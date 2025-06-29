@@ -35,10 +35,9 @@ class TestPyBADAFuelCalculator(unittest.TestCase):
     def test_calculator_initialization(self):
         """测试计算器初始化"""
         self.assertIsNotNone(self.calculator)
-        # 由于缓存是跨测试共享的，我们检查属性是否存在而不是为空
+        # 检查缓存属性是否存在
         self.assertIsNotNone(self.calculator.bada_cache)
         self.assertIsNotNone(self.calculator.aircraft_cache)
-        self.assertIsNotNone(self.calculator.calculation_results)
         print("✅ 计算器初始化测试通过")
     
     def test_bada_aircraft_loading(self):
@@ -65,7 +64,7 @@ class TestPyBADAFuelCalculator(unittest.TestCase):
         ]
         
         for icao_code, load_factor, min_mass, max_mass in test_cases:
-            mass = self.calculator._estimate_aircraft_mass(icao_code, load_factor)
+            mass = self.calculator.estimate_aircraft_mass(icao_code, load_factor)
             self.assertGreaterEqual(mass, min_mass)
             self.assertLessEqual(mass, max_mass)
             print(f"✅ {icao_code} 质量估算: {mass:.0f}kg (载客率: {load_factor:.1%})")
@@ -75,7 +74,7 @@ class TestPyBADAFuelCalculator(unittest.TestCase):
         test_aircraft = ['B737', 'A320', 'B777', 'A380']
         
         for icao_code in test_aircraft:
-            fuel = self.calculator._estimate_takeoff_landing_fuel(icao_code)
+            fuel = self.calculator.estimate_takeoff_landing_fuel(icao_code)
             self.assertGreater(fuel, 0)
             self.assertLess(fuel, 2000)  # 合理的起降燃油范围
             print(f"✅ {icao_code} 起降燃油: {fuel}kg")
@@ -95,9 +94,9 @@ class TestPyBADAFuelCalculator(unittest.TestCase):
             test_case['passengers']
         )
         
-        # 验证结果结构
+        # 验证结果结构（清理版的键名）
         required_keys = [
-            'icao_code', 'bada_available', 'fuel_consumption_kg',
+            'icao_code', 'fuel_consumption_kg',
             'load_factor', 'calculation_method'
         ]
         
@@ -112,7 +111,6 @@ class TestPyBADAFuelCalculator(unittest.TestCase):
         
         print(f"✅ 燃油消耗计算测试:")
         print(f"   机型: {result['icao_code']}")
-        print(f"   BADA可用: {result['bada_available']}")
         print(f"   燃油消耗: {result['fuel_consumption_kg']:.2f}kg")
         print(f"   载客率: {result['load_factor']:.1%}")
         print(f"   计算方法: {result['calculation_method']}")
@@ -202,11 +200,6 @@ def run_pybada_tests():
         print("\n错误详情:")
         for test, traceback in result.errors:
             print(f"- {test}: {traceback}")
-    
-    success_rate = (result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100
-    print(f"\n测试成功率: {success_rate:.1f}%")
-    
-    return result.wasSuccessful()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run_pybada_tests() 

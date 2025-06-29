@@ -38,7 +38,6 @@ def process_demo_data_with_pybada(sample_size=100):
         df['载客率'] = 0.0
         df['燃油消耗_kg'] = 0.0
         df['计算方法'] = ''
-        df['BADA可用'] = False
         df['计算状态'] = ''
         
         print("\n开始使用pyBADA计算燃油消耗...")
@@ -64,7 +63,6 @@ def process_demo_data_with_pybada(sample_size=100):
                 df.loc[idx, '载客率'] = result['load_factor']
                 df.loc[idx, '燃油消耗_kg'] = result['fuel_consumption_kg']
                 df.loc[idx, '计算方法'] = result['calculation_method']
-                df.loc[idx, 'BADA可用'] = result['bada_available']
                 df.loc[idx, '计算状态'] = '成功'
                 
                 success_count += 1
@@ -93,7 +91,12 @@ def process_demo_data_with_pybada(sample_size=100):
         print(f"  失败: {fail_count} 条")
         print(f"  pyBADA计算: {pybada_count} 条")
         print(f"  经验公式: {fallback_count} 条")
-        print(f"  pyBADA使用率: {pybada_count/success_count*100:.1f}%")
+        
+        # 避免除零错误
+        if success_count > 0:
+            print(f"  pyBADA使用率: {pybada_count/success_count*100:.1f}%")
+        else:
+            print(f"  pyBADA使用率: 0.0%")
         
         # 计算统计信息
         successful_df = df[df['计算状态'] == '成功']
