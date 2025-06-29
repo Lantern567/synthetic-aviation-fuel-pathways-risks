@@ -20,25 +20,68 @@ green_methanol_for_port_transportation/
 
 ### 🚀 航线数据可视化系统 (airline_visualization)
 
-**最新完成** - 基于pydeck库的交互式航班数据可视化系统
+**双引擎可视化系统** - 同时支持交互式Web可视化和专业静态地图
+
+#### 系统架构
+1. **pydeck交互式可视化**：基于WebGL的航班数据交互分析
+2. **frykit专业地图**：基于matplotlib+cartopy的高质量静态地图
 
 #### 功能特性
+
+**pydeck可视化引擎**：
 - 📊 **多样化可视化**：航线网络、机场分布、城市热力图、3D弧线效果
+- 🌐 **交互式体验**：缩放、旋转、图层切换、数据查询
+- 📱 **多设备支持**：响应式设计，支持PC和移动端
+
+**frykit地图引擎**：
+- 🗺️ **专业投影**：中国等距方位投影，精确的地理表示
+- 🏝️ **双地图布局**：主地图+南海诸岛小地图
+- 🧭 **地图装饰**：指北针、比例尺、网格线、边界线
+- 🎨 **智能编码**：根据航程距离自动颜色分类
+
+**共同特性**：
 - 🔧 **智能数据处理**：自动清洗、坐标验证、异常值过滤
 - 📈 **统计分析**：机型、机场、城市多维度统计报告
 - 🎯 **高性能**：支持大数据文件的样本处理模式
-- ✅ **完整测试**：100%测试覆盖，10个测试用例全部通过
+- ✅ **完整测试**：双系统测试覆盖，18个测试用例
 
 #### 技术栈
-- **可视化**：pydeck, HTML
+- **交互可视化**：pydeck, HTML5, WebGL
+- **静态地图**：frykit, matplotlib, cartopy
 - **数据处理**：pandas, numpy
-- **测试框架**：pytest
-- **输出格式**：HTML交互报告、Excel统计表格
+- **测试框架**：pytest, unittest.mock
+- **输出格式**：HTML交互报告、PNG高清地图、Excel统计表格
 
 #### 使用方法
 ```bash
 cd airline_visualization
+
+# pydeck交互式可视化
 python main_flight_visualization.py
+
+# frykit专业地图生成
+python create_frykit_route_map.py
+
+# 运行测试
+python -m pytest tests/ -v
+```
+
+#### 生成结果
+```
+results/
+├── html_reports/          # pydeck交互式报告
+│   ├── *_routes_and_airports_*.html
+│   ├── *_heatmap_*.html
+│   ├── *_arc_routes_*.html
+│   └── *_comprehensive_*.html
+├── charts/               # frykit高质量地图
+│   ├── frykit_standard_routes.png
+│   ├── frykit_dense_routes.png
+│   └── frykit_simple_routes.png
+└── tables/              # 统计数据
+    ├── aircraft_statistics_*.xlsx
+    ├── airport_statistics_*.xlsx
+    └── cities_statistics_*.xlsx
 ```
 
 ### 🛩️ 机场数据处理模块 (air_port_data_process)
@@ -107,9 +150,13 @@ module_name/
 
 **2025-06-30**：
 - ✅ 完成航线数据可视化系统开发
-- ✅ 实现4种交互式可视化类型
+- ✅ 实现4种交互式可视化类型 (pydeck)
+- ✅ 🆕 新增frykit专业地图系统
+- ✅ 生成3种密度的静态航线地图 (frykit)
+- ✅ 双引擎可视化架构完成
 - ✅ 生成完整的统计分析报告
-- ✅ 100%测试覆盖率达成
+- ✅ 18个测试用例覆盖两套系统
+- ✅ 解决HTML空白显示问题
 - ✅ 项目文档和日志更新
 
 ## 贡献指南
