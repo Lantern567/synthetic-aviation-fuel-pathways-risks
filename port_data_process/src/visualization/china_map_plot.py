@@ -91,6 +91,8 @@ def dms_to_dd(dms_str):
 
 if os.path.exists(excel_path):
     df = pd.read_excel(excel_path)
+    # 兼容新表头，去除空格和换行
+    df.columns = [c.strip() for c in df.columns]
     # 定义颜色和符号映射
     type_style = {
         '干散货-发出港':  {'color': 'red',    'marker': 'o', 'label': '干散货-发出港'},
@@ -110,7 +112,6 @@ if os.path.exists(excel_path):
         # 主图标记（不显示文字，后续交互显示）
         sc = main_ax.scatter(lon, lat, color=style['color'], s=15, marker=style['marker'], transform=data_crs, zorder=10, picker=True, label=style['label'])
         port_points.append((lon, lat, name, sc))
-        # 只为每种类型保留一个legend handle
         if style['label'] not in legend_handles:
             legend_handles[style['label']] = sc
         # 小图标记（不显示文字）
@@ -231,6 +232,8 @@ def plot_china_city_map_tianditu_style():
 
     if os.path.exists(excel_path):
         df = pd.read_excel(excel_path)
+        # 兼容新表头，去除空格和换行
+        df.columns = [c.strip() for c in df.columns]
         # 定义颜色和符号映射
         type_style = {
             '干散货-发出港':  {'color': 'red',    'marker': 'o', 'label': '干散货-发出港'},
@@ -250,7 +253,6 @@ def plot_china_city_map_tianditu_style():
             # 主图标记（不显示文字，后续交互显示）
             sc = main_ax.scatter(lon, lat, color=style['color'], s=15, marker=style['marker'], transform=data_crs, zorder=10, picker=True, label=style['label'])
             port_points.append((lon, lat, name, sc))
-            # 只为每种类型保留一个legend handle
             if style['label'] not in legend_handles:
                 legend_handles[style['label']] = sc
             # 小图标记（不显示文字）

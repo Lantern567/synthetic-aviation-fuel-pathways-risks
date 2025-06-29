@@ -130,54 +130,59 @@ def main():
         
         print("开始读取航班数据...")
         
-        # 读取数据 (分批读取以节省内存)
-        chunk_size = 5000  # 每次读取5000行
-        chunks = []
+        # 先读取前1000条记录进行测试
+        max_rows = 1000  # 限制读取行数
+        df = pd.read_excel(data_path, nrows=max_rows)
         
-        # 获取总行数
-        temp_df = pd.read_excel(data_path, nrows=1)
-        print(f"数据文件字段: {list(temp_df.columns)}")
+        print(f"数据文件字段: {list(df.columns)}")
+        print(f"读取数据: {len(df)} 条记录")
         
-        # 分块读取并处理
-        for chunk in pd.read_excel(data_path, chunksize=chunk_size):
-            processed_chunk = process_flight_data_batch(chunk, batch_size=500)
-            chunks.append(processed_chunk)
-            
-            # 计算统计信息
-            success_count = (processed_chunk['计算状态'] == '成功').sum()
-            print(f"本批次成功计算: {success_count}/{len(processed_chunk)} 条")
+        # 处理数据
+        print("开始计算燃油消耗...")
+        processed_df = process_flight_data_batch(df, batch_size=200)
         
-        # 合并所有块
-        print("合并处理结果...")
-        final_df = pd.concat(chunks, ignore_index=True)
+        # 计算统计信息
+        success_count = (processed_df['计算状态'] == '成功').sum()
+        print(f"处理完成: 成功 {success_count}/{len(processed_df)} 条")
         
         # 保存结果
-        output_path = os.path.join(output_dir, '航班燃油消耗计算结果.xlsx')
+        output_path = os.path.join(output_dir, f'航班燃油消耗计算结果_{max_rows}条.xlsx')
         print(f"保存结果到: {output_path}")
         
         with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
-            final_df.to_excel(writer, sheet_name='航班燃油消耗', index=False)
+            processed_df.to_excel(writer, sheet_name='航班燃油消耗', index=False)
             
             # 创建统计汇总表
-            summary_stats = {
-                '总航班数': len(final_df),
-                '成功计算数': (final_df['计算状态'] == '成功').sum(),
-                '失败计算数': (final_df['计算状态'] != '成功').sum(),
-                '总燃油消耗_kg': final_df[final_df['计算状态'] == '成功']['燃油消耗_kg'].sum(),
-                '平均燃油消耗_kg': final_df[final_df['计算状态'] == '成功']['燃油消耗_kg'].mean(),
-                '平均载客率': final_df[final_df['计算状态'] == '成功']['载客率'].mean(),
-            }
-            
-            summary_df = pd.DataFrame([summary_stats])
-            summary_df.to_excel(writer, sheet_name='计算统计', index=False)
+            success_df = processed_df[processed_df['计算状态'] == '成功']
+            if len(success_df) > 0:
+                summary_stats = {
+                    '总航班数': len(processed_df),
+                    '成功计算数': success_count,
+                    '失败计算数': len(processed_df) - success_count,
+                    '总燃油消耗_kg': success_df['燃油消耗_kg'].sum(),
+                    '平均燃油消耗_kg': success_df['燃油消耗_kg'].mean(),
+                    '平均载客率': success_df['载客率'].mean(),
+                }
+                
+                summary_df = pd.DataFrame([summary_stats])
+                summary_df.to_excel(writer, sheet_name='统计汇总', index=False)
+                
+                # 机型统计
+                aircraft_stats = success_df.groupby('ICAO代码').agg({
+                    '燃油消耗_kg': ['count', 'mean', 'sum'],
+                    '载客率': 'mean',
+                    '里程（公里）': 'mean'
+                }).round(2)
+                aircraft_stats.columns = ['航班数', '平均燃油消耗_kg', '总燃油消耗_kg', '平均载客率', '平均里程_km']
+                aircraft_stats.to_excel(writer, sheet_name='机型统计')
         
         print(f"处理完成！")
-        print(f"总计: {len(final_df)} 条航班")
-        print(f"成功: {(final_df['计算状态'] == '成功').sum()} 条")
-        print(f"失败: {(final_df['计算状态'] != '成功').sum()} 条")
+        print(f"总计: {len(processed_df)} 条航班")
+        print(f"成功: {success_count} 条")
+        print(f"失败: {len(processed_df) - success_count} 条")
         print(f"结果已保存到: {output_path}")
         
-        return final_df
+        return processed_df
         
     except Exception as e:
         print(f"处理过程中发生错误: {e}")
