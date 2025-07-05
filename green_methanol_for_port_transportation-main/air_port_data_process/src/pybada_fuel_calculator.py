@@ -123,51 +123,29 @@ class PyBADAFuelCalculator:
         logger.info("✅ PyBADA燃油计算器初始化完成")
     
     def get_aircraft_model(self, aircraft_type: str):
-        """获取飞机模型，支持DUMMY备用模型和完全备用方案"""
+        """获取飞机模型，直接使用DUMMY模型避免XML解析问题"""
         if aircraft_type in self._aircraft_cache:
             return self._aircraft_cache[aircraft_type]
         
         try:
-            # 映射到BADA机型代码
-            bada_code = self.aircraft_mapping.get_bada_aircraft_code(aircraft_type)
-            if not bada_code:
-                logger.warning(f"无法映射机型: {aircraft_type}，使用DUMMY模型")
-                bada_code = "DUMMY"
+            # 直接使用DUMMY模型，避免XML解析问题
+            logger.info(f"🔄 为 {aircraft_type} 直接使用DUMMY通用模型...")
             
-            # 尝试创建特定的BADA3飞机模型
             try:
-                aircraft = bada3.Bada3Aircraft(
-                    badaVersion="BADA3",
-                    acName=bada_code
+                # 直接创建DUMMY模型，跳过特定机型的XML解析
+                dummy_aircraft = bada3.Bada3Aircraft(
+                    badaVersion="DUMMY",
+                    acName="J2M"
                 )
-                self._aircraft_cache[aircraft_type] = aircraft
-                logger.info(f"✅ 成功加载飞机模型: {aircraft_type} -> {bada_code}")
-                return aircraft
+                self._aircraft_cache[aircraft_type] = dummy_aircraft
+                logger.info(f"✅ 成功使用DUMMY模型: {aircraft_type}")
+                return dummy_aircraft
                 
-            except Exception as specific_error:
-                logger.warning(f"❌ 特定模型加载失败 {aircraft_type} -> {bada_code}: {specific_error}")
-                
-                # 如果特定模型失败，尝试使用DUMMY模型
-                if bada_code != "J2M":
-                    logger.info(f"🔄 为 {aircraft_type} 尝试使用DUMMY通用模型...")
-                    try:
-                        dummy_aircraft = bada3.Bada3Aircraft(
-                            badaVersion="DUMMY",
-                            acName="J2M"
-                        )
-                        self._aircraft_cache[aircraft_type] = dummy_aircraft
-                        logger.info(f"✅ 成功使用DUMMY模型替代: {aircraft_type}")
-                        return dummy_aircraft
-                    except Exception as dummy_error:
-                        logger.error(f"❌ DUMMY模型也加载失败: {dummy_error}")
-                        # DUMMY模型也失败，返回None，将使用完全备用方案
-                        self._aircraft_cache[aircraft_type] = None
-                        return None
-                else:
-                    # 连DUMMY都失败了
-                    logger.error(f"❌ DUMMY模型加载失败: {specific_error}")
-                    self._aircraft_cache[aircraft_type] = None
-                    return None
+            except Exception as dummy_error:
+                logger.error(f"❌ DUMMY模型加载失败: {dummy_error}")
+                # DUMMY模型也失败，返回None，将使用完全备用方案
+                self._aircraft_cache[aircraft_type] = None
+                return None
             
         except Exception as e:
             logger.error(f"❌ 加载飞机模型过程中发生错误 {aircraft_type}: {e}")
