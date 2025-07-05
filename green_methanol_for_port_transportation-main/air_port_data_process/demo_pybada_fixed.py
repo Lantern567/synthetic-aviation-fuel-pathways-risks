@@ -44,7 +44,7 @@ def main():
             passengers=flight['passengers']
         )
         
-        if result.get('success', False):
+        if result.get('calculation_successful', False):
             print(f"  ✅ 燃油: {result['total_fuel_kg']:.1f} kg")
             print(f"     CO2: {result['co2_direct_kg']:.1f} kg")
             print(f"     时间: {result['total_time_minutes']:.1f} 分钟")
@@ -94,8 +94,12 @@ def main():
         df = pd.DataFrame(results)
         
         # 分别统计成功和失败的记录
-        successful_results = df[df.get('status', 'success') != 'failed']
-        failed_results = df[df.get('status', 'success') == 'failed']
+        # 为没有status列的记录添加默认值
+        if 'status' not in df.columns:
+            df['status'] = 'success'
+        
+        successful_results = df[df['status'] != 'failed']
+        failed_results = df[df['status'] == 'failed']
         
         total_flights = len(df)
         successful_flights = len(successful_results)
