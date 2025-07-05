@@ -176,12 +176,13 @@ class PyBADAFuelCalculator:
     
     def calculate_trajectory_with_tcl(self, aircraft_type: str, distance_km: float, 
                                     passengers: int) -> Optional[FlightTrajectoryResult]:
-        """使用TCL计算完整飞行轨迹"""
+        """使用TCL计算完整飞行轨迹，失败时使用备用方法"""
         try:
             # 获取飞机模型
             aircraft = self.get_aircraft_model(aircraft_type)
             if not aircraft:
-                return None
+                logger.warning(f"无法获取{aircraft_type}的pyBADA模型，使用备用计算方法")
+                return self._fallback_trajectory_calculation(aircraft_type, distance_km, passengers)
             
             # 获取飞机基本参数
             max_mass = self.aircraft_mapping.get_aircraft_parameter(aircraft_type, 'max_mass', 70000)
@@ -206,24 +207,36 @@ class PyBADAFuelCalculator:
             
             logger.info(f"飞行计划: 爬升 {climb_distance_nm:.1f}海里, 巡航 {cruise_distance_nm:.1f}海里, 下降 {descent_distance_nm:.1f}海里")
             
-            # 计算各飞行阶段
-            climb_result = self._calculate_climb_phase_tcl(
-                aircraft, climb_distance_nm, initial_mass, cruise_altitude
-            )
+            # 计算各飞行阶段，失败时使用备用方法
+            try:
+                climb_result = self._calculate_climb_phase_tcl(
+                    aircraft, climb_distance_nm, initial_mass, cruise_altitude
+                )
+            except Exception as e:
+                logger.warning(f"TCL爬升计算失败，使用备用方法: {e}")
+                climb_result = self._fallback_climb_calculation(climb_distance_nm, initial_mass, cruise_altitude)
             
             # 计算爬升后的质量
             mass_after_climb = initial_mass - climb_result.fuel_kg
             
-            cruise_result = self._calculate_cruise_phase_tcl(
-                aircraft, cruise_distance_nm, mass_after_climb, cruise_altitude
-            )
+            try:
+                cruise_result = self._calculate_cruise_phase_tcl(
+                    aircraft, cruise_distance_nm, mass_after_climb, cruise_altitude
+                )
+            except Exception as e:
+                logger.warning(f"TCL巡航计算失败，使用备用方法: {e}")
+                cruise_result = self._fallback_cruise_calculation(cruise_distance_nm, mass_after_climb, cruise_altitude)
             
             # 计算巡航后的质量
             mass_after_cruise = mass_after_climb - cruise_result.fuel_kg
             
-            descent_result = self._calculate_descent_phase_tcl(
-                aircraft, descent_distance_nm, mass_after_cruise, cruise_altitude
-            )
+            try:
+                descent_result = self._calculate_descent_phase_tcl(
+                    aircraft, descent_distance_nm, mass_after_cruise, cruise_altitude
+                )
+            except Exception as e:
+                logger.warning(f"TCL下降计算失败，使用备用方法: {e}")
+                descent_result = self._fallback_descent_calculation(descent_distance_nm, mass_after_cruise, cruise_altitude)
             
             # 汇总结果
             total_fuel = climb_result.fuel_kg + cruise_result.fuel_kg + descent_result.fuel_kg
@@ -260,6 +273,69 @@ class PyBADAFuelCalculator:
             
         except Exception as e:
             logger.error(f"❌ TCL轨迹计算失败 {aircraft_type}: {e}")
+            logger.info(f"🔄 使用完全备用计算方法: {aircraft_type}")
+            return self._fallback_trajectory_calculation(aircraft_type, distance_km, passengers)
+    
+    def _fallback_trajectory_calculation(self, aircraft_type: str, distance_km: float, 
+                                       passengers: int) -> FlightTrajectoryResult:
+        """完全备用的轨迹计算方法"""
+        try:
+            # 获取飞机基本参数
+            max_mass = self.aircraft_mapping.get_aircraft_parameter(aircraft_type, 'max_mass', 70000)
+            empty_mass = self.aircraft_mapping.get_aircraft_parameter(aircraft_type, 'empty_mass', 40000)
+            max_passengers = self.aircraft_mapping.get_aircraft_parameter(aircraft_type, 'max_passengers', 150)
+            cruise_altitude = self.aircraft_mapping.get_aircraft_parameter(aircraft_type, 'cruise_altitude', 35000)
+            
+            # 计算起飞重量
+            passenger_mass = passengers * 90
+            load_factor = min(1.0, passengers / max_passengers)
+            fuel_mass_estimate = self._estimate_fuel_requirement(distance_km, load_factor, aircraft_type)
+            
+            initial_mass = empty_mass + passenger_mass + fuel_mass_estimate
+            initial_mass = min(initial_mass, max_mass)
+            
+            # 距离分配
+            total_distance_nm = distance_km * self.KM_TO_NM
+            climb_distance_nm = min(total_distance_nm * 0.15, 150)
+            descent_distance_nm = min(total_distance_nm * 0.15, 150)
+            cruise_distance_nm = total_distance_nm - climb_distance_nm - descent_distance_nm
+            
+            # 使用备用方法计算各阶段
+            climb_result = self._fallback_climb_calculation(climb_distance_nm, initial_mass, cruise_altitude)
+            mass_after_climb = initial_mass - climb_result.fuel_kg
+            
+            cruise_result = self._fallback_cruise_calculation(cruise_distance_nm, mass_after_climb, cruise_altitude)
+            mass_after_cruise = mass_after_climb - cruise_result.fuel_kg
+            
+            descent_result = self._fallback_descent_calculation(descent_distance_nm, mass_after_cruise, cruise_altitude)
+            
+            # 汇总结果
+            total_fuel = climb_result.fuel_kg + cruise_result.fuel_kg + descent_result.fuel_kg
+            total_time = climb_result.time_minutes + cruise_result.time_minutes + descent_result.time_minutes
+            
+            # 计算详细碳排放
+            emissions = self._calculate_detailed_emissions(total_fuel, passengers, distance_km, cruise_altitude)
+            
+            return FlightTrajectoryResult(
+                total_fuel_kg=total_fuel,
+                total_distance_km=distance_km,
+                total_time_minutes=total_time,
+                climb_result=climb_result,
+                cruise_result=cruise_result,
+                descent_result=descent_result,
+                co2_direct_kg=emissions['co2_direct_kg'],
+                co2_equivalent_kg=emissions['co2_equivalent_kg'],
+                co2_rf_equivalent_kg=emissions['co2_rf_equivalent_kg'],
+                co2_per_passenger_kg=emissions['co2_per_passenger_kg'],
+                co2_per_km_kg=emissions['co2_per_km_kg'],
+                co2_per_pkm_kg=emissions['co2_per_pkm_kg'],
+                nox_kg=emissions['nox_kg'],
+                h2o_kg=emissions['h2o_kg'],
+                full_trajectory=None  # 备用方法不生成轨迹数据
+            )
+            
+        except Exception as e:
+            logger.error(f"❌ 备用计算方法也失败: {e}")
             return None
     
     def _estimate_fuel_requirement(self, distance_km: float, load_factor: float, 
@@ -657,20 +733,31 @@ class PyBADAFuelCalculator:
             result = self.calculate_trajectory_with_tcl(aircraft_type, distance_km, passengers)
             
             if result is not None:
-                # TCL计算成功
+                # 计算成功，根据实际使用的方法设置标识
                 formatted_result = self._format_tcl_result(result, aircraft_type, distance_km, passengers)
-                logger.info(f"✅ pyBADA TCL计算完成: {aircraft_type}, 燃油 {result.total_fuel_kg:.1f}kg, CO2 {result.co2_direct_kg:.1f}kg")
+                
+                # 检查是否使用了备用方法
+                if result.full_trajectory is None:
+                    formatted_result['calculation_method'] = 'pybada_fallback'
+                    formatted_result['method_description'] = 'pyBADA备用算法'
+                    logger.info(f"✅ pyBADA备用计算完成: {aircraft_type}, 燃油 {result.total_fuel_kg:.1f}kg, CO2 {result.co2_direct_kg:.1f}kg")
+                else:
+                    formatted_result['calculation_method'] = 'pybada_tcl'
+                    formatted_result['method_description'] = 'pyBADA TCL轨迹计算'
+                    logger.info(f"✅ pyBADA TCL计算完成: {aircraft_type}, 燃油 {result.total_fuel_kg:.1f}kg, CO2 {result.co2_direct_kg:.1f}kg")
+                
                 return formatted_result
             else:
-                # TCL计算失败
-                logger.error(f"❌ pyBADA TCL计算失败: {aircraft_type}")
+                # 所有计算方法都失败
+                logger.error(f"❌ 所有计算方法都失败: {aircraft_type}")
                 return {
                     'aircraft_type': aircraft_type,
                     'distance_km': distance_km,
                     'passengers': passengers,
                     'calculation_successful': False,
-                    'calculation_method': 'pyBADA TCL计算失败',
-                    'error_message': f'{aircraft_type}的pyBADA TCL计算失败',
+                    'calculation_method': '所有方法失败',
+                    'method_description': '所有计算方法（TCL和备用）都失败',
+                    'error_message': f'{aircraft_type}的所有计算方法都失败',
                     'total_fuel_kg': 0.0,
                     'co2_direct_kg': 0.0,
                     'co2_equivalent_kg': 0.0,
@@ -692,6 +779,7 @@ class PyBADAFuelCalculator:
                 'passengers': passengers,
                 'calculation_successful': False,
                 'calculation_method': 'pyBADA计算异常',
+                'method_description': '计算过程中发生未预期的异常',
                 'error_message': f'计算过程中发生错误: {str(e)}',
                 'total_fuel_kg': 0.0,
                 'co2_direct_kg': 0.0,

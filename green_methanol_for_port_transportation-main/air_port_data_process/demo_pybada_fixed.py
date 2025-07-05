@@ -64,6 +64,27 @@ def main():
             })
         else:
             print(f"  ❌ 计算失败")
+            # 显示详细的失败信息
+            if 'error_message' in result:
+                print(f"     错误: {result['error_message']}")
+            if 'method_description' in result:
+                print(f"     方法: {result['method_description']}")
+            if 'calculation_method' in result:
+                print(f"     状态: {result['calculation_method']}")
+            
+            # 将失败的记录也添加到结果中用于统计
+            results.append({
+                'route': flight['route'],
+                'aircraft': flight['aircraft'],
+                'distance_km': flight['distance'],
+                'passengers': flight['passengers'],
+                'fuel_kg': 0.0,
+                'co2_kg': 0.0,
+                'time_min': 0.0,
+                'method': result.get('calculation_method', '未知'),
+                'co2_per_passenger': 0.0,
+                'status': 'failed'
+            })
     
     # 统计分析
     if results:
@@ -71,33 +92,65 @@ def main():
         print("-" * 50)
         
         df = pd.DataFrame(results)
-        total_fuel = df['fuel_kg'].sum()
-        total_co2 = df['co2_kg'].sum()
-        total_passengers = df['passengers'].sum()
-        avg_fuel_per_km = df['fuel_kg'].sum() / df['distance_km'].sum()
-        avg_co2_per_passenger = total_co2 / total_passengers
         
-        print(f"总燃油消耗: {total_fuel:,.1f} kg")
-        print(f"总CO2排放: {total_co2:,.1f} kg")
-        print(f"总乘客数: {total_passengers:,} 人")
-        print(f"平均燃油效率: {avg_fuel_per_km:.2f} kg/km")
-        print(f"平均人均CO2: {avg_co2_per_passenger:.1f} kg/人")
+        # 分别统计成功和失败的记录
+        successful_results = df[df.get('status', 'success') != 'failed']
+        failed_results = df[df.get('status', 'success') == 'failed']
         
-        # 机型效率对比
-        print("\n🔍 机型效率对比:")
-        print("-" * 50)
-        aircraft_stats = df.groupby('aircraft').agg({
-            'fuel_kg': 'sum',
-            'distance_km': 'sum',
-            'passengers': 'sum',
-            'co2_kg': 'sum'
-        }).reset_index()
+        total_flights = len(df)
+        successful_flights = len(successful_results)
+        failed_flights = len(failed_results)
         
-        aircraft_stats['fuel_per_km'] = aircraft_stats['fuel_kg'] / aircraft_stats['distance_km']
-        aircraft_stats['co2_per_passenger'] = aircraft_stats['co2_kg'] / aircraft_stats['passengers']
+        print(f"总航班数: {total_flights}")
+        print(f"成功计算: {successful_flights} ({successful_flights/total_flights*100:.1f}%)")
+        print(f"计算失败: {failed_flights} ({failed_flights/total_flights*100:.1f}%)")
         
-        for _, row in aircraft_stats.iterrows():
-            print(f"{row['aircraft']}: {row['fuel_per_km']:.2f} kg/km, {row['co2_per_passenger']:.1f} kg CO2/人")
+        if successful_flights > 0:
+            total_fuel = successful_results['fuel_kg'].sum()
+            total_co2 = successful_results['co2_kg'].sum()
+            total_passengers = successful_results['passengers'].sum()
+            avg_fuel_per_km = successful_results['fuel_kg'].sum() / successful_results['distance_km'].sum()
+            avg_co2_per_passenger = total_co2 / total_passengers if total_passengers > 0 else 0
+            
+            print(f"\n📊 成功计算的航班统计:")
+            print(f"总燃油消耗: {total_fuel:,.1f} kg")
+            print(f"总CO2排放: {total_co2:,.1f} kg")
+            print(f"总乘客数: {total_passengers:,} 人")
+            print(f"平均燃油效率: {avg_fuel_per_km:.2f} kg/km")
+            print(f"平均人均CO2: {avg_co2_per_passenger:.1f} kg/人")
+            
+            # 机型效率对比
+            print("\n🔍 机型效率对比:")
+            print("-" * 50)
+            aircraft_stats = successful_results.groupby('aircraft').agg({
+                'fuel_kg': 'sum',
+                'distance_km': 'sum',
+                'passengers': 'sum',
+                'co2_kg': 'sum'
+            }).reset_index()
+            
+            aircraft_stats['fuel_per_km'] = aircraft_stats['fuel_kg'] / aircraft_stats['distance_km']
+            aircraft_stats['co2_per_passenger'] = aircraft_stats['co2_kg'] / aircraft_stats['passengers']
+            
+            for _, row in aircraft_stats.iterrows():
+                print(f"{row['aircraft']}: {row['fuel_per_km']:.2f} kg/km, {row['co2_per_passenger']:.1f} kg CO2/人")
+        
+            # 计算方法统计
+            print(f"\n🔧 计算方法统计:")
+            print("-" * 50)
+            method_stats = successful_results.groupby('method').size().reset_index(name='count')
+            for _, row in method_stats.iterrows():
+                print(f"{row['method']}: {row['count']} 次")
+        
+        # 失败分析
+        if failed_flights > 0:
+            print(f"\n❌ 失败分析:")
+            print("-" * 50)
+            failure_stats = failed_results.groupby('method').size().reset_index(name='count')
+            for _, row in failure_stats.iterrows():
+                print(f"{row['method']}: {row['count']} 次")
+    else:
+        print("\n❌ 没有任何计算结果")
     
     print("\n🎯 修复成果:")
     print("-" * 50)
