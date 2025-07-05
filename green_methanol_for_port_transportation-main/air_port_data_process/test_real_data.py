@@ -162,7 +162,17 @@ def run_real_data_test():
                 'co2_per_passenger': result.get('co2_per_passenger_kg', 0.0),
                 'fuel_efficiency': result.get('fuel_efficiency_l_per_100km', 0.0),
                 'flight_time_hours': result.get('total_time_minutes', 0.0) / 60.0,
-                'error_message': result.get('error_message', '')
+                'error_message': result.get('error_message', ''),
+                'fuel_cost_yuan_min': result.get('fuel_cost_yuan_min', 0.0),
+                'fuel_cost_yuan_max': result.get('fuel_cost_yuan_max', 0.0),
+                'fuel_cost_yuan_avg': result.get('fuel_cost_yuan_avg', 0.0),
+                'fuel_price_per_kg_min': result.get('fuel_price_per_kg_min', 0.0),
+                'fuel_price_per_kg_max': result.get('fuel_price_per_kg_max', 0.0),
+                'fuel_price_per_kg_avg': result.get('fuel_price_per_kg_avg', 0.0),
+                'fuel_cost_per_passenger': result.get('fuel_cost_per_passenger', 0.0),
+                'fuel_cost_per_km': result.get('fuel_cost_per_km', 0.0),
+                'fuel_market_trend': result.get('fuel_market_trend', 'N/A'),
+                'pricing_month': result.get('pricing_month', 'N/A')
             }
             
             results.append(flight_result)
@@ -195,7 +205,17 @@ def run_real_data_test():
                 'co2_per_passenger': 0.0,
                 'fuel_efficiency': 0.0,
                 'flight_time_hours': 0.0,
-                'error_message': str(e)
+                'error_message': str(e),
+                'fuel_cost_yuan_min': 0.0,
+                'fuel_cost_yuan_max': 0.0,
+                'fuel_cost_yuan_avg': 0.0,
+                'fuel_price_per_kg_min': 0.0,
+                'fuel_price_per_kg_max': 0.0,
+                'fuel_price_per_kg_avg': 0.0,
+                'fuel_cost_per_passenger': 0.0,
+                'fuel_cost_per_km': 0.0,
+                'fuel_market_trend': 'N/A',
+                'pricing_month': 'N/A'
             })
     
     return results, success_count, failure_count
@@ -365,7 +385,7 @@ def create_real_data_charts(df, successful_df):
     print("✅ 图表已保存到 results/charts/real_data_analysis.png")
 
 def save_real_data_results(df, successful_df):
-    """保存真实数据测试结果"""
+    """保存真实数据测试结果，包含燃油价格信息"""
     print(f"\n💾 保存真实数据测试结果...")
     
     # 创建结果目录
@@ -373,27 +393,105 @@ def save_real_data_results(df, successful_df):
     
     # 保存详细结果
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_file = f"results/real_data_test_results_{timestamp}.csv"
     
-    df.to_csv(results_file, index=False, encoding='utf-8-sig')
-    print(f"✅ 详细结果已保存: {results_file}")
+    # 保存CSV格式
+    csv_file = f"results/real_data_test_results_{timestamp}.csv"
+    df.to_csv(csv_file, index=False, encoding='utf-8-sig')
+    print(f"✅ CSV结果已保存: {csv_file}")
     
-    # 生成摘要报告
+    # 保存Excel格式（包含燃油价格）
+    excel_file = f"results/real_data_test_results_{timestamp}.xlsx"
+    try:
+        with pd.ExcelWriter(excel_file, engine='openpyxl') as writer:
+            # 保存完整数据
+            df.to_excel(writer, sheet_name='完整数据', index=False)
+            
+            # 保存成功数据（包含燃油价格）
+            if successful_df is not None and len(successful_df) > 0:
+                successful_df.to_excel(writer, sheet_name='成功航班', index=False)
+                
+                # 创建汇总统计表
+                summary_data = {
+                    '指标': [
+                        '总航班数',
+                        '总燃油消耗(kg)',
+                        '总CO2排放(kg)',
+                        '总燃油成本(元)',
+                        '总飞行距离(km)',
+                        '总载客人数',
+                        '平均燃油效率(kg/km)',
+                        '人均CO2排放(kg/人)',
+                        '人均燃油成本(元/人)',
+                        '每公里燃油成本(元/km)',
+                        '平均燃油价格(元/kg)'
+                    ],
+                    '数值': [
+                        len(successful_df),
+                        f"{successful_df['fuel_kg'].sum():,.1f}",
+                        f"{successful_df['co2_kg'].sum():,.1f}",
+                        f"{successful_df['fuel_cost_yuan_avg'].sum():,.2f}",
+                        f"{successful_df['distance_km'].sum():,.1f}",
+                        f"{successful_df['passengers'].sum():,}",
+                        f"{successful_df['fuel_kg'].sum()/successful_df['distance_km'].sum():.3f}",
+                        f"{successful_df['co2_kg'].sum()/successful_df['passengers'].sum():.1f}",
+                        f"{successful_df['fuel_cost_yuan_avg'].sum()/successful_df['passengers'].sum():.2f}",
+                        f"{successful_df['fuel_cost_yuan_avg'].sum()/successful_df['distance_km'].sum():.3f}",
+                        f"{successful_df['fuel_price_per_kg_avg'].mean():.2f}"
+                    ]
+                }
+                summary_df = pd.DataFrame(summary_data)
+                summary_df.to_excel(writer, sheet_name='汇总统计', index=False)
+                
+                # 按机型统计（包含燃油成本）
+                aircraft_stats = successful_df.groupby('aircraft').agg({
+                    'route': 'count',
+                    'fuel_kg': 'mean',
+                    'co2_kg': 'mean',
+                    'fuel_cost_yuan_avg': 'mean',
+                    'fuel_cost_per_passenger': 'mean',
+                    'distance_km': 'mean'
+                }).round(2)
+                aircraft_stats.columns = ['航班数', '平均燃油kg', '平均CO2kg', '平均燃油成本元', '人均燃油成本元', '平均距离km']
+                aircraft_stats.to_excel(writer, sheet_name='按机型统计', index=True)
+                
+                # 按航线类型统计（包含燃油成本）
+                successful_df['route_type'] = successful_df['distance_km'].apply(
+                    lambda x: '国内短程' if x < 800 else '国内中程' if x < 2500 else '国际中程' if x < 6000 else '洲际长程'
+                )
+                route_stats = successful_df.groupby('route_type').agg({
+                    'route': 'count',
+                    'fuel_kg': 'mean',
+                    'co2_kg': 'mean',
+                    'fuel_cost_yuan_avg': 'mean',
+                    'fuel_cost_per_passenger': 'mean'
+                }).round(2)
+                route_stats.columns = ['航班数', '平均燃油kg', '平均CO2kg', '平均燃油成本元', '人均燃油成本元']
+                route_stats.to_excel(writer, sheet_name='按航线类型统计', index=True)
+        
+        print(f"✅ Excel结果已保存: {excel_file}")
+    
+    except Exception as e:
+        print(f"⚠️ Excel保存失败: {e}")
+    
+    # 生成摘要报告（包含燃油成本）
     summary_file = f"results/real_data_summary_{timestamp}.txt"
     with open(summary_file, 'w', encoding='utf-8') as f:
         f.write("真实航空数据测试摘要报告\n")
         f.write("=" * 50 + "\n\n")
         f.write(f"测试时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"测试航班数: {len(df)}\n")
-        f.write(f"成功计算: {len(successful_df)}\n")
+        f.write(f"成功计算: {len(successful_df) if successful_df is not None else 0}\n")
         f.write(f"成功率: {len(successful_df)/len(df)*100:.1f}%\n\n")
         
-        if len(successful_df) > 0:
+        if successful_df is not None and len(successful_df) > 0:
             f.write("总体统计:\n")
             f.write(f"总燃油消耗: {successful_df['fuel_kg'].sum():,.1f} kg\n")
             f.write(f"总CO2排放: {successful_df['co2_kg'].sum():,.1f} kg\n")
+            f.write(f"总燃油成本: ¥{successful_df['fuel_cost_yuan_avg'].sum():,.2f}\n")
             f.write(f"平均燃油效率: {successful_df['fuel_kg'].sum()/successful_df['distance_km'].sum():.3f} kg/km\n")
-            f.write(f"平均人均CO2: {successful_df['co2_per_passenger'].mean():.1f} kg/人\n")
+            f.write(f"平均人均CO2: {successful_df['co2_kg'].sum()/successful_df['passengers'].sum():.1f} kg/人\n")
+            f.write(f"平均人均燃油成本: ¥{successful_df['fuel_cost_yuan_avg'].sum()/successful_df['passengers'].sum():.2f}/人\n")
+            f.write(f"平均燃油价格: ¥{successful_df['fuel_price_per_kg_avg'].mean():.2f}/kg\n")
     
     print(f"✅ 摘要报告已保存: {summary_file}")
 

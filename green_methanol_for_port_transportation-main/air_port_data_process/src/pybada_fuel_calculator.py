@@ -1,6 +1,7 @@
 """
 使用pyBADA库进行航班燃油消耗和碳排放计算
 集成完整的BADA3模型和TCL轨迹计算库
+包含燃油价格计算功能
 """
 
 import logging
@@ -30,11 +31,20 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from aircraft_mapping import get_icao_code, get_aircraft_capacity, get_cruise_mach, calculate_load_factor
-    logger.info("✅ 机型映射模块导入成功")
     AIRCRAFT_MAPPING_AVAILABLE = True
+    logger.info("✅ 机型映射模块导入成功")
 except ImportError as e:
-    logger.error(f"❌ 机型映射模块导入失败: {e}")
     AIRCRAFT_MAPPING_AVAILABLE = False
+    logger.warning(f"⚠️ 机型映射模块不可用: {e}")
+
+# 尝试导入燃油价格计算器
+try:
+    from fuel_price_calculator import FuelPriceCalculator
+    FUEL_PRICE_AVAILABLE = True
+    logger.info("✅ 燃油价格计算器导入成功")
+except ImportError as e:
+    FUEL_PRICE_AVAILABLE = False
+    logger.warning(f"⚠️ 燃油价格计算器不可用: {e}")
 
 
 @dataclass
@@ -119,6 +129,18 @@ class PyBADAFuelCalculator:
         
         self.aircraft_mapping = AircraftParameterAdapter()
         self._aircraft_cache = {}
+        
+        # 初始化燃油价格计算器
+        if FUEL_PRICE_AVAILABLE:
+            try:
+                self.fuel_price_calculator = FuelPriceCalculator()
+                logger.info("✅ 燃油价格计算器初始化成功")
+            except Exception as e:
+                logger.warning(f"⚠️ 燃油价格计算器初始化失败: {e}")
+                self.fuel_price_calculator = None
+        else:
+            self.fuel_price_calculator = None
+            logger.warning("⚠️ 燃油价格计算器不可用")
         
         logger.info("✅ PyBADA燃油计算器初始化完成")
     
@@ -774,7 +796,7 @@ class PyBADAFuelCalculator:
     
     def _format_tcl_result(self, result: FlightTrajectoryResult, aircraft_type: str, 
                           distance_km: float, passengers: int) -> Dict:
-        """格式化TCL计算结果"""
+        """格式化TCL计算结果，包含燃油价格计算"""
         # 计算详细排放指标（如果还没有计算的话）
         # 从result中获取巡航高度
         cruise_altitude = result.cruise_result.altitude_start_ft
@@ -784,7 +806,86 @@ class PyBADAFuelCalculator:
             result.total_fuel_kg, passengers, distance_km, cruise_altitude
         )
         
-        return {
+        # 计算燃油价格和成本
+        fuel_cost_info = {}
+        if self.fuel_price_calculator and hasattr(self.fuel_price_calculator, 'calculate_fuel_cost'):
+            try:
+                # 计算燃油成本（包含价格区间）
+                fuel_cost_data = self.fuel_price_calculator.calculate_fuel_cost(
+                    result.total_fuel_kg, use_price_range=True
+                )
+                
+                # 计算单位成本指标
+                cost_per_passenger = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, passengers)
+                cost_per_km = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, distance_km)
+                cost_per_passenger_km = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, passengers * distance_km)
+                
+                fuel_cost_info = {
+                    # 燃油成本（元）
+                    'fuel_cost_yuan_min': fuel_cost_data['fuel_cost_yuan_min'],
+                    'fuel_cost_yuan_max': fuel_cost_data['fuel_cost_yuan_max'],
+                    'fuel_cost_yuan_avg': fuel_cost_data['fuel_cost_yuan_avg'],
+                    'fuel_cost_range_yuan': fuel_cost_data['cost_range_yuan'],
+                    
+                    # 燃油价格（元/公斤）
+                    'fuel_price_per_kg_min': fuel_cost_data['price_per_kg_min'],
+                    'fuel_price_per_kg_max': fuel_cost_data['price_per_kg_max'],
+                    'fuel_price_per_kg_avg': fuel_cost_data['price_per_kg_avg'],
+                    
+                    # 单位成本指标
+                    'fuel_cost_per_passenger': cost_per_passenger,
+                    'fuel_cost_per_km': cost_per_km,
+                    'fuel_cost_per_passenger_km': cost_per_passenger_km,
+                    'fuel_cost_per_100km': cost_per_km * 100,
+                    
+                    # 市场信息
+                    'fuel_market_trend': fuel_cost_data['market_trend'],
+                    'fuel_base_surcharge': fuel_cost_data['base_surcharge'],
+                    'pricing_month': fuel_cost_data['month']
+                }
+                
+                logger.debug(f"燃油成本计算: {result.total_fuel_kg:.1f}kg -> ¥{fuel_cost_data['fuel_cost_yuan_avg']:.2f}")
+                
+            except Exception as e:
+                logger.warning(f"燃油价格计算失败: {e}")
+                # 设置默认值
+                fuel_cost_info = {
+                    'fuel_cost_yuan_min': 0.0,
+                    'fuel_cost_yuan_max': 0.0,
+                    'fuel_cost_yuan_avg': 0.0,
+                    'fuel_cost_range_yuan': 'N/A',
+                    'fuel_price_per_kg_min': 0.0,
+                    'fuel_price_per_kg_max': 0.0,
+                    'fuel_price_per_kg_avg': 0.0,
+                    'fuel_cost_per_passenger': 0.0,
+                    'fuel_cost_per_km': 0.0,
+                    'fuel_cost_per_passenger_km': 0.0,
+                    'fuel_cost_per_100km': 0.0,
+                    'fuel_market_trend': 'N/A',
+                    'fuel_base_surcharge': 0,
+                    'pricing_month': 'N/A'
+                }
+        else:
+            logger.warning("燃油价格计算器不可用")
+            fuel_cost_info = {
+                'fuel_cost_yuan_min': 0.0,
+                'fuel_cost_yuan_max': 0.0,
+                'fuel_cost_yuan_avg': 0.0,
+                'fuel_cost_range_yuan': 'N/A',
+                'fuel_price_per_kg_min': 0.0,
+                'fuel_price_per_kg_max': 0.0,
+                'fuel_price_per_kg_avg': 0.0,
+                'fuel_cost_per_passenger': 0.0,
+                'fuel_cost_per_km': 0.0,
+                'fuel_cost_per_passenger_km': 0.0,
+                'fuel_cost_per_100km': 0.0,
+                'fuel_market_trend': 'N/A',
+                'fuel_base_surcharge': 0,
+                'pricing_month': 'N/A'
+            }
+        
+        # 构建完整的结果字典
+        result_dict = {
             'aircraft_type': aircraft_type,
             'distance_km': distance_km,
             'passengers': passengers,
@@ -827,6 +928,11 @@ class PyBADAFuelCalculator:
             'used_tcl': True,
             'calculation_method': 'pybada_tcl'
         }
+        
+        # 添加燃油成本信息
+        result_dict.update(fuel_cost_info)
+        
+        return result_dict
 
 
 def process_flight_data_with_pybada(df: pd.DataFrame) -> pd.DataFrame:
