@@ -1,63 +1,74 @@
+#!/usr/bin/env python3
 """
-测试PyBADA燃油计算器的功能
+测试修改后的pyBADA计算器
 """
 
-import sys
 import logging
 from pybada_fuel_calculator import PyBADAFuelCalculator
 
+# 配置日志
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 def test_pybada_calculator():
-    """测试PyBADA计算器"""
-    print("🧪 开始测试 PyBADAFuelCalculator...")
-    
-    # 设置日志级别
-    logging.basicConfig(level=logging.WARNING)
+    """测试pyBADA计算器"""
+    print("🧪 测试pyBADA计算器")
+    print("=" * 50)
     
     try:
-        # 初始化计算器
-        print("正在初始化计算器...")
+        # 创建计算器实例
         calculator = PyBADAFuelCalculator()
-        print("✅ 计算器初始化成功")
+        print("✅ 计算器创建成功")
         
-        # 测试单个航班计算
-        print("\n🔬 测试单个航班计算...")
-        print("  机型: 空客320")
-        print("  距离: 1000 km")
-        print("  乘客: 150 人")
+        # 测试几个航班
+        test_flights = [
+            {'aircraft_type': '波音737', 'distance_km': 1000, 'passengers': 150},
+            {'aircraft_type': 'A320', 'distance_km': 1500, 'passengers': 160},
+            {'aircraft_type': 'A319', 'distance_km': 800, 'passengers': 120},
+            {'aircraft_type': 'B777', 'distance_km': 8000, 'passengers': 300},
+            {'aircraft_type': 'ERJ-190', 'distance_km': 500, 'passengers': 90},
+        ]
         
-        result = calculator.calculate_single_flight('空客320', 1000, 150)
+        print("\n📊 测试结果:")
+        print("-" * 100)
+        print(f"{'机型':<12} {'距离(km)':<10} {'乘客':<8} {'燃油(kg)':<12} {'CO2(kg)':<12} {'状态':<15} {'方法':<20}")
+        print("-" * 100)
         
-        print(f"\n📊 计算结果:")
-        print(f"  机型: {result['aircraft_type']}")
-        print(f"  距离: {result['distance_km']} km")
-        print(f"  乘客数: {result['passengers']}")
-        print(f"  计算方法: {result['calculation_method']}")
-        print(f"  燃油消耗: {result['fuel_consumption_kg']:.2f} kg")
-        print(f"  飞行时间: {result['flight_time_minutes']:.2f} 分钟")
+        for i, flight in enumerate(test_flights):
+            print(f"\n🔍 测试航班 {i+1}: {flight['aircraft_type']}")
+            
+            try:
+                result = calculator.calculate_single_flight(
+                    flight['aircraft_type'], 
+                    flight['distance_km'], 
+                    flight['passengers']
+                )
+                
+                status = "✅ 成功" if result['calculation_successful'] else "❌ 失败"
+                method = result.get('calculation_method', 'N/A')
+                
+                print(f"{flight['aircraft_type']:<12} {flight['distance_km']:<10} {flight['passengers']:<8} "
+                      f"{result['total_fuel_kg']:<12.1f} {result['co2_direct_kg']:<12.1f} "
+                      f"{status:<15} {method:<20}")
+                
+                if result['calculation_successful']:
+                    print(f"  └─ 每乘客CO2: {result['co2_per_passenger_kg']:.1f}kg")
+                    print(f"  └─ 每公里CO2: {result['co2_per_km_kg']:.2f}kg")
+                    print(f"  └─ NOx排放: {result['nox_kg']:.2f}kg")
+                    print(f"  └─ H2O排放: {result['h2o_kg']:.1f}kg")
+                else:
+                    print(f"  └─ 错误: {result.get('error_message', 'N/A')}")
+                    
+            except Exception as e:
+                print(f"❌ 测试航班 {i+1} 失败: {e}")
+                print(f"{'ERROR':<12} {'ERROR':<10} {'ERROR':<8} {'ERROR':<12} {'ERROR':<12} {'❌ 异常':<15} {'ERROR':<20}")
         
-        # 分阶段结果
-        print(f"\n🛫 分阶段结果:")
-        print(f"  爬升燃油: {result.get('climb_fuel_kg', 0):.2f} kg")
-        print(f"  巡航燃油: {result.get('cruise_fuel_kg', 0):.2f} kg")
-        print(f"  下降燃油: {result.get('descent_fuel_kg', 0):.2f} kg")
-        
-        # 排放结果
-        print(f"\n🌿 碳排放结果:")
-        print(f"  CO2直接排放: {result['co2_direct_kg']:.2f} kg")
-        print(f"  CO2当量排放: {result.get('co2_equivalent_kg', 0):.2f} kg")
-        print(f"  辐射强迫CO2当量: {result.get('co2_rf_equivalent_kg', 0):.2f} kg")
-        print(f"  单位旅客CO2: {result['co2_per_passenger_kg']:.2f} kg/人")
-        print(f"  单位公里CO2: {result.get('co2_per_km_kg', 0):.3f} kg/km")
-        
-        print("\n✅ 测试完成！")
-        return True
+        print("\n" + "=" * 50)
+        print("🎯 测试完成！")
         
     except Exception as e:
-        print(f"❌ 测试失败: {e}")
+        print(f"❌ 测试过程中发生错误: {e}")
         import traceback
         traceback.print_exc()
-        return False
 
 if __name__ == "__main__":
-    success = test_pybada_calculator()
-    sys.exit(0 if success else 1) 
+    test_pybada_calculator() 

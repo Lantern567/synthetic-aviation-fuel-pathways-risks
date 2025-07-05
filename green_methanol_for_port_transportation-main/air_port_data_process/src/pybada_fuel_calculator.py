@@ -9,6 +9,7 @@ import pandas as pd
 from typing import Dict, Tuple, Optional, NamedTuple
 import sys
 import os
+from dataclasses import dataclass
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -36,19 +37,22 @@ except ImportError as e:
     AIRCRAFT_MAPPING_AVAILABLE = False
 
 
-class FlightPhaseResult(NamedTuple):
+@dataclass
+class FlightPhaseResult:
     """飞行阶段结果数据结构"""
-    phase_name: str
     fuel_kg: float
-    distance_nm: float  # 改为海里单位
     time_minutes: float
+    distance_nm: float  # 海里单位
     altitude_start_ft: float
     altitude_end_ft: float
-    speed_mach: float
-    mass_start_kg: float
-    mass_end_kg: float
-    # 详细轨迹数据
-    trajectory_data: Optional[pd.DataFrame]
+    phase_type: str  # "climb", "cruise", "descent"
+    trajectory_data: Optional[pd.DataFrame] = None
+    
+    @property
+    def mass_end_kg(self) -> float:
+        """计算阶段结束时的质量（需要从外部传入初始质量）"""
+        # 这个属性需要在外部计算时使用
+        return 0.0
 
 
 class FlightTrajectoryResult(NamedTuple):
@@ -119,7 +123,7 @@ class PyBADAFuelCalculator:
         logger.info("✅ PyBADA燃油计算器初始化完成")
     
     def get_aircraft_model(self, aircraft_type: str):
-        """获取飞机模型，支持DUMMY备用模型"""
+        """获取飞机模型，支持DUMMY备用模型和完全备用方案"""
         if aircraft_type in self._aircraft_cache:
             return self._aircraft_cache[aircraft_type]
         
@@ -144,26 +148,30 @@ class PyBADAFuelCalculator:
                 logger.warning(f"❌ 特定模型加载失败 {aircraft_type} -> {bada_code}: {specific_error}")
                 
                 # 如果特定模型失败，尝试使用DUMMY模型
-                if bada_code != "DUMMY":
+                if bada_code != "J2M":
                     logger.info(f"🔄 为 {aircraft_type} 尝试使用DUMMY通用模型...")
                     try:
                         dummy_aircraft = bada3.Bada3Aircraft(
-                            badaVersion="BADA3",
-                            acName="DUMMY"
+                            badaVersion="DUMMY",
+                            acName="J2M"
                         )
                         self._aircraft_cache[aircraft_type] = dummy_aircraft
                         logger.info(f"✅ 成功使用DUMMY模型替代: {aircraft_type}")
                         return dummy_aircraft
                     except Exception as dummy_error:
                         logger.error(f"❌ DUMMY模型也加载失败: {dummy_error}")
+                        # DUMMY模型也失败，返回None，将使用完全备用方案
+                        self._aircraft_cache[aircraft_type] = None
                         return None
                 else:
                     # 连DUMMY都失败了
                     logger.error(f"❌ DUMMY模型加载失败: {specific_error}")
+                    self._aircraft_cache[aircraft_type] = None
                     return None
             
         except Exception as e:
             logger.error(f"❌ 加载飞机模型过程中发生错误 {aircraft_type}: {e}")
+            self._aircraft_cache[aircraft_type] = None
             return None
     
     def calculate_trajectory_with_tcl(self, aircraft_type: str, distance_km: float, 
@@ -203,12 +211,18 @@ class PyBADAFuelCalculator:
                 aircraft, climb_distance_nm, initial_mass, cruise_altitude
             )
             
+            # 计算爬升后的质量
+            mass_after_climb = initial_mass - climb_result.fuel_kg
+            
             cruise_result = self._calculate_cruise_phase_tcl(
-                aircraft, cruise_distance_nm, climb_result.mass_end_kg, cruise_altitude
+                aircraft, cruise_distance_nm, mass_after_climb, cruise_altitude
             )
             
+            # 计算巡航后的质量
+            mass_after_cruise = mass_after_climb - cruise_result.fuel_kg
+            
             descent_result = self._calculate_descent_phase_tcl(
-                aircraft, descent_distance_nm, cruise_result.mass_end_kg, cruise_altitude
+                aircraft, descent_distance_nm, mass_after_cruise, cruise_altitude
             )
             
             # 汇总结果
@@ -232,8 +246,16 @@ class PyBADAFuelCalculator:
                 climb_result=climb_result,
                 cruise_result=cruise_result,
                 descent_result=descent_result,
-                full_trajectory=full_trajectory,
-                **emissions
+                # 只传递FlightTrajectoryResult定义的排放字段
+                co2_direct_kg=emissions['co2_direct_kg'],
+                co2_equivalent_kg=emissions['co2_equivalent_kg'],
+                co2_rf_equivalent_kg=emissions['co2_rf_equivalent_kg'],
+                co2_per_passenger_kg=emissions['co2_per_passenger_kg'],
+                co2_per_km_kg=emissions['co2_per_km_kg'],
+                co2_per_pkm_kg=emissions['co2_per_pkm_kg'],
+                nox_kg=emissions['nox_kg'],
+                h2o_kg=emissions['h2o_kg'],
+                full_trajectory=full_trajectory
             )
             
         except Exception as e:
@@ -265,159 +287,125 @@ class PyBADAFuelCalculator:
             # 爬升参数
             initial_altitude = 1500  # 起始高度 ft
             climb_speed_cas = 250    # 校准空速 kt (低空)
-            climb_mach = 0.78       # 高空马赫数
             
             # 使用constantSpeedRating进行爬升计算
             trajectory_df = tcl.constantSpeedRating(
                 AC=aircraft,
-                speedType='CAS',  # 低空使用校准空速
-                v=climb_speed_cas,
-                Hp_init=initial_altitude,
-                Hp_final=target_altitude,
-                m_init=initial_mass,
-                DeltaTemp=self.DELTA_TEMP,
-                wS=0.0,  # 无风
-                phase='Climb',
-                config='CR'  # 巡航配置
+                speedType='CAS',         # 校准空速
+                v=climb_speed_cas,       # 速度值
+                Hp_init=initial_altitude, # 初始高度
+                Hp_final=target_altitude, # 目标高度
+                m_init=initial_mass,     # 初始质量
+                DeltaTemp=0.0,          # 温度偏差
+                wS=0.0,                 # 风速
+                turnMetrics={'rateOfTurn': 0.0, 'bankAngle': 0.0, 'directionOfTurn': None}
             )
             
-            # 提取关键数据
-            if trajectory_df is not None and not trajectory_df.empty:
-                total_fuel = trajectory_df['FUELCONSUMED'].iloc[-1]  # 总燃油消耗
-                total_time = trajectory_df['time'].iloc[-1] / 60  # 转换为分钟
-                final_mass = initial_mass - total_fuel
-                actual_distance = trajectory_df['dist'].iloc[-1]  # 实际飞行距离（海里）
-                
-                logger.info(f"爬升阶段完成: 燃油 {total_fuel:.1f}kg, 时间 {total_time:.1f}分钟, 距离 {actual_distance:.1f}海里")
-            else:
-                raise ValueError("TCL计算返回空结果")
+            if trajectory_df is None or trajectory_df.empty:
+                raise ValueError("TCL爬升计算返回空结果")
+            
+            # 提取结果
+            fuel_consumed = trajectory_df['FUELCONSUMED'].iloc[-1]
+            time_seconds = trajectory_df['time'].iloc[-1]
+            distance_nm = trajectory_df['dist'].iloc[-1]
             
             return FlightPhaseResult(
-                phase_name="climb",
-                fuel_kg=total_fuel,
-                distance_nm=actual_distance,
-                time_minutes=total_time,
+                fuel_kg=fuel_consumed,
+                time_minutes=time_seconds / 60.0,
+                distance_nm=distance_nm,
                 altitude_start_ft=initial_altitude,
                 altitude_end_ft=target_altitude,
-                speed_mach=climb_mach,
-                mass_start_kg=initial_mass,
-                mass_end_kg=final_mass,
-                trajectory_data=trajectory_df
+                phase_type="climb"
             )
             
         except Exception as e:
-            logger.warning(f"TCL爬升计算失败，使用备用方法: {e}")
-            return self._fallback_climb_calculation(distance_nm, initial_mass, target_altitude)
+            logger.error(f"TCL爬升计算失败: {e}")
+            raise
     
-    def _calculate_cruise_phase_tcl(self, aircraft, distance_nm: float,
+    def _calculate_cruise_phase_tcl(self, aircraft, distance_nm: float, 
                                   initial_mass: float, cruise_altitude: float) -> FlightPhaseResult:
         """使用TCL计算巡航阶段"""
         try:
-            cruise_mach = 0.82  # 典型巡航马赫数
+            # 巡航参数
+            cruise_mach = 0.78      # 巡航马赫数
             
             # 使用constantSpeedLevel进行巡航计算
-            # 参数格式：AC, speedType, v, Hp_init, lengthType, length, m_init, DeltaTemp, [其他参数]
             trajectory_df = tcl.constantSpeedLevel(
                 AC=aircraft,
-                speedType='M',                # 速度类型：马赫数
-                v=cruise_mach,               # 马赫数
-                Hp_init=cruise_altitude,     # 巡航高度 ft
-                lengthType='distance',       # 长度类型：距离
-                length=distance_nm,          # 距离（海里）
-                m_init=initial_mass,         # 初始质量 kg
-                DeltaTemp=self.DELTA_TEMP,   # 温度偏差
-                wS=0.0,                      # 风速（无风）
-                stepClimb=False,             # 不进行阶梯爬升
-                config='CR'                  # 配置：巡航
+                lengthType='distance',   # 按距离计算
+                length=distance_nm,      # 距离（海里）
+                speedType='M',           # 马赫数
+                v=cruise_mach,           # 马赫数值
+                Hp_init=cruise_altitude, # 巡航高度
+                m_init=initial_mass,     # 初始质量
+                DeltaTemp=0.0,          # 温度偏差
+                wS=0.0,                 # 风速
+                stepClimb=False,        # 不使用阶梯爬升
+                flightPhase="Cruise"    # 巡航阶段
             )
             
-            # 提取关键数据
-            if trajectory_df is not None and not trajectory_df.empty:
-                total_fuel = trajectory_df['FUELCONSUMED'].iloc[-1]
-                total_time = trajectory_df['time'].iloc[-1] / 60  # 转换为分钟
-                final_mass = initial_mass - total_fuel
-                actual_distance = trajectory_df['dist'].iloc[-1]
-                
-                # 添加阶段标识到轨迹数据
-                trajectory_df = trajectory_df.copy()
-                trajectory_df['phase'] = 'cruise'
-                trajectory_df['phase_time'] = trajectory_df['time']
-                
-                logger.info(f"巡航阶段完成: 燃油 {total_fuel:.1f}kg, 时间 {total_time:.1f}分钟, 距离 {actual_distance:.1f}海里")
-            else:
-                raise ValueError("TCL计算返回空结果")
+            if trajectory_df is None or trajectory_df.empty:
+                raise ValueError("TCL巡航计算返回空结果")
+            
+            # 提取结果
+            fuel_consumed = trajectory_df['FUELCONSUMED'].iloc[-1]
+            time_seconds = trajectory_df['time'].iloc[-1]
+            actual_distance_nm = trajectory_df['dist'].iloc[-1]
             
             return FlightPhaseResult(
-                phase_name="cruise",
-                fuel_kg=total_fuel,
-                distance_nm=actual_distance,
-                time_minutes=total_time,
+                fuel_kg=fuel_consumed,
+                time_minutes=time_seconds / 60.0,
+                distance_nm=actual_distance_nm,
                 altitude_start_ft=cruise_altitude,
                 altitude_end_ft=cruise_altitude,
-                speed_mach=cruise_mach,
-                mass_start_kg=initial_mass,
-                mass_end_kg=final_mass,
-                trajectory_data=trajectory_df
+                phase_type="cruise"
             )
             
         except Exception as e:
-            logger.warning(f"TCL巡航计算失败，使用备用方法: {e}")
-            return self._fallback_cruise_calculation(distance_nm, initial_mass, cruise_altitude)
+            logger.error(f"TCL巡航计算失败: {e}")
+            raise
     
-    def _calculate_descent_phase_tcl(self, aircraft, distance_nm: float,
+    def _calculate_descent_phase_tcl(self, aircraft, distance_nm: float, 
                                    initial_mass: float, cruise_altitude: float) -> FlightPhaseResult:
         """使用TCL计算下降阶段"""
         try:
-            final_altitude = 2000    # 最终高度 ft (进近高度)
-            descent_mach = 0.78     # 下降马赫数
-            descent_cas = 250       # 低空校准空速
+            # 下降参数
+            final_altitude = 1500    # 最终高度 ft
+            descent_speed_cas = 250  # 校准空速 kt
             
             # 使用constantSpeedRating进行下降计算
-            # 下降阶段的速度处理：高空使用马赫数，低空切换到校准空速
             trajectory_df = tcl.constantSpeedRating(
                 AC=aircraft,
-                Hp_init=cruise_altitude,     # 初始高度 ft
-                Hp_final=final_altitude,     # 最终高度 ft
-                speedType='M',               # 速度类型：马赫数（高空）
-                v=descent_mach,              # 马赫数
-                m_init=initial_mass,         # 初始质量 kg
-                DeltaTemp=self.DELTA_TEMP,   # 温度偏差
-                wS=0.0,                      # 风速（无风）
-                config='CR'                  # 配置：巡航（下降时发动机推力减小）
+                speedType='CAS',         # 校准空速
+                v=descent_speed_cas,     # 速度值
+                Hp_init=cruise_altitude, # 初始高度
+                Hp_final=final_altitude, # 最终高度
+                m_init=initial_mass,     # 初始质量
+                DeltaTemp=0.0,          # 温度偏差
+                wS=0.0,                 # 风速
+                turnMetrics={'rateOfTurn': 0.0, 'bankAngle': 0.0, 'directionOfTurn': None}
             )
             
-            # 提取关键数据
-            if trajectory_df is not None and not trajectory_df.empty:
-                total_fuel = trajectory_df['FUELCONSUMED'].iloc[-1]
-                total_time = trajectory_df['time'].iloc[-1] / 60  # 转换为分钟
-                final_mass = initial_mass - total_fuel
-                actual_distance = trajectory_df['dist'].iloc[-1]
-                
-                # 添加阶段标识到轨迹数据
-                trajectory_df = trajectory_df.copy()
-                trajectory_df['phase'] = 'descent'
-                trajectory_df['phase_time'] = trajectory_df['time']
-                
-                logger.info(f"下降阶段完成: 燃油 {total_fuel:.1f}kg, 时间 {total_time:.1f}分钟, 距离 {actual_distance:.1f}海里")
-            else:
-                raise ValueError("TCL计算返回空结果")
+            if trajectory_df is None or trajectory_df.empty:
+                raise ValueError("TCL下降计算返回空结果")
+            
+            # 提取结果
+            fuel_consumed = trajectory_df['FUELCONSUMED'].iloc[-1]
+            time_seconds = trajectory_df['time'].iloc[-1]
+            distance_nm = trajectory_df['dist'].iloc[-1]
             
             return FlightPhaseResult(
-                phase_name="descent",
-                fuel_kg=total_fuel,
-                distance_nm=actual_distance,
-                time_minutes=total_time,
+                fuel_kg=fuel_consumed,
+                time_minutes=time_seconds / 60.0,
+                distance_nm=distance_nm,
                 altitude_start_ft=cruise_altitude,
                 altitude_end_ft=final_altitude,
-                speed_mach=descent_mach,
-                mass_start_kg=initial_mass,
-                mass_end_kg=final_mass,
-                trajectory_data=trajectory_df
+                phase_type="descent"
             )
             
         except Exception as e:
-            logger.warning(f"TCL下降计算失败，使用备用方法: {e}")
-            return self._fallback_descent_calculation(distance_nm, initial_mass, cruise_altitude)
+            logger.error(f"TCL下降计算失败: {e}")
+            raise
     
     def _fallback_climb_calculation(self, distance_nm: float, initial_mass: float, 
                                   target_altitude: float) -> FlightPhaseResult:
@@ -429,16 +417,12 @@ class PyBADAFuelCalculator:
         time_minutes = distance_nm * time_per_nm * 60
         
         return FlightPhaseResult(
-            phase_name="climb",
             fuel_kg=fuel_used,
-            distance_nm=distance_nm,
             time_minutes=time_minutes,
+            distance_nm=distance_nm,
             altitude_start_ft=1500,
             altitude_end_ft=target_altitude,
-            speed_mach=0.78,
-            mass_start_kg=initial_mass,
-            mass_end_kg=initial_mass - fuel_used,
-            trajectory_data=None
+            phase_type="climb"
         )
     
     def _fallback_cruise_calculation(self, distance_nm: float, initial_mass: float,
@@ -451,16 +435,12 @@ class PyBADAFuelCalculator:
         time_minutes = (distance_nm / speed_kt) * 60
         
         return FlightPhaseResult(
-            phase_name="cruise",
             fuel_kg=fuel_used,
-            distance_nm=distance_nm,
             time_minutes=time_minutes,
+            distance_nm=distance_nm,
             altitude_start_ft=cruise_altitude,
             altitude_end_ft=cruise_altitude,
-            speed_mach=0.82,
-            mass_start_kg=initial_mass,
-            mass_end_kg=initial_mass - fuel_used,
-            trajectory_data=None
+            phase_type="cruise"
         )
     
     def _fallback_descent_calculation(self, distance_nm: float, initial_mass: float,
@@ -473,16 +453,12 @@ class PyBADAFuelCalculator:
         time_minutes = distance_nm * time_per_nm * 60
         
         return FlightPhaseResult(
-            phase_name="descent",
             fuel_kg=fuel_used,
-            distance_nm=distance_nm,
             time_minutes=time_minutes,
+            distance_nm=distance_nm,
             altitude_start_ft=cruise_altitude,
             altitude_end_ft=2000,
-            speed_mach=0.78,
-            mass_start_kg=initial_mass,
-            mass_end_kg=initial_mass - fuel_used,
-            trajectory_data=None
+            phase_type="descent"
         )
     
     def _merge_trajectory_data(self, trajectory_list) -> Optional[pd.DataFrame]:
@@ -650,227 +626,141 @@ class PyBADAFuelCalculator:
     
     def calculate_single_flight(self, aircraft_type: str, distance_km: float, 
                               passengers: int) -> Dict:
-        """计算单个航班的燃油消耗和排放"""
+        """计算单个航班的燃油消耗和排放，使用pyBADA模型"""
         try:
+            # 获取pyBADA模型
+            aircraft = self.get_aircraft_model(aircraft_type)
+            
+            if aircraft is None:
+                logger.error(f"❌ 无法获取 {aircraft_type} 的pyBADA模型")
+                return {
+                    'aircraft_type': aircraft_type,
+                    'distance_km': distance_km,
+                    'passengers': passengers,
+                    'calculation_successful': False,
+                    'calculation_method': 'pyBADA模型加载失败',
+                    'error_message': f'无法加载{aircraft_type}的pyBADA模型',
+                    'total_fuel_kg': 0.0,
+                    'co2_direct_kg': 0.0,
+                    'co2_equivalent_kg': 0.0,
+                    'co2_rf_equivalent_kg': 0.0,
+                    'nox_kg': 0.0,
+                    'h2o_kg': 0.0,
+                    'co2_per_passenger_kg': 0.0,
+                    'co2_per_km_kg': 0.0,
+                    'co2_per_pkm_kg': 0.0,
+                    'fuel_efficiency_kg_per_100km': 0.0,
+                    'environmental_score': 'N/A'
+                }
+            
+            # 使用TCL计算完整飞行轨迹
             result = self.calculate_trajectory_with_tcl(aircraft_type, distance_km, passengers)
             
-            if result is None:
-                logger.warning(f"计算失败，使用备用方法: {aircraft_type}")
-                return self._fallback_single_flight_calculation(aircraft_type, distance_km, passengers)
-            
-            # 格式化结果
-            formatted_result = {
+            if result is not None:
+                # TCL计算成功
+                formatted_result = self._format_tcl_result(result, aircraft_type, distance_km, passengers)
+                logger.info(f"✅ pyBADA TCL计算完成: {aircraft_type}, 燃油 {result.total_fuel_kg:.1f}kg, CO2 {result.co2_direct_kg:.1f}kg")
+                return formatted_result
+            else:
+                # TCL计算失败
+                logger.error(f"❌ pyBADA TCL计算失败: {aircraft_type}")
+                return {
+                    'aircraft_type': aircraft_type,
+                    'distance_km': distance_km,
+                    'passengers': passengers,
+                    'calculation_successful': False,
+                    'calculation_method': 'pyBADA TCL计算失败',
+                    'error_message': f'{aircraft_type}的pyBADA TCL计算失败',
+                    'total_fuel_kg': 0.0,
+                    'co2_direct_kg': 0.0,
+                    'co2_equivalent_kg': 0.0,
+                    'co2_rf_equivalent_kg': 0.0,
+                    'nox_kg': 0.0,
+                    'h2o_kg': 0.0,
+                    'co2_per_passenger_kg': 0.0,
+                    'co2_per_km_kg': 0.0,
+                    'co2_per_pkm_kg': 0.0,
+                    'fuel_efficiency_kg_per_100km': 0.0,
+                    'environmental_score': 'N/A'
+                }
+                
+        except Exception as e:
+            logger.error(f"❌ 计算过程中发生错误 {aircraft_type}: {e}")
+            return {
                 'aircraft_type': aircraft_type,
                 'distance_km': distance_km,
                 'passengers': passengers,
-                
-                # 燃油消耗
-                'total_fuel_kg': result.total_fuel_kg,
-                'fuel_per_km': result.total_fuel_kg / distance_km,
-                'fuel_per_passenger': result.total_fuel_kg / max(1, passengers),
-                
-                # 飞行时间
-                'total_time_minutes': result.total_time_minutes,
-                'climb_time_minutes': result.climb_result.time_minutes,
-                'cruise_time_minutes': result.cruise_result.time_minutes,
-                'descent_time_minutes': result.descent_result.time_minutes,
-                
-                # 各阶段燃油
-                'climb_fuel_kg': result.climb_result.fuel_kg,
-                'cruise_fuel_kg': result.cruise_result.fuel_kg,
-                'descent_fuel_kg': result.descent_result.fuel_kg,
-                
-                # 排放指标
-                'co2_direct_kg': result.co2_direct_kg,
-                'co2_equivalent_kg': result.co2_equivalent_kg,
-                'co2_rf_equivalent_kg': result.co2_rf_equivalent_kg,
-                'co2_per_passenger_kg': result.co2_per_passenger_kg,
-                'co2_per_km_kg': result.co2_per_km_kg,
-                'co2_per_pkm_kg': result.co2_per_pkm_kg,
-                'nox_kg': result.nox_kg,
-                'h2o_kg': result.h2o_kg,
-                
-                # 效率指标
-                'fuel_efficiency_l_per_100km': result.fuel_efficiency_l_per_100km,
-                'energy_intensity_mj_per_pkm': result.energy_intensity_mj_per_pkm,
-                'carbon_intensity_kg_co2_per_pkm': result.co2_per_pkm_kg,
-                
-                # 计算状态
-                'calculation_successful': True,
-                'used_tcl': True
+                'calculation_successful': False,
+                'calculation_method': 'pyBADA计算异常',
+                'error_message': f'计算过程中发生错误: {str(e)}',
+                'total_fuel_kg': 0.0,
+                'co2_direct_kg': 0.0,
+                'co2_equivalent_kg': 0.0,
+                'co2_rf_equivalent_kg': 0.0,
+                'nox_kg': 0.0,
+                'h2o_kg': 0.0,
+                'co2_per_passenger_kg': 0.0,
+                'co2_per_km_kg': 0.0,
+                'co2_per_pkm_kg': 0.0,
+                'fuel_efficiency_kg_per_100km': 0.0,
+                'environmental_score': 'N/A'
             }
-            
-            logger.info(f"✅ 航班计算完成: {aircraft_type}, 燃油 {result.total_fuel_kg:.1f}kg, CO2 {result.co2_direct_kg:.1f}kg")
-            return formatted_result
-            
-        except Exception as e:
-            logger.error(f"❌ 航班计算失败 {aircraft_type}: {e}")
-            return self._fallback_single_flight_calculation(aircraft_type, distance_km, passengers)
     
-    def _fallback_single_flight_calculation(self, aircraft_type: str, distance_km: float,
-                                          passengers: int) -> Dict:
-        """备用单航班计算方法 - 基于真实航空工程数据的改进算法"""
+    def _format_tcl_result(self, result: FlightTrajectoryResult, aircraft_type: str, 
+                          distance_km: float, passengers: int) -> Dict:
+        """格式化TCL计算结果"""
+        # 计算详细排放指标（如果还没有计算的话）
+        # 从result中获取巡航高度
+        cruise_altitude = result.cruise_result.altitude_start_ft
         
-        logger.info(f"🔧 使用备用计算方法: {aircraft_type}, {distance_km}km, {passengers}人")
+        # 重新计算详细排放指标以获取所有字段
+        emissions = self._calculate_detailed_emissions(
+            result.total_fuel_kg, passengers, distance_km, cruise_altitude
+        )
         
-        # 获取机型基础参数
-        bada_code = self.aircraft_mapping.get_bada_aircraft_code(aircraft_type) or "A320"
-        aircraft_params = self.aircraft_mapping.AIRCRAFT_PARAMETERS.get(bada_code, 
-                                                                       self.aircraft_mapping.AIRCRAFT_PARAMETERS["A320"])
-        
-        max_passengers = aircraft_params['max_passengers']
-        empty_mass = aircraft_params['empty_mass']
-        max_mass = aircraft_params['max_mass']
-        cruise_altitude = aircraft_params['cruise_altitude']
-        
-        # 计算负载系数和实际质量
-        load_factor = min(1.0, passengers / max_passengers)
-        passenger_mass = passengers * 90  # 包含行李的乘客重量
-        
-        # 改进的燃油消耗模型（基于实际航空数据）
-        # 基础消耗率根据机型调整
-        if 'A380' in bada_code or 'B777' in bada_code or 'B787' in bada_code:
-            # 宽体机
-            base_fuel_rate = 4.5  # kg/km
-            taxi_fuel = 300       # 滑行燃油
-            reserve_factor = 0.08 # 储备燃油系数
-        elif 'B737' in bada_code or 'A320' in bada_code or 'A319' in bada_code:
-            # 窄体机
-            base_fuel_rate = 3.2  # kg/km
-            taxi_fuel = 200
-            reserve_factor = 0.06
-        elif 'E190' in bada_code or 'CRJ' in bada_code:
-            # 支线飞机
-            base_fuel_rate = 2.8  # kg/km
-            taxi_fuel = 150
-            reserve_factor = 0.05
-        else:
-            # 默认（中型客机）
-            base_fuel_rate = 3.2
-            taxi_fuel = 200
-            reserve_factor = 0.06
-        
-        # 距离效率修正（长途航班更高效）
-        if distance_km < 500:
-            distance_efficiency = 1.3    # 短途效率低
-        elif distance_km < 1500:
-            distance_efficiency = 1.1    # 中程
-        elif distance_km < 4000:
-            distance_efficiency = 1.0    # 长途基准
-        else:
-            distance_efficiency = 0.95   # 超长途效率高
-        
-        # 负载系数对燃油的影响
-        load_adjustment = 0.75 + 0.35 * load_factor  # 空载75%，满载110%
-        
-        # 高度效率修正
-        altitude_efficiency = min(1.0, cruise_altitude / 35000) * 0.9 + 0.1
-        
-        # 计算基础燃油消耗
-        cruise_fuel = distance_km * base_fuel_rate * distance_efficiency * load_adjustment * altitude_efficiency
-        
-        # 爬升和下降燃油（基于高度和距离）
-        climb_distance = min(distance_km * 0.15, 200)  # 爬升距离
-        descent_distance = min(distance_km * 0.15, 200)  # 下降距离
-        
-        climb_fuel_rate = base_fuel_rate * 2.5  # 爬升燃油率是巡航的2.5倍
-        descent_fuel_rate = base_fuel_rate * 0.8  # 下降燃油率是巡航的0.8倍
-        
-        climb_fuel = climb_distance * climb_fuel_rate * load_adjustment
-        descent_fuel = descent_distance * descent_fuel_rate * load_adjustment
-        
-        # 总燃油消耗
-        operational_fuel = cruise_fuel + climb_fuel + descent_fuel + taxi_fuel
-        reserve_fuel = operational_fuel * reserve_factor
-        total_fuel = operational_fuel + reserve_fuel
-        
-        # 飞行时间估算（改进）
-        if distance_km < 500:
-            avg_speed_kmh = 420  # 短途平均速度低
-        elif distance_km < 2000:
-            avg_speed_kmh = 480  # 中程
-        else:
-            avg_speed_kmh = 520  # 长途
-        
-        flight_time_hours = distance_km / avg_speed_kmh
-        total_time_minutes = flight_time_hours * 60 + 30  # 加上滑行时间
-        
-        # 各阶段时间分配
-        climb_time = min(total_time_minutes * 0.2, 25)
-        descent_time = min(total_time_minutes * 0.2, 25)
-        cruise_time = total_time_minutes - climb_time - descent_time
-        
-        # 改进的排放计算（包含高空效应）
-        co2_direct = total_fuel * self.CO2_EMISSION_FACTOR
-        
-        # 高空效应修正
-        altitude_factor = self._get_altitude_emission_factor(cruise_altitude)
-        nox_kg = total_fuel * self.NOX_EMISSION_FACTOR * altitude_factor
-        h2o_kg = total_fuel * self.H2O_EMISSION_FACTOR
-        
-        # 高空辐射强迫效应
-        rf_multiplier = self._get_radiative_forcing_multiplier(cruise_altitude)
-        co2_equivalent = co2_direct * rf_multiplier
-        
-        # 单位指标
-        co2_per_passenger = co2_direct / max(1, passengers)
-        co2_per_km = co2_direct / distance_km
-        co2_per_pkm = co2_direct / max(1, passengers * distance_km)
-        
-        # 燃油效率
-        fuel_efficiency_l_per_100km = (total_fuel / self.FUEL_DENSITY_KG_L) / distance_km * 100
-        energy_intensity = (total_fuel * self.FUEL_LHV_MJ_KG) / max(1, passengers * distance_km)
-        
-        result = {
+        return {
             'aircraft_type': aircraft_type,
             'distance_km': distance_km,
             'passengers': passengers,
             
-            # 燃油消耗详细信息
-            'total_fuel_kg': total_fuel,
-            'cruise_fuel_kg': cruise_fuel,
-            'climb_fuel_kg': climb_fuel,
-            'descent_fuel_kg': descent_fuel,
-            'taxi_fuel_kg': taxi_fuel,
-            'reserve_fuel_kg': reserve_fuel,
-            'fuel_per_km': total_fuel / distance_km,
-            'fuel_per_passenger': total_fuel / max(1, passengers),
+            # 燃油消耗
+            'total_fuel_kg': result.total_fuel_kg,
+            'fuel_per_km': result.total_fuel_kg / distance_km,
+            'fuel_per_passenger': result.total_fuel_kg / max(1, passengers),
             
             # 飞行时间
-            'total_time_minutes': total_time_minutes,
-            'climb_time_minutes': climb_time,
-            'cruise_time_minutes': cruise_time,
-            'descent_time_minutes': descent_time,
+            'total_time_minutes': result.total_time_minutes,
+            'climb_time_minutes': result.climb_result.time_minutes,
+            'cruise_time_minutes': result.cruise_result.time_minutes,
+            'descent_time_minutes': result.descent_result.time_minutes,
             
-            # 排放指标
-            'co2_direct_kg': co2_direct,
-            'co2_equivalent_kg': co2_equivalent,
-            'co2_rf_equivalent_kg': co2_equivalent,  # 备用方法中简化处理
-            'co2_per_passenger_kg': co2_per_passenger,
-            'co2_per_km_kg': co2_per_km,
-            'co2_per_pkm_kg': co2_per_pkm,
-            'nox_kg': nox_kg,
-            'h2o_kg': h2o_kg,
+            # 各阶段燃油
+            'climb_fuel_kg': result.climb_result.fuel_kg,
+            'cruise_fuel_kg': result.cruise_result.fuel_kg,
+            'descent_fuel_kg': result.descent_result.fuel_kg,
             
-            # 效率指标
-            'fuel_efficiency_l_per_100km': fuel_efficiency_l_per_100km,
-            'energy_intensity_mj_per_pkm': energy_intensity,
-            'carbon_intensity_kg_co2_per_pkm': co2_per_pkm,
+            # 排放指标（从result中获取）
+            'co2_direct_kg': result.co2_direct_kg,
+            'co2_equivalent_kg': result.co2_equivalent_kg,
+            'co2_rf_equivalent_kg': result.co2_rf_equivalent_kg,
+            'co2_per_passenger_kg': result.co2_per_passenger_kg,
+            'co2_per_km_kg': result.co2_per_km_kg,
+            'co2_per_pkm_kg': result.co2_per_pkm_kg,
+            'nox_kg': result.nox_kg,
+            'h2o_kg': result.h2o_kg,
             
-            # 飞行参数
-            'load_factor': load_factor,
-            'cruise_altitude_ft': cruise_altitude,
-            'average_speed_kmh': avg_speed_kmh,
+            # 效率指标（从emissions字典中获取）
+            'fuel_efficiency_l_per_100km': emissions.get('fuel_efficiency_l_per_100km', 0.0),
+            'energy_intensity_mj_per_pkm': emissions.get('energy_intensity_mj_per_pkm', 0.0),
+            'carbon_intensity_kg_co2_per_pkm': emissions.get('carbon_intensity_kg_co2_per_pkm', 0.0),
+            'environmental_impact_score': emissions.get('environmental_impact_score', 'N/A'),
             
             # 计算状态
+            'success': True,
             'calculation_successful': True,
-            'used_tcl': False,
-            'calculation_method': 'fallback_improved',
-            'bada_code_used': bada_code
+            'used_tcl': True,
+            'calculation_method': 'pybada_tcl'
         }
-        
-        logger.info(f"✅ 备用计算完成: {aircraft_type}, 燃油 {total_fuel:.1f}kg, CO2 {co2_direct:.1f}kg")
-        return result
 
 
 def process_flight_data_with_pybada(df: pd.DataFrame) -> pd.DataFrame:

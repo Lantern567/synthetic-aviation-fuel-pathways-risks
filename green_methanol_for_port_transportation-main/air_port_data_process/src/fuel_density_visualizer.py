@@ -52,7 +52,7 @@ class FuelDensityVisualizer:
         """加载燃油计算结果数据"""
         try:
             # 查找最新的并行计算结果文件
-            parallel_results_dir = os.path.join(self.results_dir, 'parallel_fuel_calculation')
+            parallel_results_dir = os.path.join(self.results_dir, 'parallel_calculation')
             
             if not os.path.exists(parallel_results_dir):
                 raise FileNotFoundError(f"并行计算结果目录不存在: {parallel_results_dir}")
