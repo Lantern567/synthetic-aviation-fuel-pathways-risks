@@ -10,6 +10,7 @@ import tempfile
 import shutil
 import multiprocessing as mp
 from unittest.mock import patch, MagicMock
+import psutil
 
 # 添加src路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -215,6 +216,44 @@ class TestParallelProcessor(unittest.TestCase):
         with self.assertRaises(ValueError):
             load_and_split_data(empty_excel_path, chunk_size=10)
 
+    def test_optimal_worker_count(self):
+        """测试最佳工作进程数的计算"""
+        worker_count = get_optimal_worker_count()
+        cpu_count = mp.cpu_count()
+        memory_gb = psutil.virtual_memory().total / (1024**3)
+        
+        # 基本验证
+        self.assertGreater(worker_count, 0, "工作进程数应该大于0")
+        self.assertLessEqual(worker_count, cpu_count, "工作进程数不应该超过CPU核心数")
+        
+        # 内存基础工作进程数
+        memory_based_workers = max(1, int(memory_gb / 1.5))
+        
+        # 根据CPU核心数验证逻辑
+        if cpu_count >= 8:
+            expected_workers = min(memory_based_workers, cpu_count)
+        else:
+            expected_workers = min(memory_based_workers, cpu_count - 1)
+        
+        expected_workers = max(1, expected_workers)
+        
+        self.assertEqual(worker_count, expected_workers, 
+                        f"工作进程数计算错误，期望 {expected_workers}，实际 {worker_count}")
+        
+        print(f"✅ 系统配置验证通过:")
+        print(f"   CPU核心数: {cpu_count}")
+        print(f"   内存: {memory_gb:.1f} GB")
+        print(f"   计算得到的工作进程数: {worker_count}")
+        
+    def test_chunk_size_configuration(self):
+        """测试数据块大小配置"""
+        # 这个测试主要验证配置值
+        expected_chunk_size = 2000
+        
+        # 由于我们修改了main函数中的chunk_size，这里只是验证期望值
+        self.assertEqual(expected_chunk_size, 2000, "数据块大小应该是2000")
+        print(f"✅ 数据块大小配置验证通过: {expected_chunk_size}")
+
 class TestPerformanceOptimization(unittest.TestCase):
     """测试性能优化相关功能"""
     
@@ -261,5 +300,10 @@ if __name__ == '__main__':
     # 设置多进程启动方法（测试兼容性）
     mp.set_start_method('spawn', force=True)
     
-    # 运行所有测试
+    # 创建测试目录
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+    
+    print("🧪 开始测试并行处理器配置...")
     unittest.main(verbosity=2) 

@@ -934,6 +934,213 @@ class PyBADAFuelCalculator:
         
         return result_dict
 
+    def calculate_single_flight_with_date(self, aircraft_type: str, distance_km: float, 
+                                         passengers: int, flight_year_month: str) -> Dict:
+        """
+        计算单个航班的燃油消耗和排放 - 支持日期参数
+        
+        Args:
+            aircraft_type: 机型
+            distance_km: 距离（公里）
+            passengers: 乘客数量
+            flight_year_month: 航班日期（格式：'2024-01'）
+            
+        Returns:
+            包含详细计算结果的字典
+        """
+        logger.debug(f"🔄 计算航班: {aircraft_type}, {distance_km}km, {passengers}人, 日期: {flight_year_month}")
+        
+        try:
+            # 尝试使用TCL计算
+            result = self.calculate_trajectory_with_tcl(aircraft_type, distance_km, passengers)
+            
+            if result:
+                # 格式化TCL结果，传递日期参数
+                formatted_result = self._format_tcl_result_with_date(
+                    result, aircraft_type, distance_km, passengers, flight_year_month
+                )
+                logger.debug(f"✅ TCL计算成功: 燃油 {result.total_fuel_kg:.1f}kg")
+                return formatted_result
+            else:
+                # TCL计算失败，使用备用方法
+                logger.warning(f"TCL计算失败，使用备用方法计算 {aircraft_type}")
+                fallback_result = self._fallback_trajectory_calculation(aircraft_type, distance_km, passengers)
+                formatted_result = self._format_tcl_result_with_date(
+                    fallback_result, aircraft_type, distance_km, passengers, flight_year_month
+                )
+                formatted_result['used_tcl'] = False
+                formatted_result['calculation_method'] = 'fallback'
+                return formatted_result
+                
+        except Exception as e:
+            logger.error(f"❌ 计算失败 {aircraft_type}: {str(e)}")
+            # 返回错误结果
+            return {
+                'aircraft_type': aircraft_type,
+                'distance_km': distance_km,
+                'passengers': passengers,
+                'flight_date': flight_year_month,
+                'total_fuel_kg': 0.0,
+                'success': False,
+                'calculation_successful': False,
+                'error': str(e),
+                'used_tcl': False,
+                'calculation_method': 'error'
+            }
+
+    def _format_tcl_result_with_date(self, result: FlightTrajectoryResult, aircraft_type: str, 
+                                   distance_km: float, passengers: int, flight_year_month: str) -> Dict:
+        """
+        格式化TCL计算结果为字典格式 - 支持日期参数
+        
+        Args:
+            result: TCL计算结果
+            aircraft_type: 机型
+            distance_km: 距离
+            passengers: 乘客数
+            flight_year_month: 航班日期
+            
+        Returns:
+            格式化的结果字典
+        """
+        # 计算详细排放指标（如果还没有计算的话）
+        # 从result中获取巡航高度
+        cruise_altitude = result.cruise_result.altitude_start_ft
+        
+        # 重新计算详细排放指标以获取所有字段
+        emissions = self._calculate_detailed_emissions(
+            result.total_fuel_kg, passengers, distance_km, cruise_altitude
+        )
+        
+        # 计算燃油价格和成本 - 传递日期参数
+        fuel_cost_info = {}
+        if self.fuel_price_calculator and hasattr(self.fuel_price_calculator, 'calculate_fuel_cost'):
+            try:
+                # 计算燃油成本（包含价格区间），传递日期参数
+                fuel_cost_data = self.fuel_price_calculator.calculate_fuel_cost(
+                    result.total_fuel_kg, flight_year_month, use_price_range=True
+                )
+                
+                # 计算单位成本指标
+                cost_per_passenger = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, passengers)
+                cost_per_km = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, distance_km)
+                cost_per_passenger_km = fuel_cost_data['fuel_cost_yuan_avg'] / max(1, passengers * distance_km)
+                
+                fuel_cost_info = {
+                    # 燃油成本（元）
+                    'fuel_cost_yuan_min': fuel_cost_data['fuel_cost_yuan_min'],
+                    'fuel_cost_yuan_max': fuel_cost_data['fuel_cost_yuan_max'],
+                    'fuel_cost_yuan_avg': fuel_cost_data['fuel_cost_yuan_avg'],
+                    'fuel_cost_range_yuan': fuel_cost_data['cost_range_yuan'],
+                    
+                    # 燃油价格（元/公斤）
+                    'fuel_price_per_kg_min': fuel_cost_data['price_per_kg_min'],
+                    'fuel_price_per_kg_max': fuel_cost_data['price_per_kg_max'],
+                    'fuel_price_per_kg_avg': fuel_cost_data['price_per_kg_avg'],
+                    
+                    # 单位成本指标
+                    'fuel_cost_per_passenger': cost_per_passenger,
+                    'fuel_cost_per_km': cost_per_km,
+                    'fuel_cost_per_passenger_km': cost_per_passenger_km,
+                    'fuel_cost_per_100km': cost_per_km * 100,
+                    
+                    # 市场信息
+                    'fuel_market_trend': fuel_cost_data['market_trend'],
+                    'fuel_base_surcharge': fuel_cost_data['base_surcharge'],
+                    'pricing_month': fuel_cost_data['month']
+                }
+                
+                logger.debug(f"✅ 燃油成本计算 ({flight_year_month}): {result.total_fuel_kg:.1f}kg -> ¥{fuel_cost_data['fuel_cost_yuan_avg']:.2f}")
+                
+            except Exception as e:
+                logger.warning(f"燃油价格计算失败 ({flight_year_month}): {e}")
+                # 设置默认值
+                fuel_cost_info = {
+                    'fuel_cost_yuan_min': 0.0,
+                    'fuel_cost_yuan_max': 0.0,
+                    'fuel_cost_yuan_avg': 0.0,
+                    'fuel_cost_range_yuan': 'N/A',
+                    'fuel_price_per_kg_min': 0.0,
+                    'fuel_price_per_kg_max': 0.0,
+                    'fuel_price_per_kg_avg': 0.0,
+                    'fuel_cost_per_passenger': 0.0,
+                    'fuel_cost_per_km': 0.0,
+                    'fuel_cost_per_passenger_km': 0.0,
+                    'fuel_cost_per_100km': 0.0,
+                    'fuel_market_trend': 'N/A',
+                    'fuel_base_surcharge': 0,
+                    'pricing_month': flight_year_month
+                }
+        else:
+            logger.warning("燃油价格计算器不可用")
+            fuel_cost_info = {
+                'fuel_cost_yuan_min': 0.0,
+                'fuel_cost_yuan_max': 0.0,
+                'fuel_cost_yuan_avg': 0.0,
+                'fuel_cost_range_yuan': 'N/A',
+                'fuel_price_per_kg_min': 0.0,
+                'fuel_price_per_kg_max': 0.0,
+                'fuel_price_per_kg_avg': 0.0,
+                'fuel_cost_per_passenger': 0.0,
+                'fuel_cost_per_km': 0.0,
+                'fuel_cost_per_passenger_km': 0.0,
+                'fuel_cost_per_100km': 0.0,
+                'fuel_market_trend': 'N/A',
+                'fuel_base_surcharge': 0,
+                'pricing_month': flight_year_month
+            }
+        
+        # 构建完整的结果字典
+        result_dict = {
+            'aircraft_type': aircraft_type,
+            'distance_km': distance_km,
+            'passengers': passengers,
+            'flight_date': flight_year_month,  # 添加航班日期
+            
+            # 燃油消耗
+            'total_fuel_kg': result.total_fuel_kg,
+            'fuel_per_km': result.total_fuel_kg / distance_km,
+            'fuel_per_passenger': result.total_fuel_kg / max(1, passengers),
+            
+            # 飞行时间
+            'total_time_minutes': result.total_time_minutes,
+            'climb_time_minutes': result.climb_result.time_minutes,
+            'cruise_time_minutes': result.cruise_result.time_minutes,
+            'descent_time_minutes': result.descent_result.time_minutes,
+            
+            # 各阶段燃油
+            'climb_fuel_kg': result.climb_result.fuel_kg,
+            'cruise_fuel_kg': result.cruise_result.fuel_kg,
+            'descent_fuel_kg': result.descent_result.fuel_kg,
+            
+            # 排放指标（从result中获取）
+            'co2_direct_kg': result.co2_direct_kg,
+            'co2_equivalent_kg': result.co2_equivalent_kg,
+            'co2_rf_equivalent_kg': result.co2_rf_equivalent_kg,
+            'co2_per_passenger_kg': result.co2_per_passenger_kg,
+            'co2_per_km_kg': result.co2_per_km_kg,
+            'co2_per_pkm_kg': result.co2_per_pkm_kg,
+            'nox_kg': result.nox_kg,
+            'h2o_kg': result.h2o_kg,
+            
+            # 效率指标（从emissions字典中获取）
+            'fuel_efficiency_l_per_100km': emissions.get('fuel_efficiency_l_per_100km', 0.0),
+            'energy_intensity_mj_per_pkm': emissions.get('energy_intensity_mj_per_pkm', 0.0),
+            'carbon_intensity_kg_co2_per_pkm': emissions.get('carbon_intensity_kg_co2_per_pkm', 0.0),
+            'environmental_impact_score': emissions.get('environmental_impact_score', 'N/A'),
+            
+            # 计算状态
+            'success': True,
+            'calculation_successful': True,
+            'used_tcl': True,
+            'calculation_method': 'pybada_tcl_with_date'
+        }
+        
+        # 添加燃油成本信息
+        result_dict.update(fuel_cost_info)
+        
+        return result_dict
+
 
 def process_flight_data_with_pybada(df: pd.DataFrame) -> pd.DataFrame:
     """处理航班数据并计算燃油消耗和排放"""

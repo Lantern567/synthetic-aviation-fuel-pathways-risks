@@ -9,6 +9,29 @@ from datetime import datetime
 from typing import Dict, Tuple, Optional
 import logging
 
+# 添加数据日期提取器的导入
+try:
+    from .data_date_extractor import DataDateExtractor
+except ImportError:
+    # 如果相对导入失败，尝试绝对导入
+    try:
+        from data_date_extractor import DataDateExtractor
+    except ImportError:
+        # 如果都失败，创建一个简单的备用类
+        class DataDateExtractor:
+            def __init__(self, data_dir=None):
+                self.available_months = set()
+            
+            def get_current_month_from_data(self):
+                return '2024-12'
+            
+            def is_month_available(self, year_month):
+                return year_month in ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06', 
+                                     '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12']
+            
+            def get_closest_available_month(self, year_month):
+                return '2024-12'
+
 logger = logging.getLogger(__name__)
 
 class FuelPriceCalculator:
@@ -36,22 +59,39 @@ class FuelPriceCalculator:
     # 燃油计价单位转换
     YUAN_PER_TON_TO_YUAN_PER_KG = 0.001  # 元/吨 转 元/公斤
     
-    def __init__(self):
+    def __init__(self, data_dir=None):
         """初始化燃油价格计算器"""
-        self.current_month = datetime.now().strftime('%Y-%m')
-        logger.info("✅ 燃油价格计算器初始化完成")
+        # 初始化数据日期提取器
+        self.date_extractor = DataDateExtractor(data_dir)
+        
+        # 从实际数据中获取当前月份
+        try:
+            self.current_month = self.date_extractor.get_current_month_from_data()
+            logger.info(f"✅ 燃油价格计算器初始化完成，从数据中获取当前月份: {self.current_month}")
+        except Exception as e:
+            logger.warning(f"无法从数据中获取日期信息，使用默认月份: {str(e)}")
+            self.current_month = '2024-12'  # 备用默认值
+            logger.info(f"✅ 燃油价格计算器初始化完成，使用默认月份: {self.current_month}")
     
     def get_fuel_price_by_month(self, year_month: str = None) -> Dict:
         """获取指定月份的燃油价格信息"""
         if year_month is None:
             year_month = self.current_month
         
+        # 检查月份是否在数据中可用
+        if not self.date_extractor.is_month_available(year_month):
+            # 获取最接近的可用月份
+            closest_month = self.date_extractor.get_closest_available_month(year_month)
+            logger.warning(f"月份 {year_month} 在数据中不可用，使用最接近的可用月份: {closest_month}")
+            year_month = closest_month
+        
         if year_month in self.FUEL_PRICE_2024:
             return self.FUEL_PRICE_2024[year_month]
         else:
-            # 如果查询的月份不在数据中，使用最新的价格数据
+            # 如果查询的月份不在价格数据中，使用最新的价格数据
             logger.warning(f"未找到{year_month}的燃油价格数据，使用2024-12的数据")
-            return self.FUEL_PRICE_2024['2024-12']
+            result = self.FUEL_PRICE_2024['2024-12'].copy()
+            return result
     
     def get_current_fuel_price(self) -> float:
         """获取当前燃油价格（元/公斤）"""
@@ -77,7 +117,11 @@ class FuelPriceCalculator:
         Returns:
             包含燃油成本信息的字典
         """
+        original_month = year_month or self.current_month
         fuel_data = self.get_fuel_price_by_month(year_month)
+        
+        # 确定实际使用的月份
+        actual_month = original_month if original_month in self.FUEL_PRICE_2024 else '2024-12'
         
         if use_price_range:
             # 计算价格区间
@@ -93,7 +137,7 @@ class FuelPriceCalculator:
             
             return {
                 'fuel_kg': fuel_kg,
-                'month': year_month or self.current_month,
+                'month': actual_month,  # 使用实际的数据月份
                 'fuel_cost_yuan_min': min_cost,
                 'fuel_cost_yuan_max': max_cost,
                 'fuel_cost_yuan_avg': avg_cost,
@@ -112,7 +156,7 @@ class FuelPriceCalculator:
             
             return {
                 'fuel_kg': fuel_kg,
-                'month': year_month or self.current_month,
+                'month': actual_month,  # 使用实际的数据月份
                 'fuel_cost_yuan': total_cost,
                 'price_per_kg': price_per_kg,
                 'market_trend': fuel_data['trend'],
