@@ -1,0 +1,47 @@
+# ==================================================================
+#           最终的、逻辑完整的胜利版 GraphHopper 配置文件
+# ==================================================================
+server:
+  application_connectors:
+    - type: http
+      port: 8989
+      bind_host: 0.0.0.0
+  admin_connectors:
+    - type: http
+      port: 8990
+      bind_host: 0.0.0.0
+
+logging:
+  level: INFO
+  loggers:
+    "com.graphhopper": INFO
+  appenders:
+    - type: console
+      threshold: INFO
+
+graphhopper:
+  datareader.file: "natural_gas_supply_chain_optimization/data/china-latest.osm.pbf"
+  graph.location: "graph-cache"
+  import.osm.ignored_highways: footway, cycleway, path, track, steps, bridleway, construction
+  graph.encoded_values: road_class
+
+  profiles:
+    - name: truck
+      parent: truck
+      custom_model:
+        speed:
+          # 关键修正: 使用 if...else_if...else 结构提供完整逻辑
+          - if: "road_class == MOTORWAY"
+            limit_to: 90
+          - else_if: "road_class == PRIMARY"
+            limit_to: 70
+          - else_if: "road_class == SECONDARY"
+            limit_to: 60
+          - else_if: "road_class == TERTIARY"
+            limit_to: 50
+          # 为所有其他类型的道路提供一个默认速度
+          - else:
+            limit_to: 40
+  
+  profiles_ch:
+    - profile: truck

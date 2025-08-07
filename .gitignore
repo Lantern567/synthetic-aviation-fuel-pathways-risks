@@ -1,0 +1,299 @@
+# 绿色甲醇项目 .gitignore
+# 排除所有数据文件，只提交代码和配置文件
+
+# =============================================================================
+# 数据文件 - 完全排除
+# =============================================================================
+
+# Excel 和 CSV 数据文件
+*.xlsx
+*.xls
+*.csv
+*.xlsm
+*.xlsb
+**/data/**/*.xlsx
+**/data/**/*.csv
+**/航班数据*.xlsx
+**/22年1月1日至24年12月31日航班数据.xlsx
+**/能源价格*.xlsx
+~$*.xlsx
+~$*.xls
+
+# 大型数据文件
+*.nc  # NetCDF 文件 (风速数据)
+*.pbf # OSM 数据文件
+*.hdf5
+*.h5
+*.parquet
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# JSON 数据文件 (但保留配置文件)
+**/data/**/*.json
+**/scraped_gis_data/**/*.json
+**/results/**/*.json
+baker_institute_endpoint_test_results.json
+**/test_results*.json
+
+# GeoJSON 数据文件
+*.geojson
+gis_data_scraper/scraped_gis_data/*.geojson
+
+# 图片和可视化文件
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.pdf
+figures/
+plots/
+charts/
+images/
+visualization_results/
+**/visualization_results/
+**/figures/
+
+# HTML可视化文件
+*_interactive_map.html
+*_simple_map.html
+**/results/*.html
+
+# =============================================================================
+# 结果和缓存目录
+# =============================================================================
+
+# 结果目录中的数据文件
+results/
+**/results/
+cache/
+**/cache/
+graph-cache/
+.cache/
+
+# 但保留目录结构说明文件
+!**/results/.gitkeep
+!**/results/README.md
+!**/cache/.gitkeep
+!**/data/.gitkeep
+!**/data/README.md
+
+# =============================================================================
+# Python 开发文件
+# =============================================================================
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# 单元测试/覆盖率报告
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# 环境文件
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder项目文件
+.spyderproject
+.spyproject
+
+# Rope项目文件
+.ropeproject
+
+# mkdocs文档
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre类型检查器
+.pyre/
+
+# pytype静态类型分析器
+.pytype/
+
+# Cython调试符号
+cython_debug/
+
+# =============================================================================
+# IDE 和编辑器
+# =============================================================================
+
+# PyCharm
+.idea/
+
+# VS Code (保留部分配置)
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# =============================================================================
+# 操作系统文件
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# =============================================================================
+# 备份和临时文件
+# =============================================================================
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# =============================================================================
+# 项目特定文件
+# =============================================================================
+
+# GraphHopper 相关
+*.jar
+graphhopper-*/
+osm-data/
+
+# Gurobi 许可证文件
+gurobi.lic
+
+# 大型模型文件
+*.model
+*.pkl
+*.pickle
+
+# =============================================================================
+# 保留的重要文件 (使用 ! 强制包含)
+# =============================================================================
+
+# 代码文件
+!*.py
+!*.sh
+!*.bat
+!*.ps1
+
+# 配置文件
+!*.yml
+!*.yaml
+!requirements.txt
+!environment.yml
+!pyproject.toml
+!setup.py
+!*.json
+!.mcp.json
+!config.yml
+
+# 文档文件
+!*.md
+!README.md
+!CHANGELOG.md
+!LICENSE
+!CLAUDE.md
+!INITIAL*.md
+!BUSINESS_STRATEGY.md
+
+# Context Engineering 文件
+!.claude/**/*
+!examples/**/*
+!PRPs/**/*
+!business_contexts/**/*
+
+# 小的示例数据文件 (如果有)
+!**/example_*.csv
+!**/sample_*.json
+!**/test_*.csv 

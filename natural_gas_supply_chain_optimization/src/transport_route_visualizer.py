@@ -1,0 +1,1896 @@
+"""
+基于frykit库的运输路径可视化器
+根据transport_summary数据可视化天然气供应链运输路径
+"""
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import ast
+import re
+import os
+import sqlite3
+from datetime import datetime
+import logging
+from pathlib import Path
+import matplotlib
+import frykit.plot as fplt
+from cartopy.feature import LAND, RIVERS
+import json
+
+class TransportRouteVisualizer:
+    """运输路径可视化器"""
+    
+    def __init__(self):
+        """初始化可视化器"""
+        # 设置日志（需要最先设置）
+        self.logger = logging.getLogger(__name__)
+        
+        # 设置中文字体支持（按优先级排序）
+        matplotlib.rcParams['font.sans-serif'] = [
+            'Noto Sans CJK SC',     # Noto Sans 中文简体
+            'WenQuanYi Zen Hei',    # 文泉驿正黑
+            'AR PL UKai CN',        # AR PL 楷体
+            'AR PL UMing CN',       # AR PL 明体
+            'DejaVu Sans',          # 备用西文字体
+            'SimHei',               # Windows 黑体（如果存在）
+            'sans-serif'            # 系统默认
+        ]
+        matplotlib.rcParams['axes.unicode_minus'] = False
+        
+        # 验证字体设置
+        self._verify_font_setup()
+        
+        # 设置投影
+        self.map_crs = fplt.CN_AZIMUTHAL_EQUIDISTANT
+        self.data_crs = fplt.PLATE_CARREE
+        
+        # 设置华北地区范围和刻度
+        self.map_extent = (110, 120, 35, 45)  # 110E-120E, 35N-45N
+        self.xticks = np.arange(110, 121, 2)  # 每2度一个刻度
+        self.yticks = np.arange(35, 46, 2)    # 每2度一个刻度
+        
+        # 设施间连接线颜色映射（基于起点和终点设施类型）- 更鲜明的颜色
+        self.connection_colors = {
+            'solar_to_lng': '#FF8C00',       # 深橙色 - 太阳能电站到LNG终端
+            'wind_to_lng': '#00FF00',        # 鲜绿色 - 风电站到LNG终端
+            'lng_to_pipeline': '#0000FF',    # 蓝色 - LNG终端到管段
+            'pipeline_to_airport': '#FF0000', # 红色 - 管段到机场
+            'lng_to_airport': '#8A2BE2',     # 蓝紫色 - LNG终端到机场
+            'solar_to_airport': '#FF1493',   # 深粉色 - 太阳能到机场
+            'wind_to_airport': '#32CD32',    # 酸橙绿 - 风电到机场
+            'renewable_to_pipeline': '#FF69B4', # 热粉色 - 可再生能源到管段
+            'pipeline_to_pipeline': '#FFA500',  # 橙色 - 管段间连接
+            'default': '#000000'             # 黑色 - 默认连接
+        }
+        
+        # 设施类型标记映射（更清晰的区分）
+        self.facility_markers = {
+            'solar': 'v',            # 下三角形 - 太阳能电站
+            'wind': '^',             # 上三角形 - 风电站
+            'pipeline': 'D',         # 菱形 - 管段
+            'lng': 's',              # 方形 - LNG终端
+            'airport': 'o',          # 圆形 - 机场
+            'default': 'o'           # 默认圆形
+        }
+        
+        # 设施类型颜色映射（专门针对这5种设施）
+        self.facility_colors = {
+            'solar': '#FFD700',          # 金黄色 - 太阳能电站
+            'wind': '#32CD32',           # 绿色 - 风电站
+            'pipeline': '#FF6347',       # 橙红色 - 管段
+            'lng': '#4169E1',            # 蓝色 - LNG终端
+            'airport': '#9370DB',        # 紫色 - 机场
+            'default': '#95A5A6'         # 灰色 - 默认
+        }
+        
+        # GraphHopper缓存路径
+        self.graphhopper_cache_path = Path(__file__).parent / 'cache' / 'graphhopper_routes.db'
+    
+    def _verify_font_setup(self):
+        """验证字体设置是否正确"""
+        try:
+            import matplotlib.font_manager as fm
+            
+            # 简化字体设置，避免复杂的字体检测逻辑
+            available_fonts = [f.name for f in fm.fontManager.ttflist]
+            
+            # 优先使用常见的中文字体
+            preferred_fonts = [
+                'Microsoft YaHei', 'SimHei', 'SimSun', 
+                'WenQuanYi Zen Hei', 'Noto Sans CJK SC',
+                'DejaVu Sans', 'Arial Unicode MS'
+            ]
+            
+            found_font = None
+            for font_name in preferred_fonts:
+                if font_name in available_fonts:
+                    found_font = font_name
+                    break
+            
+            if found_font:
+                matplotlib.rcParams['font.sans-serif'] = [found_font, 'DejaVu Sans', 'Arial', 'sans-serif']
+                self.logger.info(f"使用字体: {found_font}")
+            else:
+                # 使用默认字体配置，避免中文显示问题
+                matplotlib.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'sans-serif']
+                self.logger.warning("未找到合适的中文字体，使用默认字体")
+                
+        except Exception as e:
+            self.logger.warning(f"字体设置失败: {e}")
+            matplotlib.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'sans-serif']
+        
+        # 运输类型颜色映射
+        self.transport_type_colors = {
+            'MTJ': '#E67E22',        # 橙色 - 绿色甲醇航空燃料(MTJ)运输
+            'H2': '#9B59B6',         # 紫色 - 氢气运输
+            'NG': '#3498DB',         # 蓝色 - 天然气运输
+            '氢气': '#9B59B6',       # 紫色 - 氢气运输(中文)
+            'default': '#95A5A6'     # 灰色 - 默认
+        }
+    
+    def parse_coordinates(self, coord_str):
+        """解析坐标字符串"""
+        try:
+            if pd.isna(coord_str) or coord_str == '':
+                return None, None
+            
+            # 去除首尾空格和引号
+            coord_str = str(coord_str).strip().strip('"').strip("'")
+            
+            # 尝试解析 "(lat, lon)" 格式
+            if coord_str.startswith('(') and coord_str.endswith(')'):
+                coord_str = coord_str[1:-1]
+                parts = coord_str.split(',')
+                if len(parts) == 2:
+                    lat = float(parts[0].strip())
+                    lon = float(parts[1].strip())
+                    return lat, lon
+            
+            # 尝试用ast解析
+            coords = ast.literal_eval(coord_str)
+            if isinstance(coords, (list, tuple)) and len(coords) == 2:
+                return float(coords[0]), float(coords[1])
+                
+            return None, None
+        except Exception as e:
+            self.logger.warning(f"无法解析坐标: {coord_str}, 错误: {e}")
+            return None, None
+    
+    def get_real_route_coordinates_from_data(self, row):
+        """从数据行中获取真实路径坐标"""
+        try:
+            # 优先从数据中读取路径坐标
+            if '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+                try:
+                    coordinates = json.loads(row['路径坐标'])
+                    if coordinates and len(coordinates) > 2:  # 确保有真实路径点
+                        return coordinates
+                except (json.JSONDecodeError, ValueError):
+                    pass
+            
+            # 如果数据中没有路径坐标，尝试从GraphHopper缓存获取
+            return self.get_real_route_coordinates_from_cache(
+                row['起点纬度'], row['起点经度'], 
+                row['终点纬度'], row['终点经度']
+            )
+                    
+        except Exception as e:
+            self.logger.debug(f"获取路径坐标失败: {e}")
+            return None
+
+    def get_real_route_coordinates_using_graphhopper(self, start_lat, start_lon, end_lat, end_lon):
+        """使用GraphHopper API直接获取详细路径坐标"""
+        try:
+            # 导入GraphHopper路径规划引擎
+            from graphhopper_routing_engine import GraphHopperRoutingEngine
+            
+            # 创建临时的GraphHopper引擎实例
+            routing_engine = GraphHopperRoutingEngine(
+                osm_pbf_path="data/china-latest.osm.pbf",  # 假设OSM数据在这个位置
+                graphhopper_host="localhost",
+                graphhopper_port=8989,
+                cache_dir=str(self.graphhopper_cache_path.parent),
+                enable_cache=True
+            )
+            
+            # 获取详细路径（包含路径坐标）
+            route_result = routing_engine.get_route_details(
+                start_lat=start_lat,
+                start_lon=start_lon, 
+                end_lat=end_lat,
+                end_lon=end_lon,
+                vehicle='car'
+            )
+            
+            if route_result and route_result.get('route_found'):
+                coordinates = route_result.get('route_coordinates')
+                if coordinates and len(coordinates) > 2:
+                    # 转换坐标格式：GraphHopper返回[lon, lat]，我们需要[lat, lon]
+                    formatted_coords = [[coord[1], coord[0]] for coord in coordinates]
+                    return formatted_coords
+                    
+            return None
+            
+        except Exception as e:
+            self.logger.debug(f"使用GraphHopper获取路径坐标失败: {e}")
+            return None
+    
+    def get_real_route_coordinates_from_cache(self, start_lat, start_lon, end_lat, end_lon):
+        """从GraphHopper缓存获取真实路径坐标"""
+        try:
+            if not self.graphhopper_cache_path.exists():
+                return None
+                
+            # 计算缓存键（与GraphHopper引擎保持一致）
+            import hashlib
+            cache_key = hashlib.md5(f"{start_lat:.6f},{start_lon:.6f},{end_lat:.6f},{end_lon:.6f},car".encode()).hexdigest()
+            
+            conn = sqlite3.connect(str(self.graphhopper_cache_path))
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT route_coordinates 
+                FROM route_cache 
+                WHERE cache_key = ?
+            ''', (cache_key,))
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            if result and result[0]:
+                try:
+                    coordinates = json.loads(result[0])
+                    if coordinates and len(coordinates) > 2:  # 确保有真实路径点
+                        return coordinates
+                except json.JSONDecodeError:
+                    pass
+                    
+            return None
+            
+        except Exception as e:
+            self.logger.debug(f"从缓存获取真实路径坐标失败: {e}")
+            return None
+    
+    def load_transport_data(self, csv_file_path):
+        """加载运输数据"""
+        try:
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载运输数据，共 {len(df)} 条记录")
+            
+            # 解析起点和终点坐标
+            df[['起点纬度', '起点经度']] = df['起点坐标'].apply(
+                lambda x: pd.Series(self.parse_coordinates(x))
+            )
+            df[['终点纬度', '终点经度']] = df['终点坐标'].apply(
+                lambda x: pd.Series(self.parse_coordinates(x))
+            )
+            
+            # 过滤掉无效坐标
+            valid_data = df.dropna(subset=['起点纬度', '起点经度', '终点纬度', '终点经度'])
+            invalid_count = len(df) - len(valid_data)
+            
+            if invalid_count > 0:
+                self.logger.warning(f"过滤掉 {invalid_count} 条无效坐标数据")
+            
+            # 确保坐标在中国范围内
+            china_data = valid_data[
+                (valid_data['起点纬度'] >= 18) & (valid_data['起点纬度'] <= 54) &
+                (valid_data['起点经度'] >= 73) & (valid_data['起点经度'] <= 135) &
+                (valid_data['终点纬度'] >= 18) & (valid_data['终点纬度'] <= 54) &
+                (valid_data['终点经度'] >= 73) & (valid_data['终点经度'] <= 135)
+            ]
+            
+            outside_china = len(valid_data) - len(china_data)
+            if outside_china > 0:
+                self.logger.warning(f"过滤掉 {outside_china} 条中国范围外的数据")
+            
+            self.logger.info(f"最终有效数据: {len(china_data)} 条")
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载运输数据失败: {e}")
+            return None
+    
+    def load_renewable_energy_data(self, csv_file_path):
+        """加载可再生能源设施数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("可再生能源设施文件不存在")
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载可再生能源数据，共 {len(df)} 个设施")
+            
+            # 确保坐标在中国范围内
+            china_data = df[
+                (df['纬度'] >= 18) & (df['纬度'] <= 54) &
+                (df['经度'] >= 73) & (df['经度'] <= 135)
+            ]
+            
+            outside_china = len(df) - len(china_data)
+            if outside_china > 0:
+                self.logger.warning(f"过滤掉 {outside_china} 个中国范围外的可再生能源设施")
+            
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载可再生能源数据失败: {e}")
+            return None
+    
+    def load_hydrogen_transport_data(self, csv_file_path):
+        """加载氢能运输数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("氢能运输文件不存在")
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载氢能运输数据，共 {len(df)} 条记录")
+            
+            # 过滤掉无效坐标
+            valid_data = df.dropna(subset=['起点纬度', '起点经度', '终点纬度', '终点经度'])
+            
+            # 确保坐标在中国范围内
+            china_data = valid_data[
+                (valid_data['起点纬度'] >= 18) & (valid_data['起点纬度'] <= 54) &
+                (valid_data['起点经度'] >= 73) & (valid_data['起点经度'] <= 135) &
+                (valid_data['终点纬度'] >= 18) & (valid_data['终点纬度'] <= 54) &
+                (valid_data['终点经度'] >= 73) & (valid_data['终点经度'] <= 135)
+            ]
+            
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载氢能运输数据失败: {e}")
+            return None
+    
+    def load_ng_pipeline_data(self, csv_file_path):
+        """加载天然气管道数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("天然气管道文件不存在")
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载天然气管道数据，共 {len(df)} 个管道")
+            
+            # 确保坐标在中国范围内
+            china_data = df[
+                (df['纬度'] >= 18) & (df['纬度'] <= 54) &
+                (df['经度'] >= 73) & (df['经度'] <= 135)
+            ]
+            
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载天然气管道数据失败: {e}")
+            return None
+    
+    def load_ng_transport_data(self, csv_file_path):
+        """加载天然气运输数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("天然气运输文件不存在")
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载天然气运输数据，共 {len(df)} 条记录")
+            
+            # 过滤掉无效坐标
+            valid_data = df.dropna(subset=['起点纬度', '起点经度', '终点纬度', '终点经度'])
+            
+            # 确保坐标在中国范围内
+            china_data = valid_data[
+                (valid_data['起点纬度'] >= 18) & (valid_data['起点纬度'] <= 54) &
+                (valid_data['起点经度'] >= 73) & (valid_data['起点经度'] <= 135) &
+                (valid_data['终点纬度'] >= 18) & (valid_data['终点纬度'] <= 54) &
+                (valid_data['终点经度'] >= 73) & (valid_data['终点经度'] <= 135)
+            ]
+            
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载天然气运输数据失败: {e}")
+            return None
+    
+    def load_lng_terminal_data(self, csv_file_path):
+        """加载LNG终端数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("LNG终端文件不存在") 
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载LNG终端数据，共 {len(df)} 个终端")
+            
+            # 确保坐标在中国范围内
+            china_data = df[
+                (df['纬度'] >= 18) & (df['纬度'] <= 54) &
+                (df['经度'] >= 73) & (df['经度'] <= 135)
+            ]
+            
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载LNG终端数据失败: {e}")
+            return None
+    
+    def create_base_map(self, figsize=(14, 10)):
+        """创建基础地图（华北地区）"""
+        fig = plt.figure(figsize=figsize)
+        main_ax = fig.add_subplot(projection=self.map_crs)
+        
+        # 设置主地图范围为华北地区
+        min_lon, max_lon, min_lat, max_lat = self.map_extent
+        fplt.set_map_ticks(main_ax, (min_lon, max_lon, min_lat, max_lat), 
+                          self.xticks, self.yticks)
+        main_ax.gridlines(xlocs=self.xticks, ylocs=self.yticks, 
+                         lw=0.5, ls="--", color="gray", alpha=0.5)
+        
+        # 设置刻度样式
+        main_ax.tick_params(
+            length=8, width=0.9, labelsize=10,
+            top=True, right=True, labeltop=True, labelright=True
+        )
+        
+        # 不创建南海小地图，因为华北地区不需要
+        mini_ax = None
+        
+        # 添加地图要素
+        main_ax.set_facecolor("lightcyan")
+        main_ax.add_feature(LAND, fc="floralwhite", ec="k", lw=0.5)
+        fplt.add_cn_city(main_ax, lw=0.3, edgecolor='lightgreen', 
+                       linestyle='--', zorder=2)
+        fplt.add_cn_line(main_ax, lw=1.2, edgecolor='dimgray', zorder=2.5)
+        fplt.add_cn_border(main_ax, lw=0.75, edgecolor='black', zorder=3)
+        
+        return fig, main_ax, mini_ax
+    
+    def add_decorations(self, main_ax, mini_ax=None):
+        """添加指北针和比例尺"""
+        # 添加指北针
+        fplt.add_compass(main_ax, 0.92, 0.85, size=15, style="star")
+        
+        # 添加比例尺（适合华北地区范围）
+        scale_bar = fplt.add_scale_bar(main_ax, 0.05, 0.95, length=200)
+        scale_bar.set_xticks([0, 100, 200])
+        scale_bar.xaxis.get_label().set_fontsize("small")
+    
+    def filter_data_by_region(self, data, lat_col='纬度', lon_col='经度'):
+        """过滤数据到华北地区范围"""
+        min_lon, max_lon, min_lat, max_lat = self.map_extent
+        
+        if data is None or len(data) == 0:
+            return data
+            
+        # 确保坐标在华北地区范围内
+        filtered_data = data[
+            (data[lat_col] >= min_lat) & (data[lat_col] <= max_lat) &
+            (data[lon_col] >= min_lon) & (data[lon_col] <= max_lon)
+        ]
+        
+        outside_region = len(data) - len(filtered_data)
+        if outside_region > 0:
+            self.logger.info(f"过滤掉 {outside_region} 个华北地区范围外的设施")
+        
+        return filtered_data
+    
+    def get_connection_color(self, origin_name, destination_name):
+        """根据起点和终点设施类型确定连接线颜色"""
+        origin_type = self.classify_facility_type(origin_name)
+        dest_type = self.classify_facility_type(destination_name)
+        
+        # 根据设施类型组合确定颜色
+        connection_key = f"{origin_type}_to_{dest_type}"
+        
+        # 检查是否有预定义的连接颜色
+        if connection_key in self.connection_colors:
+            return self.connection_colors[connection_key]
+        
+        # 特殊情况处理 - 更详细的连接类型
+        if origin_type == 'solar' and dest_type == 'lng':
+            return self.connection_colors['solar_to_lng']
+        elif origin_type == 'wind' and dest_type == 'lng':
+            return self.connection_colors['wind_to_lng']
+        elif origin_type == 'solar' and dest_type == 'airport':
+            return self.connection_colors['solar_to_airport']
+        elif origin_type == 'wind' and dest_type == 'airport':
+            return self.connection_colors['wind_to_airport']
+        elif origin_type == 'lng' and dest_type == 'airport':
+            return self.connection_colors['lng_to_airport']
+        elif origin_type == 'lng' and dest_type == 'pipeline':
+            return self.connection_colors['lng_to_pipeline']
+        elif origin_type == 'pipeline' and dest_type == 'airport':
+            return self.connection_colors['pipeline_to_airport']
+        elif origin_type == 'pipeline' and dest_type == 'pipeline':
+            return self.connection_colors['pipeline_to_pipeline']
+        elif origin_type in ['solar', 'wind'] and dest_type == 'pipeline':
+            return self.connection_colors['renewable_to_pipeline']
+        else:
+            return self.connection_colors['default']
+    
+    def classify_facility_type(self, facility_name, facility_type=None):
+        """根据设施名称和类型确定具体的设施分类"""
+        facility_name = str(facility_name).lower()
+        facility_type = str(facility_type).lower() if facility_type else ""
+        
+        # DEBUG: 打印分类信息
+        # print(f"DEBUG classify: '{facility_name}' -> ", end="")
+        
+        # 太阳能电站
+        if any(keyword in facility_name or keyword in facility_type 
+               for keyword in ['solar', '光伏', '太阳能', 'pv']):
+            # print("solar")
+            return 'solar'
+        
+        # 风电站
+        elif any(keyword in facility_name or keyword in facility_type 
+                 for keyword in ['wind', '风电', '风力', '风能']):
+            # print("wind") 
+            return 'wind'
+        
+        # LNG终端
+        elif any(keyword in facility_name or keyword in facility_type 
+                 for keyword in ['lng', '液化天然气', 'terminal']):
+            # print("lng")
+            return 'lng'
+        
+        # 管段/管道
+        elif any(keyword in facility_name or keyword in facility_type 
+                 for keyword in ['pipeline', '管道', '管段', 'pipe']):
+            # print("pipeline")
+            return 'pipeline'
+        
+        # 机场
+        elif any(keyword in facility_name or keyword in facility_type 
+                 for keyword in ['airport', '机场', '航空']):
+            # print("airport")
+            return 'airport'
+        
+        else:
+            # print("default")
+            return 'default'
+    
+    def normalize_transport_volume(self, volumes, min_width=0.5, max_width=4.0):
+        """标准化运输量为线条宽度"""
+        volumes = pd.to_numeric(volumes, errors='coerce')
+        volumes = volumes.fillna(0)
+        
+        if volumes.max() == volumes.min():
+            return np.full(len(volumes), (min_width + max_width) / 2)
+        
+        normalized = (volumes - volumes.min()) / (volumes.max() - volumes.min())
+        return min_width + normalized * (max_width - min_width)
+    
+    def create_north_china_facilities_with_connections_visualization(self, all_data):
+        """创建华北地区能源设施分布图，包含设施间连接线"""
+        print("正在创建华北地区能源设施及连接网络图...")
+        
+        # 创建基础地图
+        fig, main_ax, mini_ax = self.create_base_map(figsize=(14, 10))
+        
+        legend_elements = []
+        facility_stats = {
+            'solar': 0,
+            'wind': 0, 
+            'pipeline': 0,
+            'lng': 0,
+            'airport': 0
+        }
+        connection_stats = {}
+        
+        # 1. 绘制太阳能电站
+        if all_data.get('renewable_energy') is not None:
+            renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
+            
+            if renewable_data is not None and len(renewable_data) > 0:
+                solar_facilities = renewable_data[renewable_data['发电站类型'].str.contains('光伏|太阳能|solar', case=False, na=False)]
+                
+                if len(solar_facilities) > 0:
+                    print(f"正在绘制 {len(solar_facilities)} 个太阳能电站...")
+                    for _, facility in solar_facilities.iterrows():
+                        capacity = facility.get('装机容量(MW)', 50)
+                        size = min(max(capacity / 2, 30), 150)
+                        
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c=self.facility_colors['solar'], s=size, 
+                            marker=self.facility_markers['solar'],
+                            edgecolors='black', linewidth=0.8,
+                            transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                        )
+                        facility_stats['solar'] += 1
+                
+                # 2. 绘制风电站
+                wind_facilities = renewable_data[renewable_data['发电站类型'].str.contains('风电|风力|wind', case=False, na=False)]
+                
+                if len(wind_facilities) > 0:
+                    print(f"正在绘制 {len(wind_facilities)} 个风电站...")
+                    for _, facility in wind_facilities.iterrows():
+                        capacity = facility.get('装机容量(MW)', 50)
+                        size = min(max(capacity / 2, 30), 150)
+                        
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c=self.facility_colors['wind'], s=size, 
+                            marker=self.facility_markers['wind'],
+                            edgecolors='black', linewidth=0.8,
+                            transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                        )
+                        facility_stats['wind'] += 1
+        
+        # 3. 绘制天然气管段
+        if all_data.get('ng_pipelines') is not None:
+            pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
+            
+            if pipeline_data is not None and len(pipeline_data) > 0:
+                print(f"正在绘制 {len(pipeline_data)} 个管段...")
+                for _, pipeline in pipeline_data.iterrows():
+                    main_ax.scatter(
+                        pipeline['经度'], pipeline['纬度'],
+                        c=self.facility_colors['pipeline'], s=60, 
+                        marker=self.facility_markers['pipeline'],
+                        edgecolors='black', linewidth=0.8,
+                        transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                    )
+                    facility_stats['pipeline'] += 1
+        
+        # 4. 绘制LNG终端
+        if all_data.get('lng_terminals') is not None:
+            lng_data = self.filter_data_by_region(all_data['lng_terminals'])
+            
+            if lng_data is not None and len(lng_data) > 0:
+                print(f"正在绘制 {len(lng_data)} 个LNG终端...")
+                for _, terminal in lng_data.iterrows():
+                    main_ax.scatter(
+                        terminal['经度'], terminal['纬度'],
+                        c=self.facility_colors['lng'], s=80, 
+                        marker=self.facility_markers['lng'],
+                        edgecolors='black', linewidth=0.8,
+                        transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                    )
+                    facility_stats['lng'] += 1
+        
+        # 5. 绘制机场（从运输数据中提取）
+        airports_data = []
+        if all_data.get('transport_summary') is not None:
+            transport_data = all_data['transport_summary']
+            
+            # 过滤华北地区的运输数据
+            region_transport = transport_data[
+                (transport_data['起点纬度'] >= self.map_extent[2]) & 
+                (transport_data['起点纬度'] <= self.map_extent[3]) &
+                (transport_data['起点经度'] >= self.map_extent[0]) & 
+                (transport_data['起点经度'] <= self.map_extent[1]) &
+                (transport_data['终点纬度'] >= self.map_extent[2]) & 
+                (transport_data['终点纬度'] <= self.map_extent[3]) &
+                (transport_data['终点经度'] >= self.map_extent[0]) & 
+                (transport_data['终点经度'] <= self.map_extent[1])
+            ]
+            
+            if len(region_transport) > 0:
+                # 提取机场终点
+                airports = region_transport[
+                    region_transport['终点'].str.contains('机场|airport', case=False, na=False)
+                ][['终点', '终点纬度', '终点经度']].drop_duplicates()
+                
+                if len(airports) > 0:
+                    print(f"正在绘制 {len(airports)} 个机场...")
+                    for _, airport in airports.iterrows():
+                        main_ax.scatter(
+                            airport['终点经度'], airport['终点纬度'],
+                            c=self.facility_colors['airport'], s=100, 
+                            marker=self.facility_markers['airport'],
+                            edgecolors='white', linewidth=1.0,
+                            transform=self.data_crs, zorder=12, alpha=0.9  # zorder=12，最高层
+                        )
+                        facility_stats['airport'] += 1
+                
+                airports_data = airports
+                
+                # 6. 绘制设施间连接线
+                print(f"正在绘制 {len(region_transport)} 条设施连接线...")
+                print(f"DEBUG: region_transport 数据样本:")
+                if len(region_transport) > 0:
+                    sample = region_transport.head(3)
+                    for idx, row in sample.iterrows():
+                        print(f"  起点: {row['起点']} ({row['起点经度']:.2f}, {row['起点纬度']:.2f})")
+                        print(f"  终点: {row['终点']} ({row['终点经度']:.2f}, {row['终点纬度']:.2f})")
+                        print(f"  运输量: {row.get('周运输量(kg)', 'N/A')}")
+                        print("---")
+                
+                # 统计和去重连接线
+                unique_connections = {}
+                zero_length_lines = 0
+                
+                for i, (_, route) in enumerate(region_transport.iterrows()):
+                    # 检查起点终点是否相同 (零长度连接)
+                    start_coord = f"{route['起点经度']:.6f},{route['起点纬度']:.6f}"
+                    end_coord = f"{route['终点经度']:.6f},{route['终点纬度']:.6f}"
+                    
+                    if start_coord == end_coord:
+                        zero_length_lines += 1
+                        continue  # 跳过零长度连接
+                    
+                    # 创建唯一连接键
+                    connection_key = f"{route['起点']}->{route['终点']}"
+                    
+                    # 如果是新的连接，记录它
+                    if connection_key not in unique_connections:
+                        unique_connections[connection_key] = {
+                            'route': route,
+                            'start_lon': route['起点经度'],
+                            'start_lat': route['起点纬度'], 
+                            'end_lon': route['终点经度'],
+                            'end_lat': route['终点纬度'],
+                            'volume': route.get('周运输量(kg)', 1000),
+                            'origin_type': self.classify_facility_type(route['起点']),
+                            'dest_type': self.classify_facility_type(route['终点'])
+                        }
+                
+                print(f"\n连接线去重统计:")
+                print(f"  原始连接数: {len(region_transport)}")
+                print(f"  零长度连接 (已跳过): {zero_length_lines}")
+                print(f"  唯一有效连接: {len(unique_connections)}")
+                
+                # 绘制唯一的连接线
+                valid_lines_drawn = 0
+                real_route_lines = 0
+                straight_lines = 0
+                
+                for connection_key, conn_data in unique_connections.items():
+                    # 确定连接线颜色
+                    connection_color = self.get_connection_color(
+                        conn_data['route']['起点'], 
+                        conn_data['route']['终点']
+                    )
+                    
+                    # 统计连接类型
+                    connection_type = f"{conn_data['origin_type']}_to_{conn_data['dest_type']}"
+                    connection_stats[connection_type] = connection_stats.get(connection_type, 0) + 1
+                    
+                    # 根据运输量确定线条宽度
+                    volume = conn_data['volume']
+                    if pd.isna(volume) or volume <= 0:
+                        line_width = 3.0  # 默认线宽
+                    else:
+                        line_width = min(max(volume / 30000, 2.0), 6.0)  # 最小2.0，最大6.0
+                    
+                    # 计算连接距离
+                    distance = ((conn_data['end_lon'] - conn_data['start_lon'])**2 + 
+                               (conn_data['end_lat'] - conn_data['start_lat'])**2)**0.5
+                    
+                    valid_lines_drawn += 1
+                    
+                    # 尝试获取详细路径坐标
+                    route_coords = None
+                    
+                    # 1. 首先从数据中读取
+                    if 'route' in conn_data and hasattr(conn_data['route'], 'get'):
+                        route_coords = self.get_real_route_coordinates_from_data(conn_data['route'])
+                    
+                    # 2. 如果没有找到，尝试从缓存获取
+                    if not route_coords:
+                        route_coords = self.get_real_route_coordinates_from_cache(
+                            conn_data['start_lat'], conn_data['start_lon'],
+                            conn_data['end_lat'], conn_data['end_lon']
+                        )
+                    
+                    # 3. 如果仍然没有找到，尝试使用GraphHopper API直接获取
+                    if not route_coords and distance > 0.005:  # 降低距离阈值，对更多连接使用API
+                        route_coords = self.get_real_route_coordinates_using_graphhopper(
+                            conn_data['start_lat'], conn_data['start_lon'],
+                            conn_data['end_lat'], conn_data['end_lon']
+                        )
+                    
+                    # DEBUG: 打印前10条唯一连接线的信息
+                    if valid_lines_drawn <= 10:
+                        print(f"唯一连接线 {valid_lines_drawn}: {connection_key}")
+                        print(f"  类型: {conn_data['origin_type']} -> {conn_data['dest_type']}")
+                        print(f"  颜色: {connection_color}")
+                        print(f"  线条宽度: {line_width}")
+                        print(f"  坐标: ({conn_data['start_lon']:.2f}, {conn_data['start_lat']:.2f}) -> ({conn_data['end_lon']:.2f}, {conn_data['end_lat']:.2f})")
+                        print(f"  距离: {distance:.4f}度")
+                        print(f"  详细路径: {'是' if route_coords else '否'} ({len(route_coords) if route_coords else 0}个路径点)")
+                    
+                    # 绘制连接线
+                    if route_coords and len(route_coords) > 2:
+                        # 使用详细路径绘制
+                        real_route_lines += 1
+                        
+                        # 提取经纬度
+                        lons = [coord[1] if len(coord) > 1 else coord[0] for coord in route_coords]
+                        lats = [coord[0] if len(coord) > 1 else coord[1] for coord in route_coords]
+                        
+                        # 绘制详细路径
+                        line = main_ax.plot(
+                            lons, lats,
+                            color=connection_color, 
+                            alpha=0.95, linewidth=line_width,
+                            transform=self.data_crs, zorder=10,
+                            solid_capstyle='round', solid_joinstyle='round'  # 使线条更平滑
+                        )
+                    else:
+                        # 使用直线绘制（后备方案）
+                        straight_lines += 1
+                        line = main_ax.plot(
+                            [conn_data['start_lon'], conn_data['end_lon']], 
+                            [conn_data['start_lat'], conn_data['end_lat']], 
+                            color=connection_color, 
+                            alpha=0.7, linewidth=line_width,  # 直线透明度稍低
+                            linestyle='--',  # 虚线表示估算路径
+                            transform=self.data_crs, zorder=9
+                        )
+                    
+                    # DEBUG: 验证前3条线条是否被创建
+                    if valid_lines_drawn <= 3:
+                        route_type = "详细路径" if route_coords and len(route_coords) > 2 else "直线路径"
+                        print(f"DEBUG: {route_type}线条对象创建成功: {line}")
+                
+                print(f"\nDEBUG: 总共绘制了 {valid_lines_drawn} 条唯一可见连接线")
+                print(f"  详细路径: {real_route_lines} 条")
+                print(f"  直线路径: {straight_lines} 条")
+                print(f"详细路径覆盖率: {real_route_lines/valid_lines_drawn*100:.1f}%")
+        
+        # 创建设施类型图例
+        facility_names = {
+            'solar': '太阳能电站',
+            'wind': '风电站',
+            'pipeline': '天然气管段',
+            'lng': 'LNG终端',
+            'airport': '机场'
+        }
+        
+        for facility_type, count in facility_stats.items():
+            if count > 0:
+                legend_elements.append(
+                    plt.scatter([], [], 
+                              c=self.facility_colors[facility_type], 
+                              s=80, 
+                              marker=self.facility_markers[facility_type],
+                              edgecolors='black', linewidth=0.8,
+                              label=f'{facility_names[facility_type]} ({count}个)')
+                )
+        
+        # 创建连接类型图例
+        connection_names = {
+            'solar_to_lng': '太阳能→LNG',
+            'wind_to_lng': '风电→LNG',
+            'solar_to_airport': '太阳能→机场',
+            'wind_to_airport': '风电→机场',
+            'lng_to_pipeline': 'LNG→管段',
+            'pipeline_to_airport': '管段→机场',
+            'lng_to_airport': 'LNG→机场',
+            'renewable_to_pipeline': '可再生能源→管段',
+            'pipeline_to_pipeline': '管段间连接'
+        }
+        
+        # 添加路径类型图例
+        if 'real_route_lines' in locals() and 'straight_lines' in locals():
+            if real_route_lines > 0:
+                legend_elements.append(
+                    plt.Line2D([0], [0], color='gray', linewidth=3, alpha=0.95,
+                              solid_capstyle='round', solid_joinstyle='round',
+                              label=f'详细道路路径 ({real_route_lines}条)')
+                )
+            
+            if straight_lines > 0:
+                legend_elements.append(
+                    plt.Line2D([0], [0], color='gray', linewidth=3, alpha=0.7, linestyle='--',
+                              label=f'直线估算路径 ({straight_lines}条)')
+                )
+        
+        # 添加分隔线
+        if legend_elements and connection_stats:
+            legend_elements.append(plt.Line2D([0], [0], color='none', label='─── 连接类型 ───'))
+        
+        for connection_type, count in connection_stats.items():
+            if count > 0 and connection_type in connection_names:
+                color = self.connection_colors.get(connection_type, self.connection_colors['default'])
+                legend_elements.append(
+                    plt.Line2D([0], [0], color=color, linewidth=3, 
+                              label=f'{connection_names[connection_type]} ({count}条)')
+                )
+        
+        # 添加图例
+        if legend_elements:
+            main_ax.legend(handles=legend_elements, loc='upper right', 
+                          fontsize=9, framealpha=0.9, ncol=1)
+        
+        # 添加标题
+        total_facilities = sum(facility_stats.values())
+        total_connections = sum(connection_stats.values())
+        plt.suptitle(
+            f'华北地区能源基础设施网络图 (35°N-45°N, 110°E-120°E)\n'
+            f'设施: {total_facilities}个 | 连接: {total_connections}条', 
+            fontsize=14, y=0.95, fontweight='bold'
+        )
+        
+        # 添加统计信息
+        stats_text = "网络统计:\n设施分布:\n"
+        for facility_type, count in facility_stats.items():
+            if count > 0:
+                stats_text += f"  {facility_names[facility_type]}: {count}个\n"
+        
+        if connection_stats:
+            stats_text += "\n连接分布:\n"
+            for connection_type, count in connection_stats.items():
+                if count > 0 and connection_type in connection_names:
+                    stats_text += f"  {connection_names[connection_type]}: {count}条\n"
+        
+        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes, 
+                    fontsize=8, bbox=dict(boxstyle="round,pad=0.3", 
+                    facecolor="white", alpha=0.9), verticalalignment='bottom')
+        
+        # 添加装饰
+        self.add_decorations(main_ax, mini_ax)
+        
+        print(f"华北地区设施统计: {facility_stats}")
+        print(f"连接统计: {connection_stats}")
+        
+        return fig, main_ax, mini_ax, facility_stats, connection_stats
+        """创建华北地区能源设施可视化（太阳能电站、风电站、管段、LNG终端、机场）"""
+        print("正在创建华北地区能源设施分布图...")
+        
+        # 创建基础地图
+        fig, main_ax, mini_ax = self.create_base_map(figsize=(12, 10))
+        
+        legend_elements = []
+        facility_stats = {
+            'solar': 0,
+            'wind': 0, 
+            'pipeline': 0,
+            'lng': 0,
+            'airport': 0
+        }
+        
+        # 1. 绘制太阳能电站
+        if all_data.get('renewable_energy') is not None:
+            renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
+            
+            if renewable_data is not None and len(renewable_data) > 0:
+                solar_facilities = renewable_data[renewable_data['发电站类型'].str.contains('光伏|太阳能|solar', case=False, na=False)]
+                
+                if len(solar_facilities) > 0:
+                    print(f"正在绘制 {len(solar_facilities)} 个太阳能电站...")
+                    for _, facility in solar_facilities.iterrows():
+                        capacity = facility.get('装机容量(MW)', 50)
+                        size = min(max(capacity / 2, 30), 150)
+                        
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c=self.facility_colors['solar'], s=size, 
+                            marker=self.facility_markers['solar'],
+                            edgecolors='black', linewidth=0.8,
+                            transform=self.data_crs, zorder=8, alpha=0.9,
+                            label='太阳能电站' if facility_stats['solar'] == 0 else ""
+                        )
+                        facility_stats['solar'] += 1
+                
+                # 2. 绘制风电站
+                wind_facilities = renewable_data[renewable_data['发电站类型'].str.contains('风电|风力|wind', case=False, na=False)]
+                
+                if len(wind_facilities) > 0:
+                    print(f"正在绘制 {len(wind_facilities)} 个风电站...")
+                    for _, facility in wind_facilities.iterrows():
+                        capacity = facility.get('装机容量(MW)', 50)
+                        size = min(max(capacity / 2, 30), 150)
+                        
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c=self.facility_colors['wind'], s=size, 
+                            marker=self.facility_markers['wind'],
+                            edgecolors='black', linewidth=0.8,
+                            transform=self.data_crs, zorder=8, alpha=0.9,
+                            label='风电站' if facility_stats['wind'] == 0 else ""
+                        )
+                        facility_stats['wind'] += 1
+        
+        # 3. 绘制天然气管段
+        if all_data.get('ng_pipelines') is not None:
+            pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
+            
+            if pipeline_data is not None and len(pipeline_data) > 0:
+                print(f"正在绘制 {len(pipeline_data)} 个管段...")
+                for _, pipeline in pipeline_data.iterrows():
+                    main_ax.scatter(
+                        pipeline['经度'], pipeline['纬度'],
+                        c=self.facility_colors['pipeline'], s=60, 
+                        marker=self.facility_markers['pipeline'],
+                        edgecolors='black', linewidth=0.8,
+                        transform=self.data_crs, zorder=7, alpha=0.9,
+                        label='天然气管段' if facility_stats['pipeline'] == 0 else ""
+                    )
+                    facility_stats['pipeline'] += 1
+        
+        # 4. 绘制LNG终端
+        if all_data.get('lng_terminals') is not None:
+            lng_data = self.filter_data_by_region(all_data['lng_terminals'])
+            
+            if lng_data is not None and len(lng_data) > 0:
+                print(f"正在绘制 {len(lng_data)} 个LNG终端...")
+                for _, terminal in lng_data.iterrows():
+                    main_ax.scatter(
+                        terminal['经度'], terminal['纬度'],
+                        c=self.facility_colors['lng'], s=80, 
+                        marker=self.facility_markers['lng'],
+                        edgecolors='black', linewidth=0.8,
+                        transform=self.data_crs, zorder=9, alpha=0.9,
+                        label='LNG终端' if facility_stats['lng'] == 0 else ""
+                    )
+                    facility_stats['lng'] += 1
+        
+        # 5. 绘制机场（从运输数据中提取）
+        if all_data.get('transport_summary') is not None:
+            transport_data = all_data['transport_summary']
+            
+            # 过滤华北地区的运输数据
+            region_transport = transport_data[
+                (transport_data['起点纬度'] >= self.map_extent[2]) & 
+                (transport_data['起点纬度'] <= self.map_extent[3]) &
+                (transport_data['起点经度'] >= self.map_extent[0]) & 
+                (transport_data['起点经度'] <= self.map_extent[1]) &
+                (transport_data['终点纬度'] >= self.map_extent[2]) & 
+                (transport_data['终点纬度'] <= self.map_extent[3]) &
+                (transport_data['终点经度'] >= self.map_extent[0]) & 
+                (transport_data['终点经度'] <= self.map_extent[1])
+            ]
+            
+            if len(region_transport) > 0:
+                # 提取机场终点
+                airports = region_transport[
+                    region_transport['终点'].str.contains('机场|airport', case=False, na=False)
+                ][['终点', '终点纬度', '终点经度']].drop_duplicates()
+                
+                if len(airports) > 0:
+                    print(f"正在绘制 {len(airports)} 个机场...")
+                    for _, airport in airports.iterrows():
+                        main_ax.scatter(
+                            airport['终点经度'], airport['终点纬度'],
+                            c=self.facility_colors['airport'], s=100, 
+                            marker=self.facility_markers['airport'],
+                            edgecolors='white', linewidth=1.0,
+                            transform=self.data_crs, zorder=10, alpha=0.9,
+                            label='机场' if facility_stats['airport'] == 0 else ""
+                        )
+                        facility_stats['airport'] += 1
+        
+        # 创建图例
+        for facility_type, count in facility_stats.items():
+            if count > 0:
+                facility_name = {
+                    'solar': '太阳能电站',
+                    'wind': '风电站',
+                    'pipeline': '天然气管段',
+                    'lng': 'LNG终端',
+                    'airport': '机场'
+                }[facility_type]
+                
+                legend_elements.append(
+                    plt.scatter([], [], 
+                              c=self.facility_colors[facility_type], 
+                              s=80, 
+                              marker=self.facility_markers[facility_type],
+                              edgecolors='black', linewidth=0.8,
+                              label=f'{facility_name} ({count}个)')
+                )
+        
+        # 添加图例
+        if legend_elements:
+            main_ax.legend(handles=legend_elements, loc='upper right', 
+                          fontsize=10, framealpha=0.9)
+        
+        # 添加标题
+        total_facilities = sum(facility_stats.values())
+        plt.suptitle(
+            f'华北地区能源基础设施分布图 (35°N-45°N, 110°E-120°E)\n'
+            f'总设施数: {total_facilities}个', 
+            fontsize=14, y=0.95, fontweight='bold'
+        )
+        
+        # 添加统计信息
+        stats_text = "设施统计:\n"
+        facility_names = {
+            'solar': '太阳能电站',
+            'wind': '风电站', 
+            'pipeline': '天然气管段',
+            'lng': 'LNG终端',
+            'airport': '机场'
+        }
+        
+        for facility_type, count in facility_stats.items():
+            if count > 0:
+                stats_text += f"{facility_names[facility_type]}: {count}个\n"
+        
+        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes, 
+                    fontsize=9, bbox=dict(boxstyle="round,pad=0.3", 
+                    facecolor="white", alpha=0.9), verticalalignment='bottom')
+        
+        # 添加装饰
+        self.add_decorations(main_ax, mini_ax)
+        
+        print(f"华北地区设施统计: {facility_stats}")
+        
+        return fig, main_ax, mini_ax, facility_stats
+    
+    def create_transport_visualization(self, transport_data, max_routes=1000):
+        """创建运输路径可视化"""
+        if transport_data is None or len(transport_data) == 0:
+            self.logger.error("没有有效的运输数据")
+            return None
+        
+        print("正在创建天然气运输路径地图...")
+        print(f"数据统计: {len(transport_data)} 条运输路径")
+        
+        # 限制显示的路径数量
+        if len(transport_data) > max_routes:
+            display_data = transport_data.head(max_routes)
+            print(f"限制显示前 {max_routes} 条路径")
+        else:
+            display_data = transport_data.copy()
+        
+        # 创建基础地图
+        fig, main_ax, mini_ax = self.create_base_map()
+        
+        return self._create_route_focused_visualization(fig, main_ax, mini_ax, display_data)
+    
+    def _create_route_focused_visualization(self, fig, main_ax, mini_ax, display_data):
+        """创建专注于运输路径的可视化，只显示涉及的设施"""
+        
+        # 计算线条宽度（基于运输量）
+        if '周运输量(kg)' in display_data.columns:
+            line_widths = self.normalize_transport_volume(display_data['周运输量(kg)'])
+        elif '日运输量(kg)' in display_data.columns:
+            line_widths = self.normalize_transport_volume(display_data['日运输量(kg)'])
+        elif '日运输量(m3)' in display_data.columns:
+            line_widths = self.normalize_transport_volume(display_data['日运输量(m3)'])
+        else:
+            line_widths = np.ones(len(display_data)) * 1.5
+        
+        # 绘制运输路径
+        print("正在绘制运输路径...")
+        route_stats = {'truck': 0, 'pipeline': 0, 'ship': 0, 'rail': 0, 'other': 0}
+        real_route_count = 0
+        
+        for idx, row in display_data.iterrows():
+            # 确定运输方式和颜色
+            transport_mode = row.get('运输方式', 'truck').lower()
+            color = self.transport_colors.get(transport_mode, self.transport_colors['default'])
+            
+            # 统计运输方式
+            if transport_mode in route_stats:
+                route_stats[transport_mode] += 1
+            else:
+                route_stats['other'] += 1
+            
+            # 尝试获取真实路径坐标
+            real_coordinates = self.get_real_route_coordinates_from_data(row)
+            
+            line_width = line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths
+            
+            if real_coordinates and len(real_coordinates) > 2:
+                # 使用真实路径坐标绘制
+                real_route_count += 1
+                lons = [coord[0] for coord in real_coordinates]
+                lats = [coord[1] for coord in real_coordinates]
+                
+                # 绘制主地图路径
+                main_ax.plot(
+                    lons, lats,
+                    color=color, 
+                    alpha=0.8, 
+                    linewidth=line_width,
+                    transform=self.data_crs, 
+                    zorder=4
+                )
+                
+                # 绘制小地图路径（南海区域）
+                if any(105 <= lon <= 122 and 2 <= lat <= 25 for lon, lat in zip(lons, lats)):
+                    mini_ax.plot(
+                        lons, lats,
+                        color=color, 
+                        alpha=0.8, 
+                        linewidth=line_width * 0.7,
+                        transform=self.data_crs, 
+                        zorder=4
+                    )
+            else:
+                # 使用直线路径（后备方案）
+                main_ax.plot(
+                    [row['起点经度'], row['终点经度']], 
+                    [row['起点纬度'], row['终点纬度']], 
+                    color=color, 
+                    alpha=0.5,  # 直线路径透明度更低
+                    linewidth=line_width,
+                    linestyle='--',  # 使用虚线表示估算路径
+                    transform=self.data_crs, 
+                    zorder=3
+                )
+                
+                # 绘制小地图路径（南海区域）
+                if (105 <= row['起点经度'] <= 122 and 2 <= row['起点纬度'] <= 25 and
+                    105 <= row['终点经度'] <= 122 and 2 <= row['终点纬度'] <= 25):
+                    mini_ax.plot(
+                        [row['起点经度'], row['终点经度']], 
+                        [row['起点纬度'], row['终点纬度']], 
+                        color=color, 
+                        alpha=0.5, 
+                        linewidth=line_width * 0.7,
+                        linestyle='--',
+                        transform=self.data_crs, 
+                        zorder=3
+                    )
+        
+        print(f"使用真实路径: {real_route_count}/{len(display_data)} 条")
+        
+        # 绘制设施点（只显示涉及运输路径的设施）
+        print("正在绘制设施点...")
+        
+        # 收集所有涉及运输的设施点
+        transport_facilities = []
+        
+        # 起点设施
+        origins = display_data[['起点', '起点纬度', '起点经度']].drop_duplicates()
+        for _, facility in origins.iterrows():
+            transport_facilities.append({
+                'name': facility['起点'],
+                'lat': facility['起点纬度'],
+                'lon': facility['起点经度'],
+                'type': 'origin'
+            })
+        
+        # 终点设施
+        destinations = display_data[['终点', '终点纬度', '终点经度']].drop_duplicates()
+        for _, facility in destinations.iterrows():
+            transport_facilities.append({
+                'name': facility['终点'],
+                'lat': facility['终点纬度'],
+                'lon': facility['终点经度'],
+                'type': 'destination'
+            })
+        
+        # 去重设施点（基于坐标）
+        unique_facilities = {}
+        for facility in transport_facilities:
+            coord_key = f"{facility['lat']:.6f},{facility['lon']:.6f}"
+            if coord_key not in unique_facilities:
+                unique_facilities[coord_key] = facility
+            else:
+                # 如果既是起点又是终点，标记为hub
+                if unique_facilities[coord_key]['type'] != facility['type']:
+                    unique_facilities[coord_key]['type'] = 'hub'
+        
+        # 绘制设施点
+        facility_counts = {'origin': 0, 'destination': 0, 'hub': 0}
+        
+        for facility in unique_facilities.values():
+            # 根据设施名称和类型确定显示样式
+            facility_type = self.get_facility_type(facility['name'])
+            
+            if facility['type'] == 'hub':
+                # 枢纽设施使用特殊样式
+                marker = 'h'  # 六边形
+                color = '#FF6B6B'  # 红色
+                size = 80
+                edge_color = 'darkred'
+            elif facility['type'] == 'origin':
+                # 起点设施
+                marker = self.facility_markers.get(facility_type, 'o')
+                color = self.facility_colors.get(facility_type, self.facility_colors['default'])
+                size = 60
+                edge_color = 'black'
+            else:  # destination
+                # 终点设施
+                marker = self.facility_markers.get(facility_type, 's')
+                color = self.facility_colors.get(facility_type, self.facility_colors['default'])
+                size = 50
+                edge_color = 'white'
+            
+            facility_counts[facility['type']] += 1
+            
+            # 绘制主地图设施点
+            main_ax.scatter(
+                facility['lon'], facility['lat'], 
+                c=color, s=size, marker=marker, 
+                edgecolors=edge_color, linewidth=0.8,
+                transform=self.data_crs, zorder=10, alpha=0.9
+            )
+            
+            # 绘制小地图设施点（南海区域）
+            if 105 <= facility['lon'] <= 122 and 2 <= facility['lat'] <= 25:
+                mini_ax.scatter(
+                    facility['lon'], facility['lat'], 
+                    c=color, s=size*0.6, marker=marker, 
+                    edgecolors=edge_color, linewidth=0.5,
+                    transform=self.data_crs, zorder=10, alpha=0.9
+                )
+        
+        print(f"设施统计: 起点{facility_counts['origin']}个, 终点{facility_counts['destination']}个, 枢纽{facility_counts['hub']}个")
+        
+        # 创建图例
+        legend_elements = []
+        
+        # 运输方式图例
+        for mode, color in self.transport_colors.items():
+            if mode != 'default' and route_stats.get(mode, 0) > 0:
+                mode_name = {
+                    'truck': '卡车运输',
+                    'pipeline': '管道运输', 
+                    'ship': '船舶运输',
+                    'rail': '铁路运输'
+                }.get(mode, mode)
+                legend_elements.append(
+                    plt.Line2D([0], [0], color=color, linewidth=3, 
+                              label=f'{mode_name} ({route_stats[mode]}条)')
+                )
+        
+        # 路径类型图例
+        if real_route_count > 0:
+            legend_elements.append(
+                plt.Line2D([0], [0], color='gray', linewidth=2, alpha=0.8,
+                          label=f'真实路径 ({real_route_count}条)')
+            )
+        
+        estimated_routes = len(display_data) - real_route_count
+        if estimated_routes > 0:
+            legend_elements.append(
+                plt.Line2D([0], [0], color='gray', linewidth=2, alpha=0.5, linestyle='--',
+                          label=f'估算路径 ({estimated_routes}条)')
+            )
+        
+        # 设施类型图例
+        if facility_counts['hub'] > 0:
+            legend_elements.append(
+                plt.scatter([], [], c='#FF6B6B', s=80, marker='h', 
+                           edgecolors='darkred', linewidth=0.8,
+                           label=f'运输枢纽 ({facility_counts["hub"]}个)')
+            )
+        
+        if facility_counts['origin'] > 0:
+            legend_elements.append(
+                plt.scatter([], [], c=self.facility_colors['default'], s=60, marker='o', 
+                           edgecolors='black', linewidth=0.5,
+                           label=f'起点设施 ({facility_counts["origin"]}个)')
+            )
+            
+        if facility_counts['destination'] > 0:
+            legend_elements.append(
+                plt.scatter([], [], c=self.facility_colors['airport'], s=50, marker='s', 
+                           edgecolors='white', linewidth=0.8,
+                           label=f'终点设施 ({facility_counts["destination"]}个)')
+            )
+        
+        # 添加图例
+        main_ax.legend(handles=legend_elements, loc='lower left', 
+                      fontsize=9, framealpha=0.9)
+        
+        # 添加标题
+        total_volume = display_data['周运输量(kg)'].sum() if '周运输量(kg)' in display_data.columns else 0
+        plt.suptitle(
+            f'天然气供应链运输路径网络图 (真实路径显示)\n'
+            f'运输路径: {len(display_data)}条 | 真实路径: {real_route_count}条 | 总运输量: {total_volume/1e6:.1f}万吨/周', 
+            fontsize=14, y=0.95
+        )
+        
+        # 添加统计信息
+        total_facilities = sum(facility_counts.values())
+        stats_text = f"""路径统计:
+总路径: {len(display_data)}条
+真实路径: {real_route_count}条
+估算路径: {len(display_data) - real_route_count}条
+运输设施: {total_facilities}个
+总运输量: {total_volume/1e6:.1f}万吨/周"""
+        
+        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes, 
+                    fontsize=8, bbox=dict(boxstyle="round,pad=0.3", 
+                    facecolor="white", alpha=0.9))
+        
+        # 添加装饰
+        self.add_decorations(main_ax, mini_ax)
+        
+        return fig, main_ax, mini_ax, display_data
+    
+    def create_comprehensive_visualization(self, all_data, max_routes=500):
+        """创建包含所有基础设施和运输线路的综合可视化"""
+        print("正在创建综合能源基础设施地图...")
+        
+        # 创建基础地图
+        fig, main_ax, mini_ax = self.create_base_map(figsize=(16, 12))
+        
+        legend_elements = []
+        stats_info = {"设施统计": {}, "运输统计": {}}
+        
+        # 1. 绘制可再生能源设施（氢能生产点）
+        if all_data.get('renewable_energy') is not None:
+            renewable_data = all_data['renewable_energy']
+            print(f"正在绘制 {len(renewable_data)} 个可再生能源设施...")
+            
+            for _, facility in renewable_data.iterrows():
+                facility_type = 'wind' if '风电' in str(facility['发电站类型']) else 'solar'
+                color = self.facility_colors.get(facility_type, self.facility_colors['renewable'])
+                marker = '^' if facility_type == 'wind' else 'v'
+                
+                # 根据装机容量调整点大小
+                capacity = facility.get('装机容量(MW)', 50)
+                size = min(max(capacity / 5, 20), 120)
+                
+                main_ax.scatter(
+                    facility['经度'], facility['纬度'], 
+                    c=color, s=size, marker=marker, 
+                    edgecolors='black', linewidth=0.5,
+                    transform=self.data_crs, zorder=8, alpha=0.8
+                )
+                
+                # 小地图
+                if 105 <= facility['经度'] <= 122 and 2 <= facility['纬度'] <= 25:
+                    mini_ax.scatter(
+                        facility['经度'], facility['纬度'], 
+                        c=color, s=size*0.5, marker=marker, 
+                        edgecolors='black', linewidth=0.3,
+                        transform=self.data_crs, zorder=8, alpha=0.8
+                    )
+            
+            wind_count = len(renewable_data[renewable_data['发电站类型'].str.contains('风电', na=False)])
+            solar_count = len(renewable_data) - wind_count
+            stats_info["设施统计"]["风电场"] = wind_count
+            stats_info["设施统计"]["光伏电站"] = solar_count
+            
+            if wind_count > 0:
+                legend_elements.append(
+                    plt.scatter([], [], c=self.facility_colors['wind'], s=60, marker='^', 
+                               edgecolors='black', linewidth=0.5,
+                               label=f'风电场 ({wind_count}个)')
+                )
+            if solar_count > 0:
+                legend_elements.append(
+                    plt.scatter([], [], c=self.facility_colors['solar'], s=60, marker='v', 
+                               edgecolors='black', linewidth=0.5,
+                               label=f'光伏电站 ({solar_count}个)')
+                )
+        
+        # 2. 绘制LNG终端
+        if all_data.get('lng_terminals') is not None:
+            lng_data = all_data['lng_terminals']
+            print(f"正在绘制 {len(lng_data)} 个LNG终端...")
+            
+            for _, terminal in lng_data.iterrows():
+                main_ax.scatter(
+                    terminal['经度'], terminal['纬度'], 
+                    c=self.facility_colors['lng'], s=80, marker='s', 
+                    edgecolors='black', linewidth=0.8,
+                    transform=self.data_crs, zorder=9, alpha=0.9
+                )
+                
+                # 小地图
+                if 105 <= terminal['经度'] <= 122 and 2 <= terminal['纬度'] <= 25:
+                    mini_ax.scatter(
+                        terminal['经度'], terminal['纬度'], 
+                        c=self.facility_colors['lng'], s=40, marker='s', 
+                        edgecolors='black', linewidth=0.5,
+                        transform=self.data_crs, zorder=9, alpha=0.9
+                    )
+            
+            stats_info["设施统计"]["LNG终端"] = len(lng_data)
+            legend_elements.append(
+                plt.scatter([], [], c=self.facility_colors['lng'], s=80, marker='s', 
+                           edgecolors='black', linewidth=0.8,
+                           label=f'LNG终端 ({len(lng_data)}个)')
+            )
+        
+        # 3. 绘制天然气管道设施
+        if all_data.get('ng_pipelines') is not None:
+            pipeline_data = all_data['ng_pipelines']
+            print(f"正在绘制 {len(pipeline_data)} 个天然气管道节点...")
+            
+            for _, pipeline in pipeline_data.iterrows():
+                main_ax.scatter(
+                    pipeline['经度'], pipeline['纬度'], 
+                    c=self.facility_colors['pipeline'], s=50, marker='D', 
+                    edgecolors='black', linewidth=0.5,
+                    transform=self.data_crs, zorder=7, alpha=0.8
+                )
+            
+            stats_info["设施统计"]["天然气管道节点"] = len(pipeline_data)
+            legend_elements.append(
+                plt.scatter([], [], c=self.facility_colors['pipeline'], s=50, marker='D', 
+                           edgecolors='black', linewidth=0.5,
+                           label=f'天然气管道 ({len(pipeline_data)}个)')
+            )
+        
+        # 4. 绘制氢能运输线路
+        if all_data.get('hydrogen_transport') is not None:
+            h2_transport = all_data['hydrogen_transport'][:max_routes//3]  # 限制显示数量
+            print(f"正在绘制 {len(h2_transport)} 条氢能运输线路...")
+            
+            for _, route in h2_transport.iterrows():
+                volume = route.get('氢气运输量(kg)', 100)
+                line_width = min(max(volume / 200, 0.5), 3.0)
+                
+                main_ax.plot(
+                    [route['起点经度'], route['终点经度']], 
+                    [route['起点纬度'], route['终点纬度']], 
+                    color=self.transport_type_colors['H2'], 
+                    alpha=0.6, linewidth=line_width,
+                    transform=self.data_crs, zorder=4
+                )
+            
+            stats_info["运输统计"]["氢能运输"] = len(h2_transport)
+            legend_elements.append(
+                plt.Line2D([0], [0], color=self.transport_type_colors['H2'], linewidth=3, 
+                          label=f'氢能运输 ({len(h2_transport)}条)')
+            )
+        
+        # 5. 绘制天然气运输线路
+        if all_data.get('ng_transport') is not None:
+            ng_transport = all_data['ng_transport'][:max_routes//3]  # 限制显示数量
+            print(f"正在绘制 {len(ng_transport)} 条天然气运输线路...")
+            
+            for _, route in ng_transport.iterrows():
+                volume = route.get('天然气运输量(m3)', 1000)
+                line_width = min(max(volume / 5000, 0.5), 3.0)
+                
+                main_ax.plot(
+                    [route['起点经度'], route['终点经度']], 
+                    [route['起点纬度'], route['终点纬度']], 
+                    color=self.transport_type_colors['NG'], 
+                    alpha=0.6, linewidth=line_width,
+                    transform=self.data_crs, zorder=5
+                )
+            
+            stats_info["运输统计"]["天然气运输"] = len(ng_transport)
+            legend_elements.append(
+                plt.Line2D([0], [0], color=self.transport_type_colors['NG'], linewidth=3, 
+                          label=f'天然气运输 ({len(ng_transport)}条)')
+            )
+        
+        # 6. 绘制甲醇运输线路（原有功能）
+        if all_data.get('transport_summary') is not None:
+            mtj_transport = all_data['transport_summary'][:max_routes//3]  # 限制显示数量
+            print(f"正在绘制 {len(mtj_transport)} 条甲醇运输线路...")
+            
+            # 计算线条宽度
+            if '周运输量(kg)' in mtj_transport.columns:
+                line_widths = self.normalize_transport_volume(mtj_transport['周运输量(kg)'])
+            else:
+                line_widths = np.ones(len(mtj_transport)) * 1.5
+            
+            for idx, route in mtj_transport.iterrows():
+                main_ax.plot(
+                    [route['起点经度'], route['终点经度']], 
+                    [route['起点纬度'], route['终点纬度']], 
+                    color=self.transport_type_colors['MTJ'], 
+                    alpha=0.7, linewidth=line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths,
+                    transform=self.data_crs, zorder=6
+                )
+            
+            stats_info["运输统计"]["绿色甲醇航空燃料运输"] = len(mtj_transport)
+            legend_elements.append(
+                plt.Line2D([0], [0], color=self.transport_type_colors['MTJ'], linewidth=3, 
+                          label=f'绿色甲醇航空燃料 ({len(mtj_transport)}条)')
+            )
+            
+            # 绘制机场（MTJ运输的终点）- 只统计真正的机场名称，不包括生产设施
+            # 过滤出真正的机场终点（北京、天津等机场名称）
+            airport_terminals = mtj_transport[
+                (mtj_transport['终点类型'] == '机场') & 
+                (~mtj_transport['终点'].str.contains('lng_|airport_', na=False))
+            ][['终点', '终点纬度', '终点经度']].drop_duplicates()
+            
+            for _, airport in airport_terminals.iterrows():
+                main_ax.scatter(
+                    airport['终点经度'], airport['终点纬度'], 
+                    c=self.facility_colors['airport'], s=80, marker='o', 
+                    edgecolors='white', linewidth=1.0,
+                    transform=self.data_crs, zorder=12, alpha=0.9
+                )
+            
+            stats_info["设施统计"]["机场"] = len(airport_terminals)
+            if len(airport_terminals) > 0:
+                legend_elements.append(
+                    plt.scatter([], [], c=self.facility_colors['airport'], s=80, marker='o', 
+                               edgecolors='white', linewidth=1.0,
+                               label=f'机场 ({len(airport_terminals)}个)')
+                )
+        
+        # 添加图例
+        main_ax.legend(handles=legend_elements, loc='lower left', 
+                      fontsize=9, framealpha=0.9, ncol=2)
+        
+        # 添加标题
+        plt.suptitle(
+            '中国天然气-氢能-甲醇综合能源基础设施网络图', 
+            fontsize=16, y=0.95, fontweight='bold'
+        )
+        
+        # 添加统计信息
+        stats_text = "基础设施统计:\n"
+        for category, items in stats_info.items():
+            stats_text += f"{category}:\n"
+            for item, count in items.items():
+                stats_text += f"  {item}: {count}个/条\n"
+        
+        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes, 
+                    fontsize=8, bbox=dict(boxstyle="round,pad=0.3", 
+                    facecolor="white", alpha=0.9), verticalalignment='bottom')
+        
+        # 添加装饰
+        self.add_decorations(main_ax, mini_ax)
+        
+        return fig, main_ax, mini_ax, all_data
+    
+    def find_latest_files(self, results_dir=None):
+        """查找最新的所有相关数据文件"""
+        if results_dir is None:
+            results_dir = Path(__file__).parent.parent / 'results'
+        
+        results_dir = Path(results_dir)
+        
+        # 需要查找的文件类型
+        file_patterns = {
+            'transport_summary': 'transport_summary_*.csv',
+            'renewable_energy': 'renewable_energy_plants_*.csv', 
+            'hydrogen_transport': 'hydrogen_transport_plan_*.csv',
+            'ng_pipelines': 'ng_pipelines_*.csv',
+            'ng_transport': 'ng_transport_plan_*.csv',
+            'lng_terminals': 'lng_terminals_*.csv'
+        }
+        
+        latest_files = {}
+        
+        for file_type, pattern in file_patterns.items():
+            files = list(results_dir.glob(pattern))
+            if files:
+                latest_file = max(files, key=lambda x: x.stat().st_mtime)
+                latest_files[file_type] = str(latest_file)
+                self.logger.info(f"找到最新的{file_type}文件: {latest_file}")
+            else:
+                self.logger.warning(f"未找到{file_type}文件: {pattern}")
+                latest_files[file_type] = None
+        
+        return latest_files
+    
+    def find_latest_transport_file(self, results_dir=None):
+        """查找最新的transport_summary文件"""
+        if results_dir is None:
+            results_dir = Path(__file__).parent.parent / 'results'
+        
+        results_dir = Path(results_dir)
+        
+        # 查找所有transport_summary文件
+        pattern = 'transport_summary_*.csv'
+        files = list(results_dir.glob(pattern))
+        
+        if not files:
+            self.logger.error(f"在 {results_dir} 中未找到任何transport_summary文件")
+            return None
+        
+        # 按文件修改时间排序，返回最新的
+        latest_file = max(files, key=lambda x: x.stat().st_mtime)
+        self.logger.info(f"找到最新的transport_summary文件: {latest_file}")
+        
+        return str(latest_file)
+    
+    def save_visualization(self, fig, filename=None, output_dir=None):
+        """保存可视化结果"""
+        if output_dir is None:
+            output_dir = Path(__file__).parent.parent / 'results' / 'visualizations'
+        
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        if filename is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f'transport_route_network_{timestamp}.png'
+        
+        output_path = output_dir / filename
+        
+        fplt.savefig(str(output_path), dpi=300, bbox_inches='tight', 
+                    facecolor='white', edgecolor='none')
+        plt.close(fig)
+        
+        print(f"运输路径地图已保存: {output_path}")
+        return str(output_path)
+    
+    def create_analysis_report(self, transport_data, display_data, output_dir=None):
+        """创建分析报告"""
+        if output_dir is None:
+            output_dir = Path(__file__).parent.parent / 'results' / 'reports'
+        
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_path = output_dir / f'transport_analysis_report_{timestamp}.md'
+        
+        # 统计分析
+        total_routes = len(transport_data)
+        displayed_routes = len(display_data)
+        
+        # 运输方式统计
+        transport_mode_stats = display_data['运输方式'].value_counts()
+        
+        # 距离统计
+        distance_stats = display_data['距离(km)'].describe() if '距离(km)' in display_data.columns else None
+        
+        # 运输量统计
+        volume_stats = display_data['周运输量(kg)'].describe() if '周运输量(kg)' in display_data.columns else None
+        
+        # 生成报告
+        report_content = f"""# 天然气供应链运输路径分析报告
+
+**生成时间**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+## 数据概览
+
+- **总运输路径数**: {total_routes}条
+- **可视化路径数**: {displayed_routes}条
+- **起点设施数**: {len(display_data['起点'].unique())}个
+- **终点设施数**: {len(display_data['终点'].unique())}个
+
+## 运输方式分布
+
+"""
+        
+        for mode, count in transport_mode_stats.items():
+            percentage = (count / displayed_routes) * 100
+            report_content += f"- **{mode}**: {count}条 ({percentage:.1f}%)\n"
+        
+        if distance_stats is not None:
+            report_content += f"""
+## 运输距离统计
+
+- **平均距离**: {distance_stats['mean']:.2f} km
+- **最短距离**: {distance_stats['min']:.2f} km  
+- **最长距离**: {distance_stats['max']:.2f} km
+- **距离中位数**: {distance_stats['50%']:.2f} km
+"""
+        
+        if volume_stats is not None:
+            total_volume = display_data['周运输量(kg)'].sum()
+            report_content += f"""
+## 运输量统计
+
+- **总运输量**: {total_volume/1e6:.2f} 万吨/周
+- **平均运输量**: {volume_stats['mean']/1e3:.2f} 吨/周
+- **最大运输量**: {volume_stats['max']/1e3:.2f} 吨/周
+- **运输量中位数**: {volume_stats['50%']/1e3:.2f} 吨/周
+"""
+        
+        report_content += f"""
+## 主要运输枢纽
+
+### 起点设施（按运输量排序）
+"""
+        
+        # 按起点统计运输量
+        if '周运输量(kg)' in display_data.columns:
+            origin_volume = display_data.groupby('起点')['周运输量(kg)'].sum().sort_values(ascending=False).head(10)
+            for origin, volume in origin_volume.items():
+                report_content += f"- **{origin}**: {volume/1e3:.2f} 吨/周\n"
+        
+        # 保存报告
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(report_content)
+        
+        print(f"分析报告已保存: {report_path}")
+        return str(report_path)
+
+def main():
+    """主函数"""
+    # 设置日志
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
+    visualizer = TransportRouteVisualizer()
+    
+    # 查找所有最新数据文件
+    latest_files = visualizer.find_latest_files()
+    
+    print("[INFO] 正在加载最新数据文件...")
+    all_data = {}
+    
+    # 加载所有可用的数据
+    if latest_files['transport_summary']:
+        print(f"加载甲醇运输数据: {latest_files['transport_summary']}")
+        all_data['transport_summary'] = visualizer.load_transport_data(latest_files['transport_summary'])
+    
+    if latest_files['renewable_energy']:
+        print(f"加载可再生能源数据: {latest_files['renewable_energy']}")
+        all_data['renewable_energy'] = visualizer.load_renewable_energy_data(latest_files['renewable_energy'])
+    
+    if latest_files['hydrogen_transport']:
+        print(f"加载氢能运输数据: {latest_files['hydrogen_transport']}")
+        all_data['hydrogen_transport'] = visualizer.load_hydrogen_transport_data(latest_files['hydrogen_transport'])
+    
+    if latest_files['ng_pipelines']:
+        print(f"加载天然气管道数据: {latest_files['ng_pipelines']}")
+        all_data['ng_pipelines'] = visualizer.load_ng_pipeline_data(latest_files['ng_pipelines'])
+    
+    if latest_files['ng_transport']:
+        print(f"加载天然气运输数据: {latest_files['ng_transport']}")
+        all_data['ng_transport'] = visualizer.load_ng_transport_data(latest_files['ng_transport'])
+    
+    if latest_files['lng_terminals']:
+        print(f"加载LNG终端数据: {latest_files['lng_terminals']}")
+        all_data['lng_terminals'] = visualizer.load_lng_terminal_data(latest_files['lng_terminals'])
+    
+    # 检查是否有任何数据加载成功
+    valid_data = {k: v for k, v in all_data.items() if v is not None and len(v) > 0}
+    
+    if not valid_data:
+        print("[ERROR] 未找到任何有效的数据文件")
+        print("请确保已运行优化模型生成相关数据文件")
+        return
+    
+    print(f"\n[SUCCESS] 成功加载 {len(valid_data)} 类数据:")
+    for data_type, data in valid_data.items():
+        print(f"  - {data_type}: {len(data)} 条记录")
+    
+    # 创建华北地区能源设施网络可视化（包含连接线）
+    print("\n[INFO] 正在创建华北地区能源设施网络图...")
+    print("显示设施类型: 太阳能电站、风电站、天然气管段、LNG终端、机场")
+    print("显示连接关系: 不同设施类型间的连接用不同颜色表示")
+    print("地图范围: 35°N-45°N, 110°E-120°E (华北地区)")
+    
+    result = visualizer.create_north_china_facilities_with_connections_visualization(valid_data)
+    
+    if result is None:
+        print("[ERROR] 可视化创建失败")
+        return
+    
+    fig, main_ax, mini_ax, facility_stats, connection_stats = result
+    
+    # 保存可视化
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f'north_china_energy_network_{timestamp}.png'
+    viz_path = visualizer.save_visualization(fig, filename)
+    
+    print(f"\n[SUCCESS] 华北地区能源设施网络可视化完成!")
+    print(f"[OUTPUT] 图表文件: {viz_path}")
+    print(f"[REGION] 地图范围: 35°N-45°N, 110°E-120°E")
+    print(f"[FACILITIES] 设施统计: {facility_stats}")
+    print(f"[CONNECTIONS] 连接统计: {connection_stats}")
+    
+    # 显示详细统计
+    total_facilities = sum(facility_stats.values())
+    total_connections = sum(connection_stats.values())
+    
+    if total_facilities > 0:
+        print(f"[SUMMARY] 总共显示了 {total_facilities} 个能源基础设施")
+        facility_names = {
+            'solar': '太阳能电站',
+            'wind': '风电站',
+            'pipeline': '天然气管段', 
+            'lng': 'LNG终端',
+            'airport': '机场'
+        }
+        for facility_type, count in facility_stats.items():
+            if count > 0:
+                percentage = (count / total_facilities) * 100
+                print(f"  - {facility_names[facility_type]}: {count}个 ({percentage:.1f}%)")
+    
+    if total_connections > 0:
+        print(f"[CONNECTIONS] 总共显示了 {total_connections} 条设施间连接")
+        connection_names = {
+            'solar_to_lng': '太阳能→LNG',
+            'wind_to_lng': '风电→LNG', 
+            'lng_to_pipeline': 'LNG→管段',
+            'pipeline_to_airport': '管段→机场',
+            'lng_to_airport': 'LNG→机场',
+            'renewable_to_pipeline': '可再生能源→管段',
+            'pipeline_to_pipeline': '管段间连接'
+        }
+        for connection_type, count in connection_stats.items():
+            if count > 0 and connection_type in connection_names:
+                percentage = (count / total_connections) * 100
+                print(f"  - {connection_names[connection_type]}: {count}条 ({percentage:.1f}%)")
+    
+    if total_facilities == 0:
+        print("[WARNING] 在指定的华北地区范围内未找到任何设施")
+        print("请检查数据文件或调整地图范围")
+
+if __name__ == "__main__":
+    main()

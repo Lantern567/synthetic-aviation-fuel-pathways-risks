@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="max-age=18000,must-revalidate">
+<title>上海石油天然气交易中心</title>
+	<link rel="stylesheet" href="/css/style.css" type="text/css" />
+	<link href="/css/index.css" rel="stylesheet" type="text/css" />
+	<link href="/css/content.css" rel="stylesheet" type="text/css" />
+	<link href="/css/list_chart.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+
+<body>
+	<script type="text/javascript" src="/js/jquery.js"></script>
+<script>
+function qkeypress(){
+	var q=$("input[name=q]");
+	if(q.val().trim()!=""){
+		$("input[name=q]").autocomplete("enable");
+	}else{
+		$("input[name=q]").autocomplete("disable");
+	}
+}
+function query(){
+	$.post("/createToken.jspx", {}, function(data) {
+		$("#token").val(data.token);
+		$("#searchForm").submit();
+	}, "json");
+}
+$(function() {
+	$("input[name='q']").bind('keypress',function(event){
+	    if(event.keyCode == 13)     
+	    {  
+	    	event.preventDefault();
+	    	query();
+	    }  
+	});
+});
+</script>
+
+
+
+	<!--头部：语言+logo+导航+搜索-->
+	<div class="top">
+
+<!--  20240314去除语言切换  -->
+<!--
+		<div class="language_bg">
+			<div class="language_block">
+				<a href="##" class="language">English</a>
+				<a href="##" class="language language_now">中文</a>
+			</div>
+		</div>
+-->
+
+		<div class="logo_bg">
+		<div class="logo">
+			<h99 class="logo_area"><img src="/img/logo.png" style=''height:30px"></h99>
+			<div class="phone_tab_icon"><img src="/img/tab.png"></div>
+			<ul class="phone_tab_list">
+				<li class="phone_tab"  onclick="location.href='/'" style='cursor:pointer'>首页</li>
+				<li class="phone_tab"  onclick="location.href='/html/gsxw/'" style='cursor:pointer'>公司新闻</li>
+				<li class="phone_tab"  onclick="location.href='/html/clbj.html'" style='cursor:pointer'>关于我们</li>
+				<li class="phone_tab"  onclick="location.href='/html/gdtrqgp/'" style='cursor:pointer'>上市品种</li>
+				<li class="phone_tab"  onclick="location.href='/html/rslc/'" style='cursor:pointer'>入市指南</li>
+				<li class="phone_tab"  onclick="location.href='/html/jgzs/'" style='cursor:pointer'>价格与指数</li>
+				<li class="phone_tab"  onclick="location.href='/html/xyzx/'" style='cursor:pointer'>最新资讯</li>
+				<li class="phone_tab"  onclick="location.href='/html/jygg/'" style='cursor:pointer'>通知公告</li>
+				<li class="phone_tab"  onclick="location.href='/html/gdtrqsj.html'" style='cursor:pointer'>历史行情</li>
+				<li class="phone_tab"  onclick="location.href='http://kh.shpgx.com:8084/open/step2'" style='cursor:pointer'>会员中心</li>
+				<li class="phone_tab"  onclick="location.href='/html/xzzq/'" style='cursor:pointer'>下载专区</li>
+
+			</ul>
+		</div>
+		</div>
+		<div class="navigation">
+			<a href="/" class="navigation_tab">首页</a>
+			<div class="navigation_tab ">
+				<a  href='/html/gsxw/' class="navigation_tab_txt ">公司新闻</a>
+				<ul class="navigation_tab_menu">
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/clbj.html' class="navigation_tab_txt ">关于我们</a>
+				<ul class="navigation_tab_menu">
+ 					<li class="navigation_tab_menu1">中心介绍</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/clbj.html'" style='cursor:pointer'>成立背景</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/lnhjzg.html'" style='cursor:pointer'>理念和价值观</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/fzyj.html'" style='cursor:pointer'>发展愿景</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zzjg.html'" style='cursor:pointer'>组织架构</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/dsj.html'" style='cursor:pointer'>大事记</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/tdjs.html'" style='cursor:pointer'>团队建设</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/lxwm.html'" style='cursor:pointer'>联系我们</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/gdtrqgp/' class="navigation_tab_txt ">上市品种</a>
+				<ul class="navigation_tab_menu">
+ 					<li class="navigation_tab_menu1">管道天然气</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/gdtrqgp/'" style='cursor:pointer'>管道天然气挂牌</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/gdtrqjj/'" style='cursor:pointer'>管道天然气竞价</li>
+ 					<li class="navigation_tab_menu1">液化天然气</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/yhtrqgp/'" style='cursor:pointer'>液化天然气挂牌</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/yhtrqjj/'" style='cursor:pointer'>液化天然气竞价</li>
+ 					<li class="navigation_tab_menu1">油品</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/ypgp/'" style='cursor:pointer'>油品挂牌</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/ypjj/'" style='cursor:pointer'>油品竞价</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/LNGjsz/20241227/7235.html'" style='cursor:pointer'>LNG接收站</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/rslc/' class="navigation_tab_txt ">入市指南</a>
+				<ul class="navigation_tab_menu">
+					<li class="navigation_tab_menu1" onclick="location.href='/html/rslc/'" style='cursor:pointer'>入市流程</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/hygl/'" style='cursor:pointer'>会员管理</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/jygl/'" style='cursor:pointer'>交易管理</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zjyjs/'" style='cursor:pointer'>资金与结算</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/czzn/'" style='cursor:pointer'>操作指南</li>
+ 					<li class="navigation_tab_menu1">规章制度</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/zfwj/'" style='cursor:pointer'>政府文件</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/xgxygd/'" style='cursor:pointer'>相关行业规定</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/jyzxglgd/'" style='cursor:pointer'>交易中心管理规定</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/qtgf/'" style='cursor:pointer'>其他规范</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab navigation_tab_now">
+				<a  href='/html/jgzs/' class="navigation_tab_txt navigation_tab_now">价格与指数</a>
+				<ul class="navigation_tab_menu">
+ 					<li class="navigation_tab_menu1">中国LNG出厂价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/qgjg.html'" style='cursor:pointer'>全国价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/zgLNGccjgqyzs.html'" style='cursor:pointer'>区域价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/czjg.html'" style='cursor:pointer'>出站价格</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zgLNGzhjkdajgzs.html'" style='cursor:pointer'>中国LNG综合进口到岸价格指数</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zgyyzhjkdajgzs.html'" style='cursor:pointer'>中国原油综合进口到岸价格指数</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zgLPGzhjkdajgzs.html'" style='cursor:pointer'>中国LPG综合进口到岸价格指数</li>
+ 					<li class="navigation_tab_menu1">中国进口现货LNG到岸价格(CLD)</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/zgjkxhLNGdajg.html'" style='cursor:pointer'>日度价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/zgjkxhLNGdajgyjj.html'" style='cursor:pointer'>月度均价</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/LNGbjsj.html'" style='cursor:pointer'>LNG报价数据</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zgqcypfjg.html'" style='cursor:pointer'>中国汽柴油批发价格</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zgshrlybscgbj.html'" style='cursor:pointer'>中国上海燃料油保税船供报价</li>
+ 					<li class="navigation_tab_menu1">中国(华北)车用LNG加注价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/sjg.html'" style='cursor:pointer'>省价格</li>
+					<li class="navigation_tab_menu2" onclick="location.href='/html/djsjg.html'" style='cursor:pointer'>地级市价格</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/xyzx/' class="navigation_tab_txt ">最新资讯</a>
+				<ul class="navigation_tab_menu">
+					<li class="navigation_tab_menu1" onclick="location.href='/html/bgyw/'" style='cursor:pointer'>保供有我</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/xyzx/'" style='cursor:pointer'>行业资讯</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/zcsd/'" style='cursor:pointer'>政策速递</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/jygg/' class="navigation_tab_txt ">通知公告</a>
+				<ul class="navigation_tab_menu">
+					<li class="navigation_tab_menu1" onclick="location.href='/html/jygg/'" style='cursor:pointer'>交易公告</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/hyzq/'" style='cursor:pointer'>调价公告</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/qtgg/'" style='cursor:pointer'>其他公告</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/gdtrqsj.html' class="navigation_tab_txt ">历史行情</a>
+				<ul class="navigation_tab_menu">
+					<li class="navigation_tab_menu1" onclick="location.href='/html/gdtrqsj.html'" style='cursor:pointer'>管道天然气数据</li>
+					<li class="navigation_tab_menu1" onclick="location.href='/html/yhtrqsj.html'" style='cursor:pointer'>液化天然气数据</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='http://kh.shpgx.com:8084/open/step2' class="navigation_tab_txt ">会员中心</a>
+				<ul class="navigation_tab_menu">
+					<li class="navigation_tab_menu1" onclick="location.href='http://kh.shpgx.com:8084/open/step2'" style='cursor:pointer'>会员注册</li>
+					<li class="navigation_tab_menu1" onclick="location.href='http://kh.shpgx.com:8084/open/gpQuery'" style='cursor:pointer'>进度查询</li>
+					<li class="navigation_tab_menu1" onclick="location.href='https://egas.cnfin.com'" style='cursor:pointer'>会员信息平台</li>
+
+				</ul>
+			</div>
+			<div class="navigation_tab ">
+				<a  href='/html/xzzq/' class="navigation_tab_txt ">下载专区</a>
+				<ul class="navigation_tab_menu">
+
+				</ul>
+			</div>
+
+<!--  20240314去除搜索框  -->
+<!--
+			<div class="search_bg">
+				<div class="search">
+					<form action="/search.jspx" target="_blank" name="searchForm" id="searchForm">
+					<input  placeholder="请输入关键字" type="text" name="q" value=""   maxlength="50" autocomplete="off"  class="search_input" >
+					<input type="hidden" name="token" id="token" value="" />
+					<a href="javascript:query()" class="search_icon" ></a>
+					</form>
+				</div>
+			</div>
+-->
+
+		</div>
+	</div>	<script type="text/javascript" src="/js/charts/echarts.min.js"></script>
+	<script type="text/javascript" src="/js/charts/china.js"></script>
+	<script type="text/javascript" src="/js/charts/area.js"></script>
+<script type="text/javascript" src="/js/index_chart.js"></script>
+<script type="text/javascript" src="/js/data.js"></script>
+
+	<div class="date_index_bg">
+	<div class="centent2">
+	
+
+
+		<div class="centent_left_bg">
+			<div class="centent_left">
+				<div class="centent_left_tlt">价格与指数</div>
+				<ul>
+					<a href="/html/zgLNGccjg/"><li class="centent_left_menu_tlt  ">中国LNG出厂价格</li></a>
+					<li class="centent_left_menu  "><a href="/html/qgjg.html">全国价格</li></a>
+					<li class="centent_left_menu  "><a href="/html/zgLNGccjgqyzs.html">区域价格</li></a>
+					<li class="centent_left_menu  centent_left_menu_now"><a href="/html/czjg.html">出站价格</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgLNGzhjkdajgzs.html"><li class="centent_left_menu_tlt  ">中国LNG综合进口到岸价格指数</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgyyzhjkdajgzs.html"><li class="centent_left_menu_tlt  ">中国原油综合进口到岸价格指数</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgLPGzhjkdajgzs.html"><li class="centent_left_menu_tlt  ">中国LPG综合进口到岸价格指数</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgjkxhLNGdajgCLD/"><li class="centent_left_menu_tlt  ">中国进口现货LNG到岸价格(CLD)</li></a>
+					<li class="centent_left_menu  "><a href="/html/zgjkxhLNGdajg.html">日度价格</li></a>
+					<li class="centent_left_menu  "><a href="/html/zgjkxhLNGdajgyjj.html">月度均价</li></a>
+				</ul>
+				<ul>
+					<a href="/html/LNGbjsj.html"><li class="centent_left_menu_tlt  ">LNG报价数据</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgqcypfjg.html"><li class="centent_left_menu_tlt  ">中国汽柴油批发价格</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zgshrlybscgbj.html"><li class="centent_left_menu_tlt  ">中国上海燃料油保税船供报价</li></a>
+				</ul>
+				<ul>
+					<a href="/html/zghbcyLNGjzjg/"><li class="centent_left_menu_tlt  ">中国(华北)车用LNG加注价格</li></a>
+					<li class="centent_left_menu  "><a href="/html/sjg.html">省价格</li></a>
+					<li class="centent_left_menu  "><a href="/html/djsjg.html">地级市价格</li></a>
+				</ul>
+			</div>
+			<!--div class="centent_left_qr"><img src="/img/foot_qr.png"></div-->
+		</div>
+		
+		<div class="centent_right">
+		<script type="text/javascript" charset="utf-8" src="/js/My97DatePicker/WdatePicker.js"></script><script type="text/javascript" charset="utf-8" src="/js/jquery.mypagination.js"></script><div id="Data_release" style="width:850px"><!--选择区--><form name="myform" id="myform" method="post"><h2><span id="channelName" name="channelName">出站价格测试</span>
+
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<div style="float:right;"><select name="area" id="area">	<option value="">全部</option>
+			<option value="22">全国</option>
+			<option value="42">辽宁</option>
+			<option value="43">河北</option>
+			<option value="44">天津</option><option value="14">山东</option>
+			<option value="16">江苏</option>
+			<option value="19">浙江</option>
+			<option value="12">福建</option>
+			<option value="10">广东</option>
+			<option value="38">广西</option>
+			<option value="27">海南</option>
+		</select>
+		<input type="hidden" name="zhishukind" value="10"/><label style="font-size:12px;">日期：<input name="starttime" id="starttime" style="width:99px; height:20px; line-height:20px; border:1px solid #95B7E7; padding:0px 10px;" onclick="WdatePicker({dateFmt:&#39;yyyy-MM-dd&#39;});" type="text" placeholder="开始"/><input name="endtime" id="endtime" style="width:99px; height:20px; line-height:20px; border:1px solid #95B7E7; padding:0px 10px;" onclick="WdatePicker({dateFmt:&#39;yyyy-MM-dd&#39;});" type="text" placeholder="截止"/>
+		</label><input id="searchExchangeDataBtn" style="cursor:pointer; padding:1px 7px; text-align:center; background:#5092d1; border:1px solid #4e86bc; color:#ffffff;" onclick="search()" type="button" value="检索"/></div></h2></form><table class="form02" id="pngexchangedata-dt" style="width: 100%;margin:30px 0px 20px" data-page-length="25" data-language="{&#39;url&#39;:&#39;/exdata/static/datatables/i18n/zh_CN.json&#39;}" data-ajax-url="/exdata/pngexchangedata/pagelist.json" data-ordering="false" data-paging="true"><thead><tr role="row" class="firstRow" style="background-color: #738bae;position: sticky;top: 0;z-index: 10"><th data-data="price_date" class="sorting_disabled" rowspan="1" colspan="1" style="width: 33%;">日期</th>
+					<th data-data="price" class="sorting_disabled" rowspan="1" colspan="1" style="width: 33%;">地区</th>
+					<th data-data="price" class="sorting_disabled" rowspan="1" colspan="1" style="width: 33%;">价格（元/吨）</th>
+				</tr>
+			</thead>
+			<tbody id="tbody_content"></tbody>
+		</table>
+		<div align="center" class="page" id="pageNav"></div>
+	</div><script type="text/javascript" charset="utf-8" src="/js/charts/chuzhanjiage.js"></script>
+
+		</div>
+	</div>
+	</div>	
+	<div class="foot_bg">
+	<div class="centent1">
+		<!--友情链接-->
+		<div class="link_bg">
+			<div class="foot_tlt">友情链接</div>
+			<div class="link_1">
+							<a href="http://www.ndrc.gov.cn" class="link" target="_blank">国家发展和改革委员会</a>
+				<a href="http://www.nea.gov.cn/" class="link" target="_blank">国家能源局</a>
+				<a href="https://fgw.sh.gov.cn/" class="link" target="_blank">上海市发展和改革委员会</a>
+				<a href="http://ceis.xinhua08.com/" class="link" target="_blank">中国经济信息社</a>
+			</div>
+			<div class="link_2">
+				<a href="http://www.cnpc.com.cn/cnpc/index.shtml" class="link" target="_blank">中国石油</a>
+				<a href="http://www.sinopec.com" class="link" target="_blank">中国石化</a>
+				<a href="http://www.cnooc.com.cn/" class="link" target="_blank">中国海油</a>
+				<a href="https://www.pipechina.com.cn/" class="link" target="_blank">国家管网</a>
+			</div>
+			<div class="link_2">
+				<a href="http://www.shenergy.com.cn/" class="link" target="_blank">申能集团</a>
+				<a href="http://www.bjgas.com/" class="link" target="_blank">北京燃气</a>
+				<a href="http://www.towngas.com.cn/" class="link" target="_blank">港华燃气</a>
+				<a href="https://www.enn.cn/business/energy.html" class="link" target="_blank">ENN新奥</a>
+			</div>
+			<div class="link_2">
+				<a href="http://www.chinagasholdings.com/" class="link" target="_blank">中国燃气</a>
+				<a href="https://www.chng.com.cn/" class="link" target="_blank">中国华能</a>
+				<a href="https://www.greatgas.cn" class="link" target="_blank">好气网</a>
+			</div>
+		</div>
+		<!--联系我们-->
+		<div class="link_contact">
+			<div class="foot_tlt">联系我们</div>
+			<div class="foot_contact_code"><img src="/img/foot_qr.png"></div>
+		<!--	<div class="foot_contact_text">地址：上海市浦东新区东园路18号中国金融信息中心17层</div>
+			<div class="foot_contact_text">电话：021-68821717</div> -->
+			<div class="foot_contact_text">地址：上海市浦东新区临港新片区云鹃北路18弄C1幢5层6层</div>
+			<div class="foot_contact_text">电话：021-68821717</div>
+                        
+		</div>
+		<!--版权所有-->
+		<!--  <div class="foot_copyright">©版权所有 2019 上海石油天然气交易中心 沪ICP备15013792号</div> -->
+                <div class="foot_copyright"><a href="https://www.shpgx.com/html/qtgg/20240806/6640.html" style="color: #fff;font-size: 13px;display: inline-block;line-height: 20px;margin-right: 20px;" target="_blank">法律声明</a><a href="https://beian.miit.gov.cn/" style="color: #fff;font-size: 13px;display: inline-block;line-height: 20px;" target="_blank" ><br>©版权所有 2019 上海石油天然气交易中心 沪ICP备15013792号-1</a></div>
+               
+	</div>
+	</div><script type="text/javascript">
+$('#channelName').text('出站价格')
+</script>		
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
+</body>
+</html>

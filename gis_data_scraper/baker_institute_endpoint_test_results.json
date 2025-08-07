@@ -1,0 +1,342 @@
+[
+  {
+    "name": "nuclear_power_plants",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_Nuclear_Power_Plants_vSep2024/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1000
+    },
+    "layer_info": {
+      "name": "China_Nuclear_Power_Plants_vSep2024",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "coal_power_plants",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_coal_power_plants_vJan2024_3/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1000
+    },
+    "layer_info": {
+      "name": "China_coal_power_plants_vJan2024_3",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "gas_power_plants",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_Gas_Power_Plants_EH_v2024/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "China Gas Power Plants_EH_v2024",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "solar_power_plants",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_Solar_Power_Plants_GEM_202406/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1000
+    },
+    "layer_info": {
+      "name": "China_Solar_Power_Plants_GEM_202406",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "wind_power_plants",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_Wind_Power_Plants_GEM_202406/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1000
+    },
+    "layer_info": {
+      "name": "China_Wind_Power_Plants_GEM_202406",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "lng_terminals",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaLNGTerminals/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaLNGTerminals_points",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "oil_ports",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaOilPorts_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaOilPorts_Mar2023_points",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "oil_refineries",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaOilRefineries_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaOilRefineries_Mar2023_points",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "oil_storage",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaOilStorageFacilities_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1999
+    },
+    "layer_info": {
+      "name": "ChinaOilStorageFacilities_Mar2023_points",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "gas_storage",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/GlobalData_Midstream_China_Gas_Storage_20240722/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "clean",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "natural_gas_pipelines",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaNaturalGasPipelines_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaNaturalGasPipelines_Mar2023_lines",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolyline"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "crude_pipelines",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaCrudePipelines_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaCrudePipelines_Mar2023_lines",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolyline"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "refined_product_pipelines",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaRefinedProductPipelines_Mar2023/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "ChinaRefinedProductPipelines_Mar2023_lines",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolyline"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "hydrogen_pipelines",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/GEI_Hydrogen_pipelines/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "GEI_Hydrogen_pipelines",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolyline"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "hydrogen_facilities",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/GEI_Hydrogen/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "GEI_Hydrogen",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "ccs_projects",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/GEI_Carbon/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "GEI_Carbon",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "ev_battery_factories",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/China_EVB_factories_Sep2024/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 1000
+    },
+    "layer_info": {
+      "name": "China_EVB_factories_Sep2024",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "mining_properties",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/MiningProperties_Asia_MiddleEast_CIQ_20241014_3857_2/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "MiningProperties_Asia_MiddleEast_CIQ_20241014_3857_2",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPoint"
+    },
+    "sample_features": 5
+  },
+  {
+    "name": "china_boundaries",
+    "url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/CHN_adm_shp/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "CHN_adm_shp",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolygon"
+    },
+    "sample_features": 1
+  },
+  {
+    "name": "urban_areas",
+    "url": "https://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/UCDB/FeatureServer",
+    "status": "SUCCESS",
+    "service_info": {
+      "service_name": "Unknown",
+      "description": "",
+      "layers": 1,
+      "max_record_count": 2000
+    },
+    "layer_info": {
+      "name": "GHS_UCDB",
+      "type": "Feature Layer",
+      "geometry_type": "esriGeometryPolygon"
+    },
+    "sample_features": 5
+  }
+]

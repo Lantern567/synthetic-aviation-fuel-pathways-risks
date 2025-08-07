@@ -1,0 +1,36 @@
+{
+  "mining_data_summary": {
+    "scraping_time": "2025-07-15T15:49:03.621870",
+    "successful_datasets": 1,
+    "failed_datasets": 3,
+    "datasets": {
+      "mining_properties_asia": {
+        "total_records": 4286,
+        "columns": [
+          "FID",
+          "Property_N",
+          "Property_I",
+          "Primary_Co",
+          "List_of_Co",
+          "Developmen",
+          "Activity_S",
+          "Owner_Name",
+          "Latitude__",
+          "Longitude",
+          "Coordinate",
+          "Country__",
+          "State_Prov",
+          "Actual_Sta",
+          "Mill_Capac",
+          "Mining_Met",
+          "Reserves__",
+          "Lat",
+          "Lon",
+          "longitude",
+          "latitude"
+        ],
+        "description": "亚洲采矿资产（包含中国）"
+      }
+    }
+  }
+}
