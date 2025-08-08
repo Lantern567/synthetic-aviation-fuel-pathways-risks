@@ -1,0 +1,17 @@
+{
+  "test_summary": {
+    "total_tests": 5,
+    "passed_tests": 0,
+    "failed_tests": 0
+  },
+  "component_results": {
+    "geographic_calculator": {},
+    "data_processor": {},
+    "cost_calculator": {}
+  },
+  "test_data_summary": {
+    "renewable_records": 48,
+    "airports": 1,
+    "technologies": 1
+  }
+}

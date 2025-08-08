@@ -1,21 +1,51 @@
 # 绿色甲醇港口运输项目
 
+> **🏗️ 项目架构升级通知 (2025-08-07)**  
+> 本项目已迁移至 **PBR (Product-Based Repository)** 架构。详细说明请参考 [PBR_ARCHITECTURE.md](./PBR_ARCHITECTURE.md)
+
 ## 项目概述
 
-本项目专注于绿色甲醇在港口运输中的应用研究，涵盖数据处理、分析建模和可视化等多个方面。项目采用模块化设计，将数据读入、处理、算法实现和结果保存完全分离，确保代码的可读性和可维护性。
+本项目专注于绿色甲醇在港口运输中的应用研究，涵盖数据处理、分析建模和可视化等多个方面。项目采用**产品导向的模块化设计**，将功能按照业务领域进行组织，确保代码的可读性、可维护性和可扩展性。
 
-## 项目结构
+## 🏗️ PBR架构概览
 
 ```
 green_methanol_for_port_transportation/
-├── src/                      # 🆕 核心算法和计算模块
-├── airline_visualization/    # 🆕 航线数据可视化系统
-├── air_port_data_process/    # 机场数据处理模块  
-├── port_data_process/        # 港口数据处理模块
-├── wind_speed/              # 风速数据处理模块
-├── tests/                   # 🆕 核心测试套件
-├── logs/                    # 项目日志文档
-└── README.md               # 项目说明文档
+├── products/                          # � 产品模块
+│   ├── aviation_fuel_analysis/        # ✈️ 航空燃料分析
+│   ├── supply_chain_optimization/     # 🔄 供应链优化  
+│   ├── gis_energy_mapping/           # 🗺️ GIS能源映射
+│   └── port_transportation/          # 🚢 港口运输
+├── shared/                           # 🤝 共享资源
+│   ├── core/                        # 核心业务逻辑
+│   ├── data/                        # 共享数据存储
+│   ├── utils/                       # 通用工具函数
+│   └── infrastructure/              # 基础设施代码
+├── tools/                           # 🛠️ 开发工具
+│   ├── graphhopper/                 # GraphHopper路径规划工具
+│   ├── data_processing/             # 数据处理工具  
+│   └── visualization/               # 可视化工具
+└── examples/                        # 📖 示例代码
+```
+
+## 快速开始
+
+### 启动GraphHopper服务
+```bash
+# 从项目根目录启动
+python start_graphhopper.py
+```
+
+### 运行产品模块
+```bash
+# 航空燃料分析
+cd products/aviation_fuel_analysis/air_port_data_process
+python src/main_analysis.py
+
+# 供应链优化
+cd products/supply_chain_optimization/natural_gas_supply_chain_optimization
+python src/natural_gas_optimization_model.py
+python src/natural_gas_optimization_model_refactored.py  # 新增重构入口
 ```
 
 ## 核心模块
@@ -309,6 +339,10 @@ python test_real_data.py
 - ✅ **完整BADA轨迹系统**：基于物理模型的高精度计算
 - ✅ **双引擎可视化**：pydeck + frykit 双系统支持
 - ✅ **模块化重构**：标准化文件结构和工作流
+
+### 2025-08-08
+- ✅ 修复天然气供应链优化重构版本在平均距离计算中引用未初始化 `mtj_locations` 的问题
+- ✅ 新增针对平均距离计算的健壮性测试，确保在未调用 `build_model()` 前也能安全运行
 
 ---
 

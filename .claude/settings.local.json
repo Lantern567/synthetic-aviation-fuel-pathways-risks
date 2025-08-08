@@ -30,8 +30,22 @@
       "Bash(touch:*)",
       "Bash(git config:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "context7",
+    "sequential-thinking",
+    "mcp-feedback-enhanced",
+    "playwright",
+    "mcp-server-time",
+    "mcp-deepwiki",
+    "mcp-server-firecrawl",
+    "task-master-ai",
+    "mcp-damengsql",
+    "desktop-commander",
+    "github"
+  ]
 }

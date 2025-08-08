@@ -1,0 +1,76 @@
+{
+  "verification_summary": {
+    "total_components_verified": 5,
+    "passed_verifications": 1,
+    "failed_verifications": 4,
+    "success_rate": "20.0%",
+    "verification_timestamp": "2025-08-08T17:08:29.402998"
+  },
+  "component_details": {
+    "geographic_calculator": {
+      "distances": {
+        "beijing_center_to_shanghai": 1067.310170927129,
+        "beijing_to_hebei": 70.1300833969498,
+        "beijing_to_airport": 25.44227369906761
+      },
+      "range_checks": {
+        "beijing_center": true,
+        "beijing_test_point": true,
+        "hebei_point": true,
+        "shanghai": false
+      },
+      "coordinate_validations": [
+        [
+          40.0,
+          116.0,
+          true
+        ],
+        [
+          91.0,
+          116.0,
+          false
+        ],
+        [
+          40.0,
+          181.0,
+          false
+        ],
+        [
+          -91.0,
+          -181.0,
+          false
+        ]
+      ],
+      "status": "PASSED"
+    },
+    "renewable_data_processor": {
+      "status": "FAILED",
+      "error": "'gbk' codec can't encode character '\\u2713' in position 0: illegal multibyte sequence"
+    },
+    "cost_calculator": {
+      "status": "FAILED",
+      "error": "'gbk' codec can't encode character '\\u2713' in position 0: illegal multibyte sequence"
+    },
+    "gurobi_model_builder": {
+      "status": "FAILED",
+      "error": "'gbk' codec can't encode character '\\u2713' in position 2: illegal multibyte sequence"
+    },
+    "integration": {
+      "status": "FAILED",
+      "error": "3 not greater than 3 : 机场集成失败"
+    }
+  },
+  "test_data_summary": {
+    "coordinates_tested": 5,
+    "renewable_records": 48,
+    "airports_tested": 1,
+    "technologies_tested": 1
+  },
+  "compliance_with_template": {
+    "original_file_unchanged": true,
+    "modular_structure_created": true,
+    "shared_tools_separated": true,
+    "output_consistency_verified": false,
+    "file_paths_correct": true
+  }
+}

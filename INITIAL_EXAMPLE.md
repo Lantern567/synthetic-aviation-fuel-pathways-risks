@@ -1,120 +1,79 @@
-# 示例功能需求 - 绿色甲醇碳排放对比分析工具
+# 功能需求示例
 
 ## FEATURE:
-构建一个绿色甲醇与传统航空燃料的碳排放对比分析工具。该工具应该能够：
+构建一个基于GraphHopper的绿色甲醇运输路径优化器，能够计算从天然气源头到港口的最优运输路径，并进行成本效益分析。
 
-1. **数据输入功能**：
-   - 读取航班数据（Excel/CSV格式），包含机型、距离、乘客数等信息
-   - 支持批量处理多个数据文件
-   - 自动识别和验证数据格式
+具体功能要求：
+- 集成GraphHopper路径规划引擎，支持多种运输方式（管道、卡车、船舶）
+- 实现多目标优化算法（成本最小化 + 碳排放最小化）
+- 生成交互式地图可视化，显示优化后的运输网络
+- 输出详细的成本分析报告和环境影响评估
+- 支持实时路径调整和备选方案生成
 
-2. **碳排放计算功能**：
-   - 使用现有的pyBADA燃料计算器计算传统航空燃料的碳排放
-   - 实现绿色甲醇燃料的碳排放计算模型
-   - 考虑不同机型的燃料效率差异
-   - 包含生产阶段的碳足迹（Well-to-Wake分析）
-
-3. **对比分析功能**：
-   - 计算减排量和减排百分比
-   - 分析不同航线的减排潜力
-   - 生成机型级别的对比统计
-   - 计算成本效益分析
-
-4. **可视化输出**：
-   - 生成柱状图、饼图、散点图等多种图表
-   - 支持中文标签和说明
-   - 输出高分辨率PNG图片到results/figures/目录
-   - 创建交互式HTML报告
-
-5. **数据输出**：
-   - 详细对比结果表格（Excel和CSV格式）
-   - 汇总统计报告
-   - 保存到results/tables/目录，文件名包含时间戳
+性能要求：
+- 处理500+基础设施节点的网络优化
+- 计算时间 < 5分钟（包括路径规划和优化）
+- 支持并行计算以提高处理速度
 
 ## EXAMPLES:
-应该遵循的代码模式：
+遵循项目中的现有模式：
 
-1. **数据处理模式**：
-   - 遵循 `examples/data_processing_pattern.py` 的标准数据处理流程
-   - 使用 `ProcessingResult` 数据类进行结果封装
-   - 实现完整的错误处理和日志记录
+1. **数据处理模式** (`examples/data_processing_pattern.py`)
+   - 使用标准的数据读取、清理、验证、保存流程
+   - 实现时间戳文件命名和结果分类存储
+   - 添加数据质量检查和异常处理
 
-2. **计算模式**：
-   - 参考 `air_port_data_process/src/pybada_fuel_calculator.py` 的计算结构
-   - 使用现有的航空燃料计算方法
-   - 遵循相同的单位和数据验证模式
+2. **测试模式** (`examples/test_pattern.py`)
+   - 为每个主要功能编写单元测试
+   - 使用pytest框架和Mock对象
+   - 包含集成测试验证端到端功能
 
-3. **测试模式**：
-   - 使用 `examples/test_pattern.py` 的测试结构
-   - 实现参数化测试用于不同机型和燃料类型
-   - 包含集成测试验证完整工作流
-
-4. **可视化模式**：
-   - 参考 `gis_data_scraper/visualize_energy_infrastructure.py` 的可视化结构
-   - 确保中文字体正确设置
-   - 使用项目统一的颜色方案
+3. **现有模块参考**:
+   - `products/supply_chain_optimization/natural_gas_supply_chain_optimization/` - 供应链优化算法结构
+   - `tools/graphhopper/` - GraphHopper集成模式
+   - `products/gis_energy_mapping/` - GIS数据处理和可视化
 
 ## DOCUMENTATION:
-相关技术文档：
+相关文档和资源：
 
-1. **项目文档**：
-   - `README.md` - 了解项目整体架构
-   - `air_port_data_process/README.md` - pyBADA燃料计算系统文档
-   - `natural_gas_supply_chain_optimization/天然气供应链优化数学模型与数据流分析.md` - 能源建模方法
+### 项目内部文档：
+- `natural_gas_supply_chain_optimization/天然气供应链优化数学模型与数据流分析.md` - 优化算法理论基础
+- `natural_gas_supply_chain_optimization/GRAPHHOPPER_INTEGRATION.md` - GraphHopper集成指南
+- `PBR_ARCHITECTURE.md` - 项目架构规范
 
-2. **外部API文档**：
-   - pyBADA文档: https://github.com/eurocontrol/pyBADA
-   - pandas处理Excel: https://pandas.pydata.org/docs/user_guide/io.html#excel-files
-   - matplotlib中文字体: https://matplotlib.org/stable/tutorials/text/usetex.html
+### 外部API和库文档：
+- GraphHopper API: https://docs.graphhopper.com/
+- Gurobi优化器: https://www.gurobi.com/documentation/
+- PyDeck可视化: https://pydeck.gl/
+- Pandas地理数据: https://geopandas.org/
 
-3. **领域知识资源**：
-   - ICAO碳排放计算标准: https://www.icao.int/environmental-protection/CarbonOffset/
-   - 绿色甲醇技术: https://www.irena.org/publications/2021/Jan/Innovation-Outlook-Renewable-Methanol
-   - 航空燃料生命周期评估方法
+### 数据源：
+- 天然气管道数据：`products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/integrated_gas_pipeline_price_data.csv`
+- 港口位置数据：从现有数据集提取
+- OSM地图数据：`china-latest.osm.pbf`
 
 ## OTHER CONSIDERATIONS:
 
-### 技术要求：
-- **环境兼容**：必须在 `green_methanol_for_port_transportation` conda环境中运行
-- **性能目标**：能够处理包含10,000个航班记录的数据集，完整分析时间<2分钟
-- **内存管理**：对于大数据集实现分块处理，避免内存溢出
-- **并行计算**：利用multiprocessing并行处理不同机型的计算
+### 技术约束：
+- **环境要求**：必须在 `green_methanol_for_port_transportation` conda环境中运行
+- **GraphHopper服务**：需要先启动GraphHopper服务（端口8989）
+- **内存管理**：大规模路径规划可能消耗大量内存，需要实现分批处理
+- **并发处理**：充分利用多核CPU进行并行路径计算
 
-### 数据处理特殊要求：
-- **中文支持**：正确处理中文机场名称（如"北京首都国际机场"）
-- **坐标验证**：验证机场坐标的合理性（中国境内：lat 18-54, lon 73-135）
-- **数据完整性**：检查必需字段的完整性（机型、距离、乘客数等）
-- **单位统一**：确保所有计算使用统一单位（距离：km，燃料：kg，排放：kg CO2）
+### 常见陷阱：
+- GraphHopper服务启动检查：确保服务可用再开始计算
+- 坐标系统一致性：确保所有地理数据使用相同的坐标系统（WGS84）
+- 网络连通性验证：处理不连通的路径节点
+- 优化算法收敛性：设置合理的迭代次数和收敛条件
 
-### 绿色甲醇特定参数：
-- **碳强度**：绿色甲醇碳强度约 0.1 kg CO2/kg fuel（包含生产阶段）
-- **燃烧效率**：相比传统燃料效率调整系数 0.95-1.05
-- **能量密度**：绿色甲醇 19.9 MJ/kg vs Jet A-1 43.2 MJ/kg
-- **成本因子**：当前绿色甲醇成本约为传统燃料的2.5-3倍
+### 输出规范：
+- 所有结果文件包含时间戳：`optimization_results_YYYYMMDD_HHMMSS.csv`
+- 可视化输出：PNG高分辨率图片 + HTML交互地图
+- 日志记录：详细记录优化过程和性能指标
+- 错误处理：友好的错误消息和恢复建议
 
-### 输出格式要求：
-- **表格文件**：使用时间戳命名 `methanol_comparison_20250107_143022.xlsx`
-- **图表文件**：PNG格式，300 DPI，尺寸 12x8 英寸
-- **报告结构**：包含执行摘要、详细分析、附录数据表
-- **元数据文件**：记录计算参数、数据来源、处理时间等
-
-### 常见陷阱和注意事项：
-- **机型映射**：确保正确映射ICAO机型代码到容量和效率参数
-- **距离计算**：使用大圆距离（Haversine公式）而非直线距离
-- **负载因子**：考虑实际载客率对燃料消耗的影响
-- **季节调整**：不同季节的飞行条件对燃料消耗的影响
-- **高度修正**：高原机场的燃料消耗调整
-- **数据时效性**：确保使用最新的排放因子和燃料特性数据
-
-### 质量保证要求：
-- **基准验证**：使用已知航线的实际数据验证计算精度
-- **敏感性分析**：测试关键参数变化对结果的影响
-- **对比验证**：与现有工具（如OpenAP）的结果进行对比
-- **专家审核**：计算逻辑需要经过航空燃料专家审核
-
-### 部署和维护：
-- **版本控制**：所有代码变更通过git管理
-- **文档更新**：更新模块README和主项目README
-- **依赖管理**：新增依赖添加到requirements.txt
-- **测试覆盖**：确保测试覆盖率>90%
-- **性能监控**：记录处理时间和内存使用情况
+### 领域特定要求：
+- 考虑季节性因素对运输成本的影响
+- 包含不同运输方式的碳排放系数
+- 支持多货币成本计算和汇率转换
+- 遵循港口操作的实际约束条件

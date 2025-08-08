@@ -1,0 +1,43 @@
+{
+  "comparison_summary": {
+    "total_function_groups_compared": 3,
+    "passed_comparisons": 1,
+    "failed_comparisons": 2,
+    "consistency_rate": "33.3%",
+    "comparison_timestamp": "2025-08-08T17:17:52.182188"
+  },
+  "detailed_results": {
+    "data_processing": {
+      "processed_locations": 3,
+      "total_locations_with_airports": 3,
+      "geographic_filtering_correct": true,
+      "data_structure_valid": true,
+      "status": "PASSED"
+    },
+    "cost_calculations": {
+      "status": "FAILED",
+      "error": "'gbk' codec can't encode character '\\u2713' in position 0: illegal multibyte sequence"
+    },
+    "end_to_end": {
+      "status": "FAILED",
+      "error": "'gbk' codec can't encode character '\\u2713' in position 0: illegal multibyte sequence"
+    }
+  },
+  "test_data_used": {
+    "coordinate_pairs_tested": 4,
+    "range_test_points": 5,
+    "renewable_data_records": 48,
+    "airports_tested": 1
+  },
+  "methodology": {
+    "approach": "Direct function-to-function comparison",
+    "original_functions_source": "natural_gas_optimization_model.py",
+    "refactored_functions_source": "modular components in shared/ and tools/",
+    "input_data_identical": true,
+    "comparison_criteria": [
+      "numerical accuracy",
+      "logical consistency",
+      "output format matching"
+    ]
+  }
+}

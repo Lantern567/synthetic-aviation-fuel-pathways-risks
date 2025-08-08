@@ -1,0 +1,68 @@
+{
+  "comparison_summary": {
+    "total_function_groups_compared": 3,
+    "passed_comparisons": 3,
+    "failed_comparisons": 0,
+    "consistency_rate": "100.0%",
+    "comparison_timestamp": "2025-08-08T17:20:14.289870"
+  },
+  "detailed_results": {
+    "geographic_functions": {
+      "distance_calculations": {
+        "original": [
+          1067.310170927129,
+          70.1300833969498,
+          25.44227369906761
+        ],
+        "refactored": [
+          1067.310170927129,
+          70.1300833969498,
+          25.44227369906761
+        ],
+        "differences": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "range_checks": {
+        "original": [
+          true,
+          true,
+          false
+        ],
+        "refactored": [
+          true,
+          true,
+          false
+        ],
+        "matches": [
+          true,
+          true,
+          true
+        ]
+      },
+      "max_distance_difference": 0.0,
+      "all_range_matches": true,
+      "status": "PASSED"
+    },
+    "data_processing": {
+      "processed_locations_count": 2,
+      "status": "PASSED"
+    },
+    "cost_calculations": {
+      "lcoe_results": [
+        180242.58719069127,
+        604762.286496148
+      ],
+      "consistency_verified": true,
+      "status": "PASSED"
+    }
+  },
+  "methodology": {
+    "approach": "Direct function-to-function comparison",
+    "original_functions_source": "natural_gas_optimization_model.py",
+    "refactored_functions_source": "modular components in shared/ and tools/",
+    "input_data_identical": true
+  }
+}
