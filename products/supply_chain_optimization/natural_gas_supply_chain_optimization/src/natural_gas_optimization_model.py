@@ -4171,8 +4171,7 @@ class NaturalGasSupplyChainOptimizer:
             
             # 使用相对路径的真实GIS数据 - 修正后的路径
             project_root = get_project_base_dir()
-            lng_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                  "scraped_gis_data", "lng_terminals.csv")
+            lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
             if not os.path.exists(lng_file):
                 logger.error(f"LNG接收站数据文件不存在: {lng_file}")
                 raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
@@ -4854,8 +4853,9 @@ if __name__ == '__main__':
         # 2. 加载数据
         # 使用内置的真实数据加载逻辑，无需传入额外参数
         # 构建相对路径到机场数据文件
-        airport_excel_path = os.path.join(str(base_dir), "products", "aviation_fuel_analysis", "resource_flight_data_process", "data", "capital_binhai_airports_data_20250726_123415.xlsx")
-        
+        airport_excel_path = os.path.join(str(base_dir), "products", "aviation_fuel_analysis", 
+                                        "resource_flight_data_process", "results", "flights_beijing_tianjing",
+                                        "all_airports_weekly_parameters_20250726_142747.xlsx")   
         optimizer.load_data_from_excel(
             airport_excel_path=airport_excel_path
         )
