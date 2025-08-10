@@ -29,6 +29,16 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(o
 sys.path.append(project_root)
 
 from shared.utils.geographic_calculator import GeographicCalculator
+try:
+    from shared.utils.log_preserver import mount_file_logging
+except ModuleNotFoundError:
+    import sys
+    # 动态加入项目根目录到sys.path后重试
+    current_file = os.path.abspath(__file__)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
+    if project_root not in sys.path:
+        sys.path.append(project_root)
+    from shared.utils.log_preserver import mount_file_logging
 from tools.data_processing.renewable_data_processor import RenewableDataProcessor
 from shared.core.cost_calculator import CostCalculator, EconomicParametersManager
 # 延迟导入Gurobi模型构建器，避免在仅进行数据加载/距离计算时引入不必要依赖
@@ -67,6 +77,23 @@ def get_project_base_dir():
     # 向上5级目录: src -> natural_gas_supply_chain_optimization -> supply_chain_optimization -> products -> project_root
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
     return project_root
+
+
+# 在模块加载时尽早挂载日志文件输出（仅作用于logging，不捕获print）
+try:
+    _base_dir = get_project_base_dir()
+    _log_dir = os.path.join(
+        _base_dir,
+        "products",
+        "supply_chain_optimization",
+        "natural_gas_supply_chain_optimization",
+        "results",
+        "logs",
+    )
+    mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
+except Exception:
+    # 静默失败，不影响主流程
+    pass
 
 
 class NaturalGasSupplyChainOptimizer:
@@ -125,8 +152,31 @@ class NaturalGasSupplyChainOptimizer:
             total_hours=self.total_hours, 
             max_distance_km=500
         )
-        self.cost_calculator = CostCalculator()
+        # 设置与原版一致的经济参数（8%贴现率，20年生命周期）
         self.economic_params = EconomicParametersManager.define_default_economic_parameters()
+        # 覆盖默认参数以匹配原版
+        self.economic_params.update({
+            'discount_rate': 0.08,  # 从5%改为8%，与原版一致
+            'project_lifespan': 20,
+            'mtj_plant_lifetime': 20,
+            'electrolyzer_lifetime': 15,
+            'pipeline_lifetime': 30,
+            'storage_lifetime': 25,
+            'transport_vehicle_lifetime': 10,
+            'mtj_plant_capacity_factor': 0.85,
+            'electrolyzer_capacity_factor': 0.80,
+            'pipeline_capacity_factor': 0.95,
+            'storage_capacity_factor': 0.90,
+            'transport_capacity_factor': 0.75,
+            'transport_cost_yuan_per_km_kg': 0.15,
+            'hydrogen_transport_cost_yuan_per_kg_km': 0.85,
+        })
+        
+        # 使用正确的经济参数初始化成本计算器
+        self.cost_calculator = CostCalculator(
+            discount_rate=self.economic_params['discount_rate'],
+            project_lifespan=self.economic_params['project_lifespan']
+        )
         
         # 优化模型构建器（稍后初始化）
         self.model_builder = None
@@ -216,35 +266,15 @@ class NaturalGasSupplyChainOptimizer:
         self._load_ng_pipeline_data()
         self._load_lng_terminal_data()
         
-        # 使用模块化可再生能源数据处理器
+        # 使用与原版一致的处理逻辑（包含缓存与500km过滤）
         try:
-            # 导入缓存管理器（如果可用）
-            try:
-                from .data_cache_manager import cache_manager
-            except ImportError:
-                cache_manager = None
-                
-            # 处理可再生能源数据
-            processed_locations = self.renewable_data_processor.process_renewable_data(
-                renewable_data=renewable_data,
-                geographic_calculator=self.geographic_calculator,
-                cache_manager=cache_manager
-            )
-            
-            # 更新locations
-            self.locations.update(processed_locations)
-            
-            # 添加机场和LNG终端位置
-            self.locations = self.renewable_data_processor.add_airports_to_locations(
-                self.locations, self.airports
-            )
-            self.locations = self.renewable_data_processor.add_lng_terminals_to_locations(
-                self.locations, self.lng_terminals
-            )
-            
+            self._process_renewable_data(renewable_data)
         except Exception as e:
-            logger.error(f"模块化数据处理失败，回退到原有方法: {e}")
+            logger.error(f"可再生能源数据处理失败，回退到降级方法: {e}")
             self._process_renewable_data_fallback(renewable_data)
+
+        # 将天然气管道源纳入通用locations，避免后续距离计算找不到pipeline_*键
+        self._merge_ng_pipelines_into_locations()
         
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
@@ -274,16 +304,16 @@ class NaturalGasSupplyChainOptimizer:
         """
         logger.info(f"从Excel文件加载数据: {airport_excel_path}")
         
-        # 读取Excel数据
+        # 使用真实结构解析Excel；固定使用 Sheet1（与用户确认一致）
         try:
-            excel_data = pd.read_excel(airport_excel_path)
-            logger.info(f"Excel文件读取成功，包含 {len(excel_data)} 行数据")
+            excel_df = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
+            logger.info(f"Excel文件读取成功(All_Airports)，包含 {len(excel_df)} 行数据")
         except Exception as e:
-            logger.error(f"读取Excel文件失败: {e}")
+            logger.error(f"读取Excel文件失败（All_Airports）: {e}")
             raise
         
-        # 处理机场数据
-        airport_data = self._process_excel_airport_data(excel_data)
+        # 基于真实字段解析机场周需求与坐标
+        airport_data = self._process_airport_excel_real(excel_df)
         
         # 如果没有提供可再生能源数据，必须加载真实数据
         if renewable_data is None:
@@ -291,6 +321,91 @@ class NaturalGasSupplyChainOptimizer:
         
         # 使用统一的load_data方法
         self.load_data(renewable_data, airport_data)
+
+    def _merge_ng_pipelines_into_locations(self):
+        """将天然气管道源合并进通用的locations字典，供距离计算与约束构建统一使用。"""
+        if not hasattr(self, 'ng_pipeline_sources') or not self.ng_pipeline_sources:
+            return
+        merged = 0
+        for pipeline_id, info in self.ng_pipeline_sources.items():
+            if pipeline_id in self.locations:
+                continue
+            lat = float(info.get('lat', info.get('center_latitude', 40.0)))
+            lon = float(info.get('lon', info.get('center_longitude', 116.0)))
+            self.locations[pipeline_id] = {
+                'type': 'gas_field',
+                'latitude': lat,
+                'longitude': lon,
+                'capacity_mcm_per_day': info.get('capacity_mcm_per_day'),
+                'is_ng_source': True,
+            }
+            merged += 1
+        if merged > 0:
+            logger.info(f"已将 {merged} 个天然气管段源并入locations，统一参与距离计算与建模")
+
+    def _process_airport_excel_real(self, excel_df: pd.DataFrame) -> pd.DataFrame:
+        """
+        基于真实Excel结构解析机场数据，直接生成每个机场的完整周序列列表（weekly_demand_series），与原版一致。
+        输出字段：
+          - airport: 机场名称
+          - weekly_demand_series: list[float]，按周序号升序
+          - latitude/longitude: 若Excel提供则附带
+        """
+        # 规范化列名
+        original_cols = list(excel_df.columns)
+        lower_to_original = {str(c).strip().lower(): c for c in original_cols}
+        synonyms = {
+            'departure_airport_name': ['departure_airport_name', 'airport', 'airport_name', 'departure_airport', '出发机场', '机场', '起飞机场'],
+            'week_number': ['week_number', 'week', 'week_no', 'weekindex', '周数', '周'],
+            'weekly_total_fuel_kg_total': ['weekly_total_fuel_kg_total', 'weekly_total_fuel_kg', 'weekly_fuel_kg', 'weekly_methanol_kg', '总甲醇消耗_kg', '周总甲醇消耗_kg'],
+            'departure_airport_latitude': ['departure_airport_latitude', 'latitude', 'lat', '机场纬度', '纬度'],
+            'departure_airport_longitude': ['departure_airport_longitude', 'longitude', 'lon', '机场经度', '经度']
+        }
+
+        rename_map: Dict[str, str] = {}
+        for canonical, alias_list in synonyms.items():
+            for alias in alias_list:
+                key = alias.lower()
+                if key in lower_to_original:
+                    rename_map[lower_to_original[key]] = canonical
+                    break
+
+        excel_df = excel_df.rename(columns=rename_map)
+
+        required_cols = {'departure_airport_name', 'week_number', 'weekly_total_fuel_kg_total'}
+        if not required_cols.issubset(set(excel_df.columns)):
+            raise ValueError("机场Excel缺少必要字段：departure_airport_name, week_number, weekly_total_fuel_kg_total")
+
+        lat_col = 'departure_airport_latitude' if 'departure_airport_latitude' in excel_df.columns else None
+        lon_col = 'departure_airport_longitude' if 'departure_airport_longitude' in excel_df.columns else None
+
+        processed_rows = []
+        for airport_name, group in excel_df.groupby('departure_airport_name'):
+            group_sorted = group.sort_values('week_number')
+            weekly_series = []
+            for _, row in group_sorted.iterrows():
+                try:
+                    weekly_series.append(float(row['weekly_total_fuel_kg_total']))
+                except Exception:
+                    weekly_series.append(0.0)
+
+            row_out = {
+                'airport': str(airport_name),
+                'weekly_demand_series': weekly_series
+            }
+
+            if lat_col and lon_col:
+                try:
+                    row_out['latitude'] = float(group_sorted.iloc[0][lat_col])
+                    row_out['longitude'] = float(group_sorted.iloc[0][lon_col])
+                except Exception:
+                    pass
+
+            processed_rows.append(row_out)
+
+        result_df = pd.DataFrame(processed_rows)
+        logger.info(f"按真实Excel结构处理完成，包含 {len(result_df)} 个机场，生成 weekly_demand_series 列")
+        return result_df
     
     def _process_renewable_data_fallback(self, renewable_data: pd.DataFrame):
         """降级处理可再生能源数据的方法（使用模块化组件）"""
@@ -311,6 +426,115 @@ class NaturalGasSupplyChainOptimizer:
         self.locations = self.renewable_data_processor.add_lng_terminals_to_locations(
             self.locations, self.lng_terminals
         )
+
+    def _process_renewable_data(self, renewable_data: pd.DataFrame):
+        """处理可再生能源数据（与原版一致，支持缓存并按500km过滤）"""
+        try:
+            # 引入缓存管理器
+            try:
+                from .data_cache_manager import cache_manager
+            except ImportError:
+                from products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.data_cache_manager import cache_manager
+
+            # 使用稳定的源标识文件，避免临时键导致缓存失效
+            project_root = get_project_base_dir()
+            temp_renewable_file = os.path.join(
+                project_root,
+                'products', 'aviation_fuel_analysis', 'resource_flight_data_process', 'results',
+                'renewable_source_marker.csv'
+            )
+
+            # 写一个轻量标识文件作为源文件（记录摘要便于哈希）
+            try:
+                os.makedirs(os.path.dirname(temp_renewable_file), exist_ok=True)
+                summary = pd.DataFrame({
+                    'records': [len(renewable_data)],
+                    'plants': [renewable_data['plant_name'].nunique() if 'plant_name' in renewable_data.columns else 0]
+                })
+                summary.to_csv(temp_renewable_file, index=False, encoding='utf-8')
+            except Exception:
+                pass
+
+            # 检查缓存
+            if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
+                logger.info("使用缓存的可再生能源数据（500km过滤）")
+                cached_df = cache_manager.load_filtered_data('renewable_plants')
+                if cached_df is not None:
+                    filtered_renewable_data = cached_df
+                else:
+                    logger.warning("缓存加载失败，执行完整处理")
+                    filtered_renewable_data = self._filter_renewable_data(
+                        renewable_data, cache_manager, temp_renewable_file
+                    )
+            else:
+                logger.info("缓存无效或不存在，执行完整处理和过滤")
+                filtered_renewable_data = self._filter_renewable_data(
+                    renewable_data, cache_manager, temp_renewable_file
+                )
+
+            # 聚合到locations（取前total_hours小时）
+            locations: Dict[str, Dict] = {}
+            if len(filtered_renewable_data) > 0:
+                for plant_name in filtered_renewable_data['plant_name'].unique():
+                    plant_data = filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name]
+                    if len(plant_data) >= self.total_hours:
+                        hourly_data = plant_data.head(self.total_hours)
+                        plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
+                        latitude = float(hourly_data.iloc[0].get('latitude', 30.0))
+                        longitude = float(hourly_data.iloc[0].get('longitude', 104.0))
+                        capacity_val = hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0].get('power_output_mw', 0.0)
+                        locations[str(plant_name)] = {
+                            'type': plant_type,
+                            'latitude': latitude,
+                            'longitude': longitude,
+                            'capacity_mw': capacity_val,
+                            'hourly_generation': hourly_data['power_output_mw'].tolist(),
+                        }
+
+            logger.info(f"处理了 {len(locations)} 个可再生能源发电站")
+            solar_count = sum(1 for loc in locations.values() if loc['type'] == 'solar_plant')
+            wind_count = sum(1 for loc in locations.values() if loc['type'] == 'wind_farm')
+            logger.info(f"  太阳能发电站: {solar_count} 个")
+            logger.info(f"  风电场: {wind_count} 个")
+
+            # 写入类的locations
+            self.locations.update(locations)
+
+            # 将机场与LNG位置合入locations（复用处理器的方法，避免重复实现）
+            self.locations = self.renewable_data_processor.add_airports_to_locations(self.locations, self.airports)
+            self.locations = self.renewable_data_processor.add_lng_terminals_to_locations(self.locations, self.lng_terminals)
+
+        except Exception as e:
+            logger.error(f"处理可再生能源数据失败: {e}")
+            raise
+
+    def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str) -> pd.DataFrame:
+        """过滤可再生能源数据（500km范围内），并保存缓存"""
+        logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录")
+
+        filtered_plants = []
+        for plant_name in renewable_data['plant_name'].unique():
+            plant_data = renewable_data[renewable_data['plant_name'] == plant_name]
+            if len(plant_data) == 0:
+                continue
+            plant_lat = plant_data.iloc[0].get('latitude', 30.0)
+            plant_lon = plant_data.iloc[0].get('longitude', 104.0)
+
+            try:
+                in_range = self.geographic_calculator.is_within_beijing_range(plant_lat, plant_lon, 500)
+            except Exception:
+                in_range = True
+
+            if in_range:
+                filtered_plants.append(plant_data)
+
+        filtered_df = pd.concat(filtered_plants, ignore_index=True) if filtered_plants else pd.DataFrame()
+        logger.info(f"500km范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df)>0 else 0} 个电站")
+
+        if len(filtered_df) > 0:
+            cache_manager.save_filtered_data('renewable_plants', filtered_df, temp_file)
+
+        return filtered_df
     
     def _define_economic_parameters(self):
         """定义经济参数 - 使用模块化参数管理器"""
@@ -423,20 +647,28 @@ class NaturalGasSupplyChainOptimizer:
             costs=self.costs,
             locations=self.locations,
             technologies=self.technologies,
-            airports=self.airports
+            airports=self.airports,
+            time_horizon_weeks=self.time_horizon_weeks,
+            economic_params=self.economic_params
         )
         
-        self.objective_builder.create_objective(distance_calculator=self.distance_calculator)
+        self.objective_builder.create_objective(
+            mtj_locations=self.mtj_locations,
+            non_lng_mtj_locations=self.non_lng_mtj_locations,
+            hydrogen_locations=self.hydrogen_locations,
+            ng_locations=self.ng_locations,
+            distance_calculator=self.distance_calculator
+        )
         
         logger.info("模型构建完成")
     
     def solve(self) -> Dict:
         """求解优化模型并返回与原始实现保持一致的结果结构"""
         logger.info("开始求解优化模型...")
-
+        
         if self.model is None:
             raise ValueError("模型尚未构建，请先调用build_model()")
-
+        
         try:
             self.model.optimize()
 
@@ -444,7 +676,7 @@ class NaturalGasSupplyChainOptimizer:
             solution: Dict = {}
             solution['optimization_status'] = self.model.Status
             solution['optimization_time'] = getattr(self.model, 'Runtime', None)
-
+            
             if self.model.Status == GRB.OPTIMAL:
                 # 目标值（生命周期总成本）
                 objective_value = getattr(self.model, 'ObjVal', 0.0)
@@ -500,7 +732,7 @@ class NaturalGasSupplyChainOptimizer:
                 logger.error(f"求解失败，状态码: {self.model.Status}")
                 solution['status'] = 'failed'
                 return solution
-
+                
         except Exception as e:
             logger.error(f"求解过程出现异常: {e}")
             raise
@@ -588,113 +820,237 @@ class NaturalGasSupplyChainOptimizer:
     # 这些方法调用模块化组件来完成具体功能
     
     def _process_airport_data(self, airport_data: pd.DataFrame):
-        """处理机场数据（保留原有业务逻辑）"""
+        """处理机场数据：优先使用 Excel 中完整 weekly_demand_series，与原版保持一致"""
         logger.info("处理机场需求数据...")
         
         self.airports = {}
         for _, row in airport_data.iterrows():
             airport_name = row['airport']
-            
-            # 获取机场坐标
-            airport_coords = self._get_airport_coordinates(airport_name)
-            
-            # 处理周级需求数据
-            weekly_demand = []
-            for week in range(self.time_horizon_weeks):
-                week_col = f'week_{week + 1}'
-                if week_col in row:
-                    weekly_demand.append(float(row[week_col]))
+
+            # 优先支持 weekly_demand_series 列（与原版一致，包含完整周序列）
+            weekly_series: List[float] = []
+            if 'weekly_demand_series' in airport_data.columns:
+                series_value = row.get('weekly_demand_series')
+                if isinstance(series_value, (list, tuple)):
+                    weekly_series = [float(x) for x in series_value]
                 else:
-                    # 如果没有足够的周数据，使用最后一个可用值
-                    if weekly_demand:
-                        weekly_demand.append(weekly_demand[-1])
-                    else:
-                        weekly_demand.append(1000)  # 默认需求
+                    # 兼容字符串形式（如已被序列化）
+                    try:
+                        import ast
+                        parsed = ast.literal_eval(str(series_value))
+                        if isinstance(parsed, (list, tuple)):
+                            weekly_series = [float(x) for x in parsed]
+                    except Exception:
+                        weekly_series = []
             
+            if not weekly_series:
+                # 兼容旧的 week_1..week_N 列，仅取到 time_horizon_weeks 长度
+                temp_series: List[float] = []
+                for week in range(self.time_horizon_weeks):
+                    week_col = f'week_{week + 1}'
+                    value = row.get(week_col, 0.0)
+                    try:
+                        temp_series.append(float(value))
+                    except Exception:
+                        temp_series.append(0.0)
+                weekly_series = temp_series
+
+            # 坐标优先取机场行自带的真实坐标
+            lat_val = row.get('latitude', None)
+            lon_val = row.get('longitude', None)
+            if pd.notna(lat_val) and pd.notna(lon_val):
+                latitude = float(lat_val)
+                longitude = float(lon_val)
+            else:
+                coords = self._get_airport_coordinates(airport_name)
+                latitude = coords.get('latitude', coords.get('lat', 40.0))
+                longitude = coords.get('longitude', coords.get('lon', 116.0))
+
+            avg_weekly = float(np.mean(weekly_series)) if weekly_series else 0.0
+            max_weekly = float(np.max(weekly_series)) if weekly_series else 0.0
+            total_annual = float(np.sum(weekly_series)) if weekly_series else 0.0
+
             self.airports[airport_name] = {
-                'latitude': airport_coords['lat'],
-                'longitude': airport_coords['lon'],
-                'weekly_fuel_demand': weekly_demand,
-                'weekly_fuel_series': weekly_demand
+                'latitude': latitude,
+                'longitude': longitude,
+                'weekly_demand_series': weekly_series,
+                'weekly_fuel_series': weekly_series,
+                'avg_weekly_demand_kg': avg_weekly,
+                'max_weekly_demand_kg': max_weekly,
+                'total_annual_demand_kg': total_annual,
             }
         
         logger.info(f"处理了 {len(self.airports)} 个机场的需求数据")
     
     def _get_airport_coordinates(self, airport_name: str) -> dict:
-        """获取机场坐标（保留原有逻辑但可能使用地理计算器验证）"""
-        # 机场坐标数据库（简化版本）
-        airport_coords = {
-            '北京首都国际机场': {'lat': 40.0799, 'lon': 116.6031},
-            '上海浦东国际机场': {'lat': 31.1443, 'lon': 121.8083},
-            '广州白云国际机场': {'lat': 23.1924, 'lon': 113.3010},
-            '深圳宝安国际机场': {'lat': 22.6393, 'lon': 113.8107},
-            # 可以添加更多机场
+        """获取京津冀机场坐标信息（与原版一致）"""
+        airport_coords_map = {
+            '首都机场': {'latitude': 40.0801, 'longitude': 116.5846},
+            '北京首都国际机场': {'latitude': 40.0801, 'longitude': 116.5846},
+            '北京': {'latitude': 40.0801, 'longitude': 116.5846},
+            '滨海机场': {'latitude': 39.1244, 'longitude': 117.3462},
+            '天津滨海国际机场': {'latitude': 39.1244, 'longitude': 117.3462},
+            '天津': {'latitude': 39.1244, 'longitude': 117.3462},
+            '正定机场': {'latitude': 38.2807, 'longitude': 114.6956},
+            '石家庄正定国际机场': {'latitude': 38.2807, 'longitude': 114.6956},
+            '石家庄': {'latitude': 38.2807, 'longitude': 114.6956},
+            '南苑机场': {'latitude': 39.7827, 'longitude': 116.3878},
+            '北京南苑机场': {'latitude': 39.7827, 'longitude': 116.3878},
+            '邯郸机场': {'latitude': 36.5258, 'longitude': 114.4253},
+            '邯郸': {'latitude': 36.5258, 'longitude': 114.4253},
         }
-        
-        if airport_name in airport_coords:
-            coords = airport_coords[airport_name]
-            # 使用地理计算器验证坐标有效性
-            if self.geographic_calculator.validate_coordinates(coords['lat'], coords['lon']):
-                return coords
-        
-        # 默认坐标（北京）
-        logger.warning(f"未找到机场 {airport_name} 的坐标，使用默认坐标")
-        return {'lat': 40.0, 'lon': 116.0}
+
+        if airport_name in airport_coords_map:
+            return airport_coords_map[airport_name]
+
+        logger.error(f"未知的机场名称: {airport_name}，请检查数据")
+        return {'latitude': 40.0, 'longitude': 116.0}
     
     def _load_ng_pipeline_data(self):
-        """加载天然气管段数据（保留原有逻辑）"""
-        logger.info("加载天然气管段数据...")
-        
-        # 简化的天然气管段数据
-        self.ng_pipeline_sources = {
-            'shaanxi_gas_field': {
-                'name': '陕西气田',
-                'lat': 37.5, 'lon': 109.0,
-                'capacity_mcm_per_year': 5000,
-                'type': 'gas_field'
-            },
-            'xinjiang_gas_field': {
-                'name': '新疆气田', 
-                'lat': 43.8, 'lon': 87.6,
-                'capacity_mcm_per_year': 8000,
-                'type': 'gas_field'
-            }
-        }
-        
-        logger.info(f"加载了 {len(self.ng_pipeline_sources)} 个天然气来源")
+        """加载天然气管段数据（使用集成真实数据与缓存，参考原版实现）"""
+        try:
+            try:
+                from .data_cache_manager import cache_manager
+            except ImportError:
+                from products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.data_cache_manager import cache_manager
+
+            project_root = get_project_base_dir()
+            integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
+                                         "natural_gas_supply_chain_optimization", "data", 
+                                         "integrated_gas_pipeline_price_data_with_coords.csv")
+
+            if not os.path.exists(integrated_file):
+                logger.error(f"集成天然气数据文件不存在: {integrated_file}")
+                return self._load_original_pipeline_data()
+
+            if cache_manager.is_cache_valid('ng_pipelines', integrated_file):
+                logger.info("使用缓存的天然气管道数据（500km过滤）")
+                cached_df = cache_manager.load_filtered_data('ng_pipelines')
+                if cached_df is not None:
+                    integrated_df = cached_df
+                    logger.info(f"从缓存加载天然气管道数据: {len(integrated_df)} 条记录")
+                else:
+                    logger.warning("缓存加载失败，执行完整加载")
+                    integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
+            else:
+                logger.info("缓存无效或不存在，执行完整加载和过滤")
+                integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
+
+            # 写入 self.ng_pipeline_sources（与原版对齐字段）
+            self.ng_pipeline_sources = {}
+            for _, row in integrated_df.iterrows():
+                pipeline_id = row['pipeline_id']
+                lat = float(row.get('center_latitude') or row.get('lat'))
+                lon = float(row.get('center_longitude') or row.get('lon'))
+                self.ng_pipeline_sources[pipeline_id] = {
+                    'name': row['pipeline_name'],
+                    'operator': row['operator'],
+                    'status': row['status'],
+                    'year_online': row.get('year_online', 2020),
+                    'capacity_mcm_per_day': row['capacity_mcm_per_day'],
+                    'length_km': row['length_km'],
+                    'natural_gas_price_yuan_per_10k_m3': row['natural_gas_price_yuan_per_10k_m3'],
+                    'pipeline_cost_yuan_per_mcm': row['pipeline_cost_yuan_per_mcm'],
+                    'transport_cost_yuan_per_mcm_km': row['transport_cost_yuan_per_mcm_km'],
+                    'supply_reliability': row['supply_reliability'],
+                    'center_latitude': lat,
+                    'center_longitude': lon,
+                    'lat': lat,
+                    'lon': lon,
+                    'start_latitude': row.get('start_latitude', None),
+                    'start_longitude': row.get('start_longitude', None),
+                    'end_latitude': row.get('end_latitude', None),
+                    'end_longitude': row.get('end_longitude', None),
+                }
+
+            logger.info(f"成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据（含价格和坐标信息）")
+        except Exception as e:
+            logger.error(f"加载集成天然气数据失败: {e}")
+            self._load_original_pipeline_data()
     
     def _load_lng_terminal_data(self):
-        """加载LNG接收站数据（保留原有逻辑）"""
-        logger.info("加载LNG接收站数据...")
-        
-        # 简化的LNG接收站数据
-        self.lng_terminals = {
-            'dalian_lng': {
-                'name': '大连LNG接收站',
-                'lat': 38.9, 'lon': 121.6,
-                'capacity_mcm_per_year': 1000,
-                'type': 'lng_terminal'
-            },
-            'shanghai_lng': {
-                'name': '上海LNG接收站',
-                'lat': 31.2, 'lon': 121.5, 
-                'capacity_mcm_per_year': 1500,
-                'type': 'lng_terminal'
-            }
-        }
-        
-        # 计算平均LNG容量
-        if self.lng_terminals:
-            total_capacity = sum(terminal['capacity_mcm_per_year'] for terminal in self.lng_terminals.values())
-            self.avg_lng_capacity_mcm_per_year = total_capacity / len(self.lng_terminals)
-        
-        logger.info(f"加载了 {len(self.lng_terminals)} 个LNG接收站")
+        """加载LNG接收站数据（使用真实CSV与缓存，参考原版实现）"""
+        try:
+            try:
+                from .data_cache_manager import cache_manager
+            except ImportError:
+                from products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.data_cache_manager import cache_manager
+
+            project_root = get_project_base_dir()
+            lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
+            if not os.path.exists(lng_file):
+                logger.error(f"LNG接收站数据文件不存在: {lng_file}")
+                raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
+
+            if cache_manager.is_cache_valid('lng_terminals', lng_file):
+                logger.info("使用缓存的LNG接收站数据（500km过滤）")
+                cached_df = cache_manager.load_filtered_data('lng_terminals')
+                if cached_df is not None:
+                    lng_df = cached_df
+                    logger.info(f"从缓存加载LNG接收站数据: {len(lng_df)} 条记录")
+                else:
+                    logger.warning("缓存加载失败，执行完整加载")
+                    lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+            else:
+                logger.info("缓存无效或不存在，执行完整加载和过滤")
+                lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+
+            self.lng_terminals = {}
+            for idx, row in lng_df.iterrows():
+                terminal_id = f"lng_terminal_{idx+1}"
+                # 容量与坐标转换对齐原版
+                capacity_raw = row.get('current_capacity__Million_tonne', 0)
+                try:
+                    capacity_mt = float(capacity_raw) if capacity_raw else 0.0
+                    capacity_mcm_per_year = capacity_mt * 13.8 * 10
+                except (ValueError, TypeError):
+                    try:
+                        capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', 300))
+                    except Exception:
+                        capacity_mcm_per_year = row.get('capacity_mcm_per_year', None)
+                        if capacity_mcm_per_year is None:
+                            logger.warning(f"LNG接收站 {row.get('Name','未知')} 缺少容量数据，跳过")
+                            continue
+
+                lat = float(row.get('Lat'))
+                lon = float(row.get('Long'))
+
+                self.lng_terminals[terminal_id] = {
+                    'name': row.get('Name', f'LNG接收站{idx+1}'),
+                    'chinese_name': row.get('ChineseName', ''),
+                    'location': row.get('Location', ''),
+                    'capacity_mcm_per_year': capacity_mcm_per_year,
+                    'operator': row.get('Operator', '未知'),
+                    'status': row.get('Status', 'Operating'),
+                    'year_online': row.get('YearOnline', 2020),
+                    'cost_yuan_per_mcm': 200 + idx * 15,
+                    'lat': lat,
+                    'lon': lon,
+                    'berths': row.get('Berths', ''),
+                    'gas_type_source': row.get('Gas_type_source', ''),
+                    'operational_status': row.get('Status', '运营中'),
+                    'object_id': row.get('ObjectId', idx+1)
+                }
+
+            # 平均容量
+            if self.lng_terminals:
+                    capacity_values = [info['capacity_mcm_per_year'] for info in self.lng_terminals.values() if info.get('capacity_mcm_per_year')]
+                    if capacity_values:
+                        self.avg_lng_capacity_mcm_per_year = sum(capacity_values) / len(capacity_values)
+                        logger.info(f"计算得出LNG接收站容量平均值: {self.avg_lng_capacity_mcm_per_year:.1f} 万立方米/年")
+                    else:
+                        logger.warning("未找到有效的LNG容量数据，使用默认值1000万立方米/年")
+            else:
+                logger.warning("未加载到任何LNG接收站数据，使用默认容量值1000万立方米/年")
+        except Exception as e:
+            logger.error(f"加载LNG接收站数据失败: {e}")
+            raise
     
     def _define_technologies(self):
         """定义生产技术（使用模块化成本计算器）"""
         logger.info("定义生产技术（使用模块化成本计算）...")
         
-        # 技术参数定义（简化版本）
+        # 技术参数定义（完整版本，包含所有原版技术）
         tech_params = {
             'pipeline_direct_conversion': {
                 'name': '管段直供转换',
@@ -712,6 +1068,24 @@ class NaturalGasSupplyChainOptimizer:
                 'variable_opex_per_kg': 3.0,
                 'lifetime_years': 20,
                 'suitable_locations': ['airport', 'solar_plant', 'wind_farm'],
+                'hydrogen_transport_required': True
+            },
+            'lng_terminal_conversion': {
+                'name': 'LNG接收站转换',
+                'capex_per_kg_h': 70000,  # 元/(kg/h)
+                'fixed_opex_annual': 120000,  # 元/年
+                'variable_opex_per_kg': 2.8,  # 元/kg
+                'lifetime_years': 18,
+                'suitable_locations': ['lng_terminal'],
+                'hydrogen_transport_required': True
+            },
+            'integrated_supply_conversion': {
+                'name': '综合供应转换',
+                'capex_per_kg_h': 90000,  # 元/(kg/h)
+                'fixed_opex_annual': 180000,  # 元/年
+                'variable_opex_per_kg': 3.5,  # 元/kg
+                'lifetime_years': 20,
+                'suitable_locations': ['industrial_park', 'port'],
                 'hydrogen_transport_required': True
             }
         }
@@ -908,60 +1282,114 @@ class NaturalGasSupplyChainOptimizer:
         return result_df
     
     def _load_real_renewable_data(self) -> pd.DataFrame:
-        """加载真实可再生能源数据（简化版本）"""
-        logger.info("创建示例可再生能源数据...")
-        
-        # 创建示例数据
-        data = []
-        
-        # 添加一些太阳能电站
-        solar_plants = [
-            {'name': '北京太阳能电站1', 'lat': 40.2, 'lon': 116.5, 'capacity': 100},
-            {'name': '天津太阳能电站1', 'lat': 39.1, 'lon': 117.2, 'capacity': 150},
-        ]
-        
-        # 添加一些风电场
-        wind_farms = [
-            {'name': '河北风电场1', 'lat': 39.8, 'lon': 115.5, 'capacity': 200},
-            {'name': '内蒙古风电场1', 'lat': 40.8, 'lon': 115.0, 'capacity': 250},
-        ]
-        
-        # 生成小时级数据
-        for hour in range(self.total_hours):
-            # 太阳能数据（白天高，晚上低）
-            for plant in solar_plants:
-                solar_factor = max(0, np.sin(np.pi * (hour % 24) / 24)) if 6 <= hour % 24 <= 18 else 0
-                power_output = plant['capacity'] * solar_factor * (0.8 + 0.4 * np.random.random())
-                
-                data.append({
-                    'plant_name': plant['name'],
-                    'type': 'solar_plant',
-                    'latitude': plant['lat'],
-                    'longitude': plant['lon'],
-                    'capacity_mw': plant['capacity'],
-                    'power_output_mw': power_output,
-                    'hour': hour
-                })
-            
-            # 风电数据（相对稳定）
-            for farm in wind_farms:
-                wind_factor = 0.6 + 0.4 * np.random.random()  # 60-100%的随机输出
-                power_output = farm['capacity'] * wind_factor
-                
-                data.append({
-                    'plant_name': farm['name'],
+        """加载真实的可再生能源数据（与原版一致）"""
+        logger.info("加载真实的可再生能源数据...")
+
+        base_dir = get_project_base_dir()
+        wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
+        solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
+
+        if not os.path.exists(wind_data_dir):
+            logger.error(f"风电数据目录不存在: {wind_data_dir}")
+            raise FileNotFoundError(f"无法找到风电数据目录: {wind_data_dir}")
+        if not os.path.exists(solar_data_dir):
+            logger.error(f"光伏数据目录不存在: {solar_data_dir}")
+            raise FileNotFoundError(f"无法找到光伏数据目录: {solar_data_dir}")
+
+        wind_data = self._load_wind_data(wind_data_dir)
+        solar_data = self._load_solar_data(solar_data_dir)
+        renewable_data = pd.concat([wind_data, solar_data], ignore_index=True)
+        logger.info(f"成功加载了 {len(renewable_data)} 条可再生能源数据记录")
+        return renewable_data
+
+    def _load_wind_data(self, wind_data_dir: str) -> pd.DataFrame:
+        """加载风电数据（读取前若干文件并将3小时数据插值到小时）"""
+        logger.info("正在加载风电数据...")
+        wind_data_list = []
+        wind_files = [f for f in os.listdir(wind_data_dir) if f.endswith('.csv')][:10]
+        for file_name in wind_files:
+            file_path = os.path.join(wind_data_dir, file_name)
+            try:
+                df = pd.read_csv(file_path)
+                df['timestamp'] = pd.to_datetime(df['timestamp'])
+                df = df[df['timestamp'].dt.year == 2024]
+                df = df[df['timestamp'] < '2024-01-15']
+                df_hourly = self._interpolate_wind_to_hourly(df)
+                wind_data_list.append(df_hourly)
+            except Exception as e:
+                logger.warning(f"读取风电文件 {file_name} 失败: {e}")
+        if wind_data_list:
+            wind_data = pd.concat(wind_data_list, ignore_index=True)
+            logger.info(f"成功加载 {len(wind_data)} 条风电数据")
+        else:
+            logger.warning("没有成功读取任何风电数据")
+            wind_data = pd.DataFrame()
+        return wind_data
+
+    def _interpolate_wind_to_hourly(self, wind_df: pd.DataFrame) -> pd.DataFrame:
+        """将风电3小时数据插值到每小时（最近邻法：3小时值复制到每小时）"""
+        hourly_data = []
+        for _, row in wind_df.iterrows():
+            timestamp = row['timestamp']
+            generation_3h = row['generation_3h_mwh']
+            hourly_generation = generation_3h
+            for i in range(3):
+                hour_timestamp = timestamp + pd.Timedelta(hours=i)
+                hour_from_start = (hour_timestamp - wind_df['timestamp'].min()).total_seconds() // 3600
+                if hour_from_start < self.total_hours:
+                    hourly_data.append({
+                        'plant_name': row['farm_name'],
                     'type': 'wind_farm', 
-                    'latitude': farm['lat'],
-                    'longitude': farm['lon'],
-                    'capacity_mw': farm['capacity'],
-                    'power_output_mw': power_output,
-                    'hour': hour
-                })
-        
-        df = pd.DataFrame(data)
-        logger.info(f"创建了 {len(df)} 条示例可再生能源数据记录")
-        
-        return df
+                        'latitude': row['latitude'],
+                        'longitude': row['longitude'],
+                        'capacity_mw': row['capacity_mw'],
+                        'power_output_mw': hourly_generation,
+                        'hour': int(hour_from_start)
+                    })
+        return pd.DataFrame(hourly_data)
+
+    def _load_solar_data(self, solar_data_dir: str) -> pd.DataFrame:
+        """加载光伏数据（读取第一个月批次并取前total_hours小时）"""
+        logger.info("正在加载光伏数据...")
+        solar_data_list = []
+        all_files = os.listdir(solar_data_dir)
+        month01_files = [f for f in all_files if f.startswith('solar_generation_month01_batch_') and f.endswith('.csv')]
+        month01_files.sort()
+        logger.info(f"找到 {len(month01_files)} 个第一个月的批次文件")
+        for file_name in month01_files:
+            file_path = os.path.join(solar_data_dir, file_name)
+            try:
+                df = pd.read_csv(file_path)
+                df['timestamp'] = pd.to_datetime(df['timestamp'])
+                available_years = df['timestamp'].dt.year.unique()
+                logger.info(f"文件 {file_name} 包含年份: {sorted(available_years)}")
+                base_year = int(min(available_years))
+                start_date = f"{base_year}-01-01"
+                end_date = f"{base_year}-02-01"
+                df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] < end_date)].copy()
+                if len(df_filtered) == 0:
+                    logger.warning(f"文件 {file_name} 在时间范围 {start_date} 到 {end_date} 内没有数据")
+                    continue
+                df_processed = df_filtered.copy()
+                df_processed['plant_name'] = df_filtered['plant_name']
+                df_processed['type'] = 'solar_plant'
+                df_processed['generation_mwh'] = df_filtered['generation_1h_mwh']
+                df_processed['power_output_mw'] = df_filtered['generation_1h_mwh']
+                start_time = pd.to_datetime(f"{base_year}-01-01")
+                df_processed['hour'] = (df_processed['timestamp'] - start_time).dt.total_seconds() // 3600
+                df_processed['hour'] = df_processed['hour'].astype(int)
+                df_processed = df_processed[df_processed['hour'] < self.total_hours]
+                logger.info(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
+                solar_data_list.append(df_processed)
+            except Exception as e:
+                logger.warning(f"读取光伏文件 {file_name} 失败: {e}")
+        if solar_data_list:
+            solar_data = pd.concat(solar_data_list, ignore_index=True)
+            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(month01_files)} 个批次文件")
+        else:
+            logger.warning("没有成功读取任何光伏数据")
+            solar_data = pd.DataFrame()
+        return solar_data
 
 
 # 保持与原文件相同的接口
@@ -985,8 +1413,8 @@ def main():
         # 使用内置的真实数据加载逻辑，无需传入额外参数
         # 构建相对路径到机场数据文件
         airport_excel_path = os.path.join(str(base_dir), "products", "aviation_fuel_analysis", 
-                                        "resource_flight_data_process", "data", 
-                                        "capital_binhai_airports_data_20250726_123415.xlsx")
+                                        "resource_flight_data_process", "results", "flights_beijing_tianjing",
+                                        "all_airports_weekly_parameters_20250726_142747.xlsx")
         
         optimizer.load_data_from_excel(
             airport_excel_path=airport_excel_path

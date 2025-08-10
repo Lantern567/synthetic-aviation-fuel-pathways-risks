@@ -16,6 +16,16 @@ import json
 import re
 import traceback
 from datetime import datetime
+try:
+    from shared.utils.log_preserver import mount_file_logging
+except ModuleNotFoundError:
+    import sys
+    # 动态加入项目根目录到sys.path后重试
+    current_file = os.path.abspath(__file__)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
+    if project_root not in sys.path:
+        sys.path.append(project_root)
+    from shared.utils.log_preserver import mount_file_logging
 
 # 导入GraphHopper路径规划模块 - 必须可用
 try:
@@ -97,6 +107,23 @@ def get_project_base_dir():
     # 向上5级目录: src -> natural_gas_supply_chain_optimization -> supply_chain_optimization -> products -> project_root
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
     return project_root
+
+
+# 在模块加载时挂载日志文件输出（仅作用于logging，不捕获print）
+try:
+    _base_dir = get_project_base_dir()
+    _log_dir = os.path.join(
+        _base_dir,
+        "products",
+        "supply_chain_optimization",
+        "natural_gas_supply_chain_optimization",
+        "results",
+        "logs",
+    )
+    mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
+except Exception:
+    # 静默失败，不影响主流程
+    pass
 
 class NaturalGasSupplyChainOptimizer:
     def _build_mtj_locations(self):
@@ -262,13 +289,19 @@ class NaturalGasSupplyChainOptimizer:
         """
         logger.info(f"从Excel文件加载数据: {airport_excel_path}")
         
-        # 读取Excel数据
+        # 读取Excel数据 - 尝试读取All_Airports工作表，如果失败则读取默认工作表
         try:
-            excel_data = pd.read_excel(airport_excel_path)
-            logger.info(f"Excel文件读取成功，包含 {len(excel_data)} 行数据")
+            excel_data = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
+            logger.info(f"Excel文件读取成功(All_Airports)，包含 {len(excel_data)} 行数据")
         except Exception as e:
-            logger.error(f"读取Excel文件失败: {e}")
-            raise
+            logger.error(f"读取Excel文件失败（All_Airports）: {e}")
+            try:
+                logger.info("尝试使用传统方法读取airport_data...")
+                excel_data = pd.read_excel(airport_excel_path)
+                logger.info(f"Excel文件读取成功，包含 {len(excel_data)} 行数据")
+            except Exception as e2:
+                logger.error(f"读取Excel文件彻底失败: {e2}")
+                raise
         
         # 处理机场数据
         airport_data = self._process_excel_airport_data(excel_data)
