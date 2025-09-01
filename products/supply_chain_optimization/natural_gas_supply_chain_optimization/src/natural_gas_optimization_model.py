@@ -190,6 +190,12 @@ class NaturalGasSupplyChainOptimizer:
             elif key.startswith('cost_'):
                 param_key = key.replace('cost_', '')
                 new_config['cost_parameters'][param_key] = value
+            elif key.startswith('facility_lcoe_'):
+                # 允许通过 facility_lcoe_fixed_capex 等键覆盖
+                param_key = key.replace('facility_lcoe_', '')
+                if 'facility_lcoe_parameters' not in new_config:
+                    new_config['facility_lcoe_parameters'] = {}
+                new_config['facility_lcoe_parameters'][param_key] = value
             # 可以继续添加其他类别的参数覆盖逻辑
         
         return new_config
@@ -1281,9 +1287,10 @@ class NaturalGasSupplyChainOptimizer:
         return annual_total_cost / capacity_factor
 
     def _calculate_levelized_product_cost(self, capex_per_unit, fixed_opex_annual, variable_opex_per_product, 
-                                        lifetime_years, discount_rate, capacity_factor):
+                                        lifetime_years, discount_rate, capacity_factor, actual_annual_production=None):
         """
-        修正的平准化产品成本计算 (LCOP - Levelized Cost of Product)
+        平准化产品成本计算 (LCOP - Levelized Cost of Product)
+        基于实际优化结果的年产量进行计算
         
         Args:
             capex_per_unit: 初始资本支出，每单位产能 (元/单位产能)
@@ -1291,7 +1298,8 @@ class NaturalGasSupplyChainOptimizer:
             variable_opex_per_product: 单位产品变动运营成本 (元/产品)
             lifetime_years: 设备使用寿命 (年)
             discount_rate: 贴现率 (年化)
-            capacity_factor: 容量因子 (设备利用率)
+            capacity_factor: 容量因子 (设备利用率，仅在无实际产量时作为备用)
+            actual_annual_production: 优化结果的实际年产量 (kg/年)，优先使用此值
             
         Returns:
             平准化产品成本 (元/产品)
@@ -1306,8 +1314,14 @@ class NaturalGasSupplyChainOptimizer:
         # 年化资本成本
         annual_capex = capex_per_unit * crf
         
-        # 年实际产量 (假设设计产能为1单位/小时)
-        annual_production = 1.0 * 8760 * capacity_factor  # 产品/年
+        # 使用实际年产量（优先）或理论年产量（备用）
+        if actual_annual_production is not None and actual_annual_production > 0:
+            annual_production = actual_annual_production
+            logger.info(f"使用实际优化结果年产量: {annual_production:.2f} kg/年")
+        else:
+            # 仅在没有实际产量时使用理论值作为备用
+            annual_production = 1.0 * 8760 * capacity_factor  # 产品/年
+            logger.warning(f"未提供实际产量，使用理论估算: {annual_production:.2f} kg/年")
         
         # 单位产品固定成本 = (年化CAPEX + 年固定OPEX) / 年实际产量
         fixed_cost_per_product = (annual_capex + fixed_opex_annual) / annual_production
@@ -1464,11 +1478,12 @@ class NaturalGasSupplyChainOptimizer:
         Returns:
             float: LCOE (元/kg)
         """
-        # 获取设施的CAPEX和OPEX
-        fixed_capex = 2000000  # 200万元固定投资
-        variable_capex_per_capacity = 8000  # 8千元/(kg/h)
-        fixed_opex_annual = 1000000  # 100万元/年固定运营成本
-        variable_opex_per_kg = 300  # 300元/kg变动运营成本
+        # 获取设施的CAPEX和OPEX（从配置读取，提供向后兼容默认值）
+        cfg = self.config.get('facility_lcoe_parameters', {}) or {}
+        fixed_capex = cfg.get('fixed_capex', 2000000)  # 元
+        variable_capex_per_capacity = cfg.get('variable_capex_per_capacity', 8000)  # 元/(kg/h)
+        fixed_opex_annual = cfg.get('fixed_opex_annual', 1000000)  # 元/年
+        variable_opex_per_kg = cfg.get('variable_opex_per_kg', 300)  # 元/kg
         
         # 获取经济参数
         project_lifespan = self.economic_params['project_lifespan']
@@ -2632,6 +2647,10 @@ class NaturalGasSupplyChainOptimizer:
         logger.info("创建目标函数（基于20年生命周期总成本）...")
         
         total_cost = 0
+        # 读取目标函数系数配置（带默认值，保证向后兼容）
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        transport_cfg = obj_cfg.get('transport', {}) or {}
+        storage_cfg = obj_cfg.get('storage', {}) or {}
         
         # 获取经济参数
         discount_rate = self.economic_params['discount_rate']
@@ -2649,26 +2668,29 @@ class NaturalGasSupplyChainOptimizer:
         lifecycle_operation_factor = operation_expansion_factor * present_value_factor  # 20年生命周期现值系数
         
         # 1. MTJ生产设施投资成本（项目开始时的一次性投资）
+        fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
+        fixed_capex = fac_cfg.get('fixed_capex', 2000000)
+        variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 8000)
         facility_investment_cost = gp.quicksum(
-            # 固定投资成本
-            self.facility_vars[(location, tech)] * 2000000 +  # 200万固定投资
-            # 可变投资成本（基于容量）
-            self.facility_capacity_vars[(location, tech)] * 8000 * 
-            self.economic_params['mtj_plant_capacity_factor']  # 容量投资
+            self.facility_vars[(location, tech)] * fixed_capex +
+            self.facility_capacity_vars[(location, tech)] * variable_capex_per_capacity * 
+            self.economic_params['mtj_plant_capacity_factor']
             for location in self.locations
             for tech in self.technologies
         )
         
         # 2. MTJ生产设施运营成本（20年现值）
+        fixed_opex_annual = fac_cfg.get('fixed_opex_annual', 1000000)
         facility_operation_cost = gp.quicksum(
-            self.facility_vars[(location, tech)] * 1000000 * present_value_factor  # 100万/年×20年现值
+            self.facility_vars[(location, tech)] * fixed_opex_annual * present_value_factor
             for location in self.locations
             for tech in self.technologies
         )
         
         # 3. 生产变动运营成本（20年生命周期现值）
+        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 300)
         production_cost = gp.quicksum(
-            self.production_vars[(location, tech, hour)] * 300 * lifecycle_operation_factor  # 扩展到20年现值
+            self.production_vars[(location, tech, hour)] * variable_opex_per_kg * lifecycle_operation_factor
             for location in self.locations
             for tech in self.technologies  
             for hour in range(self.total_hours)
@@ -2684,7 +2706,7 @@ class NaturalGasSupplyChainOptimizer:
             if (location, airport, week) in self.transport_vars
         )
         
-        transport_equipment_cost = total_transport_demand * 0.01  # 设备投资
+        transport_equipment_cost = total_transport_demand * float(transport_cfg.get('equipment_investment_rate', 0.01))
         transport_operation_cost = gp.quicksum(
             self.transport_vars[(location, airport, week)] * 
             self._calculate_distance(location, airport) * 
@@ -2701,7 +2723,8 @@ class NaturalGasSupplyChainOptimizer:
             for location in self.locations
             for hour in range(self.total_hours + 1)
         )
-        storage_equipment_cost = max_storage_needed * 10  # 储存设备投资
+        storage_unit_cost = float(storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10))
+        storage_equipment_cost = max_storage_needed * storage_unit_cost
         storage_operation_cost = gp.quicksum(
             self.storage_vars[(location, hour)] * 
             self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
@@ -2718,11 +2741,12 @@ class NaturalGasSupplyChainOptimizer:
         )
         
         # 7. 制氢运营成本（20年生命周期现值）
+        hydrogen_production_unit_cost = float(obj_cfg.get('hydrogen_production_cost_yuan_per_kg', 50))
         hydrogen_production_cost = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] * 50 * lifecycle_operation_factor  # 20年制氢成本现值
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
+        self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
+        for location in self.locations
+        for hour in range(self.total_hours)
+        if (location, hour) in self.hydrogen_production_vars
         )
         
         # 8. 氢气储存投资 + 20年运营成本现值
@@ -2732,7 +2756,8 @@ class NaturalGasSupplyChainOptimizer:
             for hour in range(self.total_hours + 1)
             if (location, hour) in self.hydrogen_storage_vars
         )
-        h2_storage_investment = max_h2_storage * 20  # 氢气储存设备投资
+        h2_storage_unit_cost = float(storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20))
+        h2_storage_investment = max_h2_storage * h2_storage_unit_cost
         h2_storage_operation = gp.quicksum(
             self.hydrogen_storage_vars[(location, hour)] * 
             self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
@@ -2744,7 +2769,7 @@ class NaturalGasSupplyChainOptimizer:
         # 9. 氢气运输投资 + 20年运营成本现值（改为天级）
         total_days = self.total_hours // 24
         hydrogen_transport_investment = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc, day)] * 0.002  # 氢气罐车运输设备投资
+            self.hydrogen_transport_vars[(h_loc, mtj_loc, day)] * float(transport_cfg.get('hydrogen_transport_investment_rate', 0.002))
             for h_loc in self.hydrogen_locations
             for mtj_loc in sum(self.mtj_locations.values(), [])
             for day in range(total_days)
@@ -2762,7 +2787,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
         ng_transport_investment = gp.quicksum(
-            self.ng_transport_vars[(ng_loc, mtj_loc, day)] * 0.008  # 天然气罐车运输设备投资（比管道高）
+            self.ng_transport_vars[(ng_loc, mtj_loc, day)] * float(transport_cfg.get('ng_transport_investment_rate', 0.008))
             for ng_loc in self.ng_locations
             for mtj_loc in sum(self.non_lng_mtj_locations.values(), [])
             for day in range(total_days)
@@ -2823,8 +2848,9 @@ class NaturalGasSupplyChainOptimizer:
             )
         
         # 14. 期末资产处置成本（20年后的现值）
+        disposal_cost_per_kg = float(obj_cfg.get('final_inventory_disposal_cost_per_kg', 100))
         final_inventory_cost = gp.quicksum(
-            self.storage_vars[(location, self.total_hours)] * 100 * operation_expansion_factor * 
+            self.storage_vars[(location, self.total_hours)] * disposal_cost_per_kg * operation_expansion_factor * 
             (1 + discount_rate)**(-project_lifespan)  # 20年后处置成本的现值
             for location in self.locations
         )
@@ -2894,12 +2920,14 @@ class NaturalGasSupplyChainOptimizer:
     
     def _calculate_total_storage_cost_per_kg_hour(self) -> float:
         """计算总储存成本（基于实际储存的直接成本）"""
-        # 储存的直接成本（不包含设备折旧）
-        warehouse_rent_per_m3_hour = 0.01  # 仓库租金：0.01元/m³·小时
-        storage_density_kg_per_m3 = 500    # 储存密度：500kg/m³
-        handling_cost_per_kg_hour = 0.001  # 搬运费：0.001元/kg·小时
-        
-        storage_space_cost = warehouse_rent_per_m3_hour / storage_density_kg_per_m3
+        # 储存的直接成本（不包含设备折旧），来自配置
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        direct_cfg = (obj_cfg.get('storage', {}) or {}).get('direct_costs', {})
+        warehouse_rent_per_m3_hour = float(direct_cfg.get('warehouse_rent_per_m3_hour', 0.01))
+        storage_density_kg_per_m3 = float(direct_cfg.get('storage_density_kg_per_m3', 500))
+        handling_cost_per_kg_hour = float(direct_cfg.get('handling_cost_per_kg_hour', 0.001))
+
+        storage_space_cost = warehouse_rent_per_m3_hour / max(storage_density_kg_per_m3, 1e-6)
         total_storage_cost = storage_space_cost + handling_cost_per_kg_hour
         return total_storage_cost
     
@@ -2916,19 +2944,26 @@ class NaturalGasSupplyChainOptimizer:
         """计算天然气罐车固定成本"""
         distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
         
-        # 天然气罐车固定成本参数
-        truck_purchase_cost = 800000    # 80万元/辆天然气罐车
-        truck_depreciation_years = 8    # 罐车8年折旧
-        annual_insurance = 50000        # 年保险费用：5万元
-        annual_maintenance = 40000      # 年维护费用：4万元
+        # 从配置读取固定成本参数（带默认值）
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        truck_cfg = obj_cfg.get('ng_truck_fixed_cost', {}) or {}
+        truck_purchase_cost = float(truck_cfg.get('truck_purchase_cost', 800000))
+        truck_depreciation_years = float(truck_cfg.get('truck_depreciation_years', 8))
+        annual_insurance = float(truck_cfg.get('annual_insurance', 50000))
+        annual_maintenance = float(truck_cfg.get('annual_maintenance', 40000))
+        thresholds = truck_cfg.get('distance_thresholds_km', [50, 150])
+        trucks_options = truck_cfg.get('trucks_needed', [1, 2, 3])
         
         # 根据距离决定需要的车辆数量
-        if distance_km <= 50:
-            trucks_needed = 1
-        elif distance_km <= 150:
-            trucks_needed = 2
-        else:
-            trucks_needed = 3
+        trucks_needed = trucks_options[-1] if trucks_options else 1
+        for i, th in enumerate(thresholds):
+            try:
+                if distance_km <= float(th):
+                    idx = i if i < len(trucks_options) else len(trucks_options) - 1
+                    trucks_needed = trucks_options[idx]
+                    break
+            except Exception:
+                continue
         
         # 计算年化固定成本
         annual_depreciation = truck_purchase_cost / truck_depreciation_years
@@ -2955,12 +2990,17 @@ class NaturalGasSupplyChainOptimizer:
         # 氢气运输需要特殊车辆，成本更高，同样需要考虑更换成本
         transport_lifetime = self.economic_params['transport_vehicle_lifetime']
         project_lifespan = self.economic_params['project_lifespan']
-        
+        # 从配置读取参数（带默认值）
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        h2_cfg = obj_cfg.get('hydrogen_transport_vehicle', {}) or {}
+        capex_cfg = float(h2_cfg.get('capex', 1200000))
+        opex_cfg = float(h2_cfg.get('opex_annual', 120000))
+
         if transport_lifetime < project_lifespan:
             # 使用包含更换成本的计算方法
             h2_transport_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=1200000,  # 氢气运输车辆投资成本 (更高)
-                opex_annual=120000,  # 年运营成本
+                capex=capex_cfg,
+                opex_annual=opex_cfg,
                 equipment_lifetime=transport_lifetime,
                 project_lifespan=project_lifespan,
                 discount_rate=self.economic_params['discount_rate'],
@@ -2969,15 +3009,15 @@ class NaturalGasSupplyChainOptimizer:
         else:
             # 使用标准平准化成本计算
             h2_transport_levelized = self._calculate_levelized_cost(
-                capex=1200000,  # 氢气运输车辆投资成本 (更高)
-                opex_annual=120000,  # 年运营成本
+                capex=capex_cfg,
+                opex_annual=opex_cfg,
                 lifetime_years=transport_lifetime,
                 discount_rate=self.economic_params['discount_rate'],
                 capacity_factor=self.economic_params['transport_capacity_factor']
             )
-        
+
         # 氢气运输容量较低
-        annual_h2_transport_capacity = 50000  # kg·km/年
+        annual_h2_transport_capacity = float(h2_cfg.get('annual_capacity_kgkm', 50000))  # kg·km/年
         return h2_transport_levelized / annual_h2_transport_capacity  # 元/(kg·km)
     
     def _calculate_levelized_ng_transport_cost(self) -> float:
@@ -2985,12 +3025,17 @@ class NaturalGasSupplyChainOptimizer:
         # 天然气罐车运输，同样需要考虑更换成本
         transport_lifetime = self.economic_params['transport_vehicle_lifetime']
         project_lifespan = self.economic_params['project_lifespan']
-        
+        # 从配置读取参数（带默认值）
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        ng_cfg = obj_cfg.get('ng_transport_vehicle', {}) or {}
+        capex_cfg = float(ng_cfg.get('capex', 600000))
+        opex_cfg = float(ng_cfg.get('opex_annual', 60000))
+
         if transport_lifetime < project_lifespan:
             # 使用包含更换成本的计算方法
             ng_transport_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=600000,  # 天然气罐车投资成本
-                opex_annual=60000,  # 年运营成本
+                capex=capex_cfg,
+                opex_annual=opex_cfg,
                 equipment_lifetime=transport_lifetime,
                 project_lifespan=project_lifespan,
                 discount_rate=self.economic_params['discount_rate'],
@@ -2999,16 +3044,16 @@ class NaturalGasSupplyChainOptimizer:
         else:
             # 使用标准平准化成本计算
             ng_transport_levelized = self._calculate_levelized_cost(
-                capex=600000,  # 天然气罐车投资成本
-                opex_annual=60000,  # 年运营成本
+                capex=capex_cfg,
+                opex_annual=opex_cfg,
                 lifetime_years=transport_lifetime,
                 discount_rate=self.economic_params['discount_rate'],
                 capacity_factor=self.economic_params['transport_capacity_factor']
             )
-        
+
         # 天然气运输容量转换为kg基准（与其他运输方式统一）
-        annual_ng_transport_capacity_m3 = 200000  # m³·km/年
-        ng_density_kg_per_m3 = 0.8  # 天然气密度：0.8kg/m³
+        annual_ng_transport_capacity_m3 = float(ng_cfg.get('annual_capacity_m3km', 200000))  # m³·km/年
+        ng_density_kg_per_m3 = float(ng_cfg.get('ng_density_kg_per_m3', 0.8))  # 天然气密度：0.8kg/m³
         annual_ng_transport_capacity_kg = annual_ng_transport_capacity_m3 * ng_density_kg_per_m3  # kg·km/年
         return ng_transport_levelized / annual_ng_transport_capacity_kg  # 元/(kg·km)
     

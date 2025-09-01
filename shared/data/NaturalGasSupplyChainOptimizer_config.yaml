@@ -78,6 +78,68 @@ cost_parameters:
   shortage_penalty_yuan_per_kg: 2500                       # 短缺惩罚成本
 
 # =============================================================================
+# 4.1 设施LCOE快速评估参数 (Facility LCOE Quick Estimation)
+# 用于 _calculate_correct_facility_lcoe_with_utilization 的默认参数
+# 可以根据具体项目调整，若缺省则代码中有向后兼容的默认值
+# =============================================================================
+facility_lcoe_parameters:
+  # 设施类型：MTJ 航煤生产工厂（F-T合成+加氢精制工艺的生产设施）
+  # 代码引用：products/.../natural_gas_optimization_model.py::_calculate_correct_facility_lcoe_with_utilization
+  # 适用范围：仅用于 MTJ 生产工厂的“快速 LCOE 估算”；不用于电解槽/储存/管道/运输等其他设施
+  fixed_capex: 2000000                    # 元；固定投资（与规模无关，覆盖项目前期土建/公辅/控制等）
+  variable_capex_per_capacity: 8000       # 元/(kg/hour)；按产能线性投入（产能越大投资随之增加）
+  fixed_opex_annual: 1000000              # 元/年；固定运营成本（与产量无关，人员/保险/检修等）
+  variable_opex_per_kg: 300               # 元/kg；变动运营成本（随产量变化，催化剂/能耗/消耗品等）
+
+# =============================================================================
+# 4.2 目标函数/模型系数 (Objective Coefficients)
+# 将目标函数中用到的常数集中配置，便于统一管理和调参
+# =============================================================================
+objective_coefficients:
+  # 生产相关
+  hydrogen_production_cost_yuan_per_kg: 50          # 制氢成本（简化处理）
+
+  # 运输投资强度（按运输量近似折算的投资系数）
+  transport:
+    equipment_investment_rate: 0.01                 # 总运输需求的设备投资系数
+    hydrogen_transport_investment_rate: 0.002       # 氢气运输投资系数
+    ng_transport_investment_rate: 0.008             # 天然气运输投资系数
+    annual_transport_capacity_kgkm: 100000          # 通用运输车辆年能力 (kg·km/年)
+
+  # 专用运输车辆参数（用于平准化成本计算）
+  hydrogen_transport_vehicle:
+    capex: 1200000                                  # 元/辆
+    opex_annual: 120000                             # 元/年
+    annual_capacity_kgkm: 50000                     # kg·km/年
+
+  ng_transport_vehicle:
+    capex: 600000                                   # 元/辆
+    opex_annual: 60000                              # 元/年
+    annual_capacity_m3km: 200000                    # m³·km/年
+    ng_density_kg_per_m3: 0.8                       # 天然气密度 (kg/m³)
+
+  # 储存与处置相关
+  storage:
+    equipment_unit_cost_yuan_per_kg: 10             # 储存设备投资（按最大库存近似）
+    hydrogen_equipment_unit_cost_yuan_per_kg: 20    # 氢气储存设备投资（按最大库存近似）
+    direct_costs:
+      warehouse_rent_per_m3_hour: 0.01              # 仓库租金 (元/m³·小时)
+      storage_density_kg_per_m3: 500                 # 储存密度 (kg/m³)
+      handling_cost_per_kg_hour: 0.001               # 搬运费 (元/kg·小时)
+
+  # 天然气罐车固定成本估算参数
+  ng_truck_fixed_cost:
+    truck_purchase_cost: 800000                      # 购置成本（元/辆）
+    truck_depreciation_years: 8                      # 折旧年限（年）
+    annual_insurance: 50000                          # 年保险（元/年）
+    annual_maintenance: 40000                        # 年维护（元/年）
+    distance_thresholds_km: [50, 150]                # 距离阈值（km）
+    trucks_needed: [1, 2, 3]                         # 阶梯对应车辆数
+
+  # 期末处置成本
+  final_inventory_disposal_cost_per_kg: 100          # 元/kg
+
+# =============================================================================
 # 4. MTJ生产设备成本参数 (MTJ Production Equipment Costs)
 # =============================================================================
 mtj_production_costs:
