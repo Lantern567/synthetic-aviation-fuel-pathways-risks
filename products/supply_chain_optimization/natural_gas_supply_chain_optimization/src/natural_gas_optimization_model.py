@@ -15,6 +15,7 @@ import os
 import json
 import re
 import traceback
+import yaml
 from datetime import datetime
 try:
     from shared.utils.log_preserver import mount_file_logging
@@ -126,6 +127,73 @@ except Exception:
     pass
 
 class NaturalGasSupplyChainOptimizer:
+    def _load_config(self, config_path: str = None, override_params: dict = None) -> dict:
+        """
+        加载配置文件
+        
+        Args:
+            config_path: 配置文件路径，如果为None则使用默认路径
+            override_params: 用于覆盖配置文件中参数的字典
+            
+        Returns:
+            配置字典
+        """
+        if config_path is None:
+            # 使用默认配置文件路径
+            project_root = get_project_base_dir()
+            config_path = os.path.join(project_root, "shared", "data", "NaturalGasSupplyChainOptimizer_config.yaml")
+        
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"配置文件不存在: {config_path}")
+        
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+            
+            # 应用参数覆盖
+            if override_params:
+                config = self._apply_config_overrides(config, override_params)
+            
+            logger.info(f"配置文件加载成功: {config_path}")
+            return config
+            
+        except Exception as e:
+            logger.error(f"配置文件加载失败: {e}")
+            raise
+    
+    def _apply_config_overrides(self, config: dict, overrides: dict) -> dict:
+        """
+        应用配置覆盖参数
+        
+        Args:
+            config: 原始配置字典
+            overrides: 覆盖参数字典
+            
+        Returns:
+            应用覆盖后的配置字典
+        """
+        import copy
+        new_config = copy.deepcopy(config)
+        
+        # 支持扁平化的参数覆盖，如 'time_horizon_weeks': 2
+        for key, value in overrides.items():
+            if key in ['time_horizon_weeks', 'use_graphhopper_routing', 'graphhopper_host', 
+                      'graphhopper_port', 'max_transport_distance_km', 'use_routing_for_short_distance',
+                      'avg_lng_capacity_mcm_per_year']:
+                new_config['basic_parameters'][key] = value
+            elif key.startswith('basic_'):
+                param_key = key.replace('basic_', '')
+                new_config['basic_parameters'][param_key] = value
+            elif key.startswith('economic_'):
+                param_key = key.replace('economic_', '')
+                new_config['economic_parameters'][param_key] = value
+            elif key.startswith('cost_'):
+                param_key = key.replace('cost_', '')
+                new_config['cost_parameters'][param_key] = value
+            # 可以继续添加其他类别的参数覆盖逻辑
+        
+        return new_config
+
     def _build_mtj_locations(self):
         """根据每种技术的 suitable_locations 动态生成 mtj_locations 映射。"""
         self.mtj_locations = {}
@@ -139,27 +207,22 @@ class NaturalGasSupplyChainOptimizer:
 
     """天然气基供应链优化器"""
     
-    def __init__(self, time_horizon_weeks: int = 1, use_graphhopper_routing: bool = True, 
-                 osm_pbf_path: str = None,
-                 graphhopper_host: str = "localhost",
-                 graphhopper_port: int = 8989,
-                 max_transport_distance_km: float = 1000.0,
-                 use_routing_for_short_distance: bool = True):
+    def __init__(self, config_path: str = None, **override_params):
         """
         初始化优化器
         
         Args:
-            time_horizon_weeks: 优化时间范围(周数)，默认1周以减少内存使用
-            use_graphhopper_routing: 是否使用GraphHopper本地路径规划
-            osm_pbf_path: 本地OSM数据文件路径
-            graphhopper_host: GraphHopper服务主机地址
-            graphhopper_port: GraphHopper服务端口
-            max_transport_distance_km: 最大运输距离限制(公里)，超过此距离使用直线距离估算
-            use_routing_for_short_distance: 对短距离路径是否使用路径规划精确计算
+            config_path: 配置文件路径，默认使用项目内置配置文件
+            **override_params: 可以通过关键字参数覆盖配置文件中的任何参数
         """
-        self.time_horizon_weeks = time_horizon_weeks
-        self.hours_per_week = 168  # 7天 * 24小时
-        self.total_hours = time_horizon_weeks * self.hours_per_week
+        # 加载配置文件
+        self.config = self._load_config(config_path, override_params)
+        
+        # 从配置中获取基础参数
+        basic_params = self.config['basic_parameters']
+        self.time_horizon_weeks = basic_params['time_horizon_weeks']
+        self.hours_per_week = basic_params['hours_per_week']
+        self.total_hours = self.time_horizon_weeks * self.hours_per_week
         
         # 模型组件
         self.model = None
@@ -173,8 +236,8 @@ class NaturalGasSupplyChainOptimizer:
         self.lng_terminals = {}           # LNG接收站数据
         self.transport_modes = {}         # 运输模式数据
         
-        # LNG容量平均值（从实际数据计算得出）
-        self.avg_lng_capacity_mcm_per_year = 1000  # 默认值，在数据加载后会更新
+        # LNG容量平均值（从配置文件加载，在数据加载后会更新）
+        self.avg_lng_capacity_mcm_per_year = basic_params['avg_lng_capacity_mcm_per_year']
         
         # 通过GraphHopper路径规划计算得出的距离统计值（用于模型中的参考）
         self.avg_hydrogen_transport_distance = None  # 将通过GraphHopper路径规划计算得出
@@ -187,9 +250,10 @@ class NaturalGasSupplyChainOptimizer:
         self.storage_vars = {}     # 库存变量
         
         # 初始化GraphHopper路径规划引擎
-        self.use_graphhopper_routing = use_graphhopper_routing
+        self.use_graphhopper_routing = basic_params['use_graphhopper_routing']
         
         # 设置OSM数据文件路径
+        osm_pbf_path = override_params.get('osm_pbf_path')
         if osm_pbf_path is None:
             # 使用项目中的默认OSM数据文件
             project_root = get_project_base_dir()
@@ -198,14 +262,14 @@ class NaturalGasSupplyChainOptimizer:
         else:
             self.osm_pbf_path = osm_pbf_path
             
-        if use_graphhopper_routing:
+        if self.use_graphhopper_routing:
             # 创建缓存目录 - 使用shared/data/cache路径
             cache_dir = os.path.join(get_project_base_dir(), "shared", "data", "cache", "graphhopper_routes")
             
             self.routing_engine = GraphHopperRoutingEngine(
                 osm_pbf_path=self.osm_pbf_path,
-                graphhopper_host=graphhopper_host,
-                graphhopper_port=graphhopper_port,
+                graphhopper_host=basic_params['graphhopper_host'],
+                graphhopper_port=basic_params['graphhopper_port'],
                 cache_dir=cache_dir,
                 enable_cache=True
             )
@@ -221,10 +285,10 @@ class NaturalGasSupplyChainOptimizer:
         self.distance_cache = {}
         
         # GraphHopper路径规划和距离控制相关设置
-        self.graphhopper_host = graphhopper_host
-        self.graphhopper_port = graphhopper_port
-        self.max_transport_distance_km = max_transport_distance_km
-        self.use_routing_for_short_distance = use_routing_for_short_distance
+        self.graphhopper_host = basic_params['graphhopper_host']
+        self.graphhopper_port = basic_params['graphhopper_port']
+        self.max_transport_distance_km = basic_params['max_transport_distance_km']
+        self.use_routing_for_short_distance = basic_params['use_routing_for_short_distance']
         
         # 距离计算统计
         self.distance_stats = {
@@ -235,11 +299,12 @@ class NaturalGasSupplyChainOptimizer:
             'exceeded_max_distance': 0
         }
         
-        logger.info(f"初始化优化器: {time_horizon_weeks}周 ({self.total_hours}小时), GraphHopper路径规划: {use_graphhopper_routing}")
-        logger.info(f"OSM数据文件: {osm_pbf_path}")
-        logger.info(f"GraphHopper服务: {graphhopper_host}:{graphhopper_port}")
-        logger.info(f"最大运输距离限制: {max_transport_distance_km} 公里")
-        logger.info(f"短距离路径规划精确计算: {use_routing_for_short_distance}")
+        logger.info(f"初始化优化器: {self.time_horizon_weeks}周 ({self.total_hours}小时), GraphHopper路径规划: {self.use_graphhopper_routing}")
+        logger.info(f"OSM数据文件: {self.osm_pbf_path}")
+        logger.info(f"GraphHopper服务: {self.graphhopper_host}:{self.graphhopper_port}")
+        logger.info(f"最大运输距离限制: {self.max_transport_distance_km} 公里")
+        logger.info(f"短距离路径规划精确计算: {self.use_routing_for_short_distance}")
+        logger.info(f"配置文件加载完成: {len(self.config)} 个配置段")
     
     def load_data(self, renewable_data: pd.DataFrame, airport_data: pd.DataFrame):
         """
@@ -1089,26 +1154,7 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"  LNG接收站位置: {len(self.lng_terminal_locations)} 个")
         logger.info(f"  天然气管道位置: {len(self.ng_locations)} 个")
         logger.info(f"  总位置数: {len(self.locations)} 个")
-    
-    def _calculate_location_distance(self, loc1: str, loc2: str) -> float:
-        """
-        计算两个位置之间的距离（公里）
-        
-        Args:
-            loc1: 起点位置名称
-            loc2: 终点位置名称
-            
-        Returns:
-            距离（公里）
-        """
-        # 获取位置坐标
-        lat1, lon1 = self._get_location_coordinates(loc1)
-        lat2, lon2 = self._get_location_coordinates(loc2)
-        
-        # 简化距离计算 (实际应使用大圆距离)
-        distance_km = ((lat1 - lat2)**2 + (lon1 - lon2)**2)**0.5 * 111  # 1度约111km
-        
-        return max(distance_km, 10)  # 最小距离10km
+ 
     
     def _get_location_coordinates(self, location: str) -> tuple:
         """
@@ -1163,82 +1209,33 @@ class NaturalGasSupplyChainOptimizer:
         # 获取基础平准化产品成本 (元/kg)
         base_lcop = self.costs.get('mtj_base_lcop_yuan_per_kg', 808.0)
         
-        # 定义各技术模式的复杂度调整因子（统一设为1.0）
-        complexity_factors = {
-            'pipeline_direct_conversion': 1.0,       # 统一复杂度：E-CRM/TRM技术
-            'lng_terminal_conversion': 1.0,          # 统一复杂度：E-CRM/TRM技术
-            'lng_to_hplant_conversion': 1.0,         # 统一复杂度：E-CRM/TRM技术
-            'airport_integrated_conversion': 1.0,    # 统一复杂度：E-CRM/TRM技术
-            'integrated_supply_conversion': 1.0      # 统一复杂度：E-CRM/TRM技术
-        }
+        # 从配置文件加载技术参数
+        tech_config = self.config['technologies']
         
-        self.technologies = {
-            'pipeline_direct_conversion': {  # 模式①：E-CRM+TRM 可再生能源站
-                'name': 'E-CRM+TRM MTJ航煤生产（在可再生能源站）',
-                'lcop_yuan_per_kg': base_lcop * complexity_factors['pipeline_direct_conversion'],
-                'efficiency': 0.85,  # E-CRM+TRM整体效率
-                'ng_consumption_ratio': 0.8,    # m³天然气(燃料气)/kg航煤 (E-CRM输入)
-                'h2_consumption_ratio': 0.12,         # kg绿氢/kg航煤 (E-CRM输入)
-                'methanol_intermediate_ratio': 1.2,   # kg甲醇/kg航煤 (TRM输入)
-                'suitable_locations': ['solar_plant', 'wind_farm'],
-                'transport_mode': 'pipeline_direct',
-                'hydrogen_transport_required': False,  # 就地绿氢，无需运输
-                'technology_type': 'E-CRM+TRM',
-                'complexity_factor': complexity_factors['pipeline_direct_conversion']
-            },
-            'airport_integrated_conversion': {  # 模式②：E-CRM+TRM 机场集成
-                'name': 'E-CRM+TRM MTJ航煤生产（机场集成）', 
-                'lcop_yuan_per_kg': base_lcop * complexity_factors['airport_integrated_conversion'],
-                'efficiency': 0.85,  # E-CRM+TRM整体效率
-                'ng_consumption_ratio': 0.8,    # m³天然气(燃料气)/kg航煤
-                'h2_consumption_ratio': 0.12,         # kg绿氢/kg航煤（需运输）
-                'methanol_intermediate_ratio': 1.2,   # kg甲醇/kg航煤
-                'suitable_locations': ['airport'],
-                'transport_mode': 'airport_integrated',
-                'hydrogen_transport_required': True,  # 需要绿氢运输
-                'technology_type': 'E-CRM+TRM',
-                'complexity_factor': complexity_factors['airport_integrated_conversion']
-            },
-            'lng_terminal_conversion': {  # 模式③：E-CRM+TRM LNG接收站
-                'name': 'E-CRM+TRM MTJ航煤生产（LNG接收站）',
-                'lcop_yuan_per_kg': base_lcop * complexity_factors['lng_terminal_conversion'],
-                'efficiency': 0.85,  # E-CRM+TRM整体效率
-                'ng_consumption_ratio': 0.8,    # m³天然气(燃料气)/kg航煤（从LNG供应）
-                'h2_consumption_ratio': 0.12,         # kg绿氢/kg航煤（需运输）
-                'methanol_intermediate_ratio': 1.2,   # kg甲醇/kg航煤
-                'suitable_locations': ['lng_terminal'],
-                'transport_mode': 'lng_port_supply',
-                'hydrogen_transport_required': True,  # 需要绿氢运输
-                'technology_type': 'E-CRM+TRM',
-                'complexity_factor': complexity_factors['lng_terminal_conversion']
-            },
-            'lng_to_hplant_conversion': {  # 模式④：E-CRM+TRM LNG转运到可再生能源站
-                'name': 'E-CRM+TRM MTJ航煤生产（LNG转运+可再生能源站）',
-                'lcop_yuan_per_kg': base_lcop * complexity_factors['lng_to_hplant_conversion'],
-                'efficiency': 0.85,  # E-CRM+TRM整体效率
-                'ng_consumption_ratio': 0.8,    # m³天然气(燃料气)/kg航煤（LNG转运供应）
-                'h2_consumption_ratio': 0.12,         # kg绿氢/kg航煤（就地供应）
-                'methanol_intermediate_ratio': 1.2,   # kg甲醇/kg航煤
-                'suitable_locations': ['solar_plant', 'wind_farm'],
-                'transport_mode': 'lng_transfer',
-                'hydrogen_transport_required': False,  # 就地绿氢，无需运输
-                'technology_type': 'E-CRM+TRM',
-                'complexity_factor': complexity_factors['lng_to_hplant_conversion']
-            },
-            'integrated_supply_conversion': {  # 模式⑤：E-CRM+TRM 综合供应
-                'name': 'E-CRM+TRM MTJ航煤生产（综合供应）',
-                'lcop_yuan_per_kg': base_lcop * complexity_factors['integrated_supply_conversion'],
-                'efficiency': 0.85,  # E-CRM+TRM整体效率
-                'ng_consumption_ratio': 0.8,    # m³天然气(燃料气)/kg航煤
-                'h2_consumption_ratio': 0.12,         # kg绿氢/kg航煤（需运输）
-                'methanol_intermediate_ratio': 1.2,   # kg甲醇/kg航煤
-                'suitable_locations': ['airport'],
-                'transport_mode': 'integrated_supply',
-                'hydrogen_transport_required': True,  # 需要绿氢运输
-                'technology_type': 'E-CRM+TRM',
-                'complexity_factor': complexity_factors['integrated_supply_conversion']
-            }
-        }
+        # 定义各技术模式的复杂度调整因子
+        complexity_factors = tech_config['complexity_factors']
+        
+        # 构建技术配置，从配置文件加载各个技术的详细参数
+        self.technologies = {}
+        
+        for tech_key in ['pipeline_direct_conversion', 'airport_integrated_conversion', 
+                        'lng_terminal_conversion', 'lng_to_hplant_conversion', 
+                        'integrated_supply_conversion']:
+            if tech_key in tech_config:
+                tech_info = tech_config[tech_key]
+                self.technologies[tech_key] = {
+                    'name': tech_info['name'],
+                    'lcop_yuan_per_kg': base_lcop * complexity_factors[tech_key],
+                    'efficiency': tech_info['efficiency'],
+                    'ng_consumption_ratio': tech_info['ng_consumption_ratio'],
+                    'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
+                    'methanol_intermediate_ratio': tech_info['methanol_intermediate_ratio'],
+                    'suitable_locations': tech_info['suitable_locations'],
+                    'transport_mode': tech_info['transport_mode'],
+                    'hydrogen_transport_required': tech_info['hydrogen_transport_required'],
+                    'technology_type': tech_info['technology_type'],
+                    'complexity_factor': complexity_factors[tech_key]
+                }
         
         logger.info(f"定义了 {len(self.technologies)} 种MTJ航煤生产技术")
         logger.info(f"基础平准化成本: {base_lcop:.0f} 元/kg")
@@ -1518,21 +1515,25 @@ class NaturalGasSupplyChainOptimizer:
     
     def _define_economic_parameters(self):
         """定义经济参数"""
+        # 从配置文件加载经济参数
+        economic_config = self.config['economic_parameters']
+        capacity_factors = economic_config['capacity_factors']
+        
         self.economic_params = {
-            'discount_rate': 0.08,           # 8% 贴现率
-            'project_lifespan': 20,          # 项目总体寿命：20年
-            'mtj_plant_lifetime': 20,        # MTJ工厂设备寿命：20年
-            'electrolyzer_lifetime': 15,     # 电解槽设备寿命：15年
-            'pipeline_lifetime': 30,         # 管道设施寿命：30年
-            'storage_lifetime': 25,          # 储存设施寿命：25年
-            'transport_vehicle_lifetime': 10, # 运输车辆寿命：10年
+            'discount_rate': economic_config['discount_rate'],
+            'project_lifespan': economic_config['project_lifespan'],
+            'mtj_plant_lifetime': economic_config['mtj_plant_lifetime'],
+            'electrolyzer_lifetime': economic_config['electrolyzer_lifetime'],
+            'pipeline_lifetime': economic_config['pipeline_lifetime'],
+            'storage_lifetime': economic_config['storage_lifetime'],
+            'transport_vehicle_lifetime': economic_config['transport_vehicle_lifetime'],
             
             # 容量因子 (设备年利用率)
-            'mtj_plant_capacity_factor': 0.85,    # MTJ工厂容量因子
-            'electrolyzer_capacity_factor': 0.80,  # 电解槽容量因子 (依赖可再生能源)
-            'pipeline_capacity_factor': 0.95,      # 管道容量因子
-            'storage_capacity_factor': 0.90,       # 储存设施容量因子
-            'transport_capacity_factor': 0.75      # 运输设备容量因子
+            'mtj_plant_capacity_factor': capacity_factors['mtj_plant_capacity_factor'],
+            'electrolyzer_capacity_factor': capacity_factors['electrolyzer_capacity_factor'],
+            'pipeline_capacity_factor': capacity_factors['pipeline_capacity_factor'],
+            'storage_capacity_factor': capacity_factors['storage_capacity_factor'],
+            'transport_capacity_factor': capacity_factors['transport_capacity_factor']
         }
     
     def _define_costs(self):
@@ -1543,12 +1544,17 @@ class NaturalGasSupplyChainOptimizer:
         # 定义MTJ生产技术的基础工程成本数据
         mtj_base_costs = self._estimate_mtj_production_costs()
         
+        # 从配置文件加载成本参数
+        cost_config = self.config['cost_parameters']
+        equipment_costs = self.config['equipment_raw_costs']
+        infrastructure_costs = self.config['infrastructure_costs']
+        
         # 定义原始资本和运营成本数据
         raw_costs = {
             # 原料成本 (元/单位) - 运营成本，无需平准化
-            'natural_gas_price_yuan_per_m3': 3.5,      # 天然气价格
-            'hydrogen_market_price_yuan_per_kg': 35,    # 氢气市场价格
-            'renewable_electricity_cost_yuan_per_mwh': 0,  # 可再生能源自发自用电力成本
+            'natural_gas_price_yuan_per_m3': cost_config['raw_materials']['natural_gas_price_yuan_per_m3'],
+            'hydrogen_market_price_yuan_per_kg': cost_config['raw_materials']['hydrogen_market_price_yuan_per_kg'],
+            'renewable_electricity_cost_yuan_per_mwh': cost_config['raw_materials']['renewable_electricity_cost_yuan_per_mwh'],
             
             # MTJ生产设施原始成本（基于工程估算）
             'mtj_plant_capex_raw': mtj_base_costs['capex_per_kg_hour'],         # 元/(kg/hour) 产能投资
@@ -1556,32 +1562,20 @@ class NaturalGasSupplyChainOptimizer:
             'mtj_plant_variable_opex_raw': mtj_base_costs['variable_opex_per_kg'], # 元/kg 变动运营成本
             
             # 电解槽原始成本
-            'electrolyzer_capex_raw': 8000,              # 元/(kg H2/hour) 投资成本
-            'electrolyzer_opex_raw': 800,                # 元/(kg H2/hour)/年 运营成本
+            'electrolyzer_capex_raw': equipment_costs['electrolyzer']['capex_raw'],
+            'electrolyzer_opex_raw': equipment_costs['electrolyzer']['opex_raw'],
             
             # 储存设施原始成本
-            'storage_capex_raw': 200,                    # 元/kg 储存容量投资
-            'storage_opex_raw': 20,                      # 元/kg/年 储存运营成本
+            'storage_capex_raw': equipment_costs['storage']['capex_raw'],
+            'storage_opex_raw': equipment_costs['storage']['opex_raw'],
             
             # 运输设施原始成本
-            'transport_vehicle_capex_raw': 800000,       # 元/车 运输车辆投资
-            'transport_vehicle_opex_raw': 80000,         # 元/车/年 车辆运营成本
+            'transport_vehicle_capex_raw': equipment_costs['transport_vehicle']['capex_raw'],
+            'transport_vehicle_opex_raw': equipment_costs['transport_vehicle']['opex_raw'],
             
             # 基础设施原始成本 (元)
-            'infrastructure_capex_raw': {
-                'pipeline_direct': 5000000,      # 500万元初始投资
-                'airport_integrated': 8000000,   # 800万元初始投资
-                'lng_port_supply': 12000000,     # 1200万元初始投资
-                'lng_transfer': 6000000,         # 600万元初始投资
-                'integrated_supply': 10000000   # 1000万元初始投资
-            },
-            'infrastructure_opex_raw': {
-                'pipeline_direct': 500000,      # 50万元/年运营成本
-                'airport_integrated': 800000,   # 80万元/年运营成本
-                'lng_port_supply': 1200000,     # 120万元/年运营成本
-                'lng_transfer': 600000,         # 60万元/年运营成本
-                'integrated_supply': 1000000   # 100万元/年运营成本
-            }
+            'infrastructure_capex_raw': infrastructure_costs['capex'],
+            'infrastructure_opex_raw': infrastructure_costs['opex']
         }
         
         # 计算平准化成本参数
@@ -1598,25 +1592,25 @@ class NaturalGasSupplyChainOptimizer:
             'renewable_electricity_cost_yuan_per_mwh': raw_costs['renewable_electricity_cost_yuan_per_mwh'],
             
             # 天然气获取成本（保持运营成本）
-            'ng_pipeline_cost_yuan_per_mcm': 150,
-            'lng_cost_yuan_per_mcm': 220,
+            'ng_pipeline_cost_yuan_per_mcm': cost_config['natural_gas_supply']['ng_pipeline_cost_yuan_per_mcm'],
+            'lng_cost_yuan_per_mcm': cost_config['natural_gas_supply']['lng_cost_yuan_per_mcm'],
             
             # 电解制氢参数
-            'electrolysis_efficiency': 0.8,
-            'electrolysis_power_consumption': 50,  # kWh/kg H2
+            'electrolysis_efficiency': cost_config['electrolysis']['electrolysis_efficiency'],
+            'electrolysis_power_consumption': cost_config['electrolysis']['electrolysis_power_consumption'],
             
             # 运输距离限制和效率参数
-            'transport_cost_yuan_per_km_kg': 0.15,
-            'ng_pipeline_transport_yuan_per_mcm_km': 0.8,
-            'lng_truck_transport_yuan_per_mcm_km': 12.0,
-            'lng_rail_transport_yuan_per_mcm_km': 8.0,
-            'lng_ship_transport_yuan_per_mcm_km': 4.0,
-            'integrated_transport_yuan_per_mcm_km': 6.0,
-            'hydrogen_transport_cost_yuan_per_kg_km': 0.85,
-            'ng_truck_transport_yuan_per_m3_km': 0.15,
+            'transport_cost_yuan_per_km_kg': cost_config['transport']['transport_cost_yuan_per_km_kg'],
+            'ng_pipeline_transport_yuan_per_mcm_km': cost_config['transport']['ng_pipeline_transport_yuan_per_mcm_km'],
+            'lng_truck_transport_yuan_per_mcm_km': cost_config['transport']['lng_truck_transport_yuan_per_mcm_km'],
+            'lng_rail_transport_yuan_per_mcm_km': cost_config['transport']['lng_rail_transport_yuan_per_mcm_km'],
+            'lng_ship_transport_yuan_per_mcm_km': cost_config['transport']['lng_ship_transport_yuan_per_mcm_km'],
+            'integrated_transport_yuan_per_mcm_km': cost_config['transport']['integrated_transport_yuan_per_mcm_km'],
+            'hydrogen_transport_cost_yuan_per_kg_km': cost_config['transport']['hydrogen_transport_cost_yuan_per_kg_km'],
+            'ng_truck_transport_yuan_per_m3_km': cost_config['transport']['ng_truck_transport_yuan_per_m3_km'],
             
             # 短缺惩罚成本（提高到足够高的水平，使建厂更经济）
-            'shortage_penalty_yuan_per_kg': 2500,
+            'shortage_penalty_yuan_per_kg': cost_config['shortage_penalty_yuan_per_kg'],
         }
         
         # 计算平准化的设施成本（年化投资成本 + 运营成本）
@@ -1697,38 +1691,20 @@ class NaturalGasSupplyChainOptimizer:
         # MTJ生产工艺基础成本分析
         # 基于Fischer-Tropsch合成 + 加氢精制的工艺路线
         
+        # 从配置文件加载MTJ生产成本参数
+        mtj_config = self.config['mtj_production_costs']
+        
         # 主要设备投资成本估算 (元/(kg/hour)产能)
-        equipment_costs = {
-            'ft_reactor': 15000,           # F-T反应器
-            'separation_unit': 8000,       # 分离单元
-            'upgrading_unit': 12000,       # 加氢精制单元
-            'heat_exchanger': 5000,        # 换热器网络
-            'compressor': 6000,            # 压缩机
-            'control_system': 3000,        # 控制系统
-            'utilities': 8000,             # 公用工程
-            'civil_work': 10000,           # 土建工程
-            'installation': 8000,          # 安装费用
-            'contingency': 7500            # 不可预见费(10%)
-        }
+        equipment_costs = mtj_config['equipment_costs']
         
         # 总CAPEX (元/(kg/hour))
         total_capex = sum(equipment_costs.values())
         
         # 固定运营成本估算 (元/年，针对1 kg/hour产能设施)
-        fixed_operating_costs = {
-            'labor': 1580000,              # 人工成本（年薪）
-            'overhead': 1050000,           # 管理费用（年度）
-            'maintenance_fixed': 500000,   # 定期维护费用（年度）
-            'insurance': 350000            # 设备保险（年度）
-        }
+        fixed_operating_costs = mtj_config['fixed_operating_costs']
         
         # 变动运营成本估算 (元/kg产品)
-        variable_operating_costs = {
-            'catalyst': 150,               # 催化剂成本
-            'utilities_variable': 120,     # 与产量相关的电耗
-            'maintenance_variable': 80,    # 产量相关的磨损维护
-            'chemicals': 50                # 其他化学品消耗
-        }
+        variable_operating_costs = mtj_config['variable_operating_costs']
         
         # 计算总成本
         total_capex = sum(equipment_costs.values())
@@ -1748,55 +1724,45 @@ class NaturalGasSupplyChainOptimizer:
         
         # 天然气价格将在每条管道数据中单独存储，不需要全局更新
         
+        logger.info(f"调试: _define_costs 即将加载运输模式...")
+        
+        # 从配置文件加载运输模式参数
+        transport_config = self.config['transport_modes']
+        logger.info(f"调试: 开始加载运输模式，配置中有{len(transport_config)}个模式")
+        
         # 定义5种运输模式的详细参数
-        self.transport_modes = {
-            'pipeline_direct': {
-                'name': '管段直供',
-                'description': '天然气从管道经罐车运输到可再生能源站，就地制氢制备MTJ航煤，氢气运输成本为0',
-                'cost_yuan_per_mcm_km': self.costs['ng_truck_transport_yuan_per_m3_km'] * 10000,  # 转换为万立方米单位
-                'capacity_factor': 0.95,        # 可用性因子
-                'distance_limit_km': 2000,      # 最大运输距离
-                'suitable_sources': ['ng_pipeline'],
-                'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year']['pipeline_direct'],
-                'hydrogen_transport_cost': 0    # 氢气就地使用，运输成本为0
-            },
-            'airport_integrated': {
-                'name': '机场集成',
-                'description': '在机场就近建设生产设施，多种来源供气',
-                'cost_yuan_per_mcm_km': 5.0,    # 综合供气成本
-                'capacity_factor': 0.90,
-                'distance_limit_km': 500,       # 本地化供应
-                'suitable_sources': ['ng_pipeline', 'lng_terminal'],
-                'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year']['airport_integrated']
-            },
-            'lng_port_supply': {
-                'name': 'LNG接收站供应',
-                'description': '从LNG接收站直接供应天然气',
-                'cost_yuan_per_mcm_km': self.costs['lng_ship_transport_yuan_per_mcm_km'],
-                'capacity_factor': 0.92,
-                'distance_limit_km': 800,
-                'suitable_sources': ['lng_terminal'],
-                'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year']['lng_port_supply']
-            },
-            'lng_transfer': {
-                'name': 'LNG转运',
-                'description': 'LNG接收站到生产基地的多式联运',
-                'cost_yuan_per_mcm_km': self.costs['lng_truck_transport_yuan_per_mcm_km'],
-                'capacity_factor': 0.85,
-                'distance_limit_km': 1200,
-                'suitable_sources': ['lng_terminal'],
-                'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year']['lng_transfer']
-            },
-            'integrated_supply': {
-                'name': '综合供应',
-                'description': '多源头、多模式的组合供应方案',
-                'cost_yuan_per_mcm_km': self.costs['integrated_transport_yuan_per_mcm_km'],
-                'capacity_factor': 0.88,
-                'distance_limit_km': 1500,
-                'suitable_sources': ['ng_pipeline', 'lng_terminal'],
-                'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year']['integrated_supply']
-            }
-        }
+        self.transport_modes = {}
+        
+        for mode_key in ['pipeline_direct', 'airport_integrated', 'lng_port_supply', 'lng_transfer', 'integrated_supply']:
+            if mode_key in transport_config:
+                logger.info(f"调试: 正在处理运输模式 {mode_key}")
+                mode_info = transport_config[mode_key]
+                try:
+                    self.transport_modes[mode_key] = {
+                        'name': mode_info['name'],
+                        'description': mode_info['description'],
+                        'capacity_factor': mode_info['capacity_factor'],
+                        'distance_limit_km': mode_info['distance_limit_km'],
+                        'suitable_sources': mode_info['suitable_sources'],
+                        'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year'][mode_key]
+                    }
+                    logger.info(f"调试: 运输模式 {mode_key} 加载成功")
+                except Exception as e:
+                    logger.error(f"调试: 加载运输模式 {mode_key} 时出错: {e}")
+                # 动态设置成本参数
+                if mode_key == 'pipeline_direct':
+                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['ng_truck_transport_yuan_per_m3_km'] * 10000
+                    self.transport_modes[mode_key]['hydrogen_transport_cost'] = mode_info.get('hydrogen_transport_cost', 0)
+                elif mode_key == 'airport_integrated':
+                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = mode_info.get('cost_yuan_per_mcm_km', 5.0)
+                elif mode_key == 'lng_port_supply':
+                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['lng_ship_transport_yuan_per_mcm_km']
+                elif mode_key == 'lng_transfer':
+                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['lng_truck_transport_yuan_per_mcm_km']
+                elif mode_key == 'integrated_supply':
+                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['integrated_transport_yuan_per_mcm_km']
+            else:
+                logger.warning(f"调试: 配置文件中缺少运输模式 {mode_key}")
         
         logger.info(f"定义了成本参数和 {len(self.transport_modes)} 种运输模式")
     
@@ -1805,9 +1771,11 @@ class NaturalGasSupplyChainOptimizer:
         logger.info("构建Gurobi优化模型...")
         
         self.model = gp.Model("NaturalGasSupplyChain")
-        self.model.setParam('TimeLimit', 3600)  # 1小时求解时间限制
-        self.model.setParam('MIPGap', 0.01)     # 1% MIP gap
-        self.model.setParam('Threads', 128)      # 使用128个核心进行并行计算
+        # 从配置文件加载求解器参数
+        solver_params = self.config['solver_parameters']
+        self.model.setParam('TimeLimit', solver_params['TimeLimit'])
+        self.model.setParam('MIPGap', solver_params['MIPGap'])
+        self.model.setParam('Threads', solver_params['Threads'])
 
         # 构建MTJ工厂位置映射（依赖locations和technologies）
         self._build_mtj_locations()

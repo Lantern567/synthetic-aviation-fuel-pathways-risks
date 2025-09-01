@@ -1,0 +1,278 @@
+# NaturalGasSupplyChainOptimizer Configuration File
+# 天然气供应链优化器参数配置文件
+# Version: 1.0
+
+# =============================================================================
+# 1. 基础系统参数 (Basic System Parameters)
+# =============================================================================
+basic_parameters:
+  # 时间范围参数
+  time_horizon_weeks: 1                    # 优化时间范围(周数)，默认1周以减少内存使用
+  hours_per_week: 168                      # 每周小时数 (7天 * 24小时)
+  
+  # GraphHopper路径规划设置
+  use_graphhopper_routing: true            # 是否使用GraphHopper本地路径规划
+  graphhopper_host: "localhost"            # GraphHopper服务主机地址
+  graphhopper_port: 8989                   # GraphHopper服务端口
+  max_transport_distance_km: 1000.0        # 最大运输距离限制(公里)，超过此距离使用直线距离估算
+  use_routing_for_short_distance: true     # 对短距离路径是否使用路径规划精确计算
+  
+  # LNG容量默认值
+  avg_lng_capacity_mcm_per_year: 1000      # LNG接收站容量平均值（万立方米/年）
+
+# =============================================================================
+# 2. 经济参数 (Economic Parameters)
+# =============================================================================
+economic_parameters:
+  # 贴现和寿命参数
+  discount_rate: 0.08                      # 8% 贴现率
+  project_lifespan: 20                     # 项目总体寿命：20年
+  
+  # 设备寿命参数
+  mtj_plant_lifetime: 20                   # MTJ工厂设备寿命：20年
+  electrolyzer_lifetime: 15                # 电解槽设备寿命：15年
+  pipeline_lifetime: 30                    # 管道设施寿命：30年
+  storage_lifetime: 25                     # 储存设施寿命：25年
+  transport_vehicle_lifetime: 10           # 运输车辆寿命：10年
+  
+  # 容量因子 (设备年利用率)
+  capacity_factors:
+    mtj_plant_capacity_factor: 0.85         # MTJ工厂容量因子
+    electrolyzer_capacity_factor: 0.80      # 电解槽容量因子 (依赖可再生能源)
+    pipeline_capacity_factor: 0.95          # 管道容量因子
+    storage_capacity_factor: 0.90           # 储存设施容量因子
+    transport_capacity_factor: 0.75         # 运输设备容量因子
+
+# =============================================================================
+# 3. 成本参数 (Cost Parameters)
+# =============================================================================
+cost_parameters:
+  # 原料成本 (元/单位) - 运营成本，无需平准化
+  raw_materials:
+    natural_gas_price_yuan_per_m3: 3.5           # 天然气价格
+    hydrogen_market_price_yuan_per_kg: 35        # 氢气市场价格
+    renewable_electricity_cost_yuan_per_mwh: 0   # 可再生能源自发自用电力成本
+  
+  # 天然气获取成本
+  natural_gas_supply:
+    ng_pipeline_cost_yuan_per_mcm: 150           # 天然气管道供应成本
+    lng_cost_yuan_per_mcm: 220                   # LNG供应成本
+  
+  # 电解制氢参数
+  electrolysis:
+    electrolysis_efficiency: 0.8                 # 电解效率
+    electrolysis_power_consumption: 50           # kWh/kg H2 电力消耗
+  
+  # 运输成本参数
+  transport:
+    transport_cost_yuan_per_km_kg: 0.15                    # 基础运输成本
+    ng_pipeline_transport_yuan_per_mcm_km: 0.8             # 天然气管道运输
+    lng_truck_transport_yuan_per_mcm_km: 12.0              # LNG卡车运输
+    lng_rail_transport_yuan_per_mcm_km: 8.0                # LNG铁路运输
+    lng_ship_transport_yuan_per_mcm_km: 4.0                # LNG船舶运输
+    integrated_transport_yuan_per_mcm_km: 6.0              # 综合运输
+    hydrogen_transport_cost_yuan_per_kg_km: 0.85           # 氢气运输成本
+    ng_truck_transport_yuan_per_m3_km: 0.15                # 天然气卡车运输
+  
+  # 短缺惩罚成本
+  shortage_penalty_yuan_per_kg: 2500                       # 短缺惩罚成本
+
+# =============================================================================
+# 4. MTJ生产设备成本参数 (MTJ Production Equipment Costs)
+# =============================================================================
+mtj_production_costs:
+  # 主要设备投资成本估算 (元/(kg/hour)产能)
+  equipment_costs:
+    ft_reactor: 15000              # F-T反应器
+    separation_unit: 8000          # 分离单元
+    upgrading_unit: 12000          # 加氢精制单元
+    heat_exchanger: 5000           # 换热器网络
+    compressor: 6000               # 压缩机
+    control_system: 3000           # 控制系统
+    utilities: 8000                # 公用工程
+    civil_work: 10000              # 土建工程
+    installation: 8000             # 安装费用
+    contingency: 7500              # 不可预见费(10%)
+  
+  # 固定运营成本估算 (元/年，针对1 kg/hour产能设施)
+  fixed_operating_costs:
+    labor: 1580000                 # 人工成本（年薪）
+    overhead: 1050000              # 管理费用（年度）
+    maintenance_fixed: 500000      # 定期维护费用（年度）
+    insurance: 350000              # 设备保险（年度）
+  
+  # 变动运营成本估算 (元/kg产品)
+  variable_operating_costs:
+    catalyst: 150                  # 催化剂成本
+    utilities_variable: 120        # 与产量相关的电耗
+    maintenance_variable: 80       # 产量相关的磨损维护
+    chemicals: 50                  # 其他化学品消耗
+
+# =============================================================================
+# 5. 其他设备原始成本 (Other Equipment Raw Costs)
+# =============================================================================
+equipment_raw_costs:
+  # 电解槽原始成本
+  electrolyzer:
+    capex_raw: 8000                # 元/(kg H2/hour) 投资成本
+    opex_raw: 800                  # 元/(kg H2/hour)/年 运营成本
+  
+  # 储存设施原始成本
+  storage:
+    capex_raw: 200                 # 元/kg 储存容量投资
+    opex_raw: 20                   # 元/kg/年 储存运营成本
+  
+  # 运输设施原始成本
+  transport_vehicle:
+    capex_raw: 800000              # 元/车 运输车辆投资
+    opex_raw: 80000                # 元/车/年 车辆运营成本
+
+# =============================================================================
+# 6. 基础设施成本 (Infrastructure Costs)
+# =============================================================================
+infrastructure_costs:
+  # 基础设施原始投资成本 (元)
+  capex:
+    pipeline_direct: 5000000       # 500万元初始投资
+    airport_integrated: 8000000    # 800万元初始投资
+    lng_port_supply: 12000000      # 1200万元初始投资
+    lng_transfer: 6000000          # 600万元初始投资
+    integrated_supply: 10000000    # 1000万元初始投资
+  
+  # 基础设施运营成本 (元/年)
+  opex:
+    pipeline_direct: 500000        # 50万元/年运营成本
+    airport_integrated: 800000     # 80万元/年运营成本
+    lng_port_supply: 1200000       # 120万元/年运营成本
+    lng_transfer: 600000           # 60万元/年运营成本
+    integrated_supply: 1000000     # 100万元/年运营成本
+
+# =============================================================================
+# 7. 技术参数配置 (Technology Parameters)
+# =============================================================================
+technologies:
+  # 各技术模式的复杂度调整因子（统一设为1.0）
+  complexity_factors:
+    pipeline_direct_conversion: 1.0
+    lng_terminal_conversion: 1.0
+    lng_to_hplant_conversion: 1.0
+    airport_integrated_conversion: 1.0
+    integrated_supply_conversion: 1.0
+  
+  # 技术配置参数
+  pipeline_direct_conversion:
+    name: 'E-CRM+TRM MTJ航煤生产（在可再生能源站）'
+    efficiency: 0.85                           # E-CRM+TRM整体效率
+    ng_consumption_ratio: 0.8                  # m³天然气(燃料气)/kg航煤
+    h2_consumption_ratio: 0.12                 # kg绿氢/kg航煤
+    methanol_intermediate_ratio: 1.2           # kg甲醇/kg航煤
+    suitable_locations: ['solar_plant', 'wind_farm']
+    transport_mode: 'pipeline_direct'
+    hydrogen_transport_required: false         # 就地绿氢，无需运输
+    technology_type: 'E-CRM+TRM'
+  
+  airport_integrated_conversion:
+    name: 'E-CRM+TRM MTJ航煤生产（机场集成）'
+    efficiency: 0.85
+    ng_consumption_ratio: 0.8
+    h2_consumption_ratio: 0.12
+    methanol_intermediate_ratio: 1.2
+    suitable_locations: ['airport']
+    transport_mode: 'airport_integrated'
+    hydrogen_transport_required: true          # 需要绿氢运输
+    technology_type: 'E-CRM+TRM'
+  
+  lng_terminal_conversion:
+    name: 'E-CRM+TRM MTJ航煤生产（LNG接收站）'
+    efficiency: 0.85
+    ng_consumption_ratio: 0.8
+    h2_consumption_ratio: 0.12
+    methanol_intermediate_ratio: 1.2
+    suitable_locations: ['lng_terminal']
+    transport_mode: 'lng_port_supply'
+    hydrogen_transport_required: true          # 需要绿氢运输
+    technology_type: 'E-CRM+TRM'
+  
+  lng_to_hplant_conversion:
+    name: 'E-CRM+TRM MTJ航煤生产（LNG转运+可再生能源站）'
+    efficiency: 0.85
+    ng_consumption_ratio: 0.8
+    h2_consumption_ratio: 0.12
+    methanol_intermediate_ratio: 1.2
+    suitable_locations: ['solar_plant', 'wind_farm']
+    transport_mode: 'lng_transfer'
+    hydrogen_transport_required: false         # 就地绿氢，无需运输
+    technology_type: 'E-CRM+TRM'
+  
+  integrated_supply_conversion:
+    name: 'E-CRM+TRM MTJ航煤生产（综合供应）'
+    efficiency: 0.85
+    ng_consumption_ratio: 0.8
+    h2_consumption_ratio: 0.12
+    methanol_intermediate_ratio: 1.2
+    suitable_locations: ['airport']
+    transport_mode: 'integrated_supply'
+    hydrogen_transport_required: true          # 需要绿氢运输
+    technology_type: 'E-CRM+TRM'
+
+# =============================================================================
+# 8. 运输模式参数 (Transport Mode Parameters)
+# =============================================================================
+transport_modes:
+  pipeline_direct:
+    name: '管段直供'
+    description: '天然气从管道经罐车运输到可再生能源站，就地制氢制备MTJ航煤，氢气运输成本为0'
+    capacity_factor: 0.95                      # 可用性因子
+    distance_limit_km: 2000                    # 最大运输距离
+    suitable_sources: ['ng_pipeline']
+    hydrogen_transport_cost: 0                 # 氢气就地使用，运输成本为0
+  
+  airport_integrated:
+    name: '机场集成'
+    description: '在机场就近建设生产设施，多种来源供气'
+    cost_yuan_per_mcm_km: 5.0                  # 综合供气成本
+    capacity_factor: 0.90
+    distance_limit_km: 500                     # 本地化供应
+    suitable_sources: ['ng_pipeline', 'lng_terminal']
+  
+  lng_port_supply:
+    name: 'LNG接收站供应'
+    description: '从LNG接收站直接供应天然气'
+    capacity_factor: 0.92
+    distance_limit_km: 800
+    suitable_sources: ['lng_terminal']
+  
+  lng_transfer:
+    name: 'LNG转运'
+    description: 'LNG接收站到生产基地的多式联运'
+    capacity_factor: 0.85
+    distance_limit_km: 1200
+    suitable_sources: ['lng_terminal']
+  
+  integrated_supply:
+    name: '综合供应'
+    description: '多源头、多模式的组合供应方案'
+    capacity_factor: 0.88
+    distance_limit_km: 1500
+    suitable_sources: ['ng_pipeline', 'lng_terminal']
+
+# =============================================================================
+# 9. Gurobi求解器参数 (Gurobi Solver Parameters)
+# =============================================================================
+solver_parameters:
+  TimeLimit: 3600                             # 1小时求解时间限制(秒)
+  MIPGap: 0.01                                # 1% MIP gap
+  Threads: 128                                # 使用128个核心进行并行计算
+
+# =============================================================================
+# 10. 配置元数据 (Configuration Metadata)
+# =============================================================================
+metadata:
+  version: "1.0.0"
+  created_date: "2025-01-09"
+  description: "NaturalGasSupplyChainOptimizer综合参数配置文件"
+  author: "系统自动生成"
+  notes: |
+    此配置文件包含了NaturalGasSupplyChainOptimizer类的所有参数配置。
+    修改此文件可以调整优化器的行为，无需修改源代码。
+    参数分为10个主要类别，涵盖了经济、技术、成本等各个方面。
