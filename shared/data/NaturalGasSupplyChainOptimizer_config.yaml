@@ -73,6 +73,13 @@ cost_parameters:
     integrated_transport_yuan_per_mcm_km: 6.0              # 综合运输
     hydrogen_transport_cost_yuan_per_kg_km: 0.85           # 氢气运输成本
     ng_truck_transport_yuan_per_m3_km: 0.15                # 天然气卡车运输
+    
+    # 平准化运输成本计算参数 (来自 _calculate_levelized_transport_cost 方法)
+    levelized_transport:
+      vehicle_capex: 800000                                # 运输车辆投资成本(元)
+      vehicle_opex_annual: 80000                           # 年运营成本(元/年)
+      annual_transport_capacity_kgkm: 100000               # 每车每年运输能力(kg·km/年)
+    
   
   # 短缺惩罚成本
   shortage_penalty_yuan_per_kg: 2500                       # 短缺惩罚成本
@@ -106,11 +113,13 @@ objective_coefficients:
     ng_transport_investment_rate: 0.008             # 天然气运输投资系数
     annual_transport_capacity_kgkm: 100000          # 通用运输车辆年能力 (kg·km/年)
 
-  # 专用运输车辆参数（用于平准化成本计算）
+  # 专用运输车辆参数（用于平准化成本计算和运输约束）
   hydrogen_transport_vehicle:
     capex: 1200000                                  # 元/辆
     opex_annual: 120000                             # 元/年
     annual_capacity_kgkm: 50000                     # kg·km/年
+    max_vehicles_per_day: 48                        # 每天最多车次（每小时2车次）
+    vehicle_capacity_kg: 500                        # 每辆车氢气容量(kg)
 
   ng_transport_vehicle:
     capex: 600000                                   # 元/辆

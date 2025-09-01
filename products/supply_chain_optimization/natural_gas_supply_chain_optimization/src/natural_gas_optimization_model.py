@@ -2256,9 +2256,10 @@ class NaturalGasSupplyChainOptimizer:
         for h_loc in self.hydrogen_locations:
             total_days = self.total_hours // 24
             for day in range(total_days):
-                # 每个氢气生产地每天最多运输能力（考虑管道或车辆）
-                max_vehicles_per_day = 48  # 每天最多48车次（相当于每小时2车次）
-                vehicle_capacity_kg = 500  # 每辆车500kg氢气容量
+                # 从配置文件读取氢气运输车辆参数
+                h2_transport_config = self.config.get('objective_coefficients', {}).get('hydrogen_transport_vehicle', {})
+                max_vehicles_per_day = h2_transport_config.get('max_vehicles_per_day', 48)  # 每天最多车次
+                vehicle_capacity_kg = h2_transport_config.get('vehicle_capacity_kg', 500)  # 每辆车氢气容量
                 max_h2_transport_per_day = max_vehicles_per_day * vehicle_capacity_kg
                 
                 # 该天从该地点运出的总氢气不能超过运输能力
@@ -2881,6 +2882,12 @@ class NaturalGasSupplyChainOptimizer:
     
     def _calculate_levelized_transport_cost(self) -> float:
         """计算平准化运输成本（考虑车辆更换成本）"""
+        # 从配置文件读取运输车辆参数
+        transport_config = self.config.get('cost_parameters', {}).get('transport', {}).get('levelized_transport', {})
+        vehicle_capex = transport_config.get('vehicle_capex', 800000)
+        vehicle_opex_annual = transport_config.get('vehicle_opex_annual', 80000)
+        annual_transport_capacity = transport_config.get('annual_transport_capacity_kgkm', 100000)
+        
         # 运输车辆寿命为10年，项目期间20年需要更换一次
         transport_lifetime = self.economic_params['transport_vehicle_lifetime']
         project_lifespan = self.economic_params['project_lifespan']
@@ -2888,8 +2895,8 @@ class NaturalGasSupplyChainOptimizer:
         if transport_lifetime < project_lifespan:
             # 使用包含更换成本的计算方法
             transport_vehicle_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=800000,  # 运输车辆投资成本
-                opex_annual=80000,  # 年运营成本
+                capex=vehicle_capex,  # 运输车辆投资成本
+                opex_annual=vehicle_opex_annual,  # 年运营成本
                 equipment_lifetime=transport_lifetime,
                 project_lifespan=project_lifespan,
                 discount_rate=self.economic_params['discount_rate'],
@@ -2898,15 +2905,14 @@ class NaturalGasSupplyChainOptimizer:
         else:
             # 使用标准平准化成本计算
             transport_vehicle_levelized = self._calculate_levelized_cost(
-                capex=800000,  # 运输车辆投资成本
-                opex_annual=80000,  # 年运营成本
+                capex=vehicle_capex,  # 运输车辆投资成本
+                opex_annual=vehicle_opex_annual,  # 年运营成本
                 lifetime_years=transport_lifetime,
                 discount_rate=self.economic_params['discount_rate'],
                 capacity_factor=self.economic_params['transport_capacity_factor']
             )
         
-        # 假设每车每年运输 100,000 kg·km
-        annual_transport_capacity = 100000  # kg·km/年
+        # 从配置文件读取每车每年运输能力
         return transport_vehicle_levelized / annual_transport_capacity  # 元/(kg·km)
     
     def _calculate_total_transport_cost_per_kg_km(self) -> float:
