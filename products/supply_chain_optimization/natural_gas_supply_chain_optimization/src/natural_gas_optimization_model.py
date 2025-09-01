@@ -759,11 +759,12 @@ class NaturalGasSupplyChainOptimizer:
         Returns:
             包含经纬度的字典
         """
-        # 京津冀五个机场坐标映射表 (包含别名)
-        airport_coords_map = {
+        # 从配置文件读取京津冀机场坐标映射表
+        airport_coords_map = self.config.get('geographic_data', {}).get('airport_coordinates', {
+            # 向后兼容的默认值
             '首都机场': {'latitude': 40.0801, 'longitude': 116.5846},
             '北京首都国际机场': {'latitude': 40.0801, 'longitude': 116.5846},
-            '北京': {'latitude': 40.0801, 'longitude': 116.5846}, # 添加别名
+            '北京': {'latitude': 40.0801, 'longitude': 116.5846},
             '滨海机场': {'latitude': 39.1244, 'longitude': 117.3462},
             '天津滨海国际机场': {'latitude': 39.1244, 'longitude': 117.3462},
             '天津': {'latitude': 39.1244, 'longitude': 117.3462},
@@ -774,7 +775,7 @@ class NaturalGasSupplyChainOptimizer:
             '北京南苑机场': {'latitude': 39.7827, 'longitude': 116.3878},
             '邯郸机场': {'latitude': 36.5258, 'longitude': 114.4253},
             '邯郸': {'latitude': 36.5258, 'longitude': 114.4253}
-        }
+        })
         
         # 如果找到对应机场，返回实际坐标
         if airport_name in airport_coords_map:
@@ -1834,7 +1835,8 @@ class NaturalGasSupplyChainOptimizer:
             for tech in self.technologies:
                 var_name = f"capacity_{location}_{tech}"
                 self.facility_capacity_vars[(location, tech)] = self.model.addVar(
-                    lb=0, ub=10000, vtype=GRB.CONTINUOUS, name=var_name  # 最大10吨/小时产能
+                    lb=0, ub=self.config.get('capacity_limits', {}).get('mtj_max_capacity_kg_per_hour', 10000), 
+                    vtype=GRB.CONTINUOUS, name=var_name
                 )
         
         # 3. 周运输变量 Y_{i,k,w} (从生产地到机场的周运输量)
@@ -1881,7 +1883,8 @@ class NaturalGasSupplyChainOptimizer:
                 # 电解槽容量 (连续变量，kg H2/hour)
                 var_name = f"electrolyzer_capacity_{location}"
                 self.electrolyzer_capacity_vars[location] = self.model.addVar(
-                    lb=0, ub=2000, vtype=GRB.CONTINUOUS, name=var_name  # 最大2吨H2/小时（更合理规模）
+                    lb=0, ub=self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000), 
+                    vtype=GRB.CONTINUOUS, name=var_name
                 )
                 
                 # 小时级制氢量
@@ -2056,7 +2059,7 @@ class NaturalGasSupplyChainOptimizer:
                         )
                 
                 # 产能只能在建设了设施的地方存在（大M约束）
-                M = 10000  # 大M常数，与产能上限一致
+                M = self.config.get('capacity_limits', {}).get('big_m_constant', 10000)  # 大M常数
                 self.model.addConstr(
                     self.facility_capacity_vars[(location, tech)] <= 
                     M * self.facility_vars[(location, tech)],
@@ -2185,9 +2188,16 @@ class NaturalGasSupplyChainOptimizer:
             
         elif location_info['type'] == 'airport':
             # 机场：通过罐车运输，容量更有限
+            # 从配置文件读取罐车调度参数
+            schedule_config = self.config.get('transport_constraints', {}).get('truck_schedule', {})
+            schedule_cycle_hours = schedule_config.get('schedule_cycle_hours', 6)
+            high_flow_hours = schedule_config.get('high_flow_hours_per_cycle', 2)
+            high_flow_factor = schedule_config.get('high_flow_factor', 1.0)
+            low_flow_factor = schedule_config.get('low_flow_factor', 0.3)
+            base_flow_m3_per_hour = schedule_config.get('base_flow_m3_per_hour', 3000)
+            
             # 罐车调度约束：不是每小时都有罐车到达
-            truck_schedule_factor = 1.0 if (hour % 6) < 2 else 0.3  # 每6小时2小时高流量
-            base_flow_m3_per_hour = 3000  # 基础流量较小
+            truck_schedule_factor = high_flow_factor if (hour % schedule_cycle_hours) < high_flow_hours else low_flow_factor
             max_flow_m3_per_hour = base_flow_m3_per_hour * truck_schedule_factor
             
         else:
@@ -2592,9 +2602,10 @@ class NaturalGasSupplyChainOptimizer:
                     for day in range(total_days):
                         # 只为存在的变量创建约束
                         if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
-                            # 天然气罐车运输量约束（每天最大运输量）
-                            max_trucks_per_day = 20  # 每天最多20车次
-                            truck_capacity_m3 = 1200  # 每车1200立方米容量
+                            # 从配置文件读取天然气罐车运输参数
+                            truck_config = self.config.get('transport_constraints', {}).get('ng_truck_transport', {})
+                            max_trucks_per_day = truck_config.get('max_trucks_per_day', 20)  # 每天最多车次
+                            truck_capacity_m3 = truck_config.get('truck_capacity_m3', 1200)  # 每车容量(m³)
                             max_transport_per_day = max_trucks_per_day * truck_capacity_m3
                             self.model.addConstr(
                                 self.ng_transport_vars[(ng_loc, mtj_loc, day)] <= max_transport_per_day,
@@ -3512,14 +3523,19 @@ class NaturalGasSupplyChainOptimizer:
         for location in self.locations:
             for tech in self.technologies:
                 if (location, tech) in self.facility_vars and self.facility_vars[(location, tech)].x > 0.5:
+                    # 从配置文件读取投资成本参数
+                    investment_config = self.config.get('operational_parameters', {}).get('facility_investment', {})
+                    fixed_investment = investment_config.get('fixed_investment', 2000000)  # 固定投资
+                    variable_investment_per_capacity = investment_config.get('variable_investment_per_capacity', 8000)  # 单位产能投资
+                    fixed_opex_annual = investment_config.get('fixed_opex_annual', 1000000)  # 固定运营成本
+                    
                     # 投资成本
-                    fixed_investment = 2000000  # 200万固定投资
-                    variable_investment = (self.facility_capacity_vars[(location, tech)].x * 8000 * 
+                    variable_investment = (self.facility_capacity_vars[(location, tech)].x * variable_investment_per_capacity * 
                                          self.economic_params['mtj_plant_capacity_factor'])
                     facility_investment_total += fixed_investment + variable_investment
                     
                     # 运营成本（20年现值）
-                    facility_operation_total += 1000000 * present_value_factor
+                    facility_operation_total += fixed_opex_annual * present_value_factor
         
         breakdown["facility_investment_cost"] = facility_investment_total
         breakdown["facility_operation_cost"] = facility_operation_total
@@ -4685,10 +4701,13 @@ class NaturalGasSupplyChainOptimizer:
             max_flow_m3_per_hour = base_flow_m3_per_hour * pressure_factor
             
         elif location_info['type'] == 'airport':
-            # 机场：假设有充足的天然气接入
-            max_flow_m3_per_hour = 50000  # 5万立方米/小时的基础供应能力
+            # 机场：从配置文件读取天然气供应能力
+            supply_config = self.config.get('supply_capacity', {}).get('natural_gas_supply', {})
+            max_flow_m3_per_hour = supply_config.get('airport_max_flow_m3_per_hour', 50000)
         else:
-            max_flow_m3_per_hour = 10000  # 默认供应能力
+            # 默认供应能力：从配置文件读取
+            supply_config = self.config.get('supply_capacity', {}).get('natural_gas_supply', {})
+            max_flow_m3_per_hour = supply_config.get('default_max_flow_m3_per_hour', 10000)
         
         # 添加天然气供应约束
         if max_flow_m3_per_hour > 0:
@@ -4773,8 +4792,8 @@ class NaturalGasSupplyChainOptimizer:
             daily_capacity_mcm = lng_capacity_mcm_per_year / 365  # 转换为日处理能力
             daily_capacity_m3 = daily_capacity_mcm * 10000  # 转换为立方米/天
             
-            # 考虑操作因子（设备维护、天气、操作效率等）
-            operational_efficiency = 0.90  # 90%操作效率
+            # 从配置文件读取操作效率参数
+            operational_efficiency = self.config.get('operational_parameters', {}).get('operational_efficiency', 0.90)
             effective_daily_capacity = daily_capacity_m3 * operational_efficiency
             
             logger.info(f"LNG接收站 {lng_loc}: "
@@ -4840,7 +4859,9 @@ class NaturalGasSupplyChainOptimizer:
             logger.info(f"氢气运输平均距离: {self.avg_hydrogen_transport_distance:.1f}km "
                        f"(基于{len(hydrogen_distances)}个样本)")
         else:
-            self.avg_hydrogen_transport_distance = 50  # 默认值
+            # 从配置文件读取默认氢气运输距离
+            distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
+            self.avg_hydrogen_transport_distance = distance_config.get('hydrogen_transport_distance_km', 50)
             logger.warning("无法计算氢气运输平均距离，使用默认值50km")
         
         # 计算天然气运输平均距离（管道到非LNG接收站）
@@ -4862,7 +4883,9 @@ class NaturalGasSupplyChainOptimizer:
             logger.info(f"天然气运输平均距离: {self.avg_ng_transport_distance:.1f}km "
                        f"(基于{len(ng_distances)}个样本)")
         else:
-            self.avg_ng_transport_distance = 80  # 默认值
+            # 从配置文件读取默认天然气运输距离
+            distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
+            self.avg_ng_transport_distance = distance_config.get('ng_transport_distance_km', 80)
             logger.warning("无法计算天然气运输平均距离，使用默认值80km")
         
         # 计算机场运输平均距离
