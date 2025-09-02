@@ -2672,8 +2672,9 @@ class NaturalGasSupplyChainOptimizer:
         hydrogen_transport_investment = 0  # 已包含在平准化氢气运输成本中
         hydrogen_transport_operation = gp.quicksum(
             self.hydrogen_transport_vars[(h_loc, mtj_loc, day)] * 
-            self._calculate_levelized_hydrogen_transport_cost() * 
-            self._calculate_location_distance(h_loc, mtj_loc) * lifecycle_operation_factor  # 20年运营成本现值
+            self._calculate_hydrogen_transport_cost_by_distance(
+                self._calculate_location_distance(h_loc, mtj_loc)
+            ) * lifecycle_operation_factor  # 20年运营成本现值
             for h_loc in self.hydrogen_locations
             for mtj_loc in sum(self.mtj_locations.values(), [])
             for day in range(total_days)
@@ -2698,15 +2699,66 @@ class NaturalGasSupplyChainOptimizer:
                     if has_transport:
                         ng_truck_fixed_cost += self._calculate_ng_truck_fixed_cost(ng_loc, mtj_loc)
                         calculated_routes.add(route_key)
-        ng_transport_operation = gp.quicksum(
-            self.ng_transport_vars[(ng_loc, mtj_loc, day)] * 
-            self._calculate_levelized_ng_transport_cost() * 
-            self._calculate_location_distance(ng_loc, mtj_loc) * lifecycle_operation_factor  # 20年运营成本现值
-            for ng_loc in self.ng_locations
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), [])
-            for day in range(total_days)
-            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
-        )
+        # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
+        # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
+        ng_transport_operation = gp.LinExpr()
+        
+        # 为每条路线计算基于实际日输送量的运输成本
+        for ng_loc in self.ng_locations:
+            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+                
+                # 计算每天该路线的运输量，用于确定日输送量q
+                for day in range(total_days):
+                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                        
+                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
+                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
+                        ng_transport_operation += linear_cost * lifecycle_operation_factor
+                        
+        # 处理规模经济部分 0.888/q - 直接使用约束中计算好的日处理能力上限
+        for ng_loc in self.ng_locations:
+            # 从存储中获取该天然气源的日处理能力上限
+            daily_capacity_limit = self.ng_daily_capacities.get(ng_loc, 10000)  # m³/d
+            q_max = daily_capacity_limit / 10000  # 转换为10^4 m³/d单位
+            
+            if q_max > 0:
+                for day in range(total_days):
+                    # 计算该天然气源在这一天的总输送量
+                    daily_volume = gp.LinExpr()
+                    has_transport = False
+                    
+                    for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                        if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                            daily_volume += self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                            has_transport = True
+                    
+                    if has_transport:
+                        # 创建二进制变量表示是否有运输
+                        transport_indicator = self.model.addVar(
+                            vtype=gp.GRB.BINARY,
+                            name=f"ng_transport_active_{ng_loc}_day_{day}"
+                        )
+                        
+                        # 如果有运输，daily_volume > 0，则 transport_indicator = 1
+                        # 使用Big-M约束
+                        M = q_max * 10000  # 大M值
+                        self.model.addConstr(
+                            daily_volume <= M * transport_indicator,
+                            name=f"ng_transport_activate_{ng_loc}_day_{day}"
+                        )
+                        
+                        # 当有运输时，规模经济成本 = 0.888 * transport_indicator
+                        # 这是对0.888/q的简化处理：当q>0时，成本为固定值0.888
+                        scale_economy_cost = 0.888 * transport_indicator
+                        
+                        # 将成本分摊到各运输路线
+                        for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                            if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                                transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                                # 每单位运输量承担的规模经济成本
+                                ng_transport_operation += transport_var * scale_economy_cost * lifecycle_operation_factor
         
         # 11. 原料成本（20年生命周期现值）
         natural_gas_cost = self._calculate_natural_gas_cost() * lifecycle_operation_factor
@@ -2825,15 +2877,6 @@ class NaturalGasSupplyChainOptimizer:
         total_storage_cost = storage_space_cost + handling_cost_per_kg_hour
         return total_storage_cost
     
-    def _calculate_total_hydrogen_transport_cost_per_kg_km(self) -> float:
-        """计算氢气运输总成本（已弃用，统一使用平准化成本方法）
-        
-        注意：此函数已被_calculate_levelized_hydrogen_transport_cost()替代
-        保留此函数仅为向后兼容，建议使用平准化成本方法
-        """
-        # 为保持向后兼容，返回平准化成本
-        return self._calculate_levelized_hydrogen_transport_cost()
-    
     def _calculate_ng_truck_fixed_cost(self, ng_loc: str, mtj_loc: str) -> float:
         """计算天然气罐车固定成本"""
         distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
@@ -2871,85 +2914,176 @@ class NaturalGasSupplyChainOptimizer:
         return annual_fixed_cost * present_value_factor
 
     def _calculate_total_ng_transport_cost_per_kg_km(self) -> float:
-        """计算天然气罐车运输总成本（已弃用，统一使用平准化成本方法）
+        """计算天然气运输总成本（已弃用，统一使用基于距离的LNG成本公式）
         
-        注意：此函数已被_calculate_levelized_ng_transport_cost()替代
-        保留此函数仅为向后兼容，建议使用平准化成本方法
+        注意：此函数已被_calculate_ng_transport_cost_by_distance()替代
+        保留此函数仅为向后兼容，建议使用基于距离的计算方法
         """
-        # 为保持向后兼容，返回平准化成本
-        return self._calculate_levelized_ng_transport_cost()
+        # 为保持向后兼容，返回默认距离下的成本
+        return self._calculate_ng_transport_cost_by_distance(100)  # 默认100km距离
     
-    def _calculate_levelized_hydrogen_transport_cost(self) -> float:
-        """计算平准化氢气运输成本（考虑车辆更换成本）"""
-        # 氢气运输需要特殊车辆，成本更高，同样需要考虑更换成本
-        transport_lifetime = self.economic_params['transport_vehicle_lifetime']
-        project_lifespan = self.economic_params['project_lifespan']
-        # 从配置读取参数（带默认值）
-        obj_cfg = self.config.get('objective_coefficients', {}) or {}
-        h2_cfg = obj_cfg.get('hydrogen_transport_vehicle', {}) or {}
-        capex_cfg = float(h2_cfg.get('capex', 1200000))
-        opex_cfg = float(h2_cfg.get('opex_annual', 120000))
-
-        if transport_lifetime < project_lifespan:
-            # 使用包含更换成本的计算方法
-            h2_transport_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=capex_cfg,
-                opex_annual=opex_cfg,
-                equipment_lifetime=transport_lifetime,
-                project_lifespan=project_lifespan,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-        else:
-            # 使用标准平准化成本计算
-            h2_transport_levelized = self._calculate_levelized_cost(
-                capex=capex_cfg,
-                opex_annual=opex_cfg,
-                lifetime_years=transport_lifetime,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-
-        # 氢气运输容量较低
-        annual_h2_transport_capacity = float(h2_cfg.get('annual_capacity_kgkm', 50000))  # kg·km/年
-        return h2_transport_levelized / annual_h2_transport_capacity  # 元/(kg·km)
+    def _calculate_hydrogen_transport_cost_by_distance(self, distance_km: float) -> float:
+        """基于实际数据点的氢气运输成本线性插值
+        
+        数据点: (50,5.43), (100,8.66), (150,9.85), (200,11.03), (250,12.21), 
+               (300,15.45), (350,16.63), (400,17.82), (450,19.00), (500,20.18)
+        
+        Args:
+            distance_km: 运输距离 (km)
+            
+        Returns:
+            float: 运输成本 (元/kg)
+        """
+        # 实际数据点 - 距离为0时成本为0
+        data_points = [
+            (0, 0),        # 距离为0时成本为0
+            (50, 5.43),
+            (100, 8.66),
+            (150, 9.85),
+            (200, 11.03),
+            (250, 12.21),
+            (300, 15.45),
+            (350, 16.63),
+            (400, 17.82),
+            (450, 19.00),
+            (500, 20.18)
+        ]
+        
+        # 如果距离为0或负数，直接返回0
+        if distance_km <= 0:
+            return 0.0
+            
+        # 如果超出最大距离，使用最后两点的斜率外推
+        if distance_km > 500:
+            # 使用450-500km的斜率外推
+            slope = (20.18 - 19.00) / (500 - 450)
+            return 20.18 + slope * (distance_km - 500)
+        
+        # 线性插值
+        for i in range(len(data_points) - 1):
+            x1, y1 = data_points[i]
+            x2, y2 = data_points[i + 1]
+            
+            if x1 <= distance_km <= x2:
+                # 线性插值公式: y = y1 + (y2-y1) * (x-x1) / (x2-x1)
+                if x2 == x1:  # 避免除零
+                    return y1
+                transport_cost = y1 + (y2 - y1) * (distance_km - x1) / (x2 - x1)
+                return max(0, transport_cost)
+        
+        # 兜底返回最后一个点的成本
+        return data_points[-1][1]
+    
+    def _calculate_ng_transport_cost_by_distance(self, distance_km: float, daily_volume_m3: float = 10000) -> float:
+        """基于LNG运输成本公式计算天然气运输成本
+        
+        公式: W_LNG ≈ (4.52 × 10^-4 × L) + (0.888/q) + 0.927
+        
+        Args:
+            distance_km: 运输距离 L (km)  
+            daily_volume_m3: 日输送量 q (m³/d)，默认10000 m³/d，即q=1(10^4 m³/d)
+            
+        Returns:
+            float: 运输成本 (元/m³)
+        """
+        if distance_km <= 0:
+            return 0.0
+            
+        # LNG运输成本公式
+        L = distance_km
+        q = daily_volume_m3 / 10000  # 转换为10^4 m³/d单位
+        
+        # 避免除零
+        if q <= 0:
+            q = 1.0  # 默认值
+            
+        # W_LNG = (4.52 × 10^-4 × L) + (0.888/q) + 0.927
+        transport_cost_yuan_per_m3 = (4.52e-4 * L) + (0.888 / q) + 0.927
+        
+        return max(0, transport_cost_yuan_per_m3)
+    
+    def _get_ng_transport_unit_cost(self, ng_loc: str, mtj_loc: str, total_days: int) -> float:
+        """计算天然气运输单位成本，基于预期的路线运输量
+        
+        Args:
+            ng_loc: 天然气源位置
+            mtj_loc: MTJ生产位置  
+            total_days: 总天数
+            
+        Returns:
+            float: 单位运输成本 (元/m³)
+        """
+        distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+        
+        # 估算该路线的日均运输量
+        # 基于MTJ位置的需求规模估算天然气运输量
+        estimated_daily_volume_m3 = self._estimate_ng_daily_volume_for_route(ng_loc, mtj_loc)
+        
+        # 使用LNG公式计算运输成本
+        return self._calculate_ng_transport_cost_by_distance(distance_km, estimated_daily_volume_m3)
+    
+    def _estimate_ng_daily_volume_for_route(self, ng_loc: str, mtj_loc: str) -> float:
+        """估算天然气运输路线的日均运输量
+        
+        Args:
+            ng_loc: 天然气源位置
+            mtj_loc: MTJ生产位置
+            
+        Returns:
+            float: 估算的日运输量 (m³/d)
+        """
+        # 基于MTJ位置的技术类型和规模估算天然气需求
+        if mtj_loc in self.locations:
+            location_data = self.locations[mtj_loc]
+            tech_type = location_data.get('mtj_technology', 'FT')  # 默认费托技术
+            
+            # 根据技术类型估算天然气消耗比例
+            tech_info = self.mtj_technologies.get(tech_type, {})
+            ng_consumption_ratio = tech_info.get('ng_consumption_ratio', 3.0)  # m³天然气/kg MTJ
+            
+            # 估算该位置的MTJ生产规模（基于位置类型和规模）
+            estimated_daily_mtj_kg = self._estimate_location_mtj_capacity(mtj_loc)
+            estimated_daily_ng_m3 = estimated_daily_mtj_kg * ng_consumption_ratio
+            
+            return max(1000, min(50000, estimated_daily_ng_m3))  # 限制在合理范围内
+        
+        return 10000  # 默认值
+    
+    def _estimate_location_mtj_capacity(self, location: str) -> float:
+        """估算MTJ生产位置的日产能规模
+        
+        Args:
+            location: MTJ生产位置
+            
+        Returns:
+            float: 估算日产能 (kg/d)
+        """
+        if location in self.locations:
+            location_data = self.locations[location]
+            location_type = location_data.get('type', 'industrial')
+            
+            # 根据位置类型估算生产规模
+            if location_type == 'petrochemical':
+                return 5000  # 大型石化基地
+            elif location_type == 'industrial':
+                return 2000  # 工业园区
+            elif location_type == 'renewable_energy':
+                return 1000  # 可再生能源基地
+            else:
+                return 1500  # 其他类型
+        
+        return 1500  # 默认值
     
     def _calculate_levelized_ng_transport_cost(self) -> float:
-        """计算平准化天然气运输成本（考虑车辆更换成本）"""
-        # 天然气罐车运输，同样需要考虑更换成本
-        transport_lifetime = self.economic_params['transport_vehicle_lifetime']
-        project_lifespan = self.economic_params['project_lifespan']
-        # 从配置读取参数（带默认值）
-        obj_cfg = self.config.get('objective_coefficients', {}) or {}
-        ng_cfg = obj_cfg.get('ng_transport_vehicle', {}) or {}
-        capex_cfg = float(ng_cfg.get('capex', 600000))
-        opex_cfg = float(ng_cfg.get('opex_annual', 60000))
-
-        if transport_lifetime < project_lifespan:
-            # 使用包含更换成本的计算方法
-            ng_transport_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=capex_cfg,
-                opex_annual=opex_cfg,
-                equipment_lifetime=transport_lifetime,
-                project_lifespan=project_lifespan,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-        else:
-            # 使用标准平准化成本计算
-            ng_transport_levelized = self._calculate_levelized_cost(
-                capex=capex_cfg,
-                opex_annual=opex_cfg,
-                lifetime_years=transport_lifetime,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-
-        # 天然气运输容量转换为kg基准（与其他运输方式统一）
-        annual_ng_transport_capacity_m3 = float(ng_cfg.get('annual_capacity_m3km', 200000))  # m³·km/年
-        ng_density_kg_per_m3 = float(ng_cfg.get('ng_density_kg_per_m3', 0.8))  # 天然气密度：0.8kg/m³
-        annual_ng_transport_capacity_kg = annual_ng_transport_capacity_m3 * ng_density_kg_per_m3  # kg·km/年
-        return ng_transport_levelized / annual_ng_transport_capacity_kg  # 元/(kg·km)
+        """保留兼容性的函数，内部调用新的基于距离的计算方法
+        
+        Returns:
+            float: 默认距离下的运输成本 (元/m³)
+        """
+        # 使用默认距离100km和默认日输送量10000m³/d计算
+        default_distance_km = 100
+        default_daily_volume_m3 = 10000
+        return self._calculate_ng_transport_cost_by_distance(default_distance_km, default_daily_volume_m3)
     
     def _calculate_distance(self, location: str, airport: str) -> float:
         """使用OSM路径规划计算两点间真实道路距离"""
@@ -3919,7 +4053,7 @@ class NaturalGasSupplyChainOptimizer:
             return "其他"
 
     def _load_ng_pipeline_data(self):
-        """加载天然气管段数据（使用集成的价格-管道数据，支持缓存）"""
+        """加载天然气管段数据（使用预处理的容量数据，支持缓存）"""
         try:
             # 导入缓存管理器
             try:
@@ -3928,47 +4062,89 @@ class NaturalGasSupplyChainOptimizer:
                 from data_cache_manager import cache_manager
             
             project_root = get_project_base_dir()
-            integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                         "natural_gas_supply_chain_optimization", "data", 
-                                         "integrated_gas_pipeline_price_data_with_coords.csv")
-            if not os.path.exists(integrated_file):
-                logger.error(f"集成天然气数据文件不存在: {integrated_file}")
-                self._load_original_pipeline_data()
-                return
-
-            # 检查缓存是否有效
-            if cache_manager.is_cache_valid('ng_pipelines', integrated_file):
-                logger.info("使用缓存的天然气管道数据（500km过滤）")
-                cached_df = cache_manager.load_filtered_data('ng_pipelines')
-                if cached_df is not None:
-                    integrated_df = cached_df
-                    logger.info(f"从缓存加载天然气管道数据: {len(integrated_df)} 条记录")
-                else:
-                    logger.warning("缓存加载失败，执行完整加载")
-                    integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
+            
+            # 优先使用预处理的容量数据文件
+            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
+                                           "gis_data_scraper", "scraped_gis_data", 
+                                           "natural_gas_pipelines_with_capacity.xlsx")
+            
+            if os.path.exists(preprocessed_file):
+                logger.info("使用预处理的天然气管道容量数据")
+                integrated_df = pd.read_excel(preprocessed_file)
+                # 过滤北京500km范围内的管道
+                integrated_df = integrated_df[integrated_df.apply(
+                    lambda row: is_within_beijing_range(
+                        float(row.get('center_latitude') or row.get('Lat', 0)), 
+                        float(row.get('center_longitude') or row.get('Long', 0)), 
+                        500
+                    ), axis=1
+                )]
+                logger.info(f"预处理数据过滤后: {len(integrated_df)} 条管道记录")
             else:
-                logger.info("缓存无效或不存在，执行完整加载和过滤")
-                integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
+                # 备用方案：使用原有的集成数据文件
+                logger.warning("预处理容量数据文件不存在，使用原有集成数据")
+                integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
+                                             "natural_gas_supply_chain_optimization", "data", 
+                                             "integrated_gas_pipeline_price_data_with_coords.csv")
+                if not os.path.exists(integrated_file):
+                    logger.error(f"集成天然气数据文件不存在: {integrated_file}")
+                    self._load_original_pipeline_data()
+                    return
+
+                # 检查缓存是否有效
+                if cache_manager.is_cache_valid('ng_pipelines', integrated_file):
+                    logger.info("使用缓存的天然气管道数据（500km过滤）")
+                    cached_df = cache_manager.load_filtered_data('ng_pipelines')
+                    if cached_df is not None:
+                        integrated_df = cached_df
+                        logger.info(f"从缓存加载天然气管道数据: {len(integrated_df)} 条记录")
+                    else:
+                        logger.warning("缓存加载失败，执行完整加载")
+                        integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
+                else:
+                    logger.info("缓存无效或不存在，执行完整加载和过滤")
+                    integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
 
             # 处理过滤后的数据
             for idx, row in integrated_df.iterrows():
-                pipeline_id = row['pipeline_id']
+                # 处理不同数据源的字段名
+                if 'pipeline_id' in row:
+                    pipeline_id = row['pipeline_id']
+                    pipeline_name = row.get('pipeline_name', row.get('Name', f'pipeline_{idx}'))
+                else:
+                    pipeline_id = f'pipeline_{idx}'
+                    pipeline_name = row.get('Name', f'管道_{idx}')
                 
-                # 获取坐标（缓存数据已经过验证）
-                lat = float(row.get('center_latitude') or row.get('lat'))
-                lon = float(row.get('center_longitude') or row.get('lon'))
+                # 获取坐标（支持不同字段名）
+                lat = float(row.get('center_latitude') or row.get('lat') or row.get('Lat', 0))
+                lon = float(row.get('center_longitude') or row.get('lon') or row.get('Long', 0))
+                
+                # 获取预处理的容量数据，如果不存在则使用原始数据
+                if 'effective_daily_capacity_m3_per_day' in row and pd.notna(row['effective_daily_capacity_m3_per_day']):
+                    # 使用预处理的有效日处理能力
+                    capacity_mcm_per_day = row['capacity_mcm_per_day']
+                    effective_daily_capacity_m3_per_day = row['effective_daily_capacity_m3_per_day']
+                    supply_reliability = row['supply_reliability']
+                    logger.debug(f"管道 {pipeline_id} 使用预处理容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
+                else:
+                    # 备用：使用原有数据计算
+                    capacity_mcm_per_day = row.get('capacity_mcm_per_day', 0)
+                    supply_reliability = row.get('supply_reliability', 0.95)
+                    effective_daily_capacity_m3_per_day = capacity_mcm_per_day * 10000 * supply_reliability
+                    logger.debug(f"管道 {pipeline_id} 使用原始数据计算容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
                 
                 self.ng_pipeline_sources[pipeline_id] = {
-                    'name': row['pipeline_name'],
-                    'operator': row['operator'],
-                    'status': row['status'],
-                    'year_online': row.get('year_online', 2020),
-                    'capacity_mcm_per_day': row['capacity_mcm_per_day'],
-                    'length_km': row['length_km'],
-                    'natural_gas_price_yuan_per_10k_m3': row['natural_gas_price_yuan_per_10k_m3'],
-                    'pipeline_cost_yuan_per_mcm': row['pipeline_cost_yuan_per_mcm'],
-                    'transport_cost_yuan_per_mcm_km': row['transport_cost_yuan_per_mcm_km'],
-                    'supply_reliability': row['supply_reliability'],
+                    'name': pipeline_name,
+                    'operator': row.get('operator', row.get('Operator', '未知')),
+                    'status': row.get('status', row.get('Status', 'Operating')),
+                    'year_online': row.get('year_online', row.get('YearOnline', 2020)),
+                    'capacity_mcm_per_day': capacity_mcm_per_day,
+                    'effective_daily_capacity_m3_per_day': effective_daily_capacity_m3_per_day,  # 新增预处理字段
+                    'length_km': row.get('length_km', row.get('Shape__Length', 0)),
+                    'natural_gas_price_yuan_per_10k_m3': row.get('natural_gas_price_yuan_per_10k_m3', 3.0),
+                    'pipeline_cost_yuan_per_mcm': row.get('pipeline_cost_yuan_per_mcm', 200),
+                    'transport_cost_yuan_per_mcm_km': row.get('transport_cost_yuan_per_mcm_km', 1.5),
+                    'supply_reliability': supply_reliability,
                     # 添加坐标信息
                     'center_latitude': lat,
                     'center_longitude': lon,
@@ -4107,7 +4283,7 @@ class NaturalGasSupplyChainOptimizer:
             raise
 
     def _load_lng_terminal_data(self):
-        """加载LNG接收站数据（支持缓存）"""
+        """加载LNG接收站数据（使用预处理的容量数据，支持缓存）"""
         try:
             # 导入缓存管理器
             try:
@@ -4115,57 +4291,91 @@ class NaturalGasSupplyChainOptimizer:
             except ImportError:
                 from data_cache_manager import cache_manager
             
-            # 使用相对路径的真实GIS数据 - 修正后的路径
             project_root = get_project_base_dir()
-            lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
-            if not os.path.exists(lng_file):
-                logger.error(f"LNG接收站数据文件不存在: {lng_file}")
-                raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
             
-            # 检查缓存是否有效
-            if cache_manager.is_cache_valid('lng_terminals', lng_file):
-                logger.info("使用缓存的LNG接收站数据（500km过滤）")
-                cached_df = cache_manager.load_filtered_data('lng_terminals')
-                if cached_df is not None:
-                    lng_df = cached_df
-                    logger.info(f"从缓存加载LNG接收站数据: {len(lng_df)} 条记录")
-                else:
-                    logger.warning("缓存加载失败，执行完整加载")
-                    lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+            # 优先使用预处理的容量数据文件
+            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
+                                           "gis_data_scraper", "scraped_gis_data", 
+                                           "lng_terminals_with_capacity.xlsx")
+            
+            if os.path.exists(preprocessed_file):
+                logger.info("使用预处理的LNG接收站容量数据")
+                lng_df = pd.read_excel(preprocessed_file)
+                # 过滤北京500km范围内的LNG接收站
+                lng_df = lng_df[lng_df.apply(
+                    lambda row: is_within_beijing_range(
+                        float(row.get('Lat', 0)), 
+                        float(row.get('Long', 0)), 
+                        500
+                    ), axis=1
+                )]
+                logger.info(f"预处理数据过滤后: {len(lng_df)} 条LNG接收站记录")
             else:
-                logger.info("缓存无效或不存在，执行完整加载和过滤")
-                lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+                # 备用方案：使用原有数据文件
+                logger.warning("预处理容量数据文件不存在，使用原有数据")
+                lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
+                if not os.path.exists(lng_file):
+                    logger.error(f"LNG接收站数据文件不存在: {lng_file}")
+                    raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
+                
+                # 检查缓存是否有效
+                if cache_manager.is_cache_valid('lng_terminals', lng_file):
+                    logger.info("使用缓存的LNG接收站数据（500km过滤）")
+                    cached_df = cache_manager.load_filtered_data('lng_terminals')
+                    if cached_df is not None:
+                        lng_df = cached_df
+                        logger.info(f"从缓存加载LNG接收站数据: {len(lng_df)} 条记录")
+                    else:
+                        logger.warning("缓存加载失败，执行完整加载")
+                        lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+                else:
+                    logger.info("缓存无效或不存在，执行完整加载和过滤")
+                    lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
             
             # 处理过滤后的数据
             for idx, row in lng_df.iterrows():
                 terminal_id = f"lng_terminal_{idx+1}"
+                terminal_name = row.get('Name', f'LNG接收站{idx+1}')
                 
-                # 处理容量数据 - 转换为万立方米/年
-                capacity_raw = row.get('current_capacity__Million_tonne', 0)
-                try:
-                    capacity_mt = float(capacity_raw) if capacity_raw else 0.0
-                    # 1 Million tonne LNG ≈ 13.8 万立方米天然气
-                    capacity_mcm_per_year = capacity_mt * 13.8 * 10  # 转换为万立方米/年
-                except (ValueError, TypeError):
-                    # 使用备用容量字段
+                # 获取预处理的容量数据，如果不存在则使用原始数据计算
+                if 'effective_daily_capacity_m3_per_day' in row and pd.notna(row['effective_daily_capacity_m3_per_day']):
+                    # 使用预处理的容量数据
+                    capacity_mcm_per_year = row['lng_capacity_mcm_per_year']
+                    effective_daily_capacity_m3_per_day = row['effective_daily_capacity_m3_per_day']
+                    operational_efficiency = row['operational_efficiency']
+                    logger.debug(f"LNG接收站 {terminal_name} 使用预处理容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
+                else:
+                    # 备用：使用原始数据计算
+                    capacity_raw = row.get('current_capacity__Million_tonne', 0)
                     try:
-                        capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', 300))
-                    except:
-                        capacity_mcm_per_year = row.get('capacity_mcm_per_year', None)
-                        if capacity_mcm_per_year is None:  
-                            terminal_name = row.get('Name', f'LNG接收站{idx+1}')
-                            logger.warning(f"LNG接收站 {terminal_name} 缺少容量数据，跳过")
-                            continue
+                        capacity_mt = float(capacity_raw) if capacity_raw else 0.0
+                        # 1 Million tonne LNG ≈ 138 万立方米天然气/年
+                        capacity_mcm_per_year = capacity_mt * 138
+                    except (ValueError, TypeError):
+                        # 使用备用容量字段
+                        try:
+                            capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', 300))
+                        except:
+                            capacity_mcm_per_year = 300  # 默认值
+                            logger.warning(f"LNG接收站 {terminal_name} 缺少容量数据，使用默认值 300 万m³/年")
+                    
+                    # 计算有效日处理能力
+                    operational_efficiency = 0.90  # 默认操作效率
+                    daily_capacity_m3 = (capacity_mcm_per_year / 365) * 10000  # 立方米/天
+                    effective_daily_capacity_m3_per_day = daily_capacity_m3 * operational_efficiency
+                    logger.debug(f"LNG接收站 {terminal_name} 使用原始数据计算容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
                 
-                # 获取坐标（缓存数据已经过验证）
-                lat = float(row.get('Lat'))
-                lon = float(row.get('Long'))
+                # 获取坐标
+                lat = float(row.get('Lat', 0))
+                lon = float(row.get('Long', 0))
                 
                 self.lng_terminals[terminal_id] = {
-                    'name': row.get('Name', f'LNG接收站{idx+1}'),
+                    'name': terminal_name,
                     'chinese_name': row.get('ChineseName', ''),
                     'location': row.get('Location', ''),
-                    'capacity_mcm_per_year': capacity_mcm_per_year,  # 万立方米/年（唯一重要的容量参数）
+                    'capacity_mcm_per_year': capacity_mcm_per_year,  # 万立方米/年
+                    'effective_daily_capacity_m3_per_day': effective_daily_capacity_m3_per_day,  # 新增预处理字段
+                    'operational_efficiency': operational_efficiency,  # 操作效率
                     'operator': row.get('Operator', '未知'),
                     'status': row.get('Status', 'Operating'),
                     'year_online': row.get('YearOnline', 2020),
@@ -4335,7 +4545,7 @@ class NaturalGasSupplyChainOptimizer:
                 
                 if transport_amount > 0:
                     distance = self._calculate_location_distance(h_loc, location)
-                    transport_cost = distance * self._calculate_levelized_hydrogen_transport_cost()
+                    transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
                     external_h2_sources.append({
                         'source_location': h_loc,
                         'source_type': self.locations[h_loc]['type'],
@@ -4392,7 +4602,7 @@ class NaturalGasSupplyChainOptimizer:
                     'transport_distance_km': min_distance
                 }
                 ng_supply['transport_mode'] = 'pipeline_transport'
-                transport_cost = min_distance * self._calculate_levelized_ng_transport_cost()
+                transport_cost = self._calculate_ng_transport_cost_by_distance(min_distance)
                 ng_supply['price_yuan_per_m3'] = self._get_natural_gas_price_yuan_per_m3(location, best_ng_source) + transport_cost
         
         return ng_supply
@@ -4480,7 +4690,7 @@ class NaturalGasSupplyChainOptimizer:
             min_h2_cost = float('inf')
             for h_loc in self.hydrogen_locations:
                 distance = self._calculate_location_distance(h_loc, location)
-                transport_cost = distance * self._calculate_levelized_hydrogen_transport_cost()
+                transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
                 h2_production_cost = 0  # 可再生能源制氢，边际成本为0
                 total_h2_cost = (h2_production_cost + transport_cost) * h2_consumption
                 min_h2_cost = min(min_h2_cost, total_h2_cost)
@@ -4630,10 +4840,14 @@ class NaturalGasSupplyChainOptimizer:
             )
 
     def _add_ng_pipeline_daily_capacity_constraints(self):
-        """添加天然气管段日最大购入量约束"""
+        """添加天然气管段日最大购入量约束（使用预处理的容量数据）"""
         logger.info("添加天然气管段日最大购入量约束...")
         
         total_days = self.total_hours // 24
+        
+        # 初始化日处理能力存储字典
+        if not hasattr(self, 'ng_daily_capacities'):
+            self.ng_daily_capacities = {}
         
         for ng_loc in self.ng_locations:
             # 获取管道信息
@@ -4641,22 +4855,32 @@ class NaturalGasSupplyChainOptimizer:
             pipeline_id = location_info.get('pipeline_id', '')
             pipeline_data = self.ng_pipeline_sources.get(pipeline_id, {})
             
-            # 获取管道日最大容量（万立方米/天）
-            daily_capacity_mcm = pipeline_data.get('capacity_mcm_per_day', 1)  # 默认100万立方米/天
-            if daily_capacity_mcm <= 0:
-                daily_capacity_mcm = 1  # 确保有合理的默认值
+            # 优先使用预处理的有效日处理能力
+            if 'effective_daily_capacity_m3_per_day' in pipeline_data and pipeline_data['effective_daily_capacity_m3_per_day'] > 0:
+                effective_daily_capacity = pipeline_data['effective_daily_capacity_m3_per_day']
+                daily_capacity_mcm = effective_daily_capacity / 10000  # 转换为万立方米/天用于显示
+                reliability = pipeline_data.get('supply_reliability', 0.95)
+                logger.debug(f"管道 {ng_loc} 使用预处理容量: {effective_daily_capacity/10000:.2f} 万m³/天")
+            else:
+                # 备用：使用原有计算方法
+                daily_capacity_mcm = pipeline_data.get('capacity_mcm_per_day', 1)  # 默认1万立方米/天
+                if daily_capacity_mcm <= 0:
+                    daily_capacity_mcm = 1  # 确保有合理的默认值
+                
+                # 转换为立方米
+                daily_capacity_m3 = daily_capacity_mcm * 10000  # 万立方米转立方米
+                
+                # 考虑管道供应可靠性
+                reliability = pipeline_data.get('supply_reliability', 0.95)
+                effective_daily_capacity = daily_capacity_m3 * reliability
+                logger.debug(f"管道 {ng_loc} 使用原始数据计算容量: {effective_daily_capacity/10000:.2f} 万m³/天")
             
-            # 转换为立方米
-            daily_capacity_m3 = daily_capacity_mcm * 10000  # 万立方米转立方米
-            
-            # 考虑管道供应可靠性（如果有的话）
-            reliability = pipeline_data.get('supply_reliability', 0.95)
-            effective_daily_capacity = daily_capacity_m3 * reliability
+            # 存储日处理能力供后续使用
+            self.ng_daily_capacities[ng_loc] = effective_daily_capacity
             
             logger.info(f"管道 {ng_loc} ({pipeline_data.get('name', '未知')}): "
-                       f"日容量 {daily_capacity_mcm} 万m³/天, "
-                       f"可靠性 {reliability:.2%}, "
-                       f"有效容量 {effective_daily_capacity/10000:.1f} 万m³/天")
+                       f"有效日容量 {effective_daily_capacity/10000:.2f} 万m³/天, "
+                       f"可靠性 {reliability:.2%}")
             
             # 为每天添加容量约束
             for day in range(total_days):
@@ -4691,7 +4915,7 @@ class NaturalGasSupplyChainOptimizer:
                     )
 
     def _add_lng_terminal_daily_capacity_constraints(self):
-        """添加LNG接收站日最大供应量约束"""
+        """添加LNG接收站日最大供应量约束（使用预处理的容量数据）"""
         logger.info("添加LNG接收站日最大供应量约束...")
         
         total_days = self.total_hours // 24
@@ -4700,19 +4924,33 @@ class NaturalGasSupplyChainOptimizer:
             # 获取LNG接收站信息
             location_info = self.locations.get(lng_loc, {})
             
-            # 获取年处理能力，转换为日处理能力
-            lng_capacity_mcm_per_year = location_info.get('lng_capacity', self.avg_lng_capacity_mcm_per_year)  # 万立方米/年
-            daily_capacity_mcm = lng_capacity_mcm_per_year / 365  # 转换为日处理能力
-            daily_capacity_m3 = daily_capacity_mcm * 10000  # 转换为立方米/天
+            # 优先使用预处理的有效日处理能力
+            if 'effective_daily_capacity_m3_per_day' in location_info and location_info['effective_daily_capacity_m3_per_day'] > 0:
+                effective_daily_capacity = location_info['effective_daily_capacity_m3_per_day']
+                lng_capacity_mcm_per_year = location_info.get('capacity_mcm_per_year', 0)
+                operational_efficiency = location_info.get('operational_efficiency', 0.90)
+                daily_capacity_mcm = effective_daily_capacity / 10000  # 转换为万立方米/天用于显示
+                logger.debug(f"LNG接收站 {lng_loc} 使用预处理容量: {effective_daily_capacity/10000:.2f} 万m³/天")
+            else:
+                # 备用：使用原有计算方法
+                lng_capacity_mcm_per_year = location_info.get('lng_capacity', self.avg_lng_capacity_mcm_per_year)  # 万立方米/年
+                daily_capacity_mcm = lng_capacity_mcm_per_year / 365  # 转换为日处理能力
+                daily_capacity_m3 = daily_capacity_mcm * 10000  # 转换为立方米/天
+                
+                # 从配置文件读取操作效率参数
+                operational_efficiency = self.config.get('operational_parameters', {}).get('operational_efficiency', 0.90)
+                effective_daily_capacity = daily_capacity_m3 * operational_efficiency
+                logger.debug(f"LNG接收站 {lng_loc} 使用原始数据计算容量: {effective_daily_capacity/10000:.2f} 万m³/天")
             
-            # 从配置文件读取操作效率参数
-            operational_efficiency = self.config.get('operational_parameters', {}).get('operational_efficiency', 0.90)
-            effective_daily_capacity = daily_capacity_m3 * operational_efficiency
+            # 存储日处理能力供后续使用
+            if not hasattr(self, 'ng_daily_capacities'):
+                self.ng_daily_capacities = {}
+            self.ng_daily_capacities[lng_loc] = effective_daily_capacity
             
             logger.info(f"LNG接收站 {lng_loc}: "
                        f"年处理能力 {lng_capacity_mcm_per_year} 万m³/年, "
-                       f"日处理能力 {daily_capacity_mcm:.1f} 万m³/天, "
-                       f"有效日产能 {effective_daily_capacity/10000:.1f} 万m³/天")
+                       f"有效日容量 {effective_daily_capacity/10000:.2f} 万m³/天, "
+                       f"操作效率 {operational_efficiency:.2%}")
             
             # 为每天添加容量约束
             for day in range(total_days):
