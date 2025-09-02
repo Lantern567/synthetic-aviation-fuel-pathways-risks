@@ -240,7 +240,6 @@ class NaturalGasSupplyChainOptimizer:
         # 天然气基供应链专用数据
         self.ng_pipeline_sources = {}     # 天然气管段数据
         self.lng_terminals = {}           # LNG接收站数据
-        self.transport_modes = {}         # 运输模式数据
         
         # LNG容量平均值（从配置文件加载，在数据加载后会更新）
         self.avg_lng_capacity_mcm_per_year = basic_params['avg_lng_capacity_mcm_per_year']
@@ -1467,67 +1466,6 @@ class NaturalGasSupplyChainOptimizer:
         
         return lifecycle_production
     
-    def _calculate_correct_facility_lcoe_with_utilization(self, location, tech, facility_capacity):
-        """
-        计算设施的正确LCOE（基于实际利用率的生命周期成本/生命周期产量）
-        
-        Args:
-            location: 设施位置
-            tech: 技术类型
-            facility_capacity: 设施容量 (kg/h)
-            
-        Returns:
-            float: LCOE (元/kg)
-        """
-        # 获取设施的CAPEX和OPEX（从配置读取，提供向后兼容默认值）
-        cfg = self.config.get('facility_lcoe_parameters', {}) or {}
-        fixed_capex = cfg.get('fixed_capex', 2000000)  # 元
-        variable_capex_per_capacity = cfg.get('variable_capex_per_capacity', 8000)  # 元/(kg/h)
-        fixed_opex_annual = cfg.get('fixed_opex_annual', 1000000)  # 元/年
-        variable_opex_per_kg = cfg.get('variable_opex_per_kg', 300)  # 元/kg
-        
-        # 获取经济参数
-        project_lifespan = self.economic_params['project_lifespan']
-        discount_rate = self.economic_params['discount_rate']
-        
-        # 计算生命周期总CAPEX（固定+可变）
-        total_capex = fixed_capex + variable_capex_per_capacity * facility_capacity
-        
-        # 计算生命周期总OPEX现值
-        if discount_rate == 0:
-            opex_npv = fixed_opex_annual * project_lifespan
-        else:
-            opex_npv = fixed_opex_annual * (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
-        
-        # 使用实际利用率估算生命周期产量
-        lifecycle_production = self._estimate_lifecycle_production_for_lcoe(location, tech, facility_capacity)
-        annual_production = lifecycle_production / project_lifespan
-        
-        # 计算生命周期变动成本现值
-        if discount_rate == 0:
-            variable_cost_npv = variable_opex_per_kg * lifecycle_production
-        else:
-            # 每年的变动成本现值之和
-            variable_cost_npv = 0
-            for year in range(1, project_lifespan + 1):
-                annual_variable_cost = variable_opex_per_kg * annual_production
-                variable_cost_npv += annual_variable_cost / ((1 + discount_rate) ** year)
-        
-        # 总生命周期成本现值
-        total_lifecycle_cost_npv = total_capex + opex_npv + variable_cost_npv
-        
-        # LCOE = 生命周期总成本现值 / 生命周期总产量现值
-        if discount_rate == 0:
-            production_npv = lifecycle_production
-        else:
-            # 计算生命周期产量的现值
-            production_npv = 0
-            for year in range(1, project_lifespan + 1):
-                production_npv += annual_production / ((1 + discount_rate) ** year)
-        
-        lcoe = total_lifecycle_cost_npv / production_npv if production_npv > 0 else 0
-        
-        return lcoe
     
     def _define_economic_parameters(self):
         """定义经济参数"""
@@ -1615,15 +1553,6 @@ class NaturalGasSupplyChainOptimizer:
             'electrolysis_efficiency': cost_config['electrolysis']['electrolysis_efficiency'],
             'electrolysis_power_consumption': cost_config['electrolysis']['electrolysis_power_consumption'],
             
-            # 运输距离限制和效率参数
-            'transport_cost_yuan_per_km_kg': cost_config['transport']['transport_cost_yuan_per_km_kg'],
-            'ng_pipeline_transport_yuan_per_mcm_km': cost_config['transport']['ng_pipeline_transport_yuan_per_mcm_km'],
-            'lng_truck_transport_yuan_per_mcm_km': cost_config['transport']['lng_truck_transport_yuan_per_mcm_km'],
-            'lng_rail_transport_yuan_per_mcm_km': cost_config['transport']['lng_rail_transport_yuan_per_mcm_km'],
-            'lng_ship_transport_yuan_per_mcm_km': cost_config['transport']['lng_ship_transport_yuan_per_mcm_km'],
-            'integrated_transport_yuan_per_mcm_km': cost_config['transport']['integrated_transport_yuan_per_mcm_km'],
-            'hydrogen_transport_cost_yuan_per_kg_km': cost_config['transport']['hydrogen_transport_cost_yuan_per_kg_km'],
-            'ng_truck_transport_yuan_per_m3_km': cost_config['transport']['ng_truck_transport_yuan_per_m3_km'],
             
             # 短缺惩罚成本（提高到足够高的水平，使建厂更经济）
             'shortage_penalty_yuan_per_kg': cost_config['shortage_penalty_yuan_per_kg'],
@@ -1740,47 +1669,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 天然气价格将在每条管道数据中单独存储，不需要全局更新
         
-        logger.info(f"调试: _define_costs 即将加载运输模式...")
-        
-        # 从配置文件加载运输模式参数
-        transport_config = self.config['transport_modes']
-        logger.info(f"调试: 开始加载运输模式，配置中有{len(transport_config)}个模式")
-        
-        # 定义5种运输模式的详细参数
-        self.transport_modes = {}
-        
-        for mode_key in ['pipeline_direct', 'airport_integrated', 'lng_port_supply', 'lng_transfer', 'integrated_supply']:
-            if mode_key in transport_config:
-                logger.info(f"调试: 正在处理运输模式 {mode_key}")
-                mode_info = transport_config[mode_key]
-                try:
-                    self.transport_modes[mode_key] = {
-                        'name': mode_info['name'],
-                        'description': mode_info['description'],
-                        'capacity_factor': mode_info['capacity_factor'],
-                        'distance_limit_km': mode_info['distance_limit_km'],
-                        'suitable_sources': mode_info['suitable_sources'],
-                        'infrastructure_cost': self.costs['infrastructure_maintenance_yuan_per_year'][mode_key]
-                    }
-                    logger.info(f"调试: 运输模式 {mode_key} 加载成功")
-                except Exception as e:
-                    logger.error(f"调试: 加载运输模式 {mode_key} 时出错: {e}")
-                # 动态设置成本参数
-                if mode_key == 'pipeline_direct':
-                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['ng_truck_transport_yuan_per_m3_km'] * 10000
-                    self.transport_modes[mode_key]['hydrogen_transport_cost'] = mode_info.get('hydrogen_transport_cost', 0)
-                elif mode_key == 'airport_integrated':
-                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = mode_info.get('cost_yuan_per_mcm_km', 5.0)
-                elif mode_key == 'lng_port_supply':
-                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['lng_ship_transport_yuan_per_mcm_km']
-                elif mode_key == 'lng_transfer':
-                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['lng_truck_transport_yuan_per_mcm_km']
-                elif mode_key == 'integrated_supply':
-                    self.transport_modes[mode_key]['cost_yuan_per_mcm_km'] = self.costs['integrated_transport_yuan_per_mcm_km']
-            else:
-                logger.warning(f"调试: 配置文件中缺少运输模式 {mode_key}")
-        
-        logger.info(f"定义了成本参数和 {len(self.transport_modes)} 种运输模式")
+        logger.info("成本参数定义完成")
     
     def build_model(self):
         """构建优化模型"""
@@ -2718,7 +2607,7 @@ class NaturalGasSupplyChainOptimizer:
             if (location, airport, week) in self.transport_vars
         )
         
-        transport_equipment_cost = total_transport_demand * float(transport_cfg.get('equipment_investment_rate', 0.01))
+        transport_equipment_cost = 0  # 已包含在平准化运输成本中
         transport_operation_cost = gp.quicksum(
             self.transport_vars[(location, airport, week)] * 
             self._calculate_distance(location, airport) * 
@@ -2780,13 +2669,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 9. 氢气运输投资 + 20年运营成本现值（改为天级）
         total_days = self.total_hours // 24
-        hydrogen_transport_investment = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc, day)] * float(transport_cfg.get('hydrogen_transport_investment_rate', 0.002))
-            for h_loc in self.hydrogen_locations
-            for mtj_loc in sum(self.mtj_locations.values(), [])
-            for day in range(total_days)
-            if (h_loc, mtj_loc, day) in self.hydrogen_transport_vars
-        )
+        hydrogen_transport_investment = 0  # 已包含在平准化氢气运输成本中
         hydrogen_transport_operation = gp.quicksum(
             self.hydrogen_transport_vars[(h_loc, mtj_loc, day)] * 
             self._calculate_levelized_hydrogen_transport_cost() * 
@@ -2798,13 +2681,7 @@ class NaturalGasSupplyChainOptimizer:
         )
         
         # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
-        ng_transport_investment = gp.quicksum(
-            self.ng_transport_vars[(ng_loc, mtj_loc, day)] * float(transport_cfg.get('ng_transport_investment_rate', 0.008))
-            for ng_loc in self.ng_locations
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), [])
-            for day in range(total_days)
-            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
-        )
+        ng_transport_investment = 0  # 已包含在平准化天然气运输成本中
         # 天然气罐车固定成本（每条路线的基础成本）
         # 注意：固定成本只计算一次，不按天重复计算
         ng_truck_fixed_cost = 0
@@ -3267,8 +3144,9 @@ class NaturalGasSupplyChainOptimizer:
         
         for location in self.locations:
             location_data = self.locations[location]
-            # 使用统一的天然气价格，不再基于省份区分
-            ng_price_per_10k_m3 = self.costs['natural_gas_price_yuan_per_m3'] * 10000
+            # 优先使用管道文件价格，没有时使用配置默认价格
+            ng_price_per_m3 = self._get_natural_gas_price_yuan_per_m3(location)
+            ng_price_per_10k_m3 = ng_price_per_m3 * 10000
             
             # 计算实际消耗的天然气成本
             for tech in self.technologies:
@@ -4492,7 +4370,7 @@ class NaturalGasSupplyChainOptimizer:
                 'capacity': location_info.get('lng_capacity', 0)
             }
             ng_supply['transport_mode'] = 'pipeline_direct'
-            ng_supply['price_yuan_per_m3'] = self.costs['natural_gas_price_yuan_per_m3']
+            ng_supply['price_yuan_per_m3'] = self._get_natural_gas_price_yuan_per_m3(location)
             
         else:
             # 其他位置：通过管道或运输供应
@@ -4515,9 +4393,44 @@ class NaturalGasSupplyChainOptimizer:
                 }
                 ng_supply['transport_mode'] = 'pipeline_transport'
                 transport_cost = min_distance * self._calculate_levelized_ng_transport_cost()
-                ng_supply['price_yuan_per_m3'] = self.costs['natural_gas_price_yuan_per_m3'] + transport_cost
+                ng_supply['price_yuan_per_m3'] = self._get_natural_gas_price_yuan_per_m3(location, best_ng_source) + transport_cost
         
         return ng_supply
+    
+    def _get_natural_gas_price_yuan_per_m3(self, location: str = None, source_location: str = None) -> float:
+        """
+        获取天然气价格，优先使用管道文件中的具体价格数据
+        
+        Args:
+            location: 需求地点（可选）
+            source_location: 供应源地点（可选）
+            
+        Returns:
+            float: 天然气价格（元/m³）
+            
+        优先级：
+        1. 如果有管道数据，使用管道文件中的具体价格
+        2. 如果没有管道数据，使用配置文件中的默认价格
+        """
+        # 1. 首先尝试从管道文件中获取价格
+        pipeline_price = None
+        
+        # 遍历所有管道数据，寻找相关的价格信息
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            price_per_10k_m3 = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
+            if price_per_10k_m3 is not None:
+                pipeline_price = price_per_10k_m3 / 10000  # 转换为元/m³
+                logger.debug(f"从管道 {pipeline_id} 获取天然气价格: {pipeline_price:.3f} 元/m³")
+                break
+        
+        # 2. 如果找到管道价格，使用管道价格
+        if pipeline_price is not None:
+            return pipeline_price
+            
+        # 3. 如果没有找到管道价格，使用配置文件默认价格
+        config_price = self.costs['natural_gas_price_yuan_per_m3']
+        logger.debug(f"使用配置文件默认天然气价格: {config_price:.3f} 元/m³")
+        return config_price
     
     def _analyze_electricity_supply_for_location(self, location: str) -> Dict:
         """分析指定位置的电力供应"""
@@ -4577,7 +4490,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 天然气成本
         ng_consumption = total_production_kg * tech_info.get('ng_consumption_ratio', 0)
-        ng_price = self.costs['natural_gas_price_yuan_per_m3']
+        ng_price = self._get_natural_gas_price_yuan_per_m3(location)
         supply_costs['natural_gas_cost_yuan'] = ng_consumption * ng_price
         
         # 电力成本（可再生能源自发自用，成本为0）
