@@ -2076,18 +2076,8 @@ class NaturalGasSupplyChainOptimizer:
             max_flow_m3_per_hour = base_flow_m3_per_hour * pressure_factor * maintenance_factor
             
         elif location_info['type'] == 'airport':
-            # 机场：通过罐车运输，容量更有限
-            # 从配置文件读取罐车调度参数
-            schedule_config = self.config.get('transport_constraints', {}).get('truck_schedule', {})
-            schedule_cycle_hours = schedule_config.get('schedule_cycle_hours', 6)
-            high_flow_hours = schedule_config.get('high_flow_hours_per_cycle', 2)
-            high_flow_factor = schedule_config.get('high_flow_factor', 1.0)
-            low_flow_factor = schedule_config.get('low_flow_factor', 0.3)
-            base_flow_m3_per_hour = schedule_config.get('base_flow_m3_per_hour', 3000)
-            
-            # 罐车调度约束：不是每小时都有罐车到达
-            truck_schedule_factor = high_flow_factor if (hour % schedule_cycle_hours) < high_flow_hours else low_flow_factor
-            max_flow_m3_per_hour = base_flow_m3_per_hour * truck_schedule_factor
+            # 机场：通过运输获得天然气，使用简化的流量限制
+            max_flow_m3_per_hour = 5000  # 简化为固定值
             
         else:
             # 其他类型的默认约束
@@ -2683,22 +2673,6 @@ class NaturalGasSupplyChainOptimizer:
         
         # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
         ng_transport_investment = 0  # 已包含在平准化天然气运输成本中
-        # 天然气罐车固定成本（每条路线的基础成本）
-        # 注意：固定成本只计算一次，不按天重复计算
-        ng_truck_fixed_cost = 0
-        calculated_routes = set()
-        for ng_loc in self.ng_locations:
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
-                route_key = (ng_loc, mtj_loc)
-                if route_key not in calculated_routes:
-                    # 检查是否有任何天的运输量
-                    has_transport = any(
-                        (ng_loc, mtj_loc, day) in self.ng_transport_vars 
-                        for day in range(total_days)
-                    )
-                    if has_transport:
-                        ng_truck_fixed_cost += self._calculate_ng_truck_fixed_cost(ng_loc, mtj_loc)
-                        calculated_routes.add(route_key)
         # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
         # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
         ng_transport_operation = gp.LinExpr()
@@ -2801,7 +2775,7 @@ class NaturalGasSupplyChainOptimizer:
             # 投资成本（项目开始时）
             facility_investment_cost + transport_equipment_cost + storage_equipment_cost + 
             electrolyzer_investment_cost + h2_storage_investment + hydrogen_transport_investment + 
-            ng_transport_investment + ng_truck_fixed_cost + infrastructure_investment +
+            ng_transport_investment + infrastructure_investment +
             
             # 运营成本（20年现值）
             facility_operation_cost + production_cost + transport_operation_cost + 
@@ -2877,41 +2851,6 @@ class NaturalGasSupplyChainOptimizer:
         total_storage_cost = storage_space_cost + handling_cost_per_kg_hour
         return total_storage_cost
     
-    def _calculate_ng_truck_fixed_cost(self, ng_loc: str, mtj_loc: str) -> float:
-        """计算天然气罐车固定成本"""
-        distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
-        
-        # 从配置读取固定成本参数（带默认值）
-        obj_cfg = self.config.get('objective_coefficients', {}) or {}
-        truck_cfg = obj_cfg.get('ng_truck_fixed_cost', {}) or {}
-        truck_purchase_cost = float(truck_cfg.get('truck_purchase_cost', 800000))
-        truck_depreciation_years = float(truck_cfg.get('truck_depreciation_years', 8))
-        annual_insurance = float(truck_cfg.get('annual_insurance', 50000))
-        annual_maintenance = float(truck_cfg.get('annual_maintenance', 40000))
-        thresholds = truck_cfg.get('distance_thresholds_km', [50, 150])
-        trucks_options = truck_cfg.get('trucks_needed', [1, 2, 3])
-        
-        # 根据距离决定需要的车辆数量
-        trucks_needed = trucks_options[-1] if trucks_options else 1
-        for i, th in enumerate(thresholds):
-            try:
-                if distance_km <= float(th):
-                    idx = i if i < len(trucks_options) else len(trucks_options) - 1
-                    trucks_needed = trucks_options[idx]
-                    break
-            except Exception:
-                continue
-        
-        # 计算年化固定成本
-        annual_depreciation = truck_purchase_cost / truck_depreciation_years
-        annual_fixed_cost = (annual_depreciation + annual_insurance + annual_maintenance) * trucks_needed
-        
-        # 转换为项目期固定成本
-        project_years = 20
-        discount_rate = self.economic_params['discount_rate']
-        present_value_factor = (1 - (1 + discount_rate)**(-project_years)) / discount_rate
-        
-        return annual_fixed_cost * present_value_factor
 
     def _calculate_total_ng_transport_cost_per_kg_km(self) -> float:
         """计算天然气运输总成本（已弃用，统一使用基于距离的LNG成本公式）
@@ -3499,6 +3438,10 @@ class NaturalGasSupplyChainOptimizer:
                     'latitude': coords[0],
                     'longitude': coords[1]
                 }
+        
+        # 添加成本细项分析
+        cost_breakdown = self._calculate_cost_breakdown()
+        solution['cost_breakdown'] = cost_breakdown
 
         return solution
     
@@ -3601,6 +3544,30 @@ class NaturalGasSupplyChainOptimizer:
             hydrogen_production_cost_total = total_h2_production * 50 * operation_expansion_factor * present_value_factor
         breakdown["hydrogen_production_cost"] = hydrogen_production_cost_total
         
+        # 氢气运输成本（20年现值）
+        hydrogen_transport_cost_total = 0
+        if hasattr(self, 'hydrogen_transport_vars'):
+            total_days = self.total_hours // 24
+            for (h_loc, mtj_loc, day), var in self.hydrogen_transport_vars.items():
+                if var.x > 0:
+                    distance_km = self._calculate_location_distance(h_loc, mtj_loc)
+                    unit_cost = self._calculate_hydrogen_transport_cost_by_distance(distance_km)
+                    hydrogen_transport_cost_total += var.x * unit_cost
+            hydrogen_transport_cost_total *= operation_expansion_factor * present_value_factor
+        breakdown["hydrogen_transport_cost"] = hydrogen_transport_cost_total
+        
+        # 天然气运输成本（20年现值）
+        ng_transport_cost_total = 0
+        if hasattr(self, 'ng_transport_vars'):
+            total_days = self.total_hours // 24
+            for (ng_loc, mtj_loc, day), var in self.ng_transport_vars.items():
+                if var.x > 0:
+                    distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+                    unit_cost = self._calculate_ng_transport_cost_by_distance(distance_km, var.x)
+                    ng_transport_cost_total += var.x * unit_cost
+            ng_transport_cost_total *= operation_expansion_factor * present_value_factor
+        breakdown["ng_transport_cost"] = ng_transport_cost_total
+        
         # 天然气原料成本（20年现值）
         natural_gas_cost_total = self._calculate_actual_natural_gas_cost() * operation_expansion_factor * present_value_factor
         breakdown["natural_gas_raw_material_cost"] = natural_gas_cost_total
@@ -3671,12 +3638,34 @@ class NaturalGasSupplyChainOptimizer:
         self._save_infrastructure_locations(output_dir, timestamp)
         
         # 保存主要结果到CSV
+        cost_breakdown = solution.get("cost_breakdown", {})
         results_summary = {
             "优化状态": [solution.get("optimization_status", "未知")],
             "生命周期总成本(元)": [solution.get("objective_value_lifecycle_total", 0)],
             "年化成本(元/年)": [solution.get("objective_value_lifecycle_total", 0) / solution.get("project_lifespan_years", 20)],
             "生命周期平准化成本(元/kg)": [solution.get("lifecycle_levelized_cost_per_kg", 0)],
             "年化平准化成本(元/kg)": [solution.get("annual_levelized_cost_per_kg", 0)],
+            
+            # 成本细项 - 建设投资成本
+            "MTJ工厂建设投资(元)": [cost_breakdown.get("facility_investment_cost", 0)],
+            "电解槽建设投资(元)": [cost_breakdown.get("electrolyzer_investment_cost", 0)],
+            "运输设备投资(元)": [cost_breakdown.get("transport_equipment_cost", 0)],
+            "MTJ储存设备投资(元)": [cost_breakdown.get("storage_equipment_cost", 0)],
+            "基础设施投资(元)": [cost_breakdown.get("infrastructure_investment_cost", 0)],
+            
+            # 成本细项 - 运营成本
+            "MTJ工厂运营成本(元)": [cost_breakdown.get("facility_operation_cost", 0)],
+            "MTJ生产运营成本(元)": [cost_breakdown.get("production_operational_cost", 0)],
+            "氢气制取成本(元)": [cost_breakdown.get("hydrogen_production_cost", 0)],
+            "氢气运输成本(元)": [cost_breakdown.get("hydrogen_transport_cost", 0)],
+            "天然气运输成本(元)": [cost_breakdown.get("ng_transport_cost", 0)],
+            "天然气原料成本(元)": [cost_breakdown.get("natural_gas_raw_material_cost", 0)],
+            "MTJ运输运营成本(元)": [cost_breakdown.get("transport_operation_cost", 0)],
+            "MTJ储存运营成本(元)": [cost_breakdown.get("storage_operation_cost", 0)],
+            "基础设施运营成本(元)": [cost_breakdown.get("infrastructure_operation_cost", 0)],
+            "短缺惩罚成本(元)": [cost_breakdown.get("shortage_penalty_cost", 0)],
+            
+            # 统计信息
             "建设设施数": [len(solution.get("facilities", {}))],
             "运输路线数": [len(solution.get("transport_plan", {}))],
             "年产量(kg)": [solution.get("annual_production_kg", 0)],
@@ -4824,9 +4813,8 @@ class NaturalGasSupplyChainOptimizer:
             max_flow_m3_per_hour = base_flow_m3_per_hour * pressure_factor
             
         elif location_info['type'] == 'airport':
-            # 机场：从配置文件读取天然气供应能力
-            supply_config = self.config.get('supply_capacity', {}).get('natural_gas_supply', {})
-            max_flow_m3_per_hour = supply_config.get('airport_max_flow_m3_per_hour', 50000)
+            # 机场：不是天然气供应点，通过运输获得天然气，不添加供应约束
+            return  # 直接返回，跳过供应约束
         else:
             # 默认供应能力：从配置文件读取
             supply_config = self.config.get('supply_capacity', {}).get('natural_gas_supply', {})
