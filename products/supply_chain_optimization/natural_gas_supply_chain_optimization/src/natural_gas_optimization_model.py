@@ -1628,43 +1628,35 @@ class NaturalGasSupplyChainOptimizer:
     
     def _estimate_mtj_production_costs(self):
         """
-        估算MTJ生产技术的基础成本（所有技术模式使用相同基础，只有规模差异）
+        基于facility_lcoe_parameters估算MTJ生产技术的基础成本
+        （避免重复定义，统一使用facility_lcoe_parameters配置）
         
         Returns:
             dict: 包含CAPEX、固定OPEX、变动OPEX的基础成本估算
         """
-        # MTJ生产工艺基础成本分析
-        # 基于Fischer-Tropsch合成 + 加氢精制的工艺路线
+        # 从统一的facility_lcoe_parameters配置获取成本参数
+        fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
         
-        # 从配置文件加载MTJ生产成本参数
-        mtj_config = self.config['mtj_production_costs']
+        # 从配置获取成本参数 (避免重复定义)
+        # variable_capex_per_capacity 相当于总CAPEX每单位产能
+        total_capex = fac_cfg.get('variable_capex_per_capacity', 20000)  # 元/(kg/hour)
         
-        # 主要设备投资成本估算 (元/(kg/hour)产能)
-        equipment_costs = mtj_config['equipment_costs']
+        # 固定运营成本 (按单位产能分摊)
+        total_fixed_opex_annual = fac_cfg.get('fixed_opex_annual', 1000000)  # 元/年 (整个工厂)
+        # 按标准产能1000 kg/h分摊，得到单位产能的固定成本
+        standard_capacity_kg_h = 1000  
+        total_fixed_opex = total_fixed_opex_annual / standard_capacity_kg_h  # 元/年 per (kg/hour)
         
-        # 总CAPEX (元/(kg/hour))
-        total_capex = sum(equipment_costs.values())
-        
-        # 固定运营成本估算 (元/年，针对1 kg/hour产能设施)
-        fixed_operating_costs = mtj_config['fixed_operating_costs']
-        
-        # 变动运营成本估算 (元/kg产品)
-        variable_operating_costs = mtj_config['variable_operating_costs']
-        
-        # 计算总成本
-        total_capex = sum(equipment_costs.values())
-        total_fixed_opex = sum(fixed_operating_costs.values())
-        total_variable_opex = sum(variable_operating_costs.values())
+        # 变动运营成本 (从生产变动成本配置获取)
+        fac_cfg_opex = fac_cfg.get('variable_opex_per_kg', 300)  # 元/kg
+        total_variable_opex = fac_cfg_opex  # 元/kg产品
         
         logger.info(f"MTJ生产基础成本估算: CAPEX={total_capex:,.0f}元/(kg/hour), 固定OPEX={total_fixed_opex:,.0f}元/年, 变动OPEX={total_variable_opex:,.0f}元/kg")
         
         return {
             'capex_per_kg_hour': total_capex,
             'fixed_opex_annual': total_fixed_opex,
-            'variable_opex_per_kg': total_variable_opex,
-            'equipment_breakdown': equipment_costs,
-            'fixed_operating_breakdown': fixed_operating_costs,
-            'variable_operating_breakdown': variable_operating_costs
+            'variable_opex_per_kg': total_variable_opex
         }
         
         # 天然气价格将在每条管道数据中单独存储，不需要全局更新
@@ -1903,35 +1895,37 @@ class NaturalGasSupplyChainOptimizer:
         self._add_natural_gas_transport_constraints()
     
     def _add_time_scale_matching_constraints(self):
-        """添加时间尺度匹配约束：小时级生产 -> 周级运输"""
-        logger.info("添加时间尺度匹配约束...")
+        """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
+        logger.info("添加改进的时间尺度匹配约束...")
         
         for location in self.locations:
             for airport in self.airports:
                 for week in range(self.time_horizon_weeks):
-                    # 每周的运输量 = 该周168小时的生产总量 - 库存变化
-                    week_start_hour = week * self.hours_per_week
                     week_end_hour = (week + 1) * self.hours_per_week
                     
-                    # 该周的总生产量
-                    weekly_production = gp.quicksum(
+                    # 累积生产量：从项目开始到该周结束的所有生产
+                    cumulative_production = gp.quicksum(
                         self.production_vars[(location, tech, hour)]
                         for tech in self.technologies
-                        for hour in range(week_start_hour, week_end_hour)
+                        for hour in range(week_end_hour)
                         if (location, tech, hour) in self.production_vars
                     )
                     
-                    # 该周的库存变化 (周末库存 - 周初库存)
-                    inventory_change = (
-                        self.storage_vars[(location, week_end_hour)] - 
-                        self.storage_vars[(location, week_start_hour)]
+                    # 累积运输量：从项目开始到该周的所有运输
+                    cumulative_transport = gp.quicksum(
+                        self.transport_vars[(location, airport, w)]
+                        for w in range(week + 1)
+                        if (location, airport, w) in self.transport_vars
                     )
                     
-                    # 约束：运输量 ≤ 生产量 - 库存增加
+                    # 当前库存水平（项目开始时库存为0）
+                    current_inventory = self.storage_vars[(location, week_end_hour)]
+                    
+                    # 改进约束：累积运输 ≤ 累积生产 - 当前库存
+                    # 这允许使用历史生产和释放库存来支持运输
                     self.model.addConstr(
-                        self.transport_vars[(location, airport, week)] <= 
-                        weekly_production - inventory_change,
-                        name=f"time_match_{location}_{airport}_{week}"
+                        cumulative_transport <= cumulative_production - current_inventory,
+                        name=f"cumulative_balance_{location}_{airport}_{week}"
                     )
     
     def _add_production_capacity_constraints(self):
@@ -2560,8 +2554,8 @@ class NaturalGasSupplyChainOptimizer:
         
         # 1. MTJ生产设施投资成本（项目开始时的一次性投资）
         fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
-        fixed_capex = fac_cfg.get('fixed_capex', 2000000)
-        variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 8000)
+        fixed_capex = fac_cfg.get('fixed_capex', 20000000)
+        variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 20000)
         facility_investment_cost = gp.quicksum(
             self.facility_vars[(location, tech)] * fixed_capex +
             self.facility_capacity_vars[(location, tech)] * variable_capex_per_capacity * 
@@ -2600,8 +2594,9 @@ class NaturalGasSupplyChainOptimizer:
         transport_equipment_cost = 0  # 已包含在平准化运输成本中
         transport_operation_cost = gp.quicksum(
             self.transport_vars[(location, airport, week)] * 
-            self._calculate_distance(location, airport) * 
-            self._calculate_levelized_transport_cost() * lifecycle_operation_factor  # 20年运营成本现值
+            self._calculate_mtj_transport_cost_by_distance(
+                self._calculate_distance(location, airport)
+            ) * lifecycle_operation_factor  # 20年运营成本现值，基于运输理论公式
             for location in self.locations
             for airport in self.airports
             for week in range(self.time_horizon_weeks)
@@ -2794,49 +2789,40 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"生命周期运营成本系数: {lifecycle_operation_factor:.2f}")
         logger.info("所有运营成本已扩展至20年生命周期现值")
     
-    def _calculate_levelized_transport_cost(self) -> float:
-        """计算平准化运输成本（考虑车辆更换成本）"""
-        # 从配置文件读取运输车辆参数
-        transport_config = self.config.get('cost_parameters', {}).get('transport', {}).get('levelized_transport', {})
-        vehicle_capex = transport_config.get('vehicle_capex', 800000)
-        vehicle_opex_annual = transport_config.get('vehicle_opex_annual', 80000)
-        annual_transport_capacity = transport_config.get('annual_transport_capacity_kgkm', 100000)
-        
-        # 运输车辆寿命为10年，项目期间20年需要更换一次
-        transport_lifetime = self.economic_params['transport_vehicle_lifetime']
-        project_lifespan = self.economic_params['project_lifespan']
-        
-        if transport_lifetime < project_lifespan:
-            # 使用包含更换成本的计算方法
-            transport_vehicle_levelized = self._calculate_project_levelized_cost_with_replacement(
-                capex=vehicle_capex,  # 运输车辆投资成本
-                opex_annual=vehicle_opex_annual,  # 年运营成本
-                equipment_lifetime=transport_lifetime,
-                project_lifespan=project_lifespan,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-        else:
-            # 使用标准平准化成本计算
-            transport_vehicle_levelized = self._calculate_levelized_cost(
-                capex=vehicle_capex,  # 运输车辆投资成本
-                opex_annual=vehicle_opex_annual,  # 年运营成本
-                lifetime_years=transport_lifetime,
-                discount_rate=self.economic_params['discount_rate'],
-                capacity_factor=self.economic_params['transport_capacity_factor']
-            )
-        
-        # 从配置文件读取每车每年运输能力
-        return transport_vehicle_levelized / annual_transport_capacity  # 元/(kg·km)
     
-    def _calculate_total_transport_cost_per_kg_km(self) -> float:
-        """计算总运输成本（已弃用，统一使用平准化成本方法）
+    def _calculate_mtj_transport_cost_by_distance(self, distance_km: float) -> float:
+        """基于运输理论公式计算MTJ运输成本
         
-        注意：此函数已被_calculate_levelized_transport_cost()替代
-        保留此函数仅为向后兼容，建议使用平准化成本方法
+        公式: c_kg(S) = F_trip/Q_kg + v_km/Q_kg * S
+        
+        Args:
+            distance_km: 运输距离(公里)
+            
+        Returns:
+            float: 单位运输成本(元/kg)
         """
-        # 为保持向后兼容，返回平准化成本
-        return self._calculate_levelized_transport_cost()
+        # 从配置文件读取基于公式的运输参数
+        formula_config = self.config.get('cost_parameters', {}).get('transport', {}).get('formula_based_transport', {})
+        
+        # F_trip: 单次往返固定成本(元/趟)
+        F_trip = formula_config.get('trip_fixed_cost', 2000)
+        
+        # v_km: 单位里程变动成本(元/公里) 
+        v_km = formula_config.get('variable_cost_per_km', 15.0)
+        
+        # Q_kg: 实际装载质量(kg)
+        vehicle_payload_kg = formula_config.get('vehicle_payload_kg', 25000)
+        utilization_rate = formula_config.get('utilization_rate', 0.8)
+        Q_kg = vehicle_payload_kg * utilization_rate
+        
+        # 应用运输成本公式: c_kg(S) = F_trip/Q_kg + v_km/Q_kg * S
+        fixed_cost_per_kg = F_trip / Q_kg  # 固定成本分摊到每kg
+        variable_cost_per_kg_km = v_km / Q_kg  # 变动成本分摊到每kg每km
+        
+        total_cost_per_kg = fixed_cost_per_kg + variable_cost_per_kg_km * distance_km
+        
+        return total_cost_per_kg
+    
     
     def _calculate_total_storage_cost_per_kg_hour(self) -> float:
         """计算总储存成本（基于实际储存的直接成本）"""
@@ -3478,16 +3464,16 @@ class NaturalGasSupplyChainOptimizer:
         for location in self.locations:
             for tech in self.technologies:
                 if (location, tech) in self.facility_vars and self.facility_vars[(location, tech)].x > 0.5:
-                    # 从配置文件读取投资成本参数
-                    investment_config = self.config.get('operational_parameters', {}).get('facility_investment', {})
-                    fixed_investment = investment_config.get('fixed_investment', 2000000)  # 固定投资
-                    variable_investment_per_capacity = investment_config.get('variable_investment_per_capacity', 8000)  # 单位产能投资
-                    fixed_opex_annual = investment_config.get('fixed_opex_annual', 1000000)  # 固定运营成本
+                    # 使用与目标函数相同的配置参数（避免重复定义）
+                    fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
+                    fixed_capex = fac_cfg.get('fixed_capex', 20000000)  # 固定投资
+                    variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 20000)  # 单位产能投资
+                    fixed_opex_annual = fac_cfg.get('fixed_opex_annual', 1000000)  # 固定运营成本
                     
                     # 投资成本
-                    variable_investment = (self.facility_capacity_vars[(location, tech)].x * variable_investment_per_capacity * 
+                    variable_investment = (self.facility_capacity_vars[(location, tech)].x * variable_capex_per_capacity * 
                                          self.economic_params['mtj_plant_capacity_factor'])
-                    facility_investment_total += fixed_investment + variable_investment
+                    facility_investment_total += fixed_capex + variable_investment
                     
                     # 运营成本（20年现值）
                     facility_operation_total += fixed_opex_annual * present_value_factor
@@ -3505,10 +3491,10 @@ class NaturalGasSupplyChainOptimizer:
         for (location, airport, week), var in self.transport_vars.items():
             if var.x > 0:
                 transport_equipment_total += var.x * 0.01  # 设备投资
+                distance_km = self._calculate_distance(location, airport)
                 transport_operation_total += (var.x * 
-                    self._calculate_distance(location, airport) * 
-                    self._calculate_levelized_transport_cost() * 
-                    operation_expansion_factor * present_value_factor)  # 20年运营成本现值
+                    self._calculate_mtj_transport_cost_by_distance(distance_km) * 
+                    operation_expansion_factor * present_value_factor)  # 基于运输理论公式的20年运营成本现值
         
         breakdown["transport_equipment_cost"] = transport_equipment_total
         breakdown["transport_operation_cost"] = transport_operation_total
@@ -4700,7 +4686,7 @@ class NaturalGasSupplyChainOptimizer:
         for airport in self.airports:
             distance = self._calculate_distance(location, airport)
             airport_demand = sum(self.airports[airport]['weekly_demand_series']) * 52
-            transport_cost = distance * self._calculate_levelized_transport_cost() * airport_demand
+            transport_cost = self._calculate_mtj_transport_cost_by_distance(distance) * airport_demand
             total_transport_cost += transport_cost
         supply_costs['transport_cost_yuan'] = total_transport_cost
         
