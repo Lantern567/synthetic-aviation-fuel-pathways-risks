@@ -1836,6 +1836,49 @@ class NaturalGasSupplyChainOptimizer:
         
         logger.info(f"创建了 {valid_ng_routes} 条天然气运输路线（无距离限制）")
         
+        # 10. 创建氢能管道运输变量 (与罐车运输并行的选择方案)
+        logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
+        
+        self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量
+        self.hydrogen_pipeline_facility_vars = {}   # 氢能管道建设决策变量 (二进制)
+        
+        valid_pipeline_routes = 0  # 计数有效管道路线
+        total_days = self.total_hours // 24
+        
+        for h2_loc in self.hydrogen_locations:
+            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
+                # 只为需要氢气运输的技术路线创建管道变量
+                if tech not in self.technologies:
+                    continue
+                    
+                if not self.technologies[tech]['hydrogen_transport_required']:
+                    continue
+                    
+                if tech not in self.mtj_locations:
+                    continue
+                    
+                locations = self.mtj_locations[tech]
+                if not hasattr(locations, '__iter__') or isinstance(locations, str):
+                    continue
+                
+                for mtj_loc in locations:
+                    # 管道建设决策变量 (每条路线一个二进制变量)
+                    pipeline_facility_name = f"h2_pipeline_facility_{h2_loc}_{mtj_loc}"
+                    self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] = self.model.addVar(
+                        vtype=GRB.BINARY, name=pipeline_facility_name
+                    )
+                    
+                    # 管道运输量变量 (天级)
+                    valid_pipeline_routes += 1
+                    for day in range(total_days):
+                        var_name = f"h2_pipeline_transport_{h2_loc}_{mtj_loc}_day_{day}"
+                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] = self.model.addVar(
+                            lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                        )
+        
+        logger.info(f"创建了 {valid_pipeline_routes} 条氢能管道运输路线")
+        logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")
+        
         logger.info(f"创建了 {len(self.production_vars)} 个生产变量")
         logger.info(f"创建了 {len(self.facility_vars)} 个设施变量")
         logger.info(f"创建了 {len(self.facility_capacity_vars)} 个设施产能变量")
@@ -1854,7 +1897,8 @@ class NaturalGasSupplyChainOptimizer:
                 )
         
         logger.info(f"创建了 {len(self.shortage_vars)} 个缺货惩罚变量")
-        logger.info(f"创建了 {len(self.hydrogen_transport_vars)} 个氢气运输变量")
+        logger.info(f"创建了 {len(self.hydrogen_transport_vars)} 个氢气罐车运输变量")
+        logger.info(f"创建了 {len(self.hydrogen_pipeline_transport_vars)} 个氢能管道运输变量")
         logger.info(f"创建了 {len(self.ng_transport_vars)} 个天然气运输变量")
     
     def _create_constraints(self):
@@ -1890,6 +1934,9 @@ class NaturalGasSupplyChainOptimizer:
         
         # 9. 氢气运输约束
         self._add_hydrogen_transport_constraints()
+        
+        # 9.1. 氢能管道运输约束
+        self._add_hydrogen_pipeline_transport_constraints()
         
         # 10. 天然气运输约束
         self._add_natural_gas_transport_constraints()
@@ -2448,15 +2495,119 @@ class NaturalGasSupplyChainOptimizer:
                     else:
                         hydrogen_demand = 0
                     
-                    # 氢气运输量必须满足需求
+                    # 氢气运输量必须满足需求（罐车 + 管道运输）
+                    transport_supply_terms = []
+                    
+                    # 罐车运输
+                    for h_loc in self.hydrogen_locations:
+                        if (h_loc, mtj_loc, day) in self.hydrogen_transport_vars:
+                            transport_supply_terms.append(self.hydrogen_transport_vars[(h_loc, mtj_loc, day)])
+                    
+                    # 管道运输
+                    if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                        for h_loc in self.hydrogen_locations:
+                            if (h_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
+                                transport_supply_terms.append(self.hydrogen_pipeline_transport_vars[(h_loc, mtj_loc, day)])
+                    
+                    if transport_supply_terms:
+                        self.model.addConstr(
+                            gp.quicksum(transport_supply_terms) >= hydrogen_demand,
+                            name=f"hydrogen_total_demand_satisfaction_{mtj_loc}_{tech}_day_{day}"
+                        )
+    
+    def _add_hydrogen_pipeline_transport_constraints(self):
+        """添加氢能管道运输约束"""
+        logger.info("添加氢能管道运输约束...")
+        
+        if not hasattr(self, 'hydrogen_pipeline_transport_vars') or not self.hydrogen_pipeline_transport_vars:
+            logger.info("无氢能管道运输变量，跳过管道运输约束")
+            return
+        
+        # 1. 管道建设决策约束：只有建设了管道才能进行运输
+        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_facility_vars:
+            total_days = self.total_hours // 24
+            for day in range(total_days):
+                if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
+                    # 管道运输量 <= 管道建设决策 * 大M（管道日最大容量）
+                    max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
                     self.model.addConstr(
-                        gp.quicksum(
-                            self.hydrogen_transport_vars[(h_loc, mtj_loc, day)]
-                            for h_loc in self.hydrogen_locations
-                            if (h_loc, mtj_loc, day) in self.hydrogen_transport_vars
-                        ) >= hydrogen_demand,
-                        name=f"hydrogen_demand_satisfaction_{mtj_loc}_{tech}_day_{day}"
+                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= 
+                        self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] * max_daily_pipeline_capacity,
+                        name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_day_{day}"
                     )
+        
+        # 2. 管道运输量约束：不超过氢气源地的生产能力
+        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
+            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
+                continue
+                
+            if tech not in self.mtj_locations:
+                continue
+                
+            locations = self.mtj_locations[tech]
+            if not hasattr(locations, '__iter__') or isinstance(locations, str):
+                continue
+                
+            for h2_loc in self.hydrogen_locations:
+                for mtj_loc in locations:
+                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_facility_vars:
+                        continue
+                        
+                    total_days = self.total_hours // 24
+                    for day in range(total_days):
+                        if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
+                            # 管道运输量 <= 该天氢气生产量
+                            day_start_hour = day * 24
+                            day_end_hour = min((day + 1) * 24, self.total_hours)
+                            daily_h2_production = gp.quicksum(
+                                self.hydrogen_production_vars[(h2_loc, hour)]
+                                for hour in range(day_start_hour, day_end_hour)
+                                if (h2_loc, hour) in self.hydrogen_production_vars
+                            )
+                            self.model.addConstr(
+                                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= daily_h2_production,
+                                name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_day_{day}"
+                            )
+        
+        # 3. 氢气运输方式排他性约束：同一路线只能选择罐车或管道运输之一
+        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
+            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
+                continue
+                
+            if tech not in self.mtj_locations:
+                continue
+                
+            locations = self.mtj_locations[tech]
+            if not hasattr(locations, '__iter__') or isinstance(locations, str):
+                continue
+                
+            for h2_loc in self.hydrogen_locations:
+                for mtj_loc in locations:
+                    total_days = self.total_hours // 24
+                    for day in range(total_days):
+                        # 如果两种运输方式的变量都存在，添加排他约束
+                        has_truck = (h2_loc, mtj_loc, day) in self.hydrogen_transport_vars
+                        has_pipeline = (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars
+                        
+                        if has_truck and has_pipeline:
+                            # 互斥约束1：如果选择了管道运输，则罐车运输为0
+                            max_truck_capacity = self.config.get('capacity_limits', {}).get('hydrogen_truck_max_daily_capacity_kg', 10000)
+                            self.model.addConstr(
+                                self.hydrogen_transport_vars[(h2_loc, mtj_loc, day)] <= 
+                                max_truck_capacity * (1 - self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)]),
+                                name=f"h2_truck_exclusive_{h2_loc}_{mtj_loc}_day_{day}"
+                            )
+                            
+                            # 互斥约束2：如果不选择管道运输，则管道运输为0
+                            max_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
+                            self.model.addConstr(
+                                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= 
+                                max_pipeline_capacity * self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)],
+                                name=f"h2_pipeline_exclusive_{h2_loc}_{mtj_loc}_day_{day}"
+                            )
+        
+        # 注意：氢气需求满足约束已在 _add_hydrogen_transport_constraints() 中统一处理
+        logger.info("氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）")
     
     def _add_natural_gas_transport_constraints(self):
         """添加天然气运输约束：天然气从管道通过罐车运输到非LNG接收站的MTJ工厂"""
@@ -2666,6 +2817,22 @@ class NaturalGasSupplyChainOptimizer:
             if (h_loc, mtj_loc, day) in self.hydrogen_transport_vars
         )
         
+        # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
+        hydrogen_pipeline_operation = 0
+        
+        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+            # 管道运输成本（基于图像拟合的成本函数，已包含所有投资和运营成本）
+            hydrogen_pipeline_operation = gp.quicksum(
+                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] * 
+                self._calculate_hydrogen_pipeline_cost_by_distance(
+                    self._calculate_location_distance(h2_loc, mtj_loc)
+                ) * lifecycle_operation_factor  # 20年运营成本现值
+                for h2_loc in self.hydrogen_locations
+                for mtj_loc in sum(self.mtj_locations.values(), [])
+                for day in range(total_days)
+                if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars
+            )
+        
         # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
         ng_transport_investment = 0  # 已包含在平准化天然气运输成本中
         # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
@@ -2775,8 +2942,8 @@ class NaturalGasSupplyChainOptimizer:
             # 运营成本（20年现值）
             facility_operation_cost + production_cost + transport_operation_cost + 
             storage_operation_cost + hydrogen_production_cost + h2_storage_operation + 
-            hydrogen_transport_operation + ng_transport_operation + natural_gas_cost + 
-            infrastructure_operation + shortage_cost + final_inventory_cost
+            hydrogen_transport_operation + hydrogen_pipeline_operation + ng_transport_operation + 
+            natural_gas_cost + infrastructure_operation + shortage_cost + final_inventory_cost
         )
         
         # 设置目标函数：最小化项目20年生命周期总成本
@@ -2898,6 +3065,65 @@ class NaturalGasSupplyChainOptimizer:
         
         # 兜底返回最后一个点的成本
         return data_points[-1][1]
+    
+    def _calculate_hydrogen_pipeline_cost_by_distance(self, distance_km: float) -> float:
+        """基于图像数据的氢能管道运输成本函数
+        
+        使用分段线性插值计算单位成本，然后转换为总运输成本
+        原始数据单位：元/(kg·百公里)，需要乘以实际距离转换为元/kg
+        
+        数据来源：管道输送氢气成本曲线（图表33）
+        原始数据点：(25km,1.91元/(kg·百公里)), (50km,1.04), (100km,0.56), 
+                   (200km,0.30), (300km,0.21), (400km,0.16), (500km,0.13)
+        
+        Args:
+            distance_km: 管道运输距离 (km)
+            
+        Returns:
+            float: 氢能管道运输总成本 (元/kg氢气) = 单位成本 × (距离÷100)
+        """
+        if distance_km <= 0:
+            return 0.0
+            
+        # 从配置文件读取数据点，如果不存在则使用默认数据点
+        cost_config = self.config.get('costs', {}).get('hydrogen_pipeline_costs', {}).get('transport_cost_function', {})
+        data_points = cost_config.get('data_points', [
+            [25, 1.91],   # 25km距离下的单位成本: 1.91元/(kg·百公里)
+            [50, 1.04],   # 50km距离下的单位成本: 1.04元/(kg·百公里)
+            [100, 0.56],  # 100km距离下的单位成本: 0.56元/(kg·百公里)
+            [200, 0.30],  # 200km距离下的单位成本: 0.30元/(kg·百公里)
+            [300, 0.21],  # 300km距离下的单位成本: 0.21元/(kg·百公里)
+            [400, 0.16],  # 400km距离下的单位成本: 0.16元/(kg·百公里)
+            [500, 0.13]   # 500km距离下的单位成本: 0.13元/(kg·百公里)
+        ])
+        
+        # 分段线性插值获取单位成本 [元/(kg·百公里)]
+        unit_cost_per_100km = 0.0
+        
+        for i in range(len(data_points) - 1):
+            x1, y1 = data_points[i]
+            x2, y2 = data_points[i + 1]
+            
+            if x1 <= distance_km <= x2:
+                # 线性插值公式: y = y1 + (y2-y1) * (x-x1) / (x2-x1)
+                if x2 == x1:  # 避免除零
+                    unit_cost_per_100km = y1
+                else:
+                    unit_cost_per_100km = y1 + (y2 - y1) * (distance_km - x1) / (x2 - x1)
+                break
+        else:
+            # 超出范围的处理
+            if distance_km < data_points[0][0]:
+                # 距离小于最小值，使用最小值的单位成本
+                unit_cost_per_100km = data_points[0][1]
+            else:
+                # 距离大于最大值，使用最大值的单位成本
+                unit_cost_per_100km = data_points[-1][1]
+        
+        # 单位转换：元/(kg·百公里) × (距离km ÷ 100) = 元/kg
+        total_transport_cost = unit_cost_per_100km * (distance_km / 100.0)
+        
+        return max(0, total_transport_cost)
     
     def _calculate_ng_transport_cost_by_distance(self, distance_km: float, daily_volume_m3: float = 10000) -> float:
         """基于LNG运输成本公式计算天然气运输成本
@@ -3428,6 +3654,14 @@ class NaturalGasSupplyChainOptimizer:
         # 添加成本细项分析
         cost_breakdown = self._calculate_cost_breakdown()
         solution['cost_breakdown'] = cost_breakdown
+        
+        # 计算不含短缺成本的生命周期平准化成本
+        shortage_penalty_cost = cost_breakdown.get('shortage_penalty_cost', 0)
+        total_cost_excluding_shortage = solution['objective_value_lifecycle_total'] - shortage_penalty_cost
+        if lifecycle_total_production > 0:
+            solution['lifecycle_levelized_cost_excluding_shortage_per_kg'] = total_cost_excluding_shortage / lifecycle_total_production
+        else:
+            solution['lifecycle_levelized_cost_excluding_shortage_per_kg'] = 0
 
         return solution
     
@@ -3542,6 +3776,30 @@ class NaturalGasSupplyChainOptimizer:
             hydrogen_transport_cost_total *= operation_expansion_factor * present_value_factor
         breakdown["hydrogen_transport_cost"] = hydrogen_transport_cost_total
         
+        # 氢能管道运输成本（20年现值）
+        hydrogen_pipeline_transport_cost_total = 0
+        hydrogen_pipeline_investment_cost_total = 0
+        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+            # 管道运输运营成本
+            total_days = self.total_hours // 24
+            for (h2_loc, mtj_loc, day), var in self.hydrogen_pipeline_transport_vars.items():
+                if var.x > 0:
+                    distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
+                    unit_cost = self._calculate_hydrogen_pipeline_cost_by_distance(distance_km)
+                    hydrogen_pipeline_transport_cost_total += var.x * unit_cost
+            hydrogen_pipeline_transport_cost_total *= operation_expansion_factor * present_value_factor
+            
+            # 管道建设投资成本
+            if hasattr(self, 'hydrogen_pipeline_facility_vars'):
+                pipeline_capex = self.config.get('costs', {}).get('hydrogen_pipeline_costs', {}).get('capex_yuan_per_km', 5000000)
+                for (h2_loc, mtj_loc), var in self.hydrogen_pipeline_facility_vars.items():
+                    if var.x > 0.5:  # 建设了管道
+                        distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
+                        hydrogen_pipeline_investment_cost_total += distance_km * pipeline_capex
+        
+        breakdown["hydrogen_pipeline_transport_cost"] = hydrogen_pipeline_transport_cost_total
+        breakdown["hydrogen_pipeline_investment_cost"] = hydrogen_pipeline_investment_cost_total
+        
         # 天然气运输成本（20年现值）
         ng_transport_cost_total = 0
         if hasattr(self, 'ng_transport_vars'):
@@ -3625,12 +3883,17 @@ class NaturalGasSupplyChainOptimizer:
         
         # 保存主要结果到CSV
         cost_breakdown = solution.get("cost_breakdown", {})
+        
+        # 从solution中获取不含短缺成本的平准化成本
+        lifecycle_levelized_cost_excluding_shortage = solution.get("lifecycle_levelized_cost_excluding_shortage_per_kg", 0)
+        
         results_summary = {
             "优化状态": [solution.get("optimization_status", "未知")],
             "生命周期总成本(元)": [solution.get("objective_value_lifecycle_total", 0)],
             "年化成本(元/年)": [solution.get("objective_value_lifecycle_total", 0) / solution.get("project_lifespan_years", 20)],
             "生命周期平准化成本(元/kg)": [solution.get("lifecycle_levelized_cost_per_kg", 0)],
             "年化平准化成本(元/kg)": [solution.get("annual_levelized_cost_per_kg", 0)],
+            "生命周期平准化成本_不含短缺(元/kg)": [lifecycle_levelized_cost_excluding_shortage],
             
             # 成本细项 - 建设投资成本
             "MTJ工厂建设投资(元)": [cost_breakdown.get("facility_investment_cost", 0)],
@@ -3643,7 +3906,9 @@ class NaturalGasSupplyChainOptimizer:
             "MTJ工厂运营成本(元)": [cost_breakdown.get("facility_operation_cost", 0)],
             "MTJ生产运营成本(元)": [cost_breakdown.get("production_operational_cost", 0)],
             "氢气制取成本(元)": [cost_breakdown.get("hydrogen_production_cost", 0)],
-            "氢气运输成本(元)": [cost_breakdown.get("hydrogen_transport_cost", 0)],
+            "氢气罐车运输成本(元)": [cost_breakdown.get("hydrogen_transport_cost", 0)],
+            "氢能管道运输成本(元)": [cost_breakdown.get("hydrogen_pipeline_transport_cost", 0)],
+            "氢能管道建设投资(元)": [cost_breakdown.get("hydrogen_pipeline_investment_cost", 0)],
             "天然气运输成本(元)": [cost_breakdown.get("ng_transport_cost", 0)],
             "天然气原料成本(元)": [cost_breakdown.get("natural_gas_raw_material_cost", 0)],
             "MTJ运输运营成本(元)": [cost_breakdown.get("transport_operation_cost", 0)],
