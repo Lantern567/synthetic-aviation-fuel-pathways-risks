@@ -1523,9 +1523,6 @@ class NaturalGasSupplyChainOptimizer:
             'storage_capex_raw': equipment_costs['storage']['capex_raw'],
             'storage_opex_raw': equipment_costs['storage']['opex_raw'],
             
-            # 运输设施原始成本
-            'transport_vehicle_capex_raw': equipment_costs['transport_vehicle']['capex_raw'],
-            'transport_vehicle_opex_raw': equipment_costs['transport_vehicle']['opex_raw'],
             
             # 基础设施原始成本 (元)
             'infrastructure_capex_raw': infrastructure_costs['capex'],
@@ -2842,6 +2839,16 @@ class NaturalGasSupplyChainOptimizer:
         # 为每条路线计算基于实际日输送量的运输成本
         for ng_loc in self.ng_locations:
             for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                # 检查该MTJ位置是否属于机场集成转换
+                is_airport_integrated = False
+                if 'airport_integrated_conversion' in self.non_lng_mtj_locations:
+                    if mtj_loc in self.non_lng_mtj_locations['airport_integrated_conversion']:
+                        is_airport_integrated = True
+                
+                # 机场集成转换模式下天然气运输成本为0，跳过计算
+                if is_airport_integrated:
+                    continue
+                    
                 distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
                 
                 # 计算每天该路线的运输量，用于确定日输送量q
@@ -2892,6 +2899,16 @@ class NaturalGasSupplyChainOptimizer:
                         # 将成本分摊到各运输路线
                         for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
                             if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                                # 检查该MTJ位置是否属于机场集成转换
+                                is_airport_integrated = False
+                                if 'airport_integrated_conversion' in self.non_lng_mtj_locations:
+                                    if mtj_loc in self.non_lng_mtj_locations['airport_integrated_conversion']:
+                                        is_airport_integrated = True
+                                
+                                # 机场集成转换模式下天然气运输成本为0，跳过规模经济成本计算
+                                if is_airport_integrated:
+                                    continue
+                                    
                                 transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
                                 # 每单位运输量承担的规模经济成本
                                 ng_transport_operation += transport_var * scale_economy_cost * lifecycle_operation_factor
