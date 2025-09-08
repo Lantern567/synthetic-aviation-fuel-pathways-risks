@@ -1057,14 +1057,90 @@ unified_costs:
                                                      # ■ 包含：维护、监控、人工、保险等
 
 # =============================================================================
-# 17. 配置元数据 (Configuration Metadata)  
+# 17. 数据路径配置 (Data Paths Configuration)
+# 所有数据文件的路径配置，支持相对路径和绝对路径
+# =============================================================================
+data_paths:
+  # -------------------------------------------------------------------------
+  # 基础数据文件路径配置
+  # -------------------------------------------------------------------------
+  base_data_dir: "products"                                    # 基础数据目录
+  
+  # -------------------------------------------------------------------------
+  # 机场和航空燃料数据
+  # -------------------------------------------------------------------------
+  aviation_data:
+    # 机场Excel数据文件
+    airport_excel_path: "products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx"
+    
+    # 备用机场数据文件
+    backup_airport_excel_path: "products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx"
+    
+    # 可再生能源发电数据目录
+    wind_data_dir: "products/aviation_fuel_analysis/resource_flight_data_process/results/3hourly_generation"
+    solar_data_dir: "products/aviation_fuel_analysis/resource_flight_data_process/results/solar_generation"
+  
+  # -------------------------------------------------------------------------
+  # GIS能源基础设施数据
+  # -------------------------------------------------------------------------
+  gis_data:
+    # 天然气管道数据
+    ng_pipelines_preprocessed: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/natural_gas_pipelines_with_capacity.xlsx"
+    ng_pipelines_integrated: "products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/integrated_gas_pipeline_price_data_with_coords.csv"
+    ng_pipelines_original: "products/gis_energy_mapping/scraped_gis_data/natural_gas_pipelines.csv"
+    
+    # LNG接收站数据
+    lng_terminals_preprocessed: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/lng_terminals_with_capacity.xlsx"
+    lng_terminals_original: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/lng_terminals.csv"
+    
+    # 可再生能源发电站数据（由内存DataFrame提供，无固定文件路径）
+    renewable_plants_cache_prefix: "temp_renewable"
+  
+  # -------------------------------------------------------------------------
+  # 结果输出路径配置
+  # -------------------------------------------------------------------------
+  output_paths:
+    # 结果文件基础目录
+    results_base_dir: "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results"
+    
+    # 结果文件命名模板（使用timestamp占位符）
+    file_templates:
+      optimization_summary: "optimization_summary_{timestamp}.csv"
+      facility_decisions: "facility_decisions_{timestamp}.csv"
+      mtj_transport_plan: "mtj_transport_plan_{timestamp}.csv"
+      hydrogen_transport_plan: "hydrogen_transport_plan_{timestamp}.csv"
+      ng_transport_plan: "ng_transport_plan_{timestamp}.csv"
+      inventory_levels: "inventory_levels_{timestamp}.csv"
+      transport_summary: "transport_summary_{timestamp}.csv"
+      renewable_energy_plants: "renewable_energy_plants_{timestamp}.csv"
+      lng_terminals: "lng_terminals_{timestamp}.csv"
+      ng_pipelines: "ng_pipelines_{timestamp}.csv"
+      airports: "airports_{timestamp}.csv"
+      infrastructure_summary: "infrastructure_summary_{timestamp}.csv"
+      infrastructure_selection_stats: "infrastructure_selection_stats_{timestamp}.csv"
+      complete_solution: "complete_solution_{timestamp}.json"
+  
+  # -------------------------------------------------------------------------
+  # 缓存配置
+  # -------------------------------------------------------------------------
+  cache_settings:
+    # 过滤数据缓存目录
+    filtered_cache_dir: "cache/filtered_500km_data"
+    
+    # GraphHopper路由缓存目录
+    graphhopper_cache_dir: "shared/data/cache/graphhopper_routes"
+
+# =============================================================================
+# 18. 配置元数据 (Configuration Metadata)  
 # =============================================================================
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   created_date: "2025-01-09"
+  last_updated: "2025-09-08"
   description: "NaturalGasSupplyChainOptimizer综合参数配置文件"
   author: "系统自动生成"
   notes: |
     此配置文件包含了NaturalGasSupplyChainOptimizer类的所有参数配置。
     修改此文件可以调整优化器的行为，无需修改源代码。
-    参数分为10个主要类别，涵盖了经济、技术、成本等各个方面。
+    参数分为18个主要类别，涵盖了经济、技术、成本、数据路径等各个方面。
+    v1.1.0更新: 添加了数据路径配置section，支持pipeline式数据导入。

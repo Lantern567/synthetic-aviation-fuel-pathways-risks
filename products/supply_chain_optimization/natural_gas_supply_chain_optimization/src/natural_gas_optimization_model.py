@@ -127,6 +127,83 @@ except Exception:
     pass
 
 class NaturalGasSupplyChainOptimizer:
+    def _get_data_path(self, path_key: str, fallback_path: str = None) -> str:
+        """
+        从配置文件获取数据路径，支持相对路径自动转换为绝对路径
+        
+        Args:
+            path_key: 配置文件中的路径键，支持点号分隔的嵌套键（如'aviation_data.airport_excel_path'）
+            fallback_path: 当配置中找不到路径时的后备路径
+            
+        Returns:
+            绝对路径字符串
+        """
+        try:
+            # 解析嵌套的配置键
+            keys = path_key.split('.')
+            current_config = self.config.get('data_paths', {})
+            
+            for key in keys:
+                if isinstance(current_config, dict) and key in current_config:
+                    current_config = current_config[key]
+                else:
+                    logger.warning(f"配置路径 '{path_key}' 未找到，使用后备路径")
+                    if fallback_path is None:
+                        raise ValueError(f"配置路径 '{path_key}' 不存在且未提供后备路径")
+                    current_config = fallback_path
+                    break
+            
+            if not isinstance(current_config, str):
+                raise ValueError(f"配置路径 '{path_key}' 的值不是字符串类型")
+            
+            # 转换为绝对路径
+            if os.path.isabs(current_config):
+                return current_config
+            else:
+                project_root = get_project_base_dir()
+                return os.path.join(project_root, current_config)
+        except Exception as e:
+            logger.error(f"获取数据路径失败: {e}")
+            if fallback_path:
+                project_root = get_project_base_dir()
+                return os.path.join(project_root, fallback_path) if not os.path.isabs(fallback_path) else fallback_path
+            raise
+    
+    def _get_output_path(self, file_type: str, timestamp: str = None) -> str:
+        """
+        获取结果输出文件的完整路径
+        
+        Args:
+            file_type: 文件类型（如'optimization_summary'）
+            timestamp: 时间戳，如果为None则生成当前时间戳
+            
+        Returns:
+            完整的输出文件路径
+        """
+        if timestamp is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        try:
+            # 获取结果基础目录
+            results_dir = self._get_data_path('output_paths.results_base_dir', 
+                                            'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results')
+            
+            # 获取文件名模板
+            file_templates = self.config.get('data_paths', {}).get('output_paths', {}).get('file_templates', {})
+            template = file_templates.get(file_type, f"{file_type}_{timestamp}.csv")
+            
+            # 格式化文件名
+            filename = template.format(timestamp=timestamp)
+            
+            return os.path.join(results_dir, filename)
+        except Exception as e:
+            logger.error(f"获取输出路径失败: {e}")
+            # 使用默认路径
+            project_root = get_project_base_dir()
+            results_dir = os.path.join(project_root, "products", "supply_chain_optimization", 
+                                     "natural_gas_supply_chain_optimization", "results")
+            return os.path.join(results_dir, f"{file_type}_{timestamp}.csv")
+
     def _load_config(self, config_path: str = None, override_params: dict = None) -> dict:
         """
         加载配置文件
@@ -349,14 +426,32 @@ class NaturalGasSupplyChainOptimizer:
 
         logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
     
-    def load_data_from_excel(self, airport_excel_path: str, renewable_data: pd.DataFrame = None):
+    def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
         """
-        从Excel文件加载机场数据
+        从Excel文件加载机场数据（支持从配置文件自动获取路径）
         
         Args:
-            airport_excel_path: 机场数据Excel文件路径
+            airport_excel_path: 机场数据Excel文件路径，如果为None则从配置文件获取
             renewable_data: 可再生能源数据(如果为None，将创建示例数据)
         """
+        
+        # 如果未提供路径，从配置文件获取
+        if airport_excel_path is None:
+            try:
+                airport_excel_path = self._get_data_path('aviation_data.airport_excel_path')
+                logger.info(f"从配置文件获取机场数据路径: {airport_excel_path}")
+            except Exception as e:
+                logger.error(f"从配置文件获取机场数据路径失败: {e}")
+                # 使用备用路径
+                try:
+                    airport_excel_path = self._get_data_path('aviation_data.backup_airport_excel_path')
+                    logger.info(f"使用备用机场数据路径: {airport_excel_path}")
+                except Exception as e2:
+                    logger.error(f"获取备用机场数据路径也失败: {e2}")
+                    logger.info("使用传统的airport_data数据")
+                    self._load_traditional_airport_data()
+                    return
+        
         logger.info(f"从Excel文件加载数据: {airport_excel_path}")
         
         # 读取Excel数据 - 尝试读取All_Airports工作表，如果失败则读取默认工作表
@@ -794,10 +889,18 @@ class NaturalGasSupplyChainOptimizer:
         """
         logger.info("加载真实的可再生能源数据...")
         
-        # 使用相对路径
-        base_dir = get_project_base_dir()
-        wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
-        solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
+        # 从配置文件获取数据目录路径
+        try:
+            wind_data_dir = self._get_data_path('aviation_data.wind_data_dir')
+            solar_data_dir = self._get_data_path('aviation_data.solar_data_dir')
+            logger.info(f"从配置文件获取数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
+        except Exception as e:
+            logger.error(f"从配置文件获取数据目录失败: {e}")
+            # 使用默认相对路径
+            base_dir = get_project_base_dir()
+            wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
+            solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
+            logger.info(f"使用默认数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
         
         # 检查数据目录是否存在
         if not os.path.exists(wind_data_dir):
@@ -3935,7 +4038,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 保存优化总结
         summary_df = pd.DataFrame(results_summary)
-        summary_path = os.path.join(output_dir, f"optimization_summary_{timestamp}.csv")
+        summary_path = self._get_output_path('optimization_summary', timestamp)
         summary_df.to_csv(summary_path, index=False, encoding='utf-8-sig')
         print(f"优化总结保存到: {summary_path}")
         
@@ -3957,7 +4060,7 @@ class NaturalGasSupplyChainOptimizer:
         
         if facilities_data:
             facilities_df = pd.DataFrame(facilities_data)
-            facilities_path = os.path.join(output_dir, f"facility_decisions_{timestamp}.csv")
+            facilities_path = self._get_output_path('facility_decisions', timestamp)
             facilities_df.to_csv(facilities_path, index=False, encoding='utf-8-sig')
             print(f"设施决策保存到: {facilities_path}")
 
@@ -4311,9 +4414,14 @@ class NaturalGasSupplyChainOptimizer:
             project_root = get_project_base_dir()
             
             # 优先使用预处理的容量数据文件
-            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                           "gis_data_scraper", "scraped_gis_data", 
-                                           "natural_gas_pipelines_with_capacity.xlsx")
+            try:
+                preprocessed_file = self._get_data_path('gis_data.ng_pipelines_preprocessed')
+                logger.info(f"从配置文件获取预处理管道数据路径: {preprocessed_file}")
+            except Exception as e:
+                logger.error(f"从配置文件获取预处理管道数据路径失败: {e}")
+                preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
+                                               "gis_data_scraper", "scraped_gis_data", 
+                                               "natural_gas_pipelines_with_capacity.xlsx")
             
             if os.path.exists(preprocessed_file):
                 logger.info("使用预处理的天然气管道容量数据")
@@ -4330,9 +4438,14 @@ class NaturalGasSupplyChainOptimizer:
             else:
                 # 备用方案：使用原有的集成数据文件
                 logger.warning("预处理容量数据文件不存在，使用原有集成数据")
-                integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                             "natural_gas_supply_chain_optimization", "data", 
-                                             "integrated_gas_pipeline_price_data_with_coords.csv")
+                try:
+                    integrated_file = self._get_data_path('gis_data.ng_pipelines_integrated')
+                    logger.info(f"从配置文件获取集成管道数据路径: {integrated_file}")
+                except Exception as e:
+                    logger.error(f"从配置文件获取集成管道数据路径失败: {e}")
+                    integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
+                                                 "natural_gas_supply_chain_optimization", "data", 
+                                                 "integrated_gas_pipeline_price_data_with_coords.csv")
                 if not os.path.exists(integrated_file):
                     logger.error(f"集成天然气数据文件不存在: {integrated_file}")
                     self._load_original_pipeline_data()
@@ -5336,12 +5449,9 @@ if __name__ == '__main__':
         
         # 2. 加载数据
         # 使用内置的真实数据加载逻辑，无需传入额外参数
-        # 构建相对路径到机场数据文件
-        airport_excel_path = os.path.join(str(base_dir), "products", "aviation_fuel_analysis", 
-                                        "resource_flight_data_process", "results", "flights_beijing_tianjing",
-                                        "all_airports_weekly_parameters_20250726_142747.xlsx")   
+        # 使用配置文件中的路径加载数据（如果传入airport_excel_path=None，会自动从配置文件获取）
         optimizer.load_data_from_excel(
-            airport_excel_path=airport_excel_path
+            airport_excel_path=None  # 从配置文件自动获取路径
         )
         
         # 3. 构建模型
