@@ -1501,13 +1501,19 @@ class NaturalGasSupplyChainOptimizer:
         # 从配置文件加载成本参数
         cost_config = self.config['cost_parameters']
         equipment_costs = self.config['equipment_raw_costs']
-        infrastructure_costs = self.config['infrastructure_costs']
         
         # 定义原始资本和运营成本数据
         raw_costs = {
             # 原料成本 (元/单位) - 运营成本，无需平准化
-            'natural_gas_price_yuan_per_m3': cost_config['raw_materials']['natural_gas_price_yuan_per_m3'],
-            'hydrogen_market_price_yuan_per_kg': cost_config['raw_materials']['hydrogen_market_price_yuan_per_kg'],
+            # 优先使用统一成本配置，向后兼容原有配置
+            'natural_gas_price_yuan_per_m3': (
+                cost_config.get('unified_costs', {}).get('raw_materials', {}).get('natural_gas_base_price_yuan_per_m3') or
+                cost_config['raw_materials']['natural_gas_price_yuan_per_m3']
+            ),
+            'hydrogen_market_price_yuan_per_kg': (
+                cost_config.get('unified_costs', {}).get('raw_materials', {}).get('hydrogen_market_price_yuan_per_kg') or
+                cost_config['raw_materials']['hydrogen_market_price_yuan_per_kg']
+            ),
             'renewable_electricity_cost_yuan_per_mwh': cost_config['raw_materials']['renewable_electricity_cost_yuan_per_mwh'],
             
             # MTJ生产设施原始成本（基于工程估算）
@@ -1519,14 +1525,15 @@ class NaturalGasSupplyChainOptimizer:
             'electrolyzer_capex_raw': equipment_costs['electrolyzer']['capex_raw'],
             'electrolyzer_opex_raw': equipment_costs['electrolyzer']['opex_raw'],
             
-            # 储存设施原始成本
-            'storage_capex_raw': equipment_costs['storage']['capex_raw'],
-            'storage_opex_raw': equipment_costs['storage']['opex_raw'],
-            
-            
-            # 基础设施原始成本 (元)
-            'infrastructure_capex_raw': infrastructure_costs['capex'],
-            'infrastructure_opex_raw': infrastructure_costs['opex']
+            # 储存设施原始成本 - 优先使用统一成本配置
+            'storage_capex_raw': (
+                cost_config.get('unified_costs', {}).get('storage', {}).get('facility_investment_yuan_per_kg') or
+                equipment_costs['storage']['capex_raw']
+            ),
+            'storage_opex_raw': (
+                cost_config.get('unified_costs', {}).get('storage', {}).get('facility_operation_yuan_per_kg_year') or
+                equipment_costs['storage']['opex_raw']
+            )
         }
         
         # 计算平准化成本参数
@@ -1542,9 +1549,6 @@ class NaturalGasSupplyChainOptimizer:
             'hydrogen_market_price_yuan_per_kg': raw_costs['hydrogen_market_price_yuan_per_kg'],
             'renewable_electricity_cost_yuan_per_mwh': raw_costs['renewable_electricity_cost_yuan_per_mwh'],
             
-            # 天然气获取成本（保持运营成本）
-            'ng_pipeline_cost_yuan_per_mcm': cost_config['natural_gas_supply']['ng_pipeline_cost_yuan_per_mcm'],
-            'lng_cost_yuan_per_mcm': cost_config['natural_gas_supply']['lng_cost_yuan_per_mcm'],
             
             # 电解制氢参数
             'electrolysis_efficiency': cost_config['electrolysis']['electrolysis_efficiency'],
@@ -1610,18 +1614,6 @@ class NaturalGasSupplyChainOptimizer:
         )
         self.costs['storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 小时成本
         self.costs['hydrogen_storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 氢气储存
-        
-        # 基础设施平准化维护成本
-        self.costs['infrastructure_maintenance_yuan_per_year'] = {}
-        for mode in raw_costs['infrastructure_capex_raw']:
-            infrastructure_levelized_cost = self._calculate_levelized_cost(
-                capex=raw_costs['infrastructure_capex_raw'][mode],
-                opex_annual=raw_costs['infrastructure_opex_raw'][mode],
-                lifetime_years=self.economic_params['pipeline_lifetime'],
-                discount_rate=discount_rate,
-                capacity_factor=self.economic_params['pipeline_capacity_factor']
-            )
-            self.costs['infrastructure_maintenance_yuan_per_year'][mode] = infrastructure_levelized_cost
     
     def _estimate_mtj_production_costs(self):
         """
@@ -2757,7 +2749,11 @@ class NaturalGasSupplyChainOptimizer:
             for location in self.locations
             for hour in range(self.total_hours + 1)
         )
-        storage_unit_cost = float(storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10))
+        # 优先使用统一成本配置中的MTJ储存设备成本
+        storage_unit_cost = float(
+            self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
+            storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
+        )
         storage_equipment_cost = max_storage_needed * storage_unit_cost
         storage_operation_cost = gp.quicksum(
             self.storage_vars[(location, hour)] * 
@@ -2774,8 +2770,10 @@ class NaturalGasSupplyChainOptimizer:
             if location in self.electrolyzer_capacity_vars
         )
         
-        # 7. 制氢运营成本（20年生命周期现值）
-        hydrogen_production_unit_cost = float(obj_cfg.get('hydrogen_production_cost_yuan_per_kg', 50))
+        # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
+        hydrogen_production_unit_cost = float(
+            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
+        )
         hydrogen_production_cost = gp.quicksum(
         self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
         for location in self.locations
@@ -2783,14 +2781,28 @@ class NaturalGasSupplyChainOptimizer:
         if (location, hour) in self.hydrogen_production_vars
         )
         
-        # 8. 氢气储存投资 + 20年运营成本现值
+        # 8. 电解制氢电力成本（20年生命周期现值）
+        electricity_cost = gp.quicksum(
+            self.hydrogen_production_vars[(location, hour)] * 
+            self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
+            self.costs['renewable_electricity_cost_yuan_per_mwh'] * lifecycle_operation_factor
+            for location in self.locations
+            for hour in range(self.total_hours)
+            if (location, hour) in self.hydrogen_production_vars
+        )
+        
+        # 9. 氢气储存投资 + 20年运营成本现值
         max_h2_storage = gp.quicksum(
             self.hydrogen_storage_vars[(location, hour)]
             for location in self.locations
             for hour in range(self.total_hours + 1)
             if (location, hour) in self.hydrogen_storage_vars
         )
-        h2_storage_unit_cost = float(storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20))
+        # 优先使用统一成本配置中的氢气储存设备成本
+        h2_storage_unit_cost = float(
+            self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
+            storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
+        )
         h2_storage_investment = max_h2_storage * h2_storage_unit_cost
         h2_storage_operation = gp.quicksum(
             self.hydrogen_storage_vars[(location, hour)] * 
@@ -2916,22 +2928,6 @@ class NaturalGasSupplyChainOptimizer:
         # 11. 原料成本（20年生命周期现值）
         natural_gas_cost = self._calculate_natural_gas_cost() * lifecycle_operation_factor
         
-        # 12. 基础设施投资 + 20年维护成本现值
-        infrastructure_investment = gp.quicksum(
-            self.facility_vars[(location, tech)] * 500000  # 基础设施投资
-            for location in self.locations
-            for tech in self.technologies
-            if (location, tech) in self.facility_vars
-        )
-        infrastructure_operation = gp.quicksum(
-            self.facility_vars[(location, tech)] * 
-            self.costs['infrastructure_maintenance_yuan_per_year'][self.technologies[tech]['transport_mode']] * 
-            present_value_factor  # 20年维护成本现值
-            for location in self.locations
-            for tech in self.technologies
-            if (location, tech) in self.facility_vars and 
-               self.technologies[tech]['transport_mode'] in self.costs['infrastructure_maintenance_yuan_per_year']
-        )
         
         # 13. 短缺惩罚成本（20年生命周期现值）
         shortage_cost = 0
@@ -2954,13 +2950,13 @@ class NaturalGasSupplyChainOptimizer:
             # 投资成本（项目开始时）
             facility_investment_cost + transport_equipment_cost + storage_equipment_cost + 
             electrolyzer_investment_cost + h2_storage_investment + hydrogen_transport_investment + 
-            ng_transport_investment + infrastructure_investment +
+            ng_transport_investment +
             
             # 运营成本（20年现值）
             facility_operation_cost + production_cost + transport_operation_cost + 
-            storage_operation_cost + hydrogen_production_cost + h2_storage_operation + 
+            storage_operation_cost + hydrogen_production_cost + electricity_cost + h2_storage_operation + 
             hydrogen_transport_operation + hydrogen_pipeline_operation + ng_transport_operation + 
-            natural_gas_cost + infrastructure_operation + shortage_cost + final_inventory_cost
+            natural_gas_cost + shortage_cost + final_inventory_cost
         )
         
         # 设置目标函数：最小化项目20年生命周期总成本
@@ -3741,7 +3737,7 @@ class NaturalGasSupplyChainOptimizer:
         transport_operation_total = 0
         for (location, airport, week), var in self.transport_vars.items():
             if var.x > 0:
-                transport_equipment_total += var.x * 0.01  # 设备投资
+                transport_equipment_total += var.x * 0  # 设备投资已包含在平准化运输成本中
                 distance_km = self._calculate_distance(location, airport)
                 transport_operation_total += (var.x * 
                     self._calculate_mtj_transport_cost_by_distance(distance_km) * 
@@ -3778,8 +3774,23 @@ class NaturalGasSupplyChainOptimizer:
             total_h2_production = sum(
                 var.x for var in self.hydrogen_production_vars.values() if var.x > 0
         )
-            hydrogen_production_cost_total = total_h2_production * 50 * operation_expansion_factor * present_value_factor
+            # 使用统一成本配置的氢气生产成本，与目标函数保持一致
+            hydrogen_production_unit_cost = float(
+                self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
+            )
+            hydrogen_production_cost_total = total_h2_production * hydrogen_production_unit_cost * operation_expansion_factor * present_value_factor
         breakdown["hydrogen_production_cost"] = hydrogen_production_cost_total
+        
+        # 电解制氢电力成本（20年现值）
+        electricity_cost_total = 0
+        if hasattr(self, 'hydrogen_production_vars'):
+            total_h2_production = sum(
+                var.x for var in self.hydrogen_production_vars.values() if var.x > 0
+            )
+            # 计算总电力消耗成本（MWh）
+            total_electricity_consumption_mwh = total_h2_production * self.costs['electrolysis_power_consumption'] / 1000
+            electricity_cost_total = total_electricity_consumption_mwh * self.costs['renewable_electricity_cost_yuan_per_mwh'] * operation_expansion_factor * present_value_factor
+        breakdown["electricity_cost"] = electricity_cost_total
         
         # 氢气运输成本（20年现值）
         hydrogen_transport_cost_total = 0
@@ -3843,25 +3854,6 @@ class NaturalGasSupplyChainOptimizer:
             ) * operation_expansion_factor * present_value_factor
         breakdown["shortage_penalty_cost"] = shortage_cost_total
         
-        # 基础设施成本
-        infrastructure_investment_total = sum(
-            var.x * 500000  # 基础设施投资
-            for var in self.facility_vars.values()
-            if var.x > 0.5
-        )
-        infrastructure_operation_total = sum(
-            var.x * 
-            self.costs['infrastructure_maintenance_yuan_per_year'].get(
-                self.technologies[tech]['transport_mode'], 0
-            ) * present_value_factor
-            for (location, tech), var in self.facility_vars.items()
-            if var.x > 0.5 and self.technologies[tech]['transport_mode'] in 
-               self.costs['infrastructure_maintenance_yuan_per_year']
-        )
-        
-        breakdown["infrastructure_investment_cost"] = infrastructure_investment_total
-        breakdown["infrastructure_operation_cost"] = infrastructure_operation_total
-        
         # 计算总的生命周期成本
         total_lifecycle_cost = sum(
             cost for key, cost in breakdown.items() 
@@ -3917,7 +3909,6 @@ class NaturalGasSupplyChainOptimizer:
             "电解槽建设投资(元)": [cost_breakdown.get("electrolyzer_investment_cost", 0)],
             "运输设备投资(元)": [cost_breakdown.get("transport_equipment_cost", 0)],
             "MTJ储存设备投资(元)": [cost_breakdown.get("storage_equipment_cost", 0)],
-            "基础设施投资(元)": [cost_breakdown.get("infrastructure_investment_cost", 0)],
             
             # 成本细项 - 运营成本
             "MTJ工厂运营成本(元)": [cost_breakdown.get("facility_operation_cost", 0)],
@@ -3930,7 +3921,6 @@ class NaturalGasSupplyChainOptimizer:
             "天然气原料成本(元)": [cost_breakdown.get("natural_gas_raw_material_cost", 0)],
             "MTJ运输运营成本(元)": [cost_breakdown.get("transport_operation_cost", 0)],
             "MTJ储存运营成本(元)": [cost_breakdown.get("storage_operation_cost", 0)],
-            "基础设施运营成本(元)": [cost_breakdown.get("infrastructure_operation_cost", 0)],
             "短缺惩罚成本(元)": [cost_breakdown.get("shortage_penalty_cost", 0)],
             
             # 统计信息
@@ -4948,7 +4938,10 @@ class NaturalGasSupplyChainOptimizer:
             for h_loc in self.hydrogen_locations:
                 distance = self._calculate_location_distance(h_loc, location)
                 transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
-                h2_production_cost = 0  # 可再生能源制氢，边际成本为0
+                # 使用统一成本配置的氢气生产成本
+                h2_production_cost = float(
+                    self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
+                )
                 total_h2_cost = (h2_production_cost + transport_cost) * h2_consumption
                 min_h2_cost = min(min_h2_cost, total_h2_cost)
             
@@ -4960,8 +4953,17 @@ class NaturalGasSupplyChainOptimizer:
         ng_price = self._get_natural_gas_price_yuan_per_m3(location)
         supply_costs['natural_gas_cost_yuan'] = ng_consumption * ng_price
         
-        # 电力成本（可再生能源自发自用，成本为0）
-        supply_costs['electricity_cost_yuan'] = 0
+        # 电力成本（基于可再生能源边际成本）
+        electricity_cost_yuan = 0
+        
+        # 如果工艺需要制氢，计算电解制氢的电力成本
+        if tech_info.get('hydrogen_transport_required', False):
+            h2_consumption = total_production_kg * tech_info.get('h2_consumption_ratio', 0)
+            # 电解制氢耗电量 (MWh)
+            electricity_consumption_mwh = h2_consumption * self.costs['electrolysis_power_consumption'] / 1000
+            electricity_cost_yuan = electricity_consumption_mwh * self.costs['renewable_electricity_cost_yuan_per_mwh']
+        
+        supply_costs['electricity_cost_yuan'] = electricity_cost_yuan
         
         # 运输成本（到机场的平均运输成本）
         total_transport_cost = 0
