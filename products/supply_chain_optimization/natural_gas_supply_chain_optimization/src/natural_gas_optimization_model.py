@@ -532,19 +532,27 @@ class NaturalGasSupplyChainOptimizer:
             for plant_name in plant_names:
                 plant_data = filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name]
                 
-                # 取前total_hours小时数据
-                if len(plant_data) >= self.total_hours:
-                    hourly_data = plant_data.head(self.total_hours)
+                # 使用所有可用数据，不要求必须达到total_hours
+                if len(plant_data) > 0:
+                    # 如果数据超过total_hours，取前total_hours；否则使用全部数据
+                    hourly_data = plant_data.head(self.total_hours) if len(plant_data) >= self.total_hours else plant_data
                     
                     # 确定电站类型
                     plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
+                    
+                    # 获取发电量数据，如果不足total_hours则重复最后一个小时的数据
+                    generation_data = hourly_data['power_output_mw'].tolist()
+                    if len(generation_data) < self.total_hours:
+                        # 用最后一个有效值填充不足的小时数
+                        last_value = generation_data[-1] if generation_data else 0
+                        generation_data.extend([last_value] * (self.total_hours - len(generation_data)))
                     
                     self.locations[plant_name] = {
                         'type': plant_type,  # 'solar_plant' 或 'wind_farm'
                         'latitude': hourly_data.iloc[0].get('latitude', 30.0),
                         'longitude': hourly_data.iloc[0].get('longitude', 104.0),
                         'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                        'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW)
+                        'hourly_generation': generation_data,  # 每小时发电量 MWh (等价于平均功率 MW)
                     }
             
             logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站")
@@ -609,9 +617,10 @@ class NaturalGasSupplyChainOptimizer:
         for plant_name in renewable_data['plant_name'].unique():
             plant_data = renewable_data[renewable_data['plant_name'] == plant_name]
             
-            # 取前total_hours小时数据
-            if len(plant_data) >= self.total_hours:
-                hourly_data = plant_data.head(self.total_hours)
+            # 使用所有可用数据，不要求必须达到total_hours
+            if len(plant_data) > 0:
+                # 如果数据超过total_hours，取前total_hours；否则使用全部数据
+                hourly_data = plant_data.head(self.total_hours) if len(plant_data) >= self.total_hours else plant_data
                 
                 # 检查坐标是否在北京500公里范围内
                 plant_lat = hourly_data.iloc[0].get('latitude', 30.0)
@@ -625,12 +634,19 @@ class NaturalGasSupplyChainOptimizer:
                 # 确定电站类型
                 plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
                 
+                # 获取发电量数据，如果不足total_hours则重复最后一个小时的数据
+                generation_data = hourly_data['power_output_mw'].tolist()
+                if len(generation_data) < self.total_hours:
+                    # 用最后一个有效值填充不足的小时数
+                    last_value = generation_data[-1] if generation_data else 0
+                    generation_data.extend([last_value] * (self.total_hours - len(generation_data)))
+                
                 self.locations[plant_name] = {
                     'type': plant_type,  # 'solar_plant' 或 'wind_farm'
                     'latitude': hourly_data.iloc[0].get('latitude', 30.0),
                     'longitude': hourly_data.iloc[0].get('longitude', 104.0),
                     'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                    'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW)
+                    'hourly_generation': generation_data,  # 每小时发电量 MWh (等价于平均功率 MW)
                 }
         
         logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站（降级方法）")
@@ -939,7 +955,7 @@ class NaturalGasSupplyChainOptimizer:
         wind_data_list = []
         
         # 读取前几个风电数据文件（避免内存过载）
-        wind_files = [f for f in os.listdir(wind_data_dir) if f.endswith('.csv')][:10]  # 只读取前10个文件
+        wind_files = [f for f in os.listdir(wind_data_dir) if f.endswith('.csv')]  # 读取所有文件
         
         for file_name in wind_files:
             file_path = os.path.join(wind_data_dir, file_name)
@@ -949,11 +965,7 @@ class NaturalGasSupplyChainOptimizer:
                 # 数据预处理
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
                 
-                # 筛选2024年数据
-                df = df[df['timestamp'].dt.year == 2024]
-                
-                # 筛选前2周数据
-                df = df[df['timestamp'] < '2024-01-15']
+                # 使用所有可用数据，不做时间限制
                 
                 # 从3小时发电量插值到每小时发电量
                 df_hourly = self._interpolate_wind_to_hourly(df)
@@ -986,14 +998,14 @@ class NaturalGasSupplyChainOptimizer:
         
         solar_data_list = []
         
-        # 读取第一个月的所有批次文件
+        # 读取所有光伏数据文件
         all_files = os.listdir(solar_data_dir)
-        month01_files = [f for f in all_files if f.startswith('solar_generation_month01_batch_') and f.endswith('.csv')]
-        month01_files.sort()  # 按批次顺序排序
+        solar_files = [f for f in all_files if f.startswith('solar_generation_') and f.endswith('.csv')]
+        solar_files.sort()  # 按批次顺序排序
         
-        logger.info(f"找到 {len(month01_files)} 个第一个月的批次文件")
+        logger.info(f"找到 {len(solar_files)} 个光伏数据文件")
         
-        for file_name in month01_files:
+        for file_name in solar_files:
             file_path = os.path.join(solar_data_dir, file_name)
             try:
                 df = pd.read_csv(file_path)
@@ -1005,15 +1017,13 @@ class NaturalGasSupplyChainOptimizer:
                 available_years = df['timestamp'].dt.year.unique()
                 logger.info(f"文件 {file_name} 包含年份: {sorted(available_years)}")
                 
-                # 使用2020年1月的数据（第一个月的完整数据）
+                # 使用所有可用的数据
                 base_year = min(available_years)
-                start_date = f"{base_year}-01-01"
-                end_date = f"{base_year}-02-01"  # 整个1月
                 
-                df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] < end_date)].copy()
+                df_filtered = df.copy()  # 使用全部数据，不做时间范围限制
                 
                 if len(df_filtered) == 0:
-                    logger.warning(f"文件 {file_name} 在时间范围 {start_date} 到 {end_date} 内没有数据")
+                    logger.warning(f"文件 {file_name} 没有有效数据")
                     continue
                 
                 # 重命名列以统一格式
@@ -1023,13 +1033,12 @@ class NaturalGasSupplyChainOptimizer:
                 df_processed['generation_mwh'] = df_filtered['generation_1h_mwh']  # 每小时发电量(MWh)
                 df_processed['power_output_mw'] = df_filtered['generation_1h_mwh']  # 功率等于发电量/1小时 = MWh/h = MW
                 
-                # 创建hour列（从2020年1月1日开始计算）
-                start_time = pd.to_datetime(f"{base_year}-01-01")
+                # 创建hour列（使用数据中最早的时间作为起点）
+                start_time = df_processed['timestamp'].min()
                 df_processed['hour'] = (df_processed['timestamp'] - start_time).dt.total_seconds() // 3600
                 df_processed['hour'] = df_processed['hour'].astype(int)
                 
-                # 只保留前336小时（2周），如果数据超过这个范围
-                df_processed = df_processed[df_processed['hour'] < self.total_hours]
+                # 不再限制小时数，使用所有可用数据
                 
                 logger.info(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
                 solar_data_list.append(df_processed)
@@ -1039,7 +1048,7 @@ class NaturalGasSupplyChainOptimizer:
         
         if solar_data_list:
             solar_data = pd.concat(solar_data_list, ignore_index=True)
-            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(month01_files)} 个批次文件")
+            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(solar_files)} 个批次文件")
             
             # 统计光伏电站数量
             unique_plants = solar_data['plant_name'].nunique()
@@ -1076,16 +1085,16 @@ class NaturalGasSupplyChainOptimizer:
                 hour_timestamp = timestamp + pd.Timedelta(hours=i)
                 hour_from_start = (hour_timestamp - wind_df['timestamp'].min()).total_seconds() // 3600
                 
-                if hour_from_start < self.total_hours:
-                    hourly_data.append({
-                        'plant_name': row['farm_name'],
-                        'type': 'wind_farm',
-                        'latitude': row['latitude'],
-                        'longitude': row['longitude'],
-                        'capacity_mw': row['capacity_mw'],
-                        'power_output_mw': hourly_generation,  # 每小时发电量（使用最近的3小时数据）
-                        'hour': int(hour_from_start)
-                    })
+                # 不再限制小时数，使用所有可用数据
+                hourly_data.append({
+                    'plant_name': row['farm_name'],
+                    'type': 'wind_farm',
+                    'latitude': row['latitude'],
+                    'longitude': row['longitude'],
+                    'capacity_mw': row['capacity_mw'],
+                    'power_output_mw': hourly_generation,  # 每小时发电量（使用最近的3小时数据）
+                    'hour': int(hour_from_start)
+                })
         
         return pd.DataFrame(hourly_data)
     
@@ -3752,6 +3761,33 @@ class NaturalGasSupplyChainOptimizer:
                     'transport_type': 'NG',
                     'transport_mode': 'truck'
                 }
+
+        # 提取氢气管道运输计划（天级）
+        solution['hydrogen_pipeline_transport'] = {}
+        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+            for (h2_loc, mtj_loc, day), var in self.hydrogen_pipeline_transport_vars.items():
+                if var.x > 0:
+                    transport_key = f"{h2_loc}_{mtj_loc}_day_{day}"
+                    from_coords = self._get_location_coordinates(h2_loc)
+                    to_coords = self._get_location_coordinates(mtj_loc)
+                    
+                    # 获取真实路径坐标
+                    distance_km, route_coordinates = self._calculate_location_distance_with_route(h2_loc, mtj_loc)
+                    
+                    solution['hydrogen_pipeline_transport'][transport_key] = {
+                        'from_location': h2_loc,
+                        'to_location': mtj_loc,
+                        'day': day,
+                        'transport_kg_h2': var.x,
+                        'distance_km': distance_km,
+                        'from_latitude': from_coords[0],
+                        'from_longitude': from_coords[1],
+                        'to_latitude': to_coords[0],
+                        'to_longitude': to_coords[1],
+                        'route_coordinates': route_coordinates,
+                        'transport_type': 'H2',
+                        'transport_mode': 'pipeline'
+                    }
         
         # 提取库存信息
         solution['inventory'] = {}
@@ -4112,6 +4148,30 @@ class NaturalGasSupplyChainOptimizer:
             h2_transport_df.to_csv(h2_transport_path, index=False, encoding='utf-8-sig')
             print(f"氢气运输计划保存到: {h2_transport_path}")
 
+        # 保存氢气管道运输计划
+        h2_pipeline_transport_data = []
+        for transport_id, info in solution.get("hydrogen_pipeline_transport", {}).items():
+            h2_pipeline_transport_data.append({
+                "运输ID": transport_id,
+                "起点": info.get("from_location", ""),
+                "终点": info.get("to_location", ""),
+                "天": info.get("day", 0),
+                "氢气运输量(kg)": info.get("transport_kg_h2", 0),
+                "距离(km)": info.get("distance_km", 0),
+                "起点纬度": info.get("from_latitude", 0),
+                "起点经度": info.get("from_longitude", 0),
+                "终点纬度": info.get("to_latitude", 0),
+                "终点经度": info.get("to_longitude", 0),
+                "运输类型": info.get("transport_type", "H2"),
+                "运输方式": info.get("transport_mode", "pipeline")
+            })
+        
+        if h2_pipeline_transport_data:
+            h2_pipeline_transport_df = pd.DataFrame(h2_pipeline_transport_data)
+            h2_pipeline_transport_path = os.path.join(output_dir, f"hydrogen_pipeline_transport_plan_{timestamp}.csv")
+            h2_pipeline_transport_df.to_csv(h2_pipeline_transport_path, index=False, encoding='utf-8-sig')
+            print(f"氢气管道运输计划保存到: {h2_pipeline_transport_path}")
+
         # 保存天然气运输计划
         ng_transport_data = []
         for transport_id, info in solution.get("ng_transport", {}).items():
@@ -4178,7 +4238,7 @@ class NaturalGasSupplyChainOptimizer:
                 "时间单位": "周"
             })
         
-        # 添加氢气运输路径
+        # 添加氢气运输路径（罐车）
         for transport_id, info in solution.get("hydrogen_transport", {}).items():
             # 序列化路径坐标为JSON字符串
             route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
@@ -4195,6 +4255,27 @@ class NaturalGasSupplyChainOptimizer:
                 "路径坐标": route_coords_str,  # 新增：真实路径坐标
                 "货物类型": "氢气",
                 "运输方式": info.get("transport_mode", "truck"),
+                "日运输量(kg)": info.get("transport_kg_h2", 0),
+                "时间单位": "天"
+            })
+
+        # 添加氢气管道运输路径
+        for transport_id, info in solution.get("hydrogen_pipeline_transport", {}).items():
+            # 序列化路径坐标为JSON字符串
+            route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
+            
+            all_transport_summary.append({
+                "路径ID": transport_id,
+                "起点": info.get("from_location", ""),
+                "终点": info.get("to_location", ""),
+                "起点类型": "氢气生产站",
+                "终点类型": "MTJ工厂",
+                "距离(km)": info.get("distance_km", 0),
+                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
+                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
+                "路径坐标": route_coords_str,  # 新增：真实路径坐标
+                "货物类型": "氢气",
+                "运输方式": info.get("transport_mode", "pipeline"),
                 "日运输量(kg)": info.get("transport_kg_h2", 0),
                 "时间单位": "天"
             })
@@ -5443,7 +5524,7 @@ if __name__ == '__main__':
                                    "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf")
         
         optimizer = NaturalGasSupplyChainOptimizer(
-            time_horizon_weeks=1,
+            time_horizon_weeks=52,
             osm_pbf_path=osm_file_path
         )
         
