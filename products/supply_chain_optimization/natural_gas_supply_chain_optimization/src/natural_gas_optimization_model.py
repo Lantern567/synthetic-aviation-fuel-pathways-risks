@@ -19,6 +19,7 @@ import yaml
 from datetime import datetime
 try:
     from shared.utils.log_preserver import mount_file_logging
+    from shared.cost_analysis_engine import create_cost_analyzer
 except ModuleNotFoundError:
     import sys
     # 动态加入项目根目录到sys.path后重试
@@ -27,6 +28,7 @@ except ModuleNotFoundError:
     if project_root not in sys.path:
         sys.path.append(project_root)
     from shared.utils.log_preserver import mount_file_logging
+    from shared.cost_analysis_engine import create_cost_analyzer
 
 # 导入GraphHopper路径规划模块 - 必须可用
 try:
@@ -385,6 +387,9 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"OSM数据文件: {self.osm_pbf_path}")
         logger.info(f"GraphHopper服务: {self.graphhopper_host}:{self.graphhopper_port}")
         logger.info(f"最大运输距离限制: {self.max_transport_distance_km} 公里")
+        
+        # 初始化成本分析器（需要在成本参数定义后创建）
+        self.cost_analyzer = None
         logger.info(f"短距离路径规划精确计算: {self.use_routing_for_short_distance}")
         logger.info(f"配置文件加载完成: {len(self.config)} 个配置段")
     
@@ -1763,6 +1768,14 @@ class NaturalGasSupplyChainOptimizer:
         )
         self.costs['storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 小时成本
         self.costs['hydrogen_storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 氢气储存
+        
+        # 初始化成本分析器（成本参数定义完成后）
+        try:
+            self.cost_analyzer = create_cost_analyzer(self.config, self.costs, self.economic_params)
+            logger.info("成本分析器初始化成功")
+        except Exception as e:
+            logger.error(f"成本分析器初始化失败: {e}")
+            self.cost_analyzer = None
     
     def _estimate_mtj_production_costs(self):
         """
@@ -3878,13 +3891,15 @@ class NaturalGasSupplyChainOptimizer:
         cost_breakdown = self._calculate_cost_breakdown()
         solution['cost_breakdown'] = cost_breakdown
         
-        # 计算不含短缺成本的生命周期平准化成本
-        shortage_penalty_cost = cost_breakdown.get('shortage_penalty_cost', 0)
-        total_cost_excluding_shortage = solution['objective_value_lifecycle_total'] - shortage_penalty_cost
+        # 使用已经排除缺货成本的总成本（从cost_breakdown获取）
+        total_cost_excluding_shortage = cost_breakdown.get('total_lifecycle_cost', 0)
         if lifecycle_total_production > 0:
             solution['lifecycle_levelized_cost_excluding_shortage_per_kg'] = total_cost_excluding_shortage / lifecycle_total_production
         else:
             solution['lifecycle_levelized_cost_excluding_shortage_per_kg'] = 0
+        
+        # 更新主要的成本指标以反映不含缺货成本的值
+        solution['objective_value_lifecycle_total_excluding_shortage'] = total_cost_excluding_shortage
 
         return solution
     
@@ -4027,13 +4042,14 @@ class NaturalGasSupplyChainOptimizer:
                     hydrogen_pipeline_transport_cost_total += var.x * unit_cost
             hydrogen_pipeline_transport_cost_total *= operation_expansion_factor * present_value_factor
             
-            # 管道建设投资成本
-            if hasattr(self, 'hydrogen_pipeline_facility_vars'):
-                pipeline_capex = self.config.get('costs', {}).get('hydrogen_pipeline_costs', {}).get('capex_yuan_per_km', 5000000)
-                for (h2_loc, mtj_loc), var in self.hydrogen_pipeline_facility_vars.items():
-                    if var.x > 0.5:  # 建设了管道
-                        distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
-                        hydrogen_pipeline_investment_cost_total += distance_km * pipeline_capex
+            # 氢气管道建设投资成本已在成本分析引擎中考虑，此处不重复计算
+            # if hasattr(self, 'hydrogen_pipeline_facility_vars'):
+            #     pipeline_capex = self.config.get('costs', {}).get('hydrogen_pipeline_costs', {}).get('capex_yuan_per_km', 5000000)
+            #     for (h2_loc, mtj_loc), var in self.hydrogen_pipeline_facility_vars.items():
+            #         if var.x > 0.5:  # 建设了管道
+            #             distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
+            #             hydrogen_pipeline_investment_cost_total += distance_km * pipeline_capex
+            hydrogen_pipeline_investment_cost_total = 0  # 设为0，避免重复计算
         
         breakdown["hydrogen_pipeline_transport_cost"] = hydrogen_pipeline_transport_cost_total
         breakdown["hydrogen_pipeline_investment_cost"] = hydrogen_pipeline_investment_cost_total
@@ -4064,10 +4080,10 @@ class NaturalGasSupplyChainOptimizer:
             ) * operation_expansion_factor * present_value_factor
         breakdown["shortage_penalty_cost"] = shortage_cost_total
         
-        # 计算总的生命周期成本
+        # 计算总的生命周期成本（排除缺货惩罚成本）
         total_lifecycle_cost = sum(
             cost for key, cost in breakdown.items() 
-            if key.endswith('_cost')
+            if key.endswith('_cost') and key != 'shortage_penalty_cost'
         )
         breakdown["total_lifecycle_cost"] = total_lifecycle_cost
         
@@ -4078,13 +4094,13 @@ class NaturalGasSupplyChainOptimizer:
         breakdown["operation_expansion_factor"] = operation_expansion_factor
         breakdown["present_value_factor"] = present_value_factor
         
-        # 计算生命周期平准化成本（每kg平均成本）
+        # 计算生命周期平准化成本（每kg平均成本，不包含缺货惩罚成本）
         if lifecycle_total_production > 0:
             breakdown["lifecycle_levelized_cost_per_kg"] = total_lifecycle_cost / lifecycle_total_production
         else:
             breakdown["lifecycle_levelized_cost_per_kg"] = 0
         
-        # 计算年化平准化成本（用于比较）
+        # 计算年化平准化成本（用于比较，不包含缺货惩罚成本）
         if annual_production > 0:
             breakdown["annual_levelized_cost_per_kg"] = (total_lifecycle_cost / project_lifespan) / annual_production
         else:
@@ -4106,10 +4122,20 @@ class NaturalGasSupplyChainOptimizer:
         # 从solution中获取不含短缺成本的平准化成本
         lifecycle_levelized_cost_excluding_shortage = solution.get("lifecycle_levelized_cost_excluding_shortage_per_kg", 0)
         
+        # 获取成本分析数据
+        cost_analysis = {}
+        if self.cost_analyzer:
+            try:
+                cost_analysis = self.cost_analyzer.analyze_supply_chain_costs(solution)
+                logger.info("获取成本分析数据用于optimization_summary")
+            except Exception as e:
+                logger.error(f"获取成本分析数据失败: {e}")
+                cost_analysis = {}
+        
         results_summary = {
             "优化状态": [solution.get("optimization_status", "未知")],
-            "生命周期总成本(元)": [solution.get("objective_value_lifecycle_total", 0)],
-            "年化成本(元/年)": [solution.get("objective_value_lifecycle_total", 0) / solution.get("project_lifespan_years", 20)],
+            "生命周期总成本(元)": [solution.get("objective_value_lifecycle_total_excluding_shortage", 0)],
+            "年化成本(元/年)": [solution.get("objective_value_lifecycle_total_excluding_shortage", 0) / solution.get("project_lifespan_years", 20)],
             "生命周期平准化成本(元/kg)": [solution.get("lifecycle_levelized_cost_per_kg", 0)],
             "年化平准化成本(元/kg)": [solution.get("annual_levelized_cost_per_kg", 0)],
             "生命周期平准化成本_不含短缺(元/kg)": [lifecycle_levelized_cost_excluding_shortage],
@@ -4126,7 +4152,7 @@ class NaturalGasSupplyChainOptimizer:
             "氢气制取成本(元)": [cost_breakdown.get("hydrogen_production_cost", 0)],
             "氢气罐车运输成本(元)": [cost_breakdown.get("hydrogen_transport_cost", 0)],
             "氢能管道运输成本(元)": [cost_breakdown.get("hydrogen_pipeline_transport_cost", 0)],
-            "氢能管道建设投资(元)": [cost_breakdown.get("hydrogen_pipeline_investment_cost", 0)],
+            "氢能管道建设投资(元)": [0],  # 该成本已在成本分析引擎中考虑，不重复计算
             "天然气运输成本(元)": [cost_breakdown.get("ng_transport_cost", 0)],
             "天然气原料成本(元)": [cost_breakdown.get("natural_gas_raw_material_cost", 0)],
             "MTJ运输运营成本(元)": [cost_breakdown.get("transport_operation_cost", 0)],
@@ -4142,6 +4168,52 @@ class NaturalGasSupplyChainOptimizer:
             "总时段数(小时)": [self.total_hours],
             "项目期限(年)": [solution.get("project_lifespan_years", 20)]
         }
+        
+        # 添加详细成本分析指标到优化总结
+        if cost_analysis:
+            # 电解制氢成本指标（直接从analyze_supply_chain_costs返回的平铺结构获取）
+            results_summary.update({
+                "氢气单位电力成本(元/kg)": [cost_analysis.get('hydrogen_electricity_cost_yuan_per_kg', 0)],
+                "氢气设备摊销成本(元/kg)": [cost_analysis.get('hydrogen_equipment_amortization_yuan_per_kg', 0)],
+                "氢气运营维护成本(元/kg)": [cost_analysis.get('hydrogen_operation_maintenance_yuan_per_kg', 0)],
+                "氢气总单位成本(元/kg)": [cost_analysis.get('hydrogen_total_production_cost_yuan_per_kg', 0)],
+                "电解制氢效率(%)": [cost_analysis.get('electrolysis_actual_efficiency_percent', 0)]
+            })
+            
+            # MTJ生产成本指标  
+            results_summary.update({
+                "MTJ氢气原料成本(元/kg)": [cost_analysis.get('mtj_hydrogen_raw_material_cost_yuan_per_kg', 0)],
+                "MTJ CO2原料成本(元/kg)": [cost_analysis.get('mtj_co2_raw_material_cost_yuan_per_kg', 0)],
+                "MTJ设备摊销成本(元/kg)": [cost_analysis.get('mtj_equipment_amortization_yuan_per_kg', 0)],
+                "MTJ运营维护成本(元/kg)": [cost_analysis.get('mtj_operation_maintenance_yuan_per_kg', 0)],
+                "MTJ总单位成本(元/kg)": [cost_analysis.get('mtj_total_production_cost_yuan_per_kg', 0)]
+            })
+            
+            # 运输成本指标
+            results_summary.update({
+                "氢气运输单位成本(元/kg·km)": [cost_analysis.get('h2_transport_unit_cost_yuan_per_kg_km', 0)],
+                "MTJ运输单位成本(元/kg·km)": [cost_analysis.get('mtj_transport_unit_cost_yuan_per_kg_km', 0)],
+                "氢气储存单位成本(元/kg)": [cost_analysis.get('h2_storage_cost_yuan_per_kg', 0)],
+                "MTJ储存单位成本(元/kg)": [cost_analysis.get('mtj_storage_cost_yuan_per_kg', 0)]
+            })
+            
+            # 转化效率指标
+            results_summary.update({
+                "电解制氢理论效率(%)": [cost_analysis.get('electrolysis_theoretical_efficiency', 0) * 100],
+                "电解制氢实际效率(%)": [cost_analysis.get('electrolysis_actual_efficiency', 0) * 100],
+                "MTJ转化效率(%)": [cost_analysis.get('h2_to_mtj_conversion_efficiency', 0) * 100],
+                "综合电力转MTJ效率(%)": [cost_analysis.get('overall_electricity_to_mtj_efficiency', 0) * 100],
+                "单位电力消耗(MWh/kg_MTJ)": [cost_analysis.get('power_consumption_mwh_per_kg_mtj', 0)]
+            })
+            
+            # 经济性指标（从现有成本比例数据计算）
+            results_summary.update({
+                "氢气电力成本占比(%)": [cost_analysis.get('hydrogen_electricity_cost_ratio', 0) * 100],
+                "氢气设备成本占比(%)": [cost_analysis.get('hydrogen_equipment_cost_ratio', 0) * 100],
+                "氢气运营成本占比(%)": [cost_analysis.get('hydrogen_operation_cost_ratio', 0) * 100],
+                "MTJ氢气原料成本占比(%)": [cost_analysis.get('mtj_hydrogen_cost_ratio', 0) * 100],
+                "MTJ CO2原料成本占比(%)": [cost_analysis.get('mtj_co2_cost_ratio', 0) * 100]
+            })
         
         # 保存优化总结
         summary_df = pd.DataFrame(results_summary)
@@ -4328,6 +4400,15 @@ class NaturalGasSupplyChainOptimizer:
             transport_summary_path = os.path.join(output_dir, f"transport_summary_{timestamp}.csv")
             transport_summary_df.to_csv(transport_summary_path, index=False, encoding='utf-8-sig')
             print(f"运输路径汇总保存到: {transport_summary_path}")
+            
+            # 生成专门的成本分析报告
+            if self.cost_analyzer:
+                try:
+                    cost_analysis_path = os.path.join(output_dir, f"cost_analysis_report_{timestamp}.csv")
+                    self.cost_analyzer.generate_cost_analysis_report(solution, cost_analysis_path)
+                    print(f"详细成本分析报告保存到: {cost_analysis_path}")
+                except Exception as e:
+                    logger.error(f"生成成本分析报告失败: {e}")
         
         # 保存完整的解决方案到JSON文件
         solution_path = os.path.join(output_dir, f"complete_solution_{timestamp}.json")
