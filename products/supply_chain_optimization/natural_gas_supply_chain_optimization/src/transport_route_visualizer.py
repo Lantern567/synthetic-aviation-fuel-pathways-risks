@@ -393,6 +393,34 @@ class TransportRouteVisualizer:
         except Exception as e:
             self.logger.error(f"加载天然气运输数据失败: {e}")
             return None
+
+    def load_hydrogen_pipeline_transport_data(self, csv_file_path):
+        """加载氢气管道运输数据"""
+        try:
+            if not csv_file_path or not Path(csv_file_path).exists():
+                self.logger.warning("氢气管道运输文件不存在")
+                return None
+                
+            df = pd.read_csv(csv_file_path, encoding='utf-8')
+            self.logger.info(f"成功加载氢气管道运输数据，共 {len(df)} 条记录")
+            
+            # 过滤掉无效坐标
+            valid_data = df.dropna(subset=['起点纬度', '起点经度', '终点纬度', '终点经度'])
+            
+            # 确保坐标在中国范围内
+            china_data = valid_data[
+                (valid_data['起点纬度'] >= 18) & (valid_data['起点纬度'] <= 54) &
+                (valid_data['起点经度'] >= 73) & (valid_data['起点经度'] <= 135) &
+                (valid_data['终点纬度'] >= 18) & (valid_data['终点纬度'] <= 54) &
+                (valid_data['终点经度'] >= 73) & (valid_data['终点经度'] <= 135)
+            ]
+            
+            self.logger.info(f"有效氢气管道运输数据: {len(china_data)} 条记录")
+            return china_data
+            
+        except Exception as e:
+            self.logger.error(f"加载氢气管道运输数据失败: {e}")
+            return None
     
     def load_lng_terminal_data(self, csv_file_path):
         """加载LNG终端数据"""
@@ -551,6 +579,32 @@ class TransportRouteVisualizer:
         else:
             # print("default")
             return 'default'
+    
+    def map_facility_type(self, facility_type):
+        """将设施类型映射为连接系统使用的标准名称"""
+        if not facility_type:
+            return 'unknown'
+            
+        facility_type = str(facility_type).strip()
+        
+        # 更精确的类型识别
+        if '太阳能' in facility_type or 'solar' in facility_type.lower():
+            return 'solar'
+        elif '风电' in facility_type or 'wind' in facility_type.lower():
+            return 'wind'  
+        elif '储氢' in facility_type or 'hydrogen' in facility_type.lower() or 'storage' in facility_type.lower():
+            return 'storage'
+        elif '机场' in facility_type or 'airport' in facility_type.lower():
+            return 'airport'
+        elif 'lng' in facility_type.lower() or '天然气' in facility_type:
+            return 'lng'
+        elif '可再生' in facility_type:
+            return 'solar'  # 默认为太阳能
+        elif '生产' in facility_type:
+            return 'production'
+        else:
+            # 返回小写的原始类型
+            return facility_type.lower().replace(' ', '_')
     
     def normalize_transport_volume(self, volumes, min_width=0.5, max_width=4.0):
         """标准化运输量为线条宽度"""
@@ -1391,9 +1445,23 @@ class TransportRouteVisualizer:
         
         return fig, main_ax, mini_ax, display_data
     
-    def create_comprehensive_visualization(self, all_data, max_routes=500):
+    def create_comprehensive_visualization(self, all_data, max_routes=2000):
         """创建包含所有基础设施和运输线路的综合可视化"""
         print("正在创建综合能源基础设施地图...")
+        print(f"最大显示线路数: {max_routes}")
+        
+        # 输出数据概览
+        print("\n=== 数据概览 ===")
+        data_overview = {}
+        for key, data in all_data.items():
+            if data is not None:
+                data_len = len(data) if hasattr(data, '__len__') else 1
+                data_overview[key] = data_len
+                print(f"{key}: {data_len} 条记录")
+        
+        if not data_overview:
+            print("警告: 没有可用的数据进行可视化！")
+            return None, None, None, {}
         
         # 创建基础地图
         fig, main_ax, mini_ax = self.create_base_map(figsize=(16, 12))
@@ -1498,10 +1566,11 @@ class TransportRouteVisualizer:
                            label=f'天然气管道 ({len(pipeline_data)}个)')
             )
         
-        # 4. 绘制氢能运输线路
-        if all_data.get('hydrogen_transport') is not None:
-            h2_transport = all_data['hydrogen_transport'][:max_routes//3]  # 限制显示数量
-            print(f"正在绘制 {len(h2_transport)} 条氢能运输线路...")
+        # 4. [已禁用] 绘制氢能运输线路（罐车）- 避免与transport_summary重复
+        # 注意：氢气运输数据已在transport_summary中统一绘制，此处跳过独立数据源
+        if False and all_data.get('hydrogen_transport') is not None:
+            h2_transport = all_data['hydrogen_transport']  # 显示全部氢气罐车运输
+            print(f"正在绘制 {len(h2_transport)} 条氢能罐车运输线路...")
             
             for _, route in h2_transport.iterrows():
                 volume = route.get('氢气运输量(kg)', 100)
@@ -1515,15 +1584,22 @@ class TransportRouteVisualizer:
                     transform=self.data_crs, zorder=4
                 )
             
-            stats_info["运输统计"]["氢能运输"] = len(h2_transport)
+            stats_info["运输统计"]["氢能罐车运输"] = len(h2_transport)
             legend_elements.append(
                 plt.Line2D([0], [0], color=self.transport_type_colors['H2'], linewidth=3, 
-                          label=f'氢能运输 ({len(h2_transport)}条)')
+                          label=f'氢能罐车运输 ({len(h2_transport)}条)')
             )
+
+        # 4.1. [已禁用] 绘制氢能管道运输线路 - 避免与transport_summary重复
+        if False and all_data.get('hydrogen_pipeline_transport') is not None:
+            h2_pipeline_transport = all_data['hydrogen_pipeline_transport']  # 显示全部氢能管道运输
+            print(f"[已跳过] {len(h2_pipeline_transport) if h2_pipeline_transport is not None else 0} 条氢能管道运输线路（避免重复）")
+        else:
+            print("注意: hydrogen_pipeline_transport 数据未找到或为空")
         
-        # 5. 绘制天然气运输线路
-        if all_data.get('ng_transport') is not None:
-            ng_transport = all_data['ng_transport'][:max_routes//3]  # 限制显示数量
+        # 5. [已禁用] 绘制天然气运输线路 - 避免与transport_summary重复  
+        if False and all_data.get('ng_transport') is not None:
+            ng_transport = all_data['ng_transport']  # 显示全部天然气运输
             print(f"正在绘制 {len(ng_transport)} 条天然气运输线路...")
             
             for _, route in ng_transport.iterrows():
@@ -1544,38 +1620,119 @@ class TransportRouteVisualizer:
                           label=f'天然气运输 ({len(ng_transport)}条)')
             )
         
-        # 6. 绘制甲醇运输线路（原有功能）
+        # 6. 绘制运输线路（按货物类型区分）
         if all_data.get('transport_summary') is not None:
-            mtj_transport = all_data['transport_summary'][:max_routes//3]  # 限制显示数量
-            print(f"正在绘制 {len(mtj_transport)} 条甲醇运输线路...")
+            transport_data = all_data['transport_summary']  # 显示全部运输路径
+            print(f"正在绘制 {len(transport_data)} 条运输线路（全部数据）...")
             
-            # 计算线条宽度
-            if '周运输量(kg)' in mtj_transport.columns:
-                line_widths = self.normalize_transport_volume(mtj_transport['周运输量(kg)'])
-            else:
-                line_widths = np.ones(len(mtj_transport)) * 1.5
+            # 按货物类型分类运输数据
+            mtj_routes = transport_data[transport_data['货物类型'] == 'MTJ']
+            h2_routes = transport_data[transport_data['货物类型'] == '氢气']
+            ng_routes = transport_data[transport_data['货物类型'] == '天然气']
             
-            for idx, route in mtj_transport.iterrows():
-                main_ax.plot(
-                    [route['起点经度'], route['终点经度']], 
-                    [route['起点纬度'], route['终点纬度']], 
-                    color=self.transport_type_colors['MTJ'], 
-                    alpha=0.7, linewidth=line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths,
-                    transform=self.data_crs, zorder=6
-                )
+            print(f"  - MTJ运输: {len(mtj_routes)} 条")
+            print(f"  - 氢气运输: {len(h2_routes)} 条")
+            print(f"  - 天然气运输: {len(ng_routes)} 条")
             
-            stats_info["运输统计"]["绿色甲醇航空燃料运输"] = len(mtj_transport)
-            legend_elements.append(
-                plt.Line2D([0], [0], color=self.transport_type_colors['MTJ'], linewidth=3, 
-                          label=f'绿色甲醇航空燃料 ({len(mtj_transport)}条)')
-            )
+            # 6.1. 绘制MTJ运输线路
+            if len(mtj_routes) > 0:
+                # 计算线条宽度
+                if '周运输量(kg)' in mtj_routes.columns:
+                    line_widths = self.normalize_transport_volume(mtj_routes['周运输量(kg)'])
+                else:
+                    line_widths = np.ones(len(mtj_routes)) * 1.5
+                
+                for idx, route in mtj_routes.iterrows():
+                    main_ax.plot(
+                        [route['起点经度'], route['终点经度']], 
+                        [route['起点纬度'], route['终点纬度']], 
+                        color=self.transport_type_colors['MTJ'], 
+                        alpha=0.7, linewidth=line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths,
+                        transform=self.data_crs, zorder=6
+                    )
+                    
+                    # 更新连接统计（用于图例）
+                    origin_type = self.map_facility_type(route.get('起点类型', ''))
+                    dest_type = self.map_facility_type(route.get('终点类型', ''))
+                    connection_type = f"{origin_type}_to_{dest_type}"
+                    connection_stats[connection_type] = connection_stats.get(connection_type, 0) + 1
+                
+                stats_info["运输统计"]["绿色甲醇航空燃料运输"] = len(mtj_routes)
+                # 注意：不添加独立的图例，使用连接统计系统
+            
+            # 6.2. 绘制氢气运输线路（from transport_summary）
+            if len(h2_routes) > 0:
+                for _, route in h2_routes.iterrows():
+                    # 根据运输方式选择样式
+                    transport_mode = route.get('运输方式', 'truck')
+                    volume = route.get('日运输量(kg)', 100)
+                    
+                    if transport_mode == 'pipeline':
+                        # 管道运输：紫色虚线
+                        line_width = min(max(volume / 100, 1.0), 4.0)
+                        main_ax.plot(
+                            [route['起点经度'], route['终点经度']], 
+                            [route['起点纬度'], route['终点纬度']], 
+                            color='purple', alpha=0.8, linewidth=line_width,
+                            linestyle='--', transform=self.data_crs, zorder=5
+                        )
+                    else:
+                        # 罐车运输：紫色实线
+                        line_width = min(max(volume / 200, 0.5), 3.0)
+                        main_ax.plot(
+                            [route['起点经度'], route['终点经度']], 
+                            [route['起点纬度'], route['终点纬度']], 
+                            color=self.transport_type_colors['H2'], 
+                            alpha=0.6, linewidth=line_width,
+                            transform=self.data_crs, zorder=4
+                        )
+                    
+                    # 更新连接统计（用于图例）
+                    origin_type = self.map_facility_type(route.get('起点类型', ''))
+                    dest_type = self.map_facility_type(route.get('终点类型', ''))
+                    connection_type = f"{origin_type}_to_{dest_type}"
+                    connection_stats[connection_type] = connection_stats.get(connection_type, 0) + 1
+                
+                # 统计管道和罐车运输
+                h2_pipeline_count = len(h2_routes[h2_routes['运输方式'] == 'pipeline'])
+                h2_truck_count = len(h2_routes[h2_routes['运输方式'] == 'truck'])
+                
+                stats_info["运输统计"]["氢能管道运输"] = h2_pipeline_count
+                stats_info["运输统计"]["氢能罐车运输"] = h2_truck_count
+                # 注意：不添加独立的图例，使用连接统计系统
+            
+            # 6.3. 绘制天然气运输线路（from transport_summary）
+            if len(ng_routes) > 0:
+                for _, route in ng_routes.iterrows():
+                    volume = route.get('日运输量(m3)', 100)
+                    line_width = min(max(volume / 1000, 0.5), 3.0)
+                    
+                    main_ax.plot(
+                        [route['起点经度'], route['终点经度']], 
+                        [route['起点纬度'], route['终点纬度']], 
+                        color=self.transport_type_colors['NG'], 
+                        alpha=0.6, linewidth=line_width,
+                        transform=self.data_crs, zorder=4
+                    )
+                    
+                    # 更新连接统计（用于图例）
+                    origin_type = self.map_facility_type(route.get('起点类型', ''))
+                    dest_type = self.map_facility_type(route.get('终点类型', ''))
+                    connection_type = f"{origin_type}_to_{dest_type}"
+                    connection_stats[connection_type] = connection_stats.get(connection_type, 0) + 1
+                
+                stats_info["运输统计"]["天然气罐车运输"] = len(ng_routes)
+                # 注意：不添加独立的图例，使用连接统计系统
             
             # 绘制机场（MTJ运输的终点）- 只统计真正的机场名称，不包括生产设施
             # 过滤出真正的机场终点（北京、天津等机场名称）
-            airport_terminals = mtj_transport[
-                (mtj_transport['终点类型'] == '机场') & 
-                (~mtj_transport['终点'].str.contains('lng_|airport_', na=False))
-            ][['终点', '终点纬度', '终点经度']].drop_duplicates()
+            if len(mtj_routes) > 0:
+                airport_terminals = mtj_routes[
+                    (mtj_routes['终点类型'] == '机场') & 
+                    (~mtj_routes['终点'].str.contains('lng_|airport_', na=False))
+                ][['终点', '终点纬度', '终点经度']].drop_duplicates()
+            else:
+                airport_terminals = pd.DataFrame()
             
             for _, airport in airport_terminals.iterrows():
                 main_ax.scatter(
