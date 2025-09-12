@@ -82,28 +82,24 @@ class SupplyChainCostAnalyzer:
             # 计算各项成本组件 (元/kg H2)
             costs = CostComponents()
             
-            # 1. 电力成本 - 计算20年生命周期成本
-            # 单次生产每kg氢气的电力成本 × 项目年限
-            project_lifespan = self.economic_params.get('project_lifespan_years', 20)
+            # 1. 电力成本 - 计算单位成本（元/kg H2）
+            # 这应该是单次生产成本，不需要乘以项目年限
             single_production_electricity_cost = (power_consumption * electricity_price / 1000) / electrolysis_efficiency
-            costs.electricity_cost = single_production_electricity_cost * project_lifespan
+            costs.electricity_cost = single_production_electricity_cost
             
-            # 2. 设备摊销成本 - 计算20年生命周期成本
-            # electrolyzer_capex是年化平准化成本 元/(kg H2·年)
-            # 转换为20年生命周期内每kg氢气的总成本
-            project_lifespan = self.economic_params.get('project_lifespan_years', 20)
+            # 2. 设备摊销成本 - 计算单位成本（元/kg H2）
+            # electrolyzer_capex是年化平准化成本，需要转换为单位成本
             annual_hours = 8760  # 一年的小时数
             capacity_factor = self.economic_params.get('electrolyzer_capacity_factor', 0.75)
             actual_annual_hours = annual_hours * capacity_factor
             
-            # 年化成本 ÷ 年产能 × 项目年限 = 生命周期单位成本
+            # 年化成本 ÷ 年产能 = 单位成本
             annual_equipment_cost_per_kg = electrolyzer_capex / actual_annual_hours
-            costs.equipment_amortization = annual_equipment_cost_per_kg * project_lifespan
+            costs.equipment_amortization = annual_equipment_cost_per_kg
             
-            # 3. 运营维护成本 - 计算20年生命周期成本
-            # electrolyzer_opex如果是年成本，则需要乘以项目年限
-            # 如果electrolyzer_opex已经是0（包含在平准化成本中），则为0
-            costs.operation_maintenance = electrolyzer_opex * project_lifespan
+            # 3. 运营维护成本 - 计算单位成本（元/kg H2）
+            # electrolyzer_opex应该是单位运营维护成本
+            costs.operation_maintenance = electrolyzer_opex
             
             # 4. 总成本
             costs.total_cost = (costs.electricity_cost + 
@@ -148,16 +144,13 @@ class SupplyChainCostAnalyzer:
             # 1. 氢气原料成本
             costs.raw_materials = hydrogen_cost_per_kg * hydrogen_ratio
             
-            # 2. MTJ设备和运营成本 - 计算20年生命周期成本
-            # 基础LCOP是单次生产成本，需要转换为20年生命周期成本
-            project_lifespan = self.economic_params.get('project_lifespan_years', 20)
-            single_production_raw_cost = costs.raw_materials / project_lifespan
-            equipment_operation_cost = max(0, mtj_base_lcop - single_production_raw_cost)
+            # 2. MTJ设备和运营成本 - 计算单位成本（元/kg MTJ）
+            # 基础LCOP是单位生产成本，直接使用
+            equipment_operation_cost = max(0, mtj_base_lcop - costs.raw_materials)
             
-            # 将设备运营成本也转换为20年生命周期
-            lifecycle_equipment_operation_cost = equipment_operation_cost * project_lifespan
-            costs.equipment_amortization = lifecycle_equipment_operation_cost * 0.6  # 假设60%为设备摊销
-            costs.operation_maintenance = lifecycle_equipment_operation_cost * 0.4  # 假设40%为运营维护
+            # 分配设备和运营成本
+            costs.equipment_amortization = equipment_operation_cost * 0.6  # 假设60%为设备摊销
+            costs.operation_maintenance = equipment_operation_cost * 0.4  # 假设40%为运营维护
             
             # 3. 总成本 (不包含CO2成本)
             costs.total_cost = costs.raw_materials + costs.equipment_amortization + costs.operation_maintenance

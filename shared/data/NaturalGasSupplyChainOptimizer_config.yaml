@@ -344,48 +344,16 @@ facility_lcoe_parameters:
   # MTJ生产工厂投资和运营成本核心参数
   # -------------------------------------------------------------------------
   fixed_capex: 20000000                             # MTJ工厂固定投资成本 (元)
-                                                    # ■ 用途：不依赖产能规模的固定基础设施投资
-                                                    # ■ 代码位置：目标函数中的设施投资成本计算
-                                                    # ■ 覆盖范围：
-                                                    #   - 土地征用和场地准备：300万元
-                                                    #   - 公辅设施（供电、供水、废水处理）：800万元
-                                                    #   - 控制系统和仪表：400万元
-                                                    #   - 其他基础设施：500万元
-                                                    # ■ 调参建议：根据项目规模和地理位置调整
-                                                    # ■ 敏感性分析：固定成本对小规模项目影响更大
+
   
   variable_capex_per_capacity: 20000                # 变动投资成本系数 (元/(kg/hour))
-                                                    # ■ 用途：按MTJ生产能力线性增长的设备投资
-                                                    # ■ 计算方式：总产能(kg/h) × 8000元/(kg/h) 
-                                                    # ■ 设备构成（每kg/h产能）：
-                                                    #   - F-T反应器：3000元/(kg/h)
-                                                    #   - 加氢精制装置：2500元/(kg/h)  
-                                                    #   - 分离精制设备：1500元/(kg/h)
-                                                    #   - 辅助设备：1000元/(kg/h)
-                                                    # ■ 规模效应：大规模生产可降至6000-7000元/(kg/h)
-                                                    # ■ 技术进步：预计2030年可降至5000-6000元/(kg/h)
+
   
   fixed_opex_annual: 10000000                       # 年固定运营成本 (元/年)
-                                                    # ■ 用途：不随产量变化的年度运营费用
-                                                    # ■ 成本构成：
-                                                    #   - 人员工资：600万元/年 (30人×20万元/年)
-                                                    #   - 保险费用：200万元/年 (设备价值的2-3%)
-                                                    #   - 年检维护：150万元/年
-                                                    #   - 管理费用：50万元/年
-                                                    # ■ 影响因素：工厂自动化程度、地区工资水平
-                                                    # ■ 优化机会：通过数字化管理可减少20-30%人员需求
+
   
   variable_opex_per_kg: 0.3                        # 变动运营成本 (元/kg)
-                                                    # ■ 用途：每生产1kg MTJ航煤的变动成本
-                                                    # ■ 成本细分：
-                                                    #   - 催化剂消耗：150元/kg (主要成本)
-                                                    #   - 化学品消耗：80元/kg
-                                                    #   - 公辅消耗：50元/kg (蒸汽、冷却水)
-                                                    #   - 其他消耗品：20元/kg
-                                                    # ■ 优化潜力：
-                                                    #   - 催化剂回收可降低50-100元/kg
-                                                    #   - 工艺优化可减少20-30%化学品用量
-                                                    # ■ 对比：传统石油炼制边际成本200-250元/kg
+
 
 # =============================================================================
 # 4.2 目标函数/模型系数 (Objective Coefficients)
@@ -467,7 +435,7 @@ objective_coefficients:
 equipment_raw_costs:
   # 电解槽原始成本
   electrolyzer:
-    capex_raw: 80000                # 元/(kg H2/hour) 投资成本 - 氢气保持kg单位
+    capex_raw: 800000                # 元/(kg H2/hour) 投资成本 - 氢气保持kg单位
     opex_raw: 800                  # 元/(kg H2/hour)/年 运营成本 - 氢气保持kg单位
   
   # 储存设施原始成本
@@ -869,6 +837,17 @@ capacity_limits:
   mtj_max_capacity_kg_per_hour: 10000              # MTJ设备最大产能(kg/h)
   electrolyzer_max_capacity_kg_per_hour: 2000      # 电解槽最大产能(kg H2/h)
   
+  # MTJ产能估算参数 - 基于位置类型的日产能估算
+  mtj_capacity_estimates:
+    petrochemical_base: 5000                       # 大型石化基地日产能(kg/day)
+    industrial: 2000                               # 工业园区日产能(kg/day) 
+    renewable_energy: 1000                         # 可再生能源基地日产能(kg/day)
+    default: 1500                                  # 其他类型默认日产能(kg/day)
+  
+  # 天然气需求估算参数
+  ng_demand_estimates:
+    default_daily_volume_m3: 10000                 # 默认日天然气需求量(m³/day)
+  
   # 氢能运输容量限制
   hydrogen_pipeline_max_daily_capacity_kg: 50000   # 氢能管道日最大运输容量(kg H2/day)
                                                     # ■ 用途：管道运输能力上限约束
@@ -900,6 +879,13 @@ supply_capacity:
   # 天然气供应能力参数
   natural_gas_supply:
     default_max_flow_m3_per_hour: 10000            # 默认天然气供应能力(m³/h) - 仅用于真正的供应点
+    airport_max_flow_m3_per_hour: 5000             # 机场天然气供应能力(m³/h)
+    default_reduced_flow_m3_per_hour: 4000         # 其他类型默认供应能力(m³/h)
+    default_daily_volume_m3: 10000                 # 默认日天然气处理量(m³/d) - 用于成本计算
+  
+  # LNG接收站容量参数  
+  lng_terminal_capacity:
+    default_capacity_mcm_per_year: 300             # LNG接收站默认容量(万m³/年)
 
 # =============================================================================
 # 14. 地理坐标数据 (Geographic Coordinates)

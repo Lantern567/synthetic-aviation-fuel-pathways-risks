@@ -1799,8 +1799,11 @@ class NaturalGasSupplyChainOptimizer:
         total_fixed_opex = total_fixed_opex_annual / standard_capacity_kg_h  # 元/年 per (kg/hour)
         
         # 变动运营成本 (从生产变动成本配置获取)
-        fac_cfg_opex = fac_cfg.get('variable_opex_per_kg', 300)  # 元/kg
+        fac_cfg_opex = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 使用配置文件的0.3而非300
         total_variable_opex = fac_cfg_opex  # 元/kg产品
+        
+        # 日志输出参数读取情况
+        logger.info(f"MTJ变动运营成本参数读取: {fac_cfg_opex}元/kg (配置文件中值: {fac_cfg.get('variable_opex_per_kg', '未找到')})")
         
         logger.info(f"MTJ生产基础成本估算: CAPEX={total_capex:,.0f}元/(kg/hour), 固定OPEX={total_fixed_opex:,.0f}元/年, 变动OPEX={total_variable_opex:,.0f}元/kg")
         
@@ -2268,12 +2271,12 @@ class NaturalGasSupplyChainOptimizer:
             max_flow_m3_per_hour = base_flow_m3_per_hour * pressure_factor * maintenance_factor
             
         elif location_info['type'] == 'airport':
-            # 机场：通过运输获得天然气，使用简化的流量限制
-            max_flow_m3_per_hour = 5000  # 简化为固定值
+            # 机场：通过运输获得天然气，从配置读取流量限制
+            max_flow_m3_per_hour = self.config.get('supply_capacity', {}).get('natural_gas_supply', {}).get('airport_max_flow_m3_per_hour', 5000)
             
         else:
-            # 其他类型的默认约束
-            max_flow_m3_per_hour = 5000 * 0.8
+            # 其他类型的默认约束，从配置读取
+            max_flow_m3_per_hour = self.config.get('supply_capacity', {}).get('natural_gas_supply', {}).get('default_reduced_flow_m3_per_hour', 4000)
         
         # 添加流量约束
         self.model.addConstr(
@@ -2446,9 +2449,11 @@ class NaturalGasSupplyChainOptimizer:
             
             if location_type in ['solar_plant', 'wind_farm']:
                 # 1. 电解槽容量约束
+                # 从配置读取电解槽最大容量
+                max_electrolyzer_capacity = self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000)
                 self.model.addConstr(
                     self.electrolyzer_capacity_vars[location] <= 
-                    2000 * self.electrolyzer_facility_vars[location],  # 如果建设，最大容量2吨H2/小时
+                    max_electrolyzer_capacity * self.electrolyzer_facility_vars[location],  # 使用配置参数
                     name=f"electrolyzer_capacity_{location}"
                 )
                 
@@ -2888,7 +2893,8 @@ class NaturalGasSupplyChainOptimizer:
         )
         
         # 3. 生产变动运营成本（20年生命周期现值）
-        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 300)
+        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 修正默认值从300到0.3
+        logger.info(f"目标函数中使用的MTJ变动运营成本: {variable_opex_per_kg}元/kg")
         production_cost = gp.quicksum(
             self.production_vars[(location, tech, hour)] * variable_opex_per_kg * lifecycle_operation_factor
             for location in self.locations
@@ -2938,9 +2944,11 @@ class NaturalGasSupplyChainOptimizer:
         )
         
         # 6. 电解槽投资成本（一次性投资）
+        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
+        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H2/hour)")
         electrolyzer_investment_cost = gp.quicksum(
             self.electrolyzer_capacity_vars[location] * 
-            8000 * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本
+            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
             for location in self.locations
             if location in self.electrolyzer_capacity_vars
         )
@@ -3313,20 +3321,24 @@ class NaturalGasSupplyChainOptimizer:
         
         return max(0, total_transport_cost)
     
-    def _calculate_ng_transport_cost_by_distance(self, distance_km: float, daily_volume_m3: float = 10000) -> float:
+    def _calculate_ng_transport_cost_by_distance(self, distance_km: float, daily_volume_m3: float = None) -> float:
         """基于LNG运输成本公式计算天然气运输成本
         
         公式: W_LNG ≈ (4.52 × 10^-4 × L) + (0.888/q) + 0.927
         
         Args:
             distance_km: 运输距离 L (km)  
-            daily_volume_m3: 日输送量 q (m³/d)，默认10000 m³/d，即q=1(10^4 m³/d)
+            daily_volume_m3: 日输送量 q (m³/d)，如果为None则从配置读取默认值
             
         Returns:
             float: 运输成本 (元/m³)
         """
         if distance_km <= 0:
             return 0.0
+            
+        # 从配置读取默认日处理量
+        if daily_volume_m3 is None:
+            daily_volume_m3 = self.config.get('supply_capacity', {}).get('natural_gas_supply', {}).get('default_daily_volume_m3', 10000)
             
         # LNG运输成本公式
         L = distance_km
@@ -3386,7 +3398,8 @@ class NaturalGasSupplyChainOptimizer:
             
             return max(1000, min(50000, estimated_daily_ng_m3))  # 限制在合理范围内
         
-        return 10000  # 默认值
+        # 从配置读取默认天然气需求
+        return self.config.get('capacity_limits', {}).get('ng_demand_estimates', {}).get('default_daily_volume_m3', 10000)
     
     def _estimate_location_mtj_capacity(self, location: str) -> float:
         """估算MTJ生产位置的日产能规模
@@ -3397,21 +3410,24 @@ class NaturalGasSupplyChainOptimizer:
         Returns:
             float: 估算日产能 (kg/d)
         """
+        # 从配置读取MTJ产能估算参数
+        capacity_estimates = self.config.get('capacity_limits', {}).get('mtj_capacity_estimates', {})
+        
         if location in self.locations:
             location_data = self.locations[location]
             location_type = location_data.get('type', 'industrial')
             
-            # 根据位置类型估算生产规模
+            # 根据位置类型估算生产规模，从配置读取
             if location_type == 'petrochemical':
-                return 5000  # 大型石化基地
+                return capacity_estimates.get('petrochemical_base', 5000)  # 大型石化基地
             elif location_type == 'industrial':
-                return 2000  # 工业园区
+                return capacity_estimates.get('industrial', 2000)  # 工业园区
             elif location_type == 'renewable_energy':
-                return 1000  # 可再生能源基地
+                return capacity_estimates.get('renewable_energy', 1000)  # 可再生能源基地
             else:
-                return 1500  # 其他类型
+                return capacity_estimates.get('default', 1500)  # 其他类型
         
-        return 1500  # 默认值
+        return capacity_estimates.get('default', 1500)  # 默认值
     
     def _calculate_levelized_ng_transport_cost(self) -> float:
         """保留兼容性的函数，内部调用新的基于距离的计算方法
@@ -3419,9 +3435,9 @@ class NaturalGasSupplyChainOptimizer:
         Returns:
             float: 默认距离下的运输成本 (元/m³)
         """
-        # 使用默认距离100km和默认日输送量10000m³/d计算
+        # 使用默认距离100km和从配置读取的默认日输送量计算
         default_distance_km = 100
-        default_daily_volume_m3 = 10000
+        default_daily_volume_m3 = self.config.get('supply_capacity', {}).get('natural_gas_supply', {}).get('default_daily_volume_m3', 10000)
         return self._calculate_ng_transport_cost_by_distance(default_distance_km, default_daily_volume_m3)
     
     def _calculate_distance(self, location: str, airport: str) -> float:
@@ -3705,15 +3721,24 @@ class NaturalGasSupplyChainOptimizer:
         annual_production = total_production_in_window * (52.0 / self.time_horizon_weeks)
         lifecycle_total_production = annual_production * solution['project_lifespan_years']
         
-        # 生命周期平准化成本（每kg平均成本）
+        # 获取成本分解数据用于统一计算基础
+        cost_breakdown = self._calculate_cost_breakdown()
+        solution['cost_breakdown'] = cost_breakdown
+        
+        # 使用cost_breakdown统一计算平准化成本
+        total_cost_excluding_shortage = cost_breakdown.get('total_lifecycle_cost', 0)
+        shortage_cost = cost_breakdown.get('shortage_penalty_cost', 0)
+        total_cost_including_shortage = total_cost_excluding_shortage + shortage_cost
+        
+        # 生命周期平准化成本（含短缺，基于cost_breakdown）
         if lifecycle_total_production > 0:
-            solution['lifecycle_levelized_cost_per_kg'] = solution['objective_value_lifecycle_total'] / lifecycle_total_production
+            solution['lifecycle_levelized_cost_per_kg'] = total_cost_including_shortage / lifecycle_total_production
         else:
             solution['lifecycle_levelized_cost_per_kg'] = 0
         
-        # 年化平准化成本（用于比较）
+        # 年化平准化成本（含短缺，基于cost_breakdown）
         if annual_production > 0:
-            solution['annual_levelized_cost_per_kg'] = (solution['objective_value_lifecycle_total'] / solution['project_lifespan_years']) / annual_production
+            solution['annual_levelized_cost_per_kg'] = (total_cost_including_shortage / solution['project_lifespan_years']) / annual_production
         else:
             solution['annual_levelized_cost_per_kg'] = 0
         
@@ -3751,6 +3776,47 @@ class NaturalGasSupplyChainOptimizer:
                 
                 facility_key = f"{location}_{tech}"
                 solution['facilities'][facility_key] = facility_info
+        
+        # 提取电解槽设施决策
+        solution['hydrogen_facilities'] = {}
+        for location, var in self.electrolyzer_facility_vars.items():
+            if var.x > 0.5:  # 二进制变量大于0.5视为选中建设电解槽
+                electrolyzer_capacity = self.electrolyzer_capacity_vars[location].x
+                
+                # 计算实际氢气产量和利用率
+                actual_h2_production = sum(
+                    self.hydrogen_production_vars[(location, hour)].x
+                    for hour in range(self.total_hours)
+                    if (location, hour) in self.hydrogen_production_vars
+                )
+                annual_h2_production = actual_h2_production * (52.0 / self.time_horizon_weeks)
+                max_annual_h2_capacity = electrolyzer_capacity * 8760 * 0.75  # 考虑75%容量因子
+                
+                electrolyzer_info = {
+                    'location': location,
+                    'built': True,
+                    'capacity_kg_h2_per_hour': electrolyzer_capacity,
+                    'max_annual_h2_capacity_kg': max_annual_h2_capacity,
+                    'actual_annual_h2_production_kg': annual_h2_production,
+                    'utilization_rate': annual_h2_production / max_annual_h2_capacity if max_annual_h2_capacity > 0 else 0,
+                    'location_type': self.locations[location]['type'],
+                    'technology': 'electrolyzer'
+                }
+                
+                electrolyzer_key = f"electrolyzer_{location}"
+                solution['hydrogen_facilities'][location] = electrolyzer_info
+                # 同时也添加到主设施列表中以便在设施决策文件中显示
+                solution['facilities'][electrolyzer_key] = {
+                    'location': location,
+                    'technology': 'electrolyzer',
+                    'built': True,
+                    'capacity_kg_per_hour': electrolyzer_capacity,  # 氢气产能 kg H2/h
+                    'max_annual_capacity_kg': max_annual_h2_capacity,  # 年氢气产能
+                    'actual_annual_production_kg': annual_h2_production,  # 实际年氢气产量
+                    'utilization_rate': electrolyzer_info['utilization_rate'],
+                    'location_type': self.locations[location]['type'],
+                    'transport_mode': 'hydrogen_pipeline'
+                }
         
         # 提取运输计划
         solution['transport_plan'] = {}
@@ -3953,8 +4019,10 @@ class NaturalGasSupplyChainOptimizer:
         breakdown["facility_investment_cost"] = facility_investment_total
         breakdown["facility_operation_cost"] = facility_operation_total
         
-        # 生产运营成本（20年现值）
-        production_cost_total = total_production_in_window * 300 * operation_expansion_factor * present_value_factor
+        # 生产运营成本（20年现值）- 使用配置文件参数
+        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 从配置读取，默认0.3
+        logger.info(f"成本分解计算中的MTJ变动运营成本: {variable_opex_per_kg}元/kg")
+        production_cost_total = total_production_in_window * variable_opex_per_kg * operation_expansion_factor * present_value_factor
         breakdown["production_operational_cost"] = production_cost_total
         
         # 运输成本分解
@@ -3984,14 +4052,54 @@ class NaturalGasSupplyChainOptimizer:
         breakdown["storage_equipment_cost"] = storage_equipment_total
         breakdown["storage_operation_cost"] = storage_operation_total
         
+        # 氢气储存运营成本（目标函数中的h2_storage_operation）
+        h2_storage_operation_total = 0
+        if hasattr(self, 'hydrogen_storage_vars'):
+            h2_storage_operation_total = sum(
+                self.hydrogen_storage_vars[(location, hour)].x * 
+                self._calculate_total_storage_cost_per_kg_hour() * operation_expansion_factor * present_value_factor
+                for location in self.locations
+                for hour in range(self.total_hours + 1)
+                if (location, hour) in self.hydrogen_storage_vars and self.hydrogen_storage_vars[(location, hour)].x > 0
+            )
+        breakdown["h2_storage_operation_cost"] = h2_storage_operation_total
+        
         # 电解槽成本
+        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
         electrolyzer_investment_total = sum(
-            self.electrolyzer_capacity_vars[location].x * 8000 * 
+            self.electrolyzer_capacity_vars[location].x * electrolyzer_capex_raw * 
             self.economic_params['electrolyzer_capacity_factor']
             for location in self.locations
             if location in self.electrolyzer_capacity_vars and self.electrolyzer_capacity_vars[location].x > 0
         )
         breakdown["electrolyzer_investment_cost"] = electrolyzer_investment_total
+        
+        # 氢气储存投资成本（目标函数中的h2_storage_investment）
+        h2_storage_investment_total = 0
+        if hasattr(self, 'hydrogen_storage_vars'):
+            max_h2_storage = max(
+                (self.hydrogen_storage_vars[(location, hour)].x 
+                 for location in self.locations
+                 for hour in range(self.total_hours + 1)
+                 if (location, hour) in self.hydrogen_storage_vars and self.hydrogen_storage_vars[(location, hour)].x > 0),
+                default=0
+            )
+            # 使用与目标函数相同的成本参数
+            storage_cfg = self.config.get('storage_parameters', {}) or {}
+            h2_storage_unit_cost = float(
+                self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
+                storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
+            )
+            h2_storage_investment_total = max_h2_storage * h2_storage_unit_cost
+        breakdown["h2_storage_investment_cost"] = h2_storage_investment_total
+        
+        # 氢气运输投资成本（目标函数中的hydrogen_transport_investment）
+        hydrogen_transport_investment_total = 0  # 目标函数中设为0，已包含在平准化运输成本中
+        breakdown["hydrogen_transport_investment_cost"] = hydrogen_transport_investment_total
+        
+        # 天然气运输投资成本（目标函数中的ng_transport_investment）  
+        ng_transport_investment_total = 0  # 目标函数中设为0，已包含在平准化运输成本中
+        breakdown["ng_transport_investment_cost"] = ng_transport_investment_total
         
         # 制氢运营成本（20年现值）
         hydrogen_production_cost_total = 0
@@ -4080,6 +4188,22 @@ class NaturalGasSupplyChainOptimizer:
             ) * operation_expansion_factor * present_value_factor
         breakdown["shortage_penalty_cost"] = shortage_cost_total
         
+        # 期末库存处置成本（目标函数中的final_inventory_cost）
+        final_inventory_cost_total = 0
+        discount_rate = self.economic_params['discount_rate']
+        project_lifespan = self.economic_params['project_lifespan']
+        obj_cfg = self.config.get('objective_parameters', {}) or {}
+        disposal_cost_per_kg = float(obj_cfg.get('final_inventory_disposal_cost_per_kg', 100))
+        
+        if hasattr(self, 'storage_vars'):
+            final_inventory_cost_total = sum(
+                self.storage_vars[(location, self.total_hours)].x * disposal_cost_per_kg * operation_expansion_factor * 
+                (1 + discount_rate)**(-project_lifespan)  # 20年后处置成本的现值
+                for location in self.locations
+                if (location, self.total_hours) in self.storage_vars and self.storage_vars[(location, self.total_hours)].x > 0
+            )
+        breakdown["final_inventory_disposal_cost"] = final_inventory_cost_total
+        
         # 计算总的生命周期成本（排除缺货惩罚成本）
         total_lifecycle_cost = sum(
             cost for key, cost in breakdown.items() 
@@ -4145,6 +4269,9 @@ class NaturalGasSupplyChainOptimizer:
             "电解槽建设投资(元)": [cost_breakdown.get("electrolyzer_investment_cost", 0)],
             "运输设备投资(元)": [cost_breakdown.get("transport_equipment_cost", 0)],
             "MTJ储存设备投资(元)": [cost_breakdown.get("storage_equipment_cost", 0)],
+            "氢气储存设备投资(元)": [cost_breakdown.get("h2_storage_investment_cost", 0)],
+            "氢气运输设备投资(元)": [cost_breakdown.get("hydrogen_transport_investment_cost", 0)],
+            "天然气运输设备投资(元)": [cost_breakdown.get("ng_transport_investment_cost", 0)],
             
             # 成本细项 - 运营成本
             "MTJ工厂运营成本(元)": [cost_breakdown.get("facility_operation_cost", 0)],
@@ -4157,6 +4284,9 @@ class NaturalGasSupplyChainOptimizer:
             "天然气原料成本(元)": [cost_breakdown.get("natural_gas_raw_material_cost", 0)],
             "MTJ运输运营成本(元)": [cost_breakdown.get("transport_operation_cost", 0)],
             "MTJ储存运营成本(元)": [cost_breakdown.get("storage_operation_cost", 0)],
+            "氢气储存运营成本(元)": [cost_breakdown.get("h2_storage_operation_cost", 0)],
+            "电力成本(元)": [cost_breakdown.get("electricity_cost", 0)],
+            "期末库存处置成本(元)": [cost_breakdown.get("final_inventory_disposal_cost", 0)],
             "短缺惩罚成本(元)": [cost_breakdown.get("shortage_penalty_cost", 0)],
             
             # 统计信息
@@ -4900,12 +5030,13 @@ class NaturalGasSupplyChainOptimizer:
                         # 1 Million tonne LNG ≈ 138 万立方米天然气/年
                         capacity_mcm_per_year = capacity_mt * 138
                     except (ValueError, TypeError):
-                        # 使用备用容量字段
+                        # 使用备用容量字段，从配置读取默认值
+                        default_lng_capacity = self.config.get('supply_capacity', {}).get('lng_terminal_capacity', {}).get('default_capacity_mcm_per_year', 300)
                         try:
-                            capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', 300))
+                            capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', default_lng_capacity))
                         except:
-                            capacity_mcm_per_year = 300  # 默认值
-                            logger.warning(f"LNG接收站 {terminal_name} 缺少容量数据，使用默认值 300 万m³/年")
+                            capacity_mcm_per_year = default_lng_capacity  # 使用配置的默认值
+                            logger.warning(f"LNG接收站 {terminal_name} 缺少容量数据，使用配置默认值 {default_lng_capacity} 万m³/年")
                     
                     # 计算有效日处理能力
                     operational_efficiency = 0.90  # 默认操作效率
