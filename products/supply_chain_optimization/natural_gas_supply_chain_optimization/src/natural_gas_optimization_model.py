@@ -3222,6 +3222,16 @@ class NaturalGasSupplyChainOptimizer:
                     
                     for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
                         if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                            # 检查该MTJ位置是否属于机场集成转换
+                            is_airport_integrated = False
+                            if 'airport_integrated_conversion' in self.non_lng_mtj_locations:
+                                if mtj_loc in self.non_lng_mtj_locations['airport_integrated_conversion']:
+                                    is_airport_integrated = True
+
+                            # 机场集成转换模式下天然气运输成本为0，跳过计算
+                            if is_airport_integrated:
+                                continue
+
                             daily_volume += self.ng_transport_vars[(ng_loc, mtj_loc, day)]
                             has_transport = True
                     
@@ -3284,14 +3294,14 @@ class NaturalGasSupplyChainOptimizer:
         # 项目20年生命周期总成本
         total_cost = (
             # 投资成本（项目开始时）
-            facility_investment_cost + transport_equipment_cost + storage_equipment_cost + 
-            electrolyzer_investment_cost + h2_storage_investment + hydrogen_transport_investment + 
+            facility_investment_cost + transport_equipment_cost + storage_equipment_cost +
+            electrolyzer_investment_cost + h2_storage_investment + hydrogen_transport_investment +
             ng_transport_investment +
-            
+
             # 运营成本（20年现值）
-            facility_operation_cost + production_cost + transport_operation_cost + 
-            storage_operation_cost + hydrogen_production_cost + electricity_cost + h2_storage_operation + 
-            hydrogen_transport_operation + hydrogen_pipeline_operation + ng_transport_operation + 
+            facility_operation_cost + production_cost + transport_operation_cost +
+            storage_operation_cost + hydrogen_production_cost + electricity_cost + h2_storage_operation +
+            hydrogen_transport_operation + hydrogen_pipeline_operation + ng_transport_operation +
             natural_gas_cost + shortage_cost + final_inventory_cost
         )
         
@@ -3511,7 +3521,82 @@ class NaturalGasSupplyChainOptimizer:
         transport_cost_yuan_per_m3 = (4.52e-4 * L) + (0.888 / q) + 0.927
         
         return max(0, transport_cost_yuan_per_m3)
-    
+
+    def _calculate_unified_ng_transport_cost(self, operation_expansion_factor: float, present_value_factor: float) -> float:
+        """
+        计算天然气运输成本 - 与目标函数使用相同的复杂计算逻辑
+        包含线性成本和规模经济成本两部分
+        """
+        ng_transport_cost_total = 0.0
+        total_days = self.total_hours // 24
+
+        if not hasattr(self, 'ng_transport_vars'):
+            return 0.0
+
+        # 第一部分：线性成本计算 (4.52e-4 * L + 0.927) * 运输量
+        for ng_loc in self.ng_locations:
+            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                # 检查该MTJ位置是否属于机场集成转换
+                is_airport_integrated = False
+                if 'airport_integrated_conversion' in self.non_lng_mtj_locations:
+                    if mtj_loc in self.non_lng_mtj_locations['airport_integrated_conversion']:
+                        is_airport_integrated = True
+
+                # 机场集成转换模式下天然气运输成本为0，跳过计算
+                if is_airport_integrated:
+                    continue
+
+                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+
+                for day in range(total_days):
+                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                        if hasattr(transport_var, 'x') and transport_var.x > 0:
+                            # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
+                            linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var.x
+                            ng_transport_cost_total += linear_cost
+
+        # 第二部分：规模经济成本计算 0.888/q
+        # 为每个天然气源的每天计算规模经济成本
+        for ng_loc in self.ng_locations:
+            daily_capacity_limit = self.ng_daily_capacities.get(ng_loc, 10000)  # m³/d
+
+            for day in range(total_days):
+                # 计算该天然气源在这一天的总输送量
+                daily_volume = 0.0
+
+                for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                        if hasattr(transport_var, 'x') and transport_var.x > 0:
+                            daily_volume += transport_var.x
+
+                # 如果当天有运输，则应用规模经济成本
+                if daily_volume > 0:
+                    # 将成本分摊到各运输路线
+                    for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                        if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                            # 检查该MTJ位置是否属于机场集成转换
+                            is_airport_integrated = False
+                            if 'airport_integrated_conversion' in self.non_lng_mtj_locations:
+                                if mtj_loc in self.non_lng_mtj_locations['airport_integrated_conversion']:
+                                    is_airport_integrated = True
+
+                            # 机场集成转换模式下天然气运输成本为0，跳过规模经济成本计算
+                            if is_airport_integrated:
+                                continue
+
+                            transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+                            if hasattr(transport_var, 'x') and transport_var.x > 0:
+                                # 每单位运输量承担的规模经济成本
+                                scale_economy_cost = 0.888  # 简化处理，固定值
+                                ng_transport_cost_total += transport_var.x * scale_economy_cost
+
+        # 应用生命周期扩展系数
+        ng_transport_cost_total *= operation_expansion_factor * present_value_factor
+
+        return ng_transport_cost_total
+
     def _get_ng_transport_unit_cost(self, ng_loc: str, mtj_loc: str, total_days: int) -> float:
         """计算天然气运输单位成本，基于预期的路线运输量
         
@@ -3753,37 +3838,31 @@ class NaturalGasSupplyChainOptimizer:
         return max(distance_km, 5), route_coordinates
     
     def _calculate_natural_gas_cost(self):
-        """计算天然气原料成本（基于每条管道的具体价格）"""
+        """计算天然气原料成本（修复：使用MTJ生产变量）"""
         natural_gas_cost = 0
-        
-        # 只对MTJ工厂类型的地点计算天然气成本
-        for location in self.locations:
-            location_data = self.locations[location]
-            location_type = location_data.get('type', '')
-            # 只处理MTJ工厂类型（如'mtj_factory'，如有其他类型可补充）
-            if location_type not in ['mtj_factory']:
-                continue
-            # 直接遍历所有管道，取第一个有价格的即可
-            ng_price_per_10k_m3 = None
-            for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
-                price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
-                if price is not None:
-                    ng_price_per_10k_m3 = price
-                    break
-            if ng_price_per_10k_m3 is None:
-                logger.warning(f"MTJ工厂 {location} 没有找到天然气价格，跳过")
-                continue
-            # 计算该工厂的天然气消耗成本
-            for tech in self.technologies:
-                ng_consumption_ratio = self.technologies[tech]['ng_consumption_ratio']  # m³天然气/kg航煤
-                for hour in range(self.total_hours):
-                    if (location, tech, hour) in self.production_vars:
-                        natural_gas_cost += (
-                            self.production_vars[(location, tech, hour)] *
-                            ng_consumption_ratio *
-                            ng_price_per_10k_m3 / 10000  # 转换为元/立方米
-                        )
-        
+
+        # 获取天然气价格
+        ng_price_per_10k_m3 = None
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
+            if price is not None:
+                ng_price_per_10k_m3 = price
+                break
+
+        if ng_price_per_10k_m3 is None:
+            return 0
+
+        # 基于MTJ生产变量计算天然气成本
+        if hasattr(self, 'mtj_production_vars'):
+            for (location, tech, hour), var in self.mtj_production_vars.items():
+                tech_info = self.technologies.get(tech, {})
+                ng_consumption_ratio = tech_info.get('natural_gas_consumption_m3_per_kg_mtj', 0)
+
+                if ng_consumption_ratio > 0:
+                    natural_gas_cost += (
+                        var * ng_consumption_ratio * ng_price_per_10k_m3 / 10000
+                    )
+
         return natural_gas_cost
     
     def _calculate_actual_natural_gas_cost(self):
@@ -3809,7 +3888,59 @@ class NaturalGasSupplyChainOptimizer:
                             )
         
         return natural_gas_cost
-    
+
+    def _calculate_natural_gas_cost_for_breakdown(self):
+        """计算天然气原料成本（修复：使用MTJ生产变量）"""
+        natural_gas_cost = 0
+
+        # 检查是否有MTJ生产变量
+        if not hasattr(self, 'mtj_production_vars') or not self.mtj_production_vars:
+            logger.warning("没有找到MTJ生产变量，天然气成本为0")
+            return 0
+
+        # 获取天然气价格
+        ng_price_per_10k_m3 = None
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
+            if price is not None:
+                ng_price_per_10k_m3 = price
+                break
+
+        if ng_price_per_10k_m3 is None:
+            logger.warning("没有找到天然气价格，天然气成本为0")
+            return 0
+
+        # 统计活跃的MTJ locations
+        active_mtj_locations = {}
+        for (location, tech, hour), var in self.mtj_production_vars.items():
+            if hasattr(var, 'x') and var.x > 0:
+                if location not in active_mtj_locations:
+                    active_mtj_locations[location] = {}
+                if tech not in active_mtj_locations[location]:
+                    active_mtj_locations[location][tech] = 0
+                active_mtj_locations[location][tech] += var.x
+
+        # 计算每个活跃location的天然气成本
+        total_mtj_production = 0
+        for location, tech_production in active_mtj_locations.items():
+            location_cost = 0
+            for tech, production in tech_production.items():
+                tech_info = self.technologies.get(tech, {})
+                ng_consumption_ratio = tech_info.get('natural_gas_consumption_m3_per_kg_mtj', 0)
+
+                if ng_consumption_ratio > 0 and production > 0:
+                    tech_ng_cost = production * ng_consumption_ratio * ng_price_per_10k_m3 / 10000
+                    location_cost += tech_ng_cost
+                    total_mtj_production += production
+                    logger.info(f"Location {location}, Tech {tech}: 生产量={production:.0f}kg, 天然气消耗={production * ng_consumption_ratio:.0f}m³, 成本={tech_ng_cost:.2f}元")
+
+            natural_gas_cost += location_cost
+            if location_cost > 0:
+                logger.info(f"MTJ Location {location} 天然气总成本: {location_cost:.2f}元")
+
+        logger.info(f"活跃MTJ位置数: {len(active_mtj_locations)}, 总MTJ生产量: {total_mtj_production:.0f}kg, 天然气总成本: {natural_gas_cost:.2f}元")
+        return natural_gas_cost
+
     def solve(self) -> Dict:
         """求解优化模型"""
         logger.info("开始求解优化模型...")
@@ -4211,6 +4342,7 @@ class NaturalGasSupplyChainOptimizer:
             mtj_production_total = cost_breakdown.get('production_operational_cost', 0)
             mtj_storage_equipment_total = cost_breakdown.get('storage_equipment_cost', 0)
             mtj_storage_operation_total = cost_breakdown.get('storage_operation_cost', 0)
+            transport_operation_total = cost_breakdown.get('transport_operation_cost', 0)
 
             # 计算单位成本
             electricity_unit = electricity_cost_total / lifecycle_total_production
@@ -4228,6 +4360,7 @@ class NaturalGasSupplyChainOptimizer:
             mtj_production_unit = mtj_production_total / lifecycle_total_production
             mtj_storage_equipment_unit = mtj_storage_equipment_total / lifecycle_total_production
             mtj_storage_operation_unit = mtj_storage_operation_total / lifecycle_total_production
+            transport_operation_unit = transport_operation_total / lifecycle_total_production
 
             # 计算三大成本类别
             hydrogen_related_unit = (electricity_unit + electrolyzer_unit +
@@ -4235,7 +4368,8 @@ class NaturalGasSupplyChainOptimizer:
                                    h2_storage_investment_unit + h2_storage_operation_unit)
             natural_gas_related_unit = ng_procurement_unit + ng_transport_unit
             mtj_direct_unit = (facility_investment_unit + facility_operation_unit +
-                             mtj_production_unit + mtj_storage_equipment_unit + mtj_storage_operation_unit)
+                             mtj_production_unit + mtj_storage_equipment_unit + mtj_storage_operation_unit +
+                             transport_operation_unit)
 
             # 输出详细分解
             logger.info(f"1. 氢能相关成本: {hydrogen_related_unit:.3f} 元/kg")
@@ -4256,6 +4390,7 @@ class NaturalGasSupplyChainOptimizer:
             logger.info(f"   - MTJ生产运营: {mtj_production_unit:.3f} 元/kg")
             logger.info(f"   - MTJ储存设备: {mtj_storage_equipment_unit:.3f} 元/kg")
             logger.info(f"   - MTJ储存运营: {mtj_storage_operation_unit:.3f} 元/kg")
+            logger.info(f"   - MTJ运输运营: {transport_operation_unit:.3f} 元/kg")
 
             # 验证总和
             calculated_total_unit = hydrogen_related_unit + natural_gas_related_unit + mtj_direct_unit
@@ -4278,16 +4413,21 @@ class NaturalGasSupplyChainOptimizer:
         """计算生命周期平准化成本分解（基于20年总产量）"""
         breakdown = {}
         
-        # 运营成本扩展系数（与目标函数保持一致）
-        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数
-        
-        # 计算现值系数
+        # 使用与目标函数完全相同的生命周期系数计算逻辑
         discount_rate = self.economic_params['discount_rate']
         project_lifespan = self.economic_params['project_lifespan']
+
+        # 计算现值系数（与目标函数保持完全一致）
         if discount_rate == 0:
             present_value_factor = project_lifespan
         else:
             present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
+
+        # 运营成本扩展系数（与目标函数保持一致）
+        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数
+
+        # 计算与目标函数完全相同的生命周期运营成本系数
+        lifecycle_operation_factor = operation_expansion_factor * present_value_factor
         
         # 计算20年总产量
         total_production_in_window = sum(
@@ -4329,7 +4469,7 @@ class NaturalGasSupplyChainOptimizer:
         variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 从配置读取，默认0.3
         logger.info(f"成本分解计算中的MTJ变动运营成本: {variable_opex_per_kg}元/kg")
         # 应用生命周期系数，与目标函数保持一致
-        production_cost_total = total_production_in_window * variable_opex_per_kg * operation_expansion_factor * present_value_factor
+        production_cost_total = total_production_in_window * variable_opex_per_kg * lifecycle_operation_factor
         breakdown["production_operational_cost"] = production_cost_total
         
         # 运输成本分解
@@ -4339,9 +4479,9 @@ class NaturalGasSupplyChainOptimizer:
             if var.x > 0:
                 transport_equipment_total += var.x * 0  # 设备投资已包含在平准化运输成本中
                 distance_km = self._calculate_distance(location, airport)
-                transport_operation_total += (var.x * 
-                    self._calculate_mtj_transport_cost_by_distance(distance_km) * 
-                    operation_expansion_factor * present_value_factor)  # 基于运输理论公式的20年运营成本现值
+                transport_operation_total += (var.x *
+                    self._calculate_mtj_transport_cost_by_distance(distance_km) *
+                    lifecycle_operation_factor)  # 基于运输理论公式的20年运营成本现值
         
         breakdown["transport_equipment_cost"] = transport_equipment_total
         breakdown["transport_operation_cost"] = transport_operation_total
@@ -4418,7 +4558,7 @@ class NaturalGasSupplyChainOptimizer:
             hydrogen_production_unit_cost = float(
                 self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
             )
-            hydrogen_production_cost_total = total_h2_production * hydrogen_production_unit_cost * operation_expansion_factor * present_value_factor
+            hydrogen_production_cost_total = total_h2_production * hydrogen_production_unit_cost * lifecycle_operation_factor
         breakdown["hydrogen_production_cost"] = hydrogen_production_cost_total
         
         # 电解制氢电力成本（20年现值）
@@ -4430,7 +4570,7 @@ class NaturalGasSupplyChainOptimizer:
             # 计算总电力消耗成本（MWh）
             total_electricity_consumption_mwh = total_h2_production * self.costs['electrolysis_power_consumption'] / 1000
             # 应用扩展系数和现值系数，保持与其他成本计算的一致性
-            electricity_cost_total = total_electricity_consumption_mwh * self.costs['renewable_electricity_cost_yuan_per_mwh'] * operation_expansion_factor * present_value_factor
+            electricity_cost_total = total_electricity_consumption_mwh * self.costs['renewable_electricity_cost_yuan_per_mwh'] * lifecycle_operation_factor
         breakdown["electricity_cost"] = electricity_cost_total
         
         # 氢气运输成本（20年现值）
@@ -4441,7 +4581,7 @@ class NaturalGasSupplyChainOptimizer:
                     distance_km = self._calculate_location_distance(h_loc, mtj_loc)
                     unit_cost = self._calculate_hydrogen_transport_cost_by_distance(distance_km)
                     hydrogen_transport_cost_total += var.x * unit_cost
-            hydrogen_transport_cost_total *= operation_expansion_factor * present_value_factor
+            hydrogen_transport_cost_total *= lifecycle_operation_factor
         breakdown["hydrogen_transport_cost"] = hydrogen_transport_cost_total
         
         # 氢能管道运输成本（20年现值）
@@ -4454,7 +4594,7 @@ class NaturalGasSupplyChainOptimizer:
                     distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
                     unit_cost = self._calculate_hydrogen_pipeline_cost_by_distance(distance_km)
                     hydrogen_pipeline_transport_cost_total += var.x * unit_cost
-            hydrogen_pipeline_transport_cost_total *= operation_expansion_factor * present_value_factor
+            hydrogen_pipeline_transport_cost_total *= lifecycle_operation_factor
             
             # 氢气管道建设投资成本已在成本分析引擎中考虑，此处不重复计算
             # if hasattr(self, 'hydrogen_pipeline_facility_vars'):
@@ -4468,20 +4608,81 @@ class NaturalGasSupplyChainOptimizer:
         breakdown["hydrogen_pipeline_transport_cost"] = hydrogen_pipeline_transport_cost_total
         breakdown["hydrogen_pipeline_investment_cost"] = hydrogen_pipeline_investment_cost_total
         
-        # 天然气运输成本（20年现值）
-        ng_transport_cost_total = 0
+        # 天然气运输成本（20年现值）- 使用与目标函数相同的复杂计算逻辑
+        ng_transport_cost_total = self._calculate_unified_ng_transport_cost(
+            operation_expansion_factor, present_value_factor
+        )
+
+        # 额外调试：检查天然气运输变量实际值
         if hasattr(self, 'ng_transport_vars'):
-            total_days = self.total_hours // 24
-            for (ng_loc, mtj_loc, day), var in self.ng_transport_vars.items():
-                if var.x > 0:
-                    distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
-                    unit_cost = self._calculate_ng_transport_cost_by_distance(distance_km, var.x)
-                    ng_transport_cost_total += var.x * unit_cost
-            ng_transport_cost_total *= operation_expansion_factor * present_value_factor
+            ng_transport_total_volume = 0.0
+            ng_transport_active_vars = 0
+            for var_key, var in self.ng_transport_vars.items():
+                if hasattr(var, 'x') and var.x > 0:
+                    ng_transport_total_volume += var.x
+                    ng_transport_active_vars += 1
+            logger.info(f"天然气运输调试: 总运输量={ng_transport_total_volume:.2f} m³/week, 活跃变量={ng_transport_active_vars}个")
+            logger.info(f"天然气运输成本计算结果: {ng_transport_cost_total:.2f} 元")
+        else:
+            logger.info("天然气运输调试: 没有天然气运输变量")
         breakdown["ng_transport_cost"] = ng_transport_cost_total
         
-        # 天然气原料成本（20年现值）
-        natural_gas_cost_total = self._calculate_actual_natural_gas_cost() * operation_expansion_factor * present_value_factor
+        # 天然气原料成本（20年现值）- 直接复制目标函数中的计算逻辑
+        # 目标函数中是: natural_gas_cost = self._calculate_natural_gas_cost() * lifecycle_operation_factor
+        # 但_calculate_natural_gas_cost()在求解后无法正确访问变量值，所以直接计算
+
+        natural_gas_cost_total = 0
+
+        # 获取天然气价格和技术参数
+        ng_price_per_10k_m3 = None
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
+            if price is not None:
+                ng_price_per_10k_m3 = price
+                break
+
+        if ng_price_per_10k_m3 is not None:
+            # 基于实际求解结果计算天然气消耗量和成本
+            total_ng_consumption = 0  # m³
+
+            # 遍历所有MTJ生产活动，计算天然气消耗量
+            for location in self.locations:
+                for tech in self.technologies:
+                    tech_info = self.technologies.get(tech, {})
+                    ng_consumption_ratio = tech_info.get('natural_gas_consumption_m3_per_kg_mtj', 0)
+
+                    if ng_consumption_ratio > 0:
+                        location_production = 0
+                        for hour in range(self.total_hours):
+                            # 检查生产变量（优先检查MTJ生产变量）
+                            production_value = 0
+                            if hasattr(self, 'mtj_production_vars') and (location, tech, hour) in self.mtj_production_vars:
+                                var = self.mtj_production_vars[(location, tech, hour)]
+                                if hasattr(var, 'x'):
+                                    production_value = var.x
+                            elif (location, tech, hour) in self.production_vars:
+                                var = self.production_vars[(location, tech, hour)]
+                                if hasattr(var, 'x'):
+                                    production_value = var.x
+
+                            location_production += production_value
+
+                        if location_production > 0:
+                            location_ng_consumption = location_production * ng_consumption_ratio
+                            location_ng_cost = location_ng_consumption * ng_price_per_10k_m3 / 10000
+                            total_ng_consumption += location_ng_consumption
+                            natural_gas_cost_total += location_ng_cost
+                            logger.info(f"Location {location}, Tech {tech}: 生产量={location_production:.0f}kg, 天然气消耗={location_ng_consumption:.0f}m³, 成本={location_ng_cost:.2f}元")
+
+            logger.info(f"总天然气消耗量: {total_ng_consumption:.0f} m³, 总成本: {natural_gas_cost_total:.2f} 元")
+
+        # 应用生命周期系数
+        natural_gas_cost_total *= lifecycle_operation_factor
+
+        # 对比调试
+        old_natural_gas_cost = self._calculate_actual_natural_gas_cost() * lifecycle_operation_factor
+        logger.info(f"天然气成本调试: 新方法(直接计算)={natural_gas_cost_total:.2f}元, 旧方法={old_natural_gas_cost:.2f}元, 差异={(natural_gas_cost_total-old_natural_gas_cost):.2f}元")
+
         breakdown["natural_gas_raw_material_cost"] = natural_gas_cost_total
         
         # 短缺惩罚成本（20年现值）
@@ -4491,7 +4692,7 @@ class NaturalGasSupplyChainOptimizer:
                 var.x * self.costs['shortage_penalty_yuan_per_kg']
                 for var in self.shortage_vars.values()
             if var.x > 0
-            ) * operation_expansion_factor * present_value_factor
+            ) * lifecycle_operation_factor
         breakdown["shortage_penalty_cost"] = shortage_cost_total
         
         # 期末库存处置成本（目标函数中的final_inventory_cost）
@@ -4510,13 +4711,61 @@ class NaturalGasSupplyChainOptimizer:
             )
         breakdown["final_inventory_disposal_cost"] = final_inventory_cost_total
         
-        # 计算总的生命周期成本（排除缺货惩罚成本）
-        total_lifecycle_cost = sum(
-            cost for key, cost in breakdown.items() 
-            if key.endswith('_cost') and key != 'shortage_penalty_cost'
+        # 计算总的生命周期成本（排除缺货惩罚成本）- 明确列出所有成本项
+        total_lifecycle_cost = (
+            # 投资成本
+            breakdown.get("facility_investment_cost", 0) +
+            breakdown.get("transport_equipment_cost", 0) +
+            breakdown.get("storage_equipment_cost", 0) +
+            breakdown.get("electrolyzer_investment_cost", 0) +
+            breakdown.get("h2_storage_investment_cost", 0) +
+            breakdown.get("hydrogen_transport_investment_cost", 0) +
+            breakdown.get("ng_transport_investment_cost", 0) +
+            breakdown.get("hydrogen_pipeline_investment_cost", 0) +
+
+            # 运营成本
+            breakdown.get("facility_operation_cost", 0) +
+            breakdown.get("production_operational_cost", 0) +
+            breakdown.get("transport_operation_cost", 0) +
+            breakdown.get("storage_operation_cost", 0) +
+            breakdown.get("hydrogen_production_cost", 0) +
+            breakdown.get("electricity_cost", 0) +
+            breakdown.get("h2_storage_operation_cost", 0) +
+            breakdown.get("hydrogen_transport_cost", 0) +
+            breakdown.get("hydrogen_pipeline_transport_cost", 0) +
+            breakdown.get("ng_transport_cost", 0) +
+            breakdown.get("natural_gas_raw_material_cost", 0) +
+            breakdown.get("final_inventory_disposal_cost", 0)
         )
         breakdown["total_lifecycle_cost"] = total_lifecycle_cost
-        
+
+        # 验证修复：手动计算所有成本项总和
+        manual_total = (
+            breakdown.get("facility_investment_cost", 0) +
+            breakdown.get("transport_equipment_cost", 0) +
+            breakdown.get("storage_equipment_cost", 0) +
+            breakdown.get("electrolyzer_investment_cost", 0) +
+            breakdown.get("h2_storage_investment_cost", 0) +
+            breakdown.get("hydrogen_transport_investment_cost", 0) +
+            breakdown.get("ng_transport_investment_cost", 0) +
+            breakdown.get("hydrogen_pipeline_investment_cost", 0) +
+            breakdown.get("facility_operation_cost", 0) +
+            breakdown.get("production_operational_cost", 0) +
+            breakdown.get("transport_operation_cost", 0) +
+            breakdown.get("storage_operation_cost", 0) +
+            breakdown.get("hydrogen_production_cost", 0) +
+            breakdown.get("electricity_cost", 0) +
+            breakdown.get("h2_storage_operation_cost", 0) +
+            breakdown.get("hydrogen_transport_cost", 0) +
+            breakdown.get("hydrogen_pipeline_transport_cost", 0) +
+            breakdown.get("ng_transport_cost", 0) +
+            breakdown.get("natural_gas_raw_material_cost", 0) +
+            breakdown.get("final_inventory_disposal_cost", 0)
+        )
+        logger.info(f"修复后的total_lifecycle_cost: {total_lifecycle_cost:.2f} 元")
+        logger.info(f"手动计算的总成本: {manual_total:.2f} 元")
+        logger.info(f"两者差异: {abs(total_lifecycle_cost - manual_total):.2f} 元")
+
         # 添加关键统计信息
         breakdown["annual_production_kg"] = annual_production
         breakdown["lifecycle_total_production_kg"] = lifecycle_total_production
@@ -4535,7 +4784,51 @@ class NaturalGasSupplyChainOptimizer:
             breakdown["annual_levelized_cost_per_kg"] = (total_lifecycle_cost / project_lifespan) / annual_production
         else:
             breakdown["annual_levelized_cost_per_kg"] = 0
-        
+
+        # 添加详细的成本对比调试输出
+        logger.info("\n=== 成本分解详细调试输出 ===")
+        logger.info(f"生命周期运营成本系数: {lifecycle_operation_factor:.6f}")
+        logger.info(f"  年化系数: {operation_expansion_factor:.6f}")
+        logger.info(f"  现值系数: {present_value_factor:.6f}")
+        logger.info(f"生命周期总产量: {lifecycle_total_production:,.0f} kg")
+
+        # 显示各成本项的具体数值
+        major_cost_items = [
+            ("facility_investment_cost", "MTJ设施投资成本"),
+            ("facility_operation_cost", "MTJ设施运营成本"),
+            ("production_operational_cost", "生产变动运营成本"),
+            ("transport_operation_cost", "运输运营成本"),
+            ("storage_equipment_cost", "储存设备投资"),
+            ("storage_operation_cost", "储存运营成本"),
+            ("electrolyzer_investment_cost", "电解槽投资成本"),
+            ("hydrogen_production_cost", "制氢运营成本"),
+            ("electricity_cost", "电力成本"),
+            ("hydrogen_transport_cost", "氢气运输成本"),
+            ("hydrogen_pipeline_transport_cost", "氢气管道运输成本"),
+            ("hydrogen_pipeline_investment_cost", "氢气管道投资成本"),
+            ("ng_transport_cost", "天然气运输成本"),
+            ("natural_gas_raw_material_cost", "天然气原料成本"),
+            ("h2_storage_investment_cost", "氢气储存投资"),
+            ("h2_storage_operation_cost", "氢气储存运营"),
+            ("shortage_penalty_cost", "短缺惩罚成本"),
+            ("final_inventory_disposal_cost", "期末库存处置成本")
+        ]
+
+        logger.info("--- 各项成本明细 (20年生命周期总成本) ---")
+        cost_breakdown_total = 0.0
+        for cost_key, cost_name in major_cost_items:
+            if cost_key in breakdown:
+                cost_value = breakdown[cost_key]
+                cost_breakdown_total += cost_value if cost_key != 'shortage_penalty_cost' else 0
+                unit_cost = cost_value / lifecycle_total_production if lifecycle_total_production > 0 else 0
+                logger.info(f"{cost_name}: {cost_value:,.2f} 元 ({unit_cost:.4f} 元/kg)")
+
+        logger.info(f"--- 成本汇总对比 ---")
+        logger.info(f"成本分解总计(不含短缺): {cost_breakdown_total:,.2f} 元")
+        logger.info(f"成本分解中的total_lifecycle_cost: {total_lifecycle_cost:,.2f} 元")
+        logger.info(f"单位成本(不含短缺): {total_lifecycle_cost / lifecycle_total_production:.4f} 元/kg")
+        logger.info("=== 成本分解调试输出结束 ===\n")
+
         return breakdown
     
     def _calculate_unit_costs_from_optimization(self, solution: Dict) -> Dict:
