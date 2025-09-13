@@ -240,7 +240,7 @@ cost_parameters:
                                                  # ■ 趋势：绿氢成本预计2030年降至20-30元/kg
                                                  # ■ 对比：自制绿氢边际成本主要是电力成本
     
-    renewable_electricity_cost_yuan_per_mwh: 0.5   # 自发绿电边际成本 (元/MWh)
+    renewable_electricity_cost_yuan_per_mwh: 500   # 自发绿电边际成本 (元/MWh)
                                                  # ■ 用途：可再生能源站自发自用电力的边际成本
                                                  # ■ 设置原理：
                                                  #   - 自有风电/光伏的边际成本接近于0
