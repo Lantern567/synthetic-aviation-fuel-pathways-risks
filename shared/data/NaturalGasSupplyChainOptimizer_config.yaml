@@ -1130,3 +1130,128 @@ metadata:
     修改此文件可以调整优化器的行为，无需修改源代码。
     参数分为18个主要类别，涵盖了经济、技术、成本、数据路径等各个方面。
     v1.1.0更新: 添加了数据路径配置section，支持pipeline式数据导入。
+
+# =============================================================================
+# 19. 运行依赖说明 (Dependencies Documentation)
+# 为便于快速部署/迁移，列出运行 natural_gas_optimization_model.py 所需的
+# 代码模块、外部Python库、输入数据文件、输出目录与缓存目录。
+# 该节是文档性说明，不被模型读取；如需自动读取可在代码中增加解析逻辑。
+# 生成时间: 2025-09-17
+# =============================================================================
+dependencies:
+  external_libraries:             # 第三方Python库 (pip install ...)
+    - name: gurobipy
+      purpose: "MILP优化求解器 (核心)"
+      required: true
+      import_example: "import gurobipy as gp"
+    - name: pandas
+      purpose: "数据表读取/清洗 (Excel/CSV/聚合)"
+      required: true
+    - name: numpy
+      purpose: "数值计算/统计"
+      required: true
+    - name: pyyaml
+      purpose: "读取本配置文件"
+      required: true
+      package: "PyYAML"
+    - name: requests
+      purpose: "调用GraphHopper HTTP API (启用路径规划时)"
+      required: false
+    - name: openpyxl
+      purpose: "读取Excel机场/基础设施数据 (pandas engine)"
+      required: false
+    - name: sqlite3
+      purpose: "标准库：GraphHopper路径结果本地缓存 (route_cache.db)"
+      required: builtin
+    - name: logging
+      purpose: "标准库：统一日志输出"
+      required: builtin
+    - name: hashlib
+      purpose: "标准库：生成缓存Key"
+      required: builtin
+    - name: math
+      purpose: "标准库：Haversine距离计算"
+      required: builtin
+  internal_modules:               # 项目内部模块/类 (相对项目根目录)
+    - module: shared.utils.log_preserver
+      path: shared/utils/log_preserver.py
+      symbols: [mount_file_logging]
+      purpose: "挂载文件日志 (初始化时)"
+    - module: products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.graphhopper_routing_engine
+      path: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/graphhopper_routing_engine.py
+      symbols: [GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator]
+      purpose: "GraphHopper路径规划与距离计算"
+      conditional: "use_graphhopper_routing=true 时必需"
+    - module: products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.data_cache_manager
+      path: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/data_cache_manager.py
+      symbols: [cache_manager]
+      purpose: "可再生能源/管道/LNG数据500km过滤与缓存"
+    - module: products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.pipeline_coordinate_integrator
+      path: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/pipeline_coordinate_integrator.py
+      purpose: "(可选) 管道坐标/容量整合，若执行预处理脚本"
+      optional: true
+    - module: products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.direct_capacity_preprocessor
+      path: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/direct_capacity_preprocessor.py
+      purpose: "(可选) 产能预处理工具"
+      optional: true
+    - module: products.supply_chain_optimization.natural_gas_supply_chain_optimization.src.transport_route_visualizer
+      path: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/transport_route_visualizer.py
+      purpose: "(可选) 路由/运输方案可视化"
+      optional: true
+    - module: shared.utils.geographic_calculator
+      path: shared/utils/geographic_calculator.py
+      purpose: "(可选) 通用地理距离/方位计算 (若代码中扩展调用)"
+      optional: true
+  main_entry:
+    class: NaturalGasSupplyChainOptimizer
+    source_file: products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/natural_gas_optimization_model.py
+    key_init_args: [config_path, use_graphhopper_routing, osm_pbf_path]
+    construction_steps: |
+      1. _load_config -> 读取本YAML
+      2. 初始化GraphHopper (可选) & 日志系统
+      3. 调用 load_data(...) 或 load_data_from_excel(...) 构建模型数据
+      4. 定义技术/成本/位置映射 -> 构建MILP模型 -> optimize
+  data_inputs:                 # 运行前应准备的核心数据文件/目录 (若未覆盖override)
+    airports_excel: "products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx"
+    airports_excel_backup: "products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx"
+    wind_data_dir: "products/aviation_fuel_analysis/resource_flight_data_process/results/3hourly_generation"
+    solar_data_dir: "products/aviation_fuel_analysis/resource_flight_data_process/results/solar_generation"
+    ng_pipelines_preprocessed: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/natural_gas_pipelines_with_capacity.xlsx"
+    ng_pipelines_integrated: "products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/integrated_gas_pipeline_price_data_with_coords.csv"
+    ng_pipelines_original: "products/gis_energy_mapping/scraped_gis_data/natural_gas_pipelines.csv"
+    lng_terminals_preprocessed: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/lng_terminals_with_capacity.xlsx"
+    lng_terminals_original: "products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/lng_terminals.csv"
+    osm_pbf_default: "products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf"
+    renewable_plants_in_memory: "说明: 可再生能源数据通过DataFrame传入，不固定文件，可选写入临时缓存"
+  output_artifacts:            # 由 file_templates 定义的结果文件 (位于 results_base_dir)
+    dir: "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results"
+    templates_ref: data_paths.output_paths.file_templates
+    typical_files:
+      - optimization_summary_{timestamp}.csv
+      - facility_decisions_{timestamp}.csv
+      - complete_solution_{timestamp}.json
+  cache_and_temp:
+    renewable_filter_cache_dir: "cache/filtered_500km_data"          # 500km过滤后的可再生能源缓存
+    graphhopper_route_cache_dir: "shared/data/cache/graphhopper_routes" # 路由JSON与SQLite缓存
+    graphhopper_sqlite: "shared/data/cache/graphhopper_routes/route_cache.db"
+    naming_convention: "temp_renewable_<records>_<plants>.csv 用于判定缓存有效性"
+  runtime_flags:
+    use_graphhopper_routing: "true=HTTP路径规划 (requests) | false=降级直线距离"
+    use_routing_for_short_distance: "控制短距离是否仍调用GraphHopper"
+  environment_recommendation:
+    python_version: ">=3.10"
+    memory_suggestion_gb: 8
+    notes: |
+      若启用GraphHopper请确保本地已启动: java -Xmx8g -jar graphhopper-web-*.jar server config.yml
+      并保证 OSM PBF 文件与缓存目录具有写权限。gurobipy 需有效License。
+  quick_validation_checklist: |
+    1. pip install -r requirements.txt (确保gurobipy已就绪)
+    2. 检查 airports_excel 是否存在
+    3. 检查 wind/solar 目录存在且含CSV
+    4. 检查 ng_pipelines_integrated / lng_terminals_preprocessed 是否存在 (缺失则退化处理或需先运行预处理脚本)
+    5. (可选) 启动GraphHopper服务; 不启用则设 use_graphhopper_routing=false
+    6. 运行一个最小示例: 实例化优化器 -> 构造少量抽样数据 -> optimize
+  maintenance: |
+    - 如新增内部模块，请在 internal_modules 追加条目
+    - 如调整数据路径，请同步修改 data_paths 与本节 data_inputs
+    - 可在CI中添加脚本校验这些文件是否存在以提前失败
