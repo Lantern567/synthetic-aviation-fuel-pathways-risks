@@ -1380,9 +1380,8 @@ class NaturalGasSupplyChainOptimizer:
         # 构建技术配置，从配置文件加载各个技术的详细参数
         self.technologies = {}
         
-        for tech_key in ['pipeline_direct_conversion', 'airport_integrated_conversion', 
-                        'lng_terminal_conversion', 'lng_to_hplant_conversion', 
-                        'integrated_supply_conversion']:
+        for tech_key in ['pipeline_direct_conversion', 'airport_integrated_conversion',
+                        'lng_terminal_conversion', 'lng_to_hplant_conversion']:
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
                 self.technologies[tech_key] = {
@@ -1961,7 +1960,7 @@ class NaturalGasSupplyChainOptimizer:
         
         valid_h2_routes = 0  # 计数有效路线
         for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
+            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
                 # 排除管段直供和LNG转运模式，因为它们在可再生能源站就地制备MTJ，氢气无需运输
                 if tech not in self.technologies:
                     logger.warning(f"技术 {tech} 不在 technologies 中，跳过氢气运输变量创建")
@@ -1996,7 +1995,7 @@ class NaturalGasSupplyChainOptimizer:
         valid_ng_routes = 0  # 计数有效路线
         total_days = self.total_hours // 24
         for ng_loc in self.ng_locations:
-            for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion', 'integrated_supply_conversion']:
+            for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion']:
                 # 机场集成转换直接从城市管道供气，不需要运输变量
                 if tech == 'airport_integrated_conversion':
                     continue  # 跳过机场集成转换，使用管道直供
@@ -2022,24 +2021,6 @@ class NaturalGasSupplyChainOptimizer:
         
         logger.info(f"创建了 {valid_ng_routes} 条天然气运输路线（无距离限制）")
 
-        # 9.5. 创建LNG接收站到机场的天然气运输变量（专用于integrated_supply_conversion模式）
-        logger.info("创建LNG接收站到机场的天然气运输变量（integrated_supply_conversion模式专用）")
-
-        lng_routes = 0
-        # 获取所有LNG接收站位置
-        lng_locations = [loc for loc, info in self.locations.items() if info['type'] == 'lng_terminal']
-
-        for lng_loc in lng_locations:
-            # 只为integrated_supply_conversion技术的机场创建运输变量
-            for mtj_loc in self.non_lng_mtj_locations.get('integrated_supply_conversion', []):
-                lng_routes += 1
-                for day in range(total_days):
-                    var_name = f"lng_transport_{lng_loc}_{mtj_loc}_day_{day}"
-                    self.ng_transport_vars[(lng_loc, mtj_loc, day)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-
-        logger.info(f"创建了 {lng_routes} 条LNG接收站运输路线（integrated_supply_conversion模式）")
 
         # 10. 创建氢能管道运输变量 (与罐车运输并行的选择方案)
         logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
@@ -2051,7 +2032,7 @@ class NaturalGasSupplyChainOptimizer:
         total_days = self.total_hours // 24
         
         for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
+            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
                 # 只为需要氢气运输的技术路线创建管道变量
                 if tech not in self.technologies:
                     continue
@@ -2982,7 +2963,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 天然气运输约束：对于非LNG接收站位置的MTJ工厂（改为天级罐车运输）
         total_days = self.total_hours // 24
-        for tech in ['airport_integrated_conversion', 'lng_to_hplant_conversion', 'integrated_supply_conversion']:
+        for tech in ['airport_integrated_conversion', 'lng_to_hplant_conversion']:
             # 机场集成转换直接从城市管道供气，无需运输约束
             if tech == 'airport_integrated_conversion':
                 continue  # 跳过机场集成转换，使用管道直供
@@ -3019,7 +3000,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 天然气运输需求满足约束：所有非LNG接收站的MTJ工厂天然气需求（改为天级罐车运输）
         total_days = self.total_hours // 24
-        for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion', 'integrated_supply_conversion']:
+        for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion']:
             for mtj_loc in self.non_lng_mtj_locations[tech]:
                 for day in range(total_days):
                     # 计算该天的天然气需求（基于该天所有小时的生产量）
@@ -3045,21 +3026,6 @@ class NaturalGasSupplyChainOptimizer:
                         # 不需要添加约束，因为管道直供隐含地满足了所有需求
                         # 天然气需求成本会在天然气采购成本中体现
                         pass  # 管道直供，无需额外约束
-                    elif tech == 'integrated_supply_conversion':
-                        # integrated_supply_conversion通过LNG运输满足需求
-                        lng_locations = [loc for loc, info in self.locations.items() if info['type'] == 'lng_terminal']
-                        valid_lng_transport_vars = [
-                            self.ng_transport_vars[(lng_loc, mtj_loc, day)]
-                            for lng_loc in lng_locations
-                            if (lng_loc, mtj_loc, day) in self.ng_transport_vars
-                        ]
-
-                        # LNG运输量必须满足需求
-                        if valid_lng_transport_vars:
-                            self.model.addConstr(
-                                gp.quicksum(valid_lng_transport_vars) >= ng_demand,
-                                name=f"lng_ng_demand_satisfaction_{mtj_loc}_day_{day}"
-                            )
                     else:
                         # 其他技术：通过管道运输变量满足需求
                         # 只对存在的运输变量求和
@@ -3284,20 +3250,6 @@ class NaturalGasSupplyChainOptimizer:
                         linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
                         ng_transport_operation += linear_cost * lifecycle_operation_factor
 
-        # 2. LNG接收站到机场的运输成本（integrated_supply_conversion模式）
-        lng_locations = [loc for loc, info in self.locations.items() if info['type'] == 'lng_terminal']
-        for lng_loc in lng_locations:
-            for mtj_loc in self.non_lng_mtj_locations.get('integrated_supply_conversion', []):
-                distance_km = self._calculate_location_distance(lng_loc, mtj_loc)
-
-                total_days_local = self.total_hours // 24
-                for day in range(total_days_local):
-                    if (lng_loc, mtj_loc, day) in self.ng_transport_vars:
-                        transport_var = self.ng_transport_vars[(lng_loc, mtj_loc, day)]
-
-                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
-                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
-                        ng_transport_operation += linear_cost * lifecycle_operation_factor
                         
         # 天然气日处理能力约束已移除 - 允许无限制处理
         logger.info("天然气日处理能力约束已移除，允许无限制处理")

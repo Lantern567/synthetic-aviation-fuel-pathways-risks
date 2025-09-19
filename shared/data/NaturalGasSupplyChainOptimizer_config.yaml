@@ -476,9 +476,6 @@ technologies:
                                                             # ■ 场地限制：机场环境对安全和噪声要求高
                                                             # ■ 监管要求：需要符合民航安全标准
     
-    integrated_supply_conversion: 1.0                      # 综合供应技术复杂度
-                                                            # ■ 供应链复杂：多种原料来源和供应模式
-                                                            # ■ 调度难度：需要复杂的供应链管理系统
   
   # -------------------------------------------------------------------------
   # 具体技术路线配置 - E-CRM+TRM工艺的不同实施模式
@@ -573,16 +570,6 @@ technologies:
     hydrogen_transport_required: false                     # ■ 优势：就地绿氢，无运输损失
     technology_type: 'E-CRM+TRM'
   
-  integrated_supply_conversion:
-    name: 'E-CRM+TRM MTJ航煤生产（综合供应）'              # 多元化供应模式
-    efficiency: 0.85                                       # ■ 特点：多种天然气来源，供应安全性高
-    ng_consumption_ratio: 0.8                              # ■ 复杂性：需要复杂的供应链管理
-    h2_consumption_ratio: 0.12
-    methanol_intermediate_ratio: 1.2
-    suitable_locations: ['airport']                        # ■ 应用：大型机场的保供策略
-    transport_mode: 'integrated_supply'
-    hydrogen_transport_required: true                      # ■ 配套：需要完善的氢气运输网络
-    technology_type: 'E-CRM+TRM'
 
 # =============================================================================
 # 8. 运输模式参数 (Transport Mode Parameters)
@@ -649,9 +636,9 @@ transport_modes:
                                                         # ■ 实际考虑：机场周边工业用地可获得性
                                                         # ■ 安全要求：符合机场净空和安全防护要求
     
-    suitable_sources: ['ng_pipeline', 'lng_terminal']  # 适用的多元化气源
-                                                        # ■ 供应安全：多源供应提高供气可靠性
-                                                        # ■ 价格优化：根据市场情况灵活选择气源
+    suitable_sources: ['ng_pipeline']                  # 仅支持天然气管道直供
+                                                        # ■ 成本优势：无运输成本，直接管道供气
+                                                        # ■ 技术简化：避免复杂的多源供应协调
   
   # -------------------------------------------------------------------------
   # LNG接收站供应模式 - 基于LNG终端的直接供应
@@ -698,27 +685,6 @@ transport_modes:
                                                         # ■ 起点要求：必须有LNG液化和装车设施
                                                         # ■ 终点要求：需要LNG储存和气化设备
   
-  # -------------------------------------------------------------------------
-  # 综合供应模式 - 多源多模式的保障型供应方案
-  # -------------------------------------------------------------------------
-  integrated_supply:
-    name: '综合供应'                                    # 多元化综合供应模式
-    description: '多源头、多模式的组合供应方案'
-                                                        # ■ 战略定位：高安全性要求场景的保障方案
-                                                        # ■ 复杂性：需要先进的供应链管理系统
-    
-    capacity_factor: 0.88                              # 综合系统可用性
-                                                        # ■ 冗余优势：多源供应，单一故障不影响整体
-                                                        # ■ 协调难度：多系统协调增加管理复杂度
-                                                        # ■ 优化潜力：通过AI调度可提升至90-92%
-    
-    distance_limit_km: 1500                            # 综合供应覆盖半径 (km)
-                                                        # ■ 设计考虑：平衡供应安全性和经济性
-                                                        # ■ 应用场景：大型机场群、重要工业区
-    
-    suitable_sources: ['ng_pipeline', 'lng_terminal']  # 全源适配能力
-                                                        # ■ 灵活性：根据价格、供应情况动态选择
-                                                        # ■ 风险管控：多源供应降低单一来源风险
 
 # =============================================================================
 # 9. Gurobi求解器参数 (Gurobi Solver Parameters)
@@ -834,7 +800,7 @@ operational_parameters:
 # =============================================================================
 capacity_limits:
   # 设备产能上限
-  mtj_max_capacity_kg_per_hour: 10000              # MTJ设备最大产能(kg/h)
+  mtj_max_capacity_kg_per_hour: 100000             # MTJ设备最大产能(kg/h)
   electrolyzer_max_capacity_kg_per_hour: 2000      # 电解槽最大产能(kg H2/h)
   
   # MTJ产能估算参数 - 基于位置类型的日产能估算
