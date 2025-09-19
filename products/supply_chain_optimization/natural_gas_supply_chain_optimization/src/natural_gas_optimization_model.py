@@ -3706,12 +3706,12 @@ class NaturalGasSupplyChainOptimizer:
         distance_km = result.get('distance_km', 0)
         route_coordinates = result.get('route_coordinates', [])
         
-        # 如果路径规划失败，使用直线作为后备方案
+        # 如果路径规划失败，直接抛出异常
         if not result.get('route_found', False) or not route_coordinates:
-            distance_km = self.distance_calculator.calculate_haversine_distance(
-                loc_lat, loc_lon, air_lat, air_lon
-            ) * 1.3
-            route_coordinates = [[loc_lon, loc_lat], [air_lon, air_lat]]  # 直线路径
+            raise Exception(f"路径规划失败: {location} -> {airport}, "
+                          f"GraphHopper返回结果: route_found={result.get('route_found')}, "
+                          f"route_coordinates数量={len(route_coordinates) if route_coordinates else 0}, "
+                          f"错误信息: {result.get('error', '未知错误')}")
         
         # 缓存路径结果
         if not hasattr(self, 'route_cache'):
@@ -3747,12 +3747,11 @@ class NaturalGasSupplyChainOptimizer:
         )
         distance_km = result.get('distance_km', 0)
         
-        # 如果百度地图API失败，使用备选方案
+        # 如果路径规划失败，直接抛出异常
         if not result.get('route_found', False):
-            # 使用直线距离乘以系数作为备选方案
-            distance_km = self.distance_calculator.calculate_haversine_distance(
-                loc1_lat, loc1_lon, loc2_lat, loc2_lon
-            ) * 1.3
+            raise Exception(f"距离计算失败: {location1} -> {location2}, "
+                          f"GraphHopper返回结果: route_found={result.get('route_found')}, "
+                          f"错误信息: {result.get('error', '未知错误')}")
         
         # 缓存结果（双向）
         self.distance_cache[cache_key] = distance_km
@@ -3790,12 +3789,12 @@ class NaturalGasSupplyChainOptimizer:
         distance_km = result.get('distance_km', 0)
         route_coordinates = result.get('route_coordinates', [])
         
-        # 如果路径规划失败，使用直线作为后备方案
+        # 如果路径规划失败，直接抛出异常
         if not result.get('route_found', False) or not route_coordinates:
-            distance_km = self.distance_calculator.calculate_haversine_distance(
-                loc1_lat, loc1_lon, loc2_lat, loc2_lon
-            ) * 1.3
-            route_coordinates = [[loc1_lon, loc1_lat], [loc2_lon, loc2_lat]]  # 直线路径
+            raise Exception(f"路径规划失败: {location1} -> {location2}, "
+                          f"GraphHopper返回结果: route_found={result.get('route_found')}, "
+                          f"route_coordinates数量={len(route_coordinates) if route_coordinates else 0}, "
+                          f"错误信息: {result.get('error', '未知错误')}")
         
         # 缓存路径结果（双向）
         self.route_cache[route_cache_key] = {
@@ -6731,11 +6730,8 @@ class NaturalGasSupplyChainOptimizer:
         
         for h_loc in renewable_locations[:5]:  # 限制样本数以节省时间
             for mtj_loc in mtj_locations[:5]:
-                try:
-                    distance = self._calculate_location_distance(h_loc, mtj_loc)
-                    hydrogen_distances.append(distance)
-                except Exception as e:
-                    logger.warning(f"氢气运输距离计算失败 {h_loc} -> {mtj_loc}: {e}")
+                distance = self._calculate_location_distance(h_loc, mtj_loc)
+                hydrogen_distances.append(distance)
         
         if hydrogen_distances:
             self.avg_hydrogen_transport_distance = np.mean(hydrogen_distances)
@@ -6755,11 +6751,8 @@ class NaturalGasSupplyChainOptimizer:
         
         for ng_loc in ng_locations:
             for mtj_loc in non_lng_mtj_locations:
-                try:
-                    distance = self._calculate_location_distance(ng_loc, mtj_loc)
-                    ng_distances.append(distance)
-                except Exception as e:
-                    logger.warning(f"天然气运输距离计算失败 {ng_loc} -> {mtj_loc}: {e}")
+                distance = self._calculate_location_distance(ng_loc, mtj_loc)
+                ng_distances.append(distance)
         
         if ng_distances:
             self.avg_ng_transport_distance = np.mean(ng_distances)
@@ -6778,11 +6771,8 @@ class NaturalGasSupplyChainOptimizer:
         
         for loc in production_locations:
             for airport in airports:
-                try:
-                    distance = self._calculate_distance(loc, airport)
-                    airport_distances.append(distance)
-                except Exception as e:
-                    logger.warning(f"机场运输距离计算失败 {loc} -> {airport}: {e}")
+                distance = self._calculate_distance(loc, airport)
+                airport_distances.append(distance)
         
         if airport_distances:
             avg_airport_distance = np.mean(airport_distances)
