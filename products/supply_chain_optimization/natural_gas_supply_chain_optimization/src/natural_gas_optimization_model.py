@@ -3670,7 +3670,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 使用GraphHopper路径规划计算真实距离
         result = self.routing_engine.calculate_route_distance(
-            loc_lat, loc_lon, air_lat, air_lon, vehicle="car", include_route_geometry=False
+            loc_lat, loc_lon, air_lat, air_lon, vehicle="truck", include_route_geometry=False
         )
         distance_km = result.get('distance_km', 0)
         
@@ -3701,17 +3701,29 @@ class NaturalGasSupplyChainOptimizer:
         
         # 使用GraphHopper路径规划计算真实距离并获取路径
         result = self.routing_engine.calculate_route_distance(
-            loc_lat, loc_lon, air_lat, air_lon, vehicle="car", include_route_geometry=True
+            loc_lat, loc_lon, air_lat, air_lon, vehicle="truck", include_route_geometry=True
         )
         distance_km = result.get('distance_km', 0)
         route_coordinates = result.get('route_coordinates', [])
         
-        # 如果路径规划失败，直接抛出异常
-        if not result.get('route_found', False) or not route_coordinates:
-            raise Exception(f"路径规划失败: {location} -> {airport}, "
-                          f"GraphHopper返回结果: route_found={result.get('route_found')}, "
-                          f"route_coordinates数量={len(route_coordinates) if route_coordinates else 0}, "
-                          f"错误信息: {result.get('error', '未知错误')}")
+        # 验证路径规划结果
+        if not result.get('route_found', False):
+            error_msg = f"路径规划失败: {location} -> {airport}, GraphHopper未找到路径"
+            logger.error(error_msg)
+            logger.error(f"错误详情: {result.get('error', '未知错误')}")
+            logger.error(f"完整GraphHopper响应: {result}")
+            logger.error(f"起点坐标: ({loc_lat}, {loc_lon})")
+            logger.error(f"终点坐标: ({air_lat}, {air_lon})")
+            raise Exception(error_msg)
+
+        if not route_coordinates:
+            error_msg = f"路径坐标解析失败: {location} -> {airport}, GraphHopper返回结果: route_found={result.get('route_found')}, route_coordinates数量=0, 错误信息: {result.get('error', '未知错误')}"
+            logger.error(error_msg)
+            logger.error(f"GraphHopper详细响应: route_found={result.get('route_found')}, distance_km={distance_km}, time_hours={result.get('time_hours', 'N/A')}")
+            logger.error(f"起点坐标: ({loc_lat}, {loc_lon})")
+            logger.error(f"终点坐标: ({air_lat}, {air_lon})")
+            logger.error(f"完整GraphHopper结果: {result}")
+            raise Exception(error_msg)
         
         # 缓存路径结果
         if not hasattr(self, 'route_cache'):
@@ -3743,7 +3755,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 使用GraphHopper路径规划计算真实距离
         result = self.routing_engine.calculate_route_distance(
-            loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="car", include_route_geometry=False
+            loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="truck", include_route_geometry=False
         )
         distance_km = result.get('distance_km', 0)
         
@@ -3784,7 +3796,7 @@ class NaturalGasSupplyChainOptimizer:
         
         # 使用GraphHopper路径规划计算真实距离并获取路径
         result = self.routing_engine.calculate_route_distance(
-            loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="car", include_route_geometry=True
+            loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="truck", include_route_geometry=True
         )
         distance_km = result.get('distance_km', 0)
         route_coordinates = result.get('route_coordinates', [])
@@ -6866,4 +6878,22 @@ if __name__ == '__main__':
             logger.error("模型求解失败或未返回结果。")
 
     except Exception as e:
-        logger.error(f"模型执行过程中发生严重错误: {e}", exc_info=True)
+        logger.error("="*80)
+        logger.error("模型执行过程中发生严重错误")
+        logger.error("="*80)
+        logger.error(f"错误类型: {type(e).__name__}")
+        logger.error(f"错误信息: {e}")
+        logger.error(f"错误发生时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # 如果是路径规划相关的错误，记录额外信息
+        if "路径规划" in str(e) or "GraphHopper" in str(e) or "route" in str(e).lower():
+            logger.error("这是一个路径规划相关的错误")
+            logger.error("建议检查:")
+            logger.error("  1. GraphHopper服务是否正常运行 (http://localhost:8989)")
+            logger.error("  2. OSM数据文件是否存在且完整")
+            logger.error("  3. 坐标数据是否有效")
+            logger.error("  4. 网络连接是否正常")
+
+        logger.error("完整错误堆栈信息:")
+        logger.error("-"*60, exc_info=True)
+        logger.error("="*80)
