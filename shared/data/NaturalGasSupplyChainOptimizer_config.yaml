@@ -76,6 +76,21 @@ basic_parameters:
                                            #   - true: 短距离也使用精确路径规划
                                            #   - false: 短距离使用直线距离，提升性能
                                            # ■ 权衡：精度 vs 计算性能
+
+  # -------------------------------------------------------------------------
+  # 氢气管道运输设置 - 控制氢气运输距离计算方式
+  # -------------------------------------------------------------------------
+  use_hydrogen_pipeline_distance: true    # 是否使用氢气管道距离计算
+                                           # ■ 用途：启用氢气管道运输距离计算功能
+                                           # ■ 代码位置：natural_gas_optimization_model.py:342, 3885
+                                           # ■ 影响：
+                                           #   - true: 使用氢气管道距离计算器进行精确的管道路径计算
+                                           #   - false: 禁用氢气管道距离计算，使用备用方法
+                                           # ■ 依赖：需要hydrogen_pipeline_distance_calculator模块和GIS管道数据
+                                           # ■ 数据要求：
+                                           #   - products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/crude_pipelines.geojson
+                                           #   - products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/refined_pipelines.geojson
+                                           #   - products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/natural_gas_pipelines.geojson
   
   # -------------------------------------------------------------------------
   # LNG设施容量参数 - 供应能力约束的默认值

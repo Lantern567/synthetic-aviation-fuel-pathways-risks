@@ -128,6 +128,7 @@ class TransportRouteVisualizer:
             '氢气': '#9B59B6',       # 紫色 - 氢气运输(中文)
             'default': '#95A5A6'     # 灰色 - 默认
         }
+
     
     def parse_coordinates(self, coord_str):
         """解析坐标字符串"""
@@ -158,23 +159,43 @@ class TransportRouteVisualizer:
             return None, None
     
     def get_real_route_coordinates_from_data(self, row):
-        """从数据行中获取真实路径坐标"""
+        """从数据行中获取真实路径坐标，根据运输方式选择合适的路径数据"""
         try:
+            # 获取运输方式
+            transport_mode = row.get('运输方式', 'truck').lower()
+
             # 优先从数据中读取路径坐标
             if '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
                 try:
                     coordinates = json.loads(row['路径坐标'])
-                    if coordinates and len(coordinates) > 2:  # 确保有真实路径点
-                        return coordinates
-                except (json.JSONDecodeError, ValueError):
-                    pass
-            
-            # 如果数据中没有路径坐标，尝试从GraphHopper缓存获取
-            return self.get_real_route_coordinates_from_cache(
-                row['起点纬度'], row['起点经度'], 
-                row['终点纬度'], row['终点经度']
-            )
-                    
+
+                    if transport_mode == 'pipeline':
+                        # 管道运输：使用数据中的管道路径坐标
+                        if coordinates and len(coordinates) >= 2:  # 管道路径至少需要起点和终点
+                            self.logger.debug(f"使用管道路径坐标: {len(coordinates)}个点")
+                            return coordinates
+                    elif transport_mode == 'truck':
+                        # 罐车运输：如果有详细路径坐标就使用，否则fallback到GraphHopper
+                        if coordinates and len(coordinates) > 2:  # 确保有真实路径点
+                            self.logger.debug(f"使用罐车路径坐标: {len(coordinates)}个点")
+                            return coordinates
+
+                except (json.JSONDecodeError, ValueError) as e:
+                    self.logger.warning(f"路径坐标解析失败: {row['路径坐标']}, 错误: {e}")
+
+            # 根据运输方式决定fallback策略
+            if transport_mode == 'pipeline':
+                # 管道运输：如果没有管道路径坐标，不使用GraphHopper（因为GraphHopper是针对罐车的）
+                self.logger.warning(f"管道运输缺少路径坐标，无法获取详细路径")
+                return None
+            else:
+                # 罐车运输：尝试从GraphHopper缓存获取
+                self.logger.debug(f"罐车运输：尝试从GraphHopper缓存获取路径坐标")
+                return self.get_real_route_coordinates_from_cache(
+                    row['起点纬度'], row['起点经度'],
+                    row['终点纬度'], row['终点经度']
+                )
+
         except Exception as e:
             self.logger.debug(f"获取路径坐标失败: {e}")
             return None
@@ -446,44 +467,74 @@ class TransportRouteVisualizer:
     
     def create_base_map(self, figsize=(14, 10)):
         """创建基础地图（华北地区）"""
+        try:
+            # 尝试使用完整的frykit功能
+            fig = plt.figure(figsize=figsize)
+            main_ax = fig.add_subplot(projection=self.map_crs)
+
+            # 设置主地图范围为华北地区
+            min_lon, max_lon, min_lat, max_lat = self.map_extent
+            fplt.set_map_ticks(main_ax, (min_lon, max_lon, min_lat, max_lat),
+                              self.xticks, self.yticks)
+            main_ax.gridlines(xlocs=self.xticks, ylocs=self.yticks,
+                             lw=0.5, ls="--", color="gray", alpha=0.5)
+
+            # 设置刻度样式
+            main_ax.tick_params(
+                length=8, width=0.9, labelsize=10,
+                top=True, right=True, labeltop=True, labelright=True
+            )
+
+            # 不创建南海小地图，因为华北地区不需要
+            mini_ax = None
+
+            # 添加地图要素
+            main_ax.set_facecolor("lightcyan")
+            main_ax.add_feature(LAND, fc="floralwhite", ec="k", lw=0.5)
+            fplt.add_cn_city(main_ax, lw=0.3, edgecolor='lightgreen',
+                           linestyle='--', zorder=2)
+            fplt.add_cn_line(main_ax, lw=1.2, edgecolor='dimgray', zorder=2.5)
+            fplt.add_cn_border(main_ax, lw=0.75, edgecolor='black', zorder=3)
+
+            return fig, main_ax, mini_ax
+
+        except Exception as e:
+            raise RuntimeError(f"无法使用frykit创建完整地图: {e}。请确保正确安装了frykit[data]依赖。") from e
+
+    def create_simple_base_map(self, figsize=(14, 10)):
+        """创建简化的基础地图（不依赖frykit）"""
         fig = plt.figure(figsize=figsize)
-        main_ax = fig.add_subplot(projection=self.map_crs)
-        
-        # 设置主地图范围为华北地区
-        min_lon, max_lon, min_lat, max_lat = self.map_extent
-        fplt.set_map_ticks(main_ax, (min_lon, max_lon, min_lat, max_lat), 
-                          self.xticks, self.yticks)
-        main_ax.gridlines(xlocs=self.xticks, ylocs=self.yticks, 
-                         lw=0.5, ls="--", color="gray", alpha=0.5)
-        
-        # 设置刻度样式
-        main_ax.tick_params(
-            length=8, width=0.9, labelsize=10,
-            top=True, right=True, labeltop=True, labelright=True
-        )
-        
-        # 不创建南海小地图，因为华北地区不需要
+        main_ax = fig.add_subplot()
+
+        # 设置华北地区范围
+        main_ax.set_xlim(110, 120)
+        main_ax.set_ylim(35, 45)
+        main_ax.set_xlabel('经度 (°E)', fontsize=12)
+        main_ax.set_ylabel('纬度 (°N)', fontsize=12)
+        main_ax.grid(True, alpha=0.3)
+        main_ax.set_aspect('equal', adjustable='box')
+
+        # 设置标题
+        main_ax.set_title('华北地区能源基础设施网络图 (35°N-45°N, 110°E-120°E)',
+                         fontsize=14, fontweight='bold', pad=20)
+
+        # 不创建小地图
         mini_ax = None
-        
-        # 添加地图要素
-        main_ax.set_facecolor("lightcyan")
-        main_ax.add_feature(LAND, fc="floralwhite", ec="k", lw=0.5)
-        fplt.add_cn_city(main_ax, lw=0.3, edgecolor='lightgreen', 
-                       linestyle='--', zorder=2)
-        fplt.add_cn_line(main_ax, lw=1.2, edgecolor='dimgray', zorder=2.5)
-        fplt.add_cn_border(main_ax, lw=0.75, edgecolor='black', zorder=3)
-        
+
         return fig, main_ax, mini_ax
-    
+
     def add_decorations(self, main_ax, mini_ax=None):
         """添加指北针和比例尺"""
-        # 添加指北针
-        fplt.add_compass(main_ax, 0.92, 0.85, size=15, style="star")
-        
-        # 添加比例尺（适合华北地区范围）
-        scale_bar = fplt.add_scale_bar(main_ax, 0.05, 0.95, length=200)
-        scale_bar.set_xticks([0, 100, 200])
-        scale_bar.xaxis.get_label().set_fontsize("small")
+        try:
+            # 添加指北针
+            fplt.add_compass(main_ax, 0.92, 0.85, size=15, style="star")
+
+            # 添加比例尺（适合华北地区范围）
+            scale_bar = fplt.add_scale_bar(main_ax, 0.05, 0.95, length=200)
+            scale_bar.set_xticks([0, 100, 200])
+            scale_bar.xaxis.get_label().set_fontsize("small")
+        except Exception as e:
+            print(f"警告: 无法添加装饰元素 ({e})，跳过装饰...")
     
     def filter_data_by_region(self, data, lat_col='纬度', lon_col='经度'):
         """过滤数据到华北地区范围"""
@@ -623,18 +674,18 @@ class TransportRouteVisualizer:
         
         # 创建基础地图
         fig, main_ax, mini_ax = self.create_base_map(figsize=(14, 10))
-        
+
+        # 使用完整模式，不再支持简化模式
         legend_elements = []
         facility_stats = {
             'solar': 0,
-            'wind': 0, 
-            'pipeline': 0,
+            'wind': 0,
             'lng': 0,
             'airport': 0
         }
         connection_stats = {}
-        
-        # 1. 绘制太阳能电站
+
+        # 1. 绘制太阳能电站（仅在完整模式下）
         if all_data.get('renewable_energy') is not None:
             renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
             
@@ -647,12 +698,13 @@ class TransportRouteVisualizer:
                         capacity = facility.get('装机容量(MW)', 50)
                         size = min(max(capacity / 2, 30), 150)
                         
+                        # 完整模式：始终使用transform
                         main_ax.scatter(
                             facility['经度'], facility['纬度'],
-                            c=self.facility_colors['solar'], s=size, 
+                            c=self.facility_colors['solar'], s=size,
                             marker=self.facility_markers['solar'],
                             edgecolors='black', linewidth=0.8,
-                            transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                            transform=self.data_crs, zorder=20, alpha=0.9
                         )
                         facility_stats['solar'] += 1
                 
@@ -665,46 +717,48 @@ class TransportRouteVisualizer:
                         capacity = facility.get('装机容量(MW)', 50)
                         size = min(max(capacity / 2, 30), 150)
                         
+                        # 完整模式：始终使用transform
                         main_ax.scatter(
                             facility['经度'], facility['纬度'],
-                            c=self.facility_colors['wind'], s=size, 
+                            c=self.facility_colors['wind'], s=size,
                             marker=self.facility_markers['wind'],
                             edgecolors='black', linewidth=0.8,
-                            transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+                            transform=self.data_crs, zorder=20, alpha=0.9
                         )
                         facility_stats['wind'] += 1
         
-        # 3. 绘制天然气管段
-        if all_data.get('ng_pipelines') is not None:
-            pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
-            
-            if pipeline_data is not None and len(pipeline_data) > 0:
-                print(f"正在绘制 {len(pipeline_data)} 个管段...")
-                for _, pipeline in pipeline_data.iterrows():
-                    main_ax.scatter(
-                        pipeline['经度'], pipeline['纬度'],
-                        c=self.facility_colors['pipeline'], s=60, 
-                        marker=self.facility_markers['pipeline'],
-                        edgecolors='black', linewidth=0.8,
-                        transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
-                    )
-                    facility_stats['pipeline'] += 1
+        # 3. 绘制天然气管段 - 已移除管段点标记，只保留管道网络线条
+        # if all_data.get('ng_pipelines') is not None:
+        #     pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
+        #
+        #     if pipeline_data is not None and len(pipeline_data) > 0:
+        #         print(f"正在绘制 {len(pipeline_data)} 个管段...")
+        #         for _, pipeline in pipeline_data.iterrows():
+        #             main_ax.scatter(
+        #                 pipeline['经度'], pipeline['纬度'],
+        #                 c=self.facility_colors['pipeline'], s=60,
+        #                 marker=self.facility_markers['pipeline'],
+        #                 edgecolors='black', linewidth=0.8,
+        #                 transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
+        #             )
+        #             facility_stats['pipeline'] += 1
         
         # 4. 绘制LNG终端
-        if all_data.get('lng_terminals') is not None:
-            lng_data = self.filter_data_by_region(all_data['lng_terminals'])
-            
-            if lng_data is not None and len(lng_data) > 0:
-                print(f"正在绘制 {len(lng_data)} 个LNG终端...")
-                for _, terminal in lng_data.iterrows():
-                    main_ax.scatter(
-                        terminal['经度'], terminal['纬度'],
-                        c=self.facility_colors['lng'], s=80, 
-                        marker=self.facility_markers['lng'],
-                        edgecolors='black', linewidth=0.8,
-                        transform=self.data_crs, zorder=10, alpha=0.9  # zorder=10，高于连接线
-                    )
-                    facility_stats['lng'] += 1
+        # LNG终端已被用户要求移除，不进行可视化
+        # if all_data.get('lng_terminals') is not None:
+        #     lng_data = self.filter_data_by_region(all_data['lng_terminals'])
+        #
+        #     if lng_data is not None and len(lng_data) > 0:
+        #         print(f"正在绘制 {len(lng_data)} 个LNG终端...")
+        #         for _, terminal in lng_data.iterrows():
+        #             main_ax.scatter(
+        #                 terminal['经度'], terminal['纬度'],
+        #                 c=self.facility_colors['lng'], s=80,
+        #                 marker=self.facility_markers['lng'],
+        #                 edgecolors='black', linewidth=0.8,
+        #                 transform=self.data_crs, zorder=10, alpha=0.9
+        #             )
+        #             facility_stats['lng'] += 1
         
         # 5. 绘制机场（从运输数据中提取）
         airports_data = []
@@ -732,166 +786,23 @@ class TransportRouteVisualizer:
                 if len(airports) > 0:
                     print(f"正在绘制 {len(airports)} 个机场...")
                     for _, airport in airports.iterrows():
+                        # 完整模式：始终使用transform，机场显示在最上层
                         main_ax.scatter(
                             airport['终点经度'], airport['终点纬度'],
-                            c=self.facility_colors['airport'], s=100, 
+                            c=self.facility_colors['airport'], s=100,
                             marker=self.facility_markers['airport'],
                             edgecolors='white', linewidth=1.0,
-                            transform=self.data_crs, zorder=12, alpha=0.9  # zorder=12，最高层
+                            transform=self.data_crs, zorder=25, alpha=0.9  # 最上层显示
                         )
                         facility_stats['airport'] += 1
                 
                 airports_data = airports
                 
-                # 6. 绘制设施间连接线
-                print(f"正在绘制 {len(region_transport)} 条设施连接线...")
-                print(f"DEBUG: region_transport 数据样本:")
-                if len(region_transport) > 0:
-                    sample = region_transport.head(3)
-                    for idx, row in sample.iterrows():
-                        print(f"  起点: {row['起点']} ({row['起点经度']:.2f}, {row['起点纬度']:.2f})")
-                        print(f"  终点: {row['终点']} ({row['终点经度']:.2f}, {row['终点纬度']:.2f})")
-                        print(f"  运输量: {row.get('周运输量(kg)', 'N/A')}")
-                        print("---")
-                
-                # 统计和去重连接线
-                unique_connections = {}
-                zero_length_lines = 0
-                
-                for i, (_, route) in enumerate(region_transport.iterrows()):
-                    # 检查起点终点是否相同 (零长度连接)
-                    start_coord = f"{route['起点经度']:.6f},{route['起点纬度']:.6f}"
-                    end_coord = f"{route['终点经度']:.6f},{route['终点纬度']:.6f}"
-                    
-                    if start_coord == end_coord:
-                        zero_length_lines += 1
-                        continue  # 跳过零长度连接
-                    
-                    # 创建唯一连接键
-                    connection_key = f"{route['起点']}->{route['终点']}"
-                    
-                    # 如果是新的连接，记录它
-                    if connection_key not in unique_connections:
-                        unique_connections[connection_key] = {
-                            'route': route,
-                            'start_lon': route['起点经度'],
-                            'start_lat': route['起点纬度'], 
-                            'end_lon': route['终点经度'],
-                            'end_lat': route['终点纬度'],
-                            'volume': route.get('周运输量(kg)', 1000),
-                            'origin_type': self.classify_facility_type(route['起点']),
-                            'dest_type': self.classify_facility_type(route['终点'])
-                        }
-                
-                print(f"\n连接线去重统计:")
-                print(f"  原始连接数: {len(region_transport)}")
-                print(f"  零长度连接 (已跳过): {zero_length_lines}")
-                print(f"  唯一有效连接: {len(unique_connections)}")
-                
-                # 绘制唯一的连接线
-                valid_lines_drawn = 0
-                real_route_lines = 0
-                straight_lines = 0
-                
-                for connection_key, conn_data in unique_connections.items():
-                    # 确定连接线颜色
-                    connection_color = self.get_connection_color(
-                        conn_data['route']['起点'], 
-                        conn_data['route']['终点']
-                    )
-                    
-                    # 统计连接类型
-                    connection_type = f"{conn_data['origin_type']}_to_{conn_data['dest_type']}"
-                    connection_stats[connection_type] = connection_stats.get(connection_type, 0) + 1
-                    
-                    # 根据运输量确定线条宽度
-                    volume = conn_data['volume']
-                    if pd.isna(volume) or volume <= 0:
-                        line_width = 3.0  # 默认线宽
-                    else:
-                        line_width = min(max(volume / 30000, 2.0), 6.0)  # 最小2.0，最大6.0
-                    
-                    # 计算连接距离
-                    distance = ((conn_data['end_lon'] - conn_data['start_lon'])**2 + 
-                               (conn_data['end_lat'] - conn_data['start_lat'])**2)**0.5
-                    
-                    valid_lines_drawn += 1
-                    
-                    # 尝试获取详细路径坐标
-                    route_coords = None
-                    
-                    # 1. 首先从数据中读取
-                    if 'route' in conn_data and hasattr(conn_data['route'], 'get'):
-                        route_coords = self.get_real_route_coordinates_from_data(conn_data['route'])
-                    
-                    # 2. 如果没有找到，尝试从缓存获取
-                    if not route_coords:
-                        route_coords = self.get_real_route_coordinates_from_cache(
-                            conn_data['start_lat'], conn_data['start_lon'],
-                            conn_data['end_lat'], conn_data['end_lon']
-                        )
-                    
-                    # 3. 如果仍然没有找到，尝试使用GraphHopper API直接获取
-                    if not route_coords and distance > 0.005:  # 降低距离阈值，对更多连接使用API
-                        route_coords = self.get_real_route_coordinates_using_graphhopper(
-                            conn_data['start_lat'], conn_data['start_lon'],
-                            conn_data['end_lat'], conn_data['end_lon']
-                        )
-                    
-                    # DEBUG: 打印前10条唯一连接线的信息
-                    if valid_lines_drawn <= 10:
-                        print(f"唯一连接线 {valid_lines_drawn}: {connection_key}")
-                        print(f"  类型: {conn_data['origin_type']} -> {conn_data['dest_type']}")
-                        print(f"  颜色: {connection_color}")
-                        print(f"  线条宽度: {line_width}")
-                        print(f"  坐标: ({conn_data['start_lon']:.2f}, {conn_data['start_lat']:.2f}) -> ({conn_data['end_lon']:.2f}, {conn_data['end_lat']:.2f})")
-                        print(f"  距离: {distance:.4f}度")
-                        print(f"  详细路径: {'是' if route_coords else '否'} ({len(route_coords) if route_coords else 0}个路径点)")
-                    
-                    # 绘制连接线
-                    if route_coords and len(route_coords) > 2:
-                        # 使用详细路径绘制
-                        real_route_lines += 1
-                        
-                        # 提取经纬度
-                        lons = [coord[1] if len(coord) > 1 else coord[0] for coord in route_coords]
-                        lats = [coord[0] if len(coord) > 1 else coord[1] for coord in route_coords]
-                        
-                        # 绘制详细路径
-                        line = main_ax.plot(
-                            lons, lats,
-                            color=connection_color, 
-                            alpha=0.95, linewidth=line_width,
-                            transform=self.data_crs, zorder=10,
-                            solid_capstyle='round', solid_joinstyle='round'  # 使线条更平滑
-                        )
-                    else:
-                        # 使用直线绘制（后备方案）
-                        straight_lines += 1
-                        line = main_ax.plot(
-                            [conn_data['start_lon'], conn_data['end_lon']], 
-                            [conn_data['start_lat'], conn_data['end_lat']], 
-                            color=connection_color, 
-                            alpha=0.7, linewidth=line_width,  # 直线透明度稍低
-                            linestyle='--',  # 虚线表示估算路径
-                            transform=self.data_crs, zorder=9
-                        )
-                    
-                    # DEBUG: 验证前3条线条是否被创建
-                    if valid_lines_drawn <= 3:
-                        route_type = "详细路径" if route_coords and len(route_coords) > 2 else "直线路径"
-                        print(f"DEBUG: {route_type}线条对象创建成功: {line}")
-                
-                print(f"\nDEBUG: 总共绘制了 {valid_lines_drawn} 条唯一可见连接线")
-                print(f"  详细路径: {real_route_lines} 条")
-                print(f"  直线路径: {straight_lines} 条")
-                print(f"详细路径覆盖率: {real_route_lines/valid_lines_drawn*100:.1f}%")
         
         # 创建设施类型图例
         facility_names = {
             'solar': '太阳能电站',
             'wind': '风电站',
-            'pipeline': '天然气管段',
             'lng': 'LNG终端',
             'airport': '机场'
         }
@@ -972,11 +883,51 @@ class TransportRouteVisualizer:
             for connection_type, count in connection_stats.items():
                 if count > 0 and connection_type in connection_names:
                     stats_text += f"  {connection_names[connection_type]}: {count}条\n"
-        
-        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes, 
-                    fontsize=8, bbox=dict(boxstyle="round,pad=0.3", 
+
+        # 添加三种管道网络连接（不同颜色），只显示与氢能运输相关的管道
+        print("\n正在添加管道网络连接...")
+        hydrogen_transport = all_data.get('hydrogen_transport')
+        pipeline_stats = self._add_pipeline_networks_to_existing_map(main_ax, hydrogen_transport)
+
+        # 添加设施到管道的简单直线连接
+        print("正在添加设施到管道的直线连接...")
+        self._add_simple_facility_to_pipeline_connections(main_ax, all_data)
+
+        # 更新统计文本以包含管道信息
+        if pipeline_stats and any(pipeline_stats.values()):
+            stats_text += "\n管道网络:\n"
+            pipeline_names = {
+                'crude': '原油管道',
+                'refined': '成品油管道',
+                'natural_gas': '天然气管道'
+            }
+            for pipeline_type, count in pipeline_stats.items():
+                if count > 0:
+                    stats_text += f"  {pipeline_names[pipeline_type]}: {count}段\n"
+
+        main_ax.text(0.02, 0.02, stats_text, transform=main_ax.transAxes,
+                    fontsize=8, bbox=dict(boxstyle="round,pad=0.3",
                     facecolor="white", alpha=0.9), verticalalignment='bottom')
-        
+
+        # 更新图例以包含管道类型
+        if pipeline_stats and any(pipeline_stats.values()):
+            pipeline_colors = {
+                'crude': '#8B4513',      # 棕色
+                'refined': '#FF6B35',    # 橙红色
+                'natural_gas': '#4169E1' # 皇家蓝
+            }
+
+            for pipeline_type, count in pipeline_stats.items():
+                if count > 0:
+                    legend_elements.append(
+                        plt.Line2D([0], [0], color=pipeline_colors[pipeline_type],
+                                  linewidth=2, label=f"{pipeline_names[pipeline_type]} ({count}段)")
+                    )
+
+            # 更新图例
+            main_ax.legend(handles=legend_elements, loc='upper right',
+                          fontsize=9, frameon=True, fancybox=True, shadow=True, framealpha=0.9)
+
         # 添加装饰
         self.add_decorations(main_ax, mini_ax)
         
@@ -1014,7 +965,7 @@ class TransportRouteVisualizer:
                         
                         main_ax.scatter(
                             facility['经度'], facility['纬度'],
-                            c=self.facility_colors['solar'], s=size, 
+                            c=self.facility_colors['solar'], s=size,
                             marker=self.facility_markers['solar'],
                             edgecolors='black', linewidth=0.8,
                             transform=self.data_crs, zorder=8, alpha=0.9,
@@ -1033,7 +984,7 @@ class TransportRouteVisualizer:
                         
                         main_ax.scatter(
                             facility['经度'], facility['纬度'],
-                            c=self.facility_colors['wind'], s=size, 
+                            c=self.facility_colors['wind'], s=size,
                             marker=self.facility_markers['wind'],
                             edgecolors='black', linewidth=0.8,
                             transform=self.data_crs, zorder=8, alpha=0.9,
@@ -1041,39 +992,41 @@ class TransportRouteVisualizer:
                         )
                         facility_stats['wind'] += 1
         
-        # 3. 绘制天然气管段
-        if all_data.get('ng_pipelines') is not None:
-            pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
-            
-            if pipeline_data is not None and len(pipeline_data) > 0:
-                print(f"正在绘制 {len(pipeline_data)} 个管段...")
-                for _, pipeline in pipeline_data.iterrows():
-                    main_ax.scatter(
-                        pipeline['经度'], pipeline['纬度'],
-                        c=self.facility_colors['pipeline'], s=60, 
-                        marker=self.facility_markers['pipeline'],
-                        edgecolors='black', linewidth=0.8,
-                        transform=self.data_crs, zorder=7, alpha=0.9,
-                        label='天然气管段' if facility_stats['pipeline'] == 0 else ""
-                    )
-                    facility_stats['pipeline'] += 1
+        # 3. 绘制天然气管段（注释掉，改用管道网络线条显示）
+        # if all_data.get('ng_pipelines') is not None:
+        #     pipeline_data = self.filter_data_by_region(all_data['ng_pipelines'])
+        #
+        #     if pipeline_data is not None and len(pipeline_data) > 0:
+        #         print(f"正在绘制 {len(pipeline_data)} 个管段...")
+        #         for _, pipeline in pipeline_data.iterrows():
+        #             main_ax.scatter(
+        #                 pipeline['经度'], pipeline['纬度'],
+        #                 c=self.facility_colors['pipeline'], s=60,
+        #                 marker=self.facility_markers['pipeline'],
+        #                 edgecolors='black', linewidth=0.8,
+        #                 transform=self.data_crs, zorder=7, alpha=0.9,
+        #                 label='天然气管段' if facility_stats['pipeline'] == 0 else ""
+        #             )
+        #             facility_stats['pipeline'] += 1
         
-        # 4. 绘制LNG终端
-        if all_data.get('lng_terminals') is not None:
-            lng_data = self.filter_data_by_region(all_data['lng_terminals'])
-            
-            if lng_data is not None and len(lng_data) > 0:
-                print(f"正在绘制 {len(lng_data)} 个LNG终端...")
-                for _, terminal in lng_data.iterrows():
-                    main_ax.scatter(
-                        terminal['经度'], terminal['纬度'],
-                        c=self.facility_colors['lng'], s=80, 
-                        marker=self.facility_markers['lng'],
-                        edgecolors='black', linewidth=0.8,
-                        transform=self.data_crs, zorder=9, alpha=0.9,
-                        label='LNG终端' if facility_stats['lng'] == 0 else ""
-                    )
-                    facility_stats['lng'] += 1
+        # 4. 绘制LNG终端（已禁用）
+        # if all_data.get('lng_terminals') is not None:
+        #     lng_data = self.filter_data_by_region(all_data['lng_terminals'])
+        #
+        #     if lng_data is not None and len(lng_data) > 0:
+        #         print(f"正在绘制 {len(lng_data)} 个LNG终端...")
+        #         for _, terminal in lng_data.iterrows():
+        #             transform_kwargs = self._get_transform_kwargs(main_ax)
+        #             main_ax.scatter(
+        #                 terminal['经度'], terminal['纬度'],
+        #                 c=self.facility_colors['lng'], s=80,
+        #                 marker=self.facility_markers['lng'],
+        #                 edgecolors='black', linewidth=0.8,
+        #                 zorder=9, alpha=0.9,
+        #                 label='LNG终端' if facility_stats['lng'] == 0 else "",
+        #                 **transform_kwargs
+        #             )
+        #             facility_stats['lng'] += 1
         
         # 5. 绘制机场（从运输数据中提取）
         if all_data.get('transport_summary') is not None:
@@ -1102,10 +1055,10 @@ class TransportRouteVisualizer:
                     for _, airport in airports.iterrows():
                         main_ax.scatter(
                             airport['终点经度'], airport['终点纬度'],
-                            c=self.facility_colors['airport'], s=100, 
+                            c=self.facility_colors['airport'], s=100,
                             marker=self.facility_markers['airport'],
                             edgecolors='white', linewidth=1.0,
-                            transform=self.data_crs, zorder=10, alpha=0.9,
+                            transform=self.data_crs, zorder=25, alpha=0.9,  # 最上层显示
                             label='机场' if facility_stats['airport'] == 0 else ""
                         )
                         facility_stats['airport'] += 1
@@ -1147,8 +1100,7 @@ class TransportRouteVisualizer:
         stats_text = "设施统计:\n"
         facility_names = {
             'solar': '太阳能电站',
-            'wind': '风电站', 
-            'pipeline': '天然气管段',
+            'wind': '风电站',
             'lng': 'LNG终端',
             'airport': '机场'
         }
@@ -1235,8 +1187,7 @@ class TransportRouteVisualizer:
                     color=color, 
                     alpha=0.8, 
                     linewidth=line_width,
-                    transform=self.data_crs, 
-                    zorder=4
+                                        zorder=4
                 )
                 
                 # 绘制小地图路径（南海区域）
@@ -1246,8 +1197,7 @@ class TransportRouteVisualizer:
                         color=color, 
                         alpha=0.8, 
                         linewidth=line_width * 0.7,
-                        transform=self.data_crs, 
-                        zorder=4
+                                                zorder=4
                     )
             else:
                 # 使用直线路径（后备方案）
@@ -1258,8 +1208,7 @@ class TransportRouteVisualizer:
                     alpha=0.5,  # 直线路径透明度更低
                     linewidth=line_width,
                     linestyle='--',  # 使用虚线表示估算路径
-                    transform=self.data_crs, 
-                    zorder=3
+                                        zorder=3
                 )
                 
                 # 绘制小地图路径（南海区域）
@@ -1272,8 +1221,7 @@ class TransportRouteVisualizer:
                         alpha=0.5, 
                         linewidth=line_width * 0.7,
                         linestyle='--',
-                        transform=self.data_crs, 
-                        zorder=3
+                                                zorder=3
                     )
         
         print(f"使用真实路径: {real_route_count}/{len(display_data)} 条")
@@ -1445,6 +1393,492 @@ class TransportRouteVisualizer:
         
         return fig, main_ax, mini_ax, display_data
     
+    def create_pipeline_network_topology_visualization(self):
+        """创建管道网络拓扑可视化，显示三种管道类型的连接"""
+        print("=== 创建管道网络拓扑可视化 ===")
+
+        # 定义管道类型和颜色
+        pipeline_types = {
+            'crude': {
+                'name': '原油管道',
+                'color': '#8B4513',  # 棕色
+                'alpha': 0.8,
+                'linewidth': 2.0,
+                'file': 'crude_pipelines.geojson'
+            },
+            'refined': {
+                'name': '成品油管道',
+                'color': '#FF6B35',  # 橙红色
+                'alpha': 0.8,
+                'linewidth': 2.0,
+                'file': 'refined_product_pipelines.geojson'
+            },
+            'natural_gas': {
+                'name': '天然气管道',
+                'color': '#4169E1',  # 皇家蓝
+                'alpha': 0.8,
+                'linewidth': 1.5,
+                'file': 'natural_gas_pipelines.geojson'
+            }
+        }
+
+        # 创建简单地图（不使用frykit以避免依赖问题）
+        fig, main_ax = plt.subplots(1, 1, figsize=(16, 12))
+
+        # 设置中国区域的地理范围
+        main_ax.set_xlim(73, 135)  # 中国经度范围
+        main_ax.set_ylim(18, 54)   # 中国纬度范围
+        main_ax.set_xlabel('经度 (°E)', fontsize=12)
+        main_ax.set_ylabel('纬度 (°N)', fontsize=12)
+        main_ax.grid(True, alpha=0.3)
+        main_ax.set_aspect('equal', adjustable='box')
+
+        # GIS数据路径 (使用绝对路径)
+        current_dir = Path(__file__).parent
+        gis_data_path = current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
+
+        total_segments = 0
+        legend_elements = []
+        pipeline_stats = {}
+        node_stats = {}
+
+        # 绘制每种管道类型
+        for pipeline_type, config in pipeline_types.items():
+            file_path = gis_data_path / config['file']
+
+            if not file_path.exists():
+                print(f"警告: {config['name']}数据文件不存在: {file_path}")
+                pipeline_stats[pipeline_type] = 0
+                node_stats[pipeline_type] = 0
+                continue
+
+            try:
+                # 加载GeoJSON数据
+                import json
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    geojson_data = json.load(f)
+
+                features = geojson_data.get('features', [])
+                segments_count = 0
+
+                print(f"绘制{config['name']}: {len(features)}个管道段")
+
+                # 绘制每个管道段
+                for feature in features:
+                    if not feature.get('geometry') or feature['geometry'].get('type') != 'LineString':
+                        continue
+
+                    coordinates = feature['geometry']['coordinates']
+                    if not coordinates or len(coordinates) < 2:
+                        continue
+
+                    # 提取经纬度
+                    lons = [coord[0] for coord in coordinates]
+                    lats = [coord[1] for coord in coordinates]
+
+                    # 绘制管道段 (不使用transform以避免投影问题)
+                    main_ax.plot(
+                        lons, lats,
+                        color=config['color'],
+                        alpha=config['alpha'],
+                        linewidth=config['linewidth'],
+                        zorder=3
+                    )
+
+                    segments_count += 1
+
+                total_segments += segments_count
+
+                # 添加图例元素
+                legend_elements.append(
+                    plt.Line2D([0], [0],
+                              color=config['color'],
+                              linewidth=config['linewidth']*2,
+                              alpha=config['alpha'],
+                              label=f"{config['name']} ({segments_count}段)")
+                )
+
+                # 更新统计信息
+                pipeline_stats[pipeline_type] = segments_count
+                total_segments += segments_count
+
+                print(f"  成功绘制 {segments_count} 个{config['name']}段")
+
+            except Exception as e:
+                print(f"错误: 无法加载{config['name']}数据: {e}")
+                pipeline_stats[pipeline_type] = 0
+                node_stats[pipeline_type] = 0
+                continue
+
+        # 跳过网络节点可视化（避免GeoAxes问题）
+        print("\n跳过管道网络节点绘制（简化模式）")
+        # returned_node_stats = self._add_pipeline_network_nodes(main_ax, gis_data_path, pipeline_types)
+        # if returned_node_stats:
+        #     node_stats.update(returned_node_stats)
+
+        # 设置图例
+        if legend_elements:
+            main_ax.legend(
+                handles=legend_elements,
+                loc='upper right',
+                fontsize=10,
+                frameon=True,
+                fancybox=True,
+                shadow=True,
+                framealpha=0.9
+            )
+
+        # 设置标题
+        main_ax.set_title(
+            f'中国管道网络拓扑图\n总计 {total_segments} 个管道段',
+            fontsize=16,
+            fontweight='bold',
+            pad=20
+        )
+
+        plt.tight_layout()
+
+        print(f"\n管道网络拓扑可视化完成")
+
+        return fig, pipeline_stats, node_stats
+
+    def _add_pipeline_networks_to_existing_map(self, ax, hydrogen_transport_data=None):
+        """在现有地图上添加与氢能运输相关的管道网络连接（兼容简化模式）"""
+
+        # 如果没有氢能运输数据，不绘制任何管道
+        if hydrogen_transport_data is None or len(hydrogen_transport_data) == 0:
+            print("没有氢能运输数据，跳过管道网络绘制")
+            return {}
+
+        # 管道类型配置
+        pipeline_types = {
+            'crude': {'name': '原油管道', 'color': '#8B4513', 'file': 'crude_pipelines.geojson'},
+            'refined': {'name': '成品油管道', 'color': '#FF6B35', 'file': 'refined_product_pipelines.geojson'},
+            'natural_gas': {'name': '天然气管道', 'color': '#4169E1', 'file': 'natural_gas_pipelines.geojson'}
+        }
+
+        # GIS数据路径
+        current_dir = Path(__file__).parent
+        gis_data_path = current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
+
+        pipeline_stats = {}
+
+        # 华北地区范围
+        north_china_bounds = {'lat_min': 35.0, 'lat_max': 45.0, 'lon_min': 110.0, 'lon_max': 120.0}
+
+        # 提取氢能运输路径（只考虑管道运输方式）
+        h2_pipeline_routes = []
+        for _, transport in hydrogen_transport_data.iterrows():
+            if transport.get('运输方式') == 'pipeline' and transport.get('运输类型') == 'H2':
+                route = {
+                    'start_lon': transport['起点经度'],
+                    'start_lat': transport['起点纬度'],
+                    'end_lon': transport['终点经度'],
+                    'end_lat': transport['终点纬度'],
+                    'start_name': transport['起点'],
+                    'end_name': transport['终点']
+                }
+                h2_pipeline_routes.append(route)
+
+        print(f"找到 {len(h2_pipeline_routes)} 条氢能管道运输路径")
+
+        def is_pipeline_relevant_to_h2_transport(coordinates, h2_routes, tolerance_km=50):
+            """判断管道段是否与氢能运输路径相关"""
+            if not h2_routes:
+                return False
+
+            import math
+
+            def distance_km(lat1, lon1, lat2, lon2):
+                """计算两点间距离（公里）"""
+                R = 6371  # 地球半径
+                lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+                dlat = lat2 - lat1
+                dlon = lon2 - lon1
+                a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+                return 2 * R * math.asin(math.sqrt(a))
+
+            def point_to_line_distance(px, py, x1, y1, x2, y2):
+                """计算点到直线的距离（简化版本）"""
+                return distance_km(py, px, (y1+y2)/2, (x1+x2)/2)
+
+            # 检查管道段的每个点是否接近任何氢能运输路径
+            for coord in coordinates:
+                lon, lat = coord[0], coord[1]
+                for route in h2_routes:
+                    # 检查点是否接近氢能运输路径的起点或终点
+                    dist_to_start = distance_km(lat, lon, route['start_lat'], route['start_lon'])
+                    dist_to_end = distance_km(lat, lon, route['end_lat'], route['end_lon'])
+
+                    # 或检查点是否在起点和终点之间的路径上
+                    dist_to_route = point_to_line_distance(lon, lat,
+                                                         route['start_lon'], route['start_lat'],
+                                                         route['end_lon'], route['end_lat'])
+
+                    if min(dist_to_start, dist_to_end, dist_to_route) <= tolerance_km:
+                        return True
+            return False
+
+        # 绘制每种管道类型
+        for pipeline_type, config in pipeline_types.items():
+            file_path = gis_data_path / config['file']
+
+            if not file_path.exists():
+                print(f"警告: {config['name']}数据文件不存在: {file_path}")
+                pipeline_stats[pipeline_type] = 0
+                continue
+
+            try:
+                # 加载GeoJSON数据
+                import json
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    geojson_data = json.load(f)
+
+                features = geojson_data.get('features', [])
+                segments_count = 0
+
+                print(f"绘制{config['name']}: {len(features)}个管道段")
+
+                for feature in features:
+                    if not feature.get('geometry') or feature['geometry'].get('type') != 'LineString':
+                        continue
+
+                    coordinates = feature['geometry']['coordinates']
+                    if not coordinates or len(coordinates) < 2:
+                        continue
+
+                    # 检查管道段是否在华北地区范围内
+                    in_region = False
+                    for coord in coordinates:
+                        lon, lat = coord[0], coord[1]
+                        if (north_china_bounds['lat_min'] <= lat <= north_china_bounds['lat_max'] and
+                            north_china_bounds['lon_min'] <= lon <= north_china_bounds['lon_max']):
+                            in_region = True
+                            break
+
+                    if not in_region:
+                        continue
+
+                    # 检查管道段是否与氢能运输路径相关
+                    if not is_pipeline_relevant_to_h2_transport(coordinates, h2_pipeline_routes):
+                        continue
+
+                    # 提取经纬度
+                    lons = [coord[0] for coord in coordinates]
+                    lats = [coord[1] for coord in coordinates]
+
+                    # 尝试不同的绘制方式以确保可见性
+                    try:
+                        # 首先尝试使用transform（适用于GeoAxes）
+                        if hasattr(ax, 'projection'):
+                            ax.plot(lons, lats, color=config['color'], alpha=1.0, linewidth=4.0,
+                                   zorder=15, transform=self.data_crs)
+                        else:
+                            # 简化模式：直接绘制
+                            ax.plot(lons, lats, color=config['color'], alpha=1.0, linewidth=4.0, zorder=15)
+                    except:
+                        # 后备方案：强制直接绘制
+                        ax.plot(lons, lats, color=config['color'], alpha=1.0, linewidth=4.0, zorder=15)
+                    segments_count += 1
+
+                    # 显示前3个段的调试信息
+                    if segments_count <= 3:
+                        print(f"  {config['name']}段{segments_count}: {len(lons)}个点, 起点({lons[0]:.2f}, {lats[0]:.2f})")
+
+                pipeline_stats[pipeline_type] = segments_count
+                print(f"  成功绘制 {segments_count} 个{config['name']}段")
+
+            except Exception as e:
+                print(f"错误: 无法加载{config['name']}数据: {e}")
+                pipeline_stats[pipeline_type] = 0
+                import traceback
+                traceback.print_exc()
+
+        return pipeline_stats
+
+    def _add_simple_facility_to_pipeline_connections(self, ax, all_data):
+        """添加设施到最近管道的简单直线连接"""
+
+        # 华北地区范围
+        north_china_bounds = {
+            'lat_min': 35.0, 'lat_max': 45.0,
+            'lon_min': 110.0, 'lon_max': 120.0
+        }
+
+        # 收集所有设施点
+        facilities = []
+
+        # 收集太阳能电站
+        if all_data.get('renewable_energy') is not None:
+            renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
+            if renewable_data is not None and len(renewable_data) > 0:
+                solar_facilities = renewable_data[renewable_data['发电站类型'].str.contains('光伏|太阳能|solar', case=False, na=False)]
+                for _, facility in solar_facilities.iterrows():
+                    facilities.append({
+                        'lon': facility['经度'],
+                        'lat': facility['纬度'],
+                        'type': 'solar',
+                        'name': facility.get('电站名称', '太阳能电站')
+                    })
+
+                # 收集风电站
+                wind_facilities = renewable_data[renewable_data['发电站类型'].str.contains('风电|风力|wind', case=False, na=False)]
+                for _, facility in wind_facilities.iterrows():
+                    facilities.append({
+                        'lon': facility['经度'],
+                        'lat': facility['纬度'],
+                        'type': 'wind',
+                        'name': facility.get('电站名称', '风电站')
+                    })
+
+        # 收集LNG终端
+        if all_data.get('lng_terminals') is not None:
+            lng_data = self.filter_data_by_region(all_data['lng_terminals'])
+            if lng_data is not None and len(lng_data) > 0:
+                for _, terminal in lng_data.iterrows():
+                    facilities.append({
+                        'lon': terminal['经度'],
+                        'lat': terminal['纬度'],
+                        'type': 'lng',
+                        'name': terminal.get('终端名称', 'LNG终端')
+                    })
+
+        # 收集管道节点（作为连接目标）
+        pipeline_points = []
+        current_dir = Path(__file__).parent
+        gis_data_path = current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
+
+        # 从天然气管道文件提取管道点
+        ng_pipeline_file = gis_data_path / "natural_gas_pipelines.geojson"
+        if ng_pipeline_file.exists():
+            try:
+                import json
+                with open(ng_pipeline_file, 'r', encoding='utf-8') as f:
+                    geojson_data = json.load(f)
+
+                for feature in geojson_data.get('features', []):
+                    if feature.get('geometry', {}).get('type') == 'LineString':
+                        coordinates = feature['geometry']['coordinates']
+                        for coord in coordinates:
+                            lon, lat = coord[0], coord[1]
+                            if (north_china_bounds['lat_min'] <= lat <= north_china_bounds['lat_max'] and
+                                north_china_bounds['lon_min'] <= lon <= north_china_bounds['lon_max']):
+                                pipeline_points.append((lon, lat))
+
+                # 去重管道点（基于距离）
+                unique_pipeline_points = []
+                for point in pipeline_points:
+                    is_duplicate = False
+                    for existing in unique_pipeline_points:
+                        distance = ((point[0] - existing[0])**2 + (point[1] - existing[1])**2)**0.5
+                        if distance < 0.1:  # 0.1度阈值
+                            is_duplicate = True
+                            break
+                    if not is_duplicate:
+                        unique_pipeline_points.append(point)
+
+                pipeline_points = unique_pipeline_points[:50]  # 限制数量避免过多连接线
+
+            except Exception as e:
+                print(f"警告: 无法加载管道点数据: {e}")
+
+        # 绘制设施到最近管道的连接线
+        connection_count = 0
+        if facilities and pipeline_points:
+            for facility in facilities:
+                # 找到最近的管道点
+                min_distance = float('inf')
+                nearest_pipeline = None
+
+                for pipeline_point in pipeline_points:
+                    distance = ((facility['lon'] - pipeline_point[0])**2 +
+                              (facility['lat'] - pipeline_point[1])**2)**0.5
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_pipeline = pipeline_point
+
+                # 绘制连接线（如果距离合理）
+                if nearest_pipeline and min_distance < 2.0:  # 2度阈值
+                    # 完整模式：始终使用transform
+                    ax.plot(
+                        [facility['lon'], nearest_pipeline[0]],
+                        [facility['lat'], nearest_pipeline[1]],
+                        color='gray', alpha=0.6, linewidth=1.0,
+                        linestyle='-', transform=self.data_crs, zorder=4  # 连接线在管道下方
+                    )
+                    connection_count += 1
+
+        print(f"  成功绘制 {connection_count} 条设施到管道的连接线")
+        return connection_count
+
+    def _add_pipeline_network_nodes(self, ax, gis_data_path, pipeline_types):
+        """添加管道网络节点的可视化"""
+        try:
+            # 初始化氢气管道距离计算器以获取网络拓扑
+            from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator
+
+            calculator = HydrogenPipelineDistanceCalculator(str(gis_data_path))
+
+            # 构建网络图
+            calculator._build_pipeline_networks()
+
+            node_colors = {
+                'crude': '#654321',      # 深棕色
+                'refined': '#CC5500',    # 深橙色
+                'natural_gas': '#000080' # 深蓝色
+            }
+
+            total_nodes = 0
+
+            # 绘制每种管道类型的网络节点
+            for pipeline_type, graph in calculator.pipeline_networks.items():
+                if graph is None or graph.number_of_nodes() == 0:
+                    continue
+
+                nodes = list(graph.nodes())
+                node_coords = []
+
+                # 解析节点坐标
+                for node in nodes:
+                    try:
+                        lat_str, lon_str = node.split(',')
+                        lat, lon = float(lat_str), float(lon_str)
+                        node_coords.append((lon, lat))
+                    except (ValueError, AttributeError):
+                        continue
+
+                if node_coords:
+                    lons, lats = zip(*node_coords)
+
+                    # 绘制节点 (不使用transform以避免投影问题)
+                    ax.scatter(
+                        lons, lats,
+                        c=node_colors.get(pipeline_type, 'gray'),
+                        s=8,  # 小尺寸节点
+                        alpha=0.6,
+                        zorder=4,
+                        edgecolors='white',
+                        linewidths=0.5
+                    )
+
+                    total_nodes += len(node_coords)
+                    print(f"  {pipeline_type}网络: {len(node_coords)}个节点")
+
+            print(f"总计绘制 {total_nodes} 个网络节点")
+
+            # 返回节点统计信息
+            node_stats = {}
+            for pipeline_type, graph in calculator.pipeline_networks.items():
+                if graph is not None:
+                    node_stats[pipeline_type] = graph.number_of_nodes()
+                else:
+                    node_stats[pipeline_type] = 0
+            return node_stats
+
+        except Exception as e:
+            print(f"警告: 无法绘制网络节点: {e}")
+            return {'crude': 0, 'refined': 0, 'natural_gas': 0}
+
     def create_comprehensive_visualization(self, all_data, max_routes=2000):
         """创建包含所有基础设施和运输线路的综合可视化"""
         print("正在创建综合能源基础设施地图...")
@@ -1985,69 +2419,74 @@ def main():
     print(f"\n[SUCCESS] 成功加载 {len(valid_data)} 类数据:")
     for data_type, data in valid_data.items():
         print(f"  - {data_type}: {len(data)} 条记录")
-    
-    # 创建华北地区能源设施网络可视化（包含连接线）
-    print("\n[INFO] 正在创建华北地区能源设施网络图...")
-    print("显示设施类型: 太阳能电站、风电站、天然气管段、LNG终端、机场")
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # 创建华北地区能源设施网络可视化
+    print("\n[INFO] 尝试创建华北地区能源设施网络图...")
+    print("显示设施类型: 太阳能电站、风电站、LNG终端、机场")
+    print("显示管道网络: 原油管道(棕色)、成品油管道(橙红色)、天然气管道(蓝色)")
     print("显示连接关系: 不同设施类型间的连接用不同颜色表示")
     print("地图范围: 35°N-45°N, 110°E-120°E (华北地区)")
-    
+
     result = visualizer.create_north_china_facilities_with_connections_visualization(valid_data)
-    
-    if result is None:
-        print("[ERROR] 可视化创建失败")
-        return
-    
-    fig, main_ax, mini_ax, facility_stats, connection_stats = result
-    
-    # 保存可视化
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f'north_china_energy_network_{timestamp}.png'
-    viz_path = visualizer.save_visualization(fig, filename)
-    
-    print(f"\n[SUCCESS] 华北地区能源设施网络可视化完成!")
-    print(f"[OUTPUT] 图表文件: {viz_path}")
-    print(f"[REGION] 地图范围: 35°N-45°N, 110°E-120°E")
-    print(f"[FACILITIES] 设施统计: {facility_stats}")
-    print(f"[CONNECTIONS] 连接统计: {connection_stats}")
-    
-    # 显示详细统计
-    total_facilities = sum(facility_stats.values())
-    total_connections = sum(connection_stats.values())
-    
-    if total_facilities > 0:
-        print(f"[SUMMARY] 总共显示了 {total_facilities} 个能源基础设施")
-        facility_names = {
-            'solar': '太阳能电站',
-            'wind': '风电站',
-            'pipeline': '天然气管段', 
-            'lng': 'LNG终端',
-            'airport': '机场'
-        }
-        for facility_type, count in facility_stats.items():
-            if count > 0:
-                percentage = (count / total_facilities) * 100
-                print(f"  - {facility_names[facility_type]}: {count}个 ({percentage:.1f}%)")
-    
-    if total_connections > 0:
-        print(f"[CONNECTIONS] 总共显示了 {total_connections} 条设施间连接")
-        connection_names = {
-            'solar_to_lng': '太阳能→LNG',
-            'wind_to_lng': '风电→LNG', 
-            'lng_to_pipeline': 'LNG→管段',
-            'pipeline_to_airport': '管段→机场',
-            'lng_to_airport': 'LNG→机场',
-            'renewable_to_pipeline': '可再生能源→管段',
-            'pipeline_to_pipeline': '管段间连接'
-        }
-        for connection_type, count in connection_stats.items():
-            if count > 0 and connection_type in connection_names:
-                percentage = (count / total_connections) * 100
-                print(f"  - {connection_names[connection_type]}: {count}条 ({percentage:.1f}%)")
-    
-    if total_facilities == 0:
-        print("[WARNING] 在指定的华北地区范围内未找到任何设施")
-        print("请检查数据文件或调整地图范围")
+
+    if result is not None:
+        fig, main_ax, mini_ax, facility_stats, connection_stats = result
+
+        # 保存可视化
+        filename = f'north_china_energy_network_{timestamp}.png'
+        viz_path = visualizer.save_visualization(fig, filename)
+
+        print(f"\n{'='*60}")
+        print(f"[SUCCESS] 华北地区能源设施网络可视化完成!")
+        print(f"[OUTPUT] 图表文件已生成: {filename}")
+        print(f"[PATH] 完整路径: {viz_path}")
+        print(f"[REGION] 地图范围: 35°N-45°N, 110°E-120°E")
+        print(f"[FACILITIES] 设施统计: {facility_stats}")
+        print(f"[CONNECTIONS] 连接统计: {connection_stats}")
+        print(f"{'='*60}")
+        print(f"+ 文件生成成功! 请查看: {filename}")
+    else:
+        print("[WARNING] 华北地区设施网络可视化创建失败")
+
+    # 显示详细统计（仅当设施统计存在时）
+    if 'facility_stats' in locals() and facility_stats:
+        total_facilities = sum(facility_stats.values())
+        total_connections = sum(connection_stats.values())
+
+        if total_facilities > 0:
+            print(f"[SUMMARY] 总共显示了 {total_facilities} 个能源基础设施")
+            facility_names = {
+                'solar': '太阳能电站',
+                'wind': '风电站',
+                'lng': 'LNG终端',
+                'airport': '机场'
+            }
+            for facility_type, count in facility_stats.items():
+                if count > 0:
+                    percentage = (count / total_facilities) * 100
+                    print(f"  - {facility_names[facility_type]}: {count}个 ({percentage:.1f}%)")
+
+        if total_connections > 0:
+            print(f"[CONNECTIONS] 总共显示了 {total_connections} 条设施间连接")
+            connection_names = {
+                'solar_to_lng': '太阳能→LNG',
+                'wind_to_lng': '风电→LNG',
+                'lng_to_pipeline': 'LNG→管段',
+                'pipeline_to_airport': '管段→机场',
+                'lng_to_airport': 'LNG→机场',
+                'renewable_to_pipeline': '可再生能源→管段',
+                'pipeline_to_pipeline': '管段间连接'
+            }
+            for connection_type, count in connection_stats.items():
+                if count > 0 and connection_type in connection_names:
+                    percentage = (count / total_connections) * 100
+                    print(f"  - {connection_names[connection_type]}: {count}条 ({percentage:.1f}%)")
+
+        if total_facilities == 0:
+            print("[WARNING] 在指定的华北地区范围内未找到任何设施")
+            print("请检查数据文件或调整地图范围")
 
 if __name__ == "__main__":
     main()

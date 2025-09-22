@@ -337,6 +337,10 @@ class NaturalGasSupplyChainOptimizer:
         
         # 初始化GraphHopper路径规划引擎
         self.use_graphhopper_routing = basic_params['use_graphhopper_routing']
+
+        # 初始化氢气管道距离计算器
+        self.use_hydrogen_pipeline_distance = basic_params.get('use_hydrogen_pipeline_distance', False)
+        self.hydrogen_pipeline_calculator = None
         
         # 设置OSM数据文件路径
         osm_pbf_path = override_params.get('osm_pbf_path')
@@ -367,6 +371,86 @@ class NaturalGasSupplyChainOptimizer:
             self.routing_engine = None
             logger.warning("未启用GraphHopper路径规划，将使用直线距离计算，建议设置use_graphhopper_routing=True获得更精确的路径规划")
         
+        # 初始化氢气管道距离计算器
+        logger.info(f"氢气管道距离计算器配置: use_hydrogen_pipeline_distance={self.use_hydrogen_pipeline_distance}")
+
+        if self.use_hydrogen_pipeline_distance:
+            try:
+                # 模块导入调试
+                logger.debug("尝试导入氢气管道距离计算器模块...")
+                try:
+                    from .hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator
+                    logger.debug("相对导入成功")
+                except ImportError:
+                    # 相对导入失败，尝试绝对导入
+                    logger.debug("相对导入失败，尝试绝对导入...")
+                    from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator
+                    logger.debug("绝对导入成功")
+
+                # 路径设置和验证
+                project_root = get_project_base_dir()
+                logger.debug(f"项目根目录: {project_root}")
+
+                gis_data_path = os.path.join(project_root, "products", "gis_energy_mapping",
+                                           "gis_data_scraper", "scraped_gis_data")
+                logger.debug(f"GIS数据路径: {gis_data_path}")
+
+                # 验证路径存在性
+                if not os.path.exists(gis_data_path):
+                    raise FileNotFoundError(f"GIS数据路径不存在: {gis_data_path}")
+
+                # 验证关键数据文件
+                pipeline_files = [
+                    os.path.join(gis_data_path, "crude_pipelines.geojson"),
+                    os.path.join(gis_data_path, "refined_product_pipelines.geojson"),
+                    os.path.join(gis_data_path, "natural_gas_pipelines.geojson")
+                ]
+
+                missing_files = [f for f in pipeline_files if not os.path.exists(f)]
+                if missing_files:
+                    logger.warning(f"缺少管道数据文件: {missing_files}")
+                else:
+                    logger.debug("所有管道数据文件验证通过")
+
+                # 初始化计算器
+                logger.debug("正在初始化氢气管道距离计算器...")
+                self.hydrogen_pipeline_calculator = HydrogenPipelineDistanceCalculator(
+                    gis_data_path=gis_data_path,
+                    enable_cache=True
+                )
+
+                # 验证初始化结果
+                if self.hydrogen_pipeline_calculator is None:
+                    raise RuntimeError("计算器实例化失败，返回None")
+
+                # 测试基本功能
+                logger.debug("测试计算器基本功能...")
+                pipeline_count = len(getattr(self.hydrogen_pipeline_calculator, 'pipeline_network', {}).get('edges', []))
+                logger.info(f"氢气管道距离计算器初始化成功 - GIS数据路径: {gis_data_path}, 管道数量: {pipeline_count}")
+
+            except ImportError as e:
+                logger.error(f"氢气管道距离计算器初始化失败（模块导入错误）: {e}")
+                logger.error("检查点: 确保hydrogen_pipeline_distance_calculator.py文件存在且无语法错误")
+                self.use_hydrogen_pipeline_distance = False
+                self.hydrogen_pipeline_calculator = None
+
+            except FileNotFoundError as e:
+                logger.error(f"氢气管道距离计算器初始化失败（文件缺失）: {e}")
+                logger.error("检查点: 确保GIS数据目录和管道数据文件存在")
+                self.use_hydrogen_pipeline_distance = False
+                self.hydrogen_pipeline_calculator = None
+
+            except Exception as e:
+                logger.error(f"氢气管道距离计算器初始化失败（未知错误）: {e}")
+                logger.error(f"错误类型: {type(e).__name__}")
+                import traceback
+                logger.error(f"详细错误信息: {traceback.format_exc()}")
+                self.use_hydrogen_pipeline_distance = False
+                self.hydrogen_pipeline_calculator = None
+        else:
+            self.hydrogen_pipeline_calculator = None
+            logger.info("氢气管道距离计算功能已禁用")
+
         # 距离缓存（避免重复计算）
         self.distance_cache = {}
         
@@ -3206,7 +3290,7 @@ class NaturalGasSupplyChainOptimizer:
         hydrogen_transport_operation = gp.quicksum(
             self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
             self._calculate_hydrogen_transport_cost_by_distance(
-                self._calculate_location_distance(h_loc, mtj_loc)
+                self._calculate_hydrogen_transport_distance(h_loc, mtj_loc)
             ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
             for h_loc in self.hydrogen_locations
             for mtj_loc in sum(self.mtj_locations.values(), [])
@@ -3221,7 +3305,7 @@ class NaturalGasSupplyChainOptimizer:
             hydrogen_pipeline_operation = gp.quicksum(
                 self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] *
                 self._calculate_hydrogen_pipeline_cost_by_distance(
-                    self._calculate_location_distance(h2_loc, mtj_loc)
+                    self._calculate_hydrogen_transport_distance(h2_loc, mtj_loc)
                 ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
                 for h2_loc in self.hydrogen_locations
                 for mtj_loc in sum(self.mtj_locations.values(), [])
@@ -3768,8 +3852,177 @@ class NaturalGasSupplyChainOptimizer:
         # 缓存结果（双向）
         self.distance_cache[cache_key] = distance_km
         self.distance_cache[reverse_cache_key] = distance_km
-        
+
         return max(distance_km, 5)  # 最小距离5km（避免除零）
+
+    def _calculate_hydrogen_transport_distance(self, location1: str, location2: str) -> float:
+        """
+        计算氢气管道运输距离
+
+        基于现有管道网络（原油、成品油、天然气管道）计算氢气运输距离。
+        如果无法找到管道路径，将抛出异常。
+
+        Args:
+            location1: 起点位置名称
+            location2: 终点位置名称
+
+        Returns:
+            float: 管道运输距离(km)
+
+        Raises:
+            PipelineRouteNotFoundError: 当无法找到管道路径时抛出
+        """
+        # 创建缓存键
+        cache_key = f"h2_transport_{location1}_{location2}"
+        if cache_key in self.distance_cache:
+            return self.distance_cache[cache_key]
+
+        # 反向缓存键（距离是对称的）
+        reverse_cache_key = f"h2_transport_{location2}_{location1}"
+        if reverse_cache_key in self.distance_cache:
+            return self.distance_cache[reverse_cache_key]
+
+        loc1_lat = self.locations[location1]['latitude']
+        loc1_lon = self.locations[location1]['longitude']
+        loc2_lat = self.locations[location2]['latitude']
+        loc2_lon = self.locations[location2]['longitude']
+
+        # 使用管道运输计算距离
+        if not self.use_hydrogen_pipeline_distance:
+            raise ValueError(f"氢气管道距离计算功能未启用 (use_hydrogen_pipeline_distance={self.use_hydrogen_pipeline_distance})")
+
+        if self.hydrogen_pipeline_calculator is None:
+            raise ValueError(f"氢气管道距离计算器未初始化 (calculator={self.hydrogen_pipeline_calculator})")
+
+        logger.debug(f"开始计算氢气管道运输距离: {location1} -> {location2}")
+
+        result = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+            loc1_lat, loc1_lon, loc2_lat, loc2_lon,
+            max_access_distance_km=1000.0  # 移除距离限制（设置较大值）
+        )
+
+        distance_km = result.total_distance_km
+        logger.debug(f"氢气管道运输距离: {location1} -> {location2} = {distance_km:.1f}km "
+                   f"(使用{result.pipeline_types_used}管道)")
+
+        # 确保最小距离
+        distance_km = max(distance_km, 5)
+
+        # 缓存结果（双向）
+        self.distance_cache[cache_key] = distance_km
+        self.distance_cache[reverse_cache_key] = distance_km
+
+        return distance_km
+
+    def _calculate_hydrogen_transport_distance_with_route(self, location1: str, location2: str) -> tuple:
+        """
+        计算氢气管道运输距离并返回路径坐标
+
+        基于现有管道网络（原油、成品油、天然气管道）计算氢气运输距离和路径。
+        如果无法找到管道路径，将抛出异常。
+
+        Args:
+            location1: 起点位置名称
+            location2: 终点位置名称
+
+        Returns:
+            tuple: (distance_km, route_coordinates)
+                - distance_km: 管道运输距离(km)
+                - route_coordinates: 路径坐标列表 [[lat, lon], ...]
+
+        Raises:
+            PipelineRouteNotFoundError: 当无法找到管道路径时抛出
+        """
+        # 创建缓存键
+        route_cache_key = f"h2_route_{location1}_{location2}"
+        reverse_route_cache_key = f"h2_route_{location2}_{location1}"
+
+        if not hasattr(self, 'h2_route_cache'):
+            self.h2_route_cache = {}
+
+        if route_cache_key in self.h2_route_cache:
+            cached_result = self.h2_route_cache[route_cache_key]
+            return cached_result['distance_km'], cached_result['route_coordinates']
+        elif reverse_route_cache_key in self.h2_route_cache:
+            cached_result = self.h2_route_cache[reverse_route_cache_key]
+            # 反向路径坐标
+            reversed_coords = cached_result['route_coordinates'][::-1] if cached_result['route_coordinates'] else []
+            return cached_result['distance_km'], reversed_coords
+
+        loc1_lat = self.locations[location1]['latitude']
+        loc1_lon = self.locations[location1]['longitude']
+        loc2_lat = self.locations[location2]['latitude']
+        loc2_lon = self.locations[location2]['longitude']
+
+        # 使用管道运输计算距离和路径
+        if not (self.use_hydrogen_pipeline_distance and self.hydrogen_pipeline_calculator):
+            raise ValueError("氢气管道距离计算器未初始化或未启用")
+
+        result = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+            loc1_lat, loc1_lon, loc2_lat, loc2_lon,
+            max_access_distance_km=1000.0  # 移除距离限制（设置较大值）
+        )
+
+        distance_km = result.total_distance_km
+        logger.debug(f"氢气管道运输距离: {location1} -> {location2} = {distance_km:.1f}km "
+                   f"(使用{result.pipeline_types_used}管道)")
+
+        # 使用管道计算器提供的详细路径几何坐标
+        if result.route_geometry and len(result.route_geometry) > 2:
+            # 使用详细的管道路径坐标
+            route_coordinates = [[lat, lon] for lat, lon in result.route_geometry]
+            logger.debug(f"使用详细管道路径坐标: {len(route_coordinates)}个路径点")
+        else:
+            # 如果没有详细路径，使用简化坐标
+            route_coordinates = [
+                [loc1_lat, loc1_lon],  # 起点
+                [loc2_lat, loc2_lon]   # 终点
+            ]
+            logger.warning(f"管道计算器未提供详细路径坐标，使用简化路径: {location1} -> {location2}")
+
+        # 确保最小距离
+        distance_km = max(distance_km, 5)
+
+        # 缓存结果（双向）
+        self.h2_route_cache[route_cache_key] = {
+            'distance_km': distance_km,
+            'route_coordinates': route_coordinates
+        }
+        self.h2_route_cache[reverse_route_cache_key] = {
+            'distance_km': distance_km,
+            'route_coordinates': route_coordinates[::-1]  # 反向路径
+        }
+
+        return distance_km, route_coordinates
+
+    def _calculate_haversine_distance(self, lat1: float, lon1: float,
+                                    lat2: float, lon2: float) -> float:
+        """
+        使用Haversine公式计算两点间的大圆距离
+
+        Args:
+            lat1, lon1: 起点纬度经度
+            lat2, lon2: 终点纬度经度
+
+        Returns:
+            距离(公里)
+        """
+        from math import radians, sin, cos, sqrt, atan2
+
+        # 转换为弧度
+        lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+        # Haversine公式
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1-a))
+
+        # 地球半径(公里)
+        R = 6371
+        distance = R * c
+
+        return distance
     
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
@@ -4145,7 +4398,7 @@ class NaturalGasSupplyChainOptimizer:
                 to_coords = self._get_location_coordinates(mtj_loc)
                 
                 # 获取真实路径坐标
-                distance_km, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                distance_km, route_coordinates = self._calculate_hydrogen_transport_distance_with_route(h_loc, mtj_loc)
                 
                 solution['hydrogen_transport'][transport_key] = {
                     'from_location': h_loc,
@@ -4172,7 +4425,7 @@ class NaturalGasSupplyChainOptimizer:
                     to_coords = self._get_location_coordinates(mtj_loc)
                     
                     # 获取真实路径坐标
-                    distance_km, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                    distance_km, route_coordinates = self._calculate_hydrogen_transport_distance_with_route(h_loc, mtj_loc)
                     
                     solution['hydrogen_transport'][transport_key] = {
                         'from_location': h_loc,
@@ -4432,7 +4685,7 @@ class NaturalGasSupplyChainOptimizer:
         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
             for (h2_loc, mtj_loc), var in self.hydrogen_pipeline_transport_vars.items():
                 if var.x > 0:
-                    distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
+                    distance_km = self._calculate_hydrogen_transport_distance(h2_loc, mtj_loc)
                     hydrogen_pipeline_actual += (
                         var.x * self._calculate_hydrogen_pipeline_cost_by_distance(distance_km) *
                         operation_expansion_factor * present_value_factor
@@ -4462,7 +4715,7 @@ class NaturalGasSupplyChainOptimizer:
         if hasattr(self, 'hydrogen_transport_vars'):
             for (h_loc, mtj_loc), var in self.hydrogen_transport_vars.items():
                 if var.x > 0:
-                    distance_km = self._calculate_location_distance(h_loc, mtj_loc)
+                    distance_km = self._calculate_hydrogen_transport_distance(h_loc, mtj_loc)
                     transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance_km)
                     hydrogen_transport_operation_actual += (
                         var.x * transport_cost * operation_expansion_factor * present_value_factor
@@ -4929,7 +5182,7 @@ class NaturalGasSupplyChainOptimizer:
         if hasattr(self, 'hydrogen_transport_vars'):
             for (h_loc, mtj_loc), var in self.hydrogen_transport_vars.items():
                 if var.x > 0:
-                    distance_km = self._calculate_location_distance(h_loc, mtj_loc)
+                    distance_km = self._calculate_hydrogen_transport_distance(h_loc, mtj_loc)
                     unit_cost = self._calculate_hydrogen_transport_cost_by_distance(distance_km)
                     hydrogen_transport_cost_total += var.x * unit_cost
             hydrogen_transport_cost_total *= lifecycle_operation_factor
@@ -4942,7 +5195,7 @@ class NaturalGasSupplyChainOptimizer:
             # 管道运输运营成本（已更新为周级变量）
             for (h2_loc, mtj_loc), var in self.hydrogen_pipeline_transport_vars.items():
                 if var.x > 0:
-                    distance_km = self._calculate_location_distance(h2_loc, mtj_loc)
+                    distance_km = self._calculate_hydrogen_transport_distance(h2_loc, mtj_loc)
                     unit_cost = self._calculate_hydrogen_pipeline_cost_by_distance(distance_km)
                     hydrogen_pipeline_transport_cost_total += var.x * unit_cost
             hydrogen_pipeline_transport_cost_total *= lifecycle_operation_factor
@@ -6275,7 +6528,7 @@ class NaturalGasSupplyChainOptimizer:
                         transport_amount += var.x
                 
                 if transport_amount > 0:
-                    distance = self._calculate_location_distance(h_loc, location)
+                    distance = self._calculate_hydrogen_transport_distance(h_loc, location)
                     transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
                     external_h2_sources.append({
                         'source_location': h_loc,
@@ -6420,7 +6673,7 @@ class NaturalGasSupplyChainOptimizer:
             # 找最近的氢气源并计算成本
             min_h2_cost = float('inf')
             for h_loc in self.hydrogen_locations:
-                distance = self._calculate_location_distance(h_loc, location)
+                distance = self._calculate_hydrogen_transport_distance(h_loc, location)
                 transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
                 # 使用统一成本配置的氢气生产成本
                 h2_production_cost = float(
@@ -6742,7 +6995,7 @@ class NaturalGasSupplyChainOptimizer:
         
         for h_loc in renewable_locations[:5]:  # 限制样本数以节省时间
             for mtj_loc in mtj_locations[:5]:
-                distance = self._calculate_location_distance(h_loc, mtj_loc)
+                distance = self._calculate_hydrogen_transport_distance(h_loc, mtj_loc)
                 hydrogen_distances.append(distance)
         
         if hydrogen_distances:
