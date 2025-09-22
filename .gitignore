@@ -26,6 +26,38 @@
 *.h5
 *.parquet
 
+# 原始数据文件
+*_raw.json
+**/*_raw.json
+*_raw.csv
+**/*_raw.csv
+
+# 地理数据文件
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+*.tif
+*.tiff
+*.gpkg
+*.gdb/
+*.mdb
+*.kml
+*.kmz
+
+# 气象和科学数据
+*.nc4
+*.zarr/
+*.grib
+*.grib2
+
+# 大型文本数据文件
+*.txt.gz
+*.log.gz
+
 # 数据库文件
 *.db
 *.sqlite
@@ -256,6 +288,20 @@ gurobi.lic
 *.model
 *.pkl
 *.pickle
+
+# 机器学习模型文件
+*.joblib
+*.keras
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# 数据预处理缓存
+*.npy
+*.npz
+*.dill
 
 # =============================================================================
 # 保留的重要文件 (使用 ! 强制包含)
