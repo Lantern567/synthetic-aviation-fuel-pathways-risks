@@ -96,3 +96,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 保持与现有代码风格一致
 - 所有新功能都需要完整的文档和测试
 - 遇到问题时，参考examples/目录中的代码模式
+
+## 调用MCP
+不要进行错误的try和catch，这会显著增加debug的麻烦，就直接让错误暴露出来。而不是总是在最外层增加try catch函数来让错误被隐藏。

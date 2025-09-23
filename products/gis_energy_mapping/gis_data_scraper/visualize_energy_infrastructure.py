@@ -26,10 +26,16 @@ plt.rcParams['axes.unicode_minus'] = False
 class EnergyInfrastructureVisualizer:
     """能源基础设施数据可视化类"""
     
-    def __init__(self, data_dir="scraped_gis_data"):
+    def __init__(self, data_dir=None):
         """初始化可视化器"""
+        if data_dir is None:
+            # 获取脚本所在目录，然后找到scraped_gis_data目录
+            script_dir = Path(__file__).parent
+            data_dir = script_dir / "scraped_gis_data"
         self.data_dir = Path(data_dir)
-        self.output_dir = Path("visualization_results")
+        # 输出目录也相对于脚本位置
+        script_dir = Path(__file__).parent
+        self.output_dir = script_dir / "visualization_results"
         self.output_dir.mkdir(exist_ok=True)
         
         # 数据集配置
@@ -697,10 +703,137 @@ class EnergyInfrastructureVisualizer:
                         f'{int(height)}', ha='center', va='bottom')
         
         plt.tight_layout()
-        plt.savefig(self.output_dir / '08_天然气产业链专题分析.png', 
+        plt.savefig(self.output_dir / '08_天然气产业链专题分析.png',
                    dpi=300, bbox_inches='tight')
         plt.show()
-    
+
+    def visualize_hydrogen_transport_routes(self, routes_geojson_data: dict,
+                                          title: str = "氢气运输路径可视化"):
+        """
+        可视化氢气运输路径
+
+        Args:
+            routes_geojson_data: GeoJSON格式的路径数据
+            title: 图表标题
+        """
+        print(f"创建{title}...")
+
+        # 创建大图
+        fig, ax = plt.subplots(1, 1, figsize=(20, 16))
+
+        # 加载中国边界作为背景
+        china_bounds = self.load_china_boundaries()
+        if china_bounds is not None:
+            china_bounds.plot(ax=ax, color='lightgray', edgecolor='darkgray',
+                             alpha=0.6, linewidth=0.8)
+            # 设置地图范围
+            bounds = china_bounds.total_bounds
+            ax.set_xlim(bounds[0] - 1, bounds[2] + 1)
+            ax.set_ylim(bounds[1] - 1, bounds[3] + 1)
+        else:
+            ax.set_xlim(73, 135)
+            ax.set_ylim(18, 54)
+
+        # 绘制现有管道网络作为背景
+        for dataset_name, config in self.pipeline_datasets.items():
+            if dataset_name != 'hydrogen_pipelines':  # 排除氢气管道，因为我们要绘制计算出的路径
+                gdf = self.load_data(dataset_name)
+                if gdf is not None and len(gdf) > 0:
+                    gdf.plot(ax=ax,
+                            color=config['color'],
+                            linewidth=config['linewidth'] * 0.5,  # 减小线宽作为背景
+                            alpha=0.3,
+                            label=f"{config['name']}(背景)")
+
+        # 绘制氢气运输路径
+        if routes_geojson_data and "features" in routes_geojson_data:
+            route_colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF']
+            color_idx = 0
+
+            # 按类型分组绘制要素
+            lines = []
+            points = {'start': [], 'end': [], 'access': [], 'egress': []}
+
+            for feature in routes_geojson_data["features"]:
+                geometry = feature["geometry"]
+                properties = feature["properties"]
+
+                if geometry["type"] == "LineString":
+                    # 绘制路径线
+                    coords = geometry["coordinates"]
+                    lons = [coord[0] for coord in coords]
+                    lats = [coord[1] for coord in coords]
+
+                    color = route_colors[color_idx % len(route_colors)]
+                    ax.plot(lons, lats, color=color, linewidth=4, alpha=0.8,
+                           label=f"{properties.get('name', '氢气路径')} "
+                                 f"({properties.get('total_distance_km', 0):.1f}km)")
+                    color_idx += 1
+
+                elif geometry["type"] == "Point":
+                    # 收集不同类型的点
+                    point_type = properties.get("point_type", "unknown")
+                    lon, lat = geometry["coordinates"]
+                    if point_type in points:
+                        points[point_type].append((lon, lat, properties.get('name', '')))
+
+            # 绘制不同类型的点
+            point_styles = {
+                'start': {'marker': 'o', 'color': 'green', 'size': 200, 'label': '起点'},
+                'end': {'marker': 's', 'color': 'red', 'size': 200, 'label': '终点'},
+                'access': {'marker': '^', 'color': 'blue', 'size': 150, 'label': '管道接入点'},
+                'egress': {'marker': 'v', 'color': 'orange', 'size': 150, 'label': '管道离开点'}
+            }
+
+            for point_type, point_list in points.items():
+                if point_list and point_type in point_styles:
+                    style = point_styles[point_type]
+                    lons = [p[0] for p in point_list]
+                    lats = [p[1] for p in point_list]
+                    ax.scatter(lons, lats,
+                             marker=style['marker'],
+                             c=style['color'],
+                             s=style['size'],
+                             alpha=0.9,
+                             edgecolors='white',
+                             linewidth=2,
+                             label=style['label'],
+                             zorder=10)
+
+        # 设置图例和标题
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10)
+        ax.set_title(title, fontsize=16, fontweight='bold', pad=20)
+        ax.set_xlabel('经度', fontsize=12)
+        ax.set_ylabel('纬度', fontsize=12)
+
+        # 添加网格
+        ax.grid(True, alpha=0.3)
+
+        # 保存图表
+        output_file = self.output_dir / f'{title.replace(" ", "_")}.png'
+        plt.tight_layout()
+        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        plt.show()
+
+        print(f"✓ {title}已保存: {output_file}")
+
+    def create_hydrogen_route_analysis_from_geojson(self, geojson_file_path: str):
+        """
+        从GeoJSON文件创建氢气运输路径分析
+
+        Args:
+            geojson_file_path: GeoJSON文件路径
+        """
+        try:
+            import json
+            with open(geojson_file_path, 'r', encoding='utf-8') as f:
+                geojson_data = json.load(f)
+
+            self.visualize_hydrogen_transport_routes(geojson_data, "氢气运输路径分析")
+
+        except Exception as e:
+            print(f"✗ 读取GeoJSON文件失败: {e}")
+
     def run_visualization(self):
         """运行完整的可视化流程"""
         print("=" * 60)
