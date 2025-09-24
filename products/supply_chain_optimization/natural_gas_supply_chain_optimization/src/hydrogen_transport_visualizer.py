@@ -266,6 +266,93 @@ class HydrogenTransportVisualizer:
 
         logger.info(f"统计报告完成: 图表保存至 {stats_chart_file}, 数据保存至 {stats_excel_file}")
 
+    def visualize_clustered_routes(self, clustering_result, clustered_routes: Dict, destination: Tuple[float, float], destination_name: str = "目的地"):
+        try:
+            from hydrogen_clustering_optimizer import ClusteringResult
+            from hydrogen_pipeline_distance_calculator import ClusteredPipelineRoute
+        except ImportError:
+            logger.error("无法导入聚类相关模块")
+            return
+
+        if not hasattr(clustering_result, 'clusters'):
+            logger.error("clustering_result缺少clusters属性")
+            return
+
+        logger.info(f"开始可视化聚类路径: {clustering_result.total_clusters}个聚类, {clustering_result.total_noise_points}个独立点")
+
+        fig, ax = plt.subplots(figsize=(20, 16))
+
+        colors = plt.cm.tab20(range(20))
+        color_idx = 0
+
+        for cluster in clustering_result.clusters:
+            cluster_id = cluster.cluster_id
+            color = colors[color_idx % 20]
+            color_idx += 1
+
+            if cluster_id not in clustered_routes:
+                continue
+
+            route = clustered_routes[cluster_id]
+
+            for member_name, member_coord in zip(cluster.member_locations, cluster.member_coords):
+                ax.plot(member_coord[1], member_coord[0], 'o', color=color, markersize=8, label=f'聚类{cluster_id}成员' if member_name == cluster.member_locations[0] else "")
+
+            center_coord = cluster.center_coord
+            ax.plot(center_coord[1], center_coord[0], '*', color=color, markersize=20, markeredgecolor='black', markeredgewidth=2, label=f'聚类{cluster_id}中心')
+
+            for member_coord in cluster.member_coords:
+                ax.plot([member_coord[1], center_coord[1]], [member_coord[0], center_coord[0]], '--', color=color, linewidth=1.5, alpha=0.6)
+
+            logger.info(f"聚类{cluster_id} - pipeline_access_point: {route.pipeline_access_point}, hasattr: {hasattr(route, 'pipeline_access_point')}")
+
+            if hasattr(route, 'pipeline_access_point') and route.pipeline_access_point:
+                access_point = route.pipeline_access_point
+                ax.plot(access_point[1], access_point[0], 's', color=color, markersize=12, label=f'聚类{cluster_id}管道接入点')
+
+                ax.plot([center_coord[1], access_point[1]], [center_coord[0], access_point[0]], '-', color=color, linewidth=3, alpha=0.8, label=f'聚类{cluster_id}→管道')
+
+            cluster_label_pos = (center_coord[1] + 0.1, center_coord[0] + 0.1)
+            ax.text(cluster_label_pos[0], cluster_label_pos[1], f'C{cluster_id}', fontsize=12, fontweight='bold', bbox=dict(boxstyle='round,pad=0.3', facecolor=color, alpha=0.7))
+
+        for noise_loc, noise_coord in clustering_result.noise_points:
+            ax.plot(noise_coord[1], noise_coord[0], 'x', color='red', markersize=12, markeredgewidth=3, label='独立点' if noise_loc == clustering_result.noise_points[0][0] else "")
+
+        ax.plot(destination[1], destination[0], 'D', color='darkgreen', markersize=20, markeredgecolor='black', markeredgewidth=2, label=destination_name)
+
+        ax.set_xlabel('经度', fontsize=14)
+        ax.set_ylabel('纬度', fontsize=14)
+        ax.set_title(f'氢气生产厂聚类与管道运输路径可视化\n{clustering_result.total_clusters}个聚类 + {clustering_result.total_noise_points}个独立点', fontsize=16, fontweight='bold')
+        ax.grid(True, alpha=0.3)
+        ax.legend(loc='best', fontsize=10)
+
+        plt.tight_layout()
+
+        chart_file = self.output_dir / f'氢气聚类运输网络_C{clustering_result.total_clusters}_N{clustering_result.total_noise_points}.png'
+        plt.savefig(chart_file, dpi=300, bbox_inches='tight')
+        plt.close()
+
+        logger.info(f"聚类路径可视化完成: {chart_file}")
+
+        stats_data = []
+        for cluster in clustering_result.clusters:
+            if cluster.cluster_id in clustered_routes:
+                route = clustered_routes[cluster.cluster_id]
+                stats_data.append({
+                    '聚类ID': cluster.cluster_id,
+                    '成员数量': len(cluster.member_locations),
+                    'Layer1总距离(km)': round(sum(route.layer1_distances.values()), 2),
+                    'Layer2距离(km)': round(route.layer2_distance, 2),
+                    'Layer3距离(km)': round(route.layer3_distance, 2),
+                    '总产能(kg/h)': round(cluster.total_capacity_kg_per_hour, 2)
+                })
+
+        if stats_data:
+            df = pd.DataFrame(stats_data)
+            stats_file = self.output_dir / '氢气聚类运输统计.xlsx'
+            df.to_excel(stats_file, index=False)
+            logger.info(f"聚类统计数据已保存: {stats_file}")
+
     def run_demo_analysis(self):
         """运行演示分析"""
         print("=" * 60)

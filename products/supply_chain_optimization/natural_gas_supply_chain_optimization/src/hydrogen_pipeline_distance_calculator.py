@@ -64,6 +64,19 @@ class PipelineRoute:
     end_coords: Optional[Tuple[float, float]] = None  # 终点原始坐标
 
 @dataclass
+class ClusteredPipelineRoute:
+    cluster_id: int
+    layer1_distances: Dict[str, float]
+    layer2_distance: float
+    layer3_distance: float
+    total_distance_per_member: Dict[str, float]
+    route_geometry: Optional[List[Tuple[float, float]]] = None
+    cluster_center: Optional[Tuple[float, float]] = None
+    pipeline_access_point: Optional[Tuple[float, float]] = None
+    pipeline_types_used: List[str] = None
+    route_found: bool = True
+
+@dataclass
 class PipelinePoint:
     """管道点数据类"""
     lat: float
@@ -1135,6 +1148,96 @@ class HydrogenPipelineDistanceCalculator:
             "type": "FeatureCollection",
             "features": all_features
         }
+
+    def calculate_clustered_pipeline_route(self,
+                                          cluster_id: int,
+                                          cluster_members: List[Tuple[str, Tuple[float, float]]],
+                                          cluster_center: Tuple[float, float],
+                                          destination: Tuple[float, float]) -> ClusteredPipelineRoute:
+        logger.info(f"计算聚类{cluster_id}的三层管道路径，成员数: {len(cluster_members)}")
+
+        layer1_distances = {}
+        for member_name, member_coord in cluster_members:
+            distance = self._calculate_haversine_distance(
+                member_coord[0], member_coord[1],
+                cluster_center[0], cluster_center[1]
+            )
+            layer1_distances[member_name] = distance
+            logger.debug(f"Layer1: {member_name} -> 聚类中心: {distance:.2f}km")
+
+        center_access_point, layer2_distance = self._find_nearest_pipeline_point(
+            cluster_center[0], cluster_center[1], 'natural_gas', float('inf')
+        )
+
+        if center_access_point is None:
+            for pipeline_type in ['crude', 'refined']:
+                center_access_point, layer2_distance = self._find_nearest_pipeline_point(
+                    cluster_center[0], cluster_center[1], pipeline_type, float('inf')
+                )
+                if center_access_point is not None:
+                    break
+
+        if center_access_point is None:
+            logger.error(f"聚类{cluster_id}中心点无法找到管道接入点")
+            return ClusteredPipelineRoute(
+                cluster_id=cluster_id,
+                layer1_distances=layer1_distances,
+                layer2_distance=0.0,
+                layer3_distance=0.0,
+                total_distance_per_member={},
+                route_found=False
+            )
+
+        logger.debug(f"Layer2: 聚类中心 -> 管道接入点: {layer2_distance:.2f}km")
+
+        network_result = self._calculate_network_distance(
+            center_access_point, destination, 'natural_gas'
+        )
+
+        if network_result is None:
+            for pipeline_type in ['crude', 'refined']:
+                network_result = self._calculate_network_distance(
+                    center_access_point, destination, pipeline_type
+                )
+                if network_result is not None:
+                    break
+
+        if network_result is None:
+            layer3_distance = self._calculate_haversine_distance(
+                center_access_point[0], center_access_point[1],
+                destination[0], destination[1]
+            )
+            pipeline_coords = [center_access_point, destination]
+            logger.warning(f"聚类{cluster_id}无管道网络路径，使用直线距离: {layer3_distance:.2f}km")
+        else:
+            layer3_distance, pipeline_coords = network_result
+            logger.debug(f"Layer3: 管道网络距离: {layer3_distance:.2f}km")
+
+        total_distance_per_member = {}
+        for member_name in layer1_distances:
+            total_distance_per_member[member_name] = (
+                layer1_distances[member_name] + layer2_distance + layer3_distance
+            )
+
+        route_geometry = []
+        for member_name, member_coord in cluster_members:
+            route_geometry.append(member_coord)
+        route_geometry.append(cluster_center)
+        route_geometry.append(center_access_point)
+        route_geometry.extend(pipeline_coords)
+
+        return ClusteredPipelineRoute(
+            cluster_id=cluster_id,
+            layer1_distances=layer1_distances,
+            layer2_distance=layer2_distance,
+            layer3_distance=layer3_distance,
+            total_distance_per_member=total_distance_per_member,
+            route_geometry=route_geometry,
+            cluster_center=cluster_center,
+            pipeline_access_point=center_access_point,
+            pipeline_types_used=['natural_gas'],
+            route_found=True
+        )
 
     def save_route_geojson(self, route: PipelineRoute, output_file: str, route_name: str = "氢气运输路径") -> bool:
         """

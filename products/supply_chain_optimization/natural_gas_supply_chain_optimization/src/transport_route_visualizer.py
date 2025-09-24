@@ -81,7 +81,19 @@ class TransportRouteVisualizer:
             'pipeline': '#FF6347',       # 橙红色 - 管段
             'lng': '#4169E1',            # 蓝色 - LNG终端
             'airport': '#9370DB',        # 紫色 - 机场
+            'cluster_center': '#FF1493', # 深粉色 - 聚类中心
             'default': '#95A5A6'         # 灰色 - 默认
+        }
+
+        # 聚类路径颜色方案
+        self.cluster_colors = plt.cm.tab20.colors  # 使用20种不同颜色
+
+        # 聚类路径线型
+        self.cluster_line_styles = {
+            'layer1': '--',  # 虚线 - 氢气点到聚类中心
+            'layer2': '-',   # 实线 - 聚类中心到管道接入点
+            'layer3': '-',   # 实线 - 管道网络到目的地
+            'noise': ':'     # 点线 - 独立点直连
         }
         
         # GraphHopper缓存路径
@@ -273,6 +285,32 @@ class TransportRouteVisualizer:
             self.logger.debug(f"从缓存获取真实路径坐标失败: {e}")
             return None
     
+    def parse_cluster_info(self, cluster_str):
+        """解析聚类信息字符串
+
+        Args:
+            cluster_str: 聚类信息字符串，格式如 "聚类0_(中心:36.3358,114.6340)"
+
+        Returns:
+            tuple: (cluster_id, center_lat, center_lon) 或 (None, None, None)
+        """
+        if pd.isna(cluster_str) or not cluster_str:
+            return None, None, None
+
+        try:
+            # 提取聚类ID和中心坐标
+            # 格式: "聚类0_(中心:36.3358,114.6340)"
+            match = re.match(r'聚类(\d+)_\(中心:([\d.]+),([\d.]+)\)', str(cluster_str))
+            if match:
+                cluster_id = int(match.group(1))
+                center_lat = float(match.group(2))
+                center_lon = float(match.group(3))
+                return cluster_id, center_lat, center_lon
+        except Exception as e:
+            self.logger.debug(f"解析聚类信息失败: {cluster_str}, 错误: {e}")
+
+        return None, None, None
+
     def load_transport_data(self, csv_file_path):
         """加载运输数据"""
         try:
@@ -305,7 +343,12 @@ class TransportRouteVisualizer:
             outside_china = len(valid_data) - len(china_data)
             if outside_china > 0:
                 self.logger.warning(f"过滤掉 {outside_china} 条中国范围外的数据")
-            
+
+            # 检查并标记聚类数据
+            if '聚类信息' in china_data.columns:
+                has_cluster = china_data['聚类信息'].notna().sum()
+                self.logger.info(f"数据中包含 {has_cluster} 条聚类路径记录")
+
             self.logger.info(f"最终有效数据: {len(china_data)} 条")
             return china_data
             
@@ -685,47 +728,80 @@ class TransportRouteVisualizer:
         }
         connection_stats = {}
 
-        # 1. 绘制太阳能电站（仅在完整模式下）
+        # 1. 绘制可再生能源电站（区分聚类和独立）
+        clustered_stations = set()
+        standalone_stations = set()
+
+        # 从运输数据获取聚类和独立电站信息
+        if all_data.get('transport_summary') is not None:
+            transport_data = all_data['transport_summary']
+            region_transport = transport_data[
+                (transport_data['起点纬度'] >= self.map_extent[2]) &
+                (transport_data['起点纬度'] <= self.map_extent[3]) &
+                (transport_data['起点经度'] >= self.map_extent[0]) &
+                (transport_data['起点经度'] <= self.map_extent[1])
+            ]
+
+            # 收集聚类电站
+            cluster_data = region_transport[region_transport['聚类信息'].notna()]
+            for _, row in cluster_data.iterrows():
+                clustered_stations.add(row['起点'])
+
+            # 收集独立电站
+            standalone_data = region_transport[
+                (region_transport['聚类信息'].isna()) &
+                (region_transport['起点类型'] == '氢气生产站')
+            ]
+            for _, row in standalone_data.iterrows():
+                standalone_stations.add(row['起点'])
+
         if all_data.get('renewable_energy') is not None:
             renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
-            
+
             if renewable_data is not None and len(renewable_data) > 0:
-                solar_facilities = renewable_data[renewable_data['发电站类型'].str.contains('光伏|太阳能|solar', case=False, na=False)]
-                
-                if len(solar_facilities) > 0:
-                    print(f"正在绘制 {len(solar_facilities)} 个太阳能电站...")
-                    for _, facility in solar_facilities.iterrows():
-                        capacity = facility.get('装机容量(MW)', 50)
-                        size = min(max(capacity / 2, 30), 150)
-                        
-                        # 完整模式：始终使用transform
+                print(f"正在绘制 {len(renewable_data)} 个可再生能源电站...")
+                cluster_count = 0
+                standalone_count = 0
+
+                for _, facility in renewable_data.iterrows():
+                    facility_name = facility.get('位置ID', '')
+
+                    # 判断是聚类还是独立
+                    is_clustered = facility_name in clustered_stations
+                    is_standalone = facility_name in standalone_stations
+
+                    if is_clustered:
+                        # 聚类电站 - 实心圆
                         main_ax.scatter(
                             facility['经度'], facility['纬度'],
-                            c=self.facility_colors['solar'], s=size,
-                            marker=self.facility_markers['solar'],
+                            c='orange', s=80,
+                            marker='o',
+                            edgecolors='black', linewidth=1,
+                            transform=self.data_crs, zorder=20, alpha=0.9
+                        )
+                        cluster_count += 1
+                    elif is_standalone:
+                        # 独立电站 - 空心圆
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c='white', s=80,
+                            marker='o',
+                            edgecolors='orange', linewidth=2,
+                            transform=self.data_crs, zorder=20, alpha=0.9
+                        )
+                        standalone_count += 1
+                    else:
+                        # 其他电站 - 默认样式
+                        main_ax.scatter(
+                            facility['经度'], facility['纬度'],
+                            c='gold', s=60,
+                            marker='v',
                             edgecolors='black', linewidth=0.8,
                             transform=self.data_crs, zorder=20, alpha=0.9
                         )
-                        facility_stats['solar'] += 1
-                
-                # 2. 绘制风电站
-                wind_facilities = renewable_data[renewable_data['发电站类型'].str.contains('风电|风力|wind', case=False, na=False)]
-                
-                if len(wind_facilities) > 0:
-                    print(f"正在绘制 {len(wind_facilities)} 个风电站...")
-                    for _, facility in wind_facilities.iterrows():
-                        capacity = facility.get('装机容量(MW)', 50)
-                        size = min(max(capacity / 2, 30), 150)
-                        
-                        # 完整模式：始终使用transform
-                        main_ax.scatter(
-                            facility['经度'], facility['纬度'],
-                            c=self.facility_colors['wind'], s=size,
-                            marker=self.facility_markers['wind'],
-                            edgecolors='black', linewidth=0.8,
-                            transform=self.data_crs, zorder=20, alpha=0.9
-                        )
-                        facility_stats['wind'] += 1
+
+                facility_stats['solar'] = cluster_count + standalone_count
+                print(f"  聚类电站: {cluster_count}个, 独立电站: {standalone_count}个")
         
         # 3. 绘制天然气管段 - 已移除管段点标记，只保留管道网络线条
         # if all_data.get('ng_pipelines') is not None:
@@ -800,23 +876,28 @@ class TransportRouteVisualizer:
                 
         
         # 创建设施类型图例
-        facility_names = {
-            'solar': '太阳能电站',
-            'wind': '风电站',
-            'lng': 'LNG终端',
-            'airport': '机场'
-        }
-        
-        for facility_type, count in facility_stats.items():
-            if count > 0:
-                legend_elements.append(
-                    plt.scatter([], [], 
-                              c=self.facility_colors[facility_type], 
-                              s=80, 
-                              marker=self.facility_markers[facility_type],
-                              edgecolors='black', linewidth=0.8,
-                              label=f'{facility_names[facility_type]} ({count}个)')
-                )
+        # 添加电站类型图例
+        if cluster_count > 0:
+            legend_elements.append(
+                plt.scatter([], [], c='orange', s=80, marker='o',
+                          edgecolors='black', linewidth=1,
+                          label=f'聚类电站 ({cluster_count}个)')
+            )
+        if standalone_count > 0:
+            legend_elements.append(
+                plt.scatter([], [], c='white', s=80, marker='o',
+                          edgecolors='orange', linewidth=2,
+                          label=f'独立电站 ({standalone_count}个)')
+            )
+
+        # 机场
+        if facility_stats.get('airport', 0) > 0:
+            legend_elements.append(
+                plt.scatter([], [], c=self.facility_colors['airport'], s=100,
+                          marker=self.facility_markers['airport'],
+                          edgecolors='white', linewidth=1.0,
+                          label=f'机场 ({facility_stats["airport"]}个)')
+            )
         
         # 创建连接类型图例
         connection_names = {
@@ -874,9 +955,12 @@ class TransportRouteVisualizer:
         
         # 添加统计信息
         stats_text = "网络统计:\n设施分布:\n"
-        for facility_type, count in facility_stats.items():
-            if count > 0:
-                stats_text += f"  {facility_names[facility_type]}: {count}个\n"
+        if cluster_count > 0:
+            stats_text += f"  聚类电站: {cluster_count}个\n"
+        if standalone_count > 0:
+            stats_text += f"  独立电站: {standalone_count}个\n"
+        if facility_stats.get('airport', 0) > 0:
+            stats_text += f"  机场: {facility_stats['airport']}个\n"
         
         if connection_stats:
             stats_text += "\n连接分布:\n"
@@ -928,12 +1012,203 @@ class TransportRouteVisualizer:
             main_ax.legend(handles=legend_elements, loc='upper right',
                           fontsize=9, frameon=True, fancybox=True, shadow=True, framealpha=0.9)
 
+        # 绘制氢气运输路径（区分聚类和独立点）
+        print("\n正在添加氢气运输路径...")
+        if all_data.get('transport_summary') is not None:
+            transport_data = all_data['transport_summary']
+
+            # 过滤华北地区的运输数据
+            region_transport = transport_data[
+                (transport_data['起点纬度'] >= self.map_extent[2]) &
+                (transport_data['起点纬度'] <= self.map_extent[3]) &
+                (transport_data['起点经度'] >= self.map_extent[0]) &
+                (transport_data['起点经度'] <= self.map_extent[1])
+            ]
+
+            # 分离聚类数据和独立点数据
+            cluster_data = region_transport[region_transport['聚类信息'].notna()]
+            standalone_data = region_transport[
+                (region_transport['聚类信息'].isna()) &
+                (region_transport['起点类型'] == '氢气生产站')
+            ]
+
+            # 绘制聚类路径
+            if len(cluster_data) > 0:
+                print(f"找到 {len(cluster_data)} 条聚类路径")
+
+                # 收集聚类中心
+                cluster_centers = {}
+                for _, row in cluster_data.iterrows():
+                    cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
+                    if cluster_id is not None:
+                        cluster_centers[cluster_id] = (center_lat, center_lon)
+
+                print(f"收集到 {len(cluster_centers)} 个聚类中心")
+
+                # 绘制聚类路径（三层）
+                layer1_count = 0
+                layer2_count = 0
+                layer3_count = 0
+
+                for idx, row in cluster_data.iterrows():
+                    cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
+
+                    if cluster_id is not None:
+                        cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
+
+                        # Layer1: 可再生能源站 -> 聚类中心 (灰色虚线，与独立电站相同)
+                        layer1_dist = row.get('Layer1距离(km)', 0)
+                        print(f"  行{idx}: Layer1距离={layer1_dist}, Layer2距离={row.get('Layer2距离(km)', 0)}, Layer3距离={row.get('Layer3距离(km)', 0)}")
+
+                        if layer1_dist > 0:
+                            main_ax.plot(
+                                [row['起点经度'], center_lon],
+                                [row['起点纬度'], center_lat],
+                                color='gray',
+                                alpha=0.6,
+                                linewidth=2,
+                                linestyle=':',
+                                zorder=20,
+                                transform=self.data_crs
+                            )
+                            layer1_count += 1
+
+                        # Layer2: 聚类中心 -> 管道接入点 (实线)
+                        # 需要从路径坐标中找到管道接入点
+                        layer2_dist = row.get('Layer2距离(km)', 0)
+                        if layer2_dist > 0 and '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+                            try:
+                                import json
+                                from math import radians, cos, sin, asin, sqrt
+
+                                path_coords = json.loads(row['路径坐标'])
+
+                                # 计算两点间的距离（Haversine公式）
+                                def haversine(lon1, lat1, lon2, lat2):
+                                    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+                                    dlon = lon2 - lon1
+                                    dlat = lat2 - lat1
+                                    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+                                    c = 2 * asin(sqrt(a))
+                                    r = 6371  # 地球半径，单位：公里
+                                    return c * r
+
+                                # 从聚类中心开始，累计距离找到Layer2终点（管道接入点）
+                                cumulative_dist = 0
+                                pipeline_access_point = None
+
+                                # 注意：路径坐标的第一个点可能不是聚类中心，而是可再生能源站
+                                # 我们需要找到离聚类中心最近的点，然后从那里开始计算Layer2
+
+                                # 简化方法：使用Layer2距离在路径中找到对应的点
+                                # Layer1终点 = 聚类中心位置
+                                # Layer2起点 = 聚类中心，终点 = Layer1+Layer2距离对应的路径点
+
+                                prev_point = (center_lon, center_lat)
+                                target_dist = layer2_dist
+
+                                # 从路径坐标中找最接近聚类中心的点作为起点
+                                min_dist_to_center = float('inf')
+                                start_idx = 0
+                                for i, coord in enumerate(path_coords):
+                                    dist = haversine(center_lon, center_lat, coord[0], coord[1])
+                                    if dist < min_dist_to_center:
+                                        min_dist_to_center = dist
+                                        start_idx = i
+
+                                # 从起点开始累计距离
+                                cumulative_dist = 0
+                                for i in range(start_idx + 1, len(path_coords)):
+                                    seg_dist = haversine(
+                                        path_coords[i-1][0], path_coords[i-1][1],
+                                        path_coords[i][0], path_coords[i][1]
+                                    )
+                                    cumulative_dist += seg_dist
+
+                                    # 如果累计距离接近Layer2距离，这就是管道接入点
+                                    if abs(cumulative_dist - target_dist) < 1:  # 1km容差
+                                        pipeline_access_point = path_coords[i]
+                                        break
+
+                                # 绘制Layer2：聚类中心 -> 管道接入点 (灰色虚线，与独立电站相同)
+                                if pipeline_access_point:
+                                    main_ax.plot(
+                                        [center_lon, pipeline_access_point[0]],
+                                        [center_lat, pipeline_access_point[1]],
+                                        color='gray',
+                                        alpha=0.6,
+                                        linewidth=2,
+                                        linestyle=':',
+                                        zorder=20,
+                                        transform=self.data_crs
+                                    )
+                                    layer2_count += 1
+                                else:
+                                    print(f"    警告：行{idx}无法找到管道接入点")
+
+                            except Exception as e:
+                                print(f"    错误：解析路径坐标失败 - {e}")
+
+                print(f"绘制了 Layer1:{layer1_count}条, Layer2:{layer2_count}条, Layer3:{layer3_count}条")
+
+                # 绘制聚类中心
+                if cluster_centers:
+                    print(f"正在绘制 {len(cluster_centers)} 个聚类中心...")
+                    for cluster_id, (center_lat, center_lon) in cluster_centers.items():
+                        cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
+
+                        # 绘制聚类中心点（星形标记，小尺寸）
+                        main_ax.scatter(
+                            center_lon, center_lat,
+                            c=cluster_color, s=80, marker='*',
+                            edgecolors='black', linewidth=1.5,
+                            transform=self.data_crs, zorder=30, alpha=1.0
+                        )
+
+            # 绘制独立点路径
+            if len(standalone_data) > 0:
+                print(f"找到 {len(standalone_data)} 条独立点路径")
+                for _, row in standalone_data.iterrows():
+                    # 独立点用灰色虚线直连
+                    main_ax.plot(
+                        [row['起点经度'], row['终点经度']],
+                        [row['起点纬度'], row['终点纬度']],
+                        color='gray',
+                        alpha=0.6,
+                        linewidth=2,
+                        linestyle=':',
+                        zorder=20
+                    )
+
+            # 更新图例
+            if len(cluster_data) > 0 or len(standalone_data) > 0:
+                legend_elements.append(plt.Line2D([0], [0], color='none', label='─── 氢气运输 ───'))
+
+                if len(cluster_data) > 0:
+                    legend_elements.append(
+                        plt.scatter([], [], c='purple', s=80, marker='*',
+                                  edgecolors='black', linewidth=1.5,
+                                  label=f'聚类中心 ({len(cluster_centers)}个)')
+                    )
+
+                total_paths = len(cluster_data) * 2 + len(standalone_data)  # 聚类有2条线(Layer1+Layer2)
+                if total_paths > 0:
+                    legend_elements.append(
+                        plt.Line2D([0], [0], color='gray', linewidth=2, linestyle=':',
+                                  alpha=0.6, label=f'氢气运输路径 ({total_paths}条)')
+                    )
+
+            # 更新图例
+            if legend_elements:
+                main_ax.legend(handles=legend_elements, loc='upper right',
+                              fontsize=9, frameon=True, fancybox=True, shadow=True, framealpha=0.9)
+
         # 添加装饰
         self.add_decorations(main_ax, mini_ax)
-        
+
         print(f"华北地区设施统计: {facility_stats}")
         print(f"连接统计: {connection_stats}")
-        
+
         return fig, main_ax, mini_ax, facility_stats, connection_stats
         """创建华北地区能源设施可视化（太阳能电站、风电站、管段、LNG终端、机场）"""
         print("正在创建华北地区能源设施分布图...")
@@ -1154,84 +1429,217 @@ class TransportRouteVisualizer:
         else:
             line_widths = np.ones(len(display_data)) * 1.5
         
+        # 收集聚类中心信息
+        cluster_centers = {}
+        print(f"\n[调试] 检查聚类信息列...")
+        print(f"[调试] display_data列名: {list(display_data.columns)}")
+
+        if '聚类信息' in display_data.columns:
+            print(f"[调试] 找到'聚类信息'列")
+            print(f"[调试] 聚类信息列样本: {display_data['聚类信息'].head()}")
+
+            for idx, row in display_data.iterrows():
+                cluster_info_value = row.get('聚类信息')
+                print(f"[调试] 行{idx} 聚类信息值: {cluster_info_value} (类型: {type(cluster_info_value)})")
+
+                cluster_id, center_lat, center_lon = self.parse_cluster_info(cluster_info_value)
+                if cluster_id is not None:
+                    cluster_centers[cluster_id] = (center_lat, center_lon)
+                    print(f"[调试] 解析到聚类{cluster_id}, 中心: ({center_lat}, {center_lon})")
+
+            print(f"[调试] 共收集到 {len(cluster_centers)} 个聚类中心: {cluster_centers}")
+        else:
+            print(f"[调试] 未找到'聚类信息'列")
+
         # 绘制运输路径
-        print("正在绘制运输路径...")
-        route_stats = {'truck': 0, 'pipeline': 0, 'ship': 0, 'rail': 0, 'other': 0}
+        print("\n[调试] 正在绘制运输路径...")
+        route_stats = {'truck': 0, 'pipeline': 0, 'ship': 0, 'rail': 0, 'other': 0, 'cluster': 0, 'noise': 0}
         real_route_count = 0
-        
+
         for idx, row in display_data.iterrows():
-            # 确定运输方式和颜色
-            transport_mode = row.get('运输方式', 'truck').lower()
-            color = self.transport_colors.get(transport_mode, self.transport_colors['default'])
-            
-            # 统计运输方式
-            if transport_mode in route_stats:
-                route_stats[transport_mode] += 1
-            else:
-                route_stats['other'] += 1
-            
-            # 尝试获取真实路径坐标
-            real_coordinates = self.get_real_route_coordinates_from_data(row)
-            
             line_width = line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths
-            
-            if real_coordinates and len(real_coordinates) > 2:
-                # 使用真实路径坐标绘制
-                real_route_count += 1
-                lons = [coord[0] for coord in real_coordinates]
-                lats = [coord[1] for coord in real_coordinates]
-                
-                # 绘制主地图路径
-                main_ax.plot(
-                    lons, lats,
-                    color=color, 
-                    alpha=0.8, 
-                    linewidth=line_width,
-                                        zorder=4
-                )
-                
-                # 绘制小地图路径（南海区域）
-                if any(105 <= lon <= 122 and 2 <= lat <= 25 for lon, lat in zip(lons, lats)):
-                    mini_ax.plot(
-                        lons, lats,
-                        color=color, 
-                        alpha=0.8, 
-                        linewidth=line_width * 0.7,
-                                                zorder=4
+
+            # 检查是否为聚类路径
+            cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
+
+            if cluster_id is not None:
+                # 绘制聚类路径（三层结构）
+                route_stats['cluster'] += 1
+                cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
+
+                print(f"[调试-聚类路径] 聚类{cluster_id}: {row['起点']} -> {row['终点']}")
+                print(f"[调试-聚类路径]   起点: ({row['起点纬度']}, {row['起点经度']})")
+                print(f"[调试-聚类路径]   中心: ({center_lat}, {center_lon})")
+                print(f"[调试-聚类路径]   终点: ({row['终点纬度']}, {row['终点经度']})")
+
+                # Layer1: 氢气点 -> 聚类中心 (虚线)
+                layer1_dist = row.get('Layer1距离(km)', 0)
+                print(f"[调试-聚类路径]   Layer1距离: {layer1_dist} km")
+
+                if layer1_dist > 0:
+                    main_ax.plot(
+                        [row['起点经度'], center_lon],
+                        [row['起点纬度'], center_lat],
+                        color=cluster_color,
+                        alpha=0.9,
+                        linewidth=line_width * 2.5,
+                        linestyle=self.cluster_line_styles['layer1'],
+                        zorder=5
                     )
+                    print(f"[调试-聚类路径]   [OK] 绘制Layer1虚线")
+
+                # Layer2: 聚类中心 -> 管道接入点 (实线，推断位置)
+                # 由于CSV中没有管道接入点坐标，我们用中心到终点的中点来近似
+                layer2_dist = row.get('Layer2距离(km)', 0)
+                print(f"[调试-聚类路径]   Layer2距离: {layer2_dist} km")
+
+                if layer2_dist > 0:
+                    # 推断管道接入点在中心和终点之间
+                    pipeline_lon = (center_lon + row['终点经度']) / 2
+                    pipeline_lat = (center_lat + row['终点纬度']) / 2
+
+                    main_ax.plot(
+                        [center_lon, pipeline_lon],
+                        [center_lat, pipeline_lat],
+                        color=cluster_color,
+                        alpha=0.9,
+                        linewidth=line_width * 2.5,
+                        linestyle=self.cluster_line_styles['layer2'],
+                        zorder=6
+                    )
+                    print(f"[调试-聚类路径]   [OK] 绘制Layer2实线: 中心 -> 管道点({pipeline_lat}, {pipeline_lon})")
+
+                    # Layer3: 管道网络 -> 目的地 (实线)
+                    layer3_dist = row.get('Layer3距离(km)', 0)
+                    print(f"[调试-聚类路径]   Layer3距离: {layer3_dist} km")
+
+                    if layer3_dist > 0:
+                        main_ax.plot(
+                            [pipeline_lon, row['终点经度']],
+                            [pipeline_lat, row['终点纬度']],
+                            color=cluster_color,
+                            alpha=0.9,
+                            linewidth=line_width * 2.5,
+                            linestyle=self.cluster_line_styles['layer3'],
+                            zorder=6
+                        )
+                        print(f"[调试-聚类路径]   [OK] 绘制Layer3实线: 管道点 -> 终点")
             else:
-                # 使用直线路径（后备方案）
-                main_ax.plot(
-                    [row['起点经度'], row['终点经度']], 
-                    [row['起点纬度'], row['终点纬度']], 
-                    color=color, 
-                    alpha=0.5,  # 直线路径透明度更低
-                    linewidth=line_width,
-                    linestyle='--',  # 使用虚线表示估算路径
-                                        zorder=3
-                )
-                
-                # 绘制小地图路径（南海区域）
-                if (105 <= row['起点经度'] <= 122 and 2 <= row['起点纬度'] <= 25 and
-                    105 <= row['终点经度'] <= 122 and 2 <= row['终点纬度'] <= 25):
-                    mini_ax.plot(
-                        [row['起点经度'], row['终点经度']], 
-                        [row['起点纬度'], row['终点纬度']], 
-                        color=color, 
-                        alpha=0.5, 
-                        linewidth=line_width * 0.7,
-                        linestyle='--',
-                                                zorder=3
+                # 非聚类路径（独立点或其他类型）
+                if row.get('起点类型') == '氢气生产站':
+                    route_stats['noise'] += 1
+
+                # 确定运输方式和颜色
+                transport_mode = row.get('运输方式', 'truck').lower()
+                color = self.transport_type_colors.get(transport_mode, self.transport_type_colors.get('default', 'gray'))
+
+                # 统计运输方式
+                if transport_mode in route_stats:
+                    route_stats[transport_mode] += 1
+                else:
+                    route_stats['other'] += 1
+
+                # 尝试获取真实路径坐标
+                real_coordinates = self.get_real_route_coordinates_from_data(row)
+
+                if real_coordinates and len(real_coordinates) > 2:
+                    # 使用真实路径坐标绘制
+                    real_route_count += 1
+                    lons = [coord[0] for coord in real_coordinates]
+                    lats = [coord[1] for coord in real_coordinates]
+
+                    # 绘制主地图路径
+                    main_ax.plot(
+                        lons, lats,
+                        color=color,
+                        alpha=0.8,
+                        linewidth=line_width,
+                        zorder=4
                     )
-        
+
+                    # 绘制小地图路径（南海区域）
+                    if any(105 <= lon <= 122 and 2 <= lat <= 25 for lon, lat in zip(lons, lats)):
+                        mini_ax.plot(
+                            lons, lats,
+                            color=color,
+                            alpha=0.8,
+                            linewidth=line_width * 0.7,
+                            zorder=4
+                        )
+                else:
+                    # 使用直线路径（后备方案）
+                    # 独立点使用点线
+                    linestyle = self.cluster_line_styles['noise'] if row.get('起点类型') == '氢气生产站' else '--'
+
+                    main_ax.plot(
+                        [row['起点经度'], row['终点经度']],
+                        [row['起点纬度'], row['终点纬度']],
+                        color=color,
+                        alpha=0.5,
+                        linewidth=line_width,
+                        linestyle=linestyle,
+                        zorder=3
+                    )
+
+                    # 绘制小地图路径（南海区域）
+                    if (105 <= row['起点经度'] <= 122 and 2 <= row['起点纬度'] <= 25 and
+                        105 <= row['终点经度'] <= 122 and 2 <= row['终点纬度'] <= 25):
+                        mini_ax.plot(
+                            [row['起点经度'], row['终点经度']],
+                            [row['起点纬度'], row['终点纬度']],
+                            color=color,
+                            alpha=0.5,
+                            linewidth=line_width * 0.7,
+                            linestyle=linestyle,
+                            zorder=3
+                        )
+
         print(f"使用真实路径: {real_route_count}/{len(display_data)} 条")
+        print(f"聚类路径: {route_stats['cluster']} 条, 独立点路径: {route_stats['noise']} 条")
         
+        # 绘制聚类中心
+        print(f"\n[调试] 检查聚类中心绘制...")
+        print(f"[调试] cluster_centers字典: {cluster_centers}")
+        print(f"[调试] cluster_centers是否为空: {len(cluster_centers) == 0}")
+
+        if cluster_centers:
+            print(f"[调试] 正在绘制 {len(cluster_centers)} 个聚类中心...")
+            for cluster_id, (center_lat, center_lon) in cluster_centers.items():
+                cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
+
+                print(f"[调试-聚类中心] 聚类{cluster_id}:")
+                print(f"[调试-聚类中心]   位置: ({center_lat}, {center_lon})")
+                print(f"[调试-聚类中心]   颜色: {cluster_color}")
+
+                # 绘制聚类中心点（星形标记）
+                main_ax.scatter(
+                    center_lon, center_lat,
+                    c=cluster_color, s=400, marker='*',
+                    edgecolors='black', linewidth=3,
+                    transform=self.data_crs, zorder=15, alpha=1.0,
+                    label=f'聚类{cluster_id}中心' if cluster_id < 3 else None  # 只标注前3个避免图例过长
+                )
+                print(f"[调试-聚类中心]   [OK] 绘制星形标记")
+
+                # 添加聚类ID标签
+                main_ax.text(
+                    center_lon, center_lat + 0.15,
+                    f'C{cluster_id}',
+                    fontsize=12, fontweight='bold',
+                    ha='center', va='bottom',
+                    bbox=dict(boxstyle='round,pad=0.4', facecolor=cluster_color, alpha=0.9, edgecolor='black', linewidth=1.5),
+                    transform=self.data_crs, zorder=16
+                )
+                print(f"[调试-聚类中心]   [OK] 添加标签 C{cluster_id}")
+        else:
+            print(f"[调试] ⚠️ cluster_centers为空，不绘制聚类中心")
+
         # 绘制设施点（只显示涉及运输路径的设施）
         print("正在绘制设施点...")
-        
+
         # 收集所有涉及运输的设施点
         transport_facilities = []
-        
+
         # 起点设施
         origins = display_data[['起点', '起点纬度', '起点经度']].drop_duplicates()
         for _, facility in origins.iterrows():
@@ -1241,7 +1649,7 @@ class TransportRouteVisualizer:
                 'lon': facility['起点经度'],
                 'type': 'origin'
             })
-        
+
         # 终点设施
         destinations = display_data[['终点', '终点纬度', '终点经度']].drop_duplicates()
         for _, facility in destinations.iterrows():
@@ -1268,7 +1676,7 @@ class TransportRouteVisualizer:
         
         for facility in unique_facilities.values():
             # 根据设施名称和类型确定显示样式
-            facility_type = self.get_facility_type(facility['name'])
+            facility_type = self.map_facility_type(facility['name'])
             
             if facility['type'] == 'hub':
                 # 枢纽设施使用特殊样式
@@ -1312,29 +1720,58 @@ class TransportRouteVisualizer:
         
         # 创建图例
         legend_elements = []
-        
+
+        # 聚类路径图例
+        if route_stats.get('cluster', 0) > 0:
+            legend_elements.append(
+                plt.Line2D([0], [0], color='purple', linewidth=2, linestyle='--',
+                          label=f'Layer1-氢气点→中心 ({route_stats["cluster"]}条)')
+            )
+            legend_elements.append(
+                plt.Line2D([0], [0], color='purple', linewidth=3, linestyle='-',
+                          label=f'Layer2-中心→管道')
+            )
+            legend_elements.append(
+                plt.Line2D([0], [0], color='purple', linewidth=3, linestyle='-',
+                          label=f'Layer3-管道→目的地')
+            )
+
+        if route_stats.get('noise', 0) > 0:
+            legend_elements.append(
+                plt.Line2D([0], [0], color='gray', linewidth=2, linestyle=':',
+                          label=f'独立点直连 ({route_stats["noise"]}条)')
+            )
+
+        # 聚类中心图例
+        if cluster_centers:
+            legend_elements.append(
+                plt.scatter([], [], c='purple', s=200, marker='*',
+                           edgecolors='black', linewidth=2,
+                           label=f'聚类中心 ({len(cluster_centers)}个)')
+            )
+
         # 运输方式图例
-        for mode, color in self.transport_colors.items():
+        for mode, color in self.transport_type_colors.items():
             if mode != 'default' and route_stats.get(mode, 0) > 0:
                 mode_name = {
                     'truck': '卡车运输',
-                    'pipeline': '管道运输', 
+                    'pipeline': '管道运输',
                     'ship': '船舶运输',
                     'rail': '铁路运输'
                 }.get(mode, mode)
                 legend_elements.append(
-                    plt.Line2D([0], [0], color=color, linewidth=3, 
+                    plt.Line2D([0], [0], color=color, linewidth=3,
                               label=f'{mode_name} ({route_stats[mode]}条)')
                 )
-        
+
         # 路径类型图例
         if real_route_count > 0:
             legend_elements.append(
                 plt.Line2D([0], [0], color='gray', linewidth=2, alpha=0.8,
                           label=f'真实路径 ({real_route_count}条)')
             )
-        
-        estimated_routes = len(display_data) - real_route_count
+
+        estimated_routes = len(display_data) - real_route_count - route_stats.get('cluster', 0) - route_stats.get('noise', 0)
         if estimated_routes > 0:
             legend_elements.append(
                 plt.Line2D([0], [0], color='gray', linewidth=2, alpha=0.5, linestyle='--',
@@ -1697,7 +2134,7 @@ class TransportRouteVisualizer:
         return pipeline_stats
 
     def _add_simple_facility_to_pipeline_connections(self, ax, all_data):
-        """添加设施到最近管道的简单直线连接"""
+        """添加设施到最近管道的简单直线连接（排除聚类电站）"""
 
         # 华北地区范围
         north_china_bounds = {
@@ -1705,31 +2142,51 @@ class TransportRouteVisualizer:
             'lon_min': 110.0, 'lon_max': 120.0
         }
 
-        # 收集所有设施点
+        # 获取聚类电站名称（需要排除）
+        clustered_stations = set()
+        if all_data.get('transport_summary') is not None:
+            transport_data = all_data['transport_summary']
+            region_transport = transport_data[
+                (transport_data['起点纬度'] >= north_china_bounds['lat_min']) &
+                (transport_data['起点纬度'] <= north_china_bounds['lat_max']) &
+                (transport_data['起点经度'] >= north_china_bounds['lon_min']) &
+                (transport_data['起点经度'] <= north_china_bounds['lon_max'])
+            ]
+            cluster_data = region_transport[region_transport['聚类信息'].notna()]
+            for _, row in cluster_data.iterrows():
+                clustered_stations.add(row['起点'])
+
+        # 收集所有设施点（排除聚类电站）
         facilities = []
 
-        # 收集太阳能电站
+        # 收集太阳能电站（非聚类）
         if all_data.get('renewable_energy') is not None:
             renewable_data = self.filter_data_by_region(all_data['renewable_energy'])
             if renewable_data is not None and len(renewable_data) > 0:
                 solar_facilities = renewable_data[renewable_data['发电站类型'].str.contains('光伏|太阳能|solar', case=False, na=False)]
                 for _, facility in solar_facilities.iterrows():
-                    facilities.append({
-                        'lon': facility['经度'],
-                        'lat': facility['纬度'],
-                        'type': 'solar',
-                        'name': facility.get('电站名称', '太阳能电站')
-                    })
+                    facility_name = facility.get('位置ID', '')
+                    # 排除聚类电站
+                    if facility_name not in clustered_stations:
+                        facilities.append({
+                            'lon': facility['经度'],
+                            'lat': facility['纬度'],
+                            'type': 'solar',
+                            'name': facility.get('电站名称', '太阳能电站')
+                        })
 
-                # 收集风电站
+                # 收集风电站（非聚类）
                 wind_facilities = renewable_data[renewable_data['发电站类型'].str.contains('风电|风力|wind', case=False, na=False)]
                 for _, facility in wind_facilities.iterrows():
-                    facilities.append({
-                        'lon': facility['经度'],
-                        'lat': facility['纬度'],
-                        'type': 'wind',
-                        'name': facility.get('电站名称', '风电站')
-                    })
+                    facility_name = facility.get('位置ID', '')
+                    # 排除聚类电站
+                    if facility_name not in clustered_stations:
+                        facilities.append({
+                            'lon': facility['经度'],
+                            'lat': facility['纬度'],
+                            'type': 'wind',
+                            'name': facility.get('电站名称', '风电站')
+                        })
 
         # 收集LNG终端
         if all_data.get('lng_terminals') is not None:

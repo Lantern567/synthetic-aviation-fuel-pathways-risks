@@ -836,7 +836,7 @@ class GraphHopperRoutingEngine:
 
         return None
 
-    def _grid_search_nearest_road(self, lat: float, lon: float, vehicle: str = "car", max_radius_km: float = 20.0) -> Optional[Tuple[float, float]]:
+    def _grid_search_nearest_road(self, lat: float, lon: float, vehicle: str = "car", max_radius_km: float = 50.0) -> Optional[Tuple[float, float]]:
         """
         使用网格搜索算法查找最近的可用道路点
 
@@ -849,15 +849,22 @@ class GraphHopperRoutingEngine:
             最近道路点的坐标(lat, lon)，如果找不到返回None
         """
         try:
-            logger.info(f"🔍 开始20km网格搜索最近道路点: ({lat:.6f}, {lon:.6f})")
+            logger.info(f"🔍 开始{int(max_radius_km)}km网格搜索最近道路点: ({lat:.6f}, {lon:.6f})")
 
-            # 定义搜索层级和网格密度
+            # 定义搜索层级和网格密度（随最大半径自适应扩展）
             search_layers = [
                 {"radius_km": 2, "grid_size": 3, "step_km": 1.5},      # 第1层：2km内，3×3网格
                 {"radius_km": 5, "grid_size": 5, "step_km": 2.0},      # 第2层：5km内，5×5网格
                 {"radius_km": 10, "grid_size": 7, "step_km": 3.0},     # 第3层：10km内，7×7网格
-                {"radius_km": 20, "grid_size": 11, "step_km": 4.0}     # 第4层：20km内，11×11网格
             ]
+            if max_radius_km >= 20:
+                search_layers.append({"radius_km": 20, "grid_size": 11, "step_km": 4.0})  # 第4层：20km内
+            if max_radius_km >= 30:
+                search_layers.append({"radius_km": 30, "grid_size": 13, "step_km": 5.0})  # 第5层：30km内
+            if max_radius_km >= 40:
+                search_layers.append({"radius_km": 40, "grid_size": 15, "step_km": 6.0})  # 第6层：40km内
+            if max_radius_km >= 50:
+                search_layers.append({"radius_km": 50, "grid_size": 17, "step_km": 7.0})  # 第7层：50km内
 
             best_road_point = None
             best_distance = float('inf')
@@ -1000,10 +1007,10 @@ class GraphHopperRoutingEngine:
 
             # 1. 通过网格搜索找到起点最近道路
             logger.info(f"🔍 查找起点最近道路点...")
-            start_road_point = self._grid_search_nearest_road(start_lat, start_lon, vehicle)
+            start_road_point = self._grid_search_nearest_road(start_lat, start_lon, vehicle, max_radius_km=50.0)
             if not start_road_point:
                 # 如果网格搜索失败，直接抛出异常
-                error_msg = f"起点网格搜索失败: 无法在20km范围内找到起点({start_lat:.6f},{start_lon:.6f})的道路点"
+                error_msg = f"起点网格搜索失败: 无法在50km范围内找到起点({start_lat:.6f},{start_lon:.6f})的道路点"
                 logger.error(f"❌ {error_msg}")
                 raise Exception(error_msg)
 
@@ -1012,10 +1019,10 @@ class GraphHopperRoutingEngine:
 
             # 2. 通过网格搜索找到终点最近道路
             logger.info(f"🔍 查找终点最近道路点...")
-            end_road_point = self._grid_search_nearest_road(end_lat, end_lon, vehicle)
+            end_road_point = self._grid_search_nearest_road(end_lat, end_lon, vehicle, max_radius_km=50.0)
             if not end_road_point:
                 # 如果网格搜索失败，直接抛出异常
-                error_msg = f"终点网格搜索失败: 无法在20km范围内找到终点({end_lat:.6f},{end_lon:.6f})的道路点"
+                error_msg = f"终点网格搜索失败: 无法在50km范围内找到终点({end_lat:.6f},{end_lon:.6f})的道路点"
                 logger.error(f"❌ {error_msg}")
                 raise Exception(error_msg)
 
