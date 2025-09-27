@@ -284,10 +284,13 @@ class NaturalGasSupplyChainOptimizer:
         
         # 支持扁平化的参数覆盖，如 'time_horizon_weeks': 2
         for key, value in overrides.items():
-            if key in ['time_horizon_weeks', 'use_graphhopper_routing', 'graphhopper_host', 
+            if key in ['time_horizon_weeks', 'use_graphhopper_routing', 'graphhopper_host',
                       'graphhopper_port', 'max_transport_distance_km', 'use_routing_for_short_distance',
                       'avg_lng_capacity_mcm_per_year']:
                 new_config['basic_parameters'][key] = value
+            elif key in ['levelized_cost_threshold_yuan_per_kg', 'discount_rate', 'project_lifespan']:
+                # 直接支持经济参数的覆盖
+                new_config['economic_parameters'][key] = value
             elif key.startswith('basic_'):
                 param_key = key.replace('basic_', '')
                 new_config['basic_parameters'][param_key] = value
@@ -1744,13 +1747,16 @@ class NaturalGasSupplyChainOptimizer:
             'pipeline_lifetime': economic_config['pipeline_lifetime'],
             'storage_lifetime': economic_config['storage_lifetime'],
             'transport_vehicle_lifetime': economic_config['transport_vehicle_lifetime'],
-            
+
             # 容量因子 (设备年利用率)
             'mtj_plant_capacity_factor': capacity_factors['mtj_plant_capacity_factor'],
             'electrolyzer_capacity_factor': capacity_factors['electrolyzer_capacity_factor'],
             'pipeline_capacity_factor': capacity_factors['pipeline_capacity_factor'],
             'storage_capacity_factor': capacity_factors['storage_capacity_factor'],
-            'transport_capacity_factor': capacity_factors['transport_capacity_factor']
+            'transport_capacity_factor': capacity_factors['transport_capacity_factor'],
+
+            # 平准化成本门槛值
+            'levelized_cost_threshold_yuan_per_kg': economic_config.get('levelized_cost_threshold_yuan_per_kg', 5.62)
         }
     
     def _define_costs(self):
@@ -1938,10 +1944,13 @@ class NaturalGasSupplyChainOptimizer:
         self._build_mtj_locations()
         # 创建决策变量
         self._create_variables()
-        
+
+        # 创建成本表达式（在约束和目标函数之前）
+        self._create_cost_expressions()
+
         # 创建约束条件
         self._create_constraints()
-        
+
         # 创建目标函数
         self._create_objective()
         
@@ -2227,7 +2236,355 @@ class NaturalGasSupplyChainOptimizer:
         
         # 10. 天然气运输约束
         self._add_natural_gas_transport_constraints()
-    
+
+        # 11. 平准化成本约束
+        self._add_levelized_cost_constraint()  # 已修复门槛值配置，重新启用
+
+    def _add_levelized_cost_constraint(self):
+        """添加平准化成本约束：(总成本 - 短缺成本) / 总产量现值 <= 门槛值"""
+        logger.info("添加平准化成本约束...")
+
+        # 获取约束参数
+        threshold = self.economic_params.get('levelized_cost_threshold_yuan_per_kg', 5.62)
+        logger.info(f"平准化成本门槛值: {threshold} 元/kg")
+
+        # 获取经济参数
+        discount_rate = self.economic_params['discount_rate']
+        project_lifespan = self.economic_params['project_lifespan']
+
+        # 计算现值系数（与成本表达式创建中的计算保持一致）
+        if discount_rate == 0:
+            present_value_factor = project_lifespan
+        else:
+            present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
+
+        # 运营成本扩展系数：将时间窗口运营成本扩展到20年生命周期现值
+        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数（1周→52周）
+        lifecycle_operation_factor = operation_expansion_factor * present_value_factor
+
+        # 计算总产量的现值（修正：与平准化成本计算中的产量计算保持一致）
+        # 先计算时间窗口内的总产量，然后年化，最后现值化
+        weekly_production_expr = gp.quicksum(
+            self.production_vars[(location, tech, hour)]
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 年化产量现值：周产量 × 年化系数 × 现值系数
+        lifecycle_present_value_production_expr = weekly_production_expr * operation_expansion_factor * present_value_factor
+
+        # 平准化成本约束：(总成本 - 短缺成本) <= 门槛值 * 总产量现值
+        # 转换为标准形式：(总成本 - 短缺成本) - 门槛值 * 总产量现值 <= 0
+        levelized_cost_lhs = (
+            self.cost_aggregates['total_cost_excluding_shortage'] -
+            threshold * lifecycle_present_value_production_expr
+        )
+
+        # 添加约束
+        constraint = self.model.addConstr(
+            levelized_cost_lhs <= 0,
+            name="levelized_cost_constraint"
+        )
+
+        logger.info(f"平准化成本约束添加完成")
+        logger.info(f"约束形式: (总成本 - 短缺成本) - {threshold} * 总产量现值 <= 0")
+        logger.info(f"现值系数: {present_value_factor:.4f}")
+        logger.info(f"年化系数: {operation_expansion_factor:.4f}")
+        logger.info(f"产量现值化系数: {operation_expansion_factor * present_value_factor:.4f}")
+        logger.info(f"修正前的错误系数(lifecycle_operation_factor): {lifecycle_operation_factor:.4f}")
+
+
+    def _create_cost_expressions(self):
+        """创建所有成本表达式对象（用于目标函数和约束）"""
+        logger.info("创建统一的成本表达式对象...")
+
+        # 初始化成本表达式存储结构
+        self.cost_expressions = {}  # 存储所有成本项的表达式对象
+        self.cost_aggregates = {}   # 存储聚合成本表达式
+
+        # 定义时间相关常量
+        total_days = self.total_hours // 24
+
+        # 读取目标函数系数配置（带默认值，保证向后兼容）
+        obj_cfg = self.config.get('objective_coefficients', {}) or {}
+        transport_cfg = obj_cfg.get('transport', {}) or {}
+        storage_cfg = obj_cfg.get('storage', {}) or {}
+
+        # 获取经济参数
+        discount_rate = self.economic_params['discount_rate']
+        project_lifespan = self.economic_params['project_lifespan']
+
+        # 计算现值系数（用于运营成本折现）
+        if discount_rate == 0:
+            present_value_factor = project_lifespan  # 无折现时的累计系数
+        else:
+            # 计算20年运营成本的现值系数
+            present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
+
+        # 运营成本扩展系数：将时间窗口运营成本扩展到20年生命周期现值
+        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数（1周→52周）
+        lifecycle_operation_factor = operation_expansion_factor * present_value_factor  # 20年生命周期现值系数
+
+        # 1. MTJ生产设施投资成本（项目开始时的一次性投资）
+        fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
+        fixed_capex = fac_cfg.get('fixed_capex', 20000000)
+        variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 20000)
+        self.cost_expressions['facility_investment_cost'] = gp.quicksum(
+            self.facility_vars[(location, tech)] * fixed_capex +
+            self.facility_capacity_vars[(location, tech)] * variable_capex_per_capacity *
+            self.economic_params['mtj_plant_capacity_factor']
+            for location in self.locations
+            for tech in self.technologies
+        )
+
+        # 2. MTJ生产设施运营成本（20年现值）
+        fixed_opex_annual = fac_cfg.get('fixed_opex_annual', 1000000)
+        self.cost_expressions['facility_operation_cost'] = gp.quicksum(
+            self.facility_vars[(location, tech)] * fixed_opex_annual * present_value_factor
+            for location in self.locations
+            for tech in self.technologies
+        )
+
+        # 3. 生产变动运营成本（20年生命周期现值）
+        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 修正默认值从300到0.3
+        logger.info(f"成本表达式中使用的MTJ变动运营成本: {variable_opex_per_kg}元/kg")
+        self.cost_expressions['production_cost'] = gp.quicksum(
+            self.production_vars[(location, tech, hour)] * variable_opex_per_kg * lifecycle_operation_factor
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 4. 运输设备投资成本 + 20年运营成本现值
+        self.cost_expressions['transport_equipment_cost'] = gp.LinExpr(0)  # 已包含在平准化运输成本中
+        self.cost_expressions['transport_operation_cost'] = gp.quicksum(
+            self.transport_vars[(location, airport, week)] *
+            self._calculate_mtj_transport_cost_by_distance(
+                self._calculate_distance(location, airport)
+            ) * lifecycle_operation_factor  # 20年运营成本现值，基于运输理论公式
+            for location in self.locations
+            for airport in self.airports
+            for week in range(self.time_horizon_weeks)
+            if (location, airport, week) in self.transport_vars
+        )
+
+        # 5. 储存设施投资成本 + 20年运营成本现值
+        max_storage_needed = gp.quicksum(
+            self.storage_vars[(location, hour)]
+            for location in self.locations
+            for hour in range(self.total_hours + 1)
+        )
+        # 优先使用统一成本配置中的MTJ储存设备成本
+        storage_unit_cost = float(
+            self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
+            storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
+        )
+        self.cost_expressions['storage_equipment_cost'] = max_storage_needed * storage_unit_cost
+        self.cost_expressions['storage_operation_cost'] = gp.quicksum(
+            self.storage_vars[(location, hour)] *
+            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
+            for location in self.locations
+            for hour in range(self.total_hours + 1)
+        )
+
+        # 6. 电解槽投资成本（一次性投资）
+        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
+        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H2/hour)")
+        self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
+            self.electrolyzer_capacity_vars[location] *
+            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
+            for location in self.locations
+            if location in self.electrolyzer_capacity_vars
+        )
+
+        # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
+        hydrogen_production_unit_cost = float(
+            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
+        )
+        self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
+            self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
+            for location in self.locations
+            for hour in range(self.total_hours)
+            if (location, hour) in self.hydrogen_production_vars
+        )
+
+        # 8. 电解制氢电力成本（20年生命周期现值）
+        # 8. 电力成本（基于实际氢气生产的电力消耗）
+        self.cost_expressions['electricity_cost'] = gp.quicksum(
+            self.hydrogen_production_vars[(location, hour)] *
+            self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
+            self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本，不乘以生命周期系数
+            for location in self.locations
+            for hour in range(self.total_hours)
+            if (location, hour) in self.hydrogen_production_vars
+        ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
+
+        # 9. 氢气储存投资 + 20年运营成本现值
+        max_h2_storage = gp.quicksum(
+            self.hydrogen_storage_vars[(location, hour)]
+            for location in self.locations
+            for hour in range(self.total_hours + 1)
+            if (location, hour) in self.hydrogen_storage_vars
+        )
+        # 优先使用统一成本配置中的氢气储存设备成本
+        h2_storage_unit_cost = float(
+            self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
+            storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
+        )
+        self.cost_expressions['h2_storage_investment'] = max_h2_storage * h2_storage_unit_cost
+        self.cost_expressions['h2_storage_operation'] = gp.quicksum(
+            self.hydrogen_storage_vars[(location, hour)] *
+            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
+            for location in self.locations
+            for hour in range(self.total_hours + 1)
+            if (location, hour) in self.hydrogen_storage_vars
+        )
+
+        # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
+        self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化氢气运输成本中
+        self.cost_expressions['hydrogen_transport_operation'] = gp.quicksum(
+            self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
+            self._calculate_hydrogen_transport_cost_by_distance(
+                self._calculate_location_distance(h_loc, mtj_loc)
+            ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
+            for h_loc in self.hydrogen_locations
+            for mtj_loc in sum(self.mtj_locations.values(), [])
+            if (h_loc, mtj_loc) in self.hydrogen_transport_vars
+        )
+
+        # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
+        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+            # 管道运输成本（基于图像拟合的成本函数，已包含所有投资和运营成本）
+            self.cost_expressions['hydrogen_pipeline_operation'] = gp.quicksum(
+                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] *
+                self._calculate_hydrogen_pipeline_cost_by_distance(
+                    self._get_hydrogen_transport_distance_with_clustering(h2_loc, mtj_loc)
+                ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
+                for h2_loc in self.hydrogen_locations
+                for mtj_loc in sum(self.mtj_locations.values(), [])
+                if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
+            )
+        else:
+            self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
+
+        # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
+        self.cost_expressions['ng_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化天然气运输成本中
+        # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
+        # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
+        ng_transport_operation_expr = gp.LinExpr()
+
+        # 为每条路线计算基于实际日输送量的运输成本
+        # 1. 天然气管道到MTJ工厂的运输成本
+        for ng_loc in self.ng_locations:
+            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
+                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+
+                total_days_local = self.total_hours // 24
+                for day in range(total_days_local):
+                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
+                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+
+                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
+                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
+                        ng_transport_operation_expr += linear_cost * lifecycle_operation_factor
+
+        self.cost_expressions['ng_transport_operation'] = ng_transport_operation_expr
+
+
+        # 天然气日处理能力约束已移除 - 允许无限制处理
+        logger.info("天然气日处理能力约束已移除，允许无限制处理")
+
+        # 11. 原料成本（20年生命周期现值）
+        # 获取天然气价格 (元/m³)
+        ng_price_per_m3 = None
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
+            if price is not None:
+                ng_price_per_m3 = price  # 数据文件中实际是元/m³，不是元/万m³
+                break
+
+        if ng_price_per_m3 is not None:
+            # 创建天然气成本表达式对象
+            self.cost_expressions['natural_gas_cost'] = gp.quicksum(
+                self.production_vars[(location, tech, hour)] *
+                self.technologies[tech]['ng_consumption_ratio'] * ng_price_per_m3 * lifecycle_operation_factor
+                for location in self.locations
+                for tech in self.technologies
+                for hour in range(self.total_hours)
+                if (location, tech, hour) in self.production_vars and
+                   self.technologies[tech].get('ng_consumption_ratio', 0) > 0
+            )
+        else:
+            self.cost_expressions['natural_gas_cost'] = gp.LinExpr(0)  # 如果没有价格信息，成本为0
+
+
+        # 13. 短缺惩罚成本（20年生命周期现值）
+        if hasattr(self, 'shortage_vars'):
+            self.cost_expressions['shortage_cost'] = gp.quicksum(
+                var * self.costs['shortage_penalty_yuan_per_kg'] * lifecycle_operation_factor  # 20年现值
+                for var in self.shortage_vars.values()
+            )
+        else:
+            self.cost_expressions['shortage_cost'] = gp.LinExpr(0)
+
+        # 14. 期末资产处置成本（20年后的现值）
+        disposal_cost_per_kg = float(obj_cfg.get('final_inventory_disposal_cost_per_kg', 100))
+        self.cost_expressions['final_inventory_cost'] = gp.quicksum(
+            self.storage_vars[(location, self.total_hours)] * disposal_cost_per_kg * operation_expansion_factor *
+            (1 + discount_rate)**(-project_lifespan)  # 20年后处置成本的现值
+            for location in self.locations
+        )
+
+        # 创建聚合成本表达式
+        # 投资成本聚合
+        self.cost_aggregates['total_investment_cost'] = (
+            self.cost_expressions['facility_investment_cost'] +
+            self.cost_expressions['transport_equipment_cost'] +
+            self.cost_expressions['storage_equipment_cost'] +
+            self.cost_expressions['electrolyzer_investment_cost'] +
+            self.cost_expressions['h2_storage_investment'] +
+            self.cost_expressions['hydrogen_transport_investment'] +
+            self.cost_expressions['ng_transport_investment']
+        )
+
+        # 运营成本聚合
+        self.cost_aggregates['total_operation_cost'] = (
+            self.cost_expressions['facility_operation_cost'] +
+            self.cost_expressions['production_cost'] +
+            self.cost_expressions['transport_operation_cost'] +
+            self.cost_expressions['storage_operation_cost'] +
+            self.cost_expressions['hydrogen_production_cost'] +
+            self.cost_expressions['electricity_cost'] +
+            self.cost_expressions['h2_storage_operation'] +
+            self.cost_expressions['hydrogen_transport_operation'] +
+            self.cost_expressions['hydrogen_pipeline_operation'] +
+            self.cost_expressions['ng_transport_operation'] +
+            self.cost_expressions['natural_gas_cost'] +
+            self.cost_expressions['final_inventory_cost']
+        )
+
+        # 不含短缺成本的总成本
+        self.cost_aggregates['total_cost_excluding_shortage'] = (
+            self.cost_aggregates['total_investment_cost'] +
+            self.cost_aggregates['total_operation_cost']
+        )
+
+        logger.info("统一成本表达式创建完成")
+        logger.info(f"项目期限: {project_lifespan}年，时间窗口: {self.time_horizon_weeks}周")
+        logger.info(f"运营成本年化系数: {operation_expansion_factor:.1f}")
+        logger.info(f"20年运营成本现值系数: {present_value_factor:.2f}")
+        logger.info(f"生命周期运营成本系数: {lifecycle_operation_factor:.2f}")
+        logger.info("所有运营成本已扩展至20年生命周期现值")
+
+        # 关键参数验证
+        logger.info("\n【关键参数验证】")
+        logger.info(f"MTJ变动运营成本参数: {variable_opex_per_kg} 元/kg")
+        logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
+        logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
+
     def _add_time_scale_matching_constraints(self):
         """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
         logger.info("添加改进的时间尺度匹配约束...")
@@ -3151,280 +3508,16 @@ class NaturalGasSupplyChainOptimizer:
         self._add_lng_terminal_daily_capacity_constraints()
     
     def _create_objective(self):
-        """创建目标函数：最小化项目20年生命周期总成本"""
-        logger.info("创建目标函数（基于20年生命周期总成本）...")
+        """创建目标函数：最小化项目20年生命周期总成本（使用已创建的成本表达式）"""
+        logger.info("设置目标函数（使用统一的成本表达式）...")
 
-        # 初始化成本表达式存储结构
-        self.cost_expressions = {}  # 存储所有成本项的表达式对象
-        self.cost_aggregates = {}   # 存储聚合成本表达式
+        # 验证成本表达式已经创建
+        if not hasattr(self, 'cost_aggregates') or 'total_cost_excluding_shortage' not in self.cost_aggregates:
+            raise RuntimeError("成本表达式尚未创建，请先调用 _create_cost_expressions()")
 
-        # 定义时间相关常量
-        total_days = self.total_hours // 24
-
-        # 读取目标函数系数配置（带默认值，保证向后兼容）
-        obj_cfg = self.config.get('objective_coefficients', {}) or {}
-        transport_cfg = obj_cfg.get('transport', {}) or {}
-        storage_cfg = obj_cfg.get('storage', {}) or {}
-        
-        # 获取经济参数
-        discount_rate = self.economic_params['discount_rate']
-        project_lifespan = self.economic_params['project_lifespan']
-        
-        # 计算现值系数（用于运营成本折现）
-        if discount_rate == 0:
-            present_value_factor = project_lifespan  # 无折现时的累计系数
-        else:
-            # 计算20年运营成本的现值系数
-            present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
-        
-        # 运营成本扩展系数：将时间窗口运营成本扩展到20年生命周期现值
-        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数（1周→52周）
-        lifecycle_operation_factor = operation_expansion_factor * present_value_factor  # 20年生命周期现值系数
-        
-        # 1. MTJ生产设施投资成本（项目开始时的一次性投资）
-        fac_cfg = self.config.get('facility_lcoe_parameters', {}) or {}
-        fixed_capex = fac_cfg.get('fixed_capex', 20000000)
-        variable_capex_per_capacity = fac_cfg.get('variable_capex_per_capacity', 20000)
-        self.cost_expressions['facility_investment_cost'] = gp.quicksum(
-            self.facility_vars[(location, tech)] * fixed_capex +
-            self.facility_capacity_vars[(location, tech)] * variable_capex_per_capacity *
-            self.economic_params['mtj_plant_capacity_factor']
-            for location in self.locations
-            for tech in self.technologies
-        )
-        
-        # 2. MTJ生产设施运营成本（20年现值）
-        fixed_opex_annual = fac_cfg.get('fixed_opex_annual', 1000000)
-        self.cost_expressions['facility_operation_cost'] = gp.quicksum(
-            self.facility_vars[(location, tech)] * fixed_opex_annual * present_value_factor
-            for location in self.locations
-            for tech in self.technologies
-        )
-        
-        # 3. 生产变动运营成本（20年生命周期现值）
-        variable_opex_per_kg = fac_cfg.get('variable_opex_per_kg', 0.3)  # 元/kg - 修正默认值从300到0.3
-        logger.info(f"目标函数中使用的MTJ变动运营成本: {variable_opex_per_kg}元/kg")
-        self.cost_expressions['production_cost'] = gp.quicksum(
-            self.production_vars[(location, tech, hour)] * variable_opex_per_kg * lifecycle_operation_factor
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
-        
-        # 4. 运输设备投资成本 + 20年运营成本现值
-        self.cost_expressions['transport_equipment_cost'] = gp.LinExpr(0)  # 已包含在平准化运输成本中
-        self.cost_expressions['transport_operation_cost'] = gp.quicksum(
-            self.transport_vars[(location, airport, week)] *
-            self._calculate_mtj_transport_cost_by_distance(
-                self._calculate_distance(location, airport)
-            ) * lifecycle_operation_factor  # 20年运营成本现值，基于运输理论公式
-            for location in self.locations
-            for airport in self.airports
-            for week in range(self.time_horizon_weeks)
-            if (location, airport, week) in self.transport_vars
-        )
-        
-        # 5. 储存设施投资成本 + 20年运营成本现值
-        max_storage_needed = gp.quicksum(
-            self.storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-        )
-        # 优先使用统一成本配置中的MTJ储存设备成本
-        storage_unit_cost = float(
-            self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
-            storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
-        )
-        self.cost_expressions['storage_equipment_cost'] = max_storage_needed * storage_unit_cost
-        self.cost_expressions['storage_operation_cost'] = gp.quicksum(
-            self.storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-        )
-        
-        # 6. 电解槽投资成本（一次性投资）
-        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H2/hour)")
-        self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
-            self.electrolyzer_capacity_vars[location] *
-            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
-            for location in self.locations
-            if location in self.electrolyzer_capacity_vars
-        )
-        
-        # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
-        hydrogen_production_unit_cost = float(
-            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
-        )
-        self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
-        )
-        
-        # 8. 电解制氢电力成本（20年生命周期现值）
-        # 8. 电力成本（基于实际氢气生产的电力消耗）
-        self.cost_expressions['electricity_cost'] = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] *
-            self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
-            self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本，不乘以生命周期系数
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
-        ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
-        
-        # 9. 氢气储存投资 + 20年运营成本现值
-        max_h2_storage = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
-        )
-        # 优先使用统一成本配置中的氢气储存设备成本
-        h2_storage_unit_cost = float(
-            self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
-            storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
-        )
-        self.cost_expressions['h2_storage_investment'] = max_h2_storage * h2_storage_unit_cost
-        self.cost_expressions['h2_storage_operation'] = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
-        )
-        
-        # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
-        self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化氢气运输成本中
-        self.cost_expressions['hydrogen_transport_operation'] = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
-            self._calculate_hydrogen_transport_cost_by_distance(
-                self._calculate_location_distance(h_loc, mtj_loc)
-            ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
-            for h_loc in self.hydrogen_locations
-            for mtj_loc in sum(self.mtj_locations.values(), [])
-            if (h_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
-        
-        # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
-        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-            # 管道运输成本（基于图像拟合的成本函数，已包含所有投资和运营成本）
-            self.cost_expressions['hydrogen_pipeline_operation'] = gp.quicksum(
-                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] *
-                self._calculate_hydrogen_pipeline_cost_by_distance(
-                    self._get_hydrogen_transport_distance_with_clustering(h2_loc, mtj_loc)
-                ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
-                for h2_loc in self.hydrogen_locations
-                for mtj_loc in sum(self.mtj_locations.values(), [])
-                if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-            )
-        else:
-            self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
-        
-        # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
-        self.cost_expressions['ng_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化天然气运输成本中
-        # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
-        # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
-        ng_transport_operation_expr = gp.LinExpr()
-
-        # 为每条路线计算基于实际日输送量的运输成本
-        # 1. 天然气管道到MTJ工厂的运输成本
-        for ng_loc in self.ng_locations:
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
-                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
-
-                total_days_local = self.total_hours // 24
-                for day in range(total_days_local):
-                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
-                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
-
-                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
-                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
-                        ng_transport_operation_expr += linear_cost * lifecycle_operation_factor
-
-        self.cost_expressions['ng_transport_operation'] = ng_transport_operation_expr
-
-                        
-        # 天然气日处理能力约束已移除 - 允许无限制处理
-        logger.info("天然气日处理能力约束已移除，允许无限制处理")
-        
-        # 11. 原料成本（20年生命周期现值）
-        # 获取天然气价格 (元/m³)
-        ng_price_per_m3 = None
-        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
-            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
-            if price is not None:
-                ng_price_per_m3 = price  # 数据文件中实际是元/m³，不是元/万m³
-                break
-
-        if ng_price_per_m3 is not None:
-            # 创建天然气成本表达式对象
-            self.cost_expressions['natural_gas_cost'] = gp.quicksum(
-                self.production_vars[(location, tech, hour)] *
-                self.technologies[tech]['ng_consumption_ratio'] * ng_price_per_m3 * lifecycle_operation_factor
-                for location in self.locations
-                for tech in self.technologies
-                for hour in range(self.total_hours)
-                if (location, tech, hour) in self.production_vars and
-                   self.technologies[tech].get('ng_consumption_ratio', 0) > 0
-            )
-        else:
-            self.cost_expressions['natural_gas_cost'] = gp.LinExpr(0)  # 如果没有价格信息，成本为0
-        
-        
-        # 13. 短缺惩罚成本（20年生命周期现值）
-        if hasattr(self, 'shortage_vars'):
-            self.cost_expressions['shortage_cost'] = gp.quicksum(
-                var * self.costs['shortage_penalty_yuan_per_kg'] * lifecycle_operation_factor  # 20年现值
-                for var in self.shortage_vars.values()
-            )
-        else:
-            self.cost_expressions['shortage_cost'] = gp.LinExpr(0)
-        
-        # 14. 期末资产处置成本（20年后的现值）
-        disposal_cost_per_kg = float(obj_cfg.get('final_inventory_disposal_cost_per_kg', 100))
-        self.cost_expressions['final_inventory_cost'] = gp.quicksum(
-            self.storage_vars[(location, self.total_hours)] * disposal_cost_per_kg * operation_expansion_factor *
-            (1 + discount_rate)**(-project_lifespan)  # 20年后处置成本的现值
-            for location in self.locations
-        )
-        
-        # 创建聚合成本表达式
-        # 投资成本聚合
-        self.cost_aggregates['total_investment_cost'] = (
-            self.cost_expressions['facility_investment_cost'] +
-            self.cost_expressions['transport_equipment_cost'] +
-            self.cost_expressions['storage_equipment_cost'] +
-            self.cost_expressions['electrolyzer_investment_cost'] +
-            self.cost_expressions['h2_storage_investment'] +
-            self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['ng_transport_investment']
-        )
-
-        # 运营成本聚合
-        self.cost_aggregates['total_operation_cost'] = (
-            self.cost_expressions['facility_operation_cost'] +
-            self.cost_expressions['production_cost'] +
-            self.cost_expressions['transport_operation_cost'] +
-            self.cost_expressions['storage_operation_cost'] +
-            self.cost_expressions['hydrogen_production_cost'] +
-            self.cost_expressions['electricity_cost'] +
-            self.cost_expressions['h2_storage_operation'] +
-            self.cost_expressions['hydrogen_transport_operation'] +
-            self.cost_expressions['hydrogen_pipeline_operation'] +
-            self.cost_expressions['ng_transport_operation'] +
-            self.cost_expressions['natural_gas_cost'] +
-            self.cost_expressions['final_inventory_cost']
-        )
-
-        # 不含短缺成本的总成本
-        self.cost_aggregates['total_cost_excluding_shortage'] = (
-            self.cost_aggregates['total_investment_cost'] +
-            self.cost_aggregates['total_operation_cost']
-        )
+        # 验证短缺成本表达式存在
+        if not hasattr(self, 'cost_expressions') or 'shortage_cost' not in self.cost_expressions:
+            raise RuntimeError("短缺成本表达式尚未创建，请先调用 _create_cost_expressions()")
 
         # 项目20年生命周期总成本（包含短缺成本）
         total_cost = (
@@ -3435,18 +3528,7 @@ class NaturalGasSupplyChainOptimizer:
         # 设置目标函数：最小化项目20年生命周期总成本
         self.model.setObjective(total_cost, GRB.MINIMIZE)
 
-        logger.info("项目20年生命周期总成本目标函数创建完成")
-        logger.info(f"项目期限: {project_lifespan}年，时间窗口: {self.time_horizon_weeks}周")
-        logger.info(f"运营成本年化系数: {operation_expansion_factor:.1f}")
-        logger.info(f"20年运营成本现值系数: {present_value_factor:.2f}")
-        logger.info(f"生命周期运营成本系数: {lifecycle_operation_factor:.2f}")
-        logger.info("所有运营成本已扩展至20年生命周期现值")
-
-        # 关键参数验证
-        logger.info("\n【关键参数验证】")
-        logger.info(f"MTJ变动运营成本参数: {variable_opex_per_kg} 元/kg")
-        logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
-        logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
+        logger.info("目标函数设置完成（使用统一成本表达式）")
     
     
     def _calculate_mtj_transport_cost_by_distance(self, distance_km: float) -> float:
@@ -4316,6 +4398,37 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"生命周期平准化成本(不含短缺,考虑折现): {lifecycle_levelized_cost_excluding_shortage_per_kg:,.2f} 元/kg")
         logger.info(f"年化平准化成本: {annual_levelized_cost_per_kg:,.2f} 元/kg")
 
+        # ==================================================================================
+        # 验证平准化成本约束满足情况
+        # ==================================================================================
+        threshold = self.config.get('economic_parameters', {}).get('levelized_cost_threshold_yuan_per_kg', 5.62)
+
+        logger.info("")
+        logger.info("="*80)
+        logger.info("【平准化成本约束验证】")
+        logger.info(f"门槛值设定: {threshold} 元/kg（不含短缺成本）")
+        logger.info(f"实际平准化成本(不含短缺): {lifecycle_levelized_cost_excluding_shortage_per_kg:,.2f} 元/kg")
+
+        if lifecycle_levelized_cost_excluding_shortage_per_kg <= threshold:
+            constraint_status = "✓ 满足"
+            constraint_margin = threshold - lifecycle_levelized_cost_excluding_shortage_per_kg
+            logger.info(f"约束状态: {constraint_status}")
+            logger.info(f"成本余量: {constraint_margin:,.4f} 元/kg（距离门槛值的余量）")
+        else:
+            constraint_status = "✗ 违反"
+            constraint_violation = lifecycle_levelized_cost_excluding_shortage_per_kg - threshold
+            logger.info(f"约束状态: {constraint_status}")
+            logger.info(f"约束违反程度: {constraint_violation:,.4f} 元/kg（超出门槛值）")
+            logger.warning("警告：当前方案的平准化成本超出设定门槛值！")
+
+        logger.info(f"成本比例: {(lifecycle_levelized_cost_excluding_shortage_per_kg / threshold * 100):,.1f}% 相对于门槛值")
+        logger.info("="*80)
+
+        # 将约束验证结果存储到solution中
+        solution['levelized_cost_constraint_satisfied'] = lifecycle_levelized_cost_excluding_shortage_per_kg <= threshold
+        solution['levelized_cost_threshold'] = threshold
+        solution['levelized_cost_margin_or_violation'] = threshold - lifecycle_levelized_cost_excluding_shortage_per_kg
+
         return solution
 
     def _get_cost_metrics_from_expressions(self) -> Dict:
@@ -4545,6 +4658,9 @@ class NaturalGasSupplyChainOptimizer:
             "生命周期平准化成本(元/kg)": [solution.get("lifecycle_levelized_cost_per_kg", 0)],
             "年化平准化成本(元/kg)": [solution.get("annual_levelized_cost_per_kg", 0)],
             "生命周期平准化成本_不含短缺(元/kg)": [lifecycle_levelized_cost_excluding_shortage],
+            "平准化成本门槛值(元/kg)": [solution.get("levelized_cost_threshold", 0)],
+            "平准化成本约束满足": [solution.get("levelized_cost_constraint_satisfied", False)],
+            "平准化成本余量_或违反程度(元/kg)": [solution.get("levelized_cost_margin_or_violation", 0)],
         }
 
         # 使用表达式对象的实际成本数据
