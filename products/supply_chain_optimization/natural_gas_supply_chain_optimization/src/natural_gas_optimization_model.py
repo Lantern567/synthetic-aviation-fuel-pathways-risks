@@ -2585,6 +2585,58 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
         logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
 
+        # 创建需求满足比例表达式
+        self._create_demand_fulfillment_expression()
+
+    def _create_demand_fulfillment_expression(self):
+        """创建需求满足比例表达式: 1 - (缺货产量 / (缺货产量 + 总产量))"""
+        logger.info("创建需求满足比例表达式...")
+
+        # 初始化performance_expressions字典（如果不存在）
+        if not hasattr(self, 'performance_expressions'):
+            self.performance_expressions = {}
+
+        # 创建总生产量表达式（如果还不存在）
+        if not hasattr(self, 'production_total_expr'):
+            self.production_total_expr = gp.quicksum(
+                var for var in self.production_vars.values()
+            )
+            logger.info(f"[调试] 创建总生产量表达式，包含 {len(self.production_vars)} 个生产变量")
+
+        # 计算缺货产量总和
+        if hasattr(self, 'shortage_vars') and self.shortage_vars:
+            shortage_total_expr = gp.quicksum(self.shortage_vars.values())
+            logger.info(f"[调试] 创建缺货产量表达式，包含 {len(self.shortage_vars)} 个缺货变量")
+        else:
+            shortage_total_expr = gp.LinExpr(0)
+            logger.info("[调试] 未找到缺货变量，缺货产量设为0")
+
+        # 计算总需求量（总产量 + 缺货产量）
+        total_demand_expr = self.production_total_expr + shortage_total_expr
+
+        # 计算需求满足比例：1 - (缺货产量 / (缺货产量 + 总产量))
+        # 当总需求为0时，需求满足比例定义为1.0（100%满足）
+        try:
+            # 由于Gurobi不支持直接的条件表达式，我们需要在求解后再计算具体数值
+            # 这里存储表达式组件供后续计算
+            self.performance_expressions['shortage_total'] = shortage_total_expr
+            self.performance_expressions['production_total'] = self.production_total_expr
+            self.performance_expressions['total_demand'] = total_demand_expr
+
+            logger.info("[调试] 需求满足比例表达式组件创建完成")
+            logger.info("[调试] - shortage_total: 缺货产量总和")
+            logger.info("[调试] - production_total: 总产量")
+            logger.info("[调试] - total_demand: 总需求量 = 总产量 + 缺货产量")
+
+        except Exception as e:
+            logger.error(f"创建需求满足比例表达式时出错: {e}")
+            # 设置默认值
+            self.performance_expressions['shortage_total'] = gp.LinExpr(0)
+            self.performance_expressions['production_total'] = gp.LinExpr(0)
+            self.performance_expressions['total_demand'] = gp.LinExpr(0)
+
+        logger.info("需求满足比例表达式创建完成")
+
     def _add_time_scale_matching_constraints(self):
         """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
         logger.info("添加改进的时间尺度匹配约束...")
@@ -4398,6 +4450,10 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"生命周期平准化成本(不含短缺,考虑折现): {lifecycle_levelized_cost_excluding_shortage_per_kg:,.2f} 元/kg")
         logger.info(f"年化平准化成本: {annual_levelized_cost_per_kg:,.2f} 元/kg")
 
+        # 输出需求满足比例
+        demand_fulfillment_ratio = cost_metrics.get('demand_fulfillment_ratio', 1.0)
+        logger.info(f"需求满足比例: {demand_fulfillment_ratio*100:.2f}%")
+
         # ==================================================================================
         # 验证平准化成本约束满足情况
         # ==================================================================================
@@ -4472,14 +4528,75 @@ class NaturalGasSupplyChainOptimizer:
                 logger.warning(f"获取聚合成本 {agg_name} 的数值失败: {e}")
                 cost_breakdown[agg_name] = 0
 
+        # 计算需求满足比例
+        demand_fulfillment_ratio = self._calculate_demand_fulfillment_ratio()
+        cost_breakdown['demand_fulfillment_ratio'] = demand_fulfillment_ratio
+
         logger.info("成本指标获取完成")
         logger.info(f"生命周期总成本: {self.model.ObjVal:,.2f} 元")
         logger.info(f"不含短缺总成本: {cost_breakdown.get('total_cost_excluding_shortage', 0):,.2f} 元")
         logger.info(f"短缺成本: {cost_breakdown.get('shortage_cost', 0):,.2f} 元")
+        logger.info(f"需求满足比例: {demand_fulfillment_ratio*100:.2f}%")
 
         return cost_breakdown
 
     # _calculate_cost_breakdown 方法已被 _get_cost_metrics_from_expressions 替代
+
+    def _calculate_demand_fulfillment_ratio(self) -> float:
+        """计算需求满足比例: 1 - (缺货产量 / (缺货产量 + 总产量))"""
+        try:
+            # 检查是否有performance_expressions
+            if not hasattr(self, 'performance_expressions') or not self.performance_expressions:
+                logger.warning("[调试] performance_expressions未初始化，需求满足比例设为1.0")
+                return 1.0
+
+            # 获取表达式的数值
+            shortage_total_value = 0.0
+            production_total_value = 0.0
+            total_demand_value = 0.0
+
+            # 获取缺货产量总和
+            if 'shortage_total' in self.performance_expressions:
+                shortage_total_value = self.performance_expressions['shortage_total'].getValue()
+                logger.info(f"[调试] 缺货产量总和: {shortage_total_value:,.2f} kg")
+            else:
+                logger.warning("[调试] 未找到shortage_total表达式")
+
+            # 获取总产量
+            if 'production_total' in self.performance_expressions:
+                production_total_value = self.performance_expressions['production_total'].getValue()
+                logger.info(f"[调试] 总产量: {production_total_value:,.2f} kg")
+            else:
+                logger.warning("[调试] 未找到production_total表达式")
+
+            # 获取总需求量
+            if 'total_demand' in self.performance_expressions:
+                total_demand_value = self.performance_expressions['total_demand'].getValue()
+                logger.info(f"[调试] 总需求量(总产量+缺货): {total_demand_value:,.2f} kg")
+            else:
+                logger.warning("[调试] 未找到total_demand表达式")
+
+            # 计算需求满足比例
+            if total_demand_value > 0:
+                # 需求满足比例 = 1 - (缺货产量 / 总需求量)
+                # 其中总需求量 = 总产量 + 缺货产量
+                demand_fulfillment_ratio = 1.0 - (shortage_total_value / total_demand_value)
+
+                # 确保比例在0-1之间
+                demand_fulfillment_ratio = max(0.0, min(1.0, demand_fulfillment_ratio))
+
+                logger.info(f"[调试] 需求满足比例计算: 1 - ({shortage_total_value:,.2f} / {total_demand_value:,.2f}) = {demand_fulfillment_ratio:.4f}")
+
+                return demand_fulfillment_ratio
+            else:
+                # 如果总需求为0，定义为100%满足
+                logger.info("[调试] 总需求量为0，需求满足比例设为1.0 (100%)")
+                return 1.0
+
+        except Exception as e:
+            logger.error(f"计算需求满足比例时出错: {e}")
+            logger.info("[调试] 发生错误，需求满足比例设为1.0 (100%)")
+            return 1.0
 
     def _calculate_unit_costs_from_optimization(self, solution: Dict) -> Dict:
         """
@@ -4651,6 +4768,9 @@ class NaturalGasSupplyChainOptimizer:
         total_cost_excluding_shortage = cost_breakdown.get('total_cost_excluding_shortage', 0)
         project_lifespan = solution.get("project_lifespan_years", 20)
 
+        # 获取需求满足比例
+        demand_fulfillment_ratio = cost_breakdown.get('demand_fulfillment_ratio', 1.0)
+
         results_summary = {
             "优化状态": [solution.get("optimization_status", "未知")],
             "生命周期总成本(元)": [total_cost_excluding_shortage],
@@ -4661,6 +4781,7 @@ class NaturalGasSupplyChainOptimizer:
             "平准化成本门槛值(元/kg)": [solution.get("levelized_cost_threshold", 0)],
             "平准化成本约束满足": [solution.get("levelized_cost_constraint_satisfied", False)],
             "平准化成本余量_或违反程度(元/kg)": [solution.get("levelized_cost_margin_or_violation", 0)],
+            "需求满足比例(%)": [demand_fulfillment_ratio * 100],
         }
 
         # 使用表达式对象的实际成本数据
