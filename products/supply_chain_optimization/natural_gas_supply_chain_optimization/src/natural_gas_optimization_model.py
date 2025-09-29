@@ -353,7 +353,11 @@ class NaturalGasSupplyChainOptimizer:
         
         # LNG容量平均值（从配置文件加载，在数据加载后会更新）
         self.avg_lng_capacity_mcm_per_year = basic_params['avg_lng_capacity_mcm_per_year']
-        
+
+        # 加载碳排放参数
+        self.carbon_params = self.config.get('carbon_emission_parameters', {})
+        logger.info(f"加载碳排放参数: {len(self.carbon_params)} 个类别")
+
         # 通过GraphHopper路径规划计算得出的距离统计值（用于模型中的参考）
         self.avg_hydrogen_transport_distance = None  # 将通过GraphHopper路径规划计算得出
         self.avg_ng_transport_distance = None  # 将通过GraphHopper路径规划计算得出
@@ -2588,6 +2592,362 @@ class NaturalGasSupplyChainOptimizer:
         # 创建需求满足比例表达式
         self._create_demand_fulfillment_expression()
 
+        # 创建碳排放表达式（如果启用）
+        if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
+            self._create_carbon_emission_expressions()
+
+    def _create_carbon_emission_expressions(self):
+        """创建碳排放计算表达式（基于SAF生命周期碳排放计算方法）"""
+        logger.info("="*80)
+        logger.info("创建碳排放计算表达式...")
+        logger.info("="*80)
+
+        # 初始化碳排放表达式存储结构
+        self.carbon_expressions = {}  # 存储各阶段碳排放表达式
+        self.carbon_aggregates = {}   # 存储聚合碳排放表达式
+
+        # 从配置获取碳排放参数
+        raw_materials = self.carbon_params.get('raw_materials', {})
+        facility_constr = self.carbon_params.get('facility_construction', {})
+        production = self.carbon_params.get('production_process', {})
+        storage_handling = self.carbon_params.get('storage_handling', {})
+        transportation = self.carbon_params.get('transportation', {})
+
+        # 验证碳排放参数完整性
+        logger.info("验证碳排放参数完整性...")
+        required_params = {
+            'raw_materials': ['ng_extraction_intensity', 'ng_pipeline_transport'],
+            'facility_construction': ['saf_facility_embodied', 'saf_facility_lifetime',
+                                    'electrolyzer_embodied', 'electrolyzer_lifetime'],
+            'production_process': ['ng_to_methanol_rate', 'ng_process_emission',
+                                 'mtj_process_energy', 'renewable_electricity',
+                                 'electrolysis_energy', 'green_h2_intensity'],
+            'storage_handling': ['mtj_storage_energy', 'h2_storage_energy'],
+            'transportation': ['h2_truck_intensity', 'mtj_truck_intensity', 'ng_truck_intensity']
+        }
+
+        missing_params = []
+        for category, params in required_params.items():
+            category_data = self.carbon_params.get(category, {})
+            for param in params:
+                if param not in category_data:
+                    missing_params.append(f"{category}.{param}")
+                    logger.warning(f"缺失碳排放参数: {category}.{param}")
+
+        if missing_params:
+            logger.warning(f"发现 {len(missing_params)} 个缺失的碳排放参数，将使用默认值")
+        else:
+            logger.info("碳排放参数完整性检查通过")
+
+        # 时间相关常量
+        total_days = self.total_hours // 24
+        project_lifespan = self.economic_params['project_lifespan']
+        operation_expansion_factor = 52.0 / self.time_horizon_weeks  # 年化系数
+
+        # =========================================================================
+        # 1. 原料获取阶段碳排放 (Raw Material Extraction)
+        # =========================================================================
+        ng_extraction_intensity = raw_materials.get('ng_extraction_intensity', 0.25)  # kg CO2eq/m³
+        ng_pipeline_transport = raw_materials.get('ng_pipeline_transport', 0.01)  # kg CO2eq/m³·km
+
+        # 天然气开采碳排放（基于运输量推算开采量）
+        # 注：ng_transport_vars已经是天级变量(m³/天)，无需再乘以24
+        self.carbon_expressions['ng_extraction'] = gp.quicksum(
+            self.ng_transport_vars.get((ng_loc, mtj_loc, day), gp.LinExpr(0)) *
+            ng_extraction_intensity  # 天级变量 * kg CO2eq/m³
+            for ng_loc in self.ng_locations
+            for mtj_loc in self.locations
+            for day in range(total_days)
+            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
+        )
+
+        logger.info(f"天然气开采碳强度: {ng_extraction_intensity} kg CO2eq/m³")
+        logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
+
+        # =========================================================================
+        # 2. 设施建设阶段碳排放（年摊销）(Facility Construction)
+        # =========================================================================
+        saf_embodied = facility_constr.get('saf_facility_embodied', 150)  # kg CO2eq/t年产能
+        saf_lifetime = facility_constr.get('saf_facility_lifetime', 25)  # 年
+        electrolyzer_embodied = facility_constr.get('electrolyzer_embodied', 1200)  # kg CO2eq/MW
+        electrolyzer_lifetime = facility_constr.get('electrolyzer_lifetime', 20)  # 年
+
+        # SAF工厂建设碳排放（年摊销到优化时段）
+        # 单位转换: kg/h → t/年 → kg CO2eq
+        self.carbon_expressions['saf_facility'] = gp.quicksum(
+            (self.facility_capacity_vars.get((location, tech), gp.LinExpr(0)) * 8760 / 1000) *  # kg/h → t/年
+            saf_embodied / saf_lifetime * (self.time_horizon_weeks / 52.0)  # 年摊销到优化时段
+            for location in self.locations
+            for tech in self.technologies
+            if (location, tech) in self.facility_capacity_vars
+        )
+
+        # 电解槽建设碳排放（年摊销）
+        # 方案：基于氢气产能计算，避免功率转换的复杂性
+        # 重新定义电解槽碳强度为基于氢气产能：kg CO2eq/MW → kg CO2eq/(kg H2/h)
+        electrolysis_energy = production.get('electrolysis_energy', 55)  # kWh/kg H2
+        # 安全检查：避免除零错误
+        if electrolysis_energy <= 0:
+            raise ValueError(f"电解制氢能耗必须大于0，当前值: {electrolysis_energy}")
+        # 转换电解槽碳强度: MW → kg H2/h
+        # 1 MW = 1000 kW, 1 kW = 1 kWh/h, 所以 1 MW = 1000 kWh/h
+        # 1 MW / (55 kWh/kg H2) = 1000/55 ≈ 18.18 kg H2/h
+        electrolyzer_embodied_per_capacity = electrolyzer_embodied / (1000 / electrolysis_energy)  # kg CO2eq/(kg H2/h)
+
+        self.carbon_expressions['electrolyzer_facility'] = gp.quicksum(
+            self.electrolyzer_capacity_vars.get(location, gp.LinExpr(0)) *  # kg H2/h
+            electrolyzer_embodied_per_capacity / electrolyzer_lifetime * (self.time_horizon_weeks / 52.0)
+            for location in self.hydrogen_locations
+            if location in self.electrolyzer_capacity_vars
+        )
+
+        logger.info(f"SAF设施碳强度: {saf_embodied} kg CO2eq/t年产能, 寿命: {saf_lifetime}年")
+        logger.info(f"电解槽碳强度: {electrolyzer_embodied} kg CO2eq/MW → {electrolyzer_embodied_per_capacity:.2f} kg CO2eq/(kg H2/h), 寿命: {electrolyzer_lifetime}年")
+        logger.info(f"[调试] 设施容量变量数量: {len([k for k in self.facility_capacity_vars.keys()])}") if hasattr(self, 'facility_capacity_vars') else logger.warning("[调试] 未找到设施容量变量")
+        logger.info(f"[调试] 电解槽容量变量数量: {len([k for k in self.electrolyzer_capacity_vars.keys()])}") if hasattr(self, 'electrolyzer_capacity_vars') else logger.warning("[调试] 未找到电解槽容量变量")
+
+        # =========================================================================
+        # 3. 生产过程阶段碳排放 (Production Process)
+        # =========================================================================
+        ng_to_methanol = production.get('ng_to_methanol_rate', 1.2)  # m³ NG/kg甲醇
+        ng_process_em = production.get('ng_process_emission', 0.8)  # kg CO2eq/m³
+        mtj_energy = production.get('mtj_process_energy', 800)  # kWh/t SAF
+        renewable_elec = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh
+        green_h2_intensity = production.get('green_h2_intensity', 1.1)  # kg CO2eq/kg H2
+
+        # 天然气制甲醇碳排放
+        self.carbon_expressions['ng_to_methanol'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            ng_to_methanol * ng_process_em
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 甲醇制SAF过程碳排放
+        self.carbon_expressions['methanol_to_saf'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            mtj_energy / 1000 * renewable_elec  # kWh/t转换为MWh/t
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 氢气生产碳排放
+        # 注：green_h2_intensity已包含电解能耗(55 kWh/kg × 0.02 kg CO2eq/kWh = 1.1)，无需重复计算
+        self.carbon_expressions['h2_production'] = gp.quicksum(
+            self.hydrogen_production_vars.get((location, hour), gp.LinExpr(0)) *
+            green_h2_intensity  # kg H2 × kg CO2eq/kg H2 = kg CO2eq
+            for location in self.hydrogen_locations
+            for hour in range(self.total_hours)
+            if (location, hour) in self.hydrogen_production_vars
+        )
+
+        logger.info(f"天然气消耗率: {ng_to_methanol} m³/kg甲醇, 工艺排放: {ng_process_em} kg CO2eq/m³")
+        logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 可再生电力碳强度: {renewable_elec} kg CO2eq/kWh")
+        logger.info(f"绿氢碳强度: {green_h2_intensity} kg CO2eq/kg H2")
+        logger.info(f"[调试] 生产变量数量: {len([k for k in self.production_vars.keys()])}") if hasattr(self, 'production_vars') else logger.warning("[调试] 未找到生产变量")
+        logger.info(f"[调试] 氢气生产变量数量: {len([k for k in self.hydrogen_production_vars.keys()])}") if hasattr(self, 'hydrogen_production_vars') else logger.warning("[调试] 未找到氢气生产变量")
+
+        # =========================================================================
+        # 4. 储存处理阶段碳排放 (Storage & Handling)
+        # =========================================================================
+        mtj_storage_energy = storage_handling.get('mtj_storage_energy', 5)  # kWh/t·天
+        h2_storage_energy = storage_handling.get('h2_storage_energy', 0.5)  # kWh/kg·天
+
+        # 基本参数验证
+        if mtj_storage_energy <= 0:
+            logger.warning(f"MTJ储存能耗参数异常: {mtj_storage_energy}")
+        if h2_storage_energy <= 0:
+            logger.warning(f"氢气储存能耗参数异常: {h2_storage_energy}")
+
+        # MTJ储存碳排放
+        # 注：存储变量索引范围应为0到total_hours（包含边界状态）
+        self.carbon_expressions['mtj_storage'] = gp.quicksum(
+            self.storage_vars.get((location, hour), gp.LinExpr(0)) *
+            mtj_storage_energy / 24 * renewable_elec  # kWh/t·天 → kWh/t·h，修复：移除错误的/1000
+            for location in self.locations
+            for hour in range(self.total_hours + 1)  # 存储变量包含边界状态
+            if (location, hour) in self.storage_vars
+        )
+
+        # 氢气储存碳排放
+        # 注：氢气存储变量索引范围应为0到total_hours（包含边界状态）
+        self.carbon_expressions['h2_storage'] = gp.quicksum(
+            self.hydrogen_storage_vars.get((location, hour), gp.LinExpr(0)) *
+            h2_storage_energy / 24 * renewable_elec  # 转换为小时级
+            for location in self.hydrogen_locations
+            for hour in range(self.total_hours + 1)  # 氢气存储变量包含边界状态
+            if (location, hour) in self.hydrogen_storage_vars
+        )
+
+        logger.info(f"MTJ储存能耗: {mtj_storage_energy} kWh/t·天")
+        logger.info(f"氢气储存能耗: {h2_storage_energy} kWh/kg·天")
+        logger.info(f"[调试] MTJ存储变量数量: {len([k for k in self.storage_vars.keys()])}") if hasattr(self, 'storage_vars') else logger.warning("[调试] 未找到MTJ存储变量")
+        logger.info(f"[调试] 氢气存储变量数量: {len([k for k in self.hydrogen_storage_vars.keys()])}") if hasattr(self, 'hydrogen_storage_vars') else logger.warning("[调试] 未找到氢气存储变量")
+
+        # =========================================================================
+        # 5. 运输配送阶段碳排放 (Transportation & Distribution)
+        # =========================================================================
+        h2_truck = transportation.get('h2_truck_intensity', 0.15)  # kg CO2eq/kg·km
+        h2_pipeline = transportation.get('h2_pipeline_intensity', 0.005)  # kg CO2eq/kg·km
+        mtj_truck = transportation.get('mtj_truck_intensity', 0.12)  # kg CO2eq/t·km
+        ng_truck = transportation.get('ng_truck_intensity', 0.10)  # kg CO2eq/m³·km
+
+        # 氢气罐车运输碳排放
+        # 注：hydrogen_transport_vars单位为kg H2/week，h2_truck为kg CO2eq/kg·km
+        self.carbon_expressions['h2_truck_transport'] = gp.quicksum(
+            self.hydrogen_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
+            self._calculate_distance(h2_loc, mtj_loc) * h2_truck
+            for h2_loc in self.hydrogen_locations
+            for mtj_loc in self.locations
+            if (h2_loc, mtj_loc) in self.hydrogen_transport_vars
+        )
+
+        # 氢气管道运输碳排放（修复：之前遗漏了这部分）
+        # 注：hydrogen_pipeline_transport_vars单位为kg H2/week，h2_pipeline为kg CO2eq/kg·km
+        self.carbon_expressions['h2_pipeline_transport'] = gp.quicksum(
+            self.hydrogen_pipeline_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
+            self._calculate_distance(h2_loc, mtj_loc) * h2_pipeline
+            for h2_loc in self.hydrogen_locations
+            for mtj_loc in self.locations
+            if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
+        ) if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars else gp.LinExpr(0)
+
+        # 氢气总运输碳排放（包含罐车和管道两种方式）
+        self.carbon_expressions['h2_transport'] = (
+            self.carbon_expressions['h2_truck_transport'] +
+            self.carbon_expressions['h2_pipeline_transport']
+        )
+
+        # MTJ运输碳排放
+        # 单位转换: kg → t，因为mtj_truck单位是kg CO2eq/t·km
+        self.carbon_expressions['mtj_transport'] = gp.quicksum(
+            (self.transport_vars.get((location, airport, week), gp.LinExpr(0)) / 1000) *  # kg → t
+            self._calculate_distance(location, airport) * mtj_truck  # t × km × kg CO2eq/t·km
+            for location in self.locations
+            for airport in self.airports
+            for week in range(self.time_horizon_weeks)
+            if (location, airport, week) in self.transport_vars
+        )
+
+        # 天然气运输碳排放
+        # 注：ng_transport_vars是天级变量(m³/天)，ng_truck单位是kg CO2eq/m³·km，无需时间转换
+        self.carbon_expressions['ng_transport'] = gp.quicksum(
+            self.ng_transport_vars.get((ng_loc, mtj_loc, day), gp.LinExpr(0)) *
+            self._calculate_distance(ng_loc, mtj_loc) * ng_truck  # m³/天 * km * kg CO2eq/m³·km
+            for ng_loc in self.ng_locations
+            for mtj_loc in self.locations
+            for day in range(total_days)
+            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
+        )
+
+        # 验证运输碳强度参数合理性
+        transport_params = [
+            (h2_truck, 0.05, 0.50, "氢气罐车运输碳强度"),
+            (h2_pipeline, 0.001, 0.020, "氢气管道运输碳强度"),
+            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度"),
+            (ng_truck, 0.05, 0.30, "天然气罐车运输碳强度")
+        ]
+        for value, min_val, max_val, name in transport_params:
+            if not (min_val <= value <= max_val):
+                logger.warning(f"{name}可能不合理: {value}, 期望范围: [{min_val}, {max_val}]")
+
+        logger.info(f"氢气罐车运输: {h2_truck} kg CO2eq/kg·km")
+        logger.info(f"氢气管道运输: {h2_pipeline} kg CO2eq/kg·km")
+        logger.info(f"MTJ罐车运输: {mtj_truck} kg CO2eq/t·km")
+        logger.info(f"天然气罐车运输: {ng_truck} kg CO2eq/m³·km")
+        logger.info(f"[调试] 氢气罐车变量数量: {len([k for k in self.hydrogen_transport_vars.keys()])}") if hasattr(self, 'hydrogen_transport_vars') else logger.warning("[调试] 未找到氢气罐车变量")
+        logger.info(f"[调试] 氢气管道变量数量: {len([k for k in self.hydrogen_pipeline_transport_vars.keys()])}") if hasattr(self, 'hydrogen_pipeline_transport_vars') else logger.warning("[调试] 未找到氢气管道变量")
+        logger.info(f"[调试] MTJ运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到MTJ运输变量")
+        logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
+
+        # 测试距离计算方法
+        if hasattr(self, 'locations') and hasattr(self, 'airports') and self.locations and self.airports:
+            sample_location = list(self.locations.keys())[0] if self.locations else None
+            sample_airport = list(self.airports.keys())[0] if self.airports else None
+            if sample_location and sample_airport:
+                try:
+                    test_distance = self._calculate_distance(sample_location, sample_airport)
+                    logger.info(f"[调试] 距离计算测试 {sample_location} -> {sample_airport}: {test_distance:.2f} km")
+                except Exception as e:
+                    logger.warning(f"[调试] 距离计算方法测试失败: {e}")
+            else:
+                logger.warning("[调试] 无法测试距离计算：缺少位置或机场数据")
+        else:
+            logger.warning("[调试] 无法测试距离计算：位置或机场数据未初始化")
+
+        # =========================================================================
+        # 6. 汇总碳排放 (Carbon Emission Aggregation)
+        # =========================================================================
+
+        # 各类别汇总
+        self.carbon_aggregates['raw_material_emissions'] = self.carbon_expressions['ng_extraction']
+
+        self.carbon_aggregates['facility_emissions'] = (
+            self.carbon_expressions['saf_facility'] +
+            self.carbon_expressions['electrolyzer_facility']
+        )
+
+        self.carbon_aggregates['production_emissions'] = (
+            self.carbon_expressions['ng_to_methanol'] +
+            self.carbon_expressions['methanol_to_saf'] +
+            self.carbon_expressions['h2_production']
+        )
+
+        self.carbon_aggregates['storage_emissions'] = (
+            self.carbon_expressions['mtj_storage'] +
+            self.carbon_expressions['h2_storage']
+        )
+
+        self.carbon_aggregates['transport_emissions'] = (
+            self.carbon_expressions['h2_transport'] +
+            self.carbon_expressions['mtj_transport'] +
+            self.carbon_expressions['ng_transport']
+        )
+
+        # 总碳排放
+        self.carbon_aggregates['total_emissions'] = (
+            self.carbon_aggregates['raw_material_emissions'] +
+            self.carbon_aggregates['facility_emissions'] +
+            self.carbon_aggregates['production_emissions'] +
+            self.carbon_aggregates['storage_emissions'] +
+            self.carbon_aggregates['transport_emissions']
+        )
+
+        # 将碳排放扩展到年化值（用于报告）
+        self.carbon_aggregates['annual_emissions'] = (
+            self.carbon_aggregates['total_emissions'] * operation_expansion_factor
+        )
+
+        logger.info("碳排放表达式创建完成")
+        logger.info(f"包含 {len(self.carbon_expressions)} 个细分项，{len(self.carbon_aggregates)} 个汇总项")
+
+        # 详细输出各表达式项
+        logger.info("[调试] 碳排放表达式详情:")
+        for name, expr in self.carbon_expressions.items():
+            logger.info(f"  - {name}: {type(expr).__name__}")
+
+        logger.info("[调试] 碳排放汇总项详情:")
+        for name, expr in self.carbon_aggregates.items():
+            logger.info(f"  - {name}: {type(expr).__name__}")
+
+        logger.info(f"[调试] 优化时段: {self.time_horizon_weeks}周, 总小时数: {self.total_hours}小时")
+        logger.info(f"[调试] 年化系数: {52.0 / self.time_horizon_weeks:.3f}")
+
+        # 时间尺度一致性验证
+        logger.info("="*60)
+        logger.info("时间尺度一致性验证:")
+        logger.info("  原料获取: 按天计算(ng_transport_vars)")
+        logger.info("  设施建设: 年产能摊销到优化时段")
+        logger.info("  生产过程: 按小时计算(production_vars, hydrogen_production_vars)")
+        logger.info("  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)")
+        logger.info("  运输配送: MTJ按周, NG按天, H2按总量")
+        logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
+        logger.info("="*60)
+
     def _create_demand_fulfillment_expression(self):
         """创建需求满足比例表达式: 1 - (缺货产量 / (缺货产量 + 总产量))"""
         logger.info("创建需求满足比例表达式...")
@@ -4720,6 +5080,243 @@ class NaturalGasSupplyChainOptimizer:
             logger.error(f"提取优化结果成本数据失败: {e}")
             return {}
     
+    def calculate_carbon_emissions(self, solution: Dict) -> Dict:
+        """计算碳排放结果（基于优化求解后的变量值）"""
+        logger.info("="*80)
+        logger.info("计算碳排放结果...")
+        logger.info("="*80)
+
+        carbon_results = {}
+
+        # 检查是否创建了碳排放表达式
+        if not hasattr(self, 'carbon_expressions'):
+            logger.warning("未创建碳排放表达式，跳过碳排放计算")
+            return carbon_results
+
+        logger.info(f"[调试] 碳排放表达式数量: {len(self.carbon_expressions)}")
+        logger.info(f"[调试] 碳排放汇总项数量: {len(self.carbon_aggregates)}")
+
+        try:
+            # 1. 计算各细分项碳排放（kg CO2eq）
+            carbon_results['detailed'] = {}
+            for name, expr in self.carbon_expressions.items():
+                value = expr.getValue() if hasattr(expr, 'getValue') else 0
+                carbon_results['detailed'][name] = value
+                logger.info(f"  {name}: {value:.2f} kg CO2eq")
+
+            # 2. 计算各阶段汇总碳排放
+            carbon_results['by_stage'] = {}
+            for name, expr in self.carbon_aggregates.items():
+                value = expr.getValue() if hasattr(expr, 'getValue') else 0
+                carbon_results['by_stage'][name] = value
+                logger.info(f"  {name}: {value:.2f} kg CO2eq")
+
+            # 3. 计算总生产量（kg SAF）
+            total_production = sum(
+                var.x for var in self.production_vars.values()
+                if hasattr(var, 'x')
+            )
+            carbon_results['total_production_kg'] = total_production
+
+            # 4. 计算碳强度
+            if total_production > 0:
+                total_emissions = carbon_results['by_stage'].get('total_emissions', 0)
+
+                # 质量碳强度 (kg CO2eq/kg SAF)
+                carbon_intensity_mass = total_emissions / total_production
+                carbon_results['carbon_intensity_kg'] = carbon_intensity_mass
+
+                # 能量碳强度 (g CO2eq/MJ)
+                saf_energy_content = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)
+                carbon_intensity_energy = carbon_intensity_mass * 1000 / saf_energy_content
+                carbon_results['carbon_intensity_mj'] = carbon_intensity_energy
+
+                # 与基准比较
+                benchmarks = self.carbon_params.get('benchmarks', {})
+                traditional_jet = benchmarks.get('traditional_jet_fuel', 89)
+                corsia_limit = benchmarks.get('corsia_limit', 30)
+
+                carbon_results['vs_traditional_jet'] = (carbon_intensity_energy / traditional_jet - 1) * 100
+                carbon_results['vs_corsia'] = (carbon_intensity_energy / corsia_limit - 1) * 100
+
+                logger.info(f"碳强度: {carbon_intensity_mass:.3f} kg CO2eq/kg SAF")
+                logger.info(f"碳强度: {carbon_intensity_energy:.2f} g CO2eq/MJ")
+                logger.info(f"相比传统航煤: {carbon_results['vs_traditional_jet']:.1f}%")
+                logger.info(f"相比CORSIA标准: {carbon_results['vs_corsia']:.1f}%")
+            else:
+                logger.warning("总生产量为0，无法计算碳强度")
+
+            # 5. 计算各阶段贡献比例
+            total_emissions = carbon_results['by_stage'].get('total_emissions', 0)
+            if total_emissions > 0:
+                carbon_results['stage_contributions'] = {}
+                for stage in ['raw_material_emissions', 'facility_emissions',
+                             'production_emissions', 'storage_emissions', 'transport_emissions']:
+                    if stage in carbon_results['by_stage']:
+                        value = carbon_results['by_stage'][stage]
+                        percentage = (value / total_emissions) * 100
+                        carbon_results['stage_contributions'][stage] = {
+                            'value': value,
+                            'percentage': percentage
+                        }
+                        logger.info(f"  {stage}: {percentage:.1f}%")
+
+            return carbon_results
+
+        except Exception as e:
+            logger.error(f"碳排放计算失败: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return carbon_results
+
+    def save_carbon_emissions_report(self, carbon_results: Dict, output_dir: str, timestamp: str):
+        """保存碳排放报告到CSV文件"""
+        if not carbon_results:
+            logger.warning("没有碳排放数据可保存")
+            return
+
+        try:
+            # 创建碳排放详细报告DataFrame
+            report_data = []
+
+            # 1. 总体指标
+            report_data.append({
+                '类别': '总体指标',
+                '项目': '总碳排放',
+                '数值': carbon_results.get('by_stage', {}).get('total_emissions', 0),
+                '单位': 'kg CO2eq',
+                '备注': f"优化时段: {self.time_horizon_weeks}周"
+            })
+
+            report_data.append({
+                '类别': '总体指标',
+                '项目': '年化碳排放',
+                '数值': carbon_results.get('by_stage', {}).get('annual_emissions', 0),
+                '单位': 'kg CO2eq/年',
+                '备注': '扩展到全年'
+            })
+
+            report_data.append({
+                '类别': '总体指标',
+                '项目': '总生产量',
+                '数值': carbon_results.get('total_production_kg', 0),
+                '单位': 'kg SAF',
+                '备注': f"{self.time_horizon_weeks}周内"
+            })
+
+            report_data.append({
+                '类别': '总体指标',
+                '项目': '碳强度(质量)',
+                '数值': carbon_results.get('carbon_intensity_kg', 0),
+                '单位': 'kg CO2eq/kg SAF',
+                '备注': ''
+            })
+
+            report_data.append({
+                '类别': '总体指标',
+                '项目': '碳强度(能量)',
+                '数值': carbon_results.get('carbon_intensity_mj', 0),
+                '单位': 'g CO2eq/MJ',
+                '备注': ''
+            })
+
+            # 2. 各阶段排放
+            stage_mapping = {
+                'raw_material_emissions': '原料获取',
+                'facility_emissions': '设施建设',
+                'production_emissions': '生产过程',
+                'storage_emissions': '储存处理',
+                'transport_emissions': '运输配送'
+            }
+
+            contributions = carbon_results.get('stage_contributions', {})
+            for stage_key, stage_name in stage_mapping.items():
+                if stage_key in contributions:
+                    data = contributions[stage_key]
+                    report_data.append({
+                        '类别': '各阶段排放',
+                        '项目': stage_name,
+                        '数值': data['value'],
+                        '单位': 'kg CO2eq',
+                        '备注': f"占比: {data['percentage']:.1f}%"
+                    })
+
+            # 3. 细分项排放
+            detailed = carbon_results.get('detailed', {})
+            detail_mapping = {
+                'ng_extraction': '天然气开采',
+                'saf_facility': 'SAF工厂建设',
+                'electrolyzer_facility': '电解槽建设',
+                'ng_to_methanol': '天然气制甲醇',
+                'methanol_to_saf': '甲醇制SAF',
+                'h2_production': '氢气生产',
+                'mtj_storage': 'MTJ储存',
+                'h2_storage': '氢气储存',
+                'h2_transport': '氢气运输',
+                'mtj_transport': 'MTJ运输',
+                'ng_transport': '天然气运输'
+            }
+
+            for key, name in detail_mapping.items():
+                if key in detailed:
+                    report_data.append({
+                        '类别': '细分项排放',
+                        '项目': name,
+                        '数值': detailed[key],
+                        '单位': 'kg CO2eq',
+                        '备注': ''
+                    })
+
+            # 4. 基准对比
+            report_data.append({
+                '类别': '基准对比',
+                '项目': '传统航煤碳强度',
+                '数值': self.carbon_params.get('benchmarks', {}).get('traditional_jet_fuel', 89),
+                '单位': 'g CO2eq/MJ',
+                '备注': 'ICAO基准'
+            })
+
+            report_data.append({
+                '类别': '基准对比',
+                '项目': 'CORSIA限值',
+                '数值': self.carbon_params.get('benchmarks', {}).get('corsia_limit', 30),
+                '单位': 'g CO2eq/MJ',
+                '备注': '2027年标准'
+            })
+
+            report_data.append({
+                '类别': '基准对比',
+                '项目': '相比传统航煤',
+                '数值': carbon_results.get('vs_traditional_jet', 0),
+                '单位': '%',
+                '备注': '负值表示减排'
+            })
+
+            report_data.append({
+                '类别': '基准对比',
+                '项目': '相比CORSIA标准',
+                '数值': carbon_results.get('vs_corsia', 0),
+                '单位': '%',
+                '备注': '负值表示优于标准'
+            })
+
+            # 保存到CSV
+            df = pd.DataFrame(report_data)
+            csv_path = os.path.join(output_dir, f"carbon_emissions_{timestamp}.csv")
+            df.to_csv(csv_path, index=False, encoding='utf-8-sig')
+            logger.info(f"碳排放报告已保存到: {csv_path}")
+
+            # 同时保存详细的JSON格式数据
+            json_path = os.path.join(output_dir, f"carbon_emissions_detailed_{timestamp}.json")
+            with open(json_path, 'w', encoding='utf-8') as f:
+                json.dump(carbon_results, f, ensure_ascii=False, indent=2)
+            logger.info(f"碳排放详细数据已保存到: {json_path}")
+
+        except Exception as e:
+            logger.error(f"保存碳排放报告失败: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+
     def save_results(self, solution: Dict, output_dir: str):
         """保存求解结果"""
         import json  # 确保json模块可用
@@ -4931,6 +5528,32 @@ class NaturalGasSupplyChainOptimizer:
             "MTJ CO2原料成本占比(%)": [unit_costs.get('mtj_co2_cost_ratio', 0) * 100]
         })
         
+        # 计算和保存碳排放结果（如果启用）
+        if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
+            logger.info("="*80)
+            logger.info("开始碳排放计算和报告...")
+            logger.info("="*80)
+
+            # 计算碳排放
+            carbon_results = self.calculate_carbon_emissions(solution)
+
+            # 保存碳排放报告
+            if carbon_results and self.carbon_params.get('calculation_control', {}).get('save_carbon_csv', True):
+                self.save_carbon_emissions_report(carbon_results, output_dir, timestamp)
+
+            # 将碳排放结果添加到solution字典中
+            solution['carbon_emissions'] = carbon_results
+
+            # 在优化总结中添加碳排放指标
+            if carbon_results:
+                results_summary.update({
+                    "总碳排放(kg CO2eq)": [carbon_results.get('by_stage', {}).get('total_emissions', 0)],
+                    "碳强度(kg CO2eq/kg SAF)": [carbon_results.get('carbon_intensity_kg', 0)],
+                    "碳强度(g CO2eq/MJ)": [carbon_results.get('carbon_intensity_mj', 0)],
+                    "相比传统航煤(%)": [carbon_results.get('vs_traditional_jet', 0)],
+                    "相比CORSIA标准(%)": [carbon_results.get('vs_corsia', 0)]
+                })
+
         # 保存优化总结
         summary_df = pd.DataFrame(results_summary)
         summary_path = self._get_output_path('optimization_summary', timestamp)

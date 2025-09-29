@@ -140,7 +140,7 @@ economic_parameters:
   # -------------------------------------------------------------------------
   # 平准化成本约束参数 - 经济可行性门槛控制
   # -------------------------------------------------------------------------
-  levelized_cost_threshold_yuan_per_kg: 7   # 不含短缺成本的平准化成本门槛值(元/kg)
+  levelized_cost_threshold_yuan_per_kg: 6.7   # 不含短缺成本的平准化成本门槛值(元/kg)
                                            # ■ 用途：限制优化方案的平准化成本上限，确保经济可行性
                                            # ■ 代码位置：natural_gas_optimization_model.py _create_objective_function方法
                                            # ■ 约束公式：(总成本现值-短缺成本现值) / 总产量现值 <= 门槛值
@@ -1374,4 +1374,129 @@ dependencies:
   maintenance: |
     - 如新增内部模块，请在 internal_modules 追加条目
     - 如调整数据路径，请同步修改 data_paths 与本节 data_inputs
-    - 可在CI中添加脚本校验这些文件是否存在以提前失败
+
+# =============================================================================
+# 12. 碳排放计算参数 (Carbon Emission Parameters)
+# =============================================================================
+# 基于SAF生命周期碳排放计算方法，用于跟踪和评估供应链各阶段的碳排放
+# 参考文档: docs/SAF_Carbon_Emission_Calculation.md
+# 更新日期: 2025-01-28
+carbon_emission_parameters:
+  # -------------------------------------------------------------------------
+  # 原料获取阶段 (Raw Materials Extraction)
+  # -------------------------------------------------------------------------
+  raw_materials:
+    ng_extraction_intensity: 0.25         # 天然气开采碳强度 (kg CO2eq/m³)
+                                         # ■ 数据来源：中国天然气行业平均值
+                                         # ■ 包含：开采、净化、压缩等过程排放
+                                         # ■ 范围：0.2-0.3 kg CO2eq/m³
+
+    ng_pipeline_transport: 0.01          # 天然气管道运输碳强度 (kg CO2eq/m³·km)
+                                         # ■ 数据来源：管道运输行业数据
+                                         # ■ 包含：压缩站能耗、泄漏损失
+                                         # ■ 范围：0.005-0.02 kg CO2eq/m³·km
+
+  # -------------------------------------------------------------------------
+  # 设施建设阶段 (Facility Construction) - 年摊销
+  # -------------------------------------------------------------------------
+  facility_construction:
+    saf_facility_embodied: 150           # SAF工厂建设碳强度 (kg CO2eq/t年产能)
+                                         # ■ 包含：材料生产、设备制造、建设施工
+                                         # ■ 范围：100-200 kg CO2eq/t年产能
+    saf_facility_lifetime: 25            # SAF工厂设计寿命 (年)
+                                         # ■ 用于碳排放摊销计算
+
+    electrolyzer_embodied: 1200          # 电解槽制造碳强度 (kg CO2eq/MW)
+                                         # ■ 包含：材料、制造、运输、安装
+                                         # ■ 范围：1000-1500 kg CO2eq/MW
+    electrolyzer_lifetime: 20            # 电解槽设计寿命 (年)
+                                         # ■ 考虑膜材料更换周期
+
+    storage_facility_embodied: 75        # 储罐设施碳强度 (kg CO2eq/m³)
+                                         # ■ 包含：钢材、混凝土、保温材料
+                                         # ■ 范围：50-100 kg CO2eq/m³
+    storage_facility_lifetime: 30        # 储罐设施寿命 (年)
+
+  # -------------------------------------------------------------------------
+  # 生产过程阶段 (Production Process)
+  # -------------------------------------------------------------------------
+  production_process:
+    # 天然气制甲醇过程
+    ng_to_methanol_rate: 1.2            # 天然气消耗率 (m³ NG/kg甲醇)
+                                         # ■ 基于转化效率和工艺损失
+    ng_process_emission: 0.8            # 工艺排放因子 (kg CO2eq/m³ NG)
+                                         # ■ 包含：反应CO2、燃烧排放、逸散
+
+    # 甲醇制SAF过程（MTJ）
+    mtj_process_energy: 800             # MTJ工艺电耗 (kWh/t SAF)
+                                         # ■ 包含：反应、分离、精制过程
+    renewable_electricity: 0.02         # 可再生电力碳强度 (kg CO2eq/kWh)
+                                         # ■ 风电/光伏全生命周期排放
+                                         # ■ 范围：0.01-0.05 kg CO2eq/kWh
+
+    # 绿氢生产过程
+    electrolysis_energy: 55             # 电解制氢能耗 (kWh/kg H2)
+                                         # ■ 基于PEM/碱性电解技术
+                                         # ■ 范围：50-60 kWh/kg H2
+    green_h2_intensity: 1.1             # 绿氢生产碳强度 (kg CO2eq/kg H2)
+                                         # ■ 使用可再生电力的间接排放
+                                         # ■ 计算：55 kWh/kg × 0.02 kg/kWh = 1.1
+
+    # 氢气加入量
+    h2_addition_rate: 40                # 氢气加入量 (kg H2/t SAF)
+                                         # ■ 用于改善SAF品质
+
+  # -------------------------------------------------------------------------
+  # 储存处理阶段 (Storage & Handling)
+  # -------------------------------------------------------------------------
+  storage_handling:
+    mtj_storage_energy: 5               # MTJ储存能耗 (kWh/t·天)
+                                         # ■ 包含：泵送、温控、监测
+    h2_storage_energy: 0.5              # 氢气压缩储存能耗 (kWh/kg H2·天)
+                                         # ■ 压缩至350-700 bar储存
+    storage_loss_rate: 0.001            # 储存损失率 (/天)
+                                         # ■ 蒸发、泄漏损失
+
+  # -------------------------------------------------------------------------
+  # 运输配送阶段 (Transportation & Distribution)
+  # -------------------------------------------------------------------------
+  transportation:
+    # 氢气运输
+    h2_pipeline_intensity: 0.005        # 氢气管道运输碳强度 (kg CO2eq/kg·km)
+                                         # ■ 包含：压缩站能耗
+                                         # ■ 适用距离：100-500 km
+    h2_truck_intensity: 0.15           # 氢气罐车运输碳强度 (kg CO2eq/kg·km)
+                                         # ■ 高压罐车运输
+                                         # ■ 适用距离：50-200 km
+
+    # MTJ/SAF运输
+    mtj_truck_intensity: 0.12          # MTJ罐车运输碳强度 (kg CO2eq/t·km)
+                                         # ■ 标准液体罐车
+                                         # ■ 适用距离：100-300 km
+
+    # 天然气运输
+    ng_truck_intensity: 0.10           # 天然气罐车运输碳强度 (kg CO2eq/m³·km)
+                                         # ■ CNG/LNG罐车运输
+
+  # -------------------------------------------------------------------------
+  # 碳强度目标与基准 (Carbon Intensity Targets & Benchmarks)
+  # -------------------------------------------------------------------------
+  benchmarks:
+    traditional_jet_fuel: 89            # 传统航煤碳强度 (g CO2eq/MJ)
+                                         # ■ ICAO基准值（不含燃烧）
+    corsia_limit: 30                    # CORSIA碳强度要求 (g CO2eq/MJ)
+                                         # ■ 2027年后SAF标准
+    saf_energy_content: 43.15           # SAF能量密度 (MJ/kg)
+                                         # ■ 用于质量-能量转换
+
+  # -------------------------------------------------------------------------
+  # 计算控制参数 (Calculation Control Parameters)
+  # -------------------------------------------------------------------------
+  calculation_control:
+    enable_carbon_tracking: true        # 是否启用碳排放跟踪
+    include_facility_construction: true # 是否包含设施建设排放
+    use_lifecycle_amortization: true   # 是否使用生命周期摊销
+    carbon_report_detail_level: 2      # 报告详细程度 (1-简单, 2-标准, 3-详细)
+    save_carbon_csv: true              # 是否保存碳排放CSV文件
+    carbon_log_level: "INFO"           # 碳排放日志级别
+    # 注：可在CI中添加脚本校验这些文件是否存在以提前失败
