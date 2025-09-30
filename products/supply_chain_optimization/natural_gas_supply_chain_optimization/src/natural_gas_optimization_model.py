@@ -55,7 +55,8 @@ except ImportError:
     try:
         from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
     except ImportError as e:
-        logger.warning(f"氢气管道距离计算器模块不可用: {e}")
+        # logger还未定义，暂时使用print
+        print(f"警告：氢气管道距离计算器模块不可用: {e}")
         HydrogenPipelineDistanceCalculator = None
         ClusteredPipelineRoute = None
 
@@ -68,7 +69,8 @@ except ImportError:
     try:
         from hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
     except ImportError as e:
-        logger.warning(f"氢气聚类优化器模块不可用: {e}")
+        # logger还未定义，暂时使用print
+        print(f"警告：氢气聚类优化器模块不可用: {e}")
         HydrogenClusteringOptimizer = None
         ClusteringResult = None
 
@@ -1355,6 +1357,8 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"  天然气管道位置: {len(self.ng_locations)} 个")
         logger.info(f"  总位置数: {len(self.locations)} 个")
 
+        # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
+        self._build_mtj_locations()
         self._initialize_hydrogen_clustering()
 
     def _initialize_hydrogen_clustering(self):
@@ -1386,23 +1390,10 @@ class NaturalGasSupplyChainOptimizer:
             }
 
             if len(hydrogen_location_dict) > 0:
-                logger.info(f"[聚类调试] 开始聚类 {len(hydrogen_location_dict)} 个氢气生产点")
                 self.clustering_results = self.hydrogen_clustering_optimizer.cluster_hydrogen_plants(
                     hydrogen_location_dict
                 )
-                logger.info(f"[聚类调试] 聚类完成: {self.clustering_results.total_clusters}个聚类, "
-                          f"{self.clustering_results.total_noise_points}个独立点")
 
-                if self.clustering_results.clusters:
-                    logger.info(f"[聚类调试] 聚类详情:")
-                    for cluster in self.clustering_results.clusters:
-                        logger.info(f"[聚类调试]   - 聚类{cluster.cluster_id}: {len(cluster.member_locations)}个成员 - {cluster.member_locations}")
-
-                if self.clustering_results.noise_points:
-                    noise_locs = [loc for loc, _ in self.clustering_results.noise_points]
-                    logger.info(f"[聚类调试] 独立点: {noise_locs}")
-
-                logger.info(f"[聚类调试] 开始预计算聚类路径，MTJ位置: {sum(self.mtj_locations.values(), [])}")
                 for cluster in self.clustering_results.clusters:
                     cluster_members = list(zip(cluster.member_locations, cluster.member_coords))
                     for mtj_loc in sum(self.mtj_locations.values(), []):
@@ -1414,12 +1405,6 @@ class NaturalGasSupplyChainOptimizer:
                             mtj_coords
                         )
                         self.clustered_routes[(cluster.cluster_id, mtj_loc)] = route
-                        logger.info(f"[聚类调试] 预计算路径: cluster_{cluster.cluster_id} -> {mtj_loc}")
-
-                logger.info(f"[聚类调试] 预计算完成，共{len(self.clustered_routes)}条聚类路径")
-                logger.info(f"[聚类调试] clustered_routes键: {list(self.clustered_routes.keys())}")
-            else:
-                logger.info("[聚类调试] 无氢气生产位置，跳过聚类")
 
         except Exception as e:
             logger.error(f"初始化氢气聚类失败: {e}")
@@ -1944,8 +1929,7 @@ class NaturalGasSupplyChainOptimizer:
         self.model.setParam('MIPGap', solver_params['MIPGap'])
         self.model.setParam('Threads', solver_params['Threads'])
 
-        # 构建MTJ工厂位置映射（依赖locations和technologies）
-        self._build_mtj_locations()
+        # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
         self._create_variables()
 
@@ -4336,24 +4320,17 @@ class NaturalGasSupplyChainOptimizer:
         return max(distance_km, 5)  # 最小距离5km（避免除零）
 
     def _get_hydrogen_transport_distance_with_clustering(self, h2_loc: str, mtj_loc: str) -> float:
-        logger.info(f"[聚类调试] 开始计算距离: {h2_loc} -> {mtj_loc}")
-
         if not hasattr(self, 'clustering_results') or self.clustering_results is None:
-            logger.info(f"[聚类调试] 无聚类结果，使用直线距离: {h2_loc} -> {mtj_loc}")
             return self._calculate_location_distance(h2_loc, mtj_loc)
 
         for cluster in self.clustering_results.clusters:
             if h2_loc in cluster.member_locations:
-                logger.info(f"[聚类调试] {h2_loc} 在聚类{cluster.cluster_id}中")
                 route_key = (cluster.cluster_id, mtj_loc)
                 if route_key in self.clustered_routes:
                     route = self.clustered_routes[route_key]
                     member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
-                    logger.info(f"[聚类调试] 使用预计算路径: cluster_{cluster.cluster_id} -> {mtj_loc}, 总距离={member_total_distance:.2f}km")
                     return max(member_total_distance, 5)
                 else:
-                    logger.info(f"[聚类调试] 路径键 {route_key} 不在clustered_routes中，动态计算")
-                    logger.info(f"[聚类调试] 当前clustered_routes有: {list(self.clustered_routes.keys())}")
                     cluster_members = list(zip(cluster.member_locations, cluster.member_coords))
                     mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
                     route = self.hydrogen_pipeline_calculator.calculate_clustered_pipeline_route(
@@ -4364,25 +4341,20 @@ class NaturalGasSupplyChainOptimizer:
                     )
                     self.clustered_routes[route_key] = route
                     member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
-                    logger.info(f"[聚类调试] 动态计算完成，总距离={member_total_distance:.2f}km")
                     return max(member_total_distance, 5)
 
         for noise_loc, noise_coord in self.clustering_results.noise_points:
             if h2_loc == noise_loc:
-                logger.info(f"[聚类调试] {h2_loc} 是独立点，使用管道距离计算")
                 mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
                 try:
                     route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
                         noise_coord[0], noise_coord[1],
                         mtj_coords[0], mtj_coords[1]
                     )
-                    logger.info(f"[聚类调试] 独立点管道距离: {route.total_distance_km:.2f}km")
                     return max(route.total_distance_km, 5)
                 except Exception as e:
-                    logger.warning(f"[聚类调试] 独立点管道距离计算失败: {h2_loc} -> {mtj_loc}, 错误: {e}")
                     return self._calculate_location_distance(h2_loc, mtj_loc)
 
-        logger.warning(f"[聚类调试] {h2_loc} 既不在聚类也不在独立点中，使用直线距离fallback")
         return self._calculate_location_distance(h2_loc, mtj_loc)
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:

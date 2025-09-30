@@ -272,5 +272,350 @@ class DataCacheManager:
         
         return cache_info
 
-# 全局缓存管理器实例
+    # ======= 路径规划缓存扩展功能 =======
+
+    def setup_path_planning_cache(self):
+        """设置路径规划相关的缓存目录和文件结构"""
+        # 创建路径规划缓存目录
+        self.path_planning_dir = os.path.join(self.cache_base_dir, "path_planning_cache")
+        os.makedirs(self.path_planning_dir, exist_ok=True)
+
+        # GraphHopper路径缓存
+        self.graphhopper_cache_dir = os.path.join(self.path_planning_dir, "graphhopper_routes")
+        os.makedirs(self.graphhopper_cache_dir, exist_ok=True)
+
+        # 管道路径缓存
+        self.pipeline_cache_dir = os.path.join(self.path_planning_dir, "pipeline_routes")
+        os.makedirs(self.pipeline_cache_dir, exist_ok=True)
+
+        # 路径规划缓存文件
+        self.path_planning_cache_files = {
+            'graphhopper_routes': os.path.join(self.graphhopper_cache_dir, 'route_cache.db'),
+            'pipeline_routes': os.path.join(self.pipeline_cache_dir, 'pipeline_cache.db'),
+            'route_statistics': os.path.join(self.path_planning_dir, 'route_statistics.json')
+        }
+
+        # 路径规划元数据文件
+        self.path_planning_metadata_files = {
+            'graphhopper_config': os.path.join(self.metadata_dir, 'graphhopper_cache_metadata.json'),
+            'pipeline_config': os.path.join(self.metadata_dir, 'pipeline_cache_metadata.json'),
+            'unified_config': os.path.join(self.metadata_dir, 'unified_cache_config.json')
+        }
+
+        logger.info(f"路径规划缓存结构已设置，目录: {self.path_planning_dir}")
+
+    def get_path_planning_cache_info(self) -> Dict:
+        """获取路径规划缓存信息"""
+        if not hasattr(self, 'path_planning_dir'):
+            self.setup_path_planning_cache()
+
+        cache_info = {}
+
+        # GraphHopper缓存信息
+        graphhopper_db = self.path_planning_cache_files.get('graphhopper_routes')
+        cache_info['graphhopper_routes'] = {
+            'cache_exists': os.path.exists(graphhopper_db) if graphhopper_db else False,
+            'cache_file': graphhopper_db,
+            'cache_type': 'SQLite数据库'
+        }
+
+        if cache_info['graphhopper_routes']['cache_exists']:
+            try:
+                import sqlite3
+                conn = sqlite3.connect(graphhopper_db)
+                cursor = conn.cursor()
+
+                # 检查表是否存在
+                cursor.execute("""
+                    SELECT name FROM sqlite_master WHERE type='table' AND name='route_cache'
+                """)
+                table_exists = cursor.fetchone() is not None
+
+                if table_exists:
+                    cursor.execute("SELECT COUNT(*) FROM route_cache")
+                    cache_info['graphhopper_routes']['route_count'] = cursor.fetchone()[0]
+
+                    cursor.execute("SELECT MAX(created_at) FROM route_cache")
+                    last_update = cursor.fetchone()[0]
+                    cache_info['graphhopper_routes']['last_update'] = last_update
+                else:
+                    cache_info['graphhopper_routes']['route_count'] = 0
+
+                conn.close()
+            except Exception as e:
+                cache_info['graphhopper_routes']['error'] = str(e)
+
+        # 管道路径缓存信息
+        pipeline_db = self.path_planning_cache_files.get('pipeline_routes')
+        cache_info['pipeline_routes'] = {
+            'cache_exists': os.path.exists(pipeline_db) if pipeline_db else False,
+            'cache_file': pipeline_db,
+            'cache_type': 'SQLite数据库'
+        }
+
+        if cache_info['pipeline_routes']['cache_exists']:
+            try:
+                import sqlite3
+                conn = sqlite3.connect(pipeline_db)
+                cursor = conn.cursor()
+
+                cursor.execute("""
+                    SELECT name FROM sqlite_master WHERE type='table' AND name='pipeline_routes'
+                """)
+                table_exists = cursor.fetchone() is not None
+
+                if table_exists:
+                    cursor.execute("SELECT COUNT(*) FROM pipeline_routes")
+                    cache_info['pipeline_routes']['route_count'] = cursor.fetchone()[0]
+
+                    cursor.execute("SELECT MAX(created_at) FROM pipeline_routes")
+                    last_update = cursor.fetchone()[0]
+                    cache_info['pipeline_routes']['last_update'] = last_update
+                else:
+                    cache_info['pipeline_routes']['route_count'] = 0
+
+                conn.close()
+            except Exception as e:
+                cache_info['pipeline_routes']['error'] = str(e)
+
+        # 路径规划统计信息
+        stats_file = self.path_planning_cache_files.get('route_statistics')
+        cache_info['route_statistics'] = {
+            'stats_exists': os.path.exists(stats_file) if stats_file else False,
+            'stats_file': stats_file
+        }
+
+        if cache_info['route_statistics']['stats_exists']:
+            try:
+                with open(stats_file, 'r', encoding='utf-8') as f:
+                    stats_data = json.load(f)
+                cache_info['route_statistics']['data'] = stats_data
+            except Exception as e:
+                cache_info['route_statistics']['error'] = str(e)
+
+        return cache_info
+
+    def clear_path_planning_cache(self, cache_type: str = None) -> Dict:
+        """
+        清理路径规划缓存
+
+        Args:
+            cache_type: 缓存类型 ('graphhopper', 'pipeline', 'all', None=all)
+
+        Returns:
+            清理结果信息
+        """
+        if not hasattr(self, 'path_planning_dir'):
+            self.setup_path_planning_cache()
+
+        result = {
+            'cleared_files': [],
+            'errors': [],
+            'total_freed_space_mb': 0
+        }
+
+        cache_types_to_clear = []
+        if cache_type is None or cache_type == 'all':
+            cache_types_to_clear = ['graphhopper_routes', 'pipeline_routes', 'route_statistics']
+        elif cache_type == 'graphhopper':
+            cache_types_to_clear = ['graphhopper_routes']
+        elif cache_type == 'pipeline':
+            cache_types_to_clear = ['pipeline_routes']
+        elif cache_type == 'statistics':
+            cache_types_to_clear = ['route_statistics']
+
+        for cache_key in cache_types_to_clear:
+            cache_file = self.path_planning_cache_files.get(cache_key)
+            if cache_file and os.path.exists(cache_file):
+                try:
+                    file_size = os.path.getsize(cache_file)
+                    os.remove(cache_file)
+                    result['cleared_files'].append(cache_file)
+                    result['total_freed_space_mb'] += file_size / (1024 * 1024)
+                    logger.info(f"已清理路径规划缓存文件: {cache_file}")
+                except Exception as e:
+                    error_msg = f"清理缓存文件失败 {cache_file}: {e}"
+                    result['errors'].append(error_msg)
+                    logger.error(error_msg)
+
+        # 清理元数据文件
+        for metadata_key, metadata_file in self.path_planning_metadata_files.items():
+            if os.path.exists(metadata_file):
+                try:
+                    os.remove(metadata_file)
+                    result['cleared_files'].append(metadata_file)
+                    logger.info(f"已清理路径规划元数据文件: {metadata_file}")
+                except Exception as e:
+                    error_msg = f"清理元数据文件失败 {metadata_file}: {e}"
+                    result['errors'].append(error_msg)
+                    logger.error(error_msg)
+
+        logger.info(f"路径规划缓存清理完成，释放空间: {result['total_freed_space_mb']:.2f}MB")
+        return result
+
+    def save_route_planning_statistics(self, stats: Dict):
+        """
+        保存路径规划统计信息
+
+        Args:
+            stats: 统计信息字典
+        """
+        if not hasattr(self, 'path_planning_dir'):
+            self.setup_path_planning_cache()
+
+        stats_file = self.path_planning_cache_files['route_statistics']
+
+        # 添加时间戳
+        stats['saved_at'] = datetime.now().isoformat()
+        stats['cache_manager_version'] = '2.0_extended'
+
+        try:
+            with open(stats_file, 'w', encoding='utf-8') as f:
+                json.dump(stats, f, ensure_ascii=False, indent=2, default=str)
+            logger.info(f"路径规划统计信息已保存: {stats_file}")
+        except Exception as e:
+            logger.error(f"保存路径规划统计信息失败: {e}")
+
+    def load_route_planning_statistics(self) -> Optional[Dict]:
+        """
+        加载路径规划统计信息
+
+        Returns:
+            统计信息字典，如果不存在返回None
+        """
+        if not hasattr(self, 'path_planning_dir'):
+            self.setup_path_planning_cache()
+
+        stats_file = self.path_planning_cache_files['route_statistics']
+
+        if not os.path.exists(stats_file):
+            return None
+
+        try:
+            with open(stats_file, 'r', encoding='utf-8') as f:
+                stats = json.load(f)
+            return stats
+        except Exception as e:
+            logger.warning(f"加载路径规划统计信息失败: {e}")
+            return None
+
+    def validate_path_planning_cache_integrity(self) -> Dict:
+        """
+        验证路径规划缓存完整性
+
+        Returns:
+            验证结果信息
+        """
+        if not hasattr(self, 'path_planning_dir'):
+            self.setup_path_planning_cache()
+
+        validation_result = {
+            'overall_status': 'healthy',
+            'cache_files_status': {},
+            'recommendations': []
+        }
+
+        # 检查GraphHopper缓存数据库
+        graphhopper_db = self.path_planning_cache_files['graphhopper_routes']
+        if os.path.exists(graphhopper_db):
+            try:
+                import sqlite3
+                conn = sqlite3.connect(graphhopper_db)
+                cursor = conn.cursor()
+
+                # 检查表结构
+                cursor.execute("PRAGMA table_info(route_cache)")
+                columns = cursor.fetchall()
+
+                expected_columns = ['start_lat', 'start_lon', 'end_lat', 'end_lon',
+                                  'distance_km', 'time_hours', 'created_at', 'expires_at']
+                actual_columns = [col[1] for col in columns]
+
+                validation_result['cache_files_status']['graphhopper'] = {
+                    'status': 'valid',
+                    'table_exists': True,
+                    'columns_valid': all(col in actual_columns for col in expected_columns)
+                }
+
+                conn.close()
+            except Exception as e:
+                validation_result['cache_files_status']['graphhopper'] = {
+                    'status': 'error',
+                    'error': str(e)
+                }
+                validation_result['overall_status'] = 'warning'
+        else:
+            validation_result['cache_files_status']['graphhopper'] = {
+                'status': 'missing'
+            }
+
+        # 检查管道缓存数据库
+        pipeline_db = self.path_planning_cache_files['pipeline_routes']
+        if os.path.exists(pipeline_db):
+            try:
+                import sqlite3
+                conn = sqlite3.connect(pipeline_db)
+                cursor = conn.cursor()
+
+                cursor.execute("PRAGMA table_info(pipeline_routes)")
+                columns = cursor.fetchall()
+
+                validation_result['cache_files_status']['pipeline'] = {
+                    'status': 'valid',
+                    'table_exists': len(columns) > 0
+                }
+
+                conn.close()
+            except Exception as e:
+                validation_result['cache_files_status']['pipeline'] = {
+                    'status': 'error',
+                    'error': str(e)
+                }
+                validation_result['overall_status'] = 'warning'
+        else:
+            validation_result['cache_files_status']['pipeline'] = {
+                'status': 'missing'
+            }
+
+        # 生成建议
+        if validation_result['cache_files_status']['graphhopper'].get('status') == 'missing':
+            validation_result['recommendations'].append("GraphHopper缓存数据库不存在，首次使用时将自动创建")
+
+        if validation_result['cache_files_status']['pipeline'].get('status') == 'missing':
+            validation_result['recommendations'].append("管道路径缓存数据库不存在，首次使用时将自动创建")
+
+        if any(status.get('status') == 'error' for status in validation_result['cache_files_status'].values()):
+            validation_result['overall_status'] = 'error'
+            validation_result['recommendations'].append("发现缓存文件错误，建议清理并重新构建缓存")
+
+        return validation_result
+
+    def get_comprehensive_cache_info(self) -> Dict:
+        """获取包含路径规划缓存在内的综合缓存信息"""
+        # 获取原有的地理数据缓存信息
+        geo_cache_info = self.get_cache_info()
+
+        # 获取路径规划缓存信息
+        path_planning_info = self.get_path_planning_cache_info()
+
+        # 获取验证结果
+        validation_result = self.validate_path_planning_cache_integrity()
+
+        return {
+            'geo_data_cache': geo_cache_info,
+            'path_planning_cache': path_planning_info,
+            'cache_integrity': validation_result,
+            'cache_manager_info': {
+                'version': '2.0_extended_with_path_planning',
+                'base_dir': self.cache_base_dir,
+                'expiry_hours': self.cache_expiry_hours,
+                'total_cache_types': len(geo_cache_info) + len(path_planning_info)
+            }
+        }
+
+
+# 全局缓存管理器实例（扩展版本）
 cache_manager = DataCacheManager()
+
+# 自动设置路径规划缓存支持
+cache_manager.setup_path_planning_cache()

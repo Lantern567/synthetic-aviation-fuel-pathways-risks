@@ -23,81 +23,71 @@ from math import radians, sin, cos, sqrt, atan2
 import heapq
 from dataclasses import dataclass
 from functools import lru_cache
+import time
 
+# 设置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class PipelineRouteNotFoundError(Exception):
-    """管道路径未找到异常"""
+# 导入数据类型定义
+from pipeline_route_types import (
+    PipelineRoute, ClusteredPipelineRoute, PipelinePoint,
+    PipelineRouteNotFoundError
+)
 
-    def __init__(self, start_lat: float, start_lon: float, end_lat: float, end_lon: float,
-                 max_access_distance_km: float, pipeline_types_tried: List[str]):
-        self.start_lat = start_lat
-        self.start_lon = start_lon
-        self.end_lat = end_lat
-        self.end_lon = end_lon
-        self.max_access_distance_km = max_access_distance_km
-        self.pipeline_types_tried = pipeline_types_tried
-
-        message = (f"未找到管道运输路径: "
-                  f"起点({start_lat:.6f}, {start_lon:.6f}) -> "
-                  f"终点({end_lat:.6f}, {end_lon:.6f}), "
-                  f"最大接入距离: {max_access_distance_km}km, "
-                  f"尝试的管道类型: {', '.join(pipeline_types_tried)}")
-        super().__init__(message)
-
-@dataclass
-class PipelineRoute:
-    """管道路径结果数据类"""
-    total_distance_km: float
-    access_distance_km: float  # 起点吸附距离
-    pipeline_distance_km: float  # 管道网络距离
-    egress_distance_km: float  # 终点吸附距离
-    pipeline_types_used: List[str]  # 使用的管道类型
-    route_found: bool
-    calculation_method: str
-    # 新增几何信息字段
-    route_geometry: Optional[List[Tuple[float, float]]] = None  # 路径几何坐标序列 [(lat, lon), ...]
-    access_point_coords: Optional[Tuple[float, float]] = None  # 起点接入管道的坐标
-    egress_point_coords: Optional[Tuple[float, float]] = None  # 终点离开管道的坐标
-    start_coords: Optional[Tuple[float, float]] = None  # 起点原始坐标
-    end_coords: Optional[Tuple[float, float]] = None  # 终点原始坐标
-
-@dataclass
-class ClusteredPipelineRoute:
-    cluster_id: int
-    layer1_distances: Dict[str, float]
-    layer2_distance: float
-    layer3_distance: float
-    total_distance_per_member: Dict[str, float]
-    route_geometry: Optional[List[Tuple[float, float]]] = None
-    cluster_center: Optional[Tuple[float, float]] = None
-    pipeline_access_point: Optional[Tuple[float, float]] = None
-    pipeline_types_used: List[str] = None
-    route_found: bool = True
-
-@dataclass
-class PipelinePoint:
-    """管道点数据类"""
-    lat: float
-    lon: float
-    pipeline_id: str
-    pipeline_type: str  # 'crude', 'refined', 'natural_gas'
-    segment_id: int  # 在管道中的线段编号
+# 集成新的缓存系统
+try:
+    from pipeline_route_cache_manager import PipelineRouteCacheManager
+    from unified_cache_configuration import UnifiedCacheConfiguration
+    ADVANCED_CACHE_AVAILABLE = True
+except ImportError as e:
+    pass  # 静默降级处理
+    ADVANCED_CACHE_AVAILABLE = False
 
 class HydrogenPipelineDistanceCalculator:
     """氢气管道运输距离计算器"""
 
-    def __init__(self, gis_data_path: str, enable_cache: bool = True):
+    def __init__(self, gis_data_path: str, enable_cache: bool = True,
+                 cache_dir: str = None, use_unified_config: bool = True):
         """
         初始化计算器
 
         Args:
             gis_data_path: GIS数据目录路径
             enable_cache: 是否启用计算缓存
+            cache_dir: 缓存目录路径
+            use_unified_config: 是否使用统一配置系统
         """
         self.gis_data_path = Path(gis_data_path)
         self.enable_cache = enable_cache
+        self.use_unified_config = use_unified_config
+
+        # 初始化高级缓存系统
+        self.pipeline_cache_manager = None
+        if ADVANCED_CACHE_AVAILABLE and enable_cache:
+            try:
+                if use_unified_config:
+                    # 使用统一配置
+                    config = UnifiedCacheConfiguration()
+                    cache_config = config.get_pipeline_config()
+                    self.pipeline_cache_manager = PipelineRouteCacheManager(
+                        cache_dir=cache_dir,
+                        enable_cache=cache_config.enabled,
+                        ttl_hours=cache_config.ttl_hours,
+                        max_cache_size_mb=cache_config.max_cache_size_mb,
+                        max_entries=cache_config.max_entries
+                    )
+                else:
+                    # 使用默认配置
+                    self.pipeline_cache_manager = PipelineRouteCacheManager(
+                        cache_dir=cache_dir,
+                        enable_cache=enable_cache
+                    )
+
+                logger.debug("高级管道路径缓存系统已初始化")
+            except Exception as e:
+                pass  # 静默降级处理
+                self.pipeline_cache_manager = None
 
         # 管道数据存储
         self.pipeline_data = {
@@ -123,10 +113,12 @@ class HydrogenPipelineDistanceCalculator:
                 'crude': 0,
                 'refined': 0,
                 'natural_gas': 0
-            }
+            },
+            'advanced_cache_stats': {}
         }
 
-        logger.info(f"氢气管道距离计算器初始化完成，GIS数据路径: {gis_data_path}")
+        cache_status = "高级缓存" if self.pipeline_cache_manager else "基础缓存"
+        logger.debug(f"氢气管道距离计算器初始化完成，GIS数据路径: {gis_data_path}，缓存模式: {cache_status}")
 
     def load_pipeline_data(self) -> Dict[str, Dict]:
         """
@@ -135,7 +127,7 @@ class HydrogenPipelineDistanceCalculator:
         Returns:
             Dict: 包含三种管道数据的字典
         """
-        logger.info("开始加载管道数据...")
+        logger.debug("开始加载管道数据...")
 
         pipeline_files = {
             'crude': 'crude_pipelines.geojson',
@@ -151,7 +143,7 @@ class HydrogenPipelineDistanceCalculator:
                     self.pipeline_data[pipeline_type] = json.load(f)
 
                 feature_count = len(self.pipeline_data[pipeline_type]['features'])
-                logger.info(f"成功加载{pipeline_type}管道数据: {feature_count} 个要素")
+                logger.debug(f"成功加载{pipeline_type}管道数据: {feature_count} 个要素")
 
             except Exception as e:
                 logger.error(f"加载{pipeline_type}管道数据失败: {e}")
@@ -161,13 +153,13 @@ class HydrogenPipelineDistanceCalculator:
         self._build_pipeline_networks()
 
         total_pipelines = sum(len(data['features']) for data in self.pipeline_data.values())
-        logger.info(f"管道数据加载完成，总管道数: {total_pipelines}")
+        logger.debug(f"管道数据加载完成，总管道数: {total_pipelines}")
 
         return self.pipeline_data
 
     def _build_pipeline_networks(self):
         """构建管道网络图"""
-        logger.info("构建管道网络图...")
+        logger.debug("构建管道网络图...")
 
         for pipeline_type, data in self.pipeline_data.items():
             if not data or 'features' not in data:
@@ -253,12 +245,14 @@ class HydrogenPipelineDistanceCalculator:
             if not hasattr(self, 'edge_geometries'):
                 self.edge_geometries = {}
             self.edge_geometries[pipeline_type] = edge_geometry
-            logger.info(f"{pipeline_type}管道网络: {graph.number_of_nodes()} 节点, "
+            logger.debug(f"{pipeline_type}管道网络: {graph.number_of_nodes()} 节点, "
                        f"{graph.number_of_edges()} 边")
 
     def calculate_pipeline_distance(self, start_lat: float, start_lon: float,
                                   end_lat: float, end_lon: float,
-                                  max_access_distance_km: float = 100.0) -> PipelineRoute:
+                                  max_access_distance_km: float = 100.0,
+                                  route_type: str = "single",
+                                  additional_params: Dict = None) -> PipelineRoute:
         """
         计算基于管道网络的氢气运输距离
         注意：max_access_distance_km参数保留用于向后兼容，但不再限制搜索距离
@@ -267,16 +261,31 @@ class HydrogenPipelineDistanceCalculator:
             start_lat, start_lon: 起点坐标
             end_lat, end_lon: 终点坐标
             max_access_distance_km: 保留参数，不再限制距离
+            route_type: 路径类型 ("single")
+            additional_params: 额外参数字典
 
         Returns:
             PipelineRoute: 管道路径结果
         """
+        start_time = time.time()  # 记录开始时间
         self.stats['total_calculations'] += 1
+
+        # 首先检查高级缓存
+        if self.pipeline_cache_manager:
+            cached_result = self.pipeline_cache_manager.get_cached_route(
+                start_lat, start_lon, end_lat, end_lon,
+                max_access_distance_km, route_type, additional_params
+            )
+
+            if cached_result:
+                self.stats['cache_hits'] += 1
+                logger.debug(f"管道路径缓存命中: ({start_lat:.6f},{start_lon:.6f}) -> ({end_lat:.6f},{end_lon:.6f})")
+                return cached_result
 
         if not any(self.pipeline_data.values()):
             self.load_pipeline_data()
 
-        logger.info(f"计算管道运输距离: ({start_lat:.6f},{start_lon:.6f}) -> "
+        logger.debug(f"计算管道运输距离: ({start_lat:.6f},{start_lon:.6f}) -> "
                    f"({end_lat:.6f},{end_lon:.6f})")
 
         best_route = None
@@ -295,7 +304,7 @@ class HydrogenPipelineDistanceCalculator:
                     best_route = route
 
             except Exception as e:
-                logger.warning(f"{pipeline_type}管道路径计算失败: {e}")
+                logger.debug(f"{pipeline_type}管道路径计算失败: {e}")
                 continue
 
         if best_route and best_route.route_found:
@@ -304,8 +313,17 @@ class HydrogenPipelineDistanceCalculator:
             for pipeline_type in best_route.pipeline_types_used:
                 self.stats['pipeline_type_usage'][pipeline_type] += 1
 
-            logger.info(f"找到最优管道路径: {best_route.total_distance_km:.3f}km "
+            logger.debug(f"找到最优管道路径: {best_route.total_distance_km:.3f}km "
                        f"(使用{best_route.pipeline_types_used}管道)")
+
+            # 保存到高级缓存
+            if self.pipeline_cache_manager:
+                self.pipeline_cache_manager.cache_route(
+                    start_lat, start_lon, end_lat, end_lon,
+                    best_route, max_access_distance_km, route_type,
+                    calculation_time_ms=(time.time() - start_time) * 1000,
+                    additional_params=additional_params
+                )
             return best_route
         else:
             self.stats['failed_routes'] += 1
@@ -606,7 +624,7 @@ class HydrogenPipelineDistanceCalculator:
                 logger.debug(f"成功重建详细路径，包含{len(path_coords)}个几何点")
             else:
                 # 如果重建失败，使用简化的节点路径
-                logger.warning(f"无法重建详细路径，使用简化节点路径")
+                pass  # 静默处理路径重建失败
                 for node in path_nodes:
                     lat_str, lon_str = node.split(',')
                     path_coords.append((float(lat_str), float(lon_str)))
@@ -615,7 +633,7 @@ class HydrogenPipelineDistanceCalculator:
 
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             # 如果没有路径，检查是否是网络连通性问题
-            logger.warning(f"管道网络中找不到路径: 起点{start_point} -> 终点{end_point}")
+            pass  # 静默处理路径未找到
 
             # 尝试使用直线距离作为连接断开片段的桥梁
             try:
@@ -626,7 +644,7 @@ class HydrogenPipelineDistanceCalculator:
 
                     if len(components) > 1:
                         # 网络不连通，使用直线距离连接，但尝试收集沿途的管道几何信息
-                        logger.info(f"{pipeline_type}管道网络有{len(components)}个连通分量，使用直线距离桥接")
+                        pass  # 静默处理连通性问题
 
                         # 计算直线距离
                         straight_distance = self._calculate_haversine_distance(
@@ -640,7 +658,7 @@ class HydrogenPipelineDistanceCalculator:
                         )
 
                         if enhanced_path and len(enhanced_path) > 2:
-                            logger.info(f"直线桥接路径增强：从2个点扩展到{len(enhanced_path)}个点")
+                            pass  # 静默处理路径增强
                             return straight_distance, enhanced_path
                         else:
                             # 如果无法增强，返回简单的直线路径
@@ -649,7 +667,7 @@ class HydrogenPipelineDistanceCalculator:
                 return 0.0, []
 
             except Exception as e:
-                logger.warning(f"连通性检查失败: {e}")
+                pass  # 静默处理连通性检查失败
                 return 0.0, []
 
     def _find_nearest_graph_node(self, point: Tuple[float, float],
@@ -800,7 +818,7 @@ class HydrogenPipelineDistanceCalculator:
                     # 后续边，跳过第一个点避免重复
                     detailed_coords.extend(edge_geometry[1:])
             else:
-                logger.warning(f"未找到边 {i+1}/{len(path_nodes)-1} 的原始几何信息，使用节点坐标")
+                pass  # 静默处理几何信息缺失
 
                 if i == 0:
                     # 第一条边，添加起点
@@ -1154,7 +1172,7 @@ class HydrogenPipelineDistanceCalculator:
                                           cluster_members: List[Tuple[str, Tuple[float, float]]],
                                           cluster_center: Tuple[float, float],
                                           destination: Tuple[float, float]) -> ClusteredPipelineRoute:
-        logger.info(f"计算聚类{cluster_id}的三层管道路径，成员数: {len(cluster_members)}")
+        pass  # 静默处理聚类计算信息
 
         layer1_distances = {}
         for member_name, member_coord in cluster_members:
@@ -1208,7 +1226,7 @@ class HydrogenPipelineDistanceCalculator:
                 destination[0], destination[1]
             )
             pipeline_coords = [center_access_point, destination]
-            logger.warning(f"聚类{cluster_id}无管道网络路径，使用直线距离: {layer3_distance:.2f}km")
+            pass  # 静默处理直线距离降级
         else:
             layer3_distance, pipeline_coords = network_result
             logger.debug(f"Layer3: 管道网络距离: {layer3_distance:.2f}km")
@@ -1263,6 +1281,122 @@ class HydrogenPipelineDistanceCalculator:
         except Exception as e:
             logger.error(f"保存GeoJSON文件失败: {e}")
             return False
+
+    # ======= 缓存管理方法 =======
+
+    def get_cache_statistics(self) -> Dict:
+        """获取缓存统计信息"""
+        if self.pipeline_cache_manager:
+            advanced_stats = self.pipeline_cache_manager.get_cache_statistics()
+            self.stats['advanced_cache_stats'] = advanced_stats
+        else:
+            self.stats['advanced_cache_stats'] = {"status": "基础缓存模式"}
+
+        return {
+            'basic_stats': {
+                'total_calculations': self.stats['total_calculations'],
+                'cache_hits': self.stats['cache_hits'],
+                'successful_routes': self.stats['successful_routes'],
+                'failed_routes': self.stats['failed_routes'],
+                'cache_hit_rate': (self.stats['cache_hits'] / max(self.stats['total_calculations'], 1)) * 100
+            },
+            'pipeline_usage': self.stats['pipeline_type_usage'],
+            'advanced_cache_stats': self.stats['advanced_cache_stats']
+        }
+
+    def clear_cache(self) -> Dict:
+        """清理所有缓存"""
+        result = {
+            'basic_cache_cleared': False,
+            'advanced_cache_cleared': False,
+            'lru_cache_cleared': False
+        }
+
+        # 清理基础缓存统计
+        old_hits = self.stats['cache_hits']
+        self.stats.update({
+            'cache_hits': 0,
+            'advanced_cache_stats': {}
+        })
+        result['basic_cache_cleared'] = True
+
+        # 清理LRU缓存
+        if hasattr(self, '_calculation_cache'):
+            self._calculation_cache.clear()
+
+        # 清理haversine距离缓存
+        if hasattr(self.__class__, '_cached_haversine_distance'):
+            self.__class__._cached_haversine_distance.cache_clear()
+        result['lru_cache_cleared'] = True
+
+        # 清理高级缓存
+        if self.pipeline_cache_manager:
+            advanced_result = self.pipeline_cache_manager.clear_all_cache()
+            result['advanced_cache_result'] = advanced_result
+            result['advanced_cache_cleared'] = advanced_result.get('success', False)
+
+        result['total_cleared_hits'] = old_hits
+        logger.info(f"缓存清理完成，清除了{old_hits}个基础缓存命中记录")
+
+        return result
+
+    def cleanup_expired_cache(self) -> Dict:
+        """清理过期的缓存条目"""
+        if self.pipeline_cache_manager:
+            return self.pipeline_cache_manager.cleanup_expired_cache()
+        else:
+            return {"message": "基础缓存模式，无过期缓存清理功能"}
+
+    def optimize_cache_performance(self) -> Dict:
+        """优化缓存性能"""
+        if self.pipeline_cache_manager:
+            return self.pipeline_cache_manager.optimize_cache_performance()
+        else:
+            # 对基础缓存进行简单优化
+            if hasattr(self.__class__, '_cached_haversine_distance'):
+                cache_info = self.__class__._cached_haversine_distance.cache_info()
+                if cache_info.misses > cache_info.hits * 2:  # 如果miss次数是hit的2倍以上
+                    self.__class__._cached_haversine_distance.cache_clear()
+                    return {
+                        "optimization": "LRU缓存已清理（低命中率）",
+                        "cache_info_before": cache_info._asdict()
+                    }
+                else:
+                    return {
+                        "optimization": "LRU缓存性能良好，无需清理",
+                        "cache_info": cache_info._asdict()
+                    }
+            return {"message": "基础缓存模式，优化功能有限"}
+
+    def validate_cache_data_sources(self) -> Dict:
+        """验证缓存数据源有效性"""
+        result = {
+            'pipeline_data_files': {},
+            'cache_validation': {}
+        }
+
+        # 检查管道数据文件
+        pipeline_files = {
+            'crude': 'crude_pipelines.geojson',
+            'refined': 'refined_product_pipelines.geojson',
+            'natural_gas': 'natural_gas_pipelines.geojson'
+        }
+
+        for pipeline_type, filename in pipeline_files.items():
+            file_path = self.gis_data_path / filename
+            result['pipeline_data_files'][pipeline_type] = {
+                'file_path': str(file_path),
+                'exists': file_path.exists(),
+                'size_bytes': file_path.stat().st_size if file_path.exists() else 0
+            }
+
+        # 验证高级缓存
+        if self.pipeline_cache_manager:
+            result['cache_validation'] = self.pipeline_cache_manager.validate_pipeline_data_files()
+        else:
+            result['cache_validation'] = {"status": "基础缓存模式，数据验证功能有限"}
+
+        return result
 
 def main():
     """主函数，用于测试"""
