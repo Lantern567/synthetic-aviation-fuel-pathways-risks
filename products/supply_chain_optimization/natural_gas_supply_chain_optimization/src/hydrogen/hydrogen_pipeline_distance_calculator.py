@@ -30,19 +30,30 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # 导入数据类型定义
-from pipeline_route_types import (
-    PipelineRoute, ClusteredPipelineRoute, PipelinePoint,
-    PipelineRouteNotFoundError
-)
+try:
+    from ..cache.pipeline_route_types import (
+        PipelineRoute, ClusteredPipelineRoute, PipelinePoint,
+        PipelineRouteNotFoundError
+    )
+except ImportError:
+    from cache.pipeline_route_types import (
+        PipelineRoute, ClusteredPipelineRoute, PipelinePoint,
+        PipelineRouteNotFoundError
+    )
 
 # 集成新的缓存系统
 try:
-    from pipeline_route_cache_manager import PipelineRouteCacheManager
-    from unified_cache_configuration import UnifiedCacheConfiguration
+    from ..cache.pipeline_route_cache_manager import PipelineRouteCacheManager
+    from ..cache.unified_cache_configuration import UnifiedCacheConfiguration
     ADVANCED_CACHE_AVAILABLE = True
-except ImportError as e:
-    pass  # 静默降级处理
-    ADVANCED_CACHE_AVAILABLE = False
+except ImportError:
+    try:
+        from cache.pipeline_route_cache_manager import PipelineRouteCacheManager
+        from cache.unified_cache_configuration import UnifiedCacheConfiguration
+        ADVANCED_CACHE_AVAILABLE = True
+    except ImportError as e:
+        pass  # 静默降级处理
+        ADVANCED_CACHE_AVAILABLE = False
 
 class HydrogenPipelineDistanceCalculator:
     """氢气管道运输距离计算器"""

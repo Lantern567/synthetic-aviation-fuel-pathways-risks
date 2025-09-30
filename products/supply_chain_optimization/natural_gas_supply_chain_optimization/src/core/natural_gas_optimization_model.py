@@ -25,7 +25,8 @@ except ModuleNotFoundError:
     import sys
     # 动态加入项目根目录到sys.path后重试
     current_file = os.path.abspath(__file__)
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
+    # core/natural_gas_optimization_model.py -> core/ -> src/ -> natural_gas_supply_chain_optimization/ -> supply_chain_optimization/ -> products/ -> 项目根
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file))))))
     if project_root not in sys.path:
         sys.path.append(project_root)
     from shared.utils.log_preserver import mount_file_logging
@@ -36,24 +37,36 @@ except ModuleNotFoundError:
 try:
     # 尝试相对导入（当作为包使用时）
     try:
-        from .graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
+        from ..routing.graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
     except ImportError:
-        from graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
+        from routing.graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
 except ImportError:
+    # 当直接运行时，添加src目录到路径
+    import sys
+    current_file = os.path.abspath(__file__)
+    # core/natural_gas_optimization_model.py -> core/ -> src/
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
     try:
-        # 尝试绝对导入（当直接运行时）
-        from graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
+        from routing.graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
     except ImportError as e:
         raise ImportError(f"GraphHopper路径规划模块不可用，必须安装相关依赖: {e}. 请运行: pip install requests")
 
 try:
     try:
-        from .hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
+        from ..hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
     except ImportError:
-        from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
+        from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
 except ImportError:
+    # 确保src目录在路径中
+    import sys
+    current_file = os.path.abspath(__file__)
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
     try:
-        from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
+        from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
     except ImportError as e:
         # logger还未定义，暂时使用print
         print(f"警告：氢气管道距离计算器模块不可用: {e}")
@@ -62,20 +75,38 @@ except ImportError:
 
 try:
     try:
-        from .hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
+        from ..hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
     except ImportError:
-        from hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
+        from hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
 except ImportError:
+    # 确保src目录在路径中
+    import sys
+    current_file = os.path.abspath(__file__)
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
     try:
-        from hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
+        from hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
     except ImportError as e:
         # logger还未定义，暂时使用print
         print(f"警告：氢气聚类优化器模块不可用: {e}")
         HydrogenClusteringOptimizer = None
         ClusteringResult = None
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
+
+# 确保至少有一个控制台处理器输出日志
+if not logger.handlers:
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    logger.setLevel(logging.INFO)
 
 def calculate_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """
@@ -127,18 +158,18 @@ def get_project_base_dir():
     """
     获取项目根目录的绝对路径
     从当前文件位置向上找到项目根目录
-    
-    路径结构: 
-    project_root/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/natural_gas_optimization_model.py
-    需要向上5级目录到达项目根目录
-    
+
+    路径结构:
+    project_root/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/core/natural_gas_optimization_model.py
+    需要向上6级目录到达项目根目录
+
     Returns:
         str: 项目根目录路径
     """
     # 当前文件的绝对路径
     current_file = os.path.abspath(__file__)
-    # 向上5级目录: src -> natural_gas_supply_chain_optimization -> supply_chain_optimization -> products -> project_root
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file)))))
+    # 向上6级目录: core -> src -> natural_gas_supply_chain_optimization -> supply_chain_optimization -> products -> project_root
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file))))))
     return project_root
 
 
@@ -154,9 +185,10 @@ try:
         "logs",
     )
     mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
-except Exception:
-    # 静默失败，不影响主流程
-    pass
+except Exception as e:
+    # 如果文件日志挂载失败，输出警告但不中断程序
+    print(f"警告：文件日志挂载失败: {e}")
+    print("将继续使用控制台日志")
 
 class NaturalGasSupplyChainOptimizer:
     def _get_data_path(self, path_key: str, fallback_path: str = None) -> str:
@@ -384,9 +416,16 @@ class NaturalGasSupplyChainOptimizer:
             self.osm_pbf_path = osm_pbf_path
             
         if self.use_graphhopper_routing:
-            # 创建缓存目录 - 使用shared/data/cache路径
-            cache_dir = os.path.join(get_project_base_dir(), "shared", "data", "cache", "graphhopper_routes")
-            
+            # 从配置文件获取缓存根目录，然后添加graphhopper_routes子目录
+            cache_base_dir = basic_params.get('cache_base_dir', 'shared/data/cache')
+
+            # 如果是相对路径，转换为绝对路径
+            if not os.path.isabs(cache_base_dir):
+                cache_base_dir = os.path.join(get_project_base_dir(), cache_base_dir)
+
+            cache_dir = os.path.join(cache_base_dir, "graphhopper_routes")
+            logger.info(f"GraphHopper路径规划缓存目录: {cache_dir}")
+
             self.routing_engine = GraphHopperRoutingEngine(
                 osm_pbf_path=self.osm_pbf_path,
                 graphhopper_host=basic_params['graphhopper_host'],
@@ -551,9 +590,9 @@ class NaturalGasSupplyChainOptimizer:
         try:
             # 导入缓存管理器
             try:
-                from .data_cache_manager import cache_manager
+                from ..cache.data_cache_manager import cache_manager
             except ImportError:
-                from data_cache_manager import cache_manager
+                from cache.data_cache_manager import cache_manager
             
             # 为可再生能源数据创建临时文件路径用于缓存检查
             # （因为renewable_data是内存中的DataFrame，我们使用数据摘要作为标识）
@@ -1728,6 +1767,15 @@ class NaturalGasSupplyChainOptimizer:
         economic_config = self.config['economic_parameters']
         capacity_factors = economic_config['capacity_factors']
         
+        # 平准化成本门槛值
+        levelized_cost_threshold = economic_config.get('levelized_cost_threshold_yuan_per_kg', 5.62)
+
+        # [DEBUG] 打印加载的平准化成本门槛值
+        logger.info("="*80)
+        logger.info("[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:")
+        logger.info(f"  economic_parameters.levelized_cost_threshold_yuan_per_kg = {levelized_cost_threshold} 元/kg")
+        logger.info("="*80)
+
         self.economic_params = {
             'discount_rate': economic_config['discount_rate'],
             'project_lifespan': economic_config['project_lifespan'],
@@ -1745,7 +1793,7 @@ class NaturalGasSupplyChainOptimizer:
             'transport_capacity_factor': capacity_factors['transport_capacity_factor'],
 
             # 平准化成本门槛值
-            'levelized_cost_threshold_yuan_per_kg': economic_config.get('levelized_cost_threshold_yuan_per_kg', 5.62)
+            'levelized_cost_threshold_yuan_per_kg': levelized_cost_threshold
         }
     
     def _define_costs(self):
@@ -2282,6 +2330,109 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"年化系数: {operation_expansion_factor:.4f}")
         logger.info(f"产量现值化系数: {operation_expansion_factor * present_value_factor:.4f}")
         logger.info(f"修正前的错误系数(lifecycle_operation_factor): {lifecycle_operation_factor:.4f}")
+
+        return constraint
+
+    def remove_levelized_cost_constraint(self):
+        """
+        移除平准化成本约束 (用于敏感性分析)
+        允许在不重建整个模型的情况下更新约束参数
+        """
+        try:
+            constr = self.model.getConstrByName("levelized_cost_constraint")
+            if constr is not None:
+                self.model.remove(constr)
+                self.model.update()
+                logger.info("已移除平准化成本约束")
+                return True
+            else:
+                logger.warning("未找到名为'levelized_cost_constraint'的约束")
+                return False
+        except Exception as e:
+            logger.error(f"移除约束失败: {e}")
+            return False
+
+    def add_levelized_cost_constraint_with_threshold(self, threshold: float):
+        """
+        使用指定threshold添加平准化成本约束
+        (用于敏感性分析,避免重建整个模型)
+
+        Args:
+            threshold: 平准化成本门槛值 (元/kg)
+
+        Returns:
+            添加的约束对象
+        """
+        logger.info(f"添加平准化成本约束 (threshold={threshold} 元/kg)...")
+
+        # 获取经济参数
+        discount_rate = self.economic_params['discount_rate']
+        project_lifespan = self.economic_params['project_lifespan']
+
+        # 计算现值系数
+        if discount_rate == 0:
+            present_value_factor = project_lifespan
+        else:
+            present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
+
+        # 运营成本扩展系数
+        operation_expansion_factor = 52.0 / self.time_horizon_weeks
+
+        # 计算总产量的现值
+        weekly_production_expr = gp.quicksum(
+            self.production_vars[(location, tech, hour)]
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 年化产量现值
+        lifecycle_present_value_production_expr = weekly_production_expr * operation_expansion_factor * present_value_factor
+
+        # 平准化成本约束
+        levelized_cost_lhs = (
+            self.cost_aggregates['total_cost_excluding_shortage'] -
+            threshold * lifecycle_present_value_production_expr
+        )
+
+        # 添加约束
+        constraint = self.model.addConstr(
+            levelized_cost_lhs <= 0,
+            name="levelized_cost_constraint"
+        )
+        self.model.update()
+
+        logger.info(f"平准化成本约束添加完成 (threshold={threshold})")
+
+        return constraint
+
+    def update_threshold_and_resolve(self, threshold: float) -> Dict:
+        """
+        更新threshold并重新求解 (敏感性分析专用接口)
+        不重新加载数据和重建模型,只更新约束参数
+
+        Args:
+            threshold: 新的平准化成本门槛值 (元/kg)
+
+        Returns:
+            求解结果字典
+        """
+        logger.info("="*80)
+        logger.info(f"[敏感性分析] 更新threshold={threshold}并重新求解")
+        logger.info("="*80)
+
+        # 移除旧约束
+        self.remove_levelized_cost_constraint()
+
+        # 添加新约束
+        self.add_levelized_cost_constraint_with_threshold(threshold)
+
+        # 重新求解
+        logger.info("开始重新求解模型...")
+        solution = self.solve()
+
+        return solution
 
 
     def _create_cost_expressions(self):
@@ -5149,6 +5300,9 @@ class NaturalGasSupplyChainOptimizer:
 
         try:
             # 创建碳排放详细报告DataFrame
+            # 确保输出目录存在
+            os.makedirs(output_dir, exist_ok=True)
+
             report_data = []
 
             # 1. 总体指标
@@ -5910,9 +6064,9 @@ class NaturalGasSupplyChainOptimizer:
         try:
             # 导入缓存管理器
             try:
-                from .data_cache_manager import cache_manager
+                from ..cache.data_cache_manager import cache_manager
             except ImportError:
-                from data_cache_manager import cache_manager
+                from cache.data_cache_manager import cache_manager
             
             project_root = get_project_base_dir()
             
@@ -6150,9 +6304,9 @@ class NaturalGasSupplyChainOptimizer:
         try:
             # 导入缓存管理器
             try:
-                from .data_cache_manager import cache_manager
+                from ..cache.data_cache_manager import cache_manager
             except ImportError:
-                from data_cache_manager import cache_manager
+                from cache.data_cache_manager import cache_manager
             
             project_root = get_project_base_dir()
             
