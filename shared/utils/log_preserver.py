@@ -7,21 +7,21 @@ import logging
 import os
 from datetime import datetime
 
-def mount_file_logging(module_name: str = "optimizer", log_level: int = logging.INFO):
+def mount_file_logging(log_dir: str, filename_prefix: str = "optimizer", log_level: int = logging.INFO):
     """
     挂载文件日志记录
-    
+
     Args:
-        module_name: 模块名称
+        log_dir: 日志目录路径
+        filename_prefix: 日志文件前缀
         log_level: 日志级别
     """
     try:
         # 创建日志目录
-        log_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'logs')
         os.makedirs(log_dir, exist_ok=True)
-        
+
         # 创建日志文件名
-        log_filename = f"{module_name}_{datetime.now().strftime('%Y%m%d')}.log"
+        log_filename = f"{filename_prefix}_{datetime.now().strftime('%Y%m%d')}.log"
         log_path = os.path.join(log_dir, log_filename)
         
         # 配置日志格式

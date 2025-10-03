@@ -13,10 +13,22 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.colors import Normalize
+import seaborn as sns
 
-# 设置中文字体
-plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']
+# Nature期刊风格设置
+plt.style.use('seaborn-v0_8-white')
+sns.set_context("paper", font_scale=2.0)
+
+# 设置中文字体 - 使用微软雅黑
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
 plt.rcParams['axes.unicode_minus'] = False
+
+# Nature风格配色
+NATURE_COLORS = {
+    'projection_xy': '#4D4D4D',  # 深灰色
+    'projection_xz': '#2166AC',  # Nature蓝
+    'projection_yz': '#B2182B',  # Nature红
+}
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -100,13 +112,13 @@ class TradeoffVisualizer:
         fig = plt.figure(figsize=self.figsize)
         ax = fig.add_subplot(111, projection='3d')
 
-        # 颜色映射 - 使用Z值(需求满足度)作为颜色
+        # 颜色映射 - 使用Z值(需求满足度)作为颜色 - Nature风格配色
         norm = Normalize(vmin=Z_valid.min(), vmax=Z_valid.max())
-        colors = cm.viridis(norm(Z_valid))
+        colors = cm.RdYlBu_r(norm(Z_valid))  # Nature常用的红黄蓝渐变
 
-        # 绘制散点图
-        scatter = ax.scatter(X_valid, Y_valid, Z_valid, c=colors, marker='o', s=100,
-                            edgecolors='black', linewidths=0.5, alpha=0.8, label='数据点')
+        # 绘制散点图 - Nature风格
+        scatter = ax.scatter(X_valid, Y_valid, Z_valid, c=colors, marker='o', s=200,
+                            edgecolors='black', linewidths=1.0, alpha=0.8, label='数据点')
 
         # 绘制平面投影曲线
         # 按参数值排序以获得连续曲线
@@ -120,41 +132,45 @@ class TradeoffVisualizer:
         ylim = ax.get_ylim()
         zlim = ax.get_zlim()
 
-        # 1. XY平面投影（底面，Z=zlim[0]）- 成本 vs 碳排放
+        # 1. XY平面投影（底面，Z=zlim[0]）- 成本 vs 碳排放 - Nature风格
         ax.plot(X_sorted, Y_sorted, zlim[0],
-                color='gray', linewidth=2, alpha=0.6, linestyle='--',
+                color=NATURE_COLORS['projection_xy'], linewidth=3, alpha=0.6, linestyle='--',
                 label='XY平面投影')
 
-        # 2. XZ平面投影（侧面，Y=ylim[1]）- 成本 vs 需求
-        ax.plot(X_sorted, ylim[1], Z_sorted,
-                color='blue', linewidth=2, alpha=0.6, linestyle='--',
+        # 2. XZ平面投影（侧面，Y=ylim[0]）- 成本 vs 需求 - Nature风格
+        ax.plot(X_sorted, ylim[0], Z_sorted,
+                color=NATURE_COLORS['projection_xz'], linewidth=3, alpha=0.6, linestyle='--',
                 label='XZ平面投影')
 
-        # 3. YZ平面投影（背面，X=xlim[0]）- 碳排放 vs 需求
+        # 3. YZ平面投影（背面，X=xlim[0]）- 碳排放 vs 需求 - Nature风格
         ax.plot(xlim[0], Y_sorted, Z_sorted,
-                color='red', linewidth=2, alpha=0.6, linestyle='--',
+                color=NATURE_COLORS['projection_yz'], linewidth=3, alpha=0.6, linestyle='--',
                 label='YZ平面投影')
 
-        # 设置标签
-        ax.set_xlabel(x_label, fontsize=12, labelpad=10)
-        ax.set_ylabel(y_label, fontsize=12, labelpad=10)
-        ax.set_zlabel(z_label, fontsize=12, labelpad=10)
-        ax.set_title(title, fontsize=14, pad=20, weight='bold')
+        # 设置标签 - Nature风格，标签字体适度减小
+        ax.set_xlabel(x_label, fontsize=18, labelpad=15)
+        ax.set_ylabel(y_label, fontsize=18, labelpad=15)
+        ax.set_zlabel(z_label, fontsize=18, labelpad=15)
+        ax.set_title(title, fontsize=28, pad=20, weight='bold')
 
-        # 添加颜色条
-        mappable = cm.ScalarMappable(norm=norm, cmap=cm.viridis)
+        # 设置刻度标签字体大小
+        ax.tick_params(axis='both', labelsize=20)
+
+        # 添加颜色条 - Nature风格
+        mappable = cm.ScalarMappable(norm=norm, cmap=cm.RdYlBu_r)
         mappable.set_array(Z_valid)
         cbar = fig.colorbar(mappable, ax=ax, shrink=0.6, aspect=15, pad=0.1)
-        cbar.set_label(z_label, fontsize=11)
+        cbar.set_label(z_label, fontsize=18)  # 颜色条标签字体减小
+        cbar.ax.tick_params(labelsize=16)  # 颜色条刻度字体
 
-        # 添加图例
-        ax.legend(loc='upper left', fontsize=9, framealpha=0.8)
+        # 添加图例 - Nature风格
+        ax.legend(loc='upper left', fontsize=18, framealpha=0.8)
 
         # 设置视角
         ax.view_init(elev=20, azim=45)
 
-        # 添加网格
-        ax.grid(True, alpha=0.3)
+        # 添加网格 - Nature风格更细更淡
+        ax.grid(True, alpha=0.2, linewidth=0.5)
 
         # 调整布局
         plt.tight_layout()
@@ -195,7 +211,7 @@ class TradeoffVisualizer:
             y_col='total_carbon_emission',
             z_col='demand_fulfillment_ratio',
             x_label='平准化成本 (元/kg)',
-            y_label='总碳排放 (ton CO₂)',
+            y_label='总碳排放 (ton CO2)',
             z_label='需求满足度 (%)',
             title='经济性-环境影响-供应保障 三维权衡关系\n(总碳排放)',
             filename='t1.png'  # 使用超短文件名避免Windows长路径bug
@@ -209,7 +225,7 @@ class TradeoffVisualizer:
             y_col='carbon_intensity_mass',
             z_col='demand_fulfillment_ratio',
             x_label='平准化成本 (元/kg)',
-            y_label='质量碳强度 (kg CO₂/kg 甲醇)',
+            y_label='质量碳强度 (kg CO2/kg 甲醇)',
             z_label='需求满足度 (%)',
             title='经济性-环境影响-供应保障 三维权衡关系\n(质量碳强度)',
             filename='t2.png'  # 使用超短文件名避免Windows长路径bug
@@ -223,7 +239,7 @@ class TradeoffVisualizer:
             y_col='carbon_intensity_energy',
             z_col='demand_fulfillment_ratio',
             x_label='平准化成本 (元/kg)',
-            y_label='能量碳强度 (kg CO₂/MJ)',
+            y_label='能量碳强度 (kg CO2/MJ)',
             z_label='需求满足度 (%)',
             title='经济性-环境影响-供应保障 三维权衡关系\n(能量碳强度)',
             filename='t3.png'  # 使用超短文件名避免Windows长路径bug
