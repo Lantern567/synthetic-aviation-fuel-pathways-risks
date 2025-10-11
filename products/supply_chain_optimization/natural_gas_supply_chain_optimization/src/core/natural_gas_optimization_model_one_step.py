@@ -394,8 +394,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info(f"加载碳排放参数: {len(self.carbon_params)} 个类别")
 
         # 通过GraphHopper路径规划计算得出的距离统计值（用于模型中的参考）
-        self.avg_hydrogen_transport_distance = None  # 将通过GraphHopper路径规划计算得出
         self.avg_ng_transport_distance = None  # 将通过GraphHopper路径规划计算得出
+        self.avg_saf_transport_distance = None  # SAF从FT设施到机场的平均运输距离
         
         # 决策变量
         self.production_vars = {}  # 小时级生产变量
@@ -470,10 +470,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info(f"短距离路径规划精确计算: {self.use_routing_for_short_distance}")
         logger.info(f"配置文件加载完成: {len(self.config)} 个配置段")
 
-        self.hydrogen_pipeline_calculator = None
-        self.hydrogen_clustering_optimizer = None
+        # FT一步法模型不需要氢气管道计算器和聚类优化器
         self.clustering_results = None
-        self.clustered_routes = {}
     
     def load_data(self, airport_data: pd.DataFrame):
         """
@@ -2058,168 +2056,90 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                 )
         
-        # 5. 制氢决策变量 (仅在可再生能源地点)
-        self.hydrogen_production_vars = {}  # 小时级制氢量 (kg H2/hour)
-        self.electrolyzer_capacity_vars = {}  # 电解槽设施容量 (kg H2/hour)
-        self.electrolyzer_facility_vars = {}  # 电解槽建设决策 (二进制)
-        self.hydrogen_storage_vars = {}  # 氢气库存 (kg H2)
-        
-        # 6. 氢气运输决策变量 (从制氢地到MTJ工厂)
-        self.hydrogen_transport_vars = {}  # 氢气运输量 (kg H2/week)
-        
-        # 7. 天然气运输决策变量 (从管道到MTJ工厂，罐车运输)  
+        # 5. FT反应器设施决策变量 (基于候选位置)
+        self.ft_facility_vars = {}      # FT设施建设决策 (二进制)
+        self.ft_capacity_vars = {}      # FT设施产能 (kg SAF/hour)
+
+        # 从配置读取FT反应器容量限制
+        ft_max_capacity = self.config.get('capacity_limits', {}).get('ft_reactor_max_capacity_kg_per_hour', 1000000)
+        ft_min_capacity = self.config.get('capacity_limits', {}).get('ft_reactor_min_capacity_kg_per_hour', 0)
+
+        logger.info(f"FT反应器容量配置: 最小={ft_min_capacity} kg/h, 最大={ft_max_capacity} kg/h")
+
+        for candidate in self.ft_facility_candidates:
+            location_id = candidate['location_id']
+
+            # FT设施建设决策 (二进制)
+            facility_var_name = f"ft_facility_{location_id}"
+            self.ft_facility_vars[location_id] = self.model.addVar(
+                vtype=GRB.BINARY, name=facility_var_name
+            )
+
+            # FT设施产能决策 (连续变量)
+            capacity_var_name = f"ft_capacity_{location_id}"
+            self.ft_capacity_vars[location_id] = self.model.addVar(
+                lb=ft_min_capacity, ub=ft_max_capacity,
+                vtype=GRB.CONTINUOUS, name=capacity_var_name
+            )
+
+        logger.info(f"创建了 {len(self.ft_facility_vars)} 个FT设施建设决策变量")
+        logger.info(f"创建了 {len(self.ft_capacity_vars)} 个FT设施产能变量")
+
+        # 6. 天然气运输决策变量 (从NG供应源到FT设施，罐车运输，天级)
         self.ng_transport_vars = {}  # 天然气运输量 (m³/day)
-        
-        for location in self.locations:
-            location_type = self.locations[location]['type']
-            # 只在可再生能源地点创建制氢变量
-            if location_type in ['solar_plant', 'wind_farm']:
-                # 电解槽设施建设决策 (二进制)
-                var_name = f"electrolyzer_facility_{location}"
-                self.electrolyzer_facility_vars[location] = self.model.addVar(
-                    vtype=GRB.BINARY, name=var_name
-                )
-                
-                # 电解槽容量 (连续变量，kg H2/hour)
-                var_name = f"electrolyzer_capacity_{location}"
-                self.electrolyzer_capacity_vars[location] = self.model.addVar(
-                    lb=0, ub=self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000), 
-                    vtype=GRB.CONTINUOUS, name=var_name
-                )
-                
-                # 小时级制氢量
-                for hour in range(self.total_hours):
-                    var_name = f"h2_prod_{location}_{hour}"
-                    self.hydrogen_production_vars[(location, hour)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-                
-                # 氢气库存
-                for hour in range(self.total_hours + 1):
-                    var_name = f"h2_storage_{location}_{hour}"
-                    self.hydrogen_storage_vars[(location, hour)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-        
-        # 8. 创建氢气运输变量 (仅为需要氢气运输的模式，无距离限制)
-        logger.info("创建氢气运输变量，无距离限制")
-        
-        valid_h2_routes = 0  # 计数有效路线
-        for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
-                # 排除管段直供和LNG转运模式，因为它们在可再生能源站就地制备MTJ，氢气无需运输
-                if tech not in self.technologies:
-                    logger.warning(f"技术 {tech} 不在 technologies 中，跳过氢气运输变量创建")
-                    continue
-                    
-                if not self.technologies[tech]['hydrogen_transport_required']:
-                    continue
-                    
-                if tech not in self.mtj_locations:
-                    logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过氢气运输变量创建")
-                    continue
-                    
-                locations = self.mtj_locations[tech]
-                if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                    logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
-                    continue
-                
-                for mtj_loc in locations:
-                    # 不再检查距离限制，允许所有路径
-                    valid_h2_routes += 1
-                    # 修改为周级运输变量，与生产时间尺度一致
-                    var_name = f"h2_transport_{h2_loc}_{mtj_loc}_week"
-                    self.hydrogen_transport_vars[(h2_loc, mtj_loc)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-        
-        logger.info(f"创建了 {valid_h2_routes} 条氢气运输路线（无距离限制）")
-        
-        # 9. 创建天然气运输变量 (从管道到所有非LNG接收站的MTJ工厂，改为天级罐车运输，无距离限制)
-        logger.info("创建天然气罐车运输变量，无距离限制")
-        
+
+        logger.info("创建天然气罐车运输变量（从NG供应源到FT设施）")
+
         valid_ng_routes = 0  # 计数有效路线
         total_days = self.total_hours // 24
-        for ng_loc in self.ng_locations:
-            for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion']:
-                # 机场集成转换直接从城市管道供气，不需要运输变量
-                if tech == 'airport_integrated_conversion':
-                    continue  # 跳过机场集成转换，使用管道直供
 
-                # 检查该技术的运输模式是否支持天然气管道
-                tech_transport_mode = self.technologies[tech]['transport_mode']
-                transport_config = self.config['transport_modes'][tech_transport_mode]
-                suitable_sources = transport_config.get('suitable_sources', [])
+        # 为每个FT设施候选位置创建从其天然气供应源的运输变量
+        for candidate in self.ft_facility_candidates:
+            ft_location_id = candidate['location_id']
+            source_type = candidate['source_type']
+            source_id = candidate['source_id']
 
-                # 如果该运输模式不支持天然气管道，跳过
-                if 'ng_pipeline' not in suitable_sources:
-                    logger.info(f"技术 {tech} 的运输模式 {tech_transport_mode} 不支持天然气管道，跳过管道运输变量创建")
-                    continue
+            # 根据供应源类型确定运输需求
+            # - ng_pipeline: 需要罐车运输变量（管道端点到FT设施）
+            # - lng_terminal: 需要罐车运输变量（LNG接收站到FT设施）
+            # - airport: 管道直供，不需要运输变量
 
-                for mtj_loc in self.non_lng_mtj_locations[tech]:
-                    # 不再检查距离限制，允许所有路径
-                    valid_ng_routes += 1
-                    for day in range(total_days): # 改为天级
-                        var_name = f"ng_transport_{ng_loc}_{mtj_loc}_day_{day}"
-                        self.ng_transport_vars[(ng_loc, mtj_loc, day)] = self.model.addVar(
-                                lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                            )
-        
-        logger.info(f"创建了 {valid_ng_routes} 条天然气运输路线（无距离限制）")
-
-
-        # 10. 创建氢能管道运输变量 (与罐车运输并行的选择方案)
-        logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
-        
-        self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量 (kg H2/week)
-        self.hydrogen_pipeline_facility_vars = {}   # 氢能管道建设决策变量 (二进制)
-        
-        valid_pipeline_routes = 0  # 计数有效管道路线
-        total_days = self.total_hours // 24
-        
-        for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
-                # 只为需要氢气运输的技术路线创建管道变量
-                if tech not in self.technologies:
-                    continue
-                    
-                if not self.technologies[tech]['hydrogen_transport_required']:
-                    continue
-                    
-                if tech not in self.mtj_locations:
-                    continue
-                    
-                locations = self.mtj_locations[tech]
-                if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                    continue
-                
-                for mtj_loc in locations:
-                    # 管道建设决策变量 (每条路线一个二进制变量)
-                    pipeline_facility_name = f"h2_pipeline_facility_{h2_loc}_{mtj_loc}"
-                    self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] = self.model.addVar(
-                        vtype=GRB.BINARY, name=pipeline_facility_name
-                    )
-                    
-                    # 管道运输量变量 (天级)
-                    valid_pipeline_routes += 1
-                    # 氢能管道运输变量改为周级
-                    var_name = f"h2_pipeline_transport_{h2_loc}_{mtj_loc}_week"
-                    self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] = self.model.addVar(
+            if source_type in ['ng_pipeline', 'lng_terminal']:
+                for day in range(total_days):
+                    var_name = f"ng_transport_{source_id}_{ft_location_id}_day_{day}"
+                    self.ng_transport_vars[(source_id, ft_location_id, day)] = self.model.addVar(
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
-        
-        logger.info(f"创建了 {valid_pipeline_routes} 条氢能管道运输路线")
-        logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")
-        
+                    valid_ng_routes += 1
+
+        logger.info(f"创建了 {valid_ng_routes} 条天然气运输路线")
+
+        # 7. SAF运输变量 (从FT设施到机场，周级)
+        self.saf_transport_vars = {}
+
+        logger.info("创建SAF运输变量（从FT设施到机场）")
+
+        valid_saf_routes = 0
+        for candidate in self.ft_facility_candidates:
+            ft_location_id = candidate['location_id']
+            for airport in self.airports:
+                for week in range(self.time_horizon_weeks):
+                    var_name = f"saf_transport_{ft_location_id}_{airport}_{week}"
+                    self.saf_transport_vars[(ft_location_id, airport, week)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+                    valid_saf_routes += 1
+
+        logger.info(f"创建了 {valid_saf_routes} 条SAF运输路线")
+
+        # 日志汇总
         logger.info(f"创建了 {len(self.production_vars)} 个生产变量")
         logger.info(f"创建了 {len(self.facility_vars)} 个设施变量")
         logger.info(f"创建了 {len(self.facility_capacity_vars)} 个设施产能变量")
         logger.info(f"创建了 {len(self.transport_vars)} 个运输变量")
         logger.info(f"创建了 {len(self.storage_vars)} 个库存变量")
-        logger.info(f"创建了 {len(self.hydrogen_production_vars)} 个制氢变量")
-        logger.info(f"创建了 {len(self.electrolyzer_capacity_vars)} 个电解槽容量变量")
-        logger.info(f"创建了 {len(self.hydrogen_storage_vars)} 个氢气库存变量")
-        # 10. 创建缺货惩罚变量 (周级需求缺口)
+        logger.info(f"创建了 {len(self.ng_transport_vars)} 个天然气运输变量")
+        # 8. 创建缺货惩罚变量 (周级需求缺口)
         self.shortage_vars = {}
         for airport in self.airports:
             for week in range(self.time_horizon_weeks):
@@ -2227,11 +2147,11 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 self.shortage_vars[(airport, week)] = self.model.addVar(
                     lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                 )
-        
+
         logger.info(f"创建了 {len(self.shortage_vars)} 个缺货惩罚变量")
-        logger.info(f"创建了 {len(self.hydrogen_transport_vars)} 个氢气罐车运输变量")
-        logger.info(f"创建了 {len(self.hydrogen_pipeline_transport_vars)} 个氢能管道运输变量")
-        logger.info(f"创建了 {len(self.ng_transport_vars)} 个天然气运输变量")
+        logger.info(f"创建了 {len(self.saf_transport_vars)} 个SAF运输变量")
+
+        logger.info("FT一步法模型变量创建完成")
     
     def _create_constraints(self):
         """创建约束条件"""
