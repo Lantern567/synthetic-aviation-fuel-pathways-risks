@@ -2480,8 +2480,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
         # =========================================================================
         saf_embodied = facility_constr.get('saf_facility_embodied', 150)  # kg CO2eq/t年产能
         saf_lifetime = facility_constr.get('saf_facility_lifetime', 25)  # 年
-        electrolyzer_embodied = facility_constr.get('electrolyzer_embodied', 1200)  # kg CO2eq/MW
-        electrolyzer_lifetime = facility_constr.get('electrolyzer_lifetime', 20)  # 年
 
         # SAF工厂建设碳排放（年摊销到优化时段）
         # 单位转换: kg/h → t/年 → kg CO2eq
@@ -2493,29 +2491,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
             if (location, tech) in self.facility_capacity_vars
         )
 
-        # 电解槽建设碳排放（年摊销）
-        # 方案：基于氢气产能计算，避免功率转换的复杂性
-        # 重新定义电解槽碳强度为基于氢气产能：kg CO2eq/MW → kg CO2eq/(kg H2/h)
-        electrolysis_energy = production.get('electrolysis_energy', 55)  # kWh/kg H2
-        # 安全检查：避免除零错误
-        if electrolysis_energy <= 0:
-            raise ValueError(f"电解制氢能耗必须大于0，当前值: {electrolysis_energy}")
-        # 转换电解槽碳强度: MW → kg H2/h
-        # 1 MW = 1000 kW, 1 kW = 1 kWh/h, 所以 1 MW = 1000 kWh/h
-        # 1 MW / (55 kWh/kg H2) = 1000/55 ≈ 18.18 kg H2/h
-        electrolyzer_embodied_per_capacity = electrolyzer_embodied / (1000 / electrolysis_energy)  # kg CO2eq/(kg H2/h)
-
-        self.carbon_expressions['electrolyzer_facility'] = gp.quicksum(
-            self.electrolyzer_capacity_vars.get(location, gp.LinExpr(0)) *  # kg H2/h
-            electrolyzer_embodied_per_capacity / electrolyzer_lifetime * (self.time_horizon_weeks / 52.0)
-            for location in self.hydrogen_locations
-            if location in self.electrolyzer_capacity_vars
-        )
-
         logger.info(f"SAF设施碳强度: {saf_embodied} kg CO2eq/t年产能, 寿命: {saf_lifetime}年")
-        logger.info(f"电解槽碳强度: {electrolyzer_embodied} kg CO2eq/MW → {electrolyzer_embodied_per_capacity:.2f} kg CO2eq/(kg H2/h), 寿命: {electrolyzer_lifetime}年")
         logger.info(f"[调试] 设施容量变量数量: {len([k for k in self.facility_capacity_vars.keys()])}") if hasattr(self, 'facility_capacity_vars') else logger.warning("[调试] 未找到设施容量变量")
-        logger.info(f"[调试] 电解槽容量变量数量: {len([k for k in self.electrolyzer_capacity_vars.keys()])}") if hasattr(self, 'electrolyzer_capacity_vars') else logger.warning("[调试] 未找到电解槽容量变量")
 
         # =========================================================================
         # 3. 生产过程阶段碳排放 (Production Process)
@@ -2524,7 +2501,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
         ng_process_em = production.get('ng_process_emission', 0.8)  # kg CO2eq/m³
         mtj_energy = production.get('mtj_process_energy', 800)  # kWh/t SAF
         renewable_elec = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh
-        green_h2_intensity = production.get('green_h2_intensity', 1.1)  # kg CO2eq/kg H2
 
         # 天然气制甲醇碳排放
         self.carbon_expressions['ng_to_methanol'] = gp.quicksum(
@@ -2546,33 +2522,18 @@ class NaturalGasSupplyChainOptimizerOneStep:
             if (location, tech, hour) in self.production_vars
         )
 
-        # 氢气生产碳排放
-        # 注：green_h2_intensity已包含电解能耗(55 kWh/kg × 0.02 kg CO2eq/kWh = 1.1)，无需重复计算
-        self.carbon_expressions['h2_production'] = gp.quicksum(
-            self.hydrogen_production_vars.get((location, hour), gp.LinExpr(0)) *
-            green_h2_intensity  # kg H2 × kg CO2eq/kg H2 = kg CO2eq
-            for location in self.hydrogen_locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
-        )
-
         logger.info(f"天然气消耗率: {ng_to_methanol} m³/kg甲醇, 工艺排放: {ng_process_em} kg CO2eq/m³")
         logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 可再生电力碳强度: {renewable_elec} kg CO2eq/kWh")
-        logger.info(f"绿氢碳强度: {green_h2_intensity} kg CO2eq/kg H2")
         logger.info(f"[调试] 生产变量数量: {len([k for k in self.production_vars.keys()])}") if hasattr(self, 'production_vars') else logger.warning("[调试] 未找到生产变量")
-        logger.info(f"[调试] 氢气生产变量数量: {len([k for k in self.hydrogen_production_vars.keys()])}") if hasattr(self, 'hydrogen_production_vars') else logger.warning("[调试] 未找到氢气生产变量")
 
         # =========================================================================
         # 4. 储存处理阶段碳排放 (Storage & Handling)
         # =========================================================================
         mtj_storage_energy = storage_handling.get('mtj_storage_energy', 5)  # kWh/t·天
-        h2_storage_energy = storage_handling.get('h2_storage_energy', 0.5)  # kWh/kg·天
 
         # 基本参数验证
         if mtj_storage_energy <= 0:
             logger.warning(f"MTJ储存能耗参数异常: {mtj_storage_energy}")
-        if h2_storage_energy <= 0:
-            logger.warning(f"氢气储存能耗参数异常: {h2_storage_energy}")
 
         # MTJ储存碳排放
         # 注：存储变量索引范围应为0到total_hours（包含边界状态）
@@ -2584,54 +2545,14 @@ class NaturalGasSupplyChainOptimizerOneStep:
             if (location, hour) in self.storage_vars
         )
 
-        # 氢气储存碳排放
-        # 注：氢气存储变量索引范围应为0到total_hours（包含边界状态）
-        self.carbon_expressions['h2_storage'] = gp.quicksum(
-            self.hydrogen_storage_vars.get((location, hour), gp.LinExpr(0)) *
-            h2_storage_energy / 24 * renewable_elec  # 转换为小时级
-            for location in self.hydrogen_locations
-            for hour in range(self.total_hours + 1)  # 氢气存储变量包含边界状态
-            if (location, hour) in self.hydrogen_storage_vars
-        )
-
         logger.info(f"MTJ储存能耗: {mtj_storage_energy} kWh/t·天")
-        logger.info(f"氢气储存能耗: {h2_storage_energy} kWh/kg·天")
         logger.info(f"[调试] MTJ存储变量数量: {len([k for k in self.storage_vars.keys()])}") if hasattr(self, 'storage_vars') else logger.warning("[调试] 未找到MTJ存储变量")
-        logger.info(f"[调试] 氢气存储变量数量: {len([k for k in self.hydrogen_storage_vars.keys()])}") if hasattr(self, 'hydrogen_storage_vars') else logger.warning("[调试] 未找到氢气存储变量")
 
         # =========================================================================
         # 5. 运输配送阶段碳排放 (Transportation & Distribution)
         # =========================================================================
-        h2_truck = transportation.get('h2_truck_intensity', 0.15)  # kg CO2eq/kg·km
-        h2_pipeline = transportation.get('h2_pipeline_intensity', 0.005)  # kg CO2eq/kg·km
         mtj_truck = transportation.get('mtj_truck_intensity', 0.12)  # kg CO2eq/t·km
         ng_truck = transportation.get('ng_truck_intensity', 0.10)  # kg CO2eq/m³·km
-
-        # 氢气罐车运输碳排放
-        # 注：hydrogen_transport_vars单位为kg H2/week，h2_truck为kg CO2eq/kg·km
-        self.carbon_expressions['h2_truck_transport'] = gp.quicksum(
-            self.hydrogen_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
-            self._calculate_distance(h2_loc, mtj_loc) * h2_truck
-            for h2_loc in self.hydrogen_locations
-            for mtj_loc in self.locations
-            if (h2_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
-
-        # 氢气管道运输碳排放（修复：之前遗漏了这部分）
-        # 注：hydrogen_pipeline_transport_vars单位为kg H2/week，h2_pipeline为kg CO2eq/kg·km
-        self.carbon_expressions['h2_pipeline_transport'] = gp.quicksum(
-            self.hydrogen_pipeline_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
-            self._calculate_distance(h2_loc, mtj_loc) * h2_pipeline
-            for h2_loc in self.hydrogen_locations
-            for mtj_loc in self.locations
-            if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-        ) if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars else gp.LinExpr(0)
-
-        # 氢气总运输碳排放（包含罐车和管道两种方式）
-        self.carbon_expressions['h2_transport'] = (
-            self.carbon_expressions['h2_truck_transport'] +
-            self.carbon_expressions['h2_pipeline_transport']
-        )
 
         # MTJ运输碳排放
         # 单位转换: kg → t，因为mtj_truck单位是kg CO2eq/t·km
@@ -2657,8 +2578,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
         # 验证运输碳强度参数合理性
         transport_params = [
-            (h2_truck, 0.05, 0.50, "氢气罐车运输碳强度"),
-            (h2_pipeline, 0.001, 0.020, "氢气管道运输碳强度"),
             (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度"),
             (ng_truck, 0.05, 0.30, "天然气罐车运输碳强度")
         ]
@@ -2666,12 +2585,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
             if not (min_val <= value <= max_val):
                 logger.warning(f"{name}可能不合理: {value}, 期望范围: [{min_val}, {max_val}]")
 
-        logger.info(f"氢气罐车运输: {h2_truck} kg CO2eq/kg·km")
-        logger.info(f"氢气管道运输: {h2_pipeline} kg CO2eq/kg·km")
         logger.info(f"MTJ罐车运输: {mtj_truck} kg CO2eq/t·km")
         logger.info(f"天然气罐车运输: {ng_truck} kg CO2eq/m³·km")
-        logger.info(f"[调试] 氢气罐车变量数量: {len([k for k in self.hydrogen_transport_vars.keys()])}") if hasattr(self, 'hydrogen_transport_vars') else logger.warning("[调试] 未找到氢气罐车变量")
-        logger.info(f"[调试] 氢气管道变量数量: {len([k for k in self.hydrogen_pipeline_transport_vars.keys()])}") if hasattr(self, 'hydrogen_pipeline_transport_vars') else logger.warning("[调试] 未找到氢气管道变量")
         logger.info(f"[调试] MTJ运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到MTJ运输变量")
         logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
 
