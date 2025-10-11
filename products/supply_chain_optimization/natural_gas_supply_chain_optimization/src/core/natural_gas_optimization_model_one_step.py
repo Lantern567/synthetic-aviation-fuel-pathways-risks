@@ -2613,23 +2613,19 @@ class NaturalGasSupplyChainOptimizerOneStep:
         self.carbon_aggregates['raw_material_emissions'] = self.carbon_expressions['ng_extraction']
 
         self.carbon_aggregates['facility_emissions'] = (
-            self.carbon_expressions['saf_facility'] +
-            self.carbon_expressions['electrolyzer_facility']
+            self.carbon_expressions['saf_facility']
         )
 
         self.carbon_aggregates['production_emissions'] = (
             self.carbon_expressions['ng_to_methanol'] +
-            self.carbon_expressions['methanol_to_saf'] +
-            self.carbon_expressions['h2_production']
+            self.carbon_expressions['methanol_to_saf']
         )
 
         self.carbon_aggregates['storage_emissions'] = (
-            self.carbon_expressions['mtj_storage'] +
-            self.carbon_expressions['h2_storage']
+            self.carbon_expressions['mtj_storage']
         )
 
         self.carbon_aggregates['transport_emissions'] = (
-            self.carbon_expressions['h2_transport'] +
             self.carbon_expressions['mtj_transport'] +
             self.carbon_expressions['ng_transport']
         )
