@@ -1795,119 +1795,40 @@ class NaturalGasSupplyChainOptimizerOneStep:
         }
     
     def _define_costs(self):
-        """定义成本参数（使用平准化成本方法考虑整个生命周期）"""
+        """定义成本参数（FT一步法模型 - 无需氢气相关成本）"""
         # 首先定义经济参数
         self._define_economic_parameters()
-        
-        # 定义MTJ生产技术的基础工程成本数据
-        mtj_base_costs = self._estimate_mtj_production_costs()
-        
+
         # 从配置文件加载成本参数
         cost_config = self.config['cost_parameters']
         equipment_costs = self.config['equipment_raw_costs']
-        
-        # 定义原始资本和运营成本数据
+
+        # 定义原始资本和运营成本数据（FT一步法）
         raw_costs = {
             # 原料成本 (元/单位) - 运营成本，无需平准化
-            # 优先使用统一成本配置，向后兼容原有配置
-            'natural_gas_price_yuan_per_m3': (
-                cost_config.get('unified_costs', {}).get('raw_materials', {}).get('natural_gas_base_price_yuan_per_m3') or
-                cost_config['raw_materials']['natural_gas_price_yuan_per_m3']
-            ),
-            'hydrogen_market_price_yuan_per_kg': (
-                cost_config.get('unified_costs', {}).get('raw_materials', {}).get('hydrogen_market_price_yuan_per_kg') or
-                cost_config['raw_materials']['hydrogen_market_price_yuan_per_kg']
-            ),
-            'renewable_electricity_cost_yuan_per_mwh': cost_config['raw_materials']['renewable_electricity_cost_yuan_per_mwh'],
-            
-            # MTJ生产设施原始成本（基于工程估算）
-            'mtj_plant_capex_raw': mtj_base_costs['capex_per_kg_hour'],         # 元/(kg/hour) 产能投资
-            'mtj_plant_fixed_opex_raw': mtj_base_costs['fixed_opex_annual'],    # 元/年 固定运营成本
-            'mtj_plant_variable_opex_raw': mtj_base_costs['variable_opex_per_kg'], # 元/kg 变动运营成本
-            
-            # 电解槽原始成本
-            'electrolyzer_capex_raw': equipment_costs['electrolyzer']['capex_raw'],
-            'electrolyzer_opex_raw': equipment_costs['electrolyzer']['opex_raw'],
-            
-            # 储存设施原始成本 - 优先使用统一成本配置
-            'storage_capex_raw': (
-                cost_config.get('unified_costs', {}).get('storage', {}).get('facility_investment_yuan_per_kg') or
-                equipment_costs['storage']['capex_raw']
-            ),
-            'storage_opex_raw': (
-                cost_config.get('unified_costs', {}).get('storage', {}).get('facility_operation_yuan_per_kg_year') or
-                equipment_costs['storage']['opex_raw']
-            )
+            'natural_gas_price_yuan_per_m3': cost_config['raw_materials']['natural_gas_price_yuan_per_m3'],
+
+            # FT反应器原始成本
+            'ft_reactor_capex_raw': equipment_costs['ft_reactor']['capex_raw'],
+            'ft_reactor_opex_raw': equipment_costs['ft_reactor']['opex_raw'],
+
+            # SAF储存设施原始成本
+            'storage_capex_raw': equipment_costs.get('storage', {}).get('capex_raw', 1000),
+            'storage_opex_raw': equipment_costs.get('storage', {}).get('opex_raw', 50)
         }
-        
+
         # 计算平准化成本参数
-        # 先检查raw_costs中的NaN值
-        for key, value in raw_costs.items():
-            if isinstance(value, (int, float)) and pd.isna(value):
-                print(f"ERROR: raw_costs中的参数 {key} 包含NaN值: {value}")
-                raise ValueError(f"原始成本参数包含NaN值: {key} = {value}")
-        
-        self.costs = {
-            # 原料成本保持不变（运营成本）
-            'natural_gas_price_yuan_per_m3': raw_costs['natural_gas_price_yuan_per_m3'],
-            'hydrogen_market_price_yuan_per_kg': raw_costs['hydrogen_market_price_yuan_per_kg'],
-            'renewable_electricity_cost_yuan_per_mwh': raw_costs['renewable_electricity_cost_yuan_per_mwh'],
-            
-            
-            # 电解制氢参数
-            'electrolysis_efficiency': cost_config['electrolysis']['electrolysis_efficiency'],
-            'electrolysis_power_consumption': cost_config['electrolysis']['electrolysis_power_consumption'],
-            
-            
-            # 短缺惩罚成本（提高到足够高的水平，使建厂更经济）
-            'shortage_penalty_yuan_per_kg': cost_config['shortage_penalty_yuan_per_kg'],
-        }
-        
-        # 计算平准化的设施成本（年化投资成本 + 运营成本）
         discount_rate = self.economic_params['discount_rate']
-        
-        # MTJ生产设施平准化成本（修正版 - 使用正确的LCOP计算）
-        mtj_base_lcop = self._calculate_levelized_product_cost(
-            capex_per_unit=mtj_base_costs['capex_per_kg_hour'],               # 元/(kg/hour)
-            fixed_opex_annual=mtj_base_costs['fixed_opex_annual'],            # 元/年
-            variable_opex_per_product=mtj_base_costs['variable_opex_per_kg'],  # 元/kg
-            lifetime_years=self.economic_params['mtj_plant_lifetime'],
+
+        # FT反应器平准化成本
+        ft_reactor_levelized_cost = self._calculate_levelized_cost(
+            capex=raw_costs['ft_reactor_capex_raw'],
+            opex_annual=raw_costs['ft_reactor_opex_raw'],
+            lifetime_years=self.economic_params.get('ft_reactor_lifetime', 25),
             discount_rate=discount_rate,
-            capacity_factor=self.economic_params['mtj_plant_capacity_factor']
+            capacity_factor=0.9  # FT反应器利用率
         )
-        
-        # 存储MTJ基础平准化产品成本 (元/kg)
-        self.costs['mtj_base_lcop_yuan_per_kg'] = mtj_base_lcop
-        logger.info(f"基础平准化成本: {mtj_base_lcop:.0f} 元/kg")
-        
-        # 电解槽平准化成本（考虑15年寿命内需要更换的成本）
-        project_lifespan = self.economic_params['project_lifespan']
-        electrolyzer_lifetime = self.economic_params['electrolyzer_lifetime']
-        
-        if electrolyzer_lifetime < project_lifespan:
-            # 使用包含更换成本的计算方法
-            electrolyzer_levelized_cost = self._calculate_project_levelized_cost_with_replacement(
-                capex=raw_costs['electrolyzer_capex_raw'],
-                opex_annual=raw_costs['electrolyzer_opex_raw'],
-                equipment_lifetime=electrolyzer_lifetime,
-                project_lifespan=project_lifespan,
-                discount_rate=discount_rate,
-                capacity_factor=self.economic_params['electrolyzer_capacity_factor']
-            )
-            logger.info(f"电解槽需在第{electrolyzer_lifetime}年更换，总项目期间平准化成本已计算更换费用")
-        else:
-            # 使用标准平准化成本计算
-            electrolyzer_levelized_cost = self._calculate_levelized_cost(
-                capex=raw_costs['electrolyzer_capex_raw'],
-                opex_annual=raw_costs['electrolyzer_opex_raw'],
-                lifetime_years=electrolyzer_lifetime,
-                discount_rate=discount_rate,
-                capacity_factor=self.economic_params['electrolyzer_capacity_factor']
-            )
-            
-        self.costs['electrolyzer_capex_yuan_per_kg_h2_year'] = electrolyzer_levelized_cost
-        self.costs['electrolyzer_opex_yuan_per_kg_h2'] = 0  # 已包含在平准化成本中
-        
+
         # 储存设施平准化成本
         storage_levelized_cost = self._calculate_levelized_cost(
             capex=raw_costs['storage_capex_raw'],
@@ -1916,13 +1837,28 @@ class NaturalGasSupplyChainOptimizerOneStep:
             discount_rate=discount_rate,
             capacity_factor=self.economic_params['storage_capacity_factor']
         )
-        self.costs['storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 小时成本
-        self.costs['hydrogen_storage_cost_yuan_per_kg_hour'] = storage_levelized_cost / 8760  # 氢气储存
-        
-        # 移除对外部成本分析器的依赖，直接在优化模型内部计算成本
-        # 成本分析功能已集成到 _calculate_unit_costs_from_optimization 方法中
+
+        self.costs = {
+            # 原料成本（运营成本）
+            'natural_gas_price_yuan_per_m3': raw_costs['natural_gas_price_yuan_per_m3'],
+
+            # FT反应器平准化成本
+            'ft_reactor_capex_yuan_per_kg_year': ft_reactor_levelized_cost,
+            'ft_reactor_opex_yuan_per_kg': 0,  # 已包含在平准化成本中
+
+            # 储存成本
+            'storage_cost_yuan_per_kg_hour': storage_levelized_cost / 8760,  # 小时成本
+
+            # 短缺惩罚成本
+            'shortage_penalty_yuan_per_kg': cost_config.get('shortage_penalty_yuan_per_kg', 20000),
+        }
+
+        logger.info(f"FT反应器平准化成本: {ft_reactor_levelized_cost:.2f} 元/(kg·年)")
+        logger.info(f"天然气价格: {raw_costs['natural_gas_price_yuan_per_m3']:.2f} 元/m³")
+
+        # 移除对外部成本分析器的依赖
         self.cost_analyzer = None
-        logger.info("使用优化模型内部成本计算，不依赖外部成本分析器")
+        logger.info("使用优化模型内部成本计算（FT一步法）")
     
     def _estimate_mtj_production_costs(self):
         """
