@@ -510,13 +510,12 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
         logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
     
-    def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
+    def load_data_from_excel(self, airport_excel_path: str = None):
         """
-        从Excel文件加载机场数据（支持从配置文件自动获取路径）
-        
+        从Excel文件加载机场数据（FT一步法专用，不需要可再生能源数据）
+
         Args:
             airport_excel_path: 机场数据Excel文件路径，如果为None则从配置文件获取
-            renewable_data: 可再生能源数据(如果为None，将创建示例数据)
         """
         
         # 如果未提供路径，从配置文件获取
@@ -554,20 +553,18 @@ class NaturalGasSupplyChainOptimizerOneStep:
         
         # 处理机场数据
         airport_data = self._process_excel_airport_data(excel_data)
-        
-        # 如果没有提供可再生能源数据，必须加载真实数据
-        if renewable_data is None:
-            renewable_data = self._load_real_renewable_data()
-        
-        # 处理机场数据  
+
+        # FT一步法模型不需要可再生能源数据，直接处理机场和天然气数据
+
+        # 处理机场数据
         self._process_airport_data(airport_data)
-        
-        # 加载天然气供应链数据  
+
+        # 加载天然气供应链数据
         self._load_ng_pipeline_data()
         self._load_lng_terminal_data()
-        
-        # 处理可再生能源数据（在机场和LNG数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
-        self._process_renewable_data(renewable_data)
+
+        # 生成FT设施候选位置（基于天然气供应可达性）
+        self._generate_ft_facility_candidates()
         
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
@@ -581,162 +578,12 @@ class NaturalGasSupplyChainOptimizerOneStep:
         # 定义运输相关的位置映射
         self._define_transport_locations()
 
-        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
-    
-    def _process_renewable_data(self, renewable_data: pd.DataFrame):
-        """处理可再生能源数据（包含太阳能和风能，支持缓存）"""
-        try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
-            # 为可再生能源数据创建临时文件路径用于缓存检查
-            # （因为renewable_data是内存中的DataFrame，我们使用数据摘要作为标识）
-            renewable_cache_key = f"renewable_{len(renewable_data)}_{renewable_data['plant_name'].nunique()}"
-            temp_renewable_file = f"temp_renewable_{renewable_cache_key}.csv"
-            
-            # 检查是否有缓存
-            if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
-                logger.info("使用缓存的可再生能源数据（500km过滤）")
-                cached_df = cache_manager.load_filtered_data('renewable_plants')
-                if cached_df is not None:
-                    filtered_renewable_data = cached_df
-                    logger.info(f"从缓存加载可再生能源数据: {len(filtered_renewable_data)} 条记录")
-                else:
-                    logger.warning("缓存加载失败，执行完整处理")
-                    filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
-            else:
-                logger.info("缓存无效或不存在，执行完整处理和过滤")
-                filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
-            
-            # 按地点聚合小时级发电数据
-            plant_names = filtered_renewable_data['plant_name'].unique()
-            for plant_name in plant_names:
-                plant_data = filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name]
-                
-                # 取前total_hours小时数据
-                if len(plant_data) >= self.total_hours:
-                    hourly_data = plant_data.head(self.total_hours)
-                    
-                    # 确定电站类型
-                    plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
-                    
-                    self.locations[plant_name] = {
-                        'type': plant_type,  # 'solar_plant' 或 'wind_farm'
-                        'latitude': hourly_data.iloc[0].get('latitude', 30.0),
-                        'longitude': hourly_data.iloc[0].get('longitude', 104.0),
-                        'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                        'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW)
-                    }
-            
-            logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站")
-            
-            # 统计电站类型
-            solar_count = sum(1 for loc in self.locations.values() if loc['type'] == 'solar_plant')
-            wind_count = sum(1 for loc in self.locations.values() if loc['type'] == 'wind_farm')
-            logger.info(f"  太阳能发电站: {solar_count} 个")
-            logger.info(f"  风电场: {wind_count} 个")
-            
-            # 将机场位置添加到基础locations中
-            self._add_airports_to_locations()
-            
-            # 将LNG接收站位置添加到基础locations中  
-            self._add_lng_terminals_to_locations()
-            
-            # 将天然气管道位置添加到基础locations中
-            self._add_ng_pipelines_to_locations()
-        
-        except Exception as e:
-            logger.error(f"处理可再生能源数据失败: {e}")
-            # 降级到原有处理方法
-            self._process_renewable_data_fallback(renewable_data)
-    
-    def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str) -> pd.DataFrame:
-        """过滤可再生能源数据（500km范围内）"""
-        logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录")
-        
-        # 按电站分组过滤
-        filtered_plants = []
-        for plant_name in renewable_data['plant_name'].unique():
-            plant_data = renewable_data[renewable_data['plant_name'] == plant_name]
-            
-            if len(plant_data) > 0:
-                # 获取电站坐标（使用第一行数据）
-                plant_lat = plant_data.iloc[0].get('latitude', 30.0)
-                plant_lon = plant_data.iloc[0].get('longitude', 104.0)
-                
-                # 检查坐标是否在北京500公里范围内
-                if is_within_beijing_range(plant_lat, plant_lon, 500):
-                    filtered_plants.append(plant_data)
-                else:
-                    distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.debug(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
-        
-        # 合并过滤后的数据
-        if filtered_plants:
-            filtered_df = pd.concat(filtered_plants, ignore_index=True)
-        else:
-            filtered_df = pd.DataFrame()
-        
-        logger.info(f"500km范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
-        
-        # 保存到缓存
-        if len(filtered_df) > 0:
-            cache_manager.save_filtered_data('renewable_plants', filtered_df, temp_file)
-        
-        return filtered_df
-    
-    def _process_renewable_data_fallback(self, renewable_data: pd.DataFrame):
-        """处理可再生能源数据的降级方法（原有逻辑）"""
-        logger.warning("使用降级方法处理可再生能源数据")
-        
-        # 按地点聚合小时级发电数据
-        for plant_name in renewable_data['plant_name'].unique():
-            plant_data = renewable_data[renewable_data['plant_name'] == plant_name]
-            
-            # 取前total_hours小时数据
-            if len(plant_data) >= self.total_hours:
-                hourly_data = plant_data.head(self.total_hours)
-                
-                # 检查坐标是否在北京500公里范围内
-                plant_lat = hourly_data.iloc[0].get('latitude', 30.0)
-                plant_lon = hourly_data.iloc[0].get('longitude', 104.0)
-                
-                if not is_within_beijing_range(plant_lat, plant_lon, 500):
-                    distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
-                    continue
-                
-                # 确定电站类型
-                plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
-                
-                self.locations[plant_name] = {
-                    'type': plant_type,  # 'solar_plant' 或 'wind_farm'
-                    'latitude': hourly_data.iloc[0].get('latitude', 30.0),
-                    'longitude': hourly_data.iloc[0].get('longitude', 104.0),
-                    'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                    'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW)
-                }
-        
-        logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站（降级方法）")
-        
-        # 统计电站类型
-        solar_count = sum(1 for loc in self.locations.values() if loc['type'] == 'solar_plant')
-        wind_count = sum(1 for loc in self.locations.values() if loc['type'] == 'wind_farm')
-        logger.info(f"  太阳能发电站: {solar_count} 个")
-        logger.info(f"  风电场: {wind_count} 个")
-        
-        # 将机场位置添加到基础locations中
-        self._add_airports_to_locations()
-        
-        # 将LNG接收站位置添加到基础locations中  
-        self._add_lng_terminals_to_locations()
-        
-        # 将天然气管道位置添加到基础locations中
-        self._add_ng_pipelines_to_locations()
-    
+        # 使用GraphHopper路径规划计算平均距离统计
+        if self.use_graphhopper_routing:
+            self._calculate_average_distances()
+
+        logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
+
     def _add_airports_to_locations(self):
         """将机场位置添加到基础locations字典中，使其可以用于决策变量"""
         if hasattr(self, 'airports') and self.airports:
@@ -3070,43 +2917,22 @@ class NaturalGasSupplyChainOptimizerOneStep:
                         # 实际的氢气运输约束在 _add_hydrogen_transport_constraints 中处理
                         logger.debug(f"位置 {location} 在第{hour}小时有氢气需求，需要运输供应")
 
-                if location_type in ['solar_plant', 'wind_farm']:
-                    # 2. 可再生能源电力供应约束（基于时段和天气）
-                    self._add_renewable_power_constraints(location, hour)
+                # FT一步法不需要可再生能源约束
 
-                elif location_type in ['lng_terminal', 'airport']:
+                if location_type in ['lng_terminal', 'airport']:
                     # 3. 天然气管道流量限制约束（简化版，移除维护停机）
                     self._add_simplified_ng_pipeline_constraints(location, hour)
 
                     # 4. 天然气储罐压力和流量约束
                     self._add_ng_storage_flow_constraints(location, hour)
-        
+
         # 移除设备维护停机时间约束 - 这是导致20%利用率的主因
         # self._add_maintenance_downtime_constraints()  # 注释掉
-        
-        # 6. 氢气运输能力限制约束
-        self._add_hydrogen_transport_capacity_constraints()
-        
-        logger.info("严格的小时级原料供应约束添加完成（已移除维护停机约束）")
-    
-    def _add_renewable_power_constraints(self, location: str, hour: int):
-        """添加可再生能源电力供应约束"""
-        location_info = self.locations[location]
-        
-        # 该时段可用电力 (MWh)
-        if 'hourly_generation' in location_info and hour < len(location_info['hourly_generation']):
-            available_power_mwh = location_info['hourly_generation'][hour]
-        else:
-            available_power_mwh = 0.0
-        
-        # 添加电力供应约束
-        if available_power_mwh > 0:
-            self.model.addConstr(
-                self.hydrogen_production_vars[(location, hour)] * 
-                self.costs['electrolysis_power_consumption'] / 1000 <= available_power_mwh,
-                name=f"power_supply_{location}_{hour}"
-            )
-    
+
+        # FT一步法不需要氢气运输约束
+
+        logger.info("严格的小时级原料供应约束添加完成（已移除维护停机约束和氢气运输约束）")
+
     def _add_ng_pipeline_flow_constraints(self, location: str, hour: int):
         """添加天然气管道流量限制约束"""
         location_info = self.locations[location]
@@ -3205,41 +3031,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
                         )
         
         logger.info(f"为每个设施每周添加了4小时维护停机约束")
-    
-    def _add_hydrogen_transport_capacity_constraints(self):
-        """添加氢气运输能力限制约束"""
-        logger.info("添加氢气运输能力限制约束...")
-        
-        if not hasattr(self, 'hydrogen_transport_vars'):
-            return
-        
-        # 氢气运输车辆调度约束（改为天级）
-        for h_loc in self.hydrogen_locations:
-            total_days = self.total_hours // 24
-            for day in range(total_days):
-                # 从配置文件读取氢气运输车辆参数
-                h2_transport_config = self.config.get('objective_coefficients', {}).get('hydrogen_transport_vehicle', {})
-                max_vehicles_per_day = h2_transport_config.get('max_vehicles_per_day', 48)  # 每天最多车次
-                vehicle_capacity_kg = h2_transport_config.get('vehicle_capacity_kg', 500)  # 每辆车氢气容量
-                max_h2_transport_per_day = max_vehicles_per_day * vehicle_capacity_kg
-                
-                # 从该地点运出的总氢气不能超过运输能力（周级）
-                total_h2_transport = gp.quicksum(
-                    self.hydrogen_transport_vars[(h_loc, dest)]
-                    for dest in sum(self.mtj_locations.values(), [])
-                    if (h_loc, dest) in self.hydrogen_transport_vars
-                )
-                
-                if total_h2_transport.size() > 0:
-                    # 周级约束：7天的运输能力
-                    max_h2_transport_per_week = max_h2_transport_per_day * 7
-                    self.model.addConstr(
-                        total_h2_transport <= max_h2_transport_per_week,
-                        name=f"h2_transport_capacity_{h_loc}_weekly"
-                    )
-        
-        logger.info("氢气运输能力限制约束添加完成")
-    
+
     def _add_inventory_balance_constraints(self):
         """添加库存平衡约束"""
         for location in self.locations:
@@ -3318,111 +3110,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
                         self.facility_capacity_vars[(location, tech)] == 0,
                         name=f"capacity_location_compat_{location}_{tech}"
                     )
-    
-    def _add_hydrogen_production_constraints(self):
-        """添加制氢约束"""
-        logger.info("添加制氢约束...")
-        
-        for location in self.locations:
-            location_type = self.locations[location]['type']
-            
-            if location_type in ['solar_plant', 'wind_farm']:
-                # 1. 电解槽容量约束
-                # 从配置读取电解槽最大容量
-                max_electrolyzer_capacity = self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000)
-                self.model.addConstr(
-                    self.electrolyzer_capacity_vars[location] <= 
-                    max_electrolyzer_capacity * self.electrolyzer_facility_vars[location],  # 使用配置参数
-                    name=f"electrolyzer_capacity_{location}"
-                )
-                
-                # 2. 制氢生产能力约束
-                for hour in range(self.total_hours):
-                    self.model.addConstr(
-                        self.hydrogen_production_vars[(location, hour)] <= 
-                        self.electrolyzer_capacity_vars[location],
-                        name=f"h2_production_capacity_{location}_{hour}"
-                    )
-                    
-                    # 3. 可再生能源电力平衡约束
-                    available_energy_mwh = self.locations[location]['hourly_generation'][hour]  # MWh 每小时发电量
-                    
-                    # 制氢耗电：50 kWh/kg H2
-                    electricity_consumption_mwh = (
-                        self.hydrogen_production_vars[(location, hour)] * 
-                        self.costs['electrolysis_power_consumption'] / 1000  # kWh -> MWh
-                    )
-                    
-                    # 电力平衡：制氢耗电不能超过可再生能源发电量
-                    if available_energy_mwh > 0:
-                        self.model.addConstr(
-                            electricity_consumption_mwh <= available_energy_mwh,
-                            name=f"electricity_balance_{location}_{hour}"
-                        )
-                        
-    def _add_hydrogen_balance_constraints(self):
-        """添加氢气平衡约束"""
-        logger.info("添加氢气平衡约束...")
-        
-        for location in self.locations:
-            location_type = self.locations[location]['type']
-            
-            if location_type in ['solar_plant', 'wind_farm']:
-                # 氢气库存平衡（加入运输影响）
-                for hour in range(self.total_hours):
-                    # 当前氢气库存 = 上期库存 + 制氢生产 - 本地MTJ消耗 - 运输出库
-                    current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
-                    previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
-                    h2_production = self.hydrogen_production_vars[(location, hour)]
 
-                    # 氢气消耗（用于本地MTJ生产）
-                    h2_local_consumption = gp.quicksum(
-                        self.production_vars[(location, tech, hour)] *
-                        self.technologies[tech]['h2_consumption_ratio']
-                        for tech in self.technologies
-                        if (location, tech, hour) in self.production_vars
-                    )
-
-                    # 氢气运输出库（周级运输量在最后一小时统一扣减）
-                    h2_transport_outflow = 0
-                    if hour == self.total_hours - 1:  # 在最后一小时统一扣减周运输量
-                        # 整周的氢气运输出库量（周级变量）
-                        weekly_outbound_transport = gp.quicksum(
-                            self.hydrogen_transport_vars[(location, dest_loc)]
-                            for dest_loc in self.locations
-                            if (location, dest_loc) in self.hydrogen_transport_vars
-                        )
-
-                        # 管道运输（周级变量）
-                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                            weekly_outbound_pipeline = gp.quicksum(
-                                self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
-                                for dest_loc in self.locations
-                                if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                            )
-                            weekly_outbound_transport += weekly_outbound_pipeline
-
-                        h2_transport_outflow = weekly_outbound_transport
-
-                    # 氢气库存平衡方程
-                    self.model.addConstr(
-                        current_h2_inventory == previous_h2_inventory + h2_production - h2_local_consumption - h2_transport_outflow,
-                        name=f"h2_balance_{location}_{hour}"
-                    )
-
-                # 初始氢气库存为0
-                self.model.addConstr(
-                    self.hydrogen_storage_vars[(location, 0)] == 0,
-                    name=f"initial_h2_inventory_{location}"
-                )
-
-                # 添加氢气库存非负约束
-                for hour in range(self.total_hours + 1):
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, hour)] >= 0,
-                        name=f"h2_inventory_nonnegative_{location}_{hour}"
-                    )
-    
     def _add_daily_hydrogen_mtj_constraints(self):
         """添加氢气每日产量限制下一日MTJ每日产量约束"""
         logger.info("添加氢气每日产量限制MTJ每日产量约束...")
@@ -3475,322 +3163,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
                             name=f"daily_h2_limits_next_day_mtj_{location}_day{day}"
                         )
                         
-        
+
         logger.info("氢气每日产量限制MTJ每日产量约束添加完成")
-    
-    def _add_hydrogen_transport_constraints(self):
-        """添加氢气运输约束：氢气从可再生能源站运输到MTJ工厂"""
-        logger.info("添加氢气运输约束...")
 
-        # 1. 添加氢气全局守恒约束：确保周运输总量不超过周生产总量
-        logger.info("添加氢气全局守恒约束（周级）...")
-
-        # 计算整周全系统氢气总生产量
-        total_weekly_h2_production = gp.quicksum(
-            self.hydrogen_production_vars[(h_loc, hour)]
-            for h_loc in self.hydrogen_locations
-            for hour in range(self.total_hours)
-            if (h_loc, hour) in self.hydrogen_production_vars
-        )
-
-        # 计算整周全系统氢气总运输量（运输变量现在是周级）
-        total_weekly_transport = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc)]
-            for h_loc in self.hydrogen_locations
-            for mtj_loc in self.locations
-            if (h_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
-
-        # 添加管道运输（也是周级）
-        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-            pipeline_weekly_transport = gp.quicksum(
-                self.hydrogen_pipeline_transport_vars[(h_loc, mtj_loc)]
-                for h_loc in self.hydrogen_locations
-                for mtj_loc in self.locations
-                if (h_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-            )
-            total_weekly_transport += pipeline_weekly_transport
-
-        # 全局守恒约束：周运输总量不能超过周生产总量
-        if total_weekly_h2_production.size() > 0:
-            self.model.addConstr(
-                total_weekly_transport <= total_weekly_h2_production,
-                name="hydrogen_global_conservation_weekly"
-            )
-            logger.info("添加氢气全局守恒约束（周级）完成")
-
-        # 2. 氢气运输平衡约束：仅对需要氢气运输的模式
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies:
-                logger.warning(f"技术 {tech} 不在 technologies 中，跳过")
-                continue
-                
-            if not self.technologies[tech]['hydrogen_transport_required']:
-                logger.info(f"技术 {tech} 不需要氢气运输，跳过")
-                continue
-                
-            if tech not in self.mtj_locations:
-                logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过")
-                continue
-                
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
-                continue
-                
-            for h_loc in self.hydrogen_locations:
-                for mtj_loc in locations:
-                        if (h_loc, mtj_loc) in self.hydrogen_transport_vars:
-                            # 氢气运输量 <= 整周氢气生产量总和（单链路约束）
-                            weekly_h2_production = gp.quicksum(
-                                self.hydrogen_production_vars[(h_loc, hour)]
-                                for hour in range(self.total_hours)
-                                if (h_loc, hour) in self.hydrogen_production_vars
-                            )
-                            self.model.addConstr(
-                                self.hydrogen_transport_vars[(h_loc, mtj_loc)] <= weekly_h2_production,
-                                name=f"hydrogen_transport_limit_{h_loc}_{mtj_loc}"
-                                )
-
-        # 3. 添加源地总出库约束：从每个氢气源地出库的总量不能超过该地周生产量
-        logger.info("添加氢气源地总出库约束（周级）...")
-        for h_loc in self.hydrogen_locations:
-            # 该源地整周的氢气生产总量
-            weekly_h2_production = gp.quicksum(
-                self.hydrogen_production_vars[(h_loc, hour)]
-                for hour in range(self.total_hours)
-                if (h_loc, hour) in self.hydrogen_production_vars
-            )
-
-            # 从该源地出发的所有运输量（罐车，周级）
-            total_outbound_transport = gp.quicksum(
-                self.hydrogen_transport_vars[(h_loc, dest_loc)]
-                for dest_loc in self.locations
-                if (h_loc, dest_loc) in self.hydrogen_transport_vars
-            )
-
-            # 从该源地出发的所有管道运输量（周级）
-            if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                total_outbound_pipeline = gp.quicksum(
-                    self.hydrogen_pipeline_transport_vars[(h_loc, dest_loc)]
-                    for dest_loc in self.locations
-                    if (h_loc, dest_loc) in self.hydrogen_pipeline_transport_vars
-                )
-                total_outbound_transport += total_outbound_pipeline
-
-            # 源地总出库约束：周总出库不能超过该地周生产量
-            if weekly_h2_production.size() > 0:
-                self.model.addConstr(
-                    total_outbound_transport <= weekly_h2_production,
-                    name=f"hydrogen_source_outbound_limit_{h_loc}_weekly"
-                )
-                logger.debug(f"添加氢气源地总出库约束（周级）: {h_loc}")
-        
-        # 氢气供需平衡约束：对所有消耗氢气的技术添加约束，确保氢气供应满足需求
-        logger.info("添加氢气供需平衡约束...")
-
-        # 初始化日运输供应项字典
-        daily_transport_supply_terms = {}
-
-        # 遍历所有消耗氢气的技术（不论是否需要运输）
-        for tech in self.technologies:
-            # 只处理消耗氢气的技术
-            if self.technologies[tech]['h2_consumption_ratio'] <= 0:
-                continue
-
-            if tech not in self.mtj_locations:
-                logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过氢气需求约束")
-                continue
-
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
-                continue
-
-            for mtj_loc in locations:
-                # 初始化该位置的字典结构
-                if mtj_loc not in daily_transport_supply_terms:
-                    daily_transport_supply_terms[mtj_loc] = {}
-                if tech not in daily_transport_supply_terms[mtj_loc]:
-                    daily_transport_supply_terms[mtj_loc][tech] = {}
-
-                total_days = self.total_hours // 24
-                for day in range(total_days):
-                    # 计算该MTJ工厂该天的氢气需求（基于生产量）
-                    day_start_hour = day * 24
-                    day_end_hour = min((day + 1) * 24, self.total_hours)
-
-                    hydrogen_demand_terms = []
-                    for hour in range(day_start_hour, day_end_hour):
-                        if (mtj_loc, tech, hour) in self.production_vars:
-                            h2_consumption = self.technologies[tech]['h2_consumption_ratio']
-                            hydrogen_demand_terms.append(
-                                self.production_vars[(mtj_loc, tech, hour)] * h2_consumption
-                            )
-
-                    if not hydrogen_demand_terms:
-                        continue  # 该天无氢气需求，跳过
-
-                    hydrogen_demand = gp.quicksum(hydrogen_demand_terms)
-
-                    # 根据技术类型确定氢气供应方式
-                    if self.technologies[tech]['hydrogen_transport_required']:
-                        # 需要运输的技术：氢气供应来自运输（累加所有天的需求）
-                        if day not in daily_transport_supply_terms[mtj_loc][tech]:
-                            daily_transport_supply_terms[mtj_loc][tech][day] = []
-
-                        # 罐车运输（周级变量需要分摊到每天）
-                        for h_loc in self.hydrogen_locations:
-                            if (h_loc, mtj_loc) in self.hydrogen_transport_vars:
-                                # 将周级运输量分摊到每天，除以总天数
-                                total_days = self.total_hours // 24
-                                daily_transport_share = self.hydrogen_transport_vars[(h_loc, mtj_loc)] / total_days
-                                daily_transport_supply_terms[mtj_loc][tech][day].append(daily_transport_share)
-
-                        # 管道运输（周级变量需要分摊到每天）
-                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                            for h_loc in self.hydrogen_locations:
-                                if (h_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                                    # 将周级管道运输量分摊到每天
-                                    total_days = self.total_hours // 24
-                                    daily_pipeline_share = self.hydrogen_pipeline_transport_vars[(h_loc, mtj_loc)] / total_days
-                                    daily_transport_supply_terms[mtj_loc][tech][day].append(daily_pipeline_share)
-
-                        # 氢气运输供应约束（每天的需求 <= 分摊的运输量）
-                        if daily_transport_supply_terms[mtj_loc][tech][day]:
-                            self.model.addConstr(
-                                gp.quicksum(daily_transport_supply_terms[mtj_loc][tech][day]) >= hydrogen_demand,
-                                name=f"hydrogen_transport_supply_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.debug(f"添加氢气运输供应约束: {len(daily_transport_supply_terms[mtj_loc][tech][day])} 个运输变量 -> {mtj_loc} {tech} day {day}")
-                        else:
-                            # 需要运输但无运输变量 - 强制约束导致不可行
-                            self.model.addConstr(
-                                0 >= hydrogen_demand,
-                                name=f"missing_hydrogen_transport_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.warning(f"强制添加氢气运输缺失约束: 位置 {mtj_loc} 技术 {tech} 第{day}天")
-
-                    else:
-                        # 不需要运输的技术：氢气供应来自就地生产
-                        # 该位置当天的氢气生产总量
-                        daily_h2_production_terms = []
-                        for hour in range(day_start_hour, day_end_hour):
-                            if (mtj_loc, hour) in self.hydrogen_production_vars:
-                                daily_h2_production_terms.append(self.hydrogen_production_vars[(mtj_loc, hour)])
-
-                        if daily_h2_production_terms:
-                            daily_h2_production = gp.quicksum(daily_h2_production_terms)
-                            # 就地制氢供应约束：当天氢气需求不能超过当天生产
-                            self.model.addConstr(
-                                hydrogen_demand <= daily_h2_production,
-                                name=f"hydrogen_local_supply_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.debug(f"添加就地制氢供应约束: {mtj_loc} {tech} day {day}")
-                        else:
-                            # 没有氢气生产能力但需要氢气 - 强制约束导致不可行
-                            self.model.addConstr(
-                                0 >= hydrogen_demand,
-                                name=f"missing_hydrogen_production_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.warning(f"强制添加氢气生产缺失约束: 位置 {mtj_loc} 技术 {tech} 第{day}天 需要氢气但无生产能力")
-
-        logger.info("氢气供需平衡约束添加完成")
-    
-    def _add_hydrogen_pipeline_transport_constraints(self):
-        """添加氢能管道运输约束"""
-        logger.info("添加氢能管道运输约束...")
-        
-        if not hasattr(self, 'hydrogen_pipeline_transport_vars') or not self.hydrogen_pipeline_transport_vars:
-            logger.info("无氢能管道运输变量，跳过管道运输约束")
-            return
-        
-        # 1. 管道建设决策约束：只有建设了管道才能进行运输
-        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_facility_vars:
-            total_days = self.total_hours // 24
-            for day in range(total_days):
-                if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
-                    # 管道运输量 <= 管道建设决策 * 大M（管道日最大容量）
-                    max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
-                    self.model.addConstr(
-                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= 
-                        self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] * max_daily_pipeline_capacity,
-                        name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_day_{day}"
-                    )
-        
-        # 2. 管道运输量约束：不超过氢气源地的生产能力
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
-                continue
-                
-            if tech not in self.mtj_locations:
-                continue
-                
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                continue
-                
-            for h2_loc in self.hydrogen_locations:
-                for mtj_loc in locations:
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_facility_vars:
-                        continue
-                        
-                    total_days = self.total_hours // 24
-                    for day in range(total_days):
-                        if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
-                            # 管道运输量 <= 该天氢气生产量
-                            day_start_hour = day * 24
-                            day_end_hour = min((day + 1) * 24, self.total_hours)
-                            daily_h2_production = gp.quicksum(
-                                self.hydrogen_production_vars[(h2_loc, hour)]
-                                for hour in range(day_start_hour, day_end_hour)
-                                if (h2_loc, hour) in self.hydrogen_production_vars
-                            )
-                            self.model.addConstr(
-                                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= daily_h2_production,
-                                name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_day_{day}"
-                            )
-        
-        # 3. 氢气运输方式排他性约束：同一路线只能选择罐车或管道运输之一
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
-                continue
-                
-            if tech not in self.mtj_locations:
-                continue
-                
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                continue
-                
-            for h2_loc in self.hydrogen_locations:
-                for mtj_loc in locations:
-                    # 检查周级运输变量是否存在，添加排他约束
-                    has_truck = (h2_loc, mtj_loc) in self.hydrogen_transport_vars
-                    has_pipeline = (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-
-                    if has_truck and has_pipeline:
-                        # 互斥约束1：如果选择了管道运输，则罐车运输为0
-                        max_truck_capacity = self.config.get('capacity_limits', {}).get('hydrogen_truck_max_daily_capacity_kg', 10000)
-                        max_truck_weekly_capacity = max_truck_capacity * 7  # 转换为周容量
-                        self.model.addConstr(
-                            self.hydrogen_transport_vars[(h2_loc, mtj_loc)] <=
-                            max_truck_weekly_capacity * (1 - self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)]),
-                            name=f"h2_truck_exclusive_{h2_loc}_{mtj_loc}_weekly"
-                        )
-
-                        # 互斥约束2：如果不选择管道运输，则管道运输为0
-                        max_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
-                        max_pipeline_weekly_capacity = max_pipeline_capacity * 7  # 转换为周容量
-                        self.model.addConstr(
-                            self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <=
-                            max_pipeline_weekly_capacity * self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)],
-                            name=f"h2_pipeline_exclusive_{h2_loc}_{mtj_loc}_weekly"
-                        )
-        
-        # 注意：氢气需求满足约束已在 _add_hydrogen_transport_constraints() 中统一处理
-        logger.info("氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）")
-    
     def _add_natural_gas_transport_constraints(self):
         """添加天然气运输约束：天然气从管道通过罐车运输到非LNG接收站的MTJ工厂"""
         logger.info("添加天然气罐车运输约束...")
@@ -7014,7 +6389,7 @@ if __name__ == '__main__':
         osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization", 
                                    "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf")
         
-        optimizer = NaturalGasSupplyChainOptimizer(
+        optimizer = NaturalGasSupplyChainOptimizerOneStep(
             time_horizon_weeks=1,
             osm_pbf_path=osm_file_path
         )
@@ -7239,7 +6614,19 @@ if __name__ == '__main__':
 
         if os.path.exists(airport_excel_path):
             logger.info(f"从Excel加载机场数据: {airport_excel_path}")
-            airport_df = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
+            # 尝试读取All_Airports工作表，如果失败则读取默认工作表
+            try:
+                airport_df = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
+                logger.info(f"Excel文件读取成功(All_Airports)，包含 {len(airport_df)} 行数据")
+            except Exception as e:
+                logger.error(f"读取Excel文件失败（All_Airports）: {e}")
+                try:
+                    logger.info("尝试读取默认工作表...")
+                    airport_df = pd.read_excel(airport_excel_path)
+                    logger.info(f"Excel文件读取成功，包含 {len(airport_df)} 行数据")
+                except Exception as e2:
+                    logger.error(f"读取Excel文件彻底失败: {e2}")
+                    raise
 
             # 处理数据：按机场分组，提取52周时间序列
             airport_data_list = []
