@@ -1147,21 +1147,17 @@ class NaturalGasSupplyChainOptimizerOneStep:
     
     def _define_transport_locations(self):
         """定义运输相关的位置映射 - 现在基于统一的location系统"""
-        # 氢气生产位置（可再生能源发电站）
-        self.hydrogen_locations = [
-            loc for loc, info in self.locations.items() 
-            if info['type'] in ['solar_plant', 'wind_farm']
-        ]
-        
+        # FT一步法不需要氢气生产位置
+
         # 机场位置（统一从locations获取）
         self.airport_locations = [
-            loc for loc, info in self.locations.items() 
+            loc for loc, info in self.locations.items()
             if info['type'] == 'airport'
         ]
-        
+
         # LNG接收站位置（统一从locations获取）
         self.lng_terminal_locations = [
-            loc for loc, info in self.locations.items() 
+            loc for loc, info in self.locations.items()
             if info['type'] == 'lng_terminal'
         ]
         
@@ -5623,55 +5619,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
         supply_chain_analysis['summary'] = self._create_supply_chain_summary(supply_chain_analysis)
         
         return supply_chain_analysis
-    
-    def _analyze_hydrogen_supply_for_location(self, location: str, solution: Dict) -> Dict:
-        """分析指定位置的氢气供应链"""
-        hydrogen_supply = {
-            'supply_sources': [],
-            'self_production': {},
-            'external_sources': [],
-            'total_hydrogen_demand_kg': 0,
-            'supply_adequacy': 'sufficient'
-        }
-        
-        # 检查是否有自产氢气能力
-        if location in self.hydrogen_locations:
-            # 自产氢气
-            hydrogen_supply['self_production'] = {
-                'has_electrolyzer': location in solution.get('hydrogen_facilities', {}),
-                'electrolyzer_capacity_kg_per_hour': solution.get('hydrogen_facilities', {}).get(location, {}).get('capacity_kg_h2_per_hour', 0),
-                'total_h2_production_kg': sum(
-                    prod_info['h2_production_kg'] 
-                    for prod_key, prod_info in solution.get('hydrogen_production', {}).items()
-                    if prod_info['location'] == location
-                ),
-                'renewable_energy_source': self.locations[location]['type']
-            }
-        
-        # 检查外部氢气运输
-        external_h2_sources = []
-        for h_loc in self.hydrogen_locations:
-            if h_loc != location:
-                # 计算从该氢气源运输的总量
-                transport_amount = 0
-                for (source, dest), var in self.hydrogen_transport_vars.items():
-                    if source == h_loc and dest == location and var.x > 0.01:
-                        transport_amount += var.x
-                
-                if transport_amount > 0:
-                    distance = self._calculate_location_distance(h_loc, location)
-                    transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
-                    external_h2_sources.append({
-                        'source_location': h_loc,
-                        'source_type': self.locations[h_loc]['type'],
-                        'transport_amount_kg': transport_amount,
-                        'transport_distance_km': distance,
-                        'transport_cost_yuan_per_kg': transport_cost
-                    })
-        
-        hydrogen_supply['external_sources'] = external_h2_sources
-        
-        return hydrogen_supply
     
     def _analyze_natural_gas_supply_for_location(self, location: str) -> Dict:
         """分析指定位置的天然气供应链"""
