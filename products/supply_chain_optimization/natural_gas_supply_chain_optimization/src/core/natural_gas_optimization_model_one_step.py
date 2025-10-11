@@ -4546,202 +4546,129 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 facility_key = f"{location}_{tech}"
                 solution['facilities'][facility_key] = facility_info
         
-        # 提取电解槽设施决策
-        solution['hydrogen_facilities'] = {}
-        for location, var in self.electrolyzer_facility_vars.items():
-            if var.x > 0.5:  # 二进制变量大于0.5视为选中建设电解槽
-                electrolyzer_capacity = self.electrolyzer_capacity_vars[location].x
-                
-                # 计算实际氢气产量和利用率
-                actual_h2_production = sum(
-                    self.hydrogen_production_vars[(location, hour)].x
-                    for hour in range(self.total_hours)
-                    if (location, hour) in self.hydrogen_production_vars
-                )
-                annual_h2_production = actual_h2_production * (52.0 / self.time_horizon_weeks)
-                max_annual_h2_capacity = electrolyzer_capacity * 8760 * 0.75  # 考虑75%容量因子
-                
-                electrolyzer_info = {
-                    'location': location,
-                    'built': True,
-                    'capacity_kg_h2_per_hour': electrolyzer_capacity,
-                    'max_annual_h2_capacity_kg': max_annual_h2_capacity,
-                    'actual_annual_h2_production_kg': annual_h2_production,
-                    'utilization_rate': annual_h2_production / max_annual_h2_capacity if max_annual_h2_capacity > 0 else 0,
-                    'location_type': self.locations[location]['type'],
-                    'technology': 'electrolyzer'
-                }
-                
-                electrolyzer_key = f"electrolyzer_{location}"
-                solution['hydrogen_facilities'][location] = electrolyzer_info
-                # 同时也添加到主设施列表中以便在设施决策文件中显示
-                solution['facilities'][electrolyzer_key] = {
-                    'location': location,
-                    'technology': 'electrolyzer',
-                    'built': True,
-                    'capacity_kg_per_hour': electrolyzer_capacity,  # 氢气产能 kg H2/h
-                    'max_annual_capacity_kg': max_annual_h2_capacity,  # 年氢气产能
-                    'actual_annual_production_kg': annual_h2_production,  # 实际年氢气产量
-                    'utilization_rate': electrolyzer_info['utilization_rate'],
-                    'location_type': self.locations[location]['type'],
-                    'transport_mode': 'hydrogen_pipeline'
-                }
-        
-        # 提取运输计划
-        solution['transport_plan'] = {}
-        for (location, airport, week), var in self.transport_vars.items():
-            if var.x > 0:
-                transport_key = f"{location}_{airport}_{week}"
-                from_coords = self._get_location_coordinates(location)
-                to_coords = self._get_location_coordinates(airport)
-                
-                # 获取真实路径坐标
-                distance_km, route_coordinates = self._calculate_distance_with_route(location, airport)
-                
-                solution['transport_plan'][transport_key] = {
-                    'from_location': location,
-                    'to_airport': airport,
-                    'week': week,
-                    'transport_kg': var.x,
-                    'distance_km': distance_km,
-                    'from_latitude': from_coords[0],
-                    'from_longitude': from_coords[1],
-                    'to_latitude': to_coords[0],
-                    'to_longitude': to_coords[1],
-                    'route_coordinates': route_coordinates,  # 新增：真实路径坐标
-                    'transport_type': 'MTJ',
-                    'transport_mode': 'truck'  # 默认卡车运输
-                }
+        # 提取FT反应器设施决策
+        solution['ft_facilities'] = {}
+        for location_id, var in self.ft_facility_vars.items():
+            if var.x > 0.5:  # 二进制变量大于0.5视为选中建设FT设施
+                ft_capacity = self.ft_capacity_vars[location_id].x
 
-        # 提取氢气运输计划（同时处理罐车和管道运输）
-        solution['hydrogen_transport'] = {}
-        
-        # 调试信息：统计氢气运输变量
-        truck_count = 0
-        truck_positive = 0
-        pipeline_count = 0
-        pipeline_positive = 0
-        
-        # 1. 提取氢气罐车运输（周级变量）
-        for (h_loc, mtj_loc), var in self.hydrogen_transport_vars.items():
-            truck_count += 1
-            if var.x > 0:
-                truck_positive += 1
-                transport_key = f"{h_loc}_{mtj_loc}_weekly_truck"
-                from_coords = self._get_location_coordinates(h_loc)
-                to_coords = self._get_location_coordinates(mtj_loc)
-                
-                # 获取真实路径坐标
-                distance_km, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                
-                solution['hydrogen_transport'][transport_key] = {
-                    'from_location': h_loc,
-                    'to_location': mtj_loc,
-                    'transport_kg_h2': var.x,  # 周级运输量
-                    'distance_km': distance_km,
-                    'from_latitude': from_coords[0],
-                    'from_longitude': from_coords[1],
-                    'to_latitude': to_coords[0],
-                    'to_longitude': to_coords[1],
-                    'route_coordinates': route_coordinates,  # 新增：真实路径坐标
-                    'transport_type': 'H2',
-                    'transport_mode': 'truck'
-                }
-        
-        # 2. 提取氢能管道运输
-        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-            for (h_loc, mtj_loc), var in self.hydrogen_pipeline_transport_vars.items():
-                pipeline_count += 1
-                if var.x > 0:
-                    pipeline_positive += 1
-                    transport_key = f"{h_loc}_{mtj_loc}_weekly_pipeline"
-                    from_coords = self._get_location_coordinates(h_loc)
-                    to_coords = self._get_location_coordinates(mtj_loc)
+                # 查找候选位置详细信息
+                ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == location_id), None)
 
-                    distance_km = self._get_hydrogen_transport_distance_with_clustering(h_loc, mtj_loc)
+                if ft_candidate:
+                    # TODO: 计算实际SAF产量和利用率（需要基于实际的生产变量）
+                    # 暂时使用产能作为近似
+                    max_annual_saf_capacity = ft_capacity * 8760  # kg SAF/年
 
-                    cluster_id = None
-                    cluster_center = None
-                    layer1_distance = 0
-                    layer2_distance = 0
-                    layer3_distance = 0
-                    route_coordinates = []
-
-                    if hasattr(self, 'clustering_results') and self.clustering_results:
-                        for cluster in self.clustering_results.clusters:
-                            if h_loc in cluster.member_locations:
-                                cluster_id = cluster.cluster_id
-                                cluster_center = cluster.center_coord
-                                route_key = (cluster_id, mtj_loc)
-                                if route_key in self.clustered_routes:
-                                    route = self.clustered_routes[route_key]
-                                    layer1_distance = route.layer1_distances.get(h_loc, 0)
-                                    layer2_distance = route.layer2_distance
-                                    layer3_distance = route.layer3_distance
-                                    if route.route_geometry:
-                                        route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
-                                break
-
-                        if cluster_id is None:
-                            for noise_loc, noise_coord in self.clustering_results.noise_points:
-                                if h_loc == noise_loc:
-                                    _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                                    route_coordinates = fallback_route if fallback_route else []
-                                    break
-
-                    if not route_coordinates:
-                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-
-                    solution['hydrogen_transport'][transport_key] = {
-                        'from_location': h_loc,
-                        'to_location': mtj_loc,
-                        'transport_kg_h2': var.x,
-                        'distance_km': distance_km,
-                        'from_latitude': from_coords[0],
-                        'from_longitude': from_coords[1],
-                        'to_latitude': to_coords[0],
-                        'to_longitude': to_coords[1],
-                        'route_coordinates': route_coordinates,
-                        'transport_type': 'H2',
-                        'transport_mode': 'pipeline',
-                        'cluster_id': cluster_id,
-                        'cluster_center': cluster_center,
-                        'layer1_distance_km': layer1_distance,
-                        'layer2_distance_km': layer2_distance,
-                        'layer3_distance_km': layer3_distance
+                    ft_info = {
+                        'location_id': location_id,
+                        'name': ft_candidate['name'],
+                        'built': True,
+                        'capacity_kg_saf_per_hour': ft_capacity,
+                        'max_annual_saf_capacity_kg': max_annual_saf_capacity,
+                        'source_type': ft_candidate['source_type'],
+                        'source_id': ft_candidate['source_id'],
+                        'latitude': ft_candidate['lat'],
+                        'longitude': ft_candidate['lon'],
+                        'ng_supply_capacity_m3_per_hour': ft_candidate.get('ng_supply_capacity_m3_per_hour', 0),
+                        'ng_price_yuan_per_m3': ft_candidate.get('ng_price_yuan_per_m3', 0),
+                        'technology': 'ft_direct_conversion'
                     }
-        
-        # 输出氢气运输统计信息
-        print(f"\n=== 氢气运输决策统计 ===")
-        print(f"氢气罐车运输变量: {truck_count} 个, 其中非零: {truck_positive} 个")
-        print(f"氢能管道运输变量: {pipeline_count} 个, 其中非零: {pipeline_positive} 个")
-        print(f"总氢气运输记录: {len(solution['hydrogen_transport'])} 条")
-        if solution['hydrogen_transport']:
-            total_h2_transport = sum(info['transport_kg_h2'] for info in solution['hydrogen_transport'].values())
-            print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
-        print("=======================\n")
 
-        # 提取天然气运输计划（改为天级）
-        solution['ng_transport'] = {}
-        for (ng_loc, mtj_loc, day), var in self.ng_transport_vars.items():
+                    # 如果有机场附近信息
+                    if 'near_airport' in ft_candidate:
+                        ft_info['near_airport'] = ft_candidate['near_airport']
+                        ft_info['distance_to_airport_km'] = ft_candidate['distance_to_airport_km']
+
+                    solution['ft_facilities'][location_id] = ft_info
+
+                    # 同时添加到主设施列表中
+                    solution['facilities'][f"ft_{location_id}"] = {
+                        'location': location_id,
+                        'technology': 'ft_direct_conversion',
+                        'built': True,
+                        'capacity_kg_per_hour': ft_capacity,  # SAF产能 kg/h
+                        'max_annual_capacity_kg': max_annual_saf_capacity,
+                        'location_type': ft_candidate['source_type'],
+                        'transport_mode': 'ng_pipeline_direct',
+                        'latitude': ft_candidate['lat'],
+                        'longitude': ft_candidate['lon']
+                    }
+
+        # 提取SAF运输计划（从FT设施到机场）
+        solution['saf_transport'] = {}
+        for (ft_location_id, airport, week), var in self.saf_transport_vars.items():
             if var.x > 0:
-                transport_key = f"{ng_loc}_{mtj_loc}_day_{day}"
-                from_coords = self._get_location_coordinates(ng_loc)
-                to_coords = self._get_location_coordinates(mtj_loc)
-                solution['ng_transport'][transport_key] = {
-                    'from_location': ng_loc,
-                    'to_location': mtj_loc,
-                    'day': day,
-                    'transport_m3_ng': var.x,
-                    'distance_km': self._calculate_location_distance(ng_loc, mtj_loc),
-                    'from_latitude': from_coords[0],
-                    'from_longitude': from_coords[1],
-                    'to_latitude': to_coords[0],
-                    'to_longitude': to_coords[1],
-                    'transport_type': 'NG',
-                    'transport_mode': 'truck'
-                }
-        
+                transport_key = f"{ft_location_id}_{airport}_{week}"
+
+                # 查找FT设施坐标
+                ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+                airport_data = self.airports.get(airport)
+
+                if ft_candidate and airport_data:
+                    # 计算距离
+                    distance_km = self._calculate_haversine_distance(
+                        ft_candidate['lat'], ft_candidate['lon'],
+                        airport_data['lat'], airport_data['lon']
+                    )
+
+                    solution['saf_transport'][transport_key] = {
+                        'from_location': ft_location_id,
+                        'to_airport': airport,
+                        'week': week,
+                        'transport_kg_saf': var.x,
+                        'distance_km': distance_km,
+                        'from_latitude': ft_candidate['lat'],
+                        'from_longitude': ft_candidate['lon'],
+                        'to_latitude': airport_data['lat'],
+                        'to_longitude': airport_data['lon'],
+                        'transport_type': 'SAF',
+                        'transport_mode': 'truck'
+                    }
+
+        # 提取天然气运输计划（从NG源到FT设施）
+        solution['ng_transport'] = {}
+        for (source_id, ft_location_id, day), var in self.ng_transport_vars.items():
+            if var.x > 0:
+                # 每周汇总天然气运输（从天级聚合）
+                week = day // 7
+                transport_key = f"{source_id}_{ft_location_id}_week_{week}"
+
+                # 如果这个周的运输key已存在，累加运输量
+                if transport_key in solution['ng_transport']:
+                    solution['ng_transport'][transport_key]['transport_m3_ng'] += var.x
+                else:
+                    # 查找源和目标坐标
+                    source_coord = None
+                    if source_id in self.ng_pipeline_sources:
+                        source_data = self.ng_pipeline_sources[source_id]
+                        source_coord = (source_data['lat'], source_data['lon'])
+                    elif source_id in self.lng_terminals:
+                        terminal_data = self.lng_terminals[source_id]
+                        source_coord = (terminal_data['lat'], terminal_data['lon'])
+
+                    ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+
+                    if source_coord and ft_candidate:
+                        distance_km = self._calculate_haversine_distance(
+                            source_coord[0], source_coord[1],
+                            ft_candidate['lat'], ft_candidate['lon']
+                        )
+
+                        solution['ng_transport'][transport_key] = {
+                            'from_source': source_id,
+                            'to_location': ft_location_id,
+                            'week': week,
+                            'transport_m3_ng': var.x,
+                            'distance_km': distance_km,
+                            'from_latitude': source_coord[0],
+                            'from_longitude': source_coord[1],
+                            'to_latitude': ft_candidate['lat'],
+                            'to_longitude': ft_candidate['lon'],
+                            'transport_type': 'NG',
+                            'transport_mode': 'truck'
+                        }
+
         # 提取库存信息
         solution['inventory'] = {}
         for (location, hour), var in self.storage_vars.items():
