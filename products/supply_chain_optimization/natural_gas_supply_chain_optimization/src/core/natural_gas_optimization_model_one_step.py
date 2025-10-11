@@ -6364,8 +6364,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info("在机场附近50km范围内查找天然气节点...")
         airport_nearby_count = 0
         for airport_id, airport_data in self.airports.items():
-            airport_lat = airport_data['lat']
-            airport_lon = airport_data['lon']
+            airport_lat = airport_data['latitude']
+            airport_lon = airport_data['longitude']
 
             # 查找该机场附近50km内的天然气管道端点
             for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
@@ -7271,3 +7271,168 @@ if __name__ == '__main__':
             pass
 
         logger.info(f"添加了 {constraint_count} 个SAF运输约束")
+
+
+if __name__ == '__main__':
+    """主执行块 - FT一步法模型"""
+    try:
+        logger.info("开始执行天然气供应链优化模型（FT一步法）...")
+
+        # 1. 初始化优化器
+        base_dir = get_project_base_dir()
+
+        # 设置配置文件路径
+        config_path = os.path.join(base_dir, "shared", "data",
+                                   "NaturalGasSupplyChainOptimizer_config_one_step.yaml")
+
+        # 设置OSM文件路径
+        osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization",
+                                   "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf")
+
+        optimizer = NaturalGasSupplyChainOptimizerOneStep(
+            config_path=config_path,
+            time_horizon_weeks=4,  # 使用4周时间窗口
+            osm_pbf_path=osm_file_path
+        )
+
+        # 2. 加载数据
+        # 从Excel文件加载真实的机场需求数据
+        airport_excel_path = os.path.join(base_dir, "products", "aviation_fuel_analysis",
+                                        "resource_flight_data_process", "data",
+                                        "capital_binhai_airports_data_20250726_123415.xlsx")
+
+        if os.path.exists(airport_excel_path):
+            logger.info(f"从Excel加载机场数据: {airport_excel_path}")
+            airport_df = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
+
+            # 处理数据：按机场分组，提取52周时间序列
+            airport_data_list = []
+            for airport_name in airport_df['departure_airport_name'].unique():
+                airport_subset = airport_df[airport_df['departure_airport_name'] == airport_name].sort_values('week_number')
+
+                if len(airport_subset) > 0:
+                    first_row = airport_subset.iloc[0]
+                    weekly_series = airport_subset['weekly_total_fuel_kg_total'].tolist()
+
+                    airport_data_list.append({
+                        'airport': first_row.get('departure_airport_code', airport_name[:4].upper()),
+                        'airport_name': airport_name,
+                        'latitude': first_row['departure_airport_latitude'],
+                        'longitude': first_row['departure_airport_longitude'],
+                        'weekly_fuel_series': weekly_series,
+                        'avg_weekly_fuel_kg': np.mean(weekly_series),
+                        'max_weekly_fuel_kg': np.max(weekly_series),
+                        'total_fuel_kg': np.sum(weekly_series),
+                        'flight_count': airport_subset['total_flights'].sum()
+                    })
+
+            airport_data = pd.DataFrame(airport_data_list)
+        else:
+            # 如果Excel文件不存在，使用简单的测试数据
+            logger.warning(f"Excel文件不存在，使用测试数据")
+            airport_data = pd.DataFrame([
+                {
+                    'airport': 'ZBAA',
+                    'airport_name': '北京首都国际机场',
+                    'latitude': 40.08,
+                    'longitude': 116.58,
+                    'weekly_fuel_series': [10000.0] * 52,
+                    'avg_weekly_fuel_kg': 10000.0,
+                    'max_weekly_fuel_kg': 10000.0,
+                    'total_fuel_kg': 520000.0,
+                    'flight_count': 1000
+                },
+                {
+                    'airport': 'ZSPD',
+                    'airport_name': '上海浦东国际机场',
+                    'latitude': 31.14,
+                    'longitude': 121.81,
+                    'weekly_fuel_series': [10000.0] * 52,
+                    'avg_weekly_fuel_kg': 10000.0,
+                    'max_weekly_fuel_kg': 10000.0,
+                    'total_fuel_kg': 520000.0,
+                    'flight_count': 1000
+                }
+            ])
+
+        optimizer.load_data(airport_data)
+
+        # 3. 构建模型
+        optimizer.build_model()
+
+        # 4. 求解模型
+        solution = optimizer.solve()
+
+        # 5. 打印关键结果
+        if solution:
+            status = solution.get('optimization_status', 'unknown')
+            if status != 2:  # GRB.OPTIMAL = 2
+                logger.error("模型求解失败！")
+                logger.error(f"  - 求解状态码: {status}")
+            else:
+                logger.info("模型求解成功！")
+                logger.info(f"  - 求解状态: 最优解")
+                objective_value_lifecycle_total = solution.get('objective_value_lifecycle_total', 'N/A')
+                lifecycle_levelized_cost_per_kg = solution.get('lifecycle_levelized_cost_per_kg', 'N/A')
+                annual_levelized_cost_per_kg = solution.get('annual_levelized_cost_per_kg', 'N/A')
+                project_lifespan = solution.get('project_lifespan_years', 20)
+                time_window_weeks = solution.get('time_window_weeks', 4)
+                annual_production = solution.get('annual_production_kg', 0)
+                lifecycle_total_production = solution.get('lifecycle_total_production_kg', 0)
+
+                if isinstance(objective_value_lifecycle_total, (int, float)):
+                    logger.info(f"  - 项目生命周期总成本（{project_lifespan}年）: {objective_value_lifecycle_total:,.2f} 元")
+
+                    annual_cost = objective_value_lifecycle_total / project_lifespan
+                    logger.info(f"  - 年化成本: {annual_cost:,.2f} 元/年")
+
+                    if isinstance(lifecycle_levelized_cost_per_kg, (int, float)):
+                        logger.info(f"  - 生命周期平准化成本: {lifecycle_levelized_cost_per_kg:,.2f} 元/kg")
+
+                    if isinstance(annual_levelized_cost_per_kg, (int, float)):
+                        logger.info(f"  - 年化平准化成本: {annual_levelized_cost_per_kg:,.2f} 元/kg")
+
+                    if annual_production > 0:
+                        logger.info(f"  - 年产量: {annual_production:,.0f} kg")
+
+                    if lifecycle_total_production > 0:
+                        logger.info(f"  - 20年总产量: {lifecycle_total_production:,.0f} kg")
+
+                else:
+                    logger.info(f"  - 目标函数值: {objective_value_lifecycle_total}")
+
+                # 输出FT设施建设数量
+                ft_facilities_count = len(solution.get('ft_facilities', {}))
+                logger.info(f"  - 建设FT设施数量: {ft_facilities_count}")
+                logger.info(f"  - 优化时间窗口: {time_window_weeks} 周")
+
+            # 保存结果到results目录
+            results_dir = os.path.join(base_dir, "products", "supply_chain_optimization",
+                                      "natural_gas_supply_chain_optimization", "results", "ft_one_step")
+            os.makedirs(results_dir, exist_ok=True)
+            optimizer.save_results(solution, results_dir)
+            print(f"\n结果已保存到目录: {results_dir}")
+            print("="*50)
+        else:
+            logger.error("模型求解失败或未返回结果。")
+
+    except Exception as e:
+        logger.error("="*80)
+        logger.error("FT一步法模型执行过程中发生严重错误")
+        logger.error("="*80)
+        logger.error(f"错误类型: {type(e).__name__}")
+        logger.error(f"错误信息: {e}")
+        logger.error(f"错误发生时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # 如果是路径规划相关的错误，记录额外信息
+        if "路径规划" in str(e) or "GraphHopper" in str(e) or "route" in str(e).lower():
+            logger.error("这是一个路径规划相关的错误")
+            logger.error("建议检查:")
+            logger.error("  1. GraphHopper服务是否正常运行 (http://localhost:8989)")
+            logger.error("  2. OSM数据文件是否存在且完整")
+            logger.error("  3. 坐标数据是否有效")
+            logger.error("  4. 网络连接是否正常")
+
+        logger.error("完整错误堆栈信息:")
+        logger.error("-"*60, exc_info=True)
+        logger.error("="*80)
