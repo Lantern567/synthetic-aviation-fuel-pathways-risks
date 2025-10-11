@@ -5572,45 +5572,37 @@ class NaturalGasSupplyChainOptimizerOneStep:
         return distance
 
     def _analyze_supply_chain_paths(self, solution: Dict) -> Dict:
-        """分析详细的供应链路径（氢气和天然气来源）"""
+        """分析详细的供应链路径（天然气来源）"""
         logger.info("分析详细供应链路径...")
-        
+
         supply_chain_analysis = {}
-        
+
         # 分析每个MTJ厂址的供应链
         for facility_key, facility_info in solution['facility_decisions'].items():
             location = facility_info['location']
             technology = facility_info['technology']
-            
+
             # 初始化该厂址的供应链分析
             facility_analysis = {
                 'location': location,
                 'technology': technology,
                 'capacity_kg_per_hour': facility_info['capacity_kg_per_hour'],
-                'hydrogen_supply_chain': {},
                 'natural_gas_supply_chain': {},
-                'electricity_supply': {},
                 'total_production_kg': 0,
                 'supply_costs': {}
             }
-            
-            # 1. 分析氢气供应链
-            facility_analysis['hydrogen_supply_chain'] = self._analyze_hydrogen_supply_for_location(location, solution)
-            
-            # 2. 分析天然气供应链  
+
+            # 1. 分析天然气供应链
             facility_analysis['natural_gas_supply_chain'] = self._analyze_natural_gas_supply_for_location(location)
-            
-            # 3. 分析电力供应（如果有可再生能源）
-            facility_analysis['electricity_supply'] = self._analyze_electricity_supply_for_location(location)
-            
-            # 4. 计算总生产量
+
+            # 2. 计算总生产量
             total_production = 0
             for prod_key, prod_info in solution['production_schedule'].items():
                 if prod_info['location'] == location and prod_info['technology'] == technology:
                     total_production += prod_info['production_kg']
             facility_analysis['total_production_kg'] = total_production
-            
-            # 5. 分析供应成本
+
+            # 3. 分析供应成本
             facility_analysis['supply_costs'] = self._calculate_supply_costs_for_location(location, technology, total_production)
             
             supply_chain_analysis[facility_key] = facility_analysis
@@ -5704,82 +5696,22 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.debug(f"使用配置文件默认天然气价格: {config_price:.3f} 元/m³")
         return config_price
     
-    def _analyze_electricity_supply_for_location(self, location: str) -> Dict:
-        """分析指定位置的电力供应"""
-        electricity_supply = {
-            'source_type': 'none',
-            'renewable_capacity_mw': 0,
-            'hourly_generation_profile': [],
-            'annual_generation_mwh': 0,
-            'capacity_factor': 0
-        }
-        
-        location_info = self.locations[location]
-        if location_info['type'] in ['solar_plant', 'wind_farm']:
-            electricity_supply['source_type'] = location_info['type']
-            electricity_supply['renewable_capacity_mw'] = location_info.get('capacity_mw', 0)
-            
-            hourly_gen = location_info.get('hourly_generation', [])
-            if hourly_gen:
-                electricity_supply['hourly_generation_profile'] = hourly_gen[:24]  # 展示第一天
-                electricity_supply['annual_generation_mwh'] = sum(hourly_gen) * (8760 / len(hourly_gen))
-                
-                if electricity_supply['renewable_capacity_mw'] > 0:
-                    electricity_supply['capacity_factor'] = (
-                        electricity_supply['annual_generation_mwh'] / 
-                        (electricity_supply['renewable_capacity_mw'] * 8760)
-                    )
-        
-        return electricity_supply
-    
     def _calculate_supply_costs_for_location(self, location: str, technology: str, total_production_kg: float) -> Dict:
-        """计算指定位置的供应成本"""
+        """计算指定位置的供应成本 - FT一步法"""
         supply_costs = {
-            'hydrogen_cost_yuan': 0,
             'natural_gas_cost_yuan': 0,
-            'electricity_cost_yuan': 0,
             'transport_cost_yuan': 0,
             'total_levelized_supply_cost_yuan': 0,
             'unit_levelized_supply_cost_yuan_per_kg': 0
         }
-        
+
         tech_info = self.technologies[technology]
-        
-        # 氢气成本
-        if tech_info.get('hydrogen_transport_required', False):
-            h2_consumption = total_production_kg * tech_info.get('h2_consumption_ratio', 0)
-            # 找最近的氢气源并计算成本
-            min_h2_cost = float('inf')
-            for h_loc in self.hydrogen_locations:
-                distance = self._calculate_location_distance(h_loc, location)
-                transport_cost = self._calculate_hydrogen_transport_cost_by_distance(distance)
-                # 使用统一成本配置的氢气生产成本
-                h2_production_cost = float(
-                    self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
-                )
-                total_h2_cost = (h2_production_cost + transport_cost) * h2_consumption
-                min_h2_cost = min(min_h2_cost, total_h2_cost)
-            
-            if min_h2_cost != float('inf'):
-                supply_costs['hydrogen_cost_yuan'] = min_h2_cost
-        
+
         # 天然气成本
         ng_consumption = total_production_kg * tech_info.get('ng_consumption_ratio', 0)
         ng_price = self._get_natural_gas_price_yuan_per_m3(location)
         supply_costs['natural_gas_cost_yuan'] = ng_consumption * ng_price
-        
-        # 电力成本（基于可再生能源边际成本）
-        electricity_cost_yuan = 0
-        
-        # 如果工艺需要制氢，计算电解制氢的电力成本
-        if tech_info.get('hydrogen_transport_required', False):
-            h2_consumption = total_production_kg * tech_info.get('h2_consumption_ratio', 0)
-            # 电解制氢耗电量 (MWh)
-            electricity_consumption_mwh = h2_consumption * self.costs['electrolysis_power_consumption'] / 1000
-            electricity_cost_yuan = electricity_consumption_mwh * self.costs['renewable_electricity_cost_yuan_per_mwh']
-        
-        supply_costs['electricity_cost_yuan'] = electricity_cost_yuan
-        
+
         # 运输成本（到机场的平均运输成本）
         total_transport_cost = 0
         for airport in self.airports:
@@ -5788,20 +5720,18 @@ class NaturalGasSupplyChainOptimizerOneStep:
             transport_cost = self._calculate_mtj_transport_cost_by_distance(distance) * airport_demand
             total_transport_cost += transport_cost
         supply_costs['transport_cost_yuan'] = total_transport_cost
-        
+
         # 总平准化供应成本
         supply_costs['total_levelized_supply_cost_yuan'] = (
-            supply_costs['hydrogen_cost_yuan'] + 
-            supply_costs['natural_gas_cost_yuan'] + 
-            supply_costs['electricity_cost_yuan'] + 
+            supply_costs['natural_gas_cost_yuan'] +
             supply_costs['transport_cost_yuan']
         )
-        
+
         if total_production_kg > 0:
             supply_costs['unit_levelized_supply_cost_yuan_per_kg'] = (
                 supply_costs['total_levelized_supply_cost_yuan'] / total_production_kg
             )
-        
+
         return supply_costs
     
     def _create_supply_chain_summary(self, supply_chain_analysis: Dict) -> Dict:
