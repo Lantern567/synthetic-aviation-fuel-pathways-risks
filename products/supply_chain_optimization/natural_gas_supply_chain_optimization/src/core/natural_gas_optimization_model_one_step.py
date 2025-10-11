@@ -384,6 +384,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
         # 天然气基供应链专用数据
         self.ng_pipeline_sources = {}     # 天然气管段数据
         self.lng_terminals = {}           # LNG接收站数据
+        self.ft_facility_candidates = []  # FT设施候选位置（FT一步法模型专用）
         
         # LNG容量平均值（从配置文件加载，在数据加载后会更新）
         self.avg_lng_capacity_mcm_per_year = basic_params['avg_lng_capacity_mcm_per_year']
@@ -474,43 +475,42 @@ class NaturalGasSupplyChainOptimizerOneStep:
         self.clustering_results = None
         self.clustered_routes = {}
     
-    def load_data(self, renewable_data: pd.DataFrame, airport_data: pd.DataFrame):
+    def load_data(self, airport_data: pd.DataFrame):
         """
-        加载数据
-        
+        加载数据（FT一步法模型，不需要可再生能源数据）
+
         Args:
-            renewable_data: 可再生能源发电数据(小时级，包含太阳能和风能)
             airport_data: 机场需求数据(周级)
         """
-        logger.info("加载优化数据...")
-        
-        # 处理机场数据  
+        logger.info("加载优化数据（FT一步法模型）...")
+
+        # 处理机场数据
         self._process_airport_data(airport_data)
-        
+
         # 加载天然气供应链数据
         self._load_ng_pipeline_data()
         self._load_lng_terminal_data()
-        
-        # 处理可再生能源数据（在机场和LNG数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
-        self._process_renewable_data(renewable_data)
-        
+
+        # 生成FT设施候选位置（基于天然气供应可达性）
+        self._generate_ft_facility_candidates()
+
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
-        
+
         # 定义成本参数（使用平准化成本方法）
         self._define_costs()
-        
-        # 定义生产技术（使用平准化成本）
+
+        # 定义生产技术（FT一步法）
         self._define_technologies()
-        
+
         # 定义运输相关的位置映射
         self._define_transport_locations()
-        
+
         # 使用GraphHopper路径规划计算平均距离统计
         if self.use_graphhopper_routing:
             self._calculate_average_distances()
 
-        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
+        logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
     
     def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
         """
@@ -6477,7 +6477,173 @@ class NaturalGasSupplyChainOptimizerOneStep:
             cache_manager.save_filtered_data('lng_terminals', filtered_df, lng_file)
         
         return filtered_df
-    
+
+    def _generate_ft_facility_candidates(self):
+        """
+        生成FT设施候选位置（基于天然气供应可达性筛选）
+
+        候选位置来源：
+        1. 天然气管道端点（有足够产能）
+        2. LNG接收站
+        3. 机场附近50km范围内的天然气节点
+
+        Returns:
+            None (结果存储在self.ft_facility_candidates)
+        """
+        logger.info("生成FT设施候选位置...")
+
+        self.ft_facility_candidates = []
+        candidate_id = 1
+
+        # 1. 筛选天然气管道端点作为FT设施候选位置
+        logger.info("筛选天然气管道端点...")
+        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+            # 检查管道容量
+            capacity = pipeline_data.get('max_flow_m3_per_hour', 0)
+            if capacity < 1000:  # 最小容量阈值：1000 m³/h
+                continue
+
+            candidate = {
+                'location_id': f'ft_candidate_{candidate_id}',
+                'name': f'FT设施候选点{candidate_id}',
+                'source_type': 'ng_pipeline',
+                'source_id': pipeline_id,
+                'lat': pipeline_data['lat'],
+                'lon': pipeline_data['lon'],
+                'ng_supply_capacity_m3_per_hour': capacity,
+                'ng_price_yuan_per_m3': pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2),
+                'suitable_for_ft': True
+            }
+            self.ft_facility_candidates.append(candidate)
+            candidate_id += 1
+
+        logger.info(f"从天然气管道筛选了{len(self.ft_facility_candidates)}个候选位置")
+
+        # 2. 添加LNG接收站作为候选位置
+        logger.info("添加LNG接收站作为候选位置...")
+        lng_count = 0
+        for terminal_id, terminal_data in self.lng_terminals.items():
+            candidate = {
+                'location_id': f'ft_candidate_{candidate_id}',
+                'name': f'FT设施候选点{candidate_id}(LNG接收站)',
+                'source_type': 'lng_terminal',
+                'source_id': terminal_id,
+                'lat': terminal_data['lat'],
+                'lon': terminal_data['lon'],
+                'ng_supply_capacity_m3_per_hour': terminal_data.get('effective_daily_capacity_m3_per_day', 100000) / 24,
+                'ng_price_yuan_per_m3': terminal_data.get('cost_yuan_per_mcm', 200) / 10000,
+                'suitable_for_ft': True
+            }
+            self.ft_facility_candidates.append(candidate)
+            candidate_id += 1
+            lng_count += 1
+
+        logger.info(f"添加了{lng_count}个LNG接收站候选位置")
+
+        # 3. 在机场附近50km范围内查找天然气节点
+        logger.info("在机场附近50km范围内查找天然气节点...")
+        airport_nearby_count = 0
+        for airport_id, airport_data in self.airports.items():
+            airport_lat = airport_data['lat']
+            airport_lon = airport_data['lon']
+
+            # 查找该机场附近50km内的天然气管道端点
+            for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+                pipeline_lat = pipeline_data['lat']
+                pipeline_lon = pipeline_data['lon']
+
+                # 计算距离
+                distance_km = self._calculate_haversine_distance(
+                    airport_lat, airport_lon,
+                    pipeline_lat, pipeline_lon
+                )
+
+                if distance_km <= 50:  # 50km范围内
+                    # 检查是否已经添加过这个位置（避免重复）
+                    is_duplicate = any(
+                        c['source_id'] == pipeline_id
+                        for c in self.ft_facility_candidates
+                        if c['source_type'] == 'ng_pipeline'
+                    )
+
+                    if not is_duplicate:
+                        candidate = {
+                            'location_id': f'ft_candidate_{candidate_id}',
+                            'name': f'FT设施候选点{candidate_id}(机场附近)',
+                            'source_type': 'ng_pipeline',
+                            'source_id': pipeline_id,
+                            'lat': pipeline_lat,
+                            'lon': pipeline_lon,
+                            'ng_supply_capacity_m3_per_hour': pipeline_data.get('max_flow_m3_per_hour', 5000),
+                            'ng_price_yuan_per_m3': pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2),
+                            'suitable_for_ft': True,
+                            'near_airport': airport_id,
+                            'distance_to_airport_km': distance_km
+                        }
+                        self.ft_facility_candidates.append(candidate)
+                        candidate_id += 1
+                        airport_nearby_count += 1
+
+        logger.info(f"在机场附近添加了{airport_nearby_count}个候选位置")
+
+        # 去重处理（基于位置坐标）
+        deduplicated_candidates = self._deduplicate_ft_candidates(self.ft_facility_candidates)
+        self.ft_facility_candidates = deduplicated_candidates
+
+        logger.info(f"去重后，共生成{len(self.ft_facility_candidates)}个FT设施候选位置")
+
+    def _deduplicate_ft_candidates(self, candidates: List[Dict]) -> List[Dict]:
+        """
+        去除重复的候选位置（基于地理坐标）
+
+        Args:
+            candidates: 候选位置列表
+
+        Returns:
+            List[Dict]: 去重后的候选位置列表
+        """
+        if not candidates:
+            return []
+
+        unique_candidates = []
+        seen_coords = set()
+
+        for candidate in candidates:
+            # 使用坐标的元组作为唯一标识（保留2位小数）
+            coord_key = (round(candidate['lat'], 2), round(candidate['lon'], 2))
+
+            if coord_key not in seen_coords:
+                unique_candidates.append(candidate)
+                seen_coords.add(coord_key)
+
+        return unique_candidates
+
+    def _calculate_haversine_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+        """
+        使用Haversine公式计算两点间的球面距离
+
+        Args:
+            lat1, lon1: 第一个点的纬度和经度
+            lat2, lon2: 第二个点的纬度和经度
+
+        Returns:
+            float: 距离（公里）
+        """
+        from math import radians, sin, cos, sqrt, atan2
+
+        R = 6371  # 地球平均半径（公里）
+
+        lat1_rad = radians(lat1)
+        lat2_rad = radians(lat2)
+        delta_lat = radians(lat2 - lat1)
+        delta_lon = radians(lon2 - lon1)
+
+        a = sin(delta_lat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(delta_lon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        distance = R * c
+        return distance
+
     def _analyze_supply_chain_paths(self, solution: Dict) -> Dict:
         """分析详细的供应链路径（氢气和天然气来源）"""
         logger.info("分析详细供应链路径...")
