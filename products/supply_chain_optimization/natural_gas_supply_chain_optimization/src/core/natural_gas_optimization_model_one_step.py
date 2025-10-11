@@ -2433,112 +2433,104 @@ class NaturalGasSupplyChainOptimizerOneStep:
             for hour in range(self.total_hours + 1)
         )
 
-        # 6. 电解槽投资成本（一次性投资）
-        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H2/hour)")
-        self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
-            self.electrolyzer_capacity_vars[location] *
-            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
-            for location in self.locations
-            if location in self.electrolyzer_capacity_vars
+        # 6. FT反应器投资成本（一次性投资）
+        ft_reactor_capex_raw = self.config['equipment_raw_costs']['ft_reactor']['capex_raw']
+        logger.info(f"FT反应器投资成本参数: {ft_reactor_capex_raw} 元/套")
+
+        self.cost_expressions['ft_reactor_investment_cost'] = gp.quicksum(
+            self.ft_facility_vars[location_id] * ft_reactor_capex_raw
+            for location_id in self.ft_facility_vars.keys()
         )
 
-        # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
-        hydrogen_production_unit_cost = float(
-            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
-        )
-        self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
+        # 7. FT反应器运营成本（20年生命周期现值）
+        ft_reactor_opex_annual = self.config['equipment_raw_costs']['ft_reactor']['opex_raw']
+        logger.info(f"FT反应器年运营成本参数: {ft_reactor_opex_annual} 元/年")
+
+        self.cost_expressions['ft_reactor_operation_cost'] = gp.quicksum(
+            self.ft_facility_vars[location_id] * ft_reactor_opex_annual * present_value_factor
+            for location_id in self.ft_facility_vars.keys()
         )
 
-        # 8. 电解制氢电力成本（20年生命周期现值）
-        # 8. 电力成本（基于实际氢气生产的电力消耗）
-        self.cost_expressions['electricity_cost'] = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] *
-            self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
-            self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本，不乘以生命周期系数
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
-        ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
+        # 8. FT生产过程成本（20年生命周期现值）
+        # 包括催化剂成本和能源成本
+        ft_tech = self.config['technologies']['ft_direct_conversion']
+        catalyst_cost_per_kg_saf = ft_tech.get('catalyst_cost_yuan_per_kg_saf', 0.06)
+        energy_consumption_kwh_per_kg = ft_tech.get('energy_consumption_kwh_per_kg_saf', 5.0)
+        energy_cost_per_kwh = self.config['facility_lcoe_parameters'].get('energy_cost_yuan_per_kwh', 0.6)
 
-        # 9. 氢气储存投资 + 20年运营成本现值
-        max_h2_storage = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
-        )
-        # 优先使用统一成本配置中的氢气储存设备成本
-        h2_storage_unit_cost = float(
-            self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
-            storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
-        )
-        self.cost_expressions['h2_storage_investment'] = max_h2_storage * h2_storage_unit_cost
-        self.cost_expressions['h2_storage_operation'] = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
-        )
+        # FT生产成本 = 催化剂成本 + 能源成本
+        ft_production_unit_cost = catalyst_cost_per_kg_saf + (energy_consumption_kwh_per_kg * energy_cost_per_kwh)
+        logger.info(f"FT生产单位成本: {ft_production_unit_cost:.2f} 元/kg SAF")
 
-        # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
-        self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化氢气运输成本中
-        self.cost_expressions['hydrogen_transport_operation'] = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
-            self._calculate_hydrogen_transport_cost_by_distance(
-                self._calculate_location_distance(h_loc, mtj_loc)
-            ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
-            for h_loc in self.hydrogen_locations
-            for mtj_loc in sum(self.mtj_locations.values(), [])
-            if (h_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
+        # 注意：这里需要基于实际的SAF产量变量来计算
+        # 由于FT一步法模型结构，暂时使用FT产能作为基准
+        # TODO: 需要根据实际的生产变量完善此成本项
+        self.cost_expressions['ft_production_cost'] = gp.LinExpr(0)  # 暂时设为0，待完善
 
-        # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
-        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-            # 管道运输成本（基于图像拟合的成本函数，已包含所有投资和运营成本）
-            self.cost_expressions['hydrogen_pipeline_operation'] = gp.quicksum(
-                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] *
-                self._calculate_hydrogen_pipeline_cost_by_distance(
-                    self._get_hydrogen_transport_distance_with_clustering(h2_loc, mtj_loc)
-                ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
-                for h2_loc in self.hydrogen_locations
-                for mtj_loc in sum(self.mtj_locations.values(), [])
-                if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-            )
-        else:
-            self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
+        # 9. 天然气运输成本（20年运营成本现值）
+        # 从NG供应源（管道端点/LNG接收站）到FT设施的天然气运输
+        self.cost_expressions['ng_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化成本中
 
-        # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
-        self.cost_expressions['ng_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化天然气运输成本中
-        # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
-        # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
         ng_transport_operation_expr = gp.LinExpr()
 
-        # 为每条路线计算基于实际日输送量的运输成本
-        # 1. 天然气管道到MTJ工厂的运输成本
-        for ng_loc in self.ng_locations:
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
-                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+        # 遍历所有天然气运输变量
+        for (source_id, ft_location_id, day), transport_var in self.ng_transport_vars.items():
+            # 计算运输距离
+            # 需要根据source_id找到对应的坐标
+            source_coord = None
 
-                total_days_local = self.total_hours // 24
-                for day in range(total_days_local):
-                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
-                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+            # 从管道源或LNG终端中查找坐标
+            if source_id in self.ng_pipeline_sources:
+                source_data = self.ng_pipeline_sources[source_id]
+                source_coord = (source_data['lat'], source_data['lon'])
+            elif source_id in self.lng_terminals:
+                terminal_data = self.lng_terminals[source_id]
+                source_coord = (terminal_data['lat'], terminal_data['lon'])
 
-                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
-                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
-                        ng_transport_operation_expr += linear_cost * lifecycle_operation_factor
+            # 从FT候选位置中查找目标坐标
+            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+
+            if source_coord and ft_candidate:
+                ft_coord = (ft_candidate['lat'], ft_candidate['lon'])
+
+                # 使用Haversine距离计算（简化版，实际应使用GraphHopper）
+                distance_km = self._calculate_haversine_distance(
+                    source_coord[0], source_coord[1],
+                    ft_coord[0], ft_coord[1]
+                )
+
+                # 使用基于距离的天然气运输成本公式
+                ng_unit_cost = self._calculate_ng_transport_cost_by_distance(distance_km)
+
+                # 累加运输成本
+                ng_transport_operation_expr += transport_var * ng_unit_cost * lifecycle_operation_factor
 
         self.cost_expressions['ng_transport_operation'] = ng_transport_operation_expr
 
+        # 10. SAF运输成本（从FT设施到机场）
+        self.cost_expressions['saf_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化成本中
 
-        # 天然气日处理能力约束已移除 - 允许无限制处理
-        logger.info("天然气日处理能力约束已移除，允许无限制处理")
+        saf_transport_operation_expr = gp.LinExpr()
+
+        for (ft_location_id, airport, week), transport_var in self.saf_transport_vars.items():
+            # 查找FT设施和机场坐标
+            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+            airport_data = self.airports.get(airport)
+
+            if ft_candidate and airport_data:
+                # 计算距离
+                distance_km = self._calculate_haversine_distance(
+                    ft_candidate['lat'], ft_candidate['lon'],
+                    airport_data['lat'], airport_data['lon']
+                )
+
+                # 使用MTJ运输成本公式（SAF运输类似）
+                saf_unit_cost = self._calculate_mtj_transport_cost_by_distance(distance_km)
+
+                # 累加运输成本
+                saf_transport_operation_expr += transport_var * saf_unit_cost * lifecycle_operation_factor
+
+        self.cost_expressions['saf_transport_operation'] = saf_transport_operation_expr
 
         # 11. 原料成本（20年生命周期现值）
         # 获取天然气价格 (元/m³)
@@ -2581,16 +2573,15 @@ class NaturalGasSupplyChainOptimizerOneStep:
             for location in self.locations
         )
 
-        # 创建聚合成本表达式
+        # 创建聚合成本表达式（FT一步法模型）
         # 投资成本聚合
         self.cost_aggregates['total_investment_cost'] = (
             self.cost_expressions['facility_investment_cost'] +
             self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
-            self.cost_expressions['electrolyzer_investment_cost'] +
-            self.cost_expressions['h2_storage_investment'] +
-            self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['ng_transport_investment']
+            self.cost_expressions['ft_reactor_investment_cost'] +
+            self.cost_expressions['ng_transport_investment'] +
+            self.cost_expressions['saf_transport_investment']
         )
 
         # 运营成本聚合
@@ -2599,12 +2590,10 @@ class NaturalGasSupplyChainOptimizerOneStep:
             self.cost_expressions['production_cost'] +
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
-            self.cost_expressions['hydrogen_production_cost'] +
-            self.cost_expressions['electricity_cost'] +
-            self.cost_expressions['h2_storage_operation'] +
-            self.cost_expressions['hydrogen_transport_operation'] +
-            self.cost_expressions['hydrogen_pipeline_operation'] +
+            self.cost_expressions['ft_reactor_operation_cost'] +
+            self.cost_expressions['ft_production_cost'] +
             self.cost_expressions['ng_transport_operation'] +
+            self.cost_expressions['saf_transport_operation'] +
             self.cost_expressions['natural_gas_cost'] +
             self.cost_expressions['final_inventory_cost']
         )
@@ -2615,18 +2604,18 @@ class NaturalGasSupplyChainOptimizerOneStep:
             self.cost_aggregates['total_operation_cost']
         )
 
-        logger.info("统一成本表达式创建完成")
+        logger.info("FT一步法模型统一成本表达式创建完成")
         logger.info(f"项目期限: {project_lifespan}年，时间窗口: {self.time_horizon_weeks}周")
         logger.info(f"运营成本年化系数: {operation_expansion_factor:.1f}")
         logger.info(f"20年运营成本现值系数: {present_value_factor:.2f}")
         logger.info(f"生命周期运营成本系数: {lifecycle_operation_factor:.2f}")
         logger.info("所有运营成本已扩展至20年生命周期现值")
 
-        # 关键参数验证
-        logger.info("\n【关键参数验证】")
-        logger.info(f"MTJ变动运营成本参数: {variable_opex_per_kg} 元/kg")
-        logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
-        logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
+        # 关键参数验证（FT一步法模型）
+        logger.info("\n【FT一步法模型关键参数验证】")
+        logger.info(f"FT反应器投资成本: {ft_reactor_capex_raw} 元/套")
+        logger.info(f"FT反应器运营成本: {ft_reactor_opex_annual} 元/年")
+        logger.info(f"FT生产单位成本: {ft_production_unit_cost:.2f} 元/kg SAF")
 
         # 创建需求满足比例表达式
         self._create_demand_fulfillment_expression()
