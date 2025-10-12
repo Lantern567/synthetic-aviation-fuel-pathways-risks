@@ -2926,61 +2926,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
                         name=f"capacity_location_compat_{location}_{tech}"
                     )
 
-    def _add_daily_hydrogen_mtj_constraints(self):
-        """添加氢气每日产量限制下一日MTJ每日产量约束"""
-        logger.info("添加氢气每日产量限制MTJ每日产量约束...")
-        
-        hours_per_day = 24  # 每日24小时
-        total_days = self.total_hours // hours_per_day
-        
-        for location in self.locations:
-            location_type = self.locations[location]['type']
-            
-            # 对于有氢气生产能力的位置（太阳能电站和风电场）
-            if location_type in ['solar_plant', 'wind_farm']:
-                for day in range(total_days - 1):  # 不包括最后一日，因为没有下一日
-                    # 计算当日氢气总产量（24小时累计）
-                    current_day_start = day * hours_per_day
-                    current_day_end = (day + 1) * hours_per_day
-                    
-                    daily_h2_production = gp.quicksum(
-                        self.hydrogen_production_vars[(location, hour)]
-                        for hour in range(current_day_start, current_day_end)
-                        if (location, hour) in self.hydrogen_production_vars
-                    )
-                    
-                    # 计算下一日MTJ总产量（24小时累计）
-                    next_day_start = (day + 1) * hours_per_day
-                    next_day_end = (day + 2) * hours_per_day
-                    
-                    next_day_mtj_production = gp.quicksum(
-                        self.production_vars[(location, tech, hour)]
-                        for tech in self.technologies
-                        for hour in range(next_day_start, next_day_end)
-                        if (location, tech, hour) in self.production_vars and
-                           self.technologies[tech].get('h2_consumption_ratio', 0) > 0
-                    )
-                    
-                    # 计算下一日MTJ生产所需的氢气需求
-                    next_day_h2_demand = gp.quicksum(
-                        self.production_vars[(location, tech, hour)] * 
-                        self.technologies[tech]['h2_consumption_ratio']
-                        for tech in self.technologies
-                        for hour in range(next_day_start, next_day_end)
-                        if (location, tech, hour) in self.production_vars and
-                           self.technologies[tech].get('h2_consumption_ratio', 0) > 0
-                    )
-                    
-                    # 约束：当日氢气产量必须能够满足下一日MTJ生产的氢气需求
-                    if daily_h2_production.size() > 0 and next_day_h2_demand.size() > 0:
-                        self.model.addConstr(
-                            daily_h2_production >= next_day_h2_demand,
-                            name=f"daily_h2_limits_next_day_mtj_{location}_day{day}"
-                        )
-                        
-
-        logger.info("氢气每日产量限制MTJ每日产量约束添加完成")
-
     def _add_natural_gas_transport_constraints(self):
         """添加天然气运输约束：天然气从管道通过罐车运输到非LNG接收站的MTJ工厂"""
         logger.info("添加天然气罐车运输约束...")
