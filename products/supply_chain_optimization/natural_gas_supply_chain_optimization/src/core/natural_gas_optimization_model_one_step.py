@@ -1274,7 +1274,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     'methanol_intermediate_ratio': tech_info['methanol_intermediate_ratio'],
                     'suitable_locations': tech_info['suitable_locations'],
                     'transport_mode': tech_info['transport_mode'],
-                    'hydrogen_transport_required': tech_info['hydrogen_transport_required'],
                     'technology_type': tech_info['technology_type'],
                     'complexity_factor': complexity_factors[tech_key]
                 }
@@ -1529,14 +1528,12 @@ class NaturalGasSupplyChainOptimizerOneStep:
             'discount_rate': economic_config['discount_rate'],
             'project_lifespan': economic_config['project_lifespan'],
             'mtj_plant_lifetime': economic_config['mtj_plant_lifetime'],
-            'electrolyzer_lifetime': economic_config['electrolyzer_lifetime'],
             'pipeline_lifetime': economic_config['pipeline_lifetime'],
             'storage_lifetime': economic_config['storage_lifetime'],
             'transport_vehicle_lifetime': economic_config['transport_vehicle_lifetime'],
 
             # 容量因子 (设备年利用率)
             'mtj_plant_capacity_factor': capacity_factors['mtj_plant_capacity_factor'],
-            'electrolyzer_capacity_factor': capacity_factors['electrolyzer_capacity_factor'],
             'pipeline_capacity_factor': capacity_factors['pipeline_capacity_factor'],
             'storage_capacity_factor': capacity_factors['storage_capacity_factor'],
             'transport_capacity_factor': capacity_factors['transport_capacity_factor'],
@@ -2332,13 +2329,11 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info("验证碳排放参数完整性...")
         required_params = {
             'raw_materials': ['ng_extraction_intensity', 'ng_pipeline_transport'],
-            'facility_construction': ['saf_facility_embodied', 'saf_facility_lifetime',
-                                    'electrolyzer_embodied', 'electrolyzer_lifetime'],
+            'facility_construction': ['saf_facility_embodied', 'saf_facility_lifetime'],
             'production_process': ['ng_to_methanol_rate', 'ng_process_emission',
-                                 'mtj_process_energy', 'renewable_electricity',
-                                 'electrolysis_energy', 'green_h2_intensity'],
-            'storage_handling': ['mtj_storage_energy', 'h2_storage_energy'],
-            'transportation': ['h2_truck_intensity', 'mtj_truck_intensity', 'ng_truck_intensity']
+                                 'mtj_process_energy', 'renewable_electricity'],
+            'storage_handling': ['mtj_storage_energy'],
+            'transportation': ['mtj_truck_intensity', 'ng_truck_intensity']
         }
 
         missing_params = []
