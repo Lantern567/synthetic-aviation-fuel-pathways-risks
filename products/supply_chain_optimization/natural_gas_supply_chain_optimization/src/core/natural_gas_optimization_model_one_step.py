@@ -53,46 +53,6 @@ except ImportError:
     except ImportError as e:
         raise ImportError(f"GraphHopper路径规划模块不可用，必须安装相关依赖: {e}. 请运行: pip install requests")
 
-try:
-    try:
-        from ..hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-    except ImportError:
-        from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-except ImportError:
-    # 确保src目录在路径中
-    import sys
-    current_file = os.path.abspath(__file__)
-    src_dir = os.path.dirname(os.path.dirname(current_file))
-    if src_dir not in sys.path:
-        sys.path.insert(0, src_dir)
-    try:
-        from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-    except ImportError as e:
-        # logger还未定义，暂时使用print
-        print(f"警告：氢气管道距离计算器模块不可用: {e}")
-        HydrogenPipelineDistanceCalculator = None
-        ClusteredPipelineRoute = None
-
-try:
-    try:
-        from ..hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
-    except ImportError:
-        from hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
-except ImportError:
-    # 确保src目录在路径中
-    import sys
-    current_file = os.path.abspath(__file__)
-    src_dir = os.path.dirname(os.path.dirname(current_file))
-    if src_dir not in sys.path:
-        sys.path.insert(0, src_dir)
-    try:
-        from hydrogen.hydrogen_clustering_optimizer import HydrogenClusteringOptimizer, ClusteringResult
-    except ImportError as e:
-        # logger还未定义，暂时使用print
-        print(f"警告：氢气聚类优化器模块不可用: {e}")
-        HydrogenClusteringOptimizer = None
-        ClusteringResult = None
-
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -1229,67 +1189,15 @@ class NaturalGasSupplyChainOptimizerOneStep:
         
         # 所有可用于建设MTJ工厂的位置（现在统一从self.locations中获取）
         # 每种技术的适用位置由技术定义中的suitable_locations决定，不需要单独的mtj_locations映射
-        
+
         logger.info(f"定义了运输位置映射:")
-        logger.info(f"  氢气生产位置: {len(self.hydrogen_locations)} 个")
         logger.info(f"  机场位置: {len(self.airport_locations)} 个")
         logger.info(f"  LNG接收站位置: {len(self.lng_terminal_locations)} 个")
         logger.info(f"  天然气管道位置: {len(self.ng_locations)} 个")
         logger.info(f"  总位置数: {len(self.locations)} 个")
 
-        # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
+        # 构建MTJ工厂位置映射
         self._build_mtj_locations()
-        self._initialize_hydrogen_clustering()
-
-    def _initialize_hydrogen_clustering(self):
-        if not self.config.get('basic_parameters', {}).get('use_hydrogen_pipeline_distance', False):
-            logger.info("氢气管道距离计算未启用，跳过聚类初始化")
-            return
-
-        if HydrogenPipelineDistanceCalculator is None or HydrogenClusteringOptimizer is None:
-            logger.warning("氢气管道距离计算器或聚类优化器模块不可用，跳过聚类初始化")
-            return
-
-        try:
-            project_root = get_project_base_dir()
-            gis_data_path = os.path.join(project_root, "products", "gis_energy_mapping",
-                                        "gis_data_scraper", "scraped_gis_data")
-
-            self.hydrogen_pipeline_calculator = HydrogenPipelineDistanceCalculator(gis_data_path)
-            self.hydrogen_pipeline_calculator.load_pipeline_data()
-            logger.info("氢气管道距离计算器初始化完成")
-
-            self.hydrogen_clustering_optimizer = HydrogenClusteringOptimizer(
-                self.config,
-                pipeline_distance_calculator=self.hydrogen_pipeline_calculator
-            )
-            logger.info("氢气聚类优化器初始化完成")
-
-            hydrogen_location_dict = {
-                loc: self.locations[loc] for loc in self.hydrogen_locations
-            }
-
-            if len(hydrogen_location_dict) > 0:
-                self.clustering_results = self.hydrogen_clustering_optimizer.cluster_hydrogen_plants(
-                    hydrogen_location_dict
-                )
-
-                for cluster in self.clustering_results.clusters:
-                    cluster_members = list(zip(cluster.member_locations, cluster.member_coords))
-                    for mtj_loc in sum(self.mtj_locations.values(), []):
-                        mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
-                        route = self.hydrogen_pipeline_calculator.calculate_clustered_pipeline_route(
-                            cluster.cluster_id,
-                            cluster_members,
-                            cluster.center_coord,
-                            mtj_coords
-                        )
-                        self.clustered_routes[(cluster.cluster_id, mtj_loc)] = route
-
-        except Exception as e:
-            logger.error(f"初始化氢气聚类失败: {e}")
-            import traceback
-            traceback.print_exc()
 
     def _get_location_coordinates(self, location: str) -> tuple:
         """
