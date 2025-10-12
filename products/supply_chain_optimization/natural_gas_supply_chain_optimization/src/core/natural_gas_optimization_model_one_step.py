@@ -2568,9 +2568,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info("时间尺度一致性验证:")
         logger.info("  原料获取: 按天计算(ng_transport_vars)")
         logger.info("  设施建设: 年产能摊销到优化时段")
-        logger.info("  生产过程: 按小时计算(production_vars, hydrogen_production_vars)")
-        logger.info("  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)")
-        logger.info("  运输配送: MTJ按周, NG按天, H2按总量")
+        logger.info("  生产过程: 按小时计算(production_vars) - FT一步法")
+        logger.info("  储存处理: 按小时计算(storage_vars) - FT一步法")
+        logger.info("  运输配送: MTJ按周, NG按天")
         logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
         logger.info("="*60)
 
@@ -2707,32 +2707,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 elif pd.isna(value):
                     # 对于标量值，直接检查
                     raise ValueError(f"位置数据包含NaN值: {location}.{key} = {value}")
-            
+
             for hour in range(self.total_hours):
-                # 1. 为所有位置添加氢气供应约束：MTJ生产所需氢气不能超过可用氢气
-                h2_demand = gp.quicksum(
-                    self.production_vars[(location, tech, hour)] *
-                    self.technologies[tech]['h2_consumption_ratio']
-                    for tech in self.technologies
-                    if (location, tech, hour) in self.production_vars and
-                       self.technologies[tech]['h2_consumption_ratio'] > 0
-                )
-
-                if h2_demand.size() > 0:  # 只有当确实有氢气需求时才添加约束
-                    if location_type in ['solar_plant', 'wind_farm']:
-                        # 可再生能源站：氢气需求不能超过氢气库存
-                        if (location, hour) in self.hydrogen_storage_vars:
-                            self.model.addConstr(
-                                h2_demand <= self.hydrogen_storage_vars[(location, hour)],
-                                name=f"h2_supply_{location}_{hour}"
-                            )
-                    else:
-                        # 其他位置（机场、LNG终端）：氢气需求必须通过运输满足
-                        # 这里先添加一个强制约束，确保模型必须考虑氢气供应
-                        # 实际的氢气运输约束在 _add_hydrogen_transport_constraints 中处理
-                        logger.debug(f"位置 {location} 在第{hour}小时有氢气需求，需要运输供应")
-
-                # FT一步法不需要可再生能源约束
+                # FT一步法：直接从天然气生产SAF，无需氢气供应约束
 
                 if location_type in ['lng_terminal', 'airport']:
                     # 3. 天然气管道流量限制约束（简化版，移除维护停机）
@@ -3322,44 +3299,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
         self.distance_cache[reverse_cache_key] = distance_km
         
         return max(distance_km, 5)  # 最小距离5km（避免除零）
-
-    def _get_hydrogen_transport_distance_with_clustering(self, h2_loc: str, mtj_loc: str) -> float:
-        if not hasattr(self, 'clustering_results') or self.clustering_results is None:
-            return self._calculate_location_distance(h2_loc, mtj_loc)
-
-        for cluster in self.clustering_results.clusters:
-            if h2_loc in cluster.member_locations:
-                route_key = (cluster.cluster_id, mtj_loc)
-                if route_key in self.clustered_routes:
-                    route = self.clustered_routes[route_key]
-                    member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
-                    return max(member_total_distance, 5)
-                else:
-                    cluster_members = list(zip(cluster.member_locations, cluster.member_coords))
-                    mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
-                    route = self.hydrogen_pipeline_calculator.calculate_clustered_pipeline_route(
-                        cluster.cluster_id,
-                        cluster_members,
-                        cluster.center_coord,
-                        mtj_coords
-                    )
-                    self.clustered_routes[route_key] = route
-                    member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
-                    return max(member_total_distance, 5)
-
-        for noise_loc, noise_coord in self.clustering_results.noise_points:
-            if h2_loc == noise_loc:
-                mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
-                try:
-                    route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
-                        noise_coord[0], noise_coord[1],
-                        mtj_coords[0], mtj_coords[1]
-                    )
-                    return max(route.total_distance_km, 5)
-                except Exception as e:
-                    return self._calculate_location_distance(h2_loc, mtj_loc)
-
-        return self._calculate_location_distance(h2_loc, mtj_loc)
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
@@ -4472,30 +4411,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
             transport_df.to_csv(transport_path, index=False, encoding='utf-8-sig')
             print(f"MTJ运输计划保存到: {transport_path}")
 
-        # 保存氢气运输计划
-        h2_transport_data = []
-        for transport_id, info in solution.get("hydrogen_transport", {}).items():
-            h2_transport_data.append({
-                "运输ID": transport_id,
-                "起点": info.get("from_location", ""),
-                "终点": info.get("to_location", ""),
-                "天": info.get("day", 0),
-                "氢气运输量(kg)": info.get("transport_kg_h2", 0),
-                "距离(km)": info.get("distance_km", 0),
-                "起点纬度": info.get("from_latitude", 0),
-                "起点经度": info.get("from_longitude", 0),
-                "终点纬度": info.get("to_latitude", 0),
-                "终点经度": info.get("to_longitude", 0),
-                "运输类型": info.get("transport_type", "H2"),
-                "运输方式": info.get("transport_mode", "truck")
-            })
-        
-        if h2_transport_data:
-            h2_transport_df = pd.DataFrame(h2_transport_data)
-            h2_transport_path = os.path.join(output_dir, f"hydrogen_transport_plan_{timestamp}.csv")
-            h2_transport_df.to_csv(h2_transport_path, index=False, encoding='utf-8-sig')
-            print(f"氢气运输计划保存到: {h2_transport_path}")
-
         # 保存天然气运输计划
         ng_transport_data = []
         for transport_id, info in solution.get("ng_transport", {}).items():
@@ -4561,37 +4476,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 "周运输量(kg)": info.get("transport_kg", 0),
                 "时间单位": "周"
             })
-        
-        # 添加氢气运输路径
-        for transport_id, info in solution.get("hydrogen_transport", {}).items():
-            # 序列化路径坐标为JSON字符串
-            route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
 
-            cluster_info = ""
-            if info.get("cluster_id") is not None:
-                cluster_center = info.get("cluster_center", (0, 0))
-                cluster_info = f"聚类{info.get('cluster_id')}_(中心:{cluster_center[0]:.4f},{cluster_center[1]:.4f})"
-
-            all_transport_summary.append({
-                "路径ID": transport_id,
-                "起点": info.get("from_location", ""),
-                "终点": info.get("to_location", ""),
-                "起点类型": "氢气生产站",
-                "终点类型": "MTJ工厂",
-                "距离(km)": info.get("distance_km", 0),
-                "聚类信息": cluster_info,
-                "Layer1距离(km)": info.get("layer1_distance_km", 0),
-                "Layer2距离(km)": info.get("layer2_distance_km", 0),
-                "Layer3距离(km)": info.get("layer3_distance_km", 0),
-                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
-                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
-                "路径坐标": route_coords_str,
-                "货物类型": "氢气",
-                "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(kg)": info.get("transport_kg_h2", 0),
-                "时间单位": "天"
-            })
-        
         # 添加天然气运输路径
         for transport_id, info in solution.get("ng_transport", {}).items():
             all_transport_summary.append({
