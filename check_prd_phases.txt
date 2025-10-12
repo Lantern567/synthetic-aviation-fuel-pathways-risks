@@ -1,0 +1,53 @@
+# PRD Phase检查清单
+
+## Phase 0: 准备阶段
+- 类名: NaturalGasSupplyChainOptimizerOneStep
+- 配置文件: NaturalGasSupplyChainOptimizer_config_one_step.yaml
+- Git分支: feature/ft-one-step-model
+
+## Phase 1: 配置文件修改
+- 删除可再生能源配置
+- 删除电解槽配置
+- 删除氢气运输配置
+- 添加FT工艺配置
+- 添加FT LCOE参数
+- 更新碳排放参数
+
+## Phase 2: 数据加载模块修改
+- 删除_load_renewable_energy_data()
+- 删除_load_electrolyzer_data()
+- 删除_load_hydrogen_transport_network()
+
+## Phase 3: 决策变量修改
+- 删除renewable_plant_binary变量
+- 删除electrolyzer_capacity变量
+- 删除hydrogen_production变量
+- 删除hydrogen_transport变量
+- 删除hydrogen_inventory变量
+- 添加ft_capacity决策变量
+- 添加ft_facility_binary变量
+
+## Phase 4: 约束条件修改
+- 删除可再生能源约束
+- 删除氢气生产约束
+- 删除氢气运输约束
+- 删除氢气平衡约束
+- 添加FT容量约束
+- 添加FT工艺约束
+
+## Phase 5: 目标函数修改
+- 删除可再生能源成本
+- 删除电解槽成本
+- 删除氢气运输成本
+- 添加FT反应器成本
+- 添加FT工艺成本
+
+## Phase 6: 结果提取修改
+- 删除氢气相关结果提取
+- 添加FT设施结果提取
+- 添加SAF生产结果提取
+
+## Phase 7: 测试验证
+- 单元测试
+- 集成测试
+- 性能测试
