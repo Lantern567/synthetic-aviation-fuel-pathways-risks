@@ -3797,7 +3797,16 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
     def _calculate_unit_costs_from_optimization(self, solution: Dict) -> Dict:
         """
-        直接使用优化模型的现有结果，基于目标函数值计算单位成本
+        FT一步法单位成本计算 - 基于配置参数和优化模型结果
+
+        FT一步法工艺：天然气 → SAF (通过费托合成直接转化，无需氢气)
+
+        成本组成：
+        1. FT反应器设备成本：固定CAPEX + 可变CAPEX（基于容量）
+        2. 天然气原料成本：基于ng_consumption_ratio
+        3. FT催化剂成本：钴基催化剂
+        4. 能源消耗成本：FT反应器电力消耗
+        5. 运营维护成本：固定OPEX + 可变OPEX
 
         Args:
             solution: 优化求解结果
@@ -3806,117 +3815,158 @@ class NaturalGasSupplyChainOptimizerOneStep:
             Dict: 单位成本分析结果
         """
         try:
-            # 基于配置参数计算理论单位成本（不依赖cost_breakdown）
+            logger.info("基于配置参数计算FT一步法单位成本...")
 
-            # 氢气理论成本（基于配置参数）
-            electricity_cost_yuan_per_mwh = self.costs.get('renewable_electricity_cost_yuan_per_mwh', 500)
-            electrolysis_power_kwh_per_kg = self.costs.get('electrolysis_power_consumption', 45)
-            electrolysis_efficiency = self.costs.get('electrolysis_efficiency', 0.8)
+            # 1. 读取配置参数
+            # FT工艺参数
+            ft_tech_config = self.config.get('technologies', {}).get('ft_direct_conversion', {})
+            ng_consumption_ratio = ft_tech_config.get('ng_consumption_ratio', 2.0)  # m³天然气/kg SAF
+            ft_efficiency = ft_tech_config.get('efficiency', 0.55)  # FT转化效率 55%
+            ft_energy_kwh_per_kg = ft_tech_config.get('ft_energy_consumption_kwh_per_kg', 2.5)  # kWh/kg SAF
+            saf_fraction = ft_tech_config.get('saf_fraction_in_products', 0.65)  # SAF在产物中占比 65%
 
-            # 氢气电力成本（元/kg H2）
-            h2_electricity_cost_per_kg = (electrolysis_power_kwh_per_kg / 1000) * electricity_cost_yuan_per_mwh / electrolysis_efficiency
+            # FT设施成本参数
+            ft_lcoe_config = self.config.get('ft_facility_lcoe_parameters', {})
+            fixed_capex = ft_lcoe_config.get('fixed_capex', 50000000)  # 50M元固定投资
+            variable_capex_per_capacity = ft_lcoe_config.get('variable_capex_per_capacity', 2500)  # 元/kg产能
+            fixed_opex_annual = ft_lcoe_config.get('fixed_opex_annual', 10000000)  # 10M元/年
+            variable_opex_per_kg = ft_lcoe_config.get('variable_opex_per_kg', 0.30)  # 元/kg产品
+            catalyst_cost_per_kg_saf = ft_lcoe_config.get('catalyst_cost_per_kg_saf', 0.06)  # 元/kg SAF
+            facility_lifetime = ft_lcoe_config.get('facility_lifetime_years', 25)  # 25年
 
-            # 电解槽设备摊销成本（简化计算）
-            electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-            discount_rate = self.economic_params['discount_rate']
-            project_lifespan = self.economic_params['project_lifespan']
+            # 天然气价格
+            ng_price_yuan_per_m3 = self.costs.get('natural_gas_price_yuan_per_m3', 4.2)  # 元/m³
+
+            # 电力价格
+            electricity_price_yuan_per_kwh = self.config.get('electricity_price_yuan_per_kwh', 0.5)  # 元/kWh
+
+            # 经济参数
+            discount_rate = self.economic_params.get('discount_rate', 0.08)
+            project_lifespan = self.economic_params.get('project_lifespan', 25)
+
+            # 计算年金因子
             if discount_rate == 0:
                 annuity_factor = 1.0 / project_lifespan
             else:
                 annuity_factor = discount_rate / (1 - (1 + discount_rate)**(-project_lifespan))
 
-            # 假设电解槽年利用小时数
-            annual_utilization_hours = 8760 * 0.8  # 80%利用率
-            h2_equipment_cost_per_kg = (electrolyzer_capex_raw * annuity_factor) / (annual_utilization_hours * electrolysis_power_kwh_per_kg / 1000)
+            # 2. 计算FT反应器单位设备成本
+            # 假设年利用小时数
+            annual_utilization_hours = 8760 * 0.85  # 85%利用率（FT工艺较稳定）
+            annual_capacity_kg = annual_utilization_hours  # 假设1 kg/h的产能
 
-            # 氢气总成本
-            h2_total_cost_per_kg = h2_electricity_cost_per_kg + h2_equipment_cost_per_kg
+            # 固定CAPEX摊销（元/kg SAF）
+            ft_fixed_capex_per_kg = (fixed_capex * annuity_factor) / (annual_capacity_kg * project_lifespan)
 
-            # MTJ理论成本（基于配置参数）
-            mtj_variable_opex_per_kg = 0.3  # 元/kg，配置文件中的MTJ变动运营成本
-            hydrogen_ratio = 0.12  # kg H2 per kg MTJ（化学计量比）
+            # 可变CAPEX摊销（元/kg SAF，基于1 kg/h产能）
+            ft_variable_capex_per_kg = (variable_capex_per_capacity * annuity_factor) / annual_utilization_hours
 
-            # MTJ单位成本组成
-            mtj_hydrogen_raw_material_cost_per_kg = h2_total_cost_per_kg * hydrogen_ratio
-            mtj_co2_raw_material_cost_per_kg = 0  # 假设CO2成本为0
-            mtj_equipment_cost_per_kg = 0.3  # 简化设备摊销成本
-            mtj_operation_cost_per_kg = mtj_variable_opex_per_kg
-            mtj_total_cost_per_kg = (mtj_hydrogen_raw_material_cost_per_kg + mtj_co2_raw_material_cost_per_kg +
-                                   mtj_equipment_cost_per_kg + mtj_operation_cost_per_kg)
+            # FT反应器总设备成本
+            ft_equipment_cost_per_kg = ft_fixed_capex_per_kg + ft_variable_capex_per_kg
 
-            # 运输和储存成本（简化）
-            h2_transport_cost_per_kg_km = 0.05
-            mtj_transport_cost_per_kg_km = 0.03
-            h2_storage_cost_per_kg = 0.016
-            mtj_storage_cost_per_kg = 0
+            # 3. 计算天然气原料成本（元/kg SAF）
+            ng_raw_material_cost_per_kg = ng_consumption_ratio * ng_price_yuan_per_m3
 
-            # 效率参数
-            electrolysis_theoretical_efficiency = 0.8
-            electrolysis_actual_efficiency = electrolysis_efficiency
-            mtj_conversion_efficiency = 0.85
-            overall_efficiency = electrolysis_actual_efficiency * mtj_conversion_efficiency
-            power_consumption_mwh_per_kg_mtj = (electrolysis_power_kwh_per_kg / 1000) * hydrogen_ratio / overall_efficiency
+            # 4. 计算FT催化剂成本（元/kg SAF）
+            # 已经是配置参数中的单位成本
+            ft_catalyst_cost_per_kg = catalyst_cost_per_kg_saf
 
-            # 成本占比计算
-            h_total = h2_total_cost_per_kg
-            hydrogen_electricity_ratio = h2_electricity_cost_per_kg / h_total if h_total > 0 else 0
-            hydrogen_equipment_ratio = h2_equipment_cost_per_kg / h_total if h_total > 0 else 0
-            hydrogen_operation_ratio = 0
+            # 5. 计算能源消耗成本（元/kg SAF）
+            ft_energy_cost_per_kg = ft_energy_kwh_per_kg * electricity_price_yuan_per_kwh
 
-            m_total = mtj_total_cost_per_kg
-            mtj_hydrogen_ratio = mtj_hydrogen_raw_material_cost_per_kg / m_total if m_total > 0 else 0
-            mtj_co2_ratio = mtj_co2_raw_material_cost_per_kg / m_total if m_total > 0 else 0
-            
-            m_total = mtj_total_cost_per_kg
-            mtj_hydrogen_ratio = mtj_hydrogen_raw_material_cost_per_kg / m_total if m_total > 0 else 0
-            mtj_equipment_ratio = mtj_equipment_cost_per_kg / m_total if m_total > 0 else 0
-            mtj_operation_ratio = mtj_operation_cost_per_kg / m_total if m_total > 0 else 0
-            
+            # 6. 计算运营维护成本（元/kg SAF）
+            # 固定OPEX摊销
+            ft_fixed_opex_per_kg = fixed_opex_annual / (annual_capacity_kg * project_lifespan)
+            # 可变OPEX
+            ft_variable_opex_per_kg = variable_opex_per_kg
+            # 总运营成本
+            ft_operation_cost_per_kg = ft_fixed_opex_per_kg + ft_variable_opex_per_kg
+
+            # 7. 计算SAF总生产成本（元/kg SAF）
+            saf_total_production_cost_per_kg = (
+                ft_equipment_cost_per_kg +  # FT设备成本
+                ng_raw_material_cost_per_kg +  # 天然气原料成本
+                ft_catalyst_cost_per_kg +  # 催化剂成本
+                ft_energy_cost_per_kg +  # 能源消耗成本
+                ft_operation_cost_per_kg  # 运营维护成本
+            )
+
+            # 8. 运输和储存成本（简化，从配置或默认值）
+            saf_transport_cost_per_kg_km = 0.03  # 元/kg/km
+            saf_storage_cost_per_kg = 0.0  # 元/kg
+
+            # 9. 效率指标
+            ft_conversion_efficiency_percent = ft_efficiency * 100  # 转换为百分比
+            overall_ng_to_saf_efficiency_percent = ft_efficiency * saf_fraction * 100  # 考虑SAF选择性
+
+            # 10. 成本占比计算
+            if saf_total_production_cost_per_kg > 0:
+                ng_raw_material_ratio = ng_raw_material_cost_per_kg / saf_total_production_cost_per_kg
+                ft_equipment_ratio = ft_equipment_cost_per_kg / saf_total_production_cost_per_kg
+                ft_catalyst_ratio = ft_catalyst_cost_per_kg / saf_total_production_cost_per_kg
+                ft_energy_ratio = ft_energy_cost_per_kg / saf_total_production_cost_per_kg
+                ft_operation_ratio = ft_operation_cost_per_kg / saf_total_production_cost_per_kg
+            else:
+                ng_raw_material_ratio = 0
+                ft_equipment_ratio = 0
+                ft_catalyst_ratio = 0
+                ft_energy_ratio = 0
+                ft_operation_ratio = 0
+
+            # 11. 组织返回结果
             result = {
-                # 氢气成本 - 基于配置参数的理论计算
-                'hydrogen_electricity_cost_yuan_per_kg': h2_electricity_cost_per_kg,
-                'hydrogen_equipment_amortization_yuan_per_kg': h2_equipment_cost_per_kg,
-                'hydrogen_operation_maintenance_yuan_per_kg': 0,
-                'hydrogen_total_production_cost_yuan_per_kg': h2_total_cost_per_kg,
-                
-                # MTJ成本 - 基于优化模型的实际计算
-                'mtj_hydrogen_raw_material_cost_yuan_per_kg': mtj_hydrogen_raw_material_cost_per_kg,
-                'mtj_co2_raw_material_cost_yuan_per_kg': 0.0,
-                'mtj_equipment_amortization_yuan_per_kg': mtj_equipment_cost_per_kg,
-                'mtj_operation_maintenance_yuan_per_kg': mtj_operation_cost_per_kg,
-                'mtj_total_production_cost_yuan_per_kg': mtj_total_cost_per_kg,
-                
-                # 运输储存成本 - 使用优化结果
-                'h2_transport_unit_cost_yuan_per_kg_km': 0.05,  # 配置值
-                'mtj_transport_unit_cost_yuan_per_kg_km': 0.03,  # 配置值  
-                'h2_storage_cost_yuan_per_kg': h2_storage_cost_per_kg,
-                'mtj_storage_cost_yuan_per_kg': mtj_storage_cost_per_kg,
-                
-                # 效率指标 - 使用配置参数
-                'electrolysis_theoretical_efficiency': 80.0,
-                'electrolysis_actual_efficiency': electrolysis_efficiency * 100,
-                'electrolysis_actual_efficiency_percent': electrolysis_efficiency * 100,
-                'h2_to_mtj_conversion_efficiency': mtj_conversion_efficiency * 100,
-                'overall_electricity_to_mtj_efficiency': overall_efficiency * 100,
-                'power_consumption_mwh_per_kg_mtj': power_consumption_mwh_per_kg_mtj,
-                
-                # 成本占比 - 简单计算
-                'hydrogen_electricity_cost_ratio': hydrogen_electricity_ratio,
-                'hydrogen_equipment_cost_ratio': hydrogen_equipment_ratio,
-                'hydrogen_operation_cost_ratio': hydrogen_operation_ratio,
-                'mtj_hydrogen_cost_ratio': mtj_hydrogen_ratio,
-                'mtj_co2_cost_ratio': 0.0,
-                'mtj_equipment_cost_ratio': mtj_equipment_ratio,
-                'mtj_operation_cost_ratio': mtj_operation_ratio
+                # FT反应器设备成本
+                'ft_reactor_equipment_cost_yuan_per_kg': ft_equipment_cost_per_kg,
+                'ft_reactor_fixed_capex_yuan_per_kg': ft_fixed_capex_per_kg,
+                'ft_reactor_variable_capex_yuan_per_kg': ft_variable_capex_per_kg,
+
+                # FT工艺成本组成
+                'natural_gas_raw_material_cost_yuan_per_kg': ng_raw_material_cost_per_kg,
+                'ft_catalyst_cost_yuan_per_kg': ft_catalyst_cost_per_kg,
+                'ft_energy_cost_yuan_per_kg': ft_energy_cost_per_kg,
+                'ft_operation_cost_yuan_per_kg': ft_operation_cost_per_kg,
+                'ft_fixed_opex_yuan_per_kg': ft_fixed_opex_per_kg,
+                'ft_variable_opex_yuan_per_kg': ft_variable_opex_per_kg,
+
+                # SAF总成本
+                'saf_total_production_cost_yuan_per_kg': saf_total_production_cost_per_kg,
+
+                # 运输储存成本
+                'saf_transport_unit_cost_yuan_per_kg_km': saf_transport_cost_per_kg_km,
+                'saf_storage_cost_yuan_per_kg': saf_storage_cost_per_kg,
+
+                # 效率指标
+                'ft_conversion_efficiency_percent': ft_conversion_efficiency_percent,
+                'overall_ng_to_saf_efficiency_percent': overall_ng_to_saf_efficiency_percent,
+                'saf_fraction_in_products': saf_fraction * 100,
+                'ng_consumption_ratio_m3_per_kg': ng_consumption_ratio,
+
+                # 成本占比
+                'ng_raw_material_cost_ratio': ng_raw_material_ratio,
+                'ft_equipment_cost_ratio': ft_equipment_ratio,
+                'ft_catalyst_cost_ratio': ft_catalyst_ratio,
+                'ft_energy_cost_ratio': ft_energy_ratio,
+                'ft_operation_cost_ratio': ft_operation_ratio
             }
-            
-            logger.info(f"基于配置参数计算单位成本: 氢气 {h2_total_cost_per_kg:.4f} 元/kg, MTJ {mtj_total_cost_per_kg:.4f} 元/kg")
+
+            logger.info(f"FT一步法单位成本计算完成:")
+            logger.info(f"  天然气原料成本: {ng_raw_material_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  FT反应器设备成本: {ft_equipment_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  FT催化剂成本: {ft_catalyst_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  FT能源成本: {ft_energy_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  FT运营成本: {ft_operation_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  SAF总生产成本: {saf_total_production_cost_per_kg:.4f} 元/kg")
+            logger.info(f"  FT转化效率: {ft_conversion_efficiency_percent:.1f}%")
+            logger.info(f"  天然气→SAF总效率: {overall_ng_to_saf_efficiency_percent:.1f}%")
+
             return result
-            
+
         except Exception as e:
-            logger.error(f"提取优化结果成本数据失败: {e}")
+            logger.error(f"FT一步法单位成本计算失败: {e}")
+            import traceback
+            traceback.print_exc()
             return {}
-    
+
     def calculate_carbon_emissions(self, solution: Dict) -> Dict:
         """计算碳排放结果（基于优化求解后的变量值）"""
         logger.info("="*80)
