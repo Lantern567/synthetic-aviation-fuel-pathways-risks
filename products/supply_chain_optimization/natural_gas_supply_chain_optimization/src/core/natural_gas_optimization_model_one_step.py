@@ -817,50 +817,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
         raise ValueError(f"未支持的机场: {airport_name}")
     
     
-    def _load_real_renewable_data(self) -> pd.DataFrame:
-        """
-        加载真实的可再生能源数据
-        
-        Returns:
-            可再生能源数据DataFrame
-        """
-        logger.info("加载真实的可再生能源数据...")
-        
-        # 从配置文件获取数据目录路径
-        try:
-            wind_data_dir = self._get_data_path('aviation_data.wind_data_dir')
-            solar_data_dir = self._get_data_path('aviation_data.solar_data_dir')
-            logger.info(f"从配置文件获取数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
-        except Exception as e:
-            logger.error(f"从配置文件获取数据目录失败: {e}")
-            # 使用默认相对路径
-            base_dir = get_project_base_dir()
-            wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
-            solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
-            logger.info(f"使用默认数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
-        
-        # 检查数据目录是否存在
-        if not os.path.exists(wind_data_dir):
-            logger.error(f"风电数据目录不存在: {wind_data_dir}")
-            raise FileNotFoundError(f"无法找到风电数据目录: {wind_data_dir}")
-        
-        if not os.path.exists(solar_data_dir):
-            logger.error(f"光伏数据目录不存在: {solar_data_dir}")
-            raise FileNotFoundError(f"无法找到光伏数据目录: {solar_data_dir}")
-        
-        # 读取风电数据
-        wind_data = self._load_wind_data(wind_data_dir)
-        
-        # 读取光伏数据
-        solar_data = self._load_solar_data(solar_data_dir)
-        
-        # 合并数据
-        renewable_data = pd.concat([wind_data, solar_data], ignore_index=True)
-        
-        logger.info(f"成功加载了 {len(renewable_data)} 条可再生能源数据记录")
-        
-        return renewable_data
-    
+
     def _load_wind_data(self, wind_data_dir: str) -> pd.DataFrame:
         """
         加载风电数据
@@ -2330,10 +2287,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
         required_params = {
             'raw_materials': ['ng_extraction_intensity', 'ng_pipeline_transport'],
             'facility_construction': ['saf_facility_embodied', 'saf_facility_lifetime'],
-            'production_process': ['ng_to_methanol_rate', 'ng_process_emission',
-                                 'mtj_process_energy', 'renewable_electricity'],
-            'storage_handling': ['mtj_storage_energy'],
-            'transportation': ['mtj_truck_intensity', 'ng_truck_intensity']
+            'production_process': ['ng_upstream_emission', 'ft_process_emission'],
+            'storage_handling': ['saf_storage_energy'],
+            'transportation': ['saf_truck_intensity', 'ng_truck_intensity']
         }
 
         missing_params = []
@@ -2394,70 +2350,64 @@ class NaturalGasSupplyChainOptimizerOneStep:
         logger.info(f"[调试] 设施容量变量数量: {len([k for k in self.facility_capacity_vars.keys()])}") if hasattr(self, 'facility_capacity_vars') else logger.warning("[调试] 未找到设施容量变量")
 
         # =========================================================================
-        # 3. 生产过程阶段碳排放 (Production Process)
+        # 3. 生产过程阶段碳排放 (Production Process) - FT一步法
         # =========================================================================
-        ng_to_methanol = production.get('ng_to_methanol_rate', 1.2)  # m³ NG/kg甲醇
-        ng_process_em = production.get('ng_process_emission', 0.8)  # kg CO2eq/m³
-        mtj_energy = production.get('mtj_process_energy', 800)  # kWh/t SAF
-        renewable_elec = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh
+        # FT一步法：天然气 → SAF（直接转化，无中间产物，能源自给）
+        # 碳排放 = 天然气上游排放 + FT过程直接排放
 
-        # 天然气制甲醇碳排放
-        self.carbon_expressions['ng_to_methanol'] = gp.quicksum(
+        # 读取碳排放参数
+        ng_upstream_em = production.get('ng_upstream_emission', 0.5)  # kg CO2eq/m³ NG（开采+运输）
+        ft_process_em = production.get('ft_process_emission', 1.5)  # kg CO2eq/kg SAF（FT反应过程）
+
+        # 读取FT工艺参数
+        ft_tech_config = self.config.get('technologies', {}).get('ft_direct_conversion', {})
+        ng_consumption_ratio = ft_tech_config.get('ng_consumption_ratio', 2.0)  # m³ NG/kg SAF
+
+        # FT一步法总碳排放 = 天然气上游 + FT过程
+        # 注意：不需要电力碳排放项，因为FT反应放热可自供能（热集成效率75%）
+        self.carbon_expressions['ft_production'] = gp.quicksum(
             self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            ng_to_methanol * ng_process_em
+            (ng_consumption_ratio * ng_upstream_em + ft_process_em)
             for location in self.locations
             for tech in self.technologies
             for hour in range(self.total_hours)
             if (location, tech, hour) in self.production_vars
         )
 
-        # 甲醇制SAF过程碳排放
-        self.carbon_expressions['methanol_to_saf'] = gp.quicksum(
-            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            mtj_energy / 1000 * renewable_elec  # kWh/t转换为MWh/t
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
-
-        logger.info(f"天然气消耗率: {ng_to_methanol} m³/kg甲醇, 工艺排放: {ng_process_em} kg CO2eq/m³")
-        logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 可再生电力碳强度: {renewable_elec} kg CO2eq/kWh")
+        logger.info(f"FT一步法工艺参数:")
+        logger.info(f"  天然气消耗比: {ng_consumption_ratio} m³/kg SAF")
+        logger.info(f"  天然气上游碳排放: {ng_upstream_em} kg CO2eq/m³")
+        logger.info(f"  FT过程碳排放: {ft_process_em} kg CO2eq/kg SAF")
+        logger.info(f"  单位SAF总碳排放: {ng_consumption_ratio * ng_upstream_em + ft_process_em:.2f} kg CO2eq/kg")
         logger.info(f"[调试] 生产变量数量: {len([k for k in self.production_vars.keys()])}") if hasattr(self, 'production_vars') else logger.warning("[调试] 未找到生产变量")
 
         # =========================================================================
         # 4. 储存处理阶段碳排放 (Storage & Handling)
         # =========================================================================
-        mtj_storage_energy = storage_handling.get('mtj_storage_energy', 5)  # kWh/t·天
+        # SAF储存能耗很小，且可能使用FT装置余热，碳排放忽略
+        saf_storage_energy = storage_handling.get('saf_storage_energy', 5)  # kWh/t·天
 
         # 基本参数验证
-        if mtj_storage_energy <= 0:
-            logger.warning(f"MTJ储存能耗参数异常: {mtj_storage_energy}")
+        if saf_storage_energy <= 0:
+            logger.warning(f"SAF储存能耗参数异常: {saf_storage_energy}")
 
-        # MTJ储存碳排放
-        # 注：存储变量索引范围应为0到total_hours（包含边界状态）
-        self.carbon_expressions['mtj_storage'] = gp.quicksum(
-            self.storage_vars.get((location, hour), gp.LinExpr(0)) *
-            mtj_storage_energy / 24 * renewable_elec  # kWh/t·天 → kWh/t·h，修复：移除错误的/1000
-            for location in self.locations
-            for hour in range(self.total_hours + 1)  # 存储变量包含边界状态
-            if (location, hour) in self.storage_vars
-        )
+        # SAF储存碳排放 - 忽略（能耗很小，可能使用FT余热）
+        self.carbon_expressions['saf_storage'] = gp.LinExpr(0)  # 忽略储存碳排放
 
-        logger.info(f"MTJ储存能耗: {mtj_storage_energy} kWh/t·天")
-        logger.info(f"[调试] MTJ存储变量数量: {len([k for k in self.storage_vars.keys()])}") if hasattr(self, 'storage_vars') else logger.warning("[调试] 未找到MTJ存储变量")
+        logger.info(f"SAF储存能耗: {saf_storage_energy} kWh/t·天（碳排放已忽略 - FT余热利用）")
+        logger.info(f"[调试] SAF存储变量数量: {len([k for k in self.storage_vars.keys()])}") if hasattr(self, 'storage_vars') else logger.warning("[调试] 未找到SAF存储变量")
 
         # =========================================================================
         # 5. 运输配送阶段碳排放 (Transportation & Distribution)
         # =========================================================================
-        mtj_truck = transportation.get('mtj_truck_intensity', 0.12)  # kg CO2eq/t·km
+        saf_truck = transportation.get('saf_truck_intensity', 0.12)  # kg CO2eq/t·km
         ng_truck = transportation.get('ng_truck_intensity', 0.10)  # kg CO2eq/m³·km
 
-        # MTJ运输碳排放
-        # 单位转换: kg → t，因为mtj_truck单位是kg CO2eq/t·km
-        self.carbon_expressions['mtj_transport'] = gp.quicksum(
+        # SAF运输碳排放
+        # 单位转换: kg → t，因为saf_truck单位是kg CO2eq/t·km
+        self.carbon_expressions['saf_transport'] = gp.quicksum(
             (self.transport_vars.get((location, airport, week), gp.LinExpr(0)) / 1000) *  # kg → t
-            self._calculate_distance(location, airport) * mtj_truck  # t × km × kg CO2eq/t·km
+            self._calculate_distance(location, airport) * saf_truck  # t × km × kg CO2eq/t·km
             for location in self.locations
             for airport in self.airports
             for week in range(self.time_horizon_weeks)
@@ -2477,16 +2427,16 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
         # 验证运输碳强度参数合理性
         transport_params = [
-            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度"),
+            (saf_truck, 0.05, 0.30, "SAF罐车运输碳强度"),
             (ng_truck, 0.05, 0.30, "天然气罐车运输碳强度")
         ]
         for value, min_val, max_val, name in transport_params:
             if not (min_val <= value <= max_val):
                 logger.warning(f"{name}可能不合理: {value}, 期望范围: [{min_val}, {max_val}]")
 
-        logger.info(f"MTJ罐车运输: {mtj_truck} kg CO2eq/t·km")
+        logger.info(f"SAF罐车运输: {saf_truck} kg CO2eq/t·km")
         logger.info(f"天然气罐车运输: {ng_truck} kg CO2eq/m³·km")
-        logger.info(f"[调试] MTJ运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到MTJ运输变量")
+        logger.info(f"[调试] SAF运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到SAF运输变量")
         logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
 
         # 测试距离计算方法
@@ -2674,12 +2624,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     M * self.facility_vars[(location, tech)],
                     name=f"capacity_facility_link_{location}_{tech}"
                 )
-                
-                # 移除基于平均发电量的硬性产能上限约束
-                # 改为依赖动态的时段级约束：
-                # 1. 氢气生产受每时段发电量限制 (在_add_renewable_power_constraints中)
-                # 2. MTJ生产受氢气库存限制 (在_add_material_supply_constraints中)
-                # 这样允许设施产能更灵活，只要满足实际运行时的供需平衡即可
+
+                # FT一步法：无需氢气生产和可再生能源约束
+                # 产能约束仅基于天然气供应能力和FT反应器容量
     
     def _add_material_supply_constraints(self):
         """添加严格的小时级原料供应约束（氢气和天然气供应约束）"""
@@ -3163,21 +3110,19 @@ class NaturalGasSupplyChainOptimizerOneStep:
         """
         # 从配置读取MTJ产能估算参数
         capacity_estimates = self.config.get('capacity_limits', {}).get('mtj_capacity_estimates', {})
-        
+
         if location in self.locations:
             location_data = self.locations[location]
             location_type = location_data.get('type', 'industrial')
-            
+
             # 根据位置类型估算生产规模，从配置读取
             if location_type == 'petrochemical':
                 return capacity_estimates.get('petrochemical_base', 5000)  # 大型石化基地
             elif location_type == 'industrial':
                 return capacity_estimates.get('industrial', 2000)  # 工业园区
-            elif location_type == 'renewable_energy':
-                return capacity_estimates.get('renewable_energy', 1000)  # 可再生能源基地
             else:
                 return capacity_estimates.get('default', 1500)  # 其他类型
-        
+
         return capacity_estimates.get('default', 1500)  # 默认值
     
     def _calculate_distance(self, location: str, airport: str) -> float:
@@ -4561,34 +4506,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
     
     def _save_infrastructure_locations(self, output_dir: str, timestamp: str):
         """保存基础设施选点信息"""
-        
-        # 1. 保存可再生能源发电站信息
-        renewable_data = []
-        for location, info in self.locations.items():
-            if info['type'] in ['solar_plant', 'wind_farm']:
-                avg_generation = np.mean(info['hourly_generation']) if info['hourly_generation'] else 0
-                max_generation = np.max(info['hourly_generation']) if info['hourly_generation'] else 0
-                min_generation = np.min(info['hourly_generation']) if info['hourly_generation'] else 0
-                renewable_data.append({
-                    "位置ID": location,
-                    "发电站类型": "太阳能发电站" if info['type'] == 'solar_plant' else "风电场",
-                    "纬度": info['latitude'],
-                    "经度": info['longitude'],
-                    "装机容量(MW)": info.get('capacity_mw', 0),
-                    "平均发电量(MW)": avg_generation,
-                    "最大发电量(MW)": max_generation,
-                    "最小发电量(MW)": min_generation,
-                    "容量因子": avg_generation / info.get('capacity_mw', 1) if info.get('capacity_mw', 0) > 0 else 0,
-                    "坐标": f"({info['latitude']:.4f}, {info['longitude']:.4f})"
-                })
-        
-        if renewable_data:
-            renewable_df = pd.DataFrame(renewable_data)
-            renewable_path = os.path.join(output_dir, f"renewable_energy_plants_{timestamp}.csv")
-            renewable_df.to_csv(renewable_path, index=False, encoding='utf-8-sig')
-            print(f"可再生能源发电站信息保存到: {renewable_path}")
-        
-        # 2. 保存LNG接收站信息
+
+        # 1. 保存LNG接收站信息
         lng_data = []
         for location, info in self.locations.items():
             if info['type'] == 'lng_terminal':
@@ -4600,14 +4519,14 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     "LNG处理能力(万立方米/年)": info.get('lng_capacity', 0),
                     "坐标": f"({info['latitude']:.4f}, {info['longitude']:.4f})"
                 })
-        
+
         if lng_data:
             lng_df = pd.DataFrame(lng_data)
             lng_path = os.path.join(output_dir, f"lng_terminals_{timestamp}.csv")
             lng_df.to_csv(lng_path, index=False, encoding='utf-8-sig')
             print(f"LNG接收站信息保存到: {lng_path}")
-        
-        # 3. 保存天然气管道信息
+
+        # 2. 保存天然气管道信息
         ng_pipeline_data = []
         for location, info in self.locations.items():
             if info['type'] == 'ng_pipeline':

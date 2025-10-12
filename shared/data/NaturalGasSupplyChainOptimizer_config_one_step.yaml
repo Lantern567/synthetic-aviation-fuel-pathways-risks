@@ -46,7 +46,7 @@ basic_parameters:
   # GraphHopper路径规划设置 - GraphHopper Routing Configuration
   use_graphhopper_routing: true            # 是否使用GraphHopper路径规划 | Enable GraphHopper routing service
                                            # true: 使用实际道路距离，更准确但需要GraphHopper服务
-                                           # false: 使用直线距离估算，快速但精度较低
+                                           # false: 使用直线距离估算，快速但精度较低（FT一步法测试默认禁用）
 
   graphhopper_host: localhost              # GraphHopper服务主机地址 | GraphHopper service host
                                            # 默认为本地服务，可配置远程服务器IP地址
@@ -167,6 +167,9 @@ carbon_emission_parameters:
 
   # 生产过程排放 - Production Process Emissions
   production_process:
+    ng_upstream_emission: 0.5              # 天然气上游碳排放(kgCO₂e/m³) | NG upstream emissions
+                                           # 综合开采、处理、运输的总排放
+
     ng_process_emission: 0.8               # 天然气处理排放(kgCO₂e/m³) | NG processing emissions
                                            # 脱硫、脱水等预处理工艺排放
 
