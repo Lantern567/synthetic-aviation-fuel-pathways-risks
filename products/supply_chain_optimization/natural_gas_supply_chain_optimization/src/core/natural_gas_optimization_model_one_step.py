@@ -5603,58 +5603,31 @@ class NaturalGasSupplyChainOptimizerOneStep:
         return supply_costs
     
     def _create_supply_chain_summary(self, supply_chain_analysis: Dict) -> Dict:
-        """创建供应链汇总信息"""
+        """创建供应链汇总信息 - FT一步法"""
         summary = {
             'total_facilities': len([k for k in supply_chain_analysis.keys() if k != 'summary']),
             'total_production_kg': 0,
             'total_levelized_supply_cost_yuan': 0,
             'avg_unit_levelized_cost_yuan_per_kg': 0,
-            'hydrogen_supply_breakdown': {
-                'self_production_facilities': 0,
-                'external_supply_facilities': 0,
-                'total_h2_production_kg': 0
-            },
             'natural_gas_supply_breakdown': {
                 'lng_terminal_direct': 0,
                 'pipeline_transport': 0
-            },
-            'renewable_energy_breakdown': {
-                'solar_facilities': 0,
-                'wind_facilities': 0,
-                'total_renewable_capacity_mw': 0
             }
         }
-        
+
         for facility_key, facility_analysis in supply_chain_analysis.items():
             if facility_key == 'summary':
                 continue
-                
+
             summary['total_production_kg'] += facility_analysis['total_production_kg']
             summary['total_levelized_supply_cost_yuan'] += facility_analysis['supply_costs']['total_levelized_supply_cost_yuan']
-            
-            # 氢气供应统计
-            if facility_analysis['hydrogen_supply_chain']['self_production'].get('has_electrolyzer', False):
-                summary['hydrogen_supply_breakdown']['self_production_facilities'] += 1
-                summary['hydrogen_supply_breakdown']['total_h2_production_kg'] += facility_analysis['hydrogen_supply_chain']['self_production']['total_h2_production_kg']
-            
-            if facility_analysis['hydrogen_supply_chain']['external_sources']:
-                summary['hydrogen_supply_breakdown']['external_supply_facilities'] += 1
-            
+
             # 天然气供应统计
             ng_source = facility_analysis['natural_gas_supply_chain']['primary_source']
             if 'LNG接收站直供' in ng_source:
                 summary['natural_gas_supply_breakdown']['lng_terminal_direct'] += 1
             elif '管道运输' in ng_source:
                 summary['natural_gas_supply_breakdown']['pipeline_transport'] += 1
-            
-            # 可再生能源统计
-            elec_supply = facility_analysis['electricity_supply']
-            if elec_supply['source_type'] == 'solar_plant':
-                summary['renewable_energy_breakdown']['solar_facilities'] += 1
-                summary['renewable_energy_breakdown']['total_renewable_capacity_mw'] += elec_supply['renewable_capacity_mw']
-            elif elec_supply['source_type'] == 'wind_farm':
-                summary['renewable_energy_breakdown']['wind_facilities'] += 1
-                summary['renewable_energy_breakdown']['total_renewable_capacity_mw'] += elec_supply['renewable_capacity_mw']
         
         if summary['total_production_kg'] > 0:
             summary['avg_unit_levelized_cost_yuan_per_kg'] = summary['total_levelized_supply_cost_yuan'] / summary['total_production_kg']
@@ -5859,35 +5832,13 @@ class NaturalGasSupplyChainOptimizerOneStep:
     
     
     def _calculate_average_distances(self):
-        """计算并更新平均运输距离统计"""
+        """计算并更新平均运输距离统计 - FT一步法"""
         logger.info("开始计算平均运输距离统计...")
-        
-        # 计算氢气运输平均距离（可再生能源站到MTJ工厂）
-        hydrogen_distances = []
-        renewable_locations = [loc for loc, info in self.locations.items() 
-                             if info['type'] in ['solar_plant', 'wind_farm']]
-        mtj_locations = [loc for loc, info in self.locations.items() 
-                        if info['type'] in ['lng_terminal', 'industrial_park', 'port']]
-        
-        for h_loc in renewable_locations[:5]:  # 限制样本数以节省时间
-            for mtj_loc in mtj_locations[:5]:
-                distance = self._calculate_location_distance(h_loc, mtj_loc)
-                hydrogen_distances.append(distance)
-        
-        if hydrogen_distances:
-            self.avg_hydrogen_transport_distance = np.mean(hydrogen_distances)
-            logger.info(f"氢气运输平均距离: {self.avg_hydrogen_transport_distance:.1f}km "
-                       f"(基于{len(hydrogen_distances)}个样本)")
-        else:
-            # 从配置文件读取默认氢气运输距离
-            distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
-            self.avg_hydrogen_transport_distance = distance_config.get('hydrogen_transport_distance_km', 50)
-            logger.warning("无法计算氢气运输平均距离，使用默认值50km")
-        
+
         # 计算天然气运输平均距离（管道到非LNG接收站）
         ng_distances = []
         ng_locations = list(self.ng_pipeline_sources.keys())[:5]  # 天然气源位置
-        non_lng_mtj_locations = [loc for loc, info in self.locations.items() 
+        non_lng_mtj_locations = [loc for loc, info in self.locations.items()
                                if info['type'] in ['industrial_park', 'port']][:5]
         
         for ng_loc in ng_locations:
