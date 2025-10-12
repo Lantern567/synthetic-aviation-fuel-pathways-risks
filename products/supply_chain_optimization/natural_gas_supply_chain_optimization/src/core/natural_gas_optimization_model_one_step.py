@@ -4207,13 +4207,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
             detail_mapping = {
                 'ng_extraction': '天然气开采',
                 'saf_facility': 'SAF工厂建设',
-                'electrolyzer_facility': '电解槽建设',
                 'ng_to_methanol': '天然气制甲醇',
                 'methanol_to_saf': '甲醇制SAF',
-                'h2_production': '氢气生产',
                 'mtj_storage': 'MTJ储存',
-                'h2_storage': '氢气储存',
-                'h2_transport': '氢气运输',
                 'mtj_transport': 'MTJ运输',
                 'ng_transport': '天然气运输'
             }
@@ -4300,23 +4296,15 @@ class NaturalGasSupplyChainOptimizerOneStep:
         # 建立表达式对象字段到CSV输出字段的映射
         cost_field_mapping = {
             'facility_investment_cost': 'MTJ工厂建设投资(元)',
-            'electrolyzer_investment_cost': '电解槽建设投资(元)',
             'transport_equipment_cost': '运输设备投资(元)',
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
-            'h2_storage_investment': '氢气储存设备投资(元)',
-            'hydrogen_transport_investment': '氢气运输设备投资(元)',
             'ng_transport_investment': '天然气运输设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
-            'hydrogen_production_cost': '氢气制取成本(元)',
-            'hydrogen_transport_operation': '氢气罐车运输成本(元)',
-            'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
-            'hydrogen_pipeline_investment': '氢能管道建设投资(元)',
             'ng_transport_operation': '天然气运输成本(元)',
             'natural_gas_cost': '天然气原料成本(元)',
             'transport_operation_cost': 'MTJ运输运营成本(元)',
             'storage_operation_cost': 'MTJ储存运营成本(元)',
-            'h2_storage_operation': '氢气储存运营成本(元)',
             'electricity_cost': '电力成本(元)',
             'final_inventory_cost': '期末库存处置成本(元)',
             'shortage_cost': '短缺惩罚成本(元)'
@@ -4351,16 +4339,14 @@ class NaturalGasSupplyChainOptimizerOneStep:
         total_operation = 0
 
         # 投资成本类别
-        investment_fields = ['facility_investment_cost', 'electrolyzer_investment_cost',
+        investment_fields = ['facility_investment_cost',
                            'transport_equipment_cost', 'storage_equipment_cost',
-                           'h2_storage_investment', 'hydrogen_transport_investment',
-                           'ng_transport_investment', 'hydrogen_pipeline_investment']
+                           'ng_transport_investment']
 
         # 运营成本类别
-        operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
-                          'hydrogen_transport_operation', 'hydrogen_pipeline_operation',
+        operation_fields = ['facility_operation_cost', 'production_cost',
                           'ng_transport_operation', 'natural_gas_cost', 'transport_operation_cost',
-                          'storage_operation_cost', 'h2_storage_operation', 'electricity_cost',
+                          'storage_operation_cost', 'electricity_cost',
                           'final_inventory_cost']
 
         logger.info("【投资成本明细】")
@@ -4443,49 +4429,23 @@ class NaturalGasSupplyChainOptimizerOneStep:
             "总时段数(小时)": [self.total_hours],
             "项目期限(年)": [project_lifespan]
         })
-        
-        # 添加直接从优化模型计算的单位成本分析指标
-        # 电解制氢成本指标
+
+        # MTJ生产成本指标
         results_summary.update({
-            "氢气单位电力成本(元/kg)": [unit_costs.get('hydrogen_electricity_cost_yuan_per_kg', 0)],
-            "氢气设备摊销成本(元/kg)": [unit_costs.get('hydrogen_equipment_amortization_yuan_per_kg', 0)],
-            "氢气运营维护成本(元/kg)": [unit_costs.get('hydrogen_operation_maintenance_yuan_per_kg', 0)],
-            "氢气总单位成本(元/kg)": [unit_costs.get('hydrogen_total_production_cost_yuan_per_kg', 0)],
-            "电解制氢效率(%)": [unit_costs.get('electrolysis_actual_efficiency_percent', 68.0)]
-        })
-        
-        # MTJ生产成本指标  
-        results_summary.update({
-            "MTJ氢气原料成本(元/kg)": [unit_costs.get('mtj_hydrogen_raw_material_cost_yuan_per_kg', 0)],
             "MTJ CO2原料成本(元/kg)": [unit_costs.get('mtj_co2_raw_material_cost_yuan_per_kg', 0)],
             "MTJ设备摊销成本(元/kg)": [unit_costs.get('mtj_equipment_amortization_yuan_per_kg', 0)],
             "MTJ运营维护成本(元/kg)": [unit_costs.get('mtj_operation_maintenance_yuan_per_kg', 0)],
             "MTJ总单位成本(元/kg)": [unit_costs.get('mtj_total_production_cost_yuan_per_kg', 0)]
         })
-        
-        # 运输成本指标
+
+        # 运输储存成本指标
         results_summary.update({
-            "氢气运输单位成本(元/kg·km)": [unit_costs.get('h2_transport_unit_cost_yuan_per_kg_km', 0)],
             "MTJ运输单位成本(元/kg·km)": [unit_costs.get('mtj_transport_unit_cost_yuan_per_kg_km', 0)],
-            "氢气储存单位成本(元/kg)": [unit_costs.get('h2_storage_cost_yuan_per_kg', 0)],
             "MTJ储存单位成本(元/kg)": [unit_costs.get('mtj_storage_cost_yuan_per_kg', 0)]
         })
-        
-        # 转化效率指标
+
+        # 经济性指标
         results_summary.update({
-            "电解制氢理论效率(%)": [unit_costs.get('electrolysis_theoretical_efficiency', 80.0)],
-            "电解制氢实际效率(%)": [unit_costs.get('electrolysis_actual_efficiency', 68.0)],
-            "MTJ转化效率(%)": [unit_costs.get('h2_to_mtj_conversion_efficiency', 85.0)],
-            "综合电力转MTJ效率(%)": [unit_costs.get('overall_electricity_to_mtj_efficiency', 68.0)],
-            "单位电力消耗(MWh/kg_MTJ)": [unit_costs.get('power_consumption_mwh_per_kg_mtj', 0)]
-        })
-        
-        # 经济性指标（从现有成本比例数据计算）
-        results_summary.update({
-            "氢气电力成本占比(%)": [unit_costs.get('hydrogen_electricity_cost_ratio', 0) * 100],
-            "氢气设备成本占比(%)": [unit_costs.get('hydrogen_equipment_cost_ratio', 0) * 100],
-            "氢气运营成本占比(%)": [unit_costs.get('hydrogen_operation_cost_ratio', 0) * 100],
-            "MTJ氢气原料成本占比(%)": [unit_costs.get('mtj_hydrogen_cost_ratio', 0) * 100],
             "MTJ CO2原料成本占比(%)": [unit_costs.get('mtj_co2_cost_ratio', 0) * 100]
         })
         
