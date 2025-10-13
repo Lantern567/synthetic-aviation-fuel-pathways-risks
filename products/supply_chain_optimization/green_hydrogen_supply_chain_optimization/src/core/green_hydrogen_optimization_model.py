@@ -192,6 +192,105 @@ except Exception as e:
     print("将继续使用控制台日志")
 
 class GreenHydrogenSupplyChainOptimizer:
+    """
+    绿氢+CO₂制SAF供应链优化器
+
+    基于Gurobi求解器的混合整数线性规划(MILP)模型,优化绿氢和CO₂制SAF的供应链网络。
+
+    工艺路线:
+        绿氢 + CO₂ → 甲醇 → SAF (两步法)
+        - Step 1: E-CRM电化学还原(H₂ + CO₂ → 甲醇)
+        - Step 2: MTJ甲醇转化(甲醇 → SAF)
+
+    主要功能:
+        - 绿氢生产: 风电/光伏电解水制氢
+        - CO₂捕获: 煤电厂/气电厂/炼油厂碳捕获
+        - 运输优化: 管道+罐车双模式运输(H₂和CO₂)
+        - 时间尺度匹配: 生产调度(1小时) vs 需求计划(1周)
+        - 设施选址: 甲醇厂和SAF厂选址优化
+        - 碳排放追踪: 全生命周期碳强度计算
+
+    决策变量:
+        - methanol_production_vars: 甲醇生产量(kg/h)
+        - saf_production_vars: SAF生产量(kg/h)
+        - co2_pipeline/truck_transport_vars: CO₂运输量(kg/周)
+        - h2_pipeline/truck_transport_vars: H₂运输量(kg/h)
+        - methanol_inventory_vars: 甲醇库存(kg)
+        - co2_inventory_vars: CO₂库存(kg,用于时间尺度匹配)
+        - facility_build_vars: 设施建设二元变量
+
+    约束系统:
+        1. CO₂供应平衡(周级)
+        2. 甲醇生产约束(H₂+CO₂→甲醇,小时级)
+        3. SAF生产约束(甲醇→SAF,小时级)
+        4. 甲醇库存平衡(小时级)
+        5. CO₂库存平衡(时间尺度匹配,小时级)
+        6. H₂供应平衡(小时级)
+        7. SAF需求满足(机场需求,周级)
+        8. 运输能力约束
+        9. 设施能力约束
+
+    目标函数:
+        最小化总成本 = H₂生产成本 + CO₂捕获成本 + CO₂运输成本
+                    + H₂运输成本 + 甲醇生产成本 + 甲醇存储成本
+                    + SAF生产成本 + SAF运输成本 + 设施投资成本
+                    + 缺货惩罚
+
+    使用流程:
+        1. 初始化: optimizer = GreenHydrogenSupplyChainOptimizer(config_path)
+        2. 加载数据: optimizer.load_data_from_excel(airport_excel_path, renewable_data)
+        3. 运行优化: optimizer.optimize()
+        4. 获取结果: results = optimizer.get_optimization_results()
+
+    配置文件:
+        shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+        - basic_parameters: 基础参数(时间范围、路径规划等)
+        - co2_parameters: CO₂捕获和运输参数
+        - hydrogen_parameters: H₂生产和运输参数
+        - technologies: 技术参数(methanol_mtj_two_step)
+        - cost_parameters: 成本参数
+        - carbon_emission_parameters: 碳排放参数
+
+    依赖组件:
+        - Gurobi 11.0+: MILP求解器
+        - GraphHopper: 真实路网路径规划(可选)
+        - CO2CaptureCalculator: CO₂捕获计算
+        - CO2EmissionCalculator: 碳排放计算
+        - HydrogenPipelineDistanceCalculator: 氢气管道距离计算
+        - HydrogenClusteringOptimizer: 氢气厂聚类优化
+
+    输出结果:
+        - results/tables/: CSV表格(优化汇总、设施决策、供应计划等)
+        - results/figures/: 可视化图表(成本分解、碳排放对比、运输路径等)
+        - results/reports/: 分析报告
+        - results/logs/: 运行日志
+
+    技术背景:
+        - E-CRM技术: 电化学CO₂还原制甲醇
+        - MTJ技术: 甲醇转化制航空燃料(Haldor Topsoe)
+        - CCS技术: 碳捕获与封存
+        - 绿氢技术: 可再生能源电解水制氢
+
+    注意事项:
+        - 需要Gurobi有效许可证
+        - 时间范围建议从1周开始测试(计算量大)
+        - GraphHopper可选但推荐使用(更精确的距离计算)
+        - 大规模问题可能需要调整MIPGap和TimeLimit参数
+
+    版本:
+        v2.0.0 - 基于绿氢+CO₂的两步法工艺(2025-10-14)
+        v1.0.0 - 基于天然气的单步法工艺(已废弃)
+
+    作者:
+        绿色甲醇港口运输研究组
+
+    参考文献:
+        - PRD v2.0: 产品需求文档
+        - IEA Hydrogen Report 2024
+        - IRENA Green Hydrogen Cost 2024
+        - Global CCS Institute Report
+    """
+
     def _get_data_path(self, path_key: str, fallback_path: str = None) -> str:
         """
         从配置文件获取数据路径，支持相对路径自动转换为绝对路径
@@ -354,11 +453,61 @@ class GreenHydrogenSupplyChainOptimizer:
 
     def __init__(self, config_path: str = None, **override_params):
         """
-        初始化优化器
-        
+        初始化绿氢+CO₂制SAF供应链优化器
+
+        注意: __init__方法仅初始化配置和基础参数，不加载数据也不构建模型。
+        必须显式调用load_data()或load_data_from_excel()方法来加载数据并构建优化模型。
+
         Args:
-            config_path: 配置文件路径，默认使用项目内置配置文件
-            **override_params: 可以通过关键字参数覆盖配置文件中的任何参数
+            config_path (str, optional): YAML配置文件路径。
+                默认: shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+
+            **override_params: 关键字参数覆盖配置文件参数。
+                常用覆盖参数:
+                - time_horizon_weeks (int): 优化时间范围(周), 默认1
+                - use_graphhopper_routing (bool): 是否使用GraphHopper路径规划, 默认True
+                - solver_time_limit (float): Gurobi求解时间限制(秒), 默认3600
+                - solver_mip_gap (float): MIP最优性间隙, 默认0.01 (1%)
+                - osm_pbf_path (str): OSM地图数据文件路径
+                - graphhopper_host (str): GraphHopper服务器地址
+                - graphhopper_port (int): GraphHopper服务器端口
+
+        Attributes (初始化后可用):
+            config (dict): 完整配置字典
+            time_horizon_weeks (int): 优化时间范围(周)
+            hours_per_week (int): 每周小时数(168)
+            total_hours (int): 总小时数
+            model (gurobipy.Model): Gurobi模型对象(初始化后为None，需调用load_data后创建)
+            routing_engine: GraphHopper路径规划引擎(如果启用)
+            distance_calculator: 距离计算器
+
+        示例:
+            # 使用默认配置
+            optimizer = GreenHydrogenSupplyChainOptimizer()
+
+            # 自定义时间范围和关闭GraphHopper
+            optimizer = GreenHydrogenSupplyChainOptimizer(
+                time_horizon_weeks=4,
+                use_graphhopper_routing=False
+            )
+
+            # 使用自定义配置文件
+            optimizer = GreenHydrogenSupplyChainOptimizer(
+                config_path="/path/to/custom_config.yaml",
+                solver_time_limit=7200,
+                solver_mip_gap=0.05
+            )
+
+        Raises:
+            FileNotFoundError: 配置文件不存在
+            yaml.YAMLError: 配置文件格式错误
+            KeyError: 配置文件缺少必需的参数
+
+        后续步骤:
+            1. 调用load_data_from_excel()加载机场数据和可再生能源数据
+            2. 或调用load_data()加载DataFrame格式的数据
+            3. 模型自动构建完成后，调用optimize()求解
+            4. 调用get_optimization_results()获取结果
         """
         # 加载配置文件
         self.config = self._load_config(config_path, override_params)

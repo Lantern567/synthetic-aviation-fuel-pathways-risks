@@ -1,0 +1,75 @@
+# ========================================
+# Green Hydrogen Supply Chain Optimization
+# Python Dependencies
+# ========================================
+
+# Core Optimization
+gurobipy>=11.0.0,<12.0.0     # MILP solver (requires valid license)
+
+# Data Processing
+pandas>=2.0.0,<3.0.0         # DataFrame operations
+numpy>=1.24.0,<2.0.0         # Numerical computing
+scipy>=1.10.0,<2.0.0         # Scientific computing
+
+# Configuration
+PyYAML>=6.0,<7.0             # YAML configuration file parsing
+
+# Excel File Handling
+openpyxl>=3.1.0,<4.0.0       # Read/write Excel 2010 xlsx/xlsm files
+xlrd>=2.0.0,<3.0.0           # Read Excel .xls files (legacy format)
+
+# Date and Time
+python-dateutil>=2.8.0,<3.0.0  # Date utilities
+
+# Visualization
+matplotlib>=3.7.0,<4.0.0     # Static plotting
+seaborn>=0.12.0,<1.0.0       # Statistical visualization
+pydeck>=0.8.0,<1.0.0         # Interactive 3D geospatial visualization
+
+# Geospatial Processing
+geopy>=2.3.0,<3.0.0          # Geocoding and distance calculation
+pyproj>=3.5.0,<4.0.0         # Coordinate system transformations
+
+# HTTP Requests (for GraphHopper routing)
+requests>=2.31.0,<3.0.0      # HTTP library
+
+# Logging and Progress
+tqdm>=4.65.0,<5.0.0          # Progress bars
+
+# Testing (optional)
+pytest>=7.4.0,<8.0.0         # Testing framework
+pytest-cov>=4.1.0,<5.0.0     # Test coverage
+
+# Code Quality (optional)
+ruff>=0.1.0,<1.0.0           # Fast Python linter and formatter
+
+# ========================================
+# Installation Instructions
+# ========================================
+#
+# Basic installation:
+#   pip install -r requirements.txt
+#
+# With conda (recommended):
+#   conda create -n green_h2_saf python=3.12
+#   conda activate green_h2_saf
+#   pip install -r requirements.txt
+#   conda install -c gurobi gurobi
+#
+# Gurobi License:
+#   Gurobi requires a valid license. Academic licenses are free.
+#   Activate license: grbgetkey YOUR_LICENSE_KEY
+#
+# GraphHopper (optional):
+#   GraphHopper routing server is optional but recommended.
+#   If unavailable, set use_graphhopper_routing: false in config.
+#
+# Development installation (includes testing and linting):
+#   pip install -r requirements.txt
+#
+# ========================================
+# Version Information
+# ========================================
+# Python: 3.12+
+# Last Updated: 2025-10-14
+# Compatible with: Windows, Linux, macOS
