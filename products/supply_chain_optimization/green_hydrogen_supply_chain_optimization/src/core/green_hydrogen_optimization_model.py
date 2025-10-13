@@ -1,6 +1,7 @@
 """
-天然气基供应链优化模型
+绿氢+CO₂制SAF供应链优化模型
 基于Gurobi求解器的混合整数线性规划模型
+工艺路线：绿氢 + CO₂ → 甲醇 → SAF (两步法)
 包含时间尺度匹配：生产(1小时) vs 需求(1周)
 集成OSM真实路网数据进行距离计算和路径规划
 """
@@ -25,7 +26,7 @@ except ModuleNotFoundError:
     import sys
     # 动态加入项目根目录到sys.path后重试
     current_file = os.path.abspath(__file__)
-    # core/natural_gas_optimization_model.py -> core/ -> src/ -> green_hydrogen_supply_chain_optimization/ -> supply_chain_optimization/ -> products/ -> 项目根
+    # core/green_hydrogen_optimization_model.py -> core/ -> src/ -> green_hydrogen_supply_chain_optimization/ -> supply_chain_optimization/ -> products/ -> 项目根
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file))))))
     if project_root not in sys.path:
         sys.path.append(project_root)
@@ -44,7 +45,7 @@ except ImportError:
     # 当直接运行时，添加src目录到路径
     import sys
     current_file = os.path.abspath(__file__)
-    # core/natural_gas_optimization_model.py -> core/ -> src/
+    # core/green_hydrogen_optimization_model.py -> core/ -> src/
     src_dir = os.path.dirname(os.path.dirname(current_file))
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
@@ -160,7 +161,7 @@ def get_project_base_dir():
     从当前文件位置向上找到项目根目录
 
     路径结构:
-    project_root/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/core/natural_gas_optimization_model.py
+    project_root/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/core/green_hydrogen_optimization_model.py
     需要向上6级目录到达项目根目录
 
     Returns:
@@ -355,8 +356,16 @@ class GreenHydrogenSupplyChainOptimizer:
         for tech, locs in self.mtj_locations.items():
             self.non_lng_mtj_locations[tech] = [loc for loc in locs if self.locations[loc]['type'] != 'lng_terminal']
 
-    """天然气基供应链优化器"""
-    
+class GreenHydrogenSupplyChainOptimizer:
+    """
+    绿氢+CO₂制SAF供应链优化器
+
+    工艺路线：绿氢 + CO₂ → 甲醇 → SAF (两步法)
+    - 绿氢来源：可再生能源电解制氢
+    - CO₂来源：燃煤电厂、天然气发电厂、石油炼厂的碳捕获
+    - 技术路径：E-CRM甲醇合成 + MTJ航煤转化
+    """
+
     def __init__(self, config_path: str = None, **override_params):
         """
         初始化优化器
