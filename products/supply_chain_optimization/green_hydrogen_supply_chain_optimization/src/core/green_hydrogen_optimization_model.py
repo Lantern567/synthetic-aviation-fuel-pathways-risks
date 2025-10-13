@@ -351,20 +351,6 @@ class GreenHydrogenSupplyChainOptimizer:
         for tech, tech_info in self.technologies.items():
             suitable_types = tech_info.get('suitable_locations', [])
             self.mtj_locations[tech] = [loc for loc, info in self.locations.items() if info['type'] in suitable_types]
-        # 非LNG接收站的MTJ工厂位置（用于天然气运输变量）
-        self.non_lng_mtj_locations = {}
-        for tech, locs in self.mtj_locations.items():
-            self.non_lng_mtj_locations[tech] = [loc for loc in locs if self.locations[loc]['type'] != 'lng_terminal']
-
-class GreenHydrogenSupplyChainOptimizer:
-    """
-    绿氢+CO₂制SAF供应链优化器
-
-    工艺路线：绿氢 + CO₂ → 甲醇 → SAF (两步法)
-    - 绿氢来源：可再生能源电解制氢
-    - CO₂来源：燃煤电厂、天然气发电厂、石油炼厂的碳捕获
-    - 技术路径：E-CRM甲醇合成 + MTJ航煤转化
-    """
 
     def __init__(self, config_path: str = None, **override_params):
         """
@@ -393,21 +379,12 @@ class GreenHydrogenSupplyChainOptimizer:
         # CO₂捕获源数据（绿氢供应链专用）
         self.co2_capture_sources = {}     # CO₂捕获源数据
 
-        # 保留天然气相关数据结构（向后兼容，但在绿氢路线中不使用）
-        self.ng_pipeline_sources = {}     # 天然气管段数据（废弃）
-        self.lng_terminals = {}           # LNG接收站数据（废弃）
-
-        # LNG容量平均值（从配置文件加载，在数据加载后会更新）
-        # 注意：绿氢路线中此参数不再使用
-        self.avg_lng_capacity_mcm_per_year = basic_params.get('avg_lng_capacity_mcm_per_year', 1000)
-
         # 加载碳排放参数
         self.carbon_params = self.config.get('carbon_emission_parameters', {})
         logger.info(f"加载碳排放参数: {len(self.carbon_params)} 个类别")
 
         # 通过GraphHopper路径规划计算得出的距离统计值（用于模型中的参考）
         self.avg_hydrogen_transport_distance = None  # 将通过GraphHopper路径规划计算得出
-        self.avg_ng_transport_distance = None  # 将通过GraphHopper路径规划计算得出
         
         # 决策变量
         self.production_vars = {}  # 小时级生产变量
@@ -654,13 +631,7 @@ class GreenHydrogenSupplyChainOptimizer:
             
             # 将机场位置添加到基础locations中
             self._add_airports_to_locations()
-            
-            # 将LNG接收站位置添加到基础locations中  
-            self._add_lng_terminals_to_locations()
-            
-            # 将天然气管道位置添加到基础locations中
-            self._add_ng_pipelines_to_locations()
-        
+
         except Exception as e:
             logger.error(f"处理可再生能源数据失败: {e}")
             # 降级到原有处理方法
@@ -744,12 +715,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 将机场位置添加到基础locations中
         self._add_airports_to_locations()
         
-        # 将LNG接收站位置添加到基础locations中  
-        self._add_lng_terminals_to_locations()
-        
-        # 将天然气管道位置添加到基础locations中
-        self._add_ng_pipelines_to_locations()
-    
+
     def _add_airports_to_locations(self):
         """将机场位置添加到基础locations字典中，使其可以用于决策变量"""
         if hasattr(self, 'airports') and self.airports:
@@ -1246,87 +1212,13 @@ class GreenHydrogenSupplyChainOptimizer:
             loc for loc, info in self.locations.items() 
             if info['type'] == 'airport'
         ]
-        
-        # LNG接收站位置（统一从locations获取）
-        self.lng_terminal_locations = [
-            loc for loc, info in self.locations.items() 
-            if info['type'] == 'lng_terminal'
-        ]
-        
-        # 天然气来源位置（管道接入点）
-        self.ng_locations = []
-        for i, (pipeline_id, pipeline_data) in enumerate(self.ng_pipeline_sources.items()):
-            ng_location_name = f"ng_pipeline_{i}"
-            
-            # 优先使用已计算的中心坐标
-            lat = pipeline_data.get('center_latitude', pipeline_data.get('lat', None))
-            lon = pipeline_data.get('center_longitude', pipeline_data.get('lon', None))
-            
-            # 如果中心坐标缺失或为NaN，尝试从起点终点坐标计算
-            if pd.isna(lat) or lat is None or pd.isna(lon) or lon is None:
-                start_lat = pipeline_data.get('start_latitude', None)
-                start_lon = pipeline_data.get('start_longitude', None)
-                end_lat = pipeline_data.get('end_latitude', None)
-                end_lon = pipeline_data.get('end_longitude', None)
-                
-                # 如果起点终点坐标都有效，计算中心坐标
-                if (not pd.isna(start_lat) and not pd.isna(start_lon) and 
-                    not pd.isna(end_lat) and not pd.isna(end_lon) and
-                    start_lat is not None and start_lon is not None and
-                    end_lat is not None and end_lon is not None):
-                    try:
-                        lat = (float(start_lat) + float(end_lat)) / 2
-                        lon = (float(start_lon) + float(end_lon)) / 2
-                        logger.info(f"管道 {pipeline_id} 使用起点终点坐标计算中心坐标: ({lat:.6f}, {lon:.6f})")
-                    except (ValueError, TypeError):
-                        logger.error(f"管道 {pipeline_id} 起点终点坐标转换失败: start_lat={start_lat}, start_lon={start_lon}, end_lat={end_lat}, end_lon={end_lon}")
-                        continue  # 跳过这个管道
-                else:
-                    logger.error(f"管道 {pipeline_id} 缺少有效的坐标信息: center_lat={lat}, center_lon={lon}, start_lat={start_lat}, start_lon={start_lon}, end_lat={end_lat}, end_lon={end_lon}")
-                    continue  # 跳过这个管道
-            
-            # 检查坐标是否仍然无效
-            if pd.isna(lat) or lat is None or pd.isna(lon) or lon is None:
-                logger.error(f"管道 {pipeline_id} 无法获取有效坐标，跳过此管道")
-                continue
-            
-            # 确保坐标是有效的数值
-            try:
-                lat = float(lat)
-                lon = float(lon)
-                
-                # 验证坐标是否在合理范围内（中国境内）
-                if not (18 <= lat <= 54 and 73 <= lon <= 135):
-                    logger.error(f"管道 {pipeline_id} 坐标超出中国范围 ({lat}, {lon})，跳过此管道")
-                    continue
-                
-            except (ValueError, TypeError):
-                logger.error(f"管道 {pipeline_id} 坐标转换失败，跳过此管道")
-                continue
-            
-            self.ng_locations.append(ng_location_name)
-            
-            # 将天然气管道位置添加到locations字典中
-            self.locations[ng_location_name] = {
-                'type': 'ng_pipeline',
-                'latitude': lat,
-                'longitude': lon,
-                'capacity_mw': 0,  # 管道本身不发电
-                'hourly_generation': [0] * self.total_hours,  # 无发电
-                'pipeline_id': pipeline_id,
-                'pipeline_name': pipeline_data.get('name', f'管道{i+1}'),
-                'operator': pipeline_data.get('operator', '未知'),
-                'capacity_mcm_per_day': pipeline_data.get('capacity_mcm_per_day', 0)
-            }
-        
+
         # 所有可用于建设MTJ工厂的位置（现在统一从self.locations中获取）
         # 每种技术的适用位置由技术定义中的suitable_locations决定，不需要单独的mtj_locations映射
         
         logger.info(f"定义了运输位置映射:")
         logger.info(f"  氢气生产位置: {len(self.hydrogen_locations)} 个")
         logger.info(f"  机场位置: {len(self.airport_locations)} 个")
-        logger.info(f"  LNG接收站位置: {len(self.lng_terminal_locations)} 个")
-        logger.info(f"  天然气管道位置: {len(self.ng_locations)} 个")
         logger.info(f"  总位置数: {len(self.locations)} 个")
 
         # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
@@ -1396,28 +1288,11 @@ class GreenHydrogenSupplyChainOptimizer:
         # 统一从基础locations字典获取坐标
         if location in self.locations:
             return (self.locations[location]['latitude'], self.locations[location]['longitude'])
-        
+
         # 兼容性处理：如果是旧的命名方式，尝试转换
         if location in self.airports:
             return (self.airports[location]['latitude'], self.airports[location]['longitude'])
-        
-        # 检查是否是天然气管道（需要从管道数据中获取）
-        if location.startswith('ng_pipeline_'):
-            pipeline_idx = int(location.split('_')[-1])
-            if pipeline_idx < len(self.ng_pipeline_sources):
-                pipeline_id = list(self.ng_pipeline_sources.keys())[pipeline_idx]
-                pipeline_data = self.ng_pipeline_sources[pipeline_id]
-                # 尝试获取有效坐标
-                lat = pipeline_data.get('lat', None)
-                lon = pipeline_data.get('lon', None)
-                if lat is not None and lon is not None and not pd.isna(lat) and not pd.isna(lon):
-                    try:
-                        return (float(lat), float(lon))
-                    except (ValueError, TypeError):
-                        pass
-                # 如果没有有效坐标，抛出错误
-                raise ValueError(f"管道 {pipeline_id} 缺少有效坐标信息")
-        
+
         # 检查是否是机场集成位置（兼容性处理）
         if location.startswith('airport_integrated_'):
             airport_name = location.replace('airport_integrated_', '')
@@ -1444,26 +1319,29 @@ class GreenHydrogenSupplyChainOptimizer:
         
         # 构建技术配置，从配置文件加载各个技术的详细参数
         self.technologies = {}
-        
-        for tech_key in ['pipeline_direct_conversion', 'airport_integrated_conversion',
-                        'lng_terminal_conversion', 'lng_to_hplant_conversion']:
+
+        # 绿氢+CO₂制SAF供应链：只使用两步法工艺（methanol_mtj_two_step）
+        # 第一步：H₂ + CO₂ → 甲醇 (E-CRM电化学还原)
+        # 第二步：甲醇 → SAF (MTJ甲醇制航煤)
+        for tech_key in ['methanol_mtj_two_step']:
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
                 self.technologies[tech_key] = {
                     'name': tech_info['name'],
-                    'lcop_yuan_per_kg': base_lcop * complexity_factors[tech_key],
+                    'lcop_yuan_per_kg': base_lcop * complexity_factors.get(tech_key, 1.0),
                     'efficiency': tech_info['efficiency'],
-                    'ng_consumption_ratio': tech_info['ng_consumption_ratio'],
                     'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
-                    'methanol_intermediate_ratio': tech_info['methanol_intermediate_ratio'],
+                    'co2_consumption_ratio': tech_info.get('co2_consumption_ratio', 2.75),  # H₂+CO₂→甲醇的CO₂消耗比
+                    'methanol_intermediate_ratio': tech_info.get('methanol_intermediate_ratio', 3.125),  # H₂→甲醇的中间产物比
+                    'methanol_to_saf_ratio': tech_info.get('methanol_to_saf_ratio', 0.64),  # 甲醇→SAF的转化率
                     'suitable_locations': tech_info['suitable_locations'],
                     'transport_mode': tech_info['transport_mode'],
                     'hydrogen_transport_required': tech_info['hydrogen_transport_required'],
                     'technology_type': tech_info['technology_type'],
-                    'complexity_factor': complexity_factors[tech_key]
+                    'complexity_factor': complexity_factors.get(tech_key, 1.0)
                 }
-        
-        logger.info(f"定义了 {len(self.technologies)} 种MTJ航煤生产技术")
+
+        logger.info(f"定义了 {len(self.technologies)} 种SAF生产技术（绿氢+CO₂两步法）")
         logger.info(f"基础平准化成本: {base_lcop:.0f} 元/kg")
         
         # 检查技术参数中的NaN值
@@ -2000,9 +1878,6 @@ class GreenHydrogenSupplyChainOptimizer:
         # 6. 氢气运输决策变量 (从制氢地到MTJ工厂)
         self.hydrogen_transport_vars = {}  # 氢气运输量 (kg H2/week)
         
-        # 7. 天然气运输决策变量 (从管道到MTJ工厂，罐车运输)  
-        self.ng_transport_vars = {}  # 天然气运输量 (m³/day)
-        
         for location in self.locations:
             location_type = self.locations[location]['type']
             # 只在可再生能源地点创建制氢变量
@@ -2067,41 +1942,8 @@ class GreenHydrogenSupplyChainOptimizer:
                     )
         
         logger.info(f"创建了 {valid_h2_routes} 条氢气运输路线（无距离限制）")
-        
-        # 9. 创建天然气运输变量 (从管道到所有非LNG接收站的MTJ工厂，改为天级罐车运输，无距离限制)
-        logger.info("创建天然气罐车运输变量，无距离限制")
-        
-        valid_ng_routes = 0  # 计数有效路线
-        total_days = self.total_hours // 24
-        for ng_loc in self.ng_locations:
-            for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion']:
-                # 机场集成转换直接从城市管道供气，不需要运输变量
-                if tech == 'airport_integrated_conversion':
-                    continue  # 跳过机场集成转换，使用管道直供
 
-                # 检查该技术的运输模式是否支持天然气管道
-                tech_transport_mode = self.technologies[tech]['transport_mode']
-                transport_config = self.config['transport_modes'][tech_transport_mode]
-                suitable_sources = transport_config.get('suitable_sources', [])
-
-                # 如果该运输模式不支持天然气管道，跳过
-                if 'ng_pipeline' not in suitable_sources:
-                    logger.info(f"技术 {tech} 的运输模式 {tech_transport_mode} 不支持天然气管道，跳过管道运输变量创建")
-                    continue
-
-                for mtj_loc in self.non_lng_mtj_locations[tech]:
-                    # 不再检查距离限制，允许所有路径
-                    valid_ng_routes += 1
-                    for day in range(total_days): # 改为天级
-                        var_name = f"ng_transport_{ng_loc}_{mtj_loc}_day_{day}"
-                        self.ng_transport_vars[(ng_loc, mtj_loc, day)] = self.model.addVar(
-                                lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                            )
-        
-        logger.info(f"创建了 {valid_ng_routes} 条天然气运输路线（无距离限制）")
-
-
-        # 10. 创建氢能管道运输变量 (与罐车运输并行的选择方案)
+        # 9. 创建氢能管道运输变量 (与罐车运输并行的选择方案)
         logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
         
         self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量 (kg H2/week)
@@ -2164,8 +2006,103 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"创建了 {len(self.shortage_vars)} 个缺货惩罚变量")
         logger.info(f"创建了 {len(self.hydrogen_transport_vars)} 个氢气罐车运输变量")
         logger.info(f"创建了 {len(self.hydrogen_pipeline_transport_vars)} 个氢能管道运输变量")
-        logger.info(f"创建了 {len(self.ng_transport_vars)} 个天然气运输变量")
-    
+
+        # 11. CO₂运输决策变量（两种模式：管道和罐车）
+        logger.info("创建CO₂运输变量（管道和罐车）")
+
+        self.co2_pipeline_transport_vars = {}  # CO₂管道运输变量 (kg CO₂/week)
+        self.co2_truck_transport_vars = {}     # CO₂罐车运输变量 (kg CO₂/week)
+
+        # 从CO₂捕获源到所有甲醇生产地点
+        # 甲醇生产地点就是MTJ工厂位置（因为两步法：H₂+CO₂→甲醇→SAF在同一地点）
+        valid_co2_routes = 0
+
+        for co2_source_id, co2_source_data in self.co2_capture_sources.items():
+            # 遍历所有可能的甲醇生产位置（即MTJ工厂位置）
+            for tech, tech_locations in self.mtj_locations.items():
+                # 只为methanol_mtj_two_step技术创建CO₂运输变量
+                # （因为只有两步法工艺需要CO₂作为原料）
+                if 'methanol_mtj' not in tech:
+                    continue
+
+                if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
+                    logger.error(f"技术 {tech} 的位置不可迭代: {tech_locations}")
+                    continue
+
+                for methanol_loc in tech_locations:
+                    # 创建管道运输变量（周级）
+                    var_name_pipeline = f"co2_pipeline_{co2_source_id}_{methanol_loc}_week"
+                    self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name_pipeline
+                    )
+
+                    # 创建罐车运输变量（周级）
+                    var_name_truck = f"co2_truck_{co2_source_id}_{methanol_loc}_week"
+                    self.co2_truck_transport_vars[(co2_source_id, methanol_loc)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name_truck
+                    )
+
+                    valid_co2_routes += 1
+
+        logger.info(f"创建了 {valid_co2_routes} 条CO₂运输路线（管道+罐车）")
+        logger.info(f"创建了 {len(self.co2_pipeline_transport_vars)} 个CO₂管道运输变量")
+        logger.info(f"创建了 {len(self.co2_truck_transport_vars)} 个CO₂罐车运输变量")
+
+        # 12. 甲醇生产和库存决策变量（两步法第一步：H₂ + CO₂ → 甲醇）
+        logger.info("创建甲醇生产和库存变量")
+
+        self.methanol_production_vars = {}  # 甲醇生产变量 (小时级, kg methanol/hour)
+        self.methanol_inventory_vars = {}   # 甲醇库存变量 (小时级, kg methanol)
+
+        # 在所有可以生产甲醇的位置创建变量（即MTJ工厂位置）
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' not in tech:
+                continue
+
+            if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
+                continue
+
+            for methanol_loc in tech_locations:
+                # 小时级甲醇生产量
+                for hour in range(self.total_hours):
+                    var_name = f"methanol_prod_{methanol_loc}_{hour}"
+                    self.methanol_production_vars[(methanol_loc, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+
+                # 甲醇库存（小时级）
+                for hour in range(self.total_hours + 1):  # +1 for final inventory
+                    var_name = f"methanol_storage_{methanol_loc}_{hour}"
+                    self.methanol_inventory_vars[(methanol_loc, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+
+        logger.info(f"创建了 {len(self.methanol_production_vars)} 个甲醇生产变量")
+        logger.info(f"创建了 {len(self.methanol_inventory_vars)} 个甲醇库存变量")
+
+        # 13. CO₂库存决策变量（用于时间尺度匹配：周级捕获→小时级消耗）
+        logger.info("创建CO₂库存变量（时间尺度匹配：周级供应→小时级消耗）")
+
+        self.co2_inventory_vars = {}  # CO₂库存变量 (小时级, kg CO₂)
+
+        # 在所有接收CO₂的甲醇生产位置创建库存变量
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' not in tech:
+                continue
+
+            if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
+                continue
+
+            for methanol_loc in tech_locations:
+                # CO₂库存（小时级，用于周级到小时级的时间匹配）
+                for hour in range(self.total_hours + 1):  # +1 for final inventory
+                    var_name = f"co2_storage_{methanol_loc}_{hour}"
+                    self.co2_inventory_vars[(methanol_loc, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+
+        logger.info(f"创建了 {len(self.co2_inventory_vars)} 个CO₂库存变量")
+
     def _create_constraints(self):
         """创建约束条件"""
         logger.info("创建约束条件...")
@@ -2199,14 +2136,26 @@ class GreenHydrogenSupplyChainOptimizer:
         
         # 9. 氢气运输约束
         self._add_hydrogen_transport_constraints()
-        
+
         # 9.1. 氢能管道运输约束
         self._add_hydrogen_pipeline_transport_constraints()
-        
-        # 10. 天然气运输约束
-        self._add_natural_gas_transport_constraints()
 
-        # 11. 平准化成本约束
+        # 10. CO₂供应平衡约束（周级）
+        self._add_co2_supply_balance_constraints()
+
+        # 11. 甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
+        self._add_methanol_production_constraints()
+
+        # 12. SAF生产约束（甲醇→SAF，两步法第二步，小时级）
+        self._add_saf_production_from_methanol_constraints()
+
+        # 13. 甲醇库存平衡约束
+        self._add_methanol_inventory_balance_constraints()
+
+        # 14. CO₂库存平衡约束（时间尺度匹配：周级供应→小时级消耗）
+        self._add_co2_inventory_balance_constraints()
+
+        # 15. 平准化成本约束
         self._add_levelized_cost_constraint()  # 已修复门槛值配置，重新启用
 
     def _add_levelized_cost_constraint(self):
@@ -2542,55 +2491,91 @@ class GreenHydrogenSupplyChainOptimizer:
         else:
             self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
 
-        # 10. 天然气罐车运输投资 + 20年运营成本现值（改为天级）
-        self.cost_expressions['ng_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化天然气运输成本中
-        # 天然气运输成本 - 基于LNG公式 W_LNG = (4.52e-4 * L) + (0.888/q) + 0.927
-        # 其中q是日输送量(10^4 m³/d)，需要基于实际优化变量计算
-        ng_transport_operation_expr = gp.LinExpr()
+        # 10. CO₂捕获成本（20年生命周期现值）
+        # 从配置文件读取CO₂捕获成本参数
+        co2_capture_cost_cfg = self.config.get('unified_costs', {}).get('co2_capture', {})
+        co2_capture_unit_cost = float(co2_capture_cost_cfg.get('capture_cost_yuan_per_kg', 0.3))  # 元/kg CO₂
 
-        # 为每条路线计算基于实际日输送量的运输成本
-        # 1. 天然气管道到MTJ工厂的运输成本
-        for ng_loc in self.ng_locations:
-            for mtj_loc in sum(self.non_lng_mtj_locations.values(), []):
-                distance_km = self._calculate_location_distance(ng_loc, mtj_loc)
+        # CO₂捕获成本 = Σ(CO₂运输量 × 单位成本)
+        self.cost_expressions['co2_capture_cost'] = gp.quicksum(
+            (self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) +
+             self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0))) *
+            co2_capture_unit_cost * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 生命周期系数
+            for co2_source_id in self.co2_capture_sources
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
 
-                total_days_local = self.total_hours // 24
-                for day in range(total_days_local):
-                    if (ng_loc, mtj_loc, day) in self.ng_transport_vars:
-                        transport_var = self.ng_transport_vars[(ng_loc, mtj_loc, day)]
+        # 11. CO₂管道运输成本（20年生命周期现值）
+        # 从配置文件读取CO₂管道运输成本参数
+        co2_pipeline_cost_cfg = self.config.get('unified_costs', {}).get('co2_transport', {}).get('pipeline', {})
+        co2_pipeline_unit_cost = float(co2_pipeline_cost_cfg.get('transport_cost_yuan_per_kg_km', 0.0001))  # 元/(kg·km)
 
-                        # LNG公式的线性部分: (4.52e-4 * L + 0.927) * 运输量
-                        linear_cost = (4.52e-4 * distance_km + 0.927) * transport_var
-                        ng_transport_operation_expr += linear_cost * lifecycle_operation_factor
+        self.cost_expressions['co2_pipeline_transport_cost'] = gp.quicksum(
+            self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
+            co2_pipeline_unit_cost *
+            self._calculate_location_distance(
+                self.co2_capture_sources[co2_source_id]['name'],
+                methanol_loc
+            ) * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 距离 × 生命周期系数
+            for co2_source_id in self.co2_capture_sources
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
+        )
 
-        self.cost_expressions['ng_transport_operation'] = ng_transport_operation_expr
+        # 12. CO₂罐车运输成本（20年生命周期现值）
+        # 从配置文件读取CO₂罐车运输成本参数
+        co2_truck_cost_cfg = self.config.get('unified_costs', {}).get('co2_transport', {}).get('truck', {})
+        co2_truck_unit_cost = float(co2_truck_cost_cfg.get('transport_cost_yuan_per_kg_km', 0.0005))  # 元/(kg·km)
 
+        self.cost_expressions['co2_truck_transport_cost'] = gp.quicksum(
+            self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
+            co2_truck_unit_cost *
+            self._calculate_location_distance(
+                self.co2_capture_sources[co2_source_id]['name'],
+                methanol_loc
+            ) * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 距离 × 生命周期系数
+            for co2_source_id in self.co2_capture_sources
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
+        )
 
-        # 天然气日处理能力约束已移除 - 允许无限制处理
-        logger.info("天然气日处理能力约束已移除，允许无限制处理")
+        # 13. 甲醇生产成本（20年生命周期现值）
+        # 从配置文件读取甲醇生产成本参数
+        methanol_production_cost_cfg = self.config.get('unified_costs', {}).get('methanol_production', {})
+        methanol_production_unit_cost = float(methanol_production_cost_cfg.get('production_cost_yuan_per_kg', 0.5))  # 元/kg 甲醇
 
-        # 11. 原料成本（20年生命周期现值）
-        # 获取天然气价格 (元/m³)
-        ng_price_per_m3 = None
-        for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
-            price = pipeline_data.get('natural_gas_price_yuan_per_10k_m3', None)
-            if price is not None:
-                ng_price_per_m3 = price  # 数据文件中实际是元/m³，不是元/万m³
-                break
+        self.cost_expressions['methanol_production_cost'] = gp.quicksum(
+            self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
+            methanol_production_unit_cost * lifecycle_operation_factor  # 小时级生产量 × 单位成本 × 生命周期系数
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            for hour in range(self.total_hours)
+            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
 
-        if ng_price_per_m3 is not None:
-            # 创建天然气成本表达式对象
-            self.cost_expressions['natural_gas_cost'] = gp.quicksum(
-                self.production_vars[(location, tech, hour)] *
-                self.technologies[tech]['ng_consumption_ratio'] * ng_price_per_m3 * lifecycle_operation_factor
-                for location in self.locations
-                for tech in self.technologies
-                for hour in range(self.total_hours)
-                if (location, tech, hour) in self.production_vars and
-                   self.technologies[tech].get('ng_consumption_ratio', 0) > 0
-            )
-        else:
-            self.cost_expressions['natural_gas_cost'] = gp.LinExpr(0)  # 如果没有价格信息，成本为0
+        # 14. 甲醇存储成本（20年生命周期现值）
+        # 从配置文件读取甲醇存储成本参数
+        methanol_storage_cost_cfg = self.config.get('unified_costs', {}).get('methanol_storage', {})
+        methanol_storage_equipment_cost = float(methanol_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 15))  # 元/kg
+        methanol_storage_operation_cost = float(methanol_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.002))  # 元/(kg·hour)
+
+        # 甲醇储存设备投资成本
+        max_methanol_storage = gp.quicksum(
+            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            for hour in range(self.total_hours + 1)
+            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
+        self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
+
+        # 甲醇储存运营成本
+        self.cost_expressions['methanol_storage_operation'] = gp.quicksum(
+            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
+            methanol_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            for hour in range(self.total_hours + 1)
+            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
 
 
         # 13. 短缺惩罚成本（20年生命周期现值）
@@ -2619,7 +2604,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
             self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['ng_transport_investment']
+            self.cost_expressions['methanol_storage_investment']  # 新增：甲醇储存设备投资
         )
 
         # 运营成本聚合
@@ -2633,8 +2618,11 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['h2_storage_operation'] +
             self.cost_expressions['hydrogen_transport_operation'] +
             self.cost_expressions['hydrogen_pipeline_operation'] +
-            self.cost_expressions['ng_transport_operation'] +
-            self.cost_expressions['natural_gas_cost'] +
+            self.cost_expressions['co2_capture_cost'] +  # 新增：CO₂捕获成本
+            self.cost_expressions['co2_pipeline_transport_cost'] +  # 新增：CO₂管道运输成本
+            self.cost_expressions['co2_truck_transport_cost'] +  # 新增：CO₂罐车运输成本
+            self.cost_expressions['methanol_production_cost'] +  # 新增：甲醇生产成本
+            self.cost_expressions['methanol_storage_operation'] +  # 新增：甲醇储存运营成本
             self.cost_expressions['final_inventory_cost']
         )
 
@@ -3177,13 +3165,6 @@ class GreenHydrogenSupplyChainOptimizer:
                 if location_type in ['solar_plant', 'wind_farm']:
                     # 2. 可再生能源电力供应约束（基于时段和天气）
                     self._add_renewable_power_constraints(location, hour)
-
-                elif location_type in ['lng_terminal', 'airport']:
-                    # 3. 天然气管道流量限制约束（简化版，移除维护停机）
-                    self._add_simplified_ng_pipeline_constraints(location, hour)
-
-                    # 4. 天然气储罐压力和流量约束
-                    self._add_ng_storage_flow_constraints(location, hour)
         
         # 移除设备维护停机时间约束 - 这是导致20%利用率的主因
         # self._add_maintenance_downtime_constraints()  # 注释掉
@@ -5591,54 +5572,14 @@ class GreenHydrogenSupplyChainOptimizer:
                     "容量因子": avg_generation / info.get('capacity_mw', 1) if info.get('capacity_mw', 0) > 0 else 0,
                     "坐标": f"({info['latitude']:.4f}, {info['longitude']:.4f})"
                 })
-        
+
         if renewable_data:
             renewable_df = pd.DataFrame(renewable_data)
             renewable_path = os.path.join(output_dir, f"renewable_energy_plants_{timestamp}.csv")
             renewable_df.to_csv(renewable_path, index=False, encoding='utf-8-sig')
             print(f"可再生能源发电站信息保存到: {renewable_path}")
-        
-        # 2. 保存LNG接收站信息
-        lng_data = []
-        for location, info in self.locations.items():
-            if info['type'] == 'lng_terminal':
-                lng_data.append({
-                    "位置ID": location,
-                    "原始接收站ID": info.get('original_terminal_id', ''),
-                    "纬度": info['latitude'],
-                    "经度": info['longitude'],
-                    "LNG处理能力(万立方米/年)": info.get('lng_capacity', 0),
-                    "坐标": f"({info['latitude']:.4f}, {info['longitude']:.4f})"
-                })
-        
-        if lng_data:
-            lng_df = pd.DataFrame(lng_data)
-            lng_path = os.path.join(output_dir, f"lng_terminals_{timestamp}.csv")
-            lng_df.to_csv(lng_path, index=False, encoding='utf-8-sig')
-            print(f"LNG接收站信息保存到: {lng_path}")
-        
-        # 3. 保存天然气管道信息
-        ng_pipeline_data = []
-        for location, info in self.locations.items():
-            if info['type'] == 'ng_pipeline':
-                ng_pipeline_data.append({
-                    "位置ID": location,
-                    "管道ID": info.get('pipeline_id', ''),
-                    "管道名称": info.get('pipeline_name', ''),
-                    "运营商": info.get('operator', ''),
-                    "纬度": info['latitude'],
-                    "经度": info['longitude'],
-                    "输送能力(万立方米/天)": info.get('capacity_mcm_per_day', 0),
-                    "坐标": f"({info['latitude']:.4f}, {info['longitude']:.4f})"
-                })
-        
-        if ng_pipeline_data:
-            ng_pipeline_df = pd.DataFrame(ng_pipeline_data)
-            ng_pipeline_path = os.path.join(output_dir, f"ng_pipelines_{timestamp}.csv")
-            ng_pipeline_df.to_csv(ng_pipeline_path, index=False, encoding='utf-8-sig')
-            print(f"天然气管道信息保存到: {ng_pipeline_path}")
-        
-        # 4. 保存机场信息
+
+        # 2. 保存机场信息
         airport_data = []
         for location, info in self.locations.items():
             if info['type'] == 'airport':
@@ -6285,6 +6226,317 @@ class GreenHydrogenSupplyChainOptimizer:
                        f"(基于{len(airport_distances)}个样本)")
         
         logger.info("距离统计计算完成")
+
+    def _add_co2_supply_balance_constraints(self):
+        """添加CO₂供应平衡约束（周级）
+
+        约束逻辑：
+        - CO₂来源：碳捕获源通过管道和罐车运输供应（周级决策）
+        - CO₂去向：进入甲醇生产工厂的CO₂库存
+        - 平衡约束：每周运输的总CO₂量 ≥ 该周甲醇生产所需的总CO₂量（通过库存匹配）
+        """
+        logger.info("添加CO₂供应平衡约束（周级）...")
+
+        # 获取所有甲醇生产位置
+        methanol_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' in tech:
+                methanol_locations.extend(tech_locations)
+        methanol_locations = list(set(methanol_locations))
+
+        # 对每个甲醇生产位置和每周，添加CO₂供应平衡约束
+        for methanol_loc in methanol_locations:
+            for week in range(self.time_horizon_weeks):
+                # 该周通过管道运输供应的CO₂总量（kg CO₂/week）
+                co2_pipeline_supply = gp.quicksum(
+                    self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
+                    for co2_source_id in self.co2_capture_sources
+                    if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
+                )
+
+                # 该周通过罐车运输供应的CO₂总量（kg CO₂/week）
+                co2_truck_supply = gp.quicksum(
+                    self.co2_truck_transport_vars[(co2_source_id, methanol_loc)]
+                    for co2_source_id in self.co2_capture_sources
+                    if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
+                )
+
+                # 总CO₂供应（kg CO₂/week）
+                total_co2_supply = co2_pipeline_supply + co2_truck_supply
+
+                # 该周进入CO₂库存的量 = 周末库存 - 周初库存
+                week_start_hour = week * 168
+                week_end_hour = (week + 1) * 168
+
+                co2_inventory_inflow = (
+                    self.co2_inventory_vars[(methanol_loc, week_end_hour)] -
+                    self.co2_inventory_vars[(methanol_loc, week_start_hour)]
+                )
+
+                # CO₂供应平衡约束：周运输量 = 周库存增量
+                self.model.addConstr(
+                    total_co2_supply == co2_inventory_inflow,
+                    name=f"co2_supply_balance_{methanol_loc}_week{week}"
+                )
+
+        logger.info(f"添加了 {len(methanol_locations) * self.time_horizon_weeks} 个CO₂供应平衡约束")
+
+    def _add_methanol_production_constraints(self):
+        """添加甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
+
+        约束逻辑：
+        - 输入：氢气 + CO₂
+        - 输出：甲醇（中间产物）
+        - 化学计量比：从技术配置中读取
+          * h2_consumption_ratio: kg H₂ / kg SAF（最终产物）
+          * co2_consumption_ratio: kg CO₂ / kg SAF
+          * methanol_intermediate_ratio: kg 甲醇 / kg SAF
+        """
+        logger.info("添加甲醇生产约束（H₂+CO₂→甲醇）...")
+
+        # 获取methanol_mtj_two_step技术的化学计量比
+        tech_key = 'methanol_mtj_two_step'
+        if tech_key not in self.technologies:
+            logger.warning(f"未找到技术 {tech_key}，跳过甲醇生产约束")
+            return
+
+        tech_info = self.technologies[tech_key]
+        h2_consumption_ratio = tech_info['h2_consumption_ratio']  # kg H₂ / kg SAF
+        co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
+        methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']  # kg 甲醇 / kg SAF
+
+        # 获取所有甲醇生产位置
+        methanol_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' in tech:
+                methanol_locations.extend(tech_locations)
+        methanol_locations = list(set(methanol_locations))
+
+        constraint_count = 0
+        for methanol_loc in methanol_locations:
+            for hour in range(self.total_hours):
+                if (methanol_loc, hour) not in self.methanol_production_vars:
+                    continue
+
+                # 该小时生产的甲醇量（kg methanol/hour）
+                methanol_prod = self.methanol_production_vars[(methanol_loc, hour)]
+
+                # 甲醇生产需要消耗的氢气量（kg H₂/hour）
+                # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
+                h2_required = methanol_prod * (1.0 / methanol_intermediate_ratio) * h2_consumption_ratio
+
+                # 甲醇生产需要消耗的CO₂量（kg CO₂/hour）
+                # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg CO₂ / kg SAF)
+                co2_required = methanol_prod * (1.0 / methanol_intermediate_ratio) * co2_consumption_ratio
+
+                # 氢气供应约束（小时级）：该地点该小时可用氢气 ≥ 甲醇生产所需氢气
+                if (methanol_loc, hour) in self.hydrogen_storage_vars:
+                    self.model.addConstr(
+                        self.hydrogen_storage_vars[(methanol_loc, hour)] >= h2_required,
+                        name=f"methanol_h2_supply_{methanol_loc}_{hour}"
+                    )
+                    constraint_count += 1
+
+                # CO₂供应约束（小时级）：该地点该小时可用CO₂ ≥ 甲醇生产所需CO₂
+                if (methanol_loc, hour) in self.co2_inventory_vars:
+                    self.model.addConstr(
+                        self.co2_inventory_vars[(methanol_loc, hour)] >= co2_required,
+                        name=f"methanol_co2_supply_{methanol_loc}_{hour}"
+                    )
+                    constraint_count += 1
+
+        logger.info(f"添加了 {constraint_count} 个甲醇生产约束（H₂+CO₂消耗）")
+
+    def _add_saf_production_from_methanol_constraints(self):
+        """添加SAF生产约束（甲醇→SAF，两步法第二步，小时级）
+
+        约束逻辑：
+        - 输入：甲醇（中间产物）
+        - 输出：SAF（最终产物）
+        - 化学计量比：methanol_to_saf_ratio = kg SAF / kg 甲醇
+        """
+        logger.info("添加SAF生产约束（甲醇→SAF）...")
+
+        # 获取methanol_mtj_two_step技术的转化率
+        tech_key = 'methanol_mtj_two_step'
+        if tech_key not in self.technologies:
+            logger.warning(f"未找到技术 {tech_key}，跳过SAF生产约束")
+            return
+
+        tech_info = self.technologies[tech_key]
+        methanol_to_saf_ratio = tech_info['methanol_to_saf_ratio']  # kg SAF / kg 甲醇
+
+        constraint_count = 0
+        for location in self.locations:
+            for hour in range(self.total_hours):
+                # SAF生产变量（小时级，kg SAF/hour）
+                if (location, tech_key, hour) not in self.production_vars:
+                    continue
+
+                saf_prod = self.production_vars[(location, tech_key, hour)]
+
+                # SAF生产需要消耗的甲醇量（kg 甲醇/hour）
+                # saf_prod (kg SAF/hour) * (kg 甲醇 / kg SAF)
+                methanol_required = saf_prod * (1.0 / methanol_to_saf_ratio)
+
+                # 甲醇供应约束：该地点该小时甲醇生产量 ≥ SAF生产所需甲醇
+                if (location, hour) in self.methanol_production_vars:
+                    self.model.addConstr(
+                        self.methanol_production_vars[(location, hour)] >= methanol_required,
+                        name=f"saf_methanol_supply_{location}_{hour}"
+                    )
+                    constraint_count += 1
+
+        logger.info(f"添加了 {constraint_count} 个SAF生产约束（甲醇消耗）")
+
+    def _add_methanol_inventory_balance_constraints(self):
+        """添加甲醇库存平衡约束（小时级）
+
+        约束逻辑：
+        - 当前库存 = 上期库存 + 本期生产 - 本期消耗
+        - 生产：methanol_production_vars (kg methanol/hour)
+        - 消耗：用于SAF生产
+        - 初始库存：0
+        """
+        logger.info("添加甲醇库存平衡约束...")
+
+        # 获取methanol_mtj_two_step技术的转化率
+        tech_key = 'methanol_mtj_two_step'
+        if tech_key not in self.technologies:
+            logger.warning(f"未找到技术 {tech_key}，跳过甲醇库存平衡约束")
+            return
+
+        tech_info = self.technologies[tech_key]
+        methanol_to_saf_ratio = tech_info['methanol_to_saf_ratio']
+
+        # 获取所有甲醇生产位置
+        methanol_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' in tech:
+                methanol_locations.extend(tech_locations)
+        methanol_locations = list(set(methanol_locations))
+
+        constraint_count = 0
+        for methanol_loc in methanol_locations:
+            # 初始库存约束（hour 0）
+            if (methanol_loc, 0) in self.methanol_inventory_vars:
+                self.model.addConstr(
+                    self.methanol_inventory_vars[(methanol_loc, 0)] == 0,
+                    name=f"methanol_init_inventory_{methanol_loc}"
+                )
+                constraint_count += 1
+
+            # 库存平衡约束（hour 1 到 total_hours）
+            for hour in range(1, self.total_hours + 1):
+                if (methanol_loc, hour) not in self.methanol_inventory_vars:
+                    continue
+
+                # 上期库存
+                prev_inventory = self.methanol_inventory_vars[(methanol_loc, hour - 1)]
+
+                # 本期生产（kg methanol/hour）
+                production = 0
+                if (methanol_loc, hour - 1) in self.methanol_production_vars:
+                    production = self.methanol_production_vars[(methanol_loc, hour - 1)]
+
+                # 本期消耗（用于SAF生产，kg methanol/hour）
+                consumption = 0
+                if (methanol_loc, tech_key, hour - 1) in self.production_vars:
+                    saf_prod = self.production_vars[(methanol_loc, tech_key, hour - 1)]
+                    consumption = saf_prod * (1.0 / methanol_to_saf_ratio)
+
+                # 库存平衡：当前库存 = 上期库存 + 生产 - 消耗
+                self.model.addConstr(
+                    self.methanol_inventory_vars[(methanol_loc, hour)] ==
+                    prev_inventory + production - consumption,
+                    name=f"methanol_inventory_balance_{methanol_loc}_{hour}"
+                )
+                constraint_count += 1
+
+        logger.info(f"添加了 {constraint_count} 个甲醇库存平衡约束")
+
+    def _add_co2_inventory_balance_constraints(self):
+        """添加CO₂库存平衡约束（时间尺度匹配：周级供应→小时级消耗）
+
+        约束逻辑：
+        - 当前库存 = 上期库存 + 本期供应 - 本期消耗
+        - 供应：周级决策（co2_pipeline_transport + co2_truck_transport）
+        - 消耗：小时级消耗（用于甲醇生产）
+        - 初始库存：0
+        - 时间尺度匹配：周供应在每周的第一个小时入库，然后逐小时消耗
+        """
+        logger.info("添加CO₂库存平衡约束（时间尺度匹配）...")
+
+        # 获取methanol_mtj_two_step技术的化学计量比
+        tech_key = 'methanol_mtj_two_step'
+        if tech_key not in self.technologies:
+            logger.warning(f"未找到技术 {tech_key}，跳过CO₂库存平衡约束")
+            return
+
+        tech_info = self.technologies[tech_key]
+        co2_consumption_ratio = tech_info['co2_consumption_ratio']
+        methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']
+
+        # 获取所有甲醇生产位置
+        methanol_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'methanol_mtj' in tech:
+                methanol_locations.extend(tech_locations)
+        methanol_locations = list(set(methanol_locations))
+
+        constraint_count = 0
+        for methanol_loc in methanol_locations:
+            # 初始库存约束（hour 0）
+            if (methanol_loc, 0) in self.co2_inventory_vars:
+                self.model.addConstr(
+                    self.co2_inventory_vars[(methanol_loc, 0)] == 0,
+                    name=f"co2_init_inventory_{methanol_loc}"
+                )
+                constraint_count += 1
+
+            # 库存平衡约束（hour 1 到 total_hours）
+            for hour in range(1, self.total_hours + 1):
+                if (methanol_loc, hour) not in self.co2_inventory_vars:
+                    continue
+
+                # 上期库存
+                prev_inventory = self.co2_inventory_vars[(methanol_loc, hour - 1)]
+
+                # 本期供应（kg CO₂/hour）
+                # 只有每周的第一个小时（168倍数）才有周级供应入库
+                supply = 0
+                if hour % 168 == 0:  # 每周的第一个小时
+                    week = hour // 168
+                    if week < self.time_horizon_weeks:
+                        # 该周通过管道和罐车运输的CO₂总量（kg CO₂/week）
+                        supply_pipeline = gp.quicksum(
+                            self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
+                            for co2_source_id in self.co2_capture_sources
+                            if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
+                        )
+                        supply_truck = gp.quicksum(
+                            self.co2_truck_transport_vars[(co2_source_id, methanol_loc)]
+                            for co2_source_id in self.co2_capture_sources
+                            if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
+                        )
+                        supply = supply_pipeline + supply_truck
+
+                # 本期消耗（用于甲醇生产，kg CO₂/hour）
+                consumption = 0
+                if (methanol_loc, hour - 1) in self.methanol_production_vars:
+                    methanol_prod = self.methanol_production_vars[(methanol_loc, hour - 1)]
+                    # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg CO₂ / kg SAF)
+                    consumption = methanol_prod * (1.0 / methanol_intermediate_ratio) * co2_consumption_ratio
+
+                # 库存平衡：当前库存 = 上期库存 + 供应 - 消耗
+                self.model.addConstr(
+                    self.co2_inventory_vars[(methanol_loc, hour)] ==
+                    prev_inventory + supply - consumption,
+                    name=f"co2_inventory_balance_{methanol_loc}_{hour}"
+                )
+                constraint_count += 1
+
+        logger.info(f"添加了 {constraint_count} 个CO₂库存平衡约束")
 
 
 if __name__ == '__main__':
