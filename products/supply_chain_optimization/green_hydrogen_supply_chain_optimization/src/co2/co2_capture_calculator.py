@@ -384,7 +384,7 @@ class CO2CaptureCalculator:
                         'facility_type': 'coal_power',
                         'latitude': plant.get('Latitude', 0.0),
                         'longitude': plant.get('Longitude', 0.0),
-                        'province': plant.get('Province', 'Unknown'),
+                        'province': plant.get('Subnational_unit__province__sta', 'Unknown'),  # 修复：使用正确的字段名
                         'capacity_original': plant.get('Capacity__MW_', 0.0),
                         'capacity_unit': 'MW',
                         'capacity_factor': plant.get('Capacity_factor', 0.70),
