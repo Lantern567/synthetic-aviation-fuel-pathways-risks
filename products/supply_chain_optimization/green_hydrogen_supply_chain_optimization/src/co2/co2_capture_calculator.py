@@ -80,9 +80,9 @@ class CO2CaptureCalculator:
         df = pd.read_csv(coal_file, encoding='utf-8-sig')
         logger.info(f"Loaded {len(df)} coal power plant records")
 
-        # 筛选运行中的电厂
+        # 筛选运行中的电厂（不区分大小写）
         if 'Status' in df.columns:
-            df = df[df['Status'] == 'Operating'].copy()
+            df = df[df['Status'].str.lower() == 'operating'].copy()
             logger.info(f"Filtered to {len(df)} operating coal power plants")
 
         # 处理缺失的Capacity_factor（使用默认值0.70）
@@ -124,9 +124,9 @@ class CO2CaptureCalculator:
         df = pd.read_csv(gas_file, encoding='utf-8-sig')
         logger.info(f"Loaded {len(df)} gas power plant records")
 
-        # 筛选运行中的电厂
+        # 筛选运行中的电厂（不区分大小写）
         if 'Status' in df.columns:
-            df = df[df['Status'] == 'Operating'].copy()
+            df = df[df['Status'].str.lower() == 'operating'].copy()
             logger.info(f"Filtered to {len(df)} operating gas power plants")
 
         # 统一使用固定Capacity_factor=0.75
@@ -162,15 +162,17 @@ class CO2CaptureCalculator:
         df = pd.read_csv(oil_file, encoding='utf-8-sig')
         logger.info(f"Loaded {len(df)} oil refinery records")
 
-        # 筛选运行中的炼厂
+        # 筛选运行中的炼厂（不区分大小写）
         if 'Status' in df.columns:
-            df = df[df['Status'] == 'Operating'].copy()
+            df = df[df['Status'].str.lower() == 'operating'].copy()
             logger.info(f"Filtered to {len(df)} operating oil refineries")
 
         # 容量单位转换：KBD → 吨原油/周
         # 1 KBD = 1000桶/天 × 7天 × 159升/桶 × 0.85吨/m³ ÷ 1000 = 945吨/周
         if 'Capacity' in df.columns and 'CapUnit' in df.columns:
             kbd_mask = df['CapUnit'] == 'KBD'
+            # 确保Capacity是数值类型
+            df['Capacity'] = pd.to_numeric(df['Capacity'], errors='coerce')
             df.loc[kbd_mask, 'Capacity_ton_per_week'] = df.loc[kbd_mask, 'Capacity'] * 945
             logger.info(f"Converted {kbd_mask.sum()} KBD capacity values to ton/week")
 
@@ -197,6 +199,15 @@ class CO2CaptureCalculator:
         """
         capacity_mw = plant.get('Capacity__MW_', 600)  # 默认600MW
         capacity_factor = plant.get('Capacity_factor', 0.70)
+
+        # 确保数值类型
+        try:
+            capacity_mw = float(capacity_mw)
+            capacity_factor = float(capacity_factor)
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Type conversion error for plant {plant.get('Plant_name', 'Unknown')}: {e}")
+            capacity_mw = 600.0
+            capacity_factor = 0.70
 
         # Step 1: 计算周发电量
         hours_per_week = 168
@@ -239,6 +250,15 @@ class CO2CaptureCalculator:
         """
         capacity_mw = plant.get('Capacity__MW_', 400)
         capacity_factor = plant.get('Capacity_factor', 0.75)
+
+        # 确保数值类型
+        try:
+            capacity_mw = float(capacity_mw)
+            capacity_factor = float(capacity_factor)
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Type conversion error for plant {plant.get('Name', 'Unknown')}: {e}")
+            capacity_mw = 400.0
+            capacity_factor = 0.75
 
         # Step 1: 计算周发电量
         hours_per_week = 168
@@ -283,6 +303,16 @@ class CO2CaptureCalculator:
         # Step 1 & 2: 容量转换和实际处理量
         crude_ton_per_week = refinery.get('Capacity_ton_per_week', 94500)  # 默认100 KBD
         capacity_factor = refinery.get('Capacity_factor', 0.85)
+
+        # 确保数值类型
+        try:
+            crude_ton_per_week = float(crude_ton_per_week)
+            capacity_factor = float(capacity_factor)
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Type conversion error for refinery {refinery.get('Name', 'Unknown')}: {e}")
+            crude_ton_per_week = 94500.0
+            capacity_factor = 0.85
+
         actual_crude_ton = crude_ton_per_week * capacity_factor
 
         # Step 3: 计算CO₂排放
@@ -466,11 +496,17 @@ class CO2CaptureCalculator:
             raise ValueError(f"Missing required columns: {missing_cols}")
 
         # 2. 检查数值列范围
-        # CO₂捕获量必须 > 0
-        invalid_capture = df[df['co2_capture_capacity_ton_per_week'] <= 0]
+        # CO₂捕获量必须 > 0 且不能为NaN
+        invalid_capture = df[
+            (df['co2_capture_capacity_ton_per_week'] <= 0) |
+            (df['co2_capture_capacity_ton_per_week'].isna())
+        ]
         if not invalid_capture.empty:
-            logger.warning(f"Found {len(invalid_capture)} records with invalid capture capacity (<= 0)")
-            df = df[df['co2_capture_capacity_ton_per_week'] > 0].copy()
+            logger.warning(f"Found {len(invalid_capture)} records with invalid capture capacity (<= 0 or NaN)")
+            df = df[
+                (df['co2_capture_capacity_ton_per_week'] > 0) &
+                (df['co2_capture_capacity_ton_per_week'].notna())
+            ].copy()
 
         # 坐标范围检查
         invalid_coords = df[
@@ -484,11 +520,17 @@ class CO2CaptureCalculator:
                 (df['longitude'] >= -180) & (df['longitude'] <= 180)
             ].copy()
 
-        # 捕获成本必须 > 0
-        invalid_cost = df[df['capture_cost_yuan_per_ton'] <= 0]
+        # 捕获成本必须 > 0 且不能为NaN
+        invalid_cost = df[
+            (df['capture_cost_yuan_per_ton'] <= 0) |
+            (df['capture_cost_yuan_per_ton'].isna())
+        ]
         if not invalid_cost.empty:
-            logger.warning(f"Found {len(invalid_cost)} records with invalid cost (<= 0)")
-            df = df[df['capture_cost_yuan_per_ton'] > 0].copy()
+            logger.warning(f"Found {len(invalid_cost)} records with invalid cost (<= 0 or NaN)")
+            df = df[
+                (df['capture_cost_yuan_per_ton'] > 0) &
+                (df['capture_cost_yuan_per_ton'].notna())
+            ].copy()
 
         # 3. 检查空值
         null_counts = df.isnull().sum()
