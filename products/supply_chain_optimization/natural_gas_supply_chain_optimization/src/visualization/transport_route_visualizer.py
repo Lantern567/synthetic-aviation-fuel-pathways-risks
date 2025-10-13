@@ -1996,7 +1996,8 @@ class TransportRouteVisualizer:
 
         # GIS数据路径
         current_dir = Path(__file__).parent
-        gis_data_path = current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
+        # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> supply_chain_optimization/ -> products/
+        gis_data_path = current_dir.parent.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
 
         pipeline_stats = {}
 
@@ -2203,7 +2204,8 @@ class TransportRouteVisualizer:
         # 收集管道节点（作为连接目标）
         pipeline_points = []
         current_dir = Path(__file__).parent
-        gis_data_path = current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
+        # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> supply_chain_optimization/ -> products/
+        gis_data_path = current_dir.parent.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
 
         # 从天然气管道文件提取管道点
         ng_pipeline_file = gis_data_path / "natural_gas_pipelines.geojson"
@@ -2670,7 +2672,8 @@ class TransportRouteVisualizer:
     def find_latest_files(self, results_dir=None):
         """查找最新的所有相关数据文件"""
         if results_dir is None:
-            results_dir = Path(__file__).parent.parent / 'results'
+            # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> results/
+            results_dir = Path(__file__).parent.parent.parent / 'results'
         
         results_dir = Path(results_dir)
         
@@ -2701,7 +2704,8 @@ class TransportRouteVisualizer:
     def find_latest_transport_file(self, results_dir=None):
         """查找最新的transport_summary文件"""
         if results_dir is None:
-            results_dir = Path(__file__).parent.parent / 'results'
+            # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> results/
+            results_dir = Path(__file__).parent.parent.parent / 'results'
         
         results_dir = Path(results_dir)
         
@@ -2722,7 +2726,8 @@ class TransportRouteVisualizer:
     def save_visualization(self, fig, filename=None, output_dir=None):
         """保存可视化结果"""
         if output_dir is None:
-            output_dir = Path(__file__).parent.parent / 'results' / 'visualizations'
+            # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> results/
+            output_dir = Path(__file__).parent.parent.parent / 'results' / 'visualizations'
         
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -2743,7 +2748,8 @@ class TransportRouteVisualizer:
     def create_analysis_report(self, transport_data, display_data, output_dir=None):
         """创建分析报告"""
         if output_dir is None:
-            output_dir = Path(__file__).parent.parent / 'results' / 'reports'
+            # 路径: src/visualization/ -> src/ -> natural_gas_supply_chain_optimization/ -> results/
+            output_dir = Path(__file__).parent.parent.parent / 'results' / 'reports'
         
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)

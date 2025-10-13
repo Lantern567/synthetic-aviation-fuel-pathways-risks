@@ -29,11 +29,15 @@ except ModuleNotFoundError:
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file))))))
     if project_root not in sys.path:
         sys.path.append(project_root)
+    # 同时添加src目录到路径，确保routing模块可以被找到
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
     from shared.utils.log_preserver import mount_file_logging
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
     create_cost_analyzer = None
 
-# 导入GraphHopper路径规划模块 - 必须可用
+# 导入GraphHopper路径规划模块 - 在导入父类之前先导入，避免父类导入失败
 try:
     # 尝试相对导入（当作为包使用时）
     try:
@@ -52,6 +56,13 @@ except ImportError:
         from routing.graphhopper_routing_engine import GraphHopperRoutingEngine, GraphHopperDistanceCalculator, DistanceCalculator
     except ImportError as e:
         raise ImportError(f"GraphHopper路径规划模块不可用，必须安装相关依赖: {e}. 请运行: pip install requests")
+
+# 导入父类 - 原两步法模型（backup版本）
+# 必须在routing模块导入之后，这样父类导入时routing已经可用
+try:
+    from .natural_gas_optimization_model_backup import NaturalGasSupplyChainOptimizer
+except ImportError:
+    from natural_gas_optimization_model_backup import NaturalGasSupplyChainOptimizer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -145,12 +156,35 @@ try:
         "logs",
     )
     mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
+
+    # 额外添加固定名称的log.txt文件处理器
+    log_txt_path = os.path.join(_log_dir, "log.txt")
+    log_txt_handler = logging.FileHandler(log_txt_path, mode='a', encoding='utf-8')
+    log_txt_handler.setLevel(logging.INFO)
+    log_txt_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    log_txt_handler.setFormatter(log_txt_formatter)
+
+    # 添加到根日志记录器
+    root_logger = logging.getLogger()
+    root_logger.addHandler(log_txt_handler)
+
+    logger.info(f"日志文件已配置: 按日期命名的日志 + 固定名称log.txt")
+    logger.info(f"日志目录: {_log_dir}")
+
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
     print("将继续使用控制台日志")
 
-class NaturalGasSupplyChainOptimizerOneStep:
+class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
+    """
+    FT一步法天然气供应链优化模型
+    继承自两步法模型，复用数据加载和基础功能
+    主要差异：
+    1. 约束条件：FT一步法约束（无氢气生产、无可再生能源）
+    2. 成本计算：FT工艺成本
+    3. 碳排放：FT一步法碳排放计算
+    """
     def _get_data_path(self, path_key: str, fallback_path: str = None) -> str:
         """
         从配置文件获取数据路径，支持相对路径自动转换为绝对路径
@@ -319,120 +353,21 @@ class NaturalGasSupplyChainOptimizerOneStep:
     
     def __init__(self, config_path: str = None, **override_params):
         """
-        初始化优化器
-        
+        初始化FT一步法优化器
+
         Args:
             config_path: 配置文件路径，默认使用项目内置配置文件
             **override_params: 可以通过关键字参数覆盖配置文件中的任何参数
         """
-        # 加载配置文件
-        self.config = self._load_config(config_path, override_params)
-        
-        # 从配置中获取基础参数
-        basic_params = self.config['basic_parameters']
-        self.time_horizon_weeks = basic_params['time_horizon_weeks']
-        self.hours_per_week = basic_params['hours_per_week']
-        self.total_hours = self.time_horizon_weeks * self.hours_per_week
-        
-        # 模型组件
-        self.model = None
-        self.locations = {}
-        self.technologies = {}
-        self.airports = {}
-        self.costs = {}
-        
-        # 天然气基供应链专用数据
-        self.ng_pipeline_sources = {}     # 天然气管段数据
-        self.lng_terminals = {}           # LNG接收站数据
-        self.ft_facility_candidates = []  # FT设施候选位置（FT一步法模型专用）
-        
-        # LNG容量平均值（从配置文件加载，在数据加载后会更新）
-        self.avg_lng_capacity_mcm_per_year = basic_params['avg_lng_capacity_mcm_per_year']
+        # 调用父类初始化
+        super().__init__(config_path, **override_params)
 
-        # 加载碳排放参数
-        self.carbon_params = self.config.get('carbon_emission_parameters', {})
-        logger.info(f"加载碳排放参数: {len(self.carbon_params)} 个类别")
-
-        # 通过GraphHopper路径规划计算得出的距离统计值（用于模型中的参考）
-        self.avg_ng_transport_distance = None  # 将通过GraphHopper路径规划计算得出
-        self.avg_saf_transport_distance = None  # SAF从FT设施到机场的平均运输距离
-        
-        # 决策变量
-        self.production_vars = {}  # 小时级生产变量
-        self.facility_vars = {}    # 设施建设变量
-        self.transport_vars = {}   # 运输变量
-        self.storage_vars = {}     # 库存变量
-        
-        # 初始化GraphHopper路径规划引擎
-        self.use_graphhopper_routing = basic_params['use_graphhopper_routing']
-        
-        # 设置OSM数据文件路径
-        osm_pbf_path = override_params.get('osm_pbf_path')
-        if osm_pbf_path is None:
-            # 使用项目中的默认OSM数据文件
-            project_root = get_project_base_dir()
-            self.osm_pbf_path = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                           "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf")
-        else:
-            self.osm_pbf_path = osm_pbf_path
-            
-        if self.use_graphhopper_routing:
-            # 从配置文件获取缓存根目录，然后添加graphhopper_routes子目录
-            cache_base_dir = basic_params.get('cache_base_dir', 'shared/data/cache')
-
-            # 如果是相对路径，转换为绝对路径
-            if not os.path.isabs(cache_base_dir):
-                cache_base_dir = os.path.join(get_project_base_dir(), cache_base_dir)
-
-            cache_dir = os.path.join(cache_base_dir, "graphhopper_routes")
-            logger.info(f"GraphHopper路径规划缓存目录: {cache_dir}")
-
-            self.routing_engine = GraphHopperRoutingEngine(
-                osm_pbf_path=self.osm_pbf_path,
-                graphhopper_host=basic_params['graphhopper_host'],
-                graphhopper_port=basic_params['graphhopper_port'],
-                cache_dir=cache_dir,
-                enable_cache=True
-            )
-            self.distance_calculator = GraphHopperDistanceCalculator(self.routing_engine)
-            logger.info(f"GraphHopper路径规划引擎初始化完成，OSM数据文件: {self.osm_pbf_path}")
-        else:
-            # 使用简单的距离计算器作为备用方案
-            self.distance_calculator = None
-            self.routing_engine = None
-            logger.warning("未启用GraphHopper路径规划，将使用直线距离计算，建议设置use_graphhopper_routing=True获得更精确的路径规划")
-        
-        # 距离缓存（避免重复计算）
-        self.distance_cache = {}
-        
-        # GraphHopper路径规划和距离控制相关设置
-        self.graphhopper_host = basic_params['graphhopper_host']
-        self.graphhopper_port = basic_params['graphhopper_port']
-        self.max_transport_distance_km = basic_params['max_transport_distance_km']
-        self.use_routing_for_short_distance = basic_params['use_routing_for_short_distance']
-        
-        # 距离计算统计
-        self.distance_stats = {
-            'total_requests': 0,
-            'routing_calls': 0,
-            'cache_hits': 0,
-            'haversine_fallback': 0,
-            'exceeded_max_distance': 0
-        }
-        
-        logger.info(f"初始化优化器: {self.time_horizon_weeks}周 ({self.total_hours}小时), GraphHopper路径规划: {self.use_graphhopper_routing}")
-        logger.info(f"OSM数据文件: {self.osm_pbf_path}")
-        logger.info(f"GraphHopper服务: {self.graphhopper_host}:{self.graphhopper_port}")
-        logger.info(f"最大运输距离限制: {self.max_transport_distance_km} 公里")
-        
-        # 初始化成本分析器（需要在成本参数定义后创建）
-        self.cost_analyzer = None
-        logger.info(f"短距离路径规划精确计算: {self.use_routing_for_short_distance}")
-        logger.info(f"配置文件加载完成: {len(self.config)} 个配置段")
+        # FT一步法模型专用属性
+        self.ft_facility_candidates = []  # FT设施候选位置
 
         # FT一步法模型不需要氢气管道计算器和聚类优化器
         self.clustering_results = None
-    
+
     def load_data(self, airport_data: pd.DataFrame):
         """
         加载数据（FT一步法模型，不需要可再生能源数据）
@@ -470,14 +405,22 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
         logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
     
-    def load_data_from_excel(self, airport_excel_path: str = None):
+    def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
         """
-        从Excel文件加载机场数据（FT一步法专用，不需要可再生能源数据）
+        从Excel文件加载机场数据（FT一步法专用）
+
+        注意：FT一步法不需要可再生能源数据，renewable_data参数被忽略
+        此参数仅为保持与父类接口兼容性
 
         Args:
             airport_excel_path: 机场数据Excel文件路径，如果为None则从配置文件获取
+            renewable_data: 可再生能源数据（FT一步法不使用，参数被忽略）
         """
-        
+
+        # 显式忽略renewable_data参数（FT一步法不需要）
+        if renewable_data is not None:
+            logger.info("FT一步法模型不使用可再生能源数据，renewable_data参数被忽略")
+
         # 如果未提供路径，从配置文件获取
         if airport_excel_path is None:
             try:
@@ -1217,25 +1160,26 @@ class NaturalGasSupplyChainOptimizerOneStep:
         
         # 构建技术配置，从配置文件加载各个技术的详细参数
         self.technologies = {}
-        
-        for tech_key in ['pipeline_direct_conversion', 'airport_integrated_conversion',
-                        'lng_terminal_conversion', 'lng_to_hplant_conversion']:
+
+        # FT一步法只有一种技术：FT直接转换
+        for tech_key in ['ft_direct_conversion']:
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
                 self.technologies[tech_key] = {
                     'name': tech_info['name'],
                     'lcop_yuan_per_kg': base_lcop * complexity_factors[tech_key],
                     'efficiency': tech_info['efficiency'],
-                    'ng_consumption_ratio': tech_info['ng_consumption_ratio'],
-                    'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
-                    'methanol_intermediate_ratio': tech_info['methanol_intermediate_ratio'],
+                    'ng_consumption_ratio': tech_info['ng_consumption_ratio'],  # FT一步法核心参数
+                    # 注意：FT一步法不需要以下两步法字段:
+                    # - h2_consumption_ratio: FT工艺内部产氢,无需外部氢气
+                    # - methanol_intermediate_ratio: 直接转换,无甲醇中间体
                     'suitable_locations': tech_info['suitable_locations'],
                     'transport_mode': tech_info['transport_mode'],
                     'technology_type': tech_info['technology_type'],
                     'complexity_factor': complexity_factors[tech_key]
                 }
         
-        logger.info(f"定义了 {len(self.technologies)} 种MTJ航煤生产技术")
+        logger.info(f"定义了 {len(self.technologies)} 种FT一步法SAF生产技术")
         logger.info(f"基础平准化成本: {base_lcop:.0f} 元/kg")
         
         # 检查技术参数中的NaN值
@@ -1798,25 +1742,25 @@ class NaturalGasSupplyChainOptimizerOneStep:
         """创建约束条件（FT一步法模型）"""
         logger.info("创建约束条件（FT一步法模型）...")
 
-        # 1. FT设施容量约束
-        self._add_ft_capacity_constraints()
+        # 1. FT生产能力约束（FT反应器容量限制）
+        self._add_production_capacity_constraints()
 
-        # 2. FT生产过程约束
-        self._add_ft_process_constraints()
+        # 2. 原料供应约束（天然气供应和消耗）
+        self._add_material_supply_constraints()
 
-        # 3. 库存平衡约束
+        # 3. 库存平衡约束（SAF库存进出平衡）
         self._add_inventory_balance_constraints()
 
-        # 4. 机场需求约束
+        # 4. 机场需求约束（SAF需求满足）
         self._add_airport_demand_constraints()
 
-        # 5. 天然气供应和运输约束
+        # 5. 设施选择约束（FT设施建设与产能关联）
+        self._add_facility_selection_constraints()
+
+        # 6. 天然气运输约束（管道和LNG供应能力）
         self._add_natural_gas_transport_constraints()
 
-        # 6. SAF运输约束
-        self._add_saf_transport_constraints()
-
-        # 7. 平准化成本约束
+        # 7. 平准化成本约束（成本上限限制）
         self._add_levelized_cost_constraint()
 
         logger.info("FT一步法模型约束创建完成")
@@ -2162,7 +2106,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 # 计算距离
                 distance_km = self._calculate_haversine_distance(
                     ft_candidate['lat'], ft_candidate['lon'],
-                    airport_data['lat'], airport_data['lon']
+                    airport_data['latitude'], airport_data['longitude']
                 )
 
                 # 使用MTJ运输成本公式（SAF运输类似）
@@ -2466,16 +2410,15 @@ class NaturalGasSupplyChainOptimizerOneStep:
         )
 
         self.carbon_aggregates['production_emissions'] = (
-            self.carbon_expressions['ng_to_methanol'] +
-            self.carbon_expressions['methanol_to_saf']
+            self.carbon_expressions['ft_production']  # FT一步法：直接从天然气生产SAF
         )
 
         self.carbon_aggregates['storage_emissions'] = (
-            self.carbon_expressions['mtj_storage']
+            self.carbon_expressions['saf_storage']  # FT一步法：SAF储存
         )
 
         self.carbon_aggregates['transport_emissions'] = (
-            self.carbon_expressions['mtj_transport'] +
+            self.carbon_expressions['saf_transport'] +
             self.carbon_expressions['ng_transport']
         )
 
@@ -2851,14 +2794,15 @@ class NaturalGasSupplyChainOptimizerOneStep:
         
         # 天然气运输约束：对于非LNG接收站位置的MTJ工厂（改为天级罐车运输）
         total_days = self.total_hours // 24
-        for tech in ['airport_integrated_conversion', 'lng_to_hplant_conversion']:
-            # 机场集成转换直接从城市管道供气，无需运输约束
-            if tech == 'airport_integrated_conversion':
-                continue  # 跳过机场集成转换，使用管道直供
+        # 使用动态技术列表
+        for tech in self.technologies.keys():
+            # FT一步法：检查技术的运输模式配置
+            tech_transport_mode = self.technologies[tech].get('transport_mode', '')
+            if tech_transport_mode == 'airport_integrated':
+                continue  # 机场集成模式使用管道直供
 
             # 检查该技术的运输模式是否支持天然气管道
-            tech_transport_mode = self.technologies[tech]['transport_mode']
-            transport_config = self.config['transport_modes'][tech_transport_mode]
+            transport_config = self.config['transport_modes'].get(tech_transport_mode, {})
             suitable_sources = transport_config.get('suitable_sources', [])
 
             # 如果该运输模式不支持天然气管道，跳过
@@ -2888,8 +2832,9 @@ class NaturalGasSupplyChainOptimizerOneStep:
         
         # 天然气运输需求满足约束：所有非LNG接收站的MTJ工厂天然气需求（改为天级罐车运输）
         total_days = self.total_hours // 24
-        for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 'lng_to_hplant_conversion']:
-            for mtj_loc in self.non_lng_mtj_locations[tech]:
+        # 使用动态技术列表
+        for tech in self.technologies.keys():
+            for mtj_loc in self.non_lng_mtj_locations.get(tech, []):
                 for day in range(total_days):
                     # 计算该天的天然气需求（基于该天所有小时的生产量）
                     day_start_hour = day * 24
@@ -2908,9 +2853,10 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     else:
                         ng_demand = 0
 
-                    # 机场集成转换模式：直接从城市管道供气，无需运输变量
-                    if tech == 'airport_integrated_conversion':
-                        # 机场直接从本地管道获取天然气，需求被管道直接满足
+                    # FT一步法：检查技术的运输模式配置
+                    tech_transport_mode = self.technologies[tech].get('transport_mode', '')
+                    if tech_transport_mode == 'airport_integrated':
+                        # 机场集成模式：直接从城市管道供气，需求被管道直接满足
                         # 不需要添加约束，因为管道直供隐含地满足了所有需求
                         # 天然气需求成本会在天然气采购成本中体现
                         pass  # 管道直供，无需额外约束
@@ -3448,7 +3394,7 @@ class NaturalGasSupplyChainOptimizerOneStep:
                     # 计算距离
                     distance_km = self._calculate_haversine_distance(
                         ft_candidate['lat'], ft_candidate['lon'],
-                        airport_data['lat'], airport_data['lon']
+                        airport_data['latitude'], airport_data['longitude']
                     )
 
                     solution['saf_transport'][transport_key] = {
@@ -3459,8 +3405,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
                         'distance_km': distance_km,
                         'from_latitude': ft_candidate['lat'],
                         'from_longitude': ft_candidate['lon'],
-                        'to_latitude': airport_data['lat'],
-                        'to_longitude': airport_data['lon'],
+                        'to_latitude': airport_data['latitude'],
+                        'to_longitude': airport_data['longitude'],
                         'transport_type': 'SAF',
                         'transport_mode': 'truck'
                     }
@@ -3740,178 +3686,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
             logger.info("[调试] 发生错误，需求满足比例设为1.0 (100%)")
             return 1.0
 
-    def _calculate_unit_costs_from_optimization(self, solution: Dict) -> Dict:
-        """
-        FT一步法单位成本计算 - 基于配置参数和优化模型结果
-
-        FT一步法工艺：天然气 → SAF (通过费托合成直接转化，无需氢气)
-
-        成本组成：
-        1. FT反应器设备成本：固定CAPEX + 可变CAPEX（基于容量）
-        2. 天然气原料成本：基于ng_consumption_ratio
-        3. FT催化剂成本：钴基催化剂
-        4. 能源消耗成本：FT反应器电力消耗
-        5. 运营维护成本：固定OPEX + 可变OPEX
-
-        Args:
-            solution: 优化求解结果
-
-        Returns:
-            Dict: 单位成本分析结果
-        """
-        try:
-            logger.info("基于配置参数计算FT一步法单位成本...")
-
-            # 1. 读取配置参数
-            # FT工艺参数
-            ft_tech_config = self.config.get('technologies', {}).get('ft_direct_conversion', {})
-            ng_consumption_ratio = ft_tech_config.get('ng_consumption_ratio', 2.0)  # m³天然气/kg SAF
-            ft_efficiency = ft_tech_config.get('efficiency', 0.55)  # FT转化效率 55%
-            ft_energy_kwh_per_kg = ft_tech_config.get('ft_energy_consumption_kwh_per_kg', 2.5)  # kWh/kg SAF
-            saf_fraction = ft_tech_config.get('saf_fraction_in_products', 0.65)  # SAF在产物中占比 65%
-
-            # FT设施成本参数
-            ft_lcoe_config = self.config.get('ft_facility_lcoe_parameters', {})
-            fixed_capex = ft_lcoe_config.get('fixed_capex', 50000000)  # 50M元固定投资
-            variable_capex_per_capacity = ft_lcoe_config.get('variable_capex_per_capacity', 2500)  # 元/kg产能
-            fixed_opex_annual = ft_lcoe_config.get('fixed_opex_annual', 10000000)  # 10M元/年
-            variable_opex_per_kg = ft_lcoe_config.get('variable_opex_per_kg', 0.30)  # 元/kg产品
-            catalyst_cost_per_kg_saf = ft_lcoe_config.get('catalyst_cost_per_kg_saf', 0.06)  # 元/kg SAF
-            facility_lifetime = ft_lcoe_config.get('facility_lifetime_years', 25)  # 25年
-
-            # 天然气价格
-            ng_price_yuan_per_m3 = self.costs.get('natural_gas_price_yuan_per_m3', 4.2)  # 元/m³
-
-            # 电力价格
-            electricity_price_yuan_per_kwh = self.config.get('electricity_price_yuan_per_kwh', 0.5)  # 元/kWh
-
-            # 经济参数
-            discount_rate = self.economic_params.get('discount_rate', 0.08)
-            project_lifespan = self.economic_params.get('project_lifespan', 25)
-
-            # 计算年金因子
-            if discount_rate == 0:
-                annuity_factor = 1.0 / project_lifespan
-            else:
-                annuity_factor = discount_rate / (1 - (1 + discount_rate)**(-project_lifespan))
-
-            # 2. 计算FT反应器单位设备成本
-            # 假设年利用小时数
-            annual_utilization_hours = 8760 * 0.85  # 85%利用率（FT工艺较稳定）
-            annual_capacity_kg = annual_utilization_hours  # 假设1 kg/h的产能
-
-            # 固定CAPEX摊销（元/kg SAF）
-            ft_fixed_capex_per_kg = (fixed_capex * annuity_factor) / (annual_capacity_kg * project_lifespan)
-
-            # 可变CAPEX摊销（元/kg SAF，基于1 kg/h产能）
-            ft_variable_capex_per_kg = (variable_capex_per_capacity * annuity_factor) / annual_utilization_hours
-
-            # FT反应器总设备成本
-            ft_equipment_cost_per_kg = ft_fixed_capex_per_kg + ft_variable_capex_per_kg
-
-            # 3. 计算天然气原料成本（元/kg SAF）
-            ng_raw_material_cost_per_kg = ng_consumption_ratio * ng_price_yuan_per_m3
-
-            # 4. 计算FT催化剂成本（元/kg SAF）
-            # 已经是配置参数中的单位成本
-            ft_catalyst_cost_per_kg = catalyst_cost_per_kg_saf
-
-            # 5. 计算能源消耗成本（元/kg SAF）
-            ft_energy_cost_per_kg = ft_energy_kwh_per_kg * electricity_price_yuan_per_kwh
-
-            # 6. 计算运营维护成本（元/kg SAF）
-            # 固定OPEX摊销
-            ft_fixed_opex_per_kg = fixed_opex_annual / (annual_capacity_kg * project_lifespan)
-            # 可变OPEX
-            ft_variable_opex_per_kg = variable_opex_per_kg
-            # 总运营成本
-            ft_operation_cost_per_kg = ft_fixed_opex_per_kg + ft_variable_opex_per_kg
-
-            # 7. 计算SAF总生产成本（元/kg SAF）
-            saf_total_production_cost_per_kg = (
-                ft_equipment_cost_per_kg +  # FT设备成本
-                ng_raw_material_cost_per_kg +  # 天然气原料成本
-                ft_catalyst_cost_per_kg +  # 催化剂成本
-                ft_energy_cost_per_kg +  # 能源消耗成本
-                ft_operation_cost_per_kg  # 运营维护成本
-            )
-
-            # 8. 运输和储存成本（简化，从配置或默认值）
-            saf_transport_cost_per_kg_km = 0.03  # 元/kg/km
-            saf_storage_cost_per_kg = 0.0  # 元/kg
-
-            # 9. 效率指标
-            ft_conversion_efficiency_percent = ft_efficiency * 100  # 转换为百分比
-            overall_ng_to_saf_efficiency_percent = ft_efficiency * saf_fraction * 100  # 考虑SAF选择性
-
-            # 10. 成本占比计算
-            if saf_total_production_cost_per_kg > 0:
-                ng_raw_material_ratio = ng_raw_material_cost_per_kg / saf_total_production_cost_per_kg
-                ft_equipment_ratio = ft_equipment_cost_per_kg / saf_total_production_cost_per_kg
-                ft_catalyst_ratio = ft_catalyst_cost_per_kg / saf_total_production_cost_per_kg
-                ft_energy_ratio = ft_energy_cost_per_kg / saf_total_production_cost_per_kg
-                ft_operation_ratio = ft_operation_cost_per_kg / saf_total_production_cost_per_kg
-            else:
-                ng_raw_material_ratio = 0
-                ft_equipment_ratio = 0
-                ft_catalyst_ratio = 0
-                ft_energy_ratio = 0
-                ft_operation_ratio = 0
-
-            # 11. 组织返回结果
-            result = {
-                # FT反应器设备成本
-                'ft_reactor_equipment_cost_yuan_per_kg': ft_equipment_cost_per_kg,
-                'ft_reactor_fixed_capex_yuan_per_kg': ft_fixed_capex_per_kg,
-                'ft_reactor_variable_capex_yuan_per_kg': ft_variable_capex_per_kg,
-
-                # FT工艺成本组成
-                'natural_gas_raw_material_cost_yuan_per_kg': ng_raw_material_cost_per_kg,
-                'ft_catalyst_cost_yuan_per_kg': ft_catalyst_cost_per_kg,
-                'ft_energy_cost_yuan_per_kg': ft_energy_cost_per_kg,
-                'ft_operation_cost_yuan_per_kg': ft_operation_cost_per_kg,
-                'ft_fixed_opex_yuan_per_kg': ft_fixed_opex_per_kg,
-                'ft_variable_opex_yuan_per_kg': ft_variable_opex_per_kg,
-
-                # SAF总成本
-                'saf_total_production_cost_yuan_per_kg': saf_total_production_cost_per_kg,
-
-                # 运输储存成本
-                'saf_transport_unit_cost_yuan_per_kg_km': saf_transport_cost_per_kg_km,
-                'saf_storage_cost_yuan_per_kg': saf_storage_cost_per_kg,
-
-                # 效率指标
-                'ft_conversion_efficiency_percent': ft_conversion_efficiency_percent,
-                'overall_ng_to_saf_efficiency_percent': overall_ng_to_saf_efficiency_percent,
-                'saf_fraction_in_products': saf_fraction * 100,
-                'ng_consumption_ratio_m3_per_kg': ng_consumption_ratio,
-
-                # 成本占比
-                'ng_raw_material_cost_ratio': ng_raw_material_ratio,
-                'ft_equipment_cost_ratio': ft_equipment_ratio,
-                'ft_catalyst_cost_ratio': ft_catalyst_ratio,
-                'ft_energy_cost_ratio': ft_energy_ratio,
-                'ft_operation_cost_ratio': ft_operation_ratio
-            }
-
-            logger.info(f"FT一步法单位成本计算完成:")
-            logger.info(f"  天然气原料成本: {ng_raw_material_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  FT反应器设备成本: {ft_equipment_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  FT催化剂成本: {ft_catalyst_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  FT能源成本: {ft_energy_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  FT运营成本: {ft_operation_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  SAF总生产成本: {saf_total_production_cost_per_kg:.4f} 元/kg")
-            logger.info(f"  FT转化效率: {ft_conversion_efficiency_percent:.1f}%")
-            logger.info(f"  天然气→SAF总效率: {overall_ng_to_saf_efficiency_percent:.1f}%")
-
-            return result
-
-        except Exception as e:
-            logger.error(f"FT一步法单位成本计算失败: {e}")
-            import traceback
-            traceback.print_exc()
-            return {}
-
     def calculate_carbon_emissions(self, solution: Dict) -> Dict:
         """计算碳排放结果（基于优化求解后的变量值）"""
         logger.info("="*80)
@@ -4159,8 +3933,10 @@ class NaturalGasSupplyChainOptimizerOneStep:
         # 从solution中获取不含短缺成本的平准化成本
         lifecycle_levelized_cost_excluding_shortage = solution.get("lifecycle_levelized_cost_excluding_shortage_per_kg", 0)
 
-        # 直接从优化模型计算单位成本，不依赖cost_breakdown
-        unit_costs = self._calculate_unit_costs_from_optimization(solution)
+        # 注意：不再计算基于配置参数的理论单位成本（会与优化结果混淆）
+        # 优化结果的平准化成本(6.07元/kg)是整个供应链系统优化后的实际成本
+        # 它包含了所有投资、运营、原料、运输等成本，并考虑了20年项目期折现
+        unit_costs = {}  # 不使用理论成本计算
         logger.info("直接从优化模型计算单位成本数据用于optimization_summary")
 
         # 获取表达式对象的成本分解结果
@@ -4648,424 +4424,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
         else:
             return "其他"
 
-    def _load_ng_pipeline_data(self):
-        """加载天然气管段数据（使用预处理的容量数据，支持缓存）"""
-        try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
-            project_root = get_project_base_dir()
-            
-            # 优先使用预处理的容量数据文件
-            try:
-                preprocessed_file = self._get_data_path('gis_data.ng_pipelines_preprocessed')
-                logger.info(f"从配置文件获取预处理管道数据路径: {preprocessed_file}")
-            except Exception as e:
-                logger.error(f"从配置文件获取预处理管道数据路径失败: {e}")
-                preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                               "gis_data_scraper", "scraped_gis_data", 
-                                               "natural_gas_pipelines_with_capacity.xlsx")
-            
-            if os.path.exists(preprocessed_file):
-                logger.info("使用预处理的天然气管道容量数据")
-                integrated_df = pd.read_excel(preprocessed_file)
-                # 过滤北京500km范围内的管道
-                integrated_df = integrated_df[integrated_df.apply(
-                    lambda row: is_within_beijing_range(
-                        float(row.get('center_latitude') or row.get('Lat', 0)), 
-                        float(row.get('center_longitude') or row.get('Long', 0)), 
-                        500
-                    ), axis=1
-                )]
-                logger.info(f"预处理数据过滤后: {len(integrated_df)} 条管道记录")
-            else:
-                # 备用方案：使用原有的集成数据文件
-                logger.warning("预处理容量数据文件不存在，使用原有集成数据")
-                try:
-                    integrated_file = self._get_data_path('gis_data.ng_pipelines_integrated')
-                    logger.info(f"从配置文件获取集成管道数据路径: {integrated_file}")
-                except Exception as e:
-                    logger.error(f"从配置文件获取集成管道数据路径失败: {e}")
-                    integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                                 "natural_gas_supply_chain_optimization", "data", 
-                                                 "integrated_gas_pipeline_price_data_with_coords.csv")
-                if not os.path.exists(integrated_file):
-                    logger.error(f"集成天然气数据文件不存在: {integrated_file}")
-                    self._load_original_pipeline_data()
-                    return
-
-                # 检查缓存是否有效
-                if cache_manager.is_cache_valid('ng_pipelines', integrated_file):
-                    logger.info("使用缓存的天然气管道数据（500km过滤）")
-                    cached_df = cache_manager.load_filtered_data('ng_pipelines')
-                    if cached_df is not None:
-                        integrated_df = cached_df
-                        logger.info(f"从缓存加载天然气管道数据: {len(integrated_df)} 条记录")
-                    else:
-                        logger.warning("缓存加载失败，执行完整加载")
-                        integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
-                else:
-                    logger.info("缓存无效或不存在，执行完整加载和过滤")
-                    integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
-
-            # 处理过滤后的数据
-            for idx, row in integrated_df.iterrows():
-                # 处理不同数据源的字段名
-                if 'pipeline_id' in row:
-                    pipeline_id = row['pipeline_id']
-                    pipeline_name = row.get('pipeline_name', row.get('Name', f'pipeline_{idx}'))
-                else:
-                    pipeline_id = f'pipeline_{idx}'
-                    pipeline_name = row.get('Name', f'管道_{idx}')
-                
-                # 获取坐标（支持不同字段名）
-                lat = float(row.get('center_latitude') or row.get('lat') or row.get('Lat', 0))
-                lon = float(row.get('center_longitude') or row.get('lon') or row.get('Long', 0))
-                
-                # 获取预处理的容量数据，如果不存在则使用原始数据
-                if 'effective_daily_capacity_m3_per_day' in row and pd.notna(row['effective_daily_capacity_m3_per_day']):
-                    # 使用预处理的有效日处理能力
-                    capacity_mcm_per_day = row['capacity_mcm_per_day']
-                    effective_daily_capacity_m3_per_day = row['effective_daily_capacity_m3_per_day']
-                    supply_reliability = row['supply_reliability']
-                    logger.debug(f"管道 {pipeline_id} 使用预处理容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                else:
-                    # 备用：使用原有数据计算
-                    capacity_mcm_per_day = row.get('capacity_mcm_per_day', 0)
-                    supply_reliability = row.get('supply_reliability', 0.95)
-                    effective_daily_capacity_m3_per_day = capacity_mcm_per_day * 10000 * supply_reliability
-                    logger.debug(f"管道 {pipeline_id} 使用原始数据计算容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                
-                self.ng_pipeline_sources[pipeline_id] = {
-                    'name': pipeline_name,
-                    'operator': row.get('operator', row.get('Operator', '未知')),
-                    'status': row.get('status', row.get('Status', 'Operating')),
-                    'year_online': row.get('year_online', row.get('YearOnline', 2020)),
-                    'capacity_mcm_per_day': capacity_mcm_per_day,
-                    'effective_daily_capacity_m3_per_day': effective_daily_capacity_m3_per_day,  # 新增预处理字段
-                    'length_km': row.get('length_km', row.get('Shape__Length', 0)),
-                    'natural_gas_price_yuan_per_10k_m3': row.get('natural_gas_price_yuan_per_10k_m3', 3.0),
-                    'pipeline_cost_yuan_per_mcm': row.get('pipeline_cost_yuan_per_mcm', 200),
-                    'transport_cost_yuan_per_mcm_km': row.get('transport_cost_yuan_per_mcm_km', 1.5),
-                    'supply_reliability': supply_reliability,
-                    # 添加坐标信息
-                    'center_latitude': lat,
-                    'center_longitude': lon,
-                    'lat': lat,
-                    'lon': lon,
-                    'start_latitude': row.get('start_latitude', None),
-                    'start_longitude': row.get('start_longitude', None),
-                    'end_latitude': row.get('end_latitude', None),
-                    'end_longitude': row.get('end_longitude', None)
-                }
-
-            logger.info(f"成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据（含价格和坐标信息）")
-            if len(integrated_df) > 0:
-                logger.info(f"平均天然气价格: {integrated_df['natural_gas_price_yuan_per_10k_m3'].mean():.2f} 元/万立方米")
-                # 输出坐标范围用于验证
-                lat_min, lat_max = integrated_df['lat'].min(), integrated_df['lat'].max()
-                lon_min, lon_max = integrated_df['lon'].min(), integrated_df['lon'].max()
-                logger.info(f"管道坐标范围: 纬度 {lat_min:.2f}-{lat_max:.2f}, 经度 {lon_min:.2f}-{lon_max:.2f}")
-
-        except Exception as e:
-            logger.error(f"加载集成天然气数据失败: {e}")
-            self._load_original_pipeline_data()
-    
-    def _load_and_filter_ng_pipeline_data(self, integrated_file: str, cache_manager) -> pd.DataFrame:
-        """加载并过滤天然气管道数据"""
-        integrated_df = pd.read_csv(integrated_file)
-        logger.info(f"加载天然气管道原始数据: {len(integrated_df)} 条记录")
-        logger.info("注意：模型使用坐标计算运输距离，不依赖管道长度数据")
-
-        # 过滤数据
-        filtered_rows = []
-        for idx, row in integrated_df.iterrows():
-            pipeline_id = row['pipeline_id']
-            # 添加坐标信息 - 不使用默认值，确保数据质量
-            lat = row.get('center_latitude') or row.get('lat')
-            lon = row.get('center_longitude') or row.get('lon')
-            
-            if lat is None or lon is None or pd.isna(lat) or pd.isna(lon):
-                logger.debug(f"管道 {pipeline_id} 缺少有效坐标信息，跳过")
-                continue
-            
-            try:
-                lat = float(lat)
-                lon = float(lon)
-            except (ValueError, TypeError):
-                logger.debug(f"管道 {pipeline_id} 坐标数据无效，跳过")
-                continue
-            
-            # 检查是否在北京500公里范围内
-            if not is_within_beijing_range(lat, lon, 500):
-                pipeline_name = row['pipeline_name']
-                distance = calculate_distance_km(lat, lon, 39.9042, 116.4074)
-                logger.debug(f"天然气管道 {pipeline_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
-                continue
-            
-            # 更新行数据中的坐标（确保是浮点数）
-            row_copy = row.copy()
-            if 'center_latitude' in row_copy:
-                row_copy['center_latitude'] = lat
-            if 'center_longitude' in row_copy:
-                row_copy['center_longitude'] = lon
-            row_copy['lat'] = lat
-            row_copy['lon'] = lon
-            filtered_rows.append(row_copy)
-        
-        # 创建过滤后的DataFrame
-        filtered_df = pd.DataFrame(filtered_rows) if filtered_rows else pd.DataFrame()
-        
-        logger.info(f"500km范围内的天然气管道: {len(filtered_df)} 条记录")
-        
-        # 保存到缓存
-        if len(filtered_df) > 0:
-            cache_manager.save_filtered_data('ng_pipelines', filtered_df, integrated_file)
-        
-        return filtered_df
-            
-    def _load_original_pipeline_data(self):
-        """加载原始天然气管段数据（备用方法）"""
-        try:
-            # 使用相对路径的真实GIS数据
-            base_dir = get_project_base_dir()
-            pipeline_file = os.path.join(base_dir, "products", "gis_energy_mapping", "scraped_gis_data", "natural_gas_pipelines.csv")
-            if not os.path.exists(pipeline_file):
-                logger.error(f"天然气管段数据文件不存在: {pipeline_file}")
-                raise FileNotFoundError(f"无法找到天然气管段数据文件: {pipeline_file}")
-                
-            pipeline_df = pd.read_csv(pipeline_file)
-            logger.info(f"加载原始天然气管段数据: {len(pipeline_df)} 条记录")
-            logger.info("注意: 管道长度数据不用于模型计算，实际距离通过坐标计算")
-            
-            for idx, row in pipeline_df.iterrows():
-                pipeline_id = f"pipeline_{idx+1}"
-                
-                # 处理容量数据 - 将BCF/D转换为万立方米/天
-                capacity_raw = row.get('Capacity', 0.0)
-                try:
-                    capacity_bcf_d = float(capacity_raw) if capacity_raw else 0.0
-                    # 1 BCF = 28.3168万立方米
-                    capacity_mcm_per_day = capacity_bcf_d * 28.3168
-                except (ValueError, TypeError):
-                    capacity_mcm_per_day = row.get('capacity_mcm_per_day', None)
-                    if capacity_mcm_per_day is None:
-                        pipeline_name = row.get('Name', f'管段{idx+1}')
-                        logger.error(f"管道 {pipeline_name} 缺少容量数据")
-                        continue
-                
-                # 管道长度数据不用于实际计算，只需要坐标数据
-                note = str(row.get('Note', ''))
-                length_km = row.get('length_km', 0)  # 默认值，不影响实际计算
-                if 'Length:' in note:
-                    try:
-                        length_str = note.split('Length:')[1].split('km')[0].strip()
-                        length_km = float(length_str)
-                    except:
-                        length_km = 0
-                
-                self.ng_pipeline_sources[pipeline_id] = {
-                    'name': row.get('Name', f'管段{idx+1}'),
-                    'operator': row.get('Operator', '未知'),
-                    'status': row.get('Status', 'Operating'),
-                    'year_online': row.get('YearOnline', 2020),
-                    'capacity_mcm_per_day': capacity_mcm_per_day,  # 万立方米/天
-                    'length_km': length_km,
-                    'natural_gas_price_yuan_per_10k_m3': None,  # 需要从实际数据获取价格
-                    'pipeline_cost_yuan_per_mcm': 150 + idx * 10,  # 根据索引调整成本
-                    'transport_cost_yuan_per_mcm_km': 0.8,
-                    'supply_reliability': 0.92 + (idx % 5) * 0.01,  # 0.92-0.96之间
-                    'shape_length': row.get('Shape__Length', 0),
-                    'object_id': row.get('ObjectId', idx+1)
-                }
-                
-            logger.info(f"成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据")
-            
-        except Exception as e:
-            logger.error(f"加载天然气管段数据失败: {e}")
-            raise
-
-    def _load_lng_terminal_data(self):
-        """加载LNG接收站数据（使用预处理的容量数据，支持缓存）"""
-        try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
-            project_root = get_project_base_dir()
-            
-            # 优先使用预处理的容量数据文件
-            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                           "gis_data_scraper", "scraped_gis_data", 
-                                           "lng_terminals_with_capacity.xlsx")
-            
-            if os.path.exists(preprocessed_file):
-                logger.info("使用预处理的LNG接收站容量数据")
-                lng_df = pd.read_excel(preprocessed_file)
-                # 过滤北京500km范围内的LNG接收站
-                lng_df = lng_df[lng_df.apply(
-                    lambda row: is_within_beijing_range(
-                        float(row.get('Lat', 0)), 
-                        float(row.get('Long', 0)), 
-                        500
-                    ), axis=1
-                )]
-                logger.info(f"预处理数据过滤后: {len(lng_df)} 条LNG接收站记录")
-            else:
-                # 备用方案：使用原有数据文件
-                logger.warning("预处理容量数据文件不存在，使用原有数据")
-                lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
-                if not os.path.exists(lng_file):
-                    logger.error(f"LNG接收站数据文件不存在: {lng_file}")
-                    raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
-                
-                # 检查缓存是否有效
-                if cache_manager.is_cache_valid('lng_terminals', lng_file):
-                    logger.info("使用缓存的LNG接收站数据（500km过滤）")
-                    cached_df = cache_manager.load_filtered_data('lng_terminals')
-                    if cached_df is not None:
-                        lng_df = cached_df
-                        logger.info(f"从缓存加载LNG接收站数据: {len(lng_df)} 条记录")
-                    else:
-                        logger.warning("缓存加载失败，执行完整加载")
-                        lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
-                else:
-                    logger.info("缓存无效或不存在，执行完整加载和过滤")
-                    lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
-            
-            # 处理过滤后的数据
-            for idx, row in lng_df.iterrows():
-                terminal_id = f"lng_terminal_{idx+1}"
-                terminal_name = row.get('Name', f'LNG接收站{idx+1}')
-                
-                # 获取预处理的容量数据，如果不存在则使用原始数据计算
-                if 'effective_daily_capacity_m3_per_day' in row and pd.notna(row['effective_daily_capacity_m3_per_day']):
-                    # 使用预处理的容量数据
-                    capacity_mcm_per_year = row['lng_capacity_mcm_per_year']
-                    effective_daily_capacity_m3_per_day = row['effective_daily_capacity_m3_per_day']
-                    operational_efficiency = row['operational_efficiency']
-                    logger.debug(f"LNG接收站 {terminal_name} 使用预处理容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                else:
-                    # 备用：使用原始数据计算
-                    capacity_raw = row.get('current_capacity__Million_tonne', 0)
-                    try:
-                        capacity_mt = float(capacity_raw) if capacity_raw else 0.0
-                        # 1 Million tonne LNG ≈ 138 万立方米天然气/年
-                        capacity_mcm_per_year = capacity_mt * 138
-                    except (ValueError, TypeError):
-                        # 使用备用容量字段，从配置读取默认值
-                        default_lng_capacity = self.config.get('supply_capacity', {}).get('lng_terminal_capacity', {}).get('default_capacity_mcm_per_year', 300)
-                        try:
-                            capacity_mcm_per_year = float(row.get('Full_capacity__100_MMCM_y_', default_lng_capacity))
-                        except:
-                            capacity_mcm_per_year = default_lng_capacity  # 使用配置的默认值
-                            logger.warning(f"LNG接收站 {terminal_name} 缺少容量数据，使用配置默认值 {default_lng_capacity} 万m³/年")
-                    
-                    # 计算有效日处理能力
-                    operational_efficiency = 0.90  # 默认操作效率
-                    daily_capacity_m3 = (capacity_mcm_per_year / 365) * 10000  # 立方米/天
-                    effective_daily_capacity_m3_per_day = daily_capacity_m3 * operational_efficiency
-                    logger.debug(f"LNG接收站 {terminal_name} 使用原始数据计算容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                
-                # 获取坐标
-                lat = float(row.get('Lat', 0))
-                lon = float(row.get('Long', 0))
-                
-                self.lng_terminals[terminal_id] = {
-                    'name': terminal_name,
-                    'chinese_name': row.get('ChineseName', ''),
-                    'location': row.get('Location', ''),
-                    'capacity_mcm_per_year': capacity_mcm_per_year,  # 万立方米/年
-                    'effective_daily_capacity_m3_per_day': effective_daily_capacity_m3_per_day,  # 新增预处理字段
-                    'operational_efficiency': operational_efficiency,  # 操作效率
-                    'operator': row.get('Operator', '未知'),
-                    'status': row.get('Status', 'Operating'),
-                    'year_online': row.get('YearOnline', 2020),
-                    'cost_yuan_per_mcm': 200 + idx * 15,  # 根据索引调整成本
-                    'lat': lat,
-                    'lon': lon,
-                    'berths': row.get('Berths', ''),
-                    'gas_type_source': row.get('Gas_type_source', ''),
-                    'operational_status': row.get('Status', '运营中'),
-                    'object_id': row.get('ObjectId', idx+1)
-                }
-                
-            logger.info(f"成功加载 {len(self.lng_terminals)} 条LNG接收站数据")
-            
-            # 计算LNG接收站容量的平均值
-            if self.lng_terminals:
-                capacity_values = []
-                for terminal_id, terminal_info in self.lng_terminals.items():
-                    capacity = terminal_info.get('capacity_mcm_per_year', 0)
-                    if capacity > 0:  # 只包含有效的容量值
-                        capacity_values.append(capacity)
-                
-                if capacity_values:
-                    self.avg_lng_capacity_mcm_per_year = sum(capacity_values) / len(capacity_values)
-                    logger.info(f"计算得出LNG接收站容量平均值: {self.avg_lng_capacity_mcm_per_year:.1f} 万立方米/年")
-                    logger.info(f"基于 {len(capacity_values)} 个有效数据计算")
-                else:
-                    logger.warning("未找到有效的LNG容量数据，使用默认值1000万立方米/年")
-            else:
-                logger.warning("未加载到任何LNG接收站数据，使用默认容量值1000万立方米/年")
-            
-        except Exception as e:
-            logger.error(f"加载LNG接收站数据失败: {e}")
-            raise
-    
-    def _load_and_filter_lng_data(self, lng_file: str, cache_manager) -> pd.DataFrame:
-        """加载并过滤LNG接收站数据"""
-        lng_df = pd.read_csv(lng_file)
-        logger.info(f"加载LNG接收站原始数据: {len(lng_df)} 条记录")
-        
-        # 过滤数据
-        filtered_rows = []
-        for idx, row in lng_df.iterrows():
-            # 检查坐标数据质量
-            lat = row.get('Lat', None)
-            lon = row.get('Long', None)
-            
-            if lat is None or lon is None or pd.isna(lat) or pd.isna(lon):
-                terminal_name = row.get('Name', f'LNG接收站{idx+1}')
-                logger.debug(f"LNG接收站 {terminal_name} 缺少有效坐标信息，跳过")
-                continue
-            
-            try:
-                lat = float(lat)
-                lon = float(lon)
-            except (ValueError, TypeError):
-                terminal_name = row.get('Name', f'LNG接收站{idx+1}')
-                logger.debug(f"LNG接收站 {terminal_name} 坐标数据无效，跳过")
-                continue
-            
-            # 检查是否在北京500公里范围内
-            if not is_within_beijing_range(lat, lon, 500):
-                terminal_name = row.get('Name', f'LNG接收站{idx+1}')
-                distance = calculate_distance_km(lat, lon, 39.9042, 116.4074)
-                logger.debug(f"LNG接收站 {terminal_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
-                continue
-            
-            # 更新行数据中的坐标（确保是浮点数）
-            row_copy = row.copy()
-            row_copy['Lat'] = lat
-            row_copy['Long'] = lon
-            filtered_rows.append(row_copy)
-        
-        # 创建过滤后的DataFrame
-        filtered_df = pd.DataFrame(filtered_rows) if filtered_rows else pd.DataFrame()
-        
-        logger.info(f"500km范围内的LNG接收站: {len(filtered_df)} 条记录")
-        
-        # 保存到缓存
-        if len(filtered_df) > 0:
-            cache_manager.save_filtered_data('lng_terminals', filtered_df, lng_file)
-        
-        return filtered_df
 
     def _generate_ft_facility_candidates(self):
         """
@@ -5526,8 +4884,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 # 计算该天从该管道购入的总天然气量
                 daily_total_purchase = gp.quicksum(
                     self.ng_transport_vars[(ng_loc, mtj_loc, day)]
-                    for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 
-                                'lng_to_hplant_conversion', 'integrated_supply_conversion']
+                    # 使用动态技术列表
+                    for tech in self.technologies.keys()
                     for mtj_loc in self.non_lng_mtj_locations.get(tech, [])
                     if (ng_loc, mtj_loc, day) in self.ng_transport_vars
                 )
@@ -5609,8 +4967,8 @@ class NaturalGasSupplyChainOptimizerOneStep:
                 # LNG接收站向外运输的天然气（通常LNG接收站不向外运输，但为完整性考虑）
                 daily_outbound_transport = gp.quicksum(
                     self.ng_transport_vars[(lng_loc, mtj_loc, day)]
-                    for tech in ['pipeline_direct_conversion', 'airport_integrated_conversion', 
-                                'lng_to_hplant_conversion', 'integrated_supply_conversion']
+                    # 使用动态技术列表
+                    for tech in self.technologies.keys()
                     for mtj_loc in self.non_lng_mtj_locations.get(tech, [])
                     if (lng_loc, mtj_loc, day) in self.ng_transport_vars
                 )
@@ -5669,212 +5027,6 @@ class NaturalGasSupplyChainOptimizerOneStep:
 
 
 if __name__ == '__main__':
-    """主执行块"""
-    try:
-        logger.info("开始执行天然气供应链优化模型...")
-        
-        # 1. 初始化优化器 (使用1周时间范围以减少内存使用)
-        # 设置正确的OSM文件路径
-        base_dir = get_project_base_dir()
-        osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization", 
-                                   "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf")
-        
-        optimizer = NaturalGasSupplyChainOptimizerOneStep(
-            time_horizon_weeks=1,
-            osm_pbf_path=osm_file_path
-        )
-        
-        # 2. 加载数据
-        # 使用内置的真实数据加载逻辑，无需传入额外参数
-        # 使用配置文件中的路径加载数据（如果传入airport_excel_path=None，会自动从配置文件获取）
-        optimizer.load_data_from_excel(
-            airport_excel_path=None  # 从配置文件自动获取路径
-        )
-        
-        # 3. 构建模型
-        optimizer.build_model()
-        
-        # 4. 求解模型
-        solution = optimizer.solve()
-        
-        # 5. 打印关键结果
-        if solution:
-            status = solution.get('optimization_status', 'unknown')
-            if status != 2:  # GRB.OPTIMAL = 2
-                logger.error("模型求解失败！")
-                logger.error(f"  - 求解状态码: {status}")
-            else:
-                logger.info("模型求解成功！")
-                logger.info(f"  - 求解状态: 最优解")
-                objective_value_lifecycle_total = solution.get('objective_value_lifecycle_total', 'N/A')
-                lifecycle_levelized_cost_per_kg = solution.get('lifecycle_levelized_cost_per_kg', 'N/A')
-                annual_levelized_cost_per_kg = solution.get('annual_levelized_cost_per_kg', 'N/A')
-                project_lifespan = solution.get('project_lifespan_years', 20)
-                time_window_weeks = solution.get('time_window_weeks', 1)
-                annual_production = solution.get('annual_production_kg', 0)
-                lifecycle_total_production = solution.get('lifecycle_total_production_kg', 0)
-                
-
-                if isinstance(objective_value_lifecycle_total, (int, float)):
-                    logger.info(f"  - 项目生命周期总成本（{project_lifespan}年）: {objective_value_lifecycle_total:,.2f} 元")
-                    
-                    annual_cost = objective_value_lifecycle_total / project_lifespan
-                    logger.info(f"  - 年化成本: {annual_cost:,.2f} 元/年")
-                    
-                    if isinstance(lifecycle_levelized_cost_per_kg, (int, float)):
-                        logger.info(f"  - 生命周期平准化成本: {lifecycle_levelized_cost_per_kg:,.2f} 元/kg")
-                    
-                    if isinstance(annual_levelized_cost_per_kg, (int, float)):
-                        logger.info(f"  - 年化平准化成本: {annual_levelized_cost_per_kg:,.2f} 元/kg")
-                    
-                    if annual_production > 0:
-                        logger.info(f"  - 年产量: {annual_production:,.0f} kg")
-                    
-                    if lifecycle_total_production > 0:
-                        logger.info(f"  - 20年总产量: {lifecycle_total_production:,.0f} kg")
-                        
-                else:
-                    logger.info(f"  - 目标函数值: {objective_value_lifecycle_total}")
-                
-                # 输出设施建设数量
-                facilities_count = len(solution.get('facilities', {}))
-                logger.info(f"  - 建设设施数量: {facilities_count}")
-                logger.info(f"  - 优化时间窗口: {time_window_weeks} 周")
-
-            # 保存结果到results目录
-            base_dir = get_project_base_dir()
-            results_dir = os.path.join(base_dir, "products", "supply_chain_optimization", "natural_gas_supply_chain_optimization", "results")
-            os.makedirs(results_dir, exist_ok=True)
-            optimizer.save_results(solution, results_dir)
-            print(f"\n结果已保存到目录: {results_dir}")
-            print("="*50)
-        else:
-            logger.error("模型求解失败或未返回结果。")
-
-    except Exception as e:
-        logger.error("="*80)
-        logger.error("模型执行过程中发生严重错误")
-        logger.error("="*80)
-        logger.error(f"错误类型: {type(e).__name__}")
-        logger.error(f"错误信息: {e}")
-        logger.error(f"错误发生时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-        # 如果是路径规划相关的错误，记录额外信息
-        if "路径规划" in str(e) or "GraphHopper" in str(e) or "route" in str(e).lower():
-            logger.error("这是一个路径规划相关的错误")
-            logger.error("建议检查:")
-            logger.error("  1. GraphHopper服务是否正常运行 (http://localhost:8989)")
-            logger.error("  2. OSM数据文件是否存在且完整")
-            logger.error("  3. 坐标数据是否有效")
-            logger.error("  4. 网络连接是否正常")
-
-        logger.error("完整错误堆栈信息:")
-        logger.error("-"*60, exc_info=True)
-        logger.error("="*80)
-
-    def _add_ft_capacity_constraints(self):
-        """
-        添加FT反应器容量约束
-        约束内容：
-        1. FT设施产能必须在其建设决策范围内（Big-M约束）
-        2. FT设施产能必须满足配置的最小/最大容量限制
-        """
-        logger.info("添加FT反应器容量约束...")
-
-        # 从配置读取容量限制
-        ft_max_capacity = self.config.get('capacity_limits', {}).get('ft_reactor_max_capacity_kg_per_hour', 1000000)
-        ft_min_capacity = self.config.get('capacity_limits', {}).get('ft_reactor_min_capacity_kg_per_hour', 0)
-
-        constraint_count = 0
-
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
-
-            if location_id not in self.ft_facility_vars:
-                continue
-
-            facility_var = self.ft_facility_vars[location_id]
-            capacity_var = self.ft_capacity_vars[location_id]
-
-            # Big-M约束：capacity <= facility * max_capacity
-            # 当facility=0时，capacity必须为0；当facility=1时，capacity可以取0-max_capacity
-            constraint_name = f"ft_capacity_upper_{location_id}"
-            self.model.addConstr(
-                capacity_var <= facility_var * ft_max_capacity,
-                name=constraint_name
-            )
-            constraint_count += 1
-
-            # 如果有最小容量要求，添加下界约束
-            if ft_min_capacity > 0:
-                # capacity >= facility * min_capacity
-                constraint_name = f"ft_capacity_lower_{location_id}"
-                self.model.addConstr(
-                    capacity_var >= facility_var * ft_min_capacity,
-                    name=constraint_name
-                )
-                constraint_count += 1
-
-        logger.info(f"添加了 {constraint_count} 个FT反应器容量约束")
-
-    def _add_ft_process_constraints(self):
-        """
-        添加FT合成过程约束
-        约束内容：
-        1. SAF产量 = FT设施产能 × 效率
-        2. 天然气消耗 = SAF产量 × NG消耗比
-        3. 天然气供应能力约束
-        """
-        logger.info("添加FT合成过程约束...")
-
-        # 从配置读取FT技术参数
-        ft_tech = self.config['technologies']['ft_direct_conversion']
-        efficiency = ft_tech['efficiency']
-        ng_consumption_ratio = ft_tech['ng_consumption_ratio']
-
-        constraint_count = 0
-
-        # SAF生产能力约束（小时级）
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
-
-            if location_id not in self.ft_capacity_vars:
-                continue
-
-            capacity_var = self.ft_capacity_vars[location_id]
-
-            for hour in range(self.total_hours):
-                # 小时生产量 ≤ 设施产能
-                # 注意：这里需要根据实际的生产变量来设置
-                # 由于FT是一步法，直接从NG到SAF，不需要中间氢气环节
-
-                # TODO: 需要根据实际的变量结构来完善这个约束
-                # 这里暂时只添加产能上限约束
-                pass
-
-        logger.info(f"添加了 {constraint_count} 个FT合成过程约束")
-
-    def _add_saf_transport_constraints(self):
-        """
-        添加SAF运输约束
-        约束内容：
-        1. SAF从FT设施到机场的运输量约束
-        2. 运输能力限制
-        """
-        logger.info("添加SAF运输约束...")
-
-        constraint_count = 0
-
-        # SAF运输约束（周级）
-        for (ft_location, airport, week), transport_var in self.saf_transport_vars.items():
-            # TODO: 添加运输能力限制
-            # transport_var <= max_transport_capacity
-            pass
-
-        logger.info(f"添加了 {constraint_count} 个SAF运输约束")
-
-
-if __name__ == '__main__':
     """主执行块 - FT一步法模型"""
     try:
         logger.info("开始执行天然气供应链优化模型（FT一步法）...")
@@ -5896,79 +5048,12 @@ if __name__ == '__main__':
             osm_pbf_path=osm_file_path
         )
 
-        # 2. 加载数据
-        # 从Excel文件加载真实的机场需求数据
-        airport_excel_path = os.path.join(base_dir, "products", "aviation_fuel_analysis",
-                                        "resource_flight_data_process", "data",
-                                        "capital_binhai_airports_data_20250726_123415.xlsx")
-
-        if os.path.exists(airport_excel_path):
-            logger.info(f"从Excel加载机场数据: {airport_excel_path}")
-            # 尝试读取All_Airports工作表，如果失败则读取默认工作表
-            try:
-                airport_df = pd.read_excel(airport_excel_path, sheet_name='All_Airports')
-                logger.info(f"Excel文件读取成功(All_Airports)，包含 {len(airport_df)} 行数据")
-            except Exception as e:
-                logger.error(f"读取Excel文件失败（All_Airports）: {e}")
-                try:
-                    logger.info("尝试读取默认工作表...")
-                    airport_df = pd.read_excel(airport_excel_path)
-                    logger.info(f"Excel文件读取成功，包含 {len(airport_df)} 行数据")
-                except Exception as e2:
-                    logger.error(f"读取Excel文件彻底失败: {e2}")
-                    raise
-
-            # 处理数据：按机场分组，提取52周时间序列
-            airport_data_list = []
-            for airport_name in airport_df['departure_airport_name'].unique():
-                airport_subset = airport_df[airport_df['departure_airport_name'] == airport_name].sort_values('week_number')
-
-                if len(airport_subset) > 0:
-                    first_row = airport_subset.iloc[0]
-                    weekly_series = airport_subset['weekly_total_fuel_kg_total'].tolist()
-
-                    airport_data_list.append({
-                        'airport': first_row.get('departure_airport_code', airport_name[:4].upper()),
-                        'airport_name': airport_name,
-                        'latitude': first_row['departure_airport_latitude'],
-                        'longitude': first_row['departure_airport_longitude'],
-                        'weekly_fuel_series': weekly_series,
-                        'avg_weekly_fuel_kg': np.mean(weekly_series),
-                        'max_weekly_fuel_kg': np.max(weekly_series),
-                        'total_fuel_kg': np.sum(weekly_series),
-                        'flight_count': airport_subset['total_flights'].sum()
-                    })
-
-            airport_data = pd.DataFrame(airport_data_list)
-        else:
-            # 如果Excel文件不存在，使用简单的测试数据
-            logger.warning(f"Excel文件不存在，使用测试数据")
-            airport_data = pd.DataFrame([
-                {
-                    'airport': 'ZBAA',
-                    'airport_name': '北京首都国际机场',
-                    'latitude': 40.08,
-                    'longitude': 116.58,
-                    'weekly_fuel_series': [10000.0] * 52,
-                    'avg_weekly_fuel_kg': 10000.0,
-                    'max_weekly_fuel_kg': 10000.0,
-                    'total_fuel_kg': 520000.0,
-                    'flight_count': 1000
-                },
-                {
-                    'airport': 'ZSPD',
-                    'airport_name': '上海浦东国际机场',
-                    'latitude': 31.14,
-                    'longitude': 121.81,
-                    'weekly_fuel_series': [10000.0] * 52,
-                    'avg_weekly_fuel_kg': 10000.0,
-                    'max_weekly_fuel_kg': 10000.0,
-                    'total_fuel_kg': 520000.0,
-                    'flight_count': 1000
-                }
-            ])
-
-        optimizer.load_data(airport_data)
+        # 2. 加载数据 - 使用继承的load_data_from_excel()方法
+        # 该方法会自动从配置文件获取数据路径并处理Excel列名兼容性
+        optimizer.load_data_from_excel(
+            airport_excel_path=None,  # 从配置文件自动获取路径
+            renewable_data=None  # FT一步法不需要可再生能源数据
+        )
 
         # 3. 构建模型
         optimizer.build_model()

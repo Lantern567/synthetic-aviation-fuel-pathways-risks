@@ -312,7 +312,10 @@ class GraphHopperRoutingEngine:
                 (self.stats['cache_performance']['average_cache_read_time_ms'] * self.stats['cache_hits'] + read_time_ms) /
                 (self.stats['cache_hits'] + 1)
             )
-            print(f"[GraphHopper缓存] 🟢 内存缓存命中: {cache_key[:8]}..., 耗时: {read_time_ms:.1f}ms")
+            try:
+                print(f"[GraphHopper缓存] 🟢 内存缓存命中: {cache_key[:8]}..., 耗时: {read_time_ms:.1f}ms")
+            except:
+                pass  # 静默处理编码错误
             return cache_data
 
         try:
@@ -396,16 +399,19 @@ class GraphHopperRoutingEngine:
                         self.stats['cache_hits']
                     )
 
-                print(f"[GraphHopper缓存] 🟡 数据库缓存命中: {cache_key[:8]}..., 耗时: {read_time_ms:.1f}ms, 原计算时间: {calc_time_ms or 0:.0f}ms")
+                try:
+                    print(f"[GraphHopper缓存] 🟡 数据库缓存命中: {cache_key[:8]}..., 耗时: {read_time_ms:.1f}ms, 原计算时间: {calc_time_ms or 0:.0f}ms")
+                except:
+                    pass  # 静默处理编码错误
                 return cache_result
 
             conn.close()
             self.stats['cache_misses'] += 1
-            print(f"[GraphHopper缓存] 🔴 缓存未命中: {cache_key[:8]}..., 需要重新计算")
+            print(f"[GraphHopper缓存] 缓存未命中: {cache_key[:8]}..., 需要重新计算")
             return None
 
         except Exception as e:
-            print(f"[GraphHopper缓存] 🔴 缓存查询失败: {cache_key[:8]}..., 错误: {e}")
+            print(f"[GraphHopper缓存] 缓存查询失败: {cache_key[:8]}..., 错误: {e}")
             self.stats['cache_misses'] += 1
             return None
     
