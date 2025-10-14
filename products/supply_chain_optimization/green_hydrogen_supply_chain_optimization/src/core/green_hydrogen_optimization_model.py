@@ -419,8 +419,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 支持扁平化的参数覆盖，如 'time_horizon_weeks': 2
         for key, value in overrides.items():
             if key in ['time_horizon_weeks', 'use_graphhopper_routing', 'graphhopper_host',
-                      'graphhopper_port', 'max_transport_distance_km', 'use_routing_for_short_distance',
-                      'avg_lng_capacity_mcm_per_year']:
+                      'graphhopper_port', 'max_transport_distance_km', 'use_routing_for_short_distance']:
                 new_config['basic_parameters'][key] = value
             elif key in ['levelized_cost_threshold_yuan_per_kg', 'discount_rate', 'project_lifespan']:
                 # 直接支持经济参数的覆盖
@@ -5690,132 +5689,6 @@ class GreenHydrogenSupplyChainOptimizer:
             return "其他"
 
     def _load_co2_capture_data(self):
-        """加载天然气管段数据（使用预处理的容量数据，支持缓存）"""
-        try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
-            project_root = get_project_base_dir()
-            
-            # 优先使用预处理的容量数据文件
-            try:
-                preprocessed_file = self._get_data_path('gis_data.ng_pipelines_preprocessed')
-                logger.info(f"从配置文件获取预处理管道数据路径: {preprocessed_file}")
-            except Exception as e:
-                logger.error(f"从配置文件获取预处理管道数据路径失败: {e}")
-                preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                               "gis_data_scraper", "scraped_gis_data", 
-                                               "natural_gas_pipelines_with_capacity.xlsx")
-            
-            if os.path.exists(preprocessed_file):
-                logger.info("使用预处理的天然气管道容量数据")
-                integrated_df = pd.read_excel(preprocessed_file)
-                # 过滤北京500km范围内的管道
-                integrated_df = integrated_df[integrated_df.apply(
-                    lambda row: is_within_beijing_range(
-                        float(row.get('center_latitude') or row.get('Lat', 0)), 
-                        float(row.get('center_longitude') or row.get('Long', 0)), 
-                        500
-                    ), axis=1
-                )]
-                logger.info(f"预处理数据过滤后: {len(integrated_df)} 条管道记录")
-            else:
-                # 备用方案：使用原有的集成数据文件
-                logger.warning("预处理容量数据文件不存在，使用原有集成数据")
-                try:
-                    integrated_file = self._get_data_path('gis_data.ng_pipelines_integrated')
-                    logger.info(f"从配置文件获取集成管道数据路径: {integrated_file}")
-                except Exception as e:
-                    logger.error(f"从配置文件获取集成管道数据路径失败: {e}")
-                    integrated_file = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                                 "green_hydrogen_supply_chain_optimization", "data", 
-                                                 "integrated_gas_pipeline_price_data_with_coords.csv")
-                if not os.path.exists(integrated_file):
-                    logger.error(f"集成天然气数据文件不存在: {integrated_file}")
-                    self._load_original_pipeline_data()
-                    return
-
-                # 检查缓存是否有效
-                if cache_manager.is_cache_valid('ng_pipelines', integrated_file):
-                    logger.info("使用缓存的天然气管道数据（500km过滤）")
-                    cached_df = cache_manager.load_filtered_data('ng_pipelines')
-                    if cached_df is not None:
-                        integrated_df = cached_df
-                        logger.info(f"从缓存加载天然气管道数据: {len(integrated_df)} 条记录")
-                    else:
-                        logger.warning("缓存加载失败，执行完整加载")
-                        integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
-                else:
-                    logger.info("缓存无效或不存在，执行完整加载和过滤")
-                    integrated_df = self._load_and_filter_ng_pipeline_data(integrated_file, cache_manager)
-
-            # 处理过滤后的数据
-            for idx, row in integrated_df.iterrows():
-                # 处理不同数据源的字段名
-                if 'pipeline_id' in row:
-                    pipeline_id = row['pipeline_id']
-                    pipeline_name = row.get('pipeline_name', row.get('Name', f'pipeline_{idx}'))
-                else:
-                    pipeline_id = f'pipeline_{idx}'
-                    pipeline_name = row.get('Name', f'管道_{idx}')
-                
-                # 获取坐标（支持不同字段名）
-                lat = float(row.get('center_latitude') or row.get('lat') or row.get('Lat', 0))
-                lon = float(row.get('center_longitude') or row.get('lon') or row.get('Long', 0))
-                
-                # 获取预处理的容量数据，如果不存在则使用原始数据
-                if 'effective_daily_capacity_m3_per_day' in row and pd.notna(row['effective_daily_capacity_m3_per_day']):
-                    # 使用预处理的有效日处理能力
-                    capacity_mcm_per_day = row['capacity_mcm_per_day']
-                    effective_daily_capacity_m3_per_day = row['effective_daily_capacity_m3_per_day']
-                    supply_reliability = row['supply_reliability']
-                    logger.debug(f"管道 {pipeline_id} 使用预处理容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                else:
-                    # 备用：使用原有数据计算
-                    capacity_mcm_per_day = row.get('capacity_mcm_per_day', 0)
-                    supply_reliability = row.get('supply_reliability', 0.95)
-                    effective_daily_capacity_m3_per_day = capacity_mcm_per_day * 10000 * supply_reliability
-                    logger.debug(f"管道 {pipeline_id} 使用原始数据计算容量: {effective_daily_capacity_m3_per_day/10000:.2f} 万m³/天")
-                
-                self.ng_pipeline_sources[pipeline_id] = {
-                    'name': pipeline_name,
-                    'operator': row.get('operator', row.get('Operator', '未知')),
-                    'status': row.get('status', row.get('Status', 'Operating')),
-                    'year_online': row.get('year_online', row.get('YearOnline', 2020)),
-                    'capacity_mcm_per_day': capacity_mcm_per_day,
-                    'effective_daily_capacity_m3_per_day': effective_daily_capacity_m3_per_day,  # 新增预处理字段
-                    'length_km': row.get('length_km', row.get('Shape__Length', 0)),
-                    'natural_gas_price_yuan_per_10k_m3': row.get('natural_gas_price_yuan_per_10k_m3', 3.0),
-                    'pipeline_cost_yuan_per_mcm': row.get('pipeline_cost_yuan_per_mcm', 200),
-                    'transport_cost_yuan_per_mcm_km': row.get('transport_cost_yuan_per_mcm_km', 1.5),
-                    'supply_reliability': supply_reliability,
-                    # 添加坐标信息
-                    'center_latitude': lat,
-                    'center_longitude': lon,
-                    'lat': lat,
-                    'lon': lon,
-                    'start_latitude': row.get('start_latitude', None),
-                    'start_longitude': row.get('start_longitude', None),
-                    'end_latitude': row.get('end_latitude', None),
-                    'end_longitude': row.get('end_longitude', None)
-                }
-
-            logger.info(f"成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据（含价格和坐标信息）")
-            if len(integrated_df) > 0:
-                logger.info(f"平均天然气价格: {integrated_df['natural_gas_price_yuan_per_10k_m3'].mean():.2f} 元/万立方米")
-                # 输出坐标范围用于验证
-                lat_min, lat_max = integrated_df['lat'].min(), integrated_df['lat'].max()
-                lon_min, lon_max = integrated_df['lon'].min(), integrated_df['lon'].max()
-                logger.info(f"管道坐标范围: 纬度 {lat_min:.2f}-{lat_max:.2f}, 经度 {lon_min:.2f}-{lon_max:.2f}")
-
-        except Exception as e:
-            logger.error(f"加载集成天然气数据失败: {e}")
-            self._load_original_pipeline_data()
-    
-    def _load_co2_capture_data(self):
         """加载CO₂捕获源数据"""
         try:
             from ..co2.co2_capture_calculator import CO2CaptureCalculator
@@ -6158,8 +6031,8 @@ class GreenHydrogenSupplyChainOptimizer:
         hydrogen_distances = []
         renewable_locations = [loc for loc, info in self.locations.items() 
                              if info['type'] in ['solar_plant', 'wind_farm']]
-        mtj_locations = [loc for loc, info in self.locations.items() 
-                        if info['type'] in ['lng_terminal', 'industrial_park', 'port']]
+        mtj_locations = [loc for loc, info in self.locations.items()
+                        if info['type'] in ['industrial_park', 'port']]
         
         for h_loc in renewable_locations[:5]:  # 限制样本数以节省时间
             for mtj_loc in mtj_locations[:5]:
@@ -6175,28 +6048,7 @@ class GreenHydrogenSupplyChainOptimizer:
             distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
             self.avg_hydrogen_transport_distance = distance_config.get('hydrogen_transport_distance_km', 50)
             logger.warning("无法计算氢气运输平均距离，使用默认值50km")
-        
-        # 计算天然气运输平均距离（管道到非LNG接收站）
-        ng_distances = []
-        ng_locations = list(self.ng_pipeline_sources.keys())[:5]  # 天然气源位置
-        non_lng_mtj_locations = [loc for loc, info in self.locations.items() 
-                               if info['type'] in ['industrial_park', 'port']][:5]
-        
-        for ng_loc in ng_locations:
-            for mtj_loc in non_lng_mtj_locations:
-                distance = self._calculate_location_distance(ng_loc, mtj_loc)
-                ng_distances.append(distance)
-        
-        if ng_distances:
-            self.avg_ng_transport_distance = np.mean(ng_distances)
-            logger.info(f"天然气运输平均距离: {self.avg_ng_transport_distance:.1f}km "
-                       f"(基于{len(ng_distances)}个样本)")
-        else:
-            # 从配置文件读取默认天然气运输距离
-            distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
-            self.avg_ng_transport_distance = distance_config.get('ng_transport_distance_km', 80)
-            logger.warning("无法计算天然气运输平均距离，使用默认值80km")
-        
+
         # 计算机场运输平均距离
         airport_distances = []
         production_locations = list(self.locations.keys())[:10]  # 限制样本数
