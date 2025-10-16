@@ -247,7 +247,7 @@ class GreenHydrogenSupplyChainOptimizer:
         - basic_parameters: 基础参数(时间范围、路径规划等)
         - co2_parameters: CO₂捕获和运输参数
         - hydrogen_parameters: H₂生产和运输参数
-        - technologies: 技术参数(methanol_mtj_two_step)
+        - technologies: 技术参数(green_h2_co2_to_saf)
         - cost_parameters: 成本参数
         - carbon_emission_parameters: 碳排放参数
 
@@ -446,9 +446,40 @@ class GreenHydrogenSupplyChainOptimizer:
     def _build_mtj_locations(self):
         """根据每种技术的 suitable_locations 动态生成 mtj_locations 映射。"""
         self.mtj_locations = {}
+
+        logger.info("=" * 60)
+        logger.info("【位置类型匹配诊断】")
+        logger.info("=" * 60)
+
+        # 统计实际位置类型分布
+        actual_types = {}
+        for loc, info in self.locations.items():
+            loc_type = info['type']
+            actual_types[loc_type] = actual_types.get(loc_type, 0) + 1
+
+        logger.info(f"实际位置类型分布: {actual_types}")
+        logger.info(f"总位置数: {len(self.locations)}")
+
         for tech, tech_info in self.technologies.items():
             suitable_types = tech_info.get('suitable_locations', [])
-            self.mtj_locations[tech] = [loc for loc, info in self.locations.items() if info['type'] in suitable_types]
+            matched_locations = [
+                loc for loc, info in self.locations.items()
+                if info['type'] in suitable_types
+            ]
+            self.mtj_locations[tech] = matched_locations
+
+            logger.info(f"\n技术 [{tech}]:")
+            logger.info(f"  要求位置类型: {suitable_types}")
+            logger.info(f"  匹配到的位置数: {len(matched_locations)}")
+
+            if len(matched_locations) == 0:
+                logger.error(f"  ❌ 没有匹配的位置！")
+                logger.error(f"  → 检查suitable_locations配置是否与实际位置类型一致")
+                logger.error(f"  → 实际可用类型: {list(actual_types.keys())}")
+            else:
+                logger.info(f"  ✅ 匹配位置示例: {matched_locations[:3]}")
+
+        logger.info("=" * 60)
 
     def __init__(self, config_path: str = None, **override_params):
         """
@@ -1468,10 +1499,10 @@ class GreenHydrogenSupplyChainOptimizer:
         # 构建技术配置，从配置文件加载各个技术的详细参数
         self.technologies = {}
 
-        # 绿氢+CO₂制SAF供应链：只使用两步法工艺（methanol_mtj_two_step）
+        # 绿氢+CO₂制SAF供应链：只使用两步法工艺（green_h2_co2_to_saf）
         # 第一步：H₂ + CO₂ → 甲醇 (E-CRM电化学还原)
         # 第二步：甲醇 → SAF (MTJ甲醇制航煤)
-        for tech_key in ['methanol_mtj_two_step']:
+        for tech_key in ['green_h2_co2_to_saf']:
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
                 self.technologies[tech_key] = {
@@ -1738,14 +1769,14 @@ class GreenHydrogenSupplyChainOptimizer:
         self.economic_params = {
             'discount_rate': economic_config['discount_rate'],
             'project_lifespan': economic_config['project_lifespan'],
-            'mtj_plant_lifetime': economic_config['mtj_plant_lifetime'],
+            'mtj_plant_lifetime': economic_config['saf_reactor_lifetime'],
             'electrolyzer_lifetime': economic_config['electrolyzer_lifetime'],
             'pipeline_lifetime': economic_config['pipeline_lifetime'],
             'storage_lifetime': economic_config['storage_lifetime'],
             'transport_vehicle_lifetime': economic_config['transport_vehicle_lifetime'],
 
             # 容量因子 (设备年利用率)
-            'mtj_plant_capacity_factor': capacity_factors['mtj_plant_capacity_factor'],
+            'mtj_plant_capacity_factor': capacity_factors['saf_reactor_capacity_factor'],
             'electrolyzer_capacity_factor': capacity_factors['electrolyzer_capacity_factor'],
             'pipeline_capacity_factor': capacity_factors['pipeline_capacity_factor'],
             'storage_capacity_factor': capacity_factors['storage_capacity_factor'],
@@ -2156,9 +2187,9 @@ class GreenHydrogenSupplyChainOptimizer:
         for co2_source_id, co2_source_data in self.co2_capture_sources.items():
             # 遍历所有可能的甲醇生产位置（即MTJ工厂位置）
             for tech, tech_locations in self.mtj_locations.items():
-                # 只为methanol_mtj_two_step技术创建CO₂运输变量
+                # 只为green_h2_co2_to_saf技术创建CO₂运输变量
                 # （因为只有两步法工艺需要CO₂作为原料）
-                if 'methanol_mtj' not in tech:
+                if 'green_h2_co2' not in tech:
                     continue
 
                 if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
@@ -2192,7 +2223,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 在所有可以生产甲醇的位置创建变量（即MTJ工厂位置）
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' not in tech:
+            if 'green_h2_co2' not in tech:
                 continue
 
             if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
@@ -2223,7 +2254,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 在所有接收CO₂的甲醇生产位置创建库存变量
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' not in tech:
+            if 'green_h2_co2' not in tech:
                 continue
 
             if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
@@ -2639,7 +2670,7 @@ class GreenHydrogenSupplyChainOptimizer:
             co2_capture_unit_cost * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 生命周期系数
             for co2_source_id in self.co2_capture_sources
             for methanol_loc in sum(self.mtj_locations.values(), [])
-            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
         )
 
         # 11. CO₂管道运输成本（20年生命周期现值）
@@ -2651,7 +2682,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
             co2_pipeline_unit_cost *
             self._calculate_location_distance(
-                self.co2_capture_sources[co2_source_id]['name'],
+                co2_source_id,  # 直接传递字典键（如 "co2_source_1"），而非 facility_name
                 methanol_loc
             ) * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 距离 × 生命周期系数
             for co2_source_id in self.co2_capture_sources
@@ -2668,7 +2699,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
             co2_truck_unit_cost *
             self._calculate_location_distance(
-                self.co2_capture_sources[co2_source_id]['name'],
+                co2_source_id,  # 直接传递字典键（如 "co2_source_1"），而非 facility_name
                 methanol_loc
             ) * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 距离 × 生命周期系数
             for co2_source_id in self.co2_capture_sources
@@ -2686,7 +2717,7 @@ class GreenHydrogenSupplyChainOptimizer:
             methanol_production_unit_cost * lifecycle_operation_factor  # 小时级生产量 × 单位成本 × 生命周期系数
             for methanol_loc in sum(self.mtj_locations.values(), [])
             for hour in range(self.total_hours)
-            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
         )
 
         # 14. 甲醇存储成本（20年生命周期现值）
@@ -2700,7 +2731,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
             for methanol_loc in sum(self.mtj_locations.values(), [])
             for hour in range(self.total_hours + 1)
-            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
         )
         self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
 
@@ -2710,7 +2741,7 @@ class GreenHydrogenSupplyChainOptimizer:
             methanol_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
             for methanol_loc in sum(self.mtj_locations.values(), [])
             for hour in range(self.total_hours + 1)
-            if 'methanol_mtj' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
         )
 
 
@@ -3197,11 +3228,24 @@ class GreenHydrogenSupplyChainOptimizer:
                 mtj_max_capacity = self.config.get('capacity_limits', {}).get('mtj_max_capacity_kg_per_hour', 100000)
                 M = mtj_max_capacity  # 大M常数跟随MTJ工厂上限
                 self.model.addConstr(
-                    self.facility_capacity_vars[(location, tech)] <= 
+                    self.facility_capacity_vars[(location, tech)] <=
                     M * self.facility_vars[(location, tech)],
                     name=f"capacity_facility_link_{location}_{tech}"
                 )
-                
+
+                # 【修复】添加最小经济规模约束（防止建了设施但容量为0）
+                # 如果建设设施(facility_vars=1)，则容量必须≥最小经济规模
+                # 如果不建设(facility_vars=0)，则容量必须为0
+                min_economic_scale = self.config.get('capacity_limits', {}).get(
+                    'saf_reactor_min_capacity_kg_per_hour', 100
+                )
+                self.model.addConstr(
+                    self.facility_capacity_vars[(location, tech)] >=
+                    min_economic_scale * self.facility_vars[(location, tech)],
+                    name=f"min_capacity_{location}_{tech}"
+                )
+                logger.debug(f"添加最小容量约束: {location} {tech}, 最小规模={min_economic_scale} kg/h")
+
                 # 移除基于平均发电量的硬性产能上限约束
                 # 改为依赖动态的时段级约束：
                 # 1. 氢气生产受每时段发电量限制 (在_add_renewable_power_constraints中)
@@ -4185,21 +4229,35 @@ class GreenHydrogenSupplyChainOptimizer:
         return max(distance_km, 5), route_coordinates
     
     def _calculate_location_distance(self, location1: str, location2: str) -> float:
-        """使用GraphHopper路径规划计算两个位置间的真实道路距离"""
+        """使用GraphHopper路径规划计算两个位置间的真实道路距离
+
+        支持从以下数据源查找位置：
+        1. self.locations（机场、可再生能源工厂等）
+        2. self.co2_capture_sources（CO₂捕获源）
+        """
         # 创建缓存键
         cache_key = f"{location1}_{location2}"
         if cache_key in self.distance_cache:
             return self.distance_cache[cache_key]
-        
+
         # 反向缓存键（距离是对称的）
         reverse_cache_key = f"{location2}_{location1}"
         if reverse_cache_key in self.distance_cache:
             return self.distance_cache[reverse_cache_key]
-        
-        loc1_lat = self.locations[location1]['latitude']
-        loc1_lon = self.locations[location1]['longitude']
-        loc2_lat = self.locations[location2]['latitude']
-        loc2_lon = self.locations[location2]['longitude']
+
+        # 辅助函数：从多个数据源查找位置坐标
+        def get_location_coords(loc_name):
+            """从locations或co2_capture_sources中获取位置坐标"""
+            if loc_name in self.locations:
+                return self.locations[loc_name]['latitude'], self.locations[loc_name]['longitude']
+            elif loc_name in self.co2_capture_sources:
+                return self.co2_capture_sources[loc_name]['latitude'], self.co2_capture_sources[loc_name]['longitude']
+            else:
+                raise KeyError(f"位置 '{loc_name}' 既不在 locations 也不在 co2_capture_sources 中")
+
+        # 获取两个位置的坐标
+        loc1_lat, loc1_lon = get_location_coords(location1)
+        loc2_lat, loc2_lon = get_location_coords(location2)
         
         # 使用GraphHopper路径规划计算真实距离
         result = self.routing_engine.calculate_route_distance(
@@ -5691,7 +5749,7 @@ class GreenHydrogenSupplyChainOptimizer:
     def _load_co2_capture_data(self):
         """加载CO₂捕获源数据"""
         try:
-            from ..co2.co2_capture_calculator import CO2CaptureCalculator
+            from co2.co2_capture_calculator import CO2CaptureCalculator
 
             project_root = get_project_base_dir()
 
@@ -6079,7 +6137,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 获取所有甲醇生产位置
         methanol_locations = []
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' in tech:
+            if 'green_h2_co2' in tech:
                 methanol_locations.extend(tech_locations)
         methanol_locations = list(set(methanol_locations))
 
@@ -6133,13 +6191,24 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         logger.info("添加甲醇生产约束（H₂+CO₂→甲醇）...")
 
-        # 获取methanol_mtj_two_step技术的化学计量比
-        tech_key = 'methanol_mtj_two_step'
+        # 🆕 添加诊断日志
+        tech_key = 'green_h2_co2_to_saf'
+        logger.info(f"[诊断] 检查技术 {tech_key}...")
+
         if tech_key not in self.technologies:
-            logger.warning(f"未找到技术 {tech_key}，跳过甲醇生产约束")
+            logger.error(f"❌ 未找到技术 {tech_key}")
+            logger.error(f"   可用技术: {list(self.technologies.keys())}")
             return
 
         tech_info = self.technologies[tech_key]
+
+        # 🆕 验证关键参数
+        required_params = ['h2_consumption_ratio', 'co2_consumption_ratio', 'methanol_intermediate_ratio']
+        missing_params = [p for p in required_params if p not in tech_info]
+        if missing_params:
+            logger.warning(f"⚠️  技术 {tech_key} 缺失参数: {missing_params}")
+            logger.warning(f"   将使用默认值")
+
         h2_consumption_ratio = tech_info['h2_consumption_ratio']  # kg H₂ / kg SAF
         co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
         methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']  # kg 甲醇 / kg SAF
@@ -6147,9 +6216,19 @@ class GreenHydrogenSupplyChainOptimizer:
         # 获取所有甲醇生产位置
         methanol_locations = []
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' in tech:
+            if 'green_h2_co2' in tech:
                 methanol_locations.extend(tech_locations)
         methanol_locations = list(set(methanol_locations))
+
+        # 🆕 诊断位置信息
+        logger.info(f"[诊断] 甲醇生产位置数量: {len(methanol_locations)}")
+        if len(methanol_locations) == 0:
+            logger.error("❌ 没有找到甲醇生产位置！")
+            logger.error(f"   mtj_locations内容: {dict((k, len(v)) for k, v in self.mtj_locations.items())}")
+            logger.error("   → 检查位置类型是否匹配技术要求")
+            return
+        else:
+            logger.info(f"   示例位置: {methanol_locations[:3]}")
 
         constraint_count = 0
         for methanol_loc in methanol_locations:
@@ -6186,6 +6265,16 @@ class GreenHydrogenSupplyChainOptimizer:
 
         logger.info(f"添加了 {constraint_count} 个甲醇生产约束（H₂+CO₂消耗）")
 
+        # 🆕 验证约束确实被添加
+        if constraint_count == 0:
+            logger.error("❌ 约束数量为0！可能原因：")
+            logger.error("   1. methanol_production_vars为空")
+            logger.error("   2. 时间范围(total_hours)为0")
+            logger.error(f"   3. methanol_production_vars数量: {len(self.methanol_production_vars)}")
+            logger.error(f"   4. hydrogen_storage_vars数量: {len(self.hydrogen_storage_vars)}")
+            logger.error(f"   5. co2_inventory_vars数量: {len(self.co2_inventory_vars)}")
+            logger.error(f"   6. total_hours: {self.total_hours}")
+
     def _add_saf_production_from_methanol_constraints(self):
         """添加SAF生产约束（甲醇→SAF，两步法第二步，小时级）
 
@@ -6196,8 +6285,8 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         logger.info("添加SAF生产约束（甲醇→SAF）...")
 
-        # 获取methanol_mtj_two_step技术的转化率
-        tech_key = 'methanol_mtj_two_step'
+        # 获取green_h2_co2_to_saf技术的转化率
+        tech_key = 'green_h2_co2_to_saf'
         if tech_key not in self.technologies:
             logger.warning(f"未找到技术 {tech_key}，跳过SAF生产约束")
             return
@@ -6239,8 +6328,8 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         logger.info("添加甲醇库存平衡约束...")
 
-        # 获取methanol_mtj_two_step技术的转化率
-        tech_key = 'methanol_mtj_two_step'
+        # 获取green_h2_co2_to_saf技术的转化率
+        tech_key = 'green_h2_co2_to_saf'
         if tech_key not in self.technologies:
             logger.warning(f"未找到技术 {tech_key}，跳过甲醇库存平衡约束")
             return
@@ -6251,7 +6340,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 获取所有甲醇生产位置
         methanol_locations = []
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' in tech:
+            if 'green_h2_co2' in tech:
                 methanol_locations.extend(tech_locations)
         methanol_locations = list(set(methanol_locations))
 
@@ -6306,8 +6395,8 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         logger.info("添加CO₂库存平衡约束（时间尺度匹配）...")
 
-        # 获取methanol_mtj_two_step技术的化学计量比
-        tech_key = 'methanol_mtj_two_step'
+        # 获取green_h2_co2_to_saf技术的化学计量比
+        tech_key = 'green_h2_co2_to_saf'
         if tech_key not in self.technologies:
             logger.warning(f"未找到技术 {tech_key}，跳过CO₂库存平衡约束")
             return
@@ -6319,7 +6408,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 获取所有甲醇生产位置
         methanol_locations = []
         for tech, tech_locations in self.mtj_locations.items():
-            if 'methanol_mtj' in tech:
+            if 'green_h2_co2' in tech:
                 methanol_locations.extend(tech_locations)
         methanol_locations = list(set(methanol_locations))
 

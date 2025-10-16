@@ -289,11 +289,26 @@ carbon_emission_parameters:
     saf_process_energy: 3.0                # SAF生产工艺能耗(kWh/kg SAF) | SAF production energy (kWh/kg SAF)
                                            # 包括反应、精制、分离等全过程
 
+    mtj_process_energy: 800                # 甲醇制SAF工艺能耗(kWh/t SAF) | MTJ process energy (kWh/t SAF)
+                                           # 包括反应、精制、分离等全过程
+
+    renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI (kgCO₂e/kWh)
+                                           # 风电/光伏的全生命周期碳排放
+
+    electrolysis_energy: 55                # 电解制氢能耗(kWh/kg H₂) | Electrolysis energy (kWh/kg H₂)
+                                           # 包括系统损耗
+
+    green_h2_intensity: 1.1                # 绿氢碳强度(kgCO₂e/kg H₂) | Green H₂ CI (kgCO₂e/kg H₂)
+                                           # 已包含电解能耗 55 kWh/kg × 0.02 kgCO₂e/kWh = 1.1
+
   # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
     h2_storage_energy: 2                   # 氢气储存能耗(kWh/kg/天) | H₂ storage energy (kWh/kg/day)
 
     saf_storage_energy: 5                  # SAF储存能耗(kWh/吨/天) | SAF storage energy (kWh/ton/day)
+
+    mtj_storage_energy: 5                  # 甲醇储存能耗(kWh/t·天) | MTJ storage energy (kWh/t·day)
+                                           # 甲醇储罐温控、泵送等能耗
 
     storage_loss_rate: 0.001               # 储存损耗率(%/天) | Storage loss rate (%/day)
                                            # 挥发、泄漏等导致的物料损失
@@ -305,6 +320,9 @@ carbon_emission_parameters:
     co2_truck_intensity: 0.08              # CO₂罐车碳强度(kgCO₂e/kg/100km) | CO₂ truck CI
 
     saf_truck_intensity: 0.12              # SAF罐车碳强度(kgCO₂e/kg/100km) | SAF truck CI
+
+    mtj_truck_intensity: 0.12              # 甲醇罐车碳强度(kgCO₂e/t·km) | MTJ truck CI
+                                           # 甲醇罐车运输的全生命周期碳排放
 
     h2_pipeline_intensity: 0.02            # 氢气管道碳强度(kgCO₂e/kg/100km) | H₂ pipeline CI
 
@@ -406,6 +424,27 @@ cost_parameters:
     grid_electricity_price_yuan_per_kwh: 0.70  # 电网电价(元/kWh) | Grid electricity price
                                            # 工业用电价格（备用电源）
 
+  # 原材料价格参数 - Raw Material Prices
+  raw_materials:
+    hydrogen_market_price_yuan_per_kg: 25.0    # 氢气市场价格(元/kg H₂) | Hydrogen market price (yuan/kg H₂)
+                                           # 外购氢气的市场价格（如果不自产）
+                                           # 包括采购、质检等成本
+
+    renewable_electricity_cost_yuan_per_mwh: 350  # 可再生电力成本(元/MWh) | Renewable electricity cost (yuan/MWh)
+                                           # 0.35元/kWh = 350元/MWh
+                                           # 用于电解制氢的电力成本
+                                           # 基于风电和光伏的平均上网电价
+
+  # 电解制氢参数 - Electrolysis Parameters
+  electrolysis:
+    electrolysis_efficiency: 0.70              # 电解槽效率 | Electrolysis efficiency (70%)
+                                           # 电能到氢能的转换效率
+                                           # 碱性/PEM电解槽的典型效率
+
+    electrolysis_power_consumption: 50         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
+                                           # 电解制氢单位能耗（包括系统损耗）
+                                           # 典型值：50 kWh/kg H₂
+
   # 缺货惩罚 - Shortage Penalty
   shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
                                            # 未满足需求时的惩罚成本
@@ -417,6 +456,55 @@ cost_parameters:
 # 包含氢气运输和SAF工艺成本
 # =============================================================================
 costs:
+  # 氢气管道成本 - Hydrogen Pipeline Costs
+  hydrogen_pipeline_costs:
+    capex_yuan_per_km: 5000000             # 管道资本支出(元/km) | Pipeline CAPEX (yuan/km)
+                                           # 包括管道本体、压缩机站、阀门等设施的建设成本
+                                           # 500万元/km是中等规格氢气管道的典型值
+
+    # 运输成本函数 - Transport Cost Function
+    transport_cost_function:
+      function_type: piecewise_linear      # 函数类型：分段线性 | Function type: piecewise linear
+                                           # 采用分段线性插值，模拟规模经济效应
+
+      unit: yuan_per_kg_hydrogen_per_100km # 成本单位 | Cost unit
+                                           # 元/(kg氢气·百公里)
+                                           # 计算公式：总成本 = 单位成本 × (距离km ÷ 100)
+
+      description: 基于图表33管道输送氢气成本曲线  # 数据来源 | Data source
+                                           # 参考行业标准成本曲线
+
+      # 成本数据点 - Cost Data Points [距离(km), 成本(元/kg/100km)]
+      data_points:
+      - - 25                               # 25km: 1.91元/kg/100km | Short distance
+        - 1.91
+      - - 50                               # 50km: 1.04元/kg/100km | Medium-short
+        - 1.04
+      - - 100                              # 100km: 0.56元/kg/100km | Medium
+        - 0.56
+      - - 200                              # 200km: 0.30元/kg/100km | Medium-long
+        - 0.3
+      - - 300                              # 300km: 0.21元/kg/100km | Long
+        - 0.21
+      - - 400                              # 400km: 0.16元/kg/100km | Very long
+        - 0.16
+      - - 500                              # 500km: 0.13元/kg/100km | Extra long
+        - 0.13
+                                           # 规律：距离越长，单位成本越低（规模经济）
+
+      notes: |                             # 成本函数说明 | Cost function notes
+        成本函数已包含以下所有费用：
+        - 管道建设投资摊销 (Pipeline construction amortization)
+        - 压缩机站投资和运营 (Compressor station CAPEX & OPEX)
+        - 管道维护和检测 (Pipeline maintenance & inspection)
+        - 能耗成本（压缩机电力） (Energy cost for compression)
+        - 人工和管理成本 (Labor & management)
+
+        单位转换说明：
+        - 配置单位：元/(kg氢气·百公里)
+        - 计算公式：总成本 = 单位成本 × (运输距离km ÷ 100)
+        - 最终单位：元/kg氢气
+        - 与罐车运输单位保持一致
 
 # =============================================================================
 # 绿氢供应参数 (Green Hydrogen Supply Parameters)
@@ -665,9 +753,11 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 10  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+  levelized_cost_threshold_yuan_per_kg: 50  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+                                           # 【修复】从10元/kg放宽至50元/kg
+                                           # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
+                                           # 50元/kg更符合实际成本水平
                                            # 用于经济性边界约束
-                                           # 超过此值的方案可能不经济（绿氢路线成本较高）
 
   # 设备寿命参数 - Equipment Lifetime
   electrolyzer_lifetime: 15                # 电解槽寿命(年) | Electrolyzer lifetime (years)
@@ -906,10 +996,9 @@ technologies:
 
     # 适用位置 - Suitable Locations
     suitable_locations:                   # 可部署位置类型 | Deployable location types
-    - renewable_plant                     # 可再生能源发电厂
+    - solar_plant                         # 太阳能发电站（修复：匹配代码实际类型）
+    - wind_farm                           # 风电场（修复：匹配代码实际类型）
     - airport                             # 机场附近
-    - industrial                          # 工业基地
-    - co2_capture_site                    # CO₂捕获点附近
 
     # 工艺参数 - Process Parameters
     efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
@@ -920,6 +1009,13 @@ technologies:
 
     co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
                                           # 生产1kg SAF需要3.0kg CO₂
+
+    # 🆕 两步法转化比例参数（H₂+CO₂→甲醇→SAF）
+    methanol_intermediate_ratio: 3.125    # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
+                                          # 中间产物甲醇的生成比例
+
+    methanol_to_saf_ratio: 0.64           # kg SAF/kg甲醇（第二步：甲醇→SAF）
+                                          # 甲醇转化为SAF的转化率
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）
