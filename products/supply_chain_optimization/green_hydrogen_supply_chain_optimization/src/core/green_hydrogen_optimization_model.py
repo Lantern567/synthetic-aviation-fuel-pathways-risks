@@ -185,7 +185,7 @@ try:
         "results",
         "logs",
     )
-    mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
+    mount_file_logging(_log_dir, filename_prefix="green_h2_supply_chain")
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
@@ -1767,30 +1767,26 @@ class GreenHydrogenSupplyChainOptimizer:
         # 从配置文件加载成本参数
         cost_config = self.config['cost_parameters']
         equipment_costs = self.config['equipment_raw_costs']
-        
+
         # 定义原始资本和运营成本数据
         raw_costs = {
             # 原料成本 (元/单位) - 运营成本，无需平准化
-            # 优先使用统一成本配置，向后兼容原有配置
-            'natural_gas_price_yuan_per_m3': (
-                cost_config.get('unified_costs', {}).get('raw_materials', {}).get('natural_gas_base_price_yuan_per_m3') or
-                cost_config['raw_materials']['natural_gas_price_yuan_per_m3']
-            ),
+            # 绿氢供应链：主要原料是可再生电力和氢气
             'hydrogen_market_price_yuan_per_kg': (
                 cost_config.get('unified_costs', {}).get('raw_materials', {}).get('hydrogen_market_price_yuan_per_kg') or
                 cost_config['raw_materials']['hydrogen_market_price_yuan_per_kg']
             ),
             'renewable_electricity_cost_yuan_per_mwh': cost_config['raw_materials']['renewable_electricity_cost_yuan_per_mwh'],
-            
+
             # MTJ生产设施原始成本（基于工程估算）
             'mtj_plant_capex_raw': mtj_base_costs['capex_per_kg_hour'],         # 元/(kg/hour) 产能投资
             'mtj_plant_fixed_opex_raw': mtj_base_costs['fixed_opex_annual'],    # 元/年 固定运营成本
             'mtj_plant_variable_opex_raw': mtj_base_costs['variable_opex_per_kg'], # 元/kg 变动运营成本
-            
+
             # 电解槽原始成本
             'electrolyzer_capex_raw': equipment_costs['electrolyzer']['capex_raw'],
             'electrolyzer_opex_raw': equipment_costs['electrolyzer']['opex_raw'],
-            
+
             # 储存设施原始成本 - 优先使用统一成本配置
             'storage_capex_raw': (
                 cost_config.get('unified_costs', {}).get('storage', {}).get('facility_investment_yuan_per_kg') or
@@ -1801,21 +1797,20 @@ class GreenHydrogenSupplyChainOptimizer:
                 equipment_costs['storage']['opex_raw']
             )
         }
-        
+
         # 计算平准化成本参数
         # 先检查raw_costs中的NaN值
         for key, value in raw_costs.items():
             if isinstance(value, (int, float)) and pd.isna(value):
                 print(f"ERROR: raw_costs中的参数 {key} 包含NaN值: {value}")
                 raise ValueError(f"原始成本参数包含NaN值: {key} = {value}")
-        
+
         self.costs = {
             # 原料成本保持不变（运营成本）
-            'natural_gas_price_yuan_per_m3': raw_costs['natural_gas_price_yuan_per_m3'],
             'hydrogen_market_price_yuan_per_kg': raw_costs['hydrogen_market_price_yuan_per_kg'],
             'renewable_electricity_cost_yuan_per_mwh': raw_costs['renewable_electricity_cost_yuan_per_mwh'],
-            
-            
+
+
             # 电解制氢参数
             'electrolysis_efficiency': cost_config['electrolysis']['electrolysis_efficiency'],
             'electrolysis_power_consumption': cost_config['electrolysis']['electrolysis_power_consumption'],
@@ -2063,12 +2058,8 @@ class GreenHydrogenSupplyChainOptimizer:
         
         valid_h2_routes = 0  # 计数有效路线
         for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
-                # 排除管段直供和LNG转运模式，因为它们在可再生能源站就地制备MTJ，氢气无需运输
-                if tech not in self.technologies:
-                    logger.warning(f"技术 {tech} 不在 technologies 中，跳过氢气运输变量创建")
-                    continue
-                    
+            for tech in self.technologies.keys():
+                # 只为需要氢气运输的技术路线创建运输变量
                 if not self.technologies[tech]['hydrogen_transport_required']:
                     continue
                     
@@ -2102,11 +2093,8 @@ class GreenHydrogenSupplyChainOptimizer:
         total_days = self.total_hours // 24
         
         for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
+            for tech in self.technologies.keys():
                 # 只为需要氢气运输的技术路线创建管道变量
-                if tech not in self.technologies:
-                    continue
-                    
                 if not self.technologies[tech]['hydrogen_transport_required']:
                     continue
                     
@@ -2821,14 +2809,13 @@ class GreenHydrogenSupplyChainOptimizer:
         # 验证碳排放参数完整性
         logger.info("验证碳排放参数完整性...")
         required_params = {
-            'raw_materials': ['ng_extraction_intensity', 'ng_pipeline_transport'],
+            'raw_materials': [],  # 绿氢供应链无需天然气开采参数
             'facility_construction': ['saf_facility_embodied', 'saf_facility_lifetime',
                                     'electrolyzer_embodied', 'electrolyzer_lifetime'],
-            'production_process': ['ng_to_methanol_rate', 'ng_process_emission',
-                                 'mtj_process_energy', 'renewable_electricity',
+            'production_process': ['mtj_process_energy', 'renewable_electricity',
                                  'electrolysis_energy', 'green_h2_intensity'],
             'storage_handling': ['mtj_storage_energy', 'h2_storage_energy'],
-            'transportation': ['h2_truck_intensity', 'mtj_truck_intensity', 'ng_truck_intensity']
+            'transportation': ['h2_truck_intensity', 'mtj_truck_intensity']
         }
 
         missing_params = []
@@ -2852,22 +2839,8 @@ class GreenHydrogenSupplyChainOptimizer:
         # =========================================================================
         # 1. 原料获取阶段碳排放 (Raw Material Extraction)
         # =========================================================================
-        ng_extraction_intensity = raw_materials.get('ng_extraction_intensity', 0.25)  # kg CO2eq/m³
-        ng_pipeline_transport = raw_materials.get('ng_pipeline_transport', 0.01)  # kg CO2eq/m³·km
-
-        # 天然气开采碳排放（基于运输量推算开采量）
-        # 注：ng_transport_vars已经是天级变量(m³/天)，无需再乘以24
-        self.carbon_expressions['ng_extraction'] = gp.quicksum(
-            self.ng_transport_vars.get((ng_loc, mtj_loc, day), gp.LinExpr(0)) *
-            ng_extraction_intensity  # 天级变量 * kg CO2eq/m³
-            for ng_loc in self.ng_locations
-            for mtj_loc in self.locations
-            for day in range(total_days)
-            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
-        )
-
-        logger.info(f"天然气开采碳强度: {ng_extraction_intensity} kg CO2eq/m³")
-        logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
+        # 绿氢供应链：原料主要是CO₂捕获（已在捕获成本中包含能耗排放）
+        # 此处不再需要天然气开采排放
 
         # =========================================================================
         # 2. 设施建设阶段碳排放（年摊销）(Facility Construction)
@@ -2914,21 +2887,9 @@ class GreenHydrogenSupplyChainOptimizer:
         # =========================================================================
         # 3. 生产过程阶段碳排放 (Production Process)
         # =========================================================================
-        ng_to_methanol = production.get('ng_to_methanol_rate', 1.2)  # m³ NG/kg甲醇
-        ng_process_em = production.get('ng_process_emission', 0.8)  # kg CO2eq/m³
         mtj_energy = production.get('mtj_process_energy', 800)  # kWh/t SAF
         renewable_elec = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh
         green_h2_intensity = production.get('green_h2_intensity', 1.1)  # kg CO2eq/kg H2
-
-        # 天然气制甲醇碳排放
-        self.carbon_expressions['ng_to_methanol'] = gp.quicksum(
-            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            ng_to_methanol * ng_process_em
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
 
         # 甲醇制SAF过程碳排放
         self.carbon_expressions['methanol_to_saf'] = gp.quicksum(
@@ -2950,7 +2911,6 @@ class GreenHydrogenSupplyChainOptimizer:
             if (location, hour) in self.hydrogen_production_vars
         )
 
-        logger.info(f"天然气消耗率: {ng_to_methanol} m³/kg甲醇, 工艺排放: {ng_process_em} kg CO2eq/m³")
         logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 可再生电力碳强度: {renewable_elec} kg CO2eq/kWh")
         logger.info(f"绿氢碳强度: {green_h2_intensity} kg CO2eq/kg H2")
         logger.info(f"[调试] 生产变量数量: {len([k for k in self.production_vars.keys()])}") if hasattr(self, 'production_vars') else logger.warning("[调试] 未找到生产变量")
@@ -2999,7 +2959,6 @@ class GreenHydrogenSupplyChainOptimizer:
         h2_truck = transportation.get('h2_truck_intensity', 0.15)  # kg CO2eq/kg·km
         h2_pipeline = transportation.get('h2_pipeline_intensity', 0.005)  # kg CO2eq/kg·km
         mtj_truck = transportation.get('mtj_truck_intensity', 0.12)  # kg CO2eq/t·km
-        ng_truck = transportation.get('ng_truck_intensity', 0.10)  # kg CO2eq/m³·km
 
         # 氢气罐车运输碳排放
         # 注：hydrogen_transport_vars单位为kg H2/week，h2_truck为kg CO2eq/kg·km
@@ -3038,23 +2997,11 @@ class GreenHydrogenSupplyChainOptimizer:
             if (location, airport, week) in self.transport_vars
         )
 
-        # 天然气运输碳排放
-        # 注：ng_transport_vars是天级变量(m³/天)，ng_truck单位是kg CO2eq/m³·km，无需时间转换
-        self.carbon_expressions['ng_transport'] = gp.quicksum(
-            self.ng_transport_vars.get((ng_loc, mtj_loc, day), gp.LinExpr(0)) *
-            self._calculate_distance(ng_loc, mtj_loc) * ng_truck  # m³/天 * km * kg CO2eq/m³·km
-            for ng_loc in self.ng_locations
-            for mtj_loc in self.locations
-            for day in range(total_days)
-            if (ng_loc, mtj_loc, day) in self.ng_transport_vars
-        )
-
         # 验证运输碳强度参数合理性
         transport_params = [
             (h2_truck, 0.05, 0.50, "氢气罐车运输碳强度"),
             (h2_pipeline, 0.001, 0.020, "氢气管道运输碳强度"),
-            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度"),
-            (ng_truck, 0.05, 0.30, "天然气罐车运输碳强度")
+            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度")
         ]
         for value, min_val, max_val, name in transport_params:
             if not (min_val <= value <= max_val):
@@ -3063,11 +3010,9 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"氢气罐车运输: {h2_truck} kg CO2eq/kg·km")
         logger.info(f"氢气管道运输: {h2_pipeline} kg CO2eq/kg·km")
         logger.info(f"MTJ罐车运输: {mtj_truck} kg CO2eq/t·km")
-        logger.info(f"天然气罐车运输: {ng_truck} kg CO2eq/m³·km")
         logger.info(f"[调试] 氢气罐车变量数量: {len([k for k in self.hydrogen_transport_vars.keys()])}") if hasattr(self, 'hydrogen_transport_vars') else logger.warning("[调试] 未找到氢气罐车变量")
         logger.info(f"[调试] 氢气管道变量数量: {len([k for k in self.hydrogen_pipeline_transport_vars.keys()])}") if hasattr(self, 'hydrogen_pipeline_transport_vars') else logger.warning("[调试] 未找到氢气管道变量")
         logger.info(f"[调试] MTJ运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到MTJ运输变量")
-        logger.info(f"[调试] 天然气运输变量数量: {len([k for k in self.ng_transport_vars.keys()])}") if hasattr(self, 'ng_transport_vars') else logger.warning("[调试] 未找到天然气运输变量")
 
         # 测试距离计算方法
         if hasattr(self, 'locations') and hasattr(self, 'airports') and self.locations and self.airports:
@@ -3089,7 +3034,8 @@ class GreenHydrogenSupplyChainOptimizer:
         # =========================================================================
 
         # 各类别汇总
-        self.carbon_aggregates['raw_material_emissions'] = self.carbon_expressions['ng_extraction']
+        # 绿氢供应链：无原料开采排放（CO₂来自捕获，电力来自可再生能源）
+        self.carbon_aggregates['raw_material_emissions'] = gp.LinExpr(0)
 
         self.carbon_aggregates['facility_emissions'] = (
             self.carbon_expressions['saf_facility'] +
@@ -3097,7 +3043,6 @@ class GreenHydrogenSupplyChainOptimizer:
         )
 
         self.carbon_aggregates['production_emissions'] = (
-            self.carbon_expressions['ng_to_methanol'] +
             self.carbon_expressions['methanol_to_saf'] +
             self.carbon_expressions['h2_production']
         )
@@ -3109,8 +3054,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         self.carbon_aggregates['transport_emissions'] = (
             self.carbon_expressions['h2_transport'] +
-            self.carbon_expressions['mtj_transport'] +
-            self.carbon_expressions['ng_transport']
+            self.carbon_expressions['mtj_transport']
         )
 
         # 总碳排放
@@ -3145,11 +3089,11 @@ class GreenHydrogenSupplyChainOptimizer:
         # 时间尺度一致性验证
         logger.info("="*60)
         logger.info("时间尺度一致性验证:")
-        logger.info("  原料获取: 按天计算(ng_transport_vars)")
+        logger.info("  原料获取: CO₂捕获（按周计算）")
         logger.info("  设施建设: 年产能摊销到优化时段")
         logger.info("  生产过程: 按小时计算(production_vars, hydrogen_production_vars)")
         logger.info("  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)")
-        logger.info("  运输配送: MTJ按周, NG按天, H2按总量")
+        logger.info("  运输配送: MTJ按周, H₂按总量, CO₂按周")
         logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
         logger.info("="*60)
 
@@ -3683,11 +3627,7 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.info("添加氢气全局守恒约束（周级）完成")
 
         # 2. 氢气运输平衡约束：仅对需要氢气运输的模式
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies:
-                logger.warning(f"技术 {tech} 不在 technologies 中，跳过")
-                continue
-                
+        for tech in self.technologies.keys():
             if not self.technologies[tech]['hydrogen_transport_required']:
                 logger.info(f"技术 {tech} 不需要氢气运输，跳过")
                 continue
@@ -3882,8 +3822,8 @@ class GreenHydrogenSupplyChainOptimizer:
                     )
         
         # 2. 管道运输量约束：不超过氢气源地的生产能力
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
+        for tech in self.technologies.keys():
+            if not self.technologies[tech]['hydrogen_transport_required']:
                 continue
                 
             if tech not in self.mtj_locations:
@@ -3915,8 +3855,8 @@ class GreenHydrogenSupplyChainOptimizer:
                             )
         
         # 3. 氢气运输方式排他性约束：同一路线只能选择罐车或管道运输之一
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
+        for tech in self.technologies.keys():
+            if not self.technologies[tech]['hydrogen_transport_required']:
                 continue
                 
             if tech not in self.mtj_locations:
@@ -4638,27 +4578,6 @@ class GreenHydrogenSupplyChainOptimizer:
             print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
         print("=======================\n")
 
-        # 提取天然气运输计划（改为天级）
-        solution['ng_transport'] = {}
-        for (ng_loc, mtj_loc, day), var in self.ng_transport_vars.items():
-            if var.x > 0:
-                transport_key = f"{ng_loc}_{mtj_loc}_day_{day}"
-                from_coords = self._get_location_coordinates(ng_loc)
-                to_coords = self._get_location_coordinates(mtj_loc)
-                solution['ng_transport'][transport_key] = {
-                    'from_location': ng_loc,
-                    'to_location': mtj_loc,
-                    'day': day,
-                    'transport_m3_ng': var.x,
-                    'distance_km': self._calculate_location_distance(ng_loc, mtj_loc),
-                    'from_latitude': from_coords[0],
-                    'from_longitude': from_coords[1],
-                    'to_latitude': to_coords[0],
-                    'to_longitude': to_coords[1],
-                    'transport_type': 'NG',
-                    'transport_mode': 'truck'
-                }
-        
         # 提取库存信息
         solution['inventory'] = {}
         for (location, hour), var in self.storage_vars.items():
@@ -5180,17 +5099,14 @@ class GreenHydrogenSupplyChainOptimizer:
             # 3. 细分项排放
             detailed = carbon_results.get('detailed', {})
             detail_mapping = {
-                'ng_extraction': '天然气开采',
                 'saf_facility': 'SAF工厂建设',
                 'electrolyzer_facility': '电解槽建设',
-                'ng_to_methanol': '天然气制甲醇',
                 'methanol_to_saf': '甲醇制SAF',
                 'h2_production': '氢气生产',
                 'mtj_storage': 'MTJ储存',
                 'h2_storage': '氢气储存',
                 'h2_transport': '氢气运输',
-                'mtj_transport': 'MTJ运输',
-                'ng_transport': '天然气运输'
+                'mtj_transport': 'MTJ运输'
             }
 
             for key, name in detail_mapping.items():
@@ -5280,15 +5196,12 @@ class GreenHydrogenSupplyChainOptimizer:
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
             'h2_storage_investment': '氢气储存设备投资(元)',
             'hydrogen_transport_investment': '氢气运输设备投资(元)',
-            'ng_transport_investment': '天然气运输设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
             'hydrogen_production_cost': '氢气制取成本(元)',
             'hydrogen_transport_operation': '氢气罐车运输成本(元)',
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'hydrogen_pipeline_investment': '氢能管道建设投资(元)',
-            'ng_transport_operation': '天然气运输成本(元)',
-            'natural_gas_cost': '天然气原料成本(元)',
             'transport_operation_cost': 'MTJ运输运营成本(元)',
             'storage_operation_cost': 'MTJ储存运营成本(元)',
             'h2_storage_operation': '氢气储存运营成本(元)',
@@ -5329,14 +5242,13 @@ class GreenHydrogenSupplyChainOptimizer:
         investment_fields = ['facility_investment_cost', 'electrolyzer_investment_cost',
                            'transport_equipment_cost', 'storage_equipment_cost',
                            'h2_storage_investment', 'hydrogen_transport_investment',
-                           'ng_transport_investment', 'hydrogen_pipeline_investment']
+                           'hydrogen_pipeline_investment']
 
         # 运营成本类别
         operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
                           'hydrogen_transport_operation', 'hydrogen_pipeline_operation',
-                          'ng_transport_operation', 'natural_gas_cost', 'transport_operation_cost',
-                          'storage_operation_cost', 'h2_storage_operation', 'electricity_cost',
-                          'final_inventory_cost']
+                          'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',
+                          'electricity_cost', 'final_inventory_cost']
 
         logger.info("【投资成本明细】")
         for expr_field, csv_field in cost_field_mapping.items():
@@ -5566,30 +5478,6 @@ class GreenHydrogenSupplyChainOptimizer:
             h2_transport_df.to_csv(h2_transport_path, index=False, encoding='utf-8-sig')
             print(f"氢气运输计划保存到: {h2_transport_path}")
 
-        # 保存天然气运输计划
-        ng_transport_data = []
-        for transport_id, info in solution.get("ng_transport", {}).items():
-            ng_transport_data.append({
-                "运输ID": transport_id,
-                "起点": info.get("from_location", ""),
-                "终点": info.get("to_location", ""),
-                "天": info.get("day", 0),
-                "天然气运输量(m3)": info.get("transport_m3_ng", 0),
-                "距离(km)": info.get("distance_km", 0),
-                "起点纬度": info.get("from_latitude", 0),
-                "起点经度": info.get("from_longitude", 0),
-                "终点纬度": info.get("to_latitude", 0),
-                "终点经度": info.get("to_longitude", 0),
-                "运输类型": info.get("transport_type", "NG"),
-                "运输方式": info.get("transport_mode", "truck")
-            })
-        
-        if ng_transport_data:
-            ng_transport_df = pd.DataFrame(ng_transport_data)
-            ng_transport_path = os.path.join(output_dir, f"ng_transport_plan_{timestamp}.csv")
-            ng_transport_df.to_csv(ng_transport_path, index=False, encoding='utf-8-sig')
-            print(f"天然气运输计划保存到: {ng_transport_path}")
-
         # 保存库存信息（更新后的版本，包含坐标）
         inventory_data = []
         for inventory_id, info in solution.get("inventory", {}).items():
@@ -5661,24 +5549,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 "日运输量(kg)": info.get("transport_kg_h2", 0),
                 "时间单位": "天"
             })
-        
-        # 添加天然气运输路径
-        for transport_id, info in solution.get("ng_transport", {}).items():
-            all_transport_summary.append({
-                "路径ID": transport_id,
-                "起点": info.get("from_location", ""),
-                "终点": info.get("to_location", ""),
-                "起点类型": "天然气管道",
-                "终点类型": "MTJ工厂",
-                "距离(km)": info.get("distance_km", 0),
-                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
-                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
-                "货物类型": "天然气",
-                "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(m3)": info.get("transport_m3_ng", 0),
-                "时间单位": "天"
-            })
-        
+
         if all_transport_summary:
             transport_summary_df = pd.DataFrame(all_transport_summary)
             transport_summary_path = os.path.join(output_dir, f"transport_summary_{timestamp}.csv")
@@ -5766,8 +5637,6 @@ class GreenHydrogenSupplyChainOptimizer:
             type_name_map = {
                 'solar_plant': '太阳能发电站',
                 'wind_farm': '风电场',
-                'lng_terminal': 'LNG接收站',
-                'ng_pipeline': '天然气管道',
                 'airport': '机场'
             }
             
@@ -5791,9 +5660,7 @@ class GreenHydrogenSupplyChainOptimizer:
         for location_type, count in type_counts.items():
             type_name_map = {
                 'solar_plant': '太阳能发电站',
-                'wind_farm': '风电场', 
-                'lng_terminal': 'LNG接收站',
-                'ng_pipeline': '天然气管道',
+                'wind_farm': '风电场',
                 'airport': '机场'
             }
             selection_stats.append({
@@ -5811,18 +5678,11 @@ class GreenHydrogenSupplyChainOptimizer:
     def _get_location_main_parameter(self, location_info: dict) -> str:
         """根据位置类型获取主要参数描述"""
         location_type = location_info['type']
-        
+
         if location_type in ['solar_plant', 'wind_farm']:
             capacity = location_info.get('capacity_mw', 0)
             avg_gen = np.mean(location_info['hourly_generation']) if location_info['hourly_generation'] else 0
             return f"装机{capacity}MW, 平均发电{avg_gen:.1f}MW"
-        elif location_type == 'lng_terminal':
-            capacity = location_info.get('lng_capacity', 0)
-            return f"处理能力{capacity}万立方米/年"
-        elif location_type == 'ng_pipeline':
-            capacity = location_info.get('capacity_mcm_per_day', 0)
-            name = location_info.get('pipeline_name', '')
-            return f"{name}, {capacity}万立方米/天"
         elif location_type == 'airport':
             # 这里可以添加机场的主要参数
             return "航空燃料需求"
@@ -6071,19 +5931,15 @@ class GreenHydrogenSupplyChainOptimizer:
                 'technology': technology,
                 'capacity_kg_per_hour': facility_info['capacity_kg_per_hour'],
                 'hydrogen_supply_chain': {},
-                'natural_gas_supply_chain': {},
                 'electricity_supply': {},
                 'total_production_kg': 0,
                 'supply_costs': {}
             }
-            
+
             # 1. 分析氢气供应链
             facility_analysis['hydrogen_supply_chain'] = self._analyze_hydrogen_supply_for_location(location, solution)
-            
-            # 2. 分析天然气供应链  
-            facility_analysis['natural_gas_supply_chain'] = self._analyze_natural_gas_supply_for_location(location)
-            
-            # 3. 分析电力供应（如果有可再生能源）
+
+            # 2. 分析电力供应（如果有可再生能源）
             facility_analysis['electricity_supply'] = self._analyze_electricity_supply_for_location(location)
             
             # 4. 计算总生产量
@@ -6184,13 +6040,12 @@ class GreenHydrogenSupplyChainOptimizer:
         """计算指定位置的供应成本"""
         supply_costs = {
             'hydrogen_cost_yuan': 0,
-            'natural_gas_cost_yuan': 0,
             'electricity_cost_yuan': 0,
             'transport_cost_yuan': 0,
             'total_levelized_supply_cost_yuan': 0,
             'unit_levelized_supply_cost_yuan_per_kg': 0
         }
-        
+
         tech_info = self.technologies[technology]
         
         # 氢气成本
@@ -6210,12 +6065,7 @@ class GreenHydrogenSupplyChainOptimizer:
             
             if min_h2_cost != float('inf'):
                 supply_costs['hydrogen_cost_yuan'] = min_h2_cost
-        
-        # 天然气成本
-        ng_consumption = total_production_kg * tech_info.get('ng_consumption_ratio', 0)
-        ng_price = self._get_natural_gas_price_yuan_per_m3(location)
-        supply_costs['natural_gas_cost_yuan'] = ng_consumption * ng_price
-        
+
         # 电力成本（基于可再生能源边际成本）
         electricity_cost_yuan = 0
         
@@ -6239,9 +6089,8 @@ class GreenHydrogenSupplyChainOptimizer:
         
         # 总平准化供应成本
         supply_costs['total_levelized_supply_cost_yuan'] = (
-            supply_costs['hydrogen_cost_yuan'] + 
-            supply_costs['natural_gas_cost_yuan'] + 
-            supply_costs['electricity_cost_yuan'] + 
+            supply_costs['hydrogen_cost_yuan'] +
+            supply_costs['electricity_cost_yuan'] +
             supply_costs['transport_cost_yuan']
         )
         
@@ -6264,10 +6113,6 @@ class GreenHydrogenSupplyChainOptimizer:
                 'external_supply_facilities': 0,
                 'total_h2_production_kg': 0
             },
-            'natural_gas_supply_breakdown': {
-                'lng_terminal_direct': 0,
-                'pipeline_transport': 0
-            },
             'renewable_energy_breakdown': {
                 'solar_facilities': 0,
                 'wind_facilities': 0,
@@ -6289,14 +6134,7 @@ class GreenHydrogenSupplyChainOptimizer:
             
             if facility_analysis['hydrogen_supply_chain']['external_sources']:
                 summary['hydrogen_supply_breakdown']['external_supply_facilities'] += 1
-            
-            # 天然气供应统计
-            ng_source = facility_analysis['natural_gas_supply_chain']['primary_source']
-            if 'LNG接收站直供' in ng_source:
-                summary['natural_gas_supply_breakdown']['lng_terminal_direct'] += 1
-            elif '管道运输' in ng_source:
-                summary['natural_gas_supply_breakdown']['pipeline_transport'] += 1
-            
+
             # 可再生能源统计
             elec_supply = facility_analysis['electricity_supply']
             if elec_supply['source_type'] == 'solar_plant':

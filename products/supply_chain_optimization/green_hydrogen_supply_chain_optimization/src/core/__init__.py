@@ -2,6 +2,6 @@
 核心优化模型模块
 """
 
-from .natural_gas_optimization_model import NaturalGasSupplyChainOptimizer
+from .green_hydrogen_optimization_model import GreenHydrogenSupplyChainOptimizer
 
-__all__ = ['NaturalGasSupplyChainOptimizer']
+__all__ = ['GreenHydrogenSupplyChainOptimizer']

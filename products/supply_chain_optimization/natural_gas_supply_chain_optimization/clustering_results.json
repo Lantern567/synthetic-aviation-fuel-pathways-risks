@@ -1,0 +1,86 @@
+{
+  "total_clusters": 2,
+  "total_noise_points": 1,
+  "clustering_params": {
+    "enable_clustering": true,
+    "eps_distance_km": 40.0,
+    "min_samples": 2,
+    "shared_pipeline_discount_factor": 0.65,
+    "processing_cost_base": 10.0,
+    "enable_pipeline_optimization": true,
+    "pipeline_weight": 0.3,
+    "noise_plant_handling": "direct_connection",
+    "max_clusters": 50,
+    "export_clustering_results": true,
+    "clustering_output_path": "clustering_results.json",
+    "enable_clustering_visualization": false
+  },
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "member_locations": [
+        "solar_plant_1",
+        "solar_plant_2",
+        "solar_plant_3"
+      ],
+      "member_coords": [
+        [
+          39.9,
+          116.4
+        ],
+        [
+          39.92,
+          116.42
+        ],
+        [
+          39.88,
+          116.38
+        ]
+      ],
+      "center_coord": [
+        39.9,
+        116.4
+      ],
+      "geo_center": [
+        39.900001145163515,
+        116.39999610847512
+      ],
+      "total_capacity_kg_per_hour": 300
+    },
+    {
+      "cluster_id": 1,
+      "member_locations": [
+        "wind_farm_1",
+        "wind_farm_2"
+      ],
+      "member_coords": [
+        [
+          31.2,
+          121.4
+        ],
+        [
+          31.25,
+          121.45
+        ]
+      ],
+      "center_coord": [
+        31.25,
+        121.45
+      ],
+      "geo_center": [
+        31.225002417846962,
+        121.42499338718602
+      ],
+      "total_capacity_kg_per_hour": 280
+    }
+  ],
+  "noise_points": [
+    {
+      "location": "solar_plant_4",
+      "coords": [
+        23.1,
+        113.3
+      ]
+    }
+  ]
+}

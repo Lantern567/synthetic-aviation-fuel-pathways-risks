@@ -77,7 +77,7 @@ class FastSensitivityAnalyzer:
         self.project_root = self._get_project_root()
         self.results_base_dir = os.path.join(
             self.project_root, "products", "supply_chain_optimization",
-            "natural_gas_supply_chain_optimization", "results"
+            "green_hydrogen_supply_chain_optimization", "results"
         )
 
         # 创建时间戳
@@ -96,7 +96,7 @@ class FastSensitivityAnalyzer:
         # 设置日志文件
         log_dir = os.path.join(
             self.project_root, "products", "supply_chain_optimization",
-            "natural_gas_supply_chain_optimization", "logs"
+            "green_hydrogen_supply_chain_optimization", "logs"
         )
         os.makedirs(log_dir, exist_ok=True)
         log_file = os.path.join(log_dir, f"fast_sensitivity_{self.timestamp}.log")
@@ -117,13 +117,13 @@ class FastSensitivityAnalyzer:
         # OSM文件路径
         self.osm_file_path = os.path.join(
             self.project_root, "products", "supply_chain_optimization",
-            "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf"
+            "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf"
         )
 
     def _get_project_root(self) -> str:
         """获取项目根目录"""
         current_file = os.path.abspath(__file__)
-        # fast_sensitivity_analyzer.py -> sensitivity_analysis/ -> src/ -> natural_gas/ -> supply_chain/ -> products/ -> 根目录
+        # fast_sensitivity_analyzer.py -> sensitivity_analysis/ -> src/ -> green_hydrogen/ -> supply_chain/ -> products/ -> 根目录
         return os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.dirname(current_file))))))
 
@@ -148,12 +148,12 @@ class FastSensitivityAnalyzer:
             # 导入优化器类
             sys.path.insert(0, os.path.join(self.project_root, "products",
                                            "supply_chain_optimization",
-                                           "natural_gas_supply_chain_optimization", "src"))
-            from core.natural_gas_optimization_model import NaturalGasSupplyChainOptimizer
+                                           "green_hydrogen_supply_chain_optimization", "src"))
+            from core.green_hydrogen_optimization_model import GreenHydrogenSupplyChainOptimizer
 
             # 初始化优化器 (使用1周时间范围)
             # 注意: 第一个参数是config_path，使用None表示使用默认配置
-            optimizer = NaturalGasSupplyChainOptimizer(
+            optimizer = GreenHydrogenSupplyChainOptimizer(
                 config_path=None,  # 使用默认配置文件
                 time_horizon_weeks=1,
                 osm_pbf_path=self.osm_file_path

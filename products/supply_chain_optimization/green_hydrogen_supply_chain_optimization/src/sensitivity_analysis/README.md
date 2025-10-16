@@ -28,7 +28,7 @@ sensitivity_analysis/
 运行完整的敏感性分析：
 
 ```bash
-cd products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/sensitivity_analysis
+cd products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/sensitivity_analysis
 python sensitivity_analysis.py
 ```
 
@@ -165,7 +165,7 @@ def create_3d_your_metric_plot(self):
 
 日志文件保存在：
 ```
-products/supply_chain_optimization/natural_gas_supply_chain_optimization/logs/
+products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/logs/
 sensitivity_analysis_YYYYMMDD_HHMMSS.log
 ```
 

@@ -40,7 +40,7 @@ class DirectCapacityPreprocessor:
         self.data_dir = self.base_dir / "products" / "gis_energy_mapping" / "gis_data_scraper" / "scraped_gis_data"
         
         # 数据文件路径 - 使用集成的带坐标的管道数据
-        self.ng_pipeline_file = self.base_dir / "products" / "supply_chain_optimization" / "natural_gas_supply_chain_optimization" / "data" / "integrated_gas_pipeline_price_data_with_coords.csv"
+        self.ng_pipeline_file = self.base_dir / "products" / "supply_chain_optimization" / "green_hydrogen_supply_chain_optimization" / "data" / "integrated_gas_pipeline_price_data_with_coords.csv"
         self.lng_terminal_file = self.data_dir / "lng_terminals.xlsx"
         
         # 默认参数
