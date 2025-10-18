@@ -22,8 +22,8 @@ current_dir = Path(__file__).parent
 sys.path.append(str(current_dir))
 sys.path.append(str(current_dir.parent.parent.parent / "gis_energy_mapping" / "gis_data_scraper"))
 
-from hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, PipelineRoute, PipelineRouteNotFoundError
-from visualize_energy_infrastructure import EnergyInfrastructureVisualizer
+from .hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, PipelineRoute, PipelineRouteNotFoundError
+from ...gis_energy_mapping.gis_data_scraper.visualize_energy_infrastructure import EnergyInfrastructureVisualizer
 
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei']
@@ -268,8 +268,8 @@ class HydrogenTransportVisualizer:
 
     def visualize_clustered_routes(self, clustering_result, clustered_routes: Dict, destination: Tuple[float, float], destination_name: str = "目的地"):
         try:
-            from hydrogen_clustering_optimizer import ClusteringResult
-            from hydrogen_pipeline_distance_calculator import ClusteredPipelineRoute
+            from .hydrogen_clustering_optimizer import ClusteringResult
+            from .hydrogen_pipeline_distance_calculator import ClusteredPipelineRoute
         except ImportError:
             logger.error("无法导入聚类相关模块")
             return

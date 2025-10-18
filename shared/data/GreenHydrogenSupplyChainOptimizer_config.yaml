@@ -63,6 +63,16 @@ basic_parameters:
                                            # true: 短距离也使用精确路径规划
                                            # false: 短距离使用直线距离，提升性能
 
+  # 氢气管道运输设置 - Hydrogen Pipeline Configuration
+  use_hydrogen_pipeline_distance: true     # 是否使用氢气管道距离计算 | Enable hydrogen pipeline distance calculation
+                                           # 启用后使用管道路径进行精确的氢气运输距离计算
+                                           # 依赖：基于聚类和管道路权的专用算法
+
+  # CO₂管道运输设置 - CO₂ Pipeline Configuration
+  use_co2_pipeline_distance: true          # 是否使用CO₂管道距离计算 | Enable CO₂ pipeline distance calculation
+                                           # 启用后使用管道路径进行精确的CO₂运输距离计算
+                                           # 依赖：基于聚类和管道路权的专用算法
+
   # 缓存设置 - Cache Configuration
   cache_base_dir: shared/data/cache        # 缓存基础目录 | Base directory for cache files
                                            # 存储GraphHopper路径缓存、可再生能源数据缓存等
@@ -753,7 +763,7 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 50  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+  levelized_cost_threshold_yuan_per_kg: 1000  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
                                            # 【修复】从10元/kg放宽至50元/kg
                                            # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
                                            # 50元/kg更符合实际成本水平
