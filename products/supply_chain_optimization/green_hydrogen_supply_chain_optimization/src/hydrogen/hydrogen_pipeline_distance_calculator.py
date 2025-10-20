@@ -276,8 +276,25 @@ class HydrogenPipelineDistanceCalculator:
             if not hasattr(self, 'edge_geometries'):
                 self.edge_geometries = {}
             self.edge_geometries[pipeline_type] = edge_geometry
-            logger.debug(f"{pipeline_type}管道网络: {graph.number_of_nodes()} 节点, "
-                       f"{graph.number_of_edges()} 边")
+
+            # 分析连通性
+            components = list(nx.connected_components(graph))
+            num_components = len(components)
+            largest_component_size = max(len(c) for c in components) if components else 0
+
+            logger.info(f"{pipeline_type}管道网络构建完成: "
+                       f"{graph.number_of_nodes()}节点, "
+                       f"{graph.number_of_edges()}边, "
+                       f"{num_components}个连通分量 "
+                       f"(最大分量{largest_component_size}节点)")
+
+            if num_components > 1:
+                # 显示各连通分量大小
+                component_sizes = sorted([len(c) for c in components], reverse=True)
+                logger.warning(f"{pipeline_type}管道网络不连通! "
+                             f"分量大小: {component_sizes[:5]}")
+            else:
+                logger.debug(f"{pipeline_type}管道网络完全连通")
 
     def _build_spatial_indexes(self):
         """
@@ -787,9 +804,9 @@ class HydrogenPipelineDistanceCalculator:
 
             return path_length, path_coords
 
-        except (nx.NetworkXNoPath, nx.NodeNotFound):
+        except (nx.NetworkXNoPath, nx.NodeNotFound) as e:
             # 如果没有路径，检查是否是网络连通性问题
-            pass  # 静默处理路径未找到
+            logger.debug(f"NetworkX路径查找失败: {e}, 尝试使用直线距离连接不连通子图")
 
             # 尝试使用直线距离作为连接断开片段的桥梁
             try:
@@ -800,7 +817,7 @@ class HydrogenPipelineDistanceCalculator:
 
                     if len(components) > 1:
                         # 网络不连通，使用直线距离连接，但尝试收集沿途的管道几何信息
-                        pass  # 静默处理连通性问题
+                        logger.debug(f"{pipeline_type}管道网络有{len(components)}个不连通分量，使用直线距离连接")
 
                         # 计算直线距离
                         straight_distance = self._calculate_haversine_distance(
@@ -814,17 +831,28 @@ class HydrogenPipelineDistanceCalculator:
                         )
 
                         if enhanced_path and len(enhanced_path) > 2:
-                            pass  # 静默处理路径增强
+                            logger.debug(f"成功增强路径，包含{len(enhanced_path)}个几何点")
                             return straight_distance, enhanced_path
                         else:
                             # 如果无法增强，返回简单的直线路径
+                            logger.debug(f"使用简单直线路径，距离{straight_distance:.3f}km")
                             return straight_distance, [start_point, end_point]
+                    else:
+                        # 网络连通但找不到路径（不应该发生，但作为降级处理）
+                        logger.warning(f"{pipeline_type}管道网络连通但找不到路径，使用直线距离")
+                        straight_distance = self._calculate_haversine_distance(
+                            start_point[0], start_point[1],
+                            end_point[0], end_point[1]
+                        )
+                        return straight_distance, [start_point, end_point]
 
-                return 0.0, []
+                # 如果没有管道网络，返回None让上层处理
+                logger.error(f"{pipeline_type}管道网络不存在")
+                return None
 
-            except Exception as e:
-                pass  # 静默处理连通性检查失败
-                return 0.0, []
+            except Exception as ex:
+                logger.error(f"连通性检查失败: {ex}, 返回None")
+                return None
 
     def _find_nearest_graph_node(self, point: Tuple[float, float],
                                 graph: nx.Graph) -> Optional[str]:

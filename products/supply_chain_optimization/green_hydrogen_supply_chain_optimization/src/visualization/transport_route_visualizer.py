@@ -285,31 +285,44 @@ class TransportRouteVisualizer:
             self.logger.debug(f"从缓存获取真实路径坐标失败: {e}")
             return None
     
-    def parse_cluster_info(self, cluster_str):
+    def parse_cluster_info(self, cluster_str, cluster_type='H2'):
         """解析聚类信息字符串
 
         Args:
-            cluster_str: 聚类信息字符串，格式如 "聚类0_(中心:36.3358,114.6340)"
+            cluster_str: 聚类信息字符串，格式如 "聚类0_(中心:36.3358,114.6340)" 或 "CO2聚类0_(中心:36.3358,114.6340)"
+            cluster_type: 聚类类型 ('H2' for 氢气, 'CO2' for CO2)
 
         Returns:
-            tuple: (cluster_id, center_lat, center_lon) 或 (None, None, None)
+            tuple: (cluster_id, center_lat, center_lon, is_co2_cluster) 或 (None, None, None, False)
         """
         if pd.isna(cluster_str) or not cluster_str:
-            return None, None, None
+            return None, None, None, False
 
         try:
             # 提取聚类ID和中心坐标
-            # 格式: "聚类0_(中心:36.3358,114.6340)"
-            match = re.match(r'聚类(\d+)_\(中心:([\d.]+),([\d.]+)\)', str(cluster_str))
-            if match:
-                cluster_id = int(match.group(1))
-                center_lat = float(match.group(2))
-                center_lon = float(match.group(3))
-                return cluster_id, center_lat, center_lon
+            # 格式1: "聚类0_(中心:36.3358,114.6340)" - 氢气聚类
+            # 格式2: "CO2聚类0_(中心:36.3358,114.6340)" - CO2聚类
+
+            # 尝试匹配CO2聚类
+            co2_match = re.match(r'CO2聚类(\d+)_\(中心:([\d.]+),([\d.]+)\)', str(cluster_str))
+            if co2_match:
+                cluster_id = int(co2_match.group(1))
+                center_lat = float(co2_match.group(2))
+                center_lon = float(co2_match.group(3))
+                return cluster_id, center_lat, center_lon, True
+
+            # 尝试匹配氢气聚类
+            h2_match = re.match(r'聚类(\d+)_\(中心:([\d.]+),([\d.]+)\)', str(cluster_str))
+            if h2_match:
+                cluster_id = int(h2_match.group(1))
+                center_lat = float(h2_match.group(2))
+                center_lon = float(h2_match.group(3))
+                return cluster_id, center_lat, center_lon, False
+
         except Exception as e:
             self.logger.debug(f"解析聚类信息失败: {cluster_str}, 错误: {e}")
 
-        return None, None, None
+        return None, None, None, False
 
     def load_transport_data(self, csv_file_path):
         """加载运输数据"""
@@ -464,13 +477,13 @@ class TransportRouteVisualizer:
             if not csv_file_path or not Path(csv_file_path).exists():
                 self.logger.warning("氢气管道运输文件不存在")
                 return None
-                
+
             df = pd.read_csv(csv_file_path, encoding='utf-8')
             self.logger.info(f"成功加载氢气管道运输数据，共 {len(df)} 条记录")
-            
+
             # 过滤掉无效坐标
             valid_data = df.dropna(subset=['起点纬度', '起点经度', '终点纬度', '终点经度'])
-            
+
             # 确保坐标在中国范围内
             china_data = valid_data[
                 (valid_data['起点纬度'] >= 18) & (valid_data['起点纬度'] <= 54) &
@@ -478,13 +491,50 @@ class TransportRouteVisualizer:
                 (valid_data['终点纬度'] >= 18) & (valid_data['终点纬度'] <= 54) &
                 (valid_data['终点经度'] >= 73) & (valid_data['终点经度'] <= 135)
             ]
-            
+
             self.logger.info(f"有效氢气管道运输数据: {len(china_data)} 条记录")
             return china_data
-            
+
         except Exception as e:
             self.logger.error(f"加载氢气管道运输数据失败: {e}")
             return None
+
+    def load_co2_clustering_data(self):
+        """加载CO2聚类数据和CO2源点数据"""
+        try:
+            import json
+
+            # 路径: src/visualization/ -> src/ -> green_hydrogen_supply_chain_optimization/
+            current_dir = Path(__file__).parent
+            project_root = current_dir.parent.parent
+
+            # 加载CO2聚类结果
+            co2_clustering_file = project_root / 'co2_clustering_results.json'
+            co2_sources_file = project_root / 'data' / 'co2_capture_sources.csv'
+
+            if not co2_clustering_file.exists():
+                self.logger.warning(f"CO2聚类结果文件不存在: {co2_clustering_file}")
+                return None, None
+
+            if not co2_sources_file.exists():
+                self.logger.warning(f"CO2源点数据文件不存在: {co2_sources_file}")
+                return None, None
+
+            # 读取聚类结果
+            with open(co2_clustering_file, 'r', encoding='utf-8') as f:
+                clustering_results = json.load(f)
+
+            # 读取CO2源点数据
+            co2_sources_df = pd.read_csv(co2_sources_file, encoding='utf-8')
+
+            self.logger.info(f"成功加载CO2聚类数据: {clustering_results.get('total_clusters', 0)} 个聚类")
+            self.logger.info(f"成功加载CO2源点数据: {len(co2_sources_df)} 个源点")
+
+            return clustering_results, co2_sources_df
+
+        except Exception as e:
+            self.logger.error(f"加载CO2聚类数据失败: {e}")
+            return None, None
     
     def load_lng_terminal_data(self, csv_file_path):
         """加载LNG终端数据"""
@@ -1025,22 +1075,34 @@ class TransportRouteVisualizer:
                 (transport_data['起点经度'] <= self.map_extent[1])
             ]
 
-            # 分离聚类数据和独立点数据
-            cluster_data = region_transport[region_transport['聚类信息'].notna()]
+            # 分离H2聚类数据、CO2聚类数据和独立点数据
+            h2_cluster_data = []
+            co2_cluster_data = []
+            for idx, row in region_transport[region_transport['聚类信息'].notna()].iterrows():
+                _, _, _, is_co2 = self.parse_cluster_info(row.get('聚类信息'))
+                if is_co2:
+                    co2_cluster_data.append(row)
+                else:
+                    h2_cluster_data.append(row)
+
+            h2_cluster_data = pd.DataFrame(h2_cluster_data) if h2_cluster_data else pd.DataFrame()
+            co2_cluster_data = pd.DataFrame(co2_cluster_data) if co2_cluster_data else pd.DataFrame()
+
             standalone_data = region_transport[
                 (region_transport['聚类信息'].isna()) &
                 (region_transport['起点类型'] == '氢气生产站')
             ]
 
-            # 绘制聚类路径
+            # 绘制H2聚类路径
+            cluster_data = h2_cluster_data  # 保持原变量名兼容性
             if len(cluster_data) > 0:
-                print(f"找到 {len(cluster_data)} 条聚类路径")
+                print(f"找到 {len(cluster_data)} 条H2聚类路径")
 
                 # 收集聚类中心
                 cluster_centers = {}
                 for _, row in cluster_data.iterrows():
-                    cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
-                    if cluster_id is not None:
+                    cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(row.get('聚类信息'))
+                    if cluster_id is not None and not is_co2_cluster:  # 只收集H2聚类中心
                         cluster_centers[cluster_id] = (center_lat, center_lon)
 
                 print(f"收集到 {len(cluster_centers)} 个聚类中心")
@@ -1051,9 +1113,9 @@ class TransportRouteVisualizer:
                 layer3_count = 0
 
                 for idx, row in cluster_data.iterrows():
-                    cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
+                    cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(row.get('聚类信息'))
 
-                    if cluster_id is not None:
+                    if cluster_id is not None and not is_co2_cluster:  # 只处理H2聚类
                         cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
 
                         # Layer1: 可再生能源站 -> 聚类中心 (灰色虚线，与独立电站相同)
@@ -1180,6 +1242,335 @@ class TransportRouteVisualizer:
                         zorder=20
                     )
 
+            # 绘制CO2聚类数据（从单独文件加载）
+            print("\n正在绘制CO2聚类数据...")
+
+            # ========== 新增：从transport_summary提取实际运输的CO2源点和聚类 ==========
+            active_co2_source_coords = set()  # 实际运输的CO2源点坐标 (lat, lon)
+            active_co2_clusters = set()  # 实际运输的CO2聚类ID
+
+            print(f"\n从transport_summary提取实际运输的CO2源点和聚类...")
+            print(f"CO2聚类路径数据条数: {len(co2_cluster_data)}")
+
+            for _, row in co2_cluster_data.iterrows():
+                # 提取源点坐标 (从'起点坐标'字段)
+                source_coords_str = row.get('起点坐标', '')
+                if source_coords_str:
+                    try:
+                        # 解析 "(39.8894, 116.2726)" 格式
+                        import re
+                        match = re.search(r'\(([\d.]+),\s*([\d.]+)\)', str(source_coords_str))
+                        if match:
+                            lat = float(match.group(1))
+                            lon = float(match.group(2))
+                            active_co2_source_coords.add((lat, lon))
+                    except:
+                        pass
+
+                # 提取聚类ID
+                cluster_id, _, _, is_co2 = self.parse_cluster_info(row.get('聚类信息'))
+                if cluster_id is not None and is_co2:
+                    active_co2_clusters.add(cluster_id)
+
+            print(f"提取到 {len(active_co2_source_coords)} 个活跃CO2源点坐标")
+            print(f"活跃CO2源点坐标: {active_co2_source_coords}")
+            print(f"提取到 {len(active_co2_clusters)} 个活跃CO2聚类")
+            # ========== 新增部分结束 ==========
+
+            if all_data.get('co2_clustering') is not None and all_data.get('co2_sources') is not None:
+                co2_clustering = all_data['co2_clustering']
+                co2_sources_df = all_data['co2_sources']
+
+                # 过滤华北地区的CO2源点
+                north_china_co2_sources = co2_sources_df[
+                    (co2_sources_df['latitude'] >= 35.0) &
+                    (co2_sources_df['latitude'] <= 45.0) &
+                    (co2_sources_df['longitude'] >= 110.0) &
+                    (co2_sources_df['longitude'] <= 120.0)
+                ]
+
+                print(f"华北地区CO2源点总数: {len(north_china_co2_sources)}")
+                print(f"CO2聚类总数: {co2_clustering.get('total_clusters', 0)}")
+
+                # 提取聚类信息（只保留活跃的聚类）
+                co2_cluster_centers = {}
+                # 保存所有聚类成员的坐标及其对应的聚类信息
+                co2_cluster_members = []  # [(lat, lon, cluster_info), ...]
+
+                for cluster in co2_clustering.get('clusters', []):
+                    cluster_id = cluster['cluster_id']
+
+                    # ========== 修改：只处理活跃的聚类 ==========
+                    if cluster_id not in active_co2_clusters:
+                        continue  # 跳过不活跃的聚类
+                    # ========== 修改结束 ==========
+
+                    # 使用 'geo_center' 字段,格式为 [lat, lon]
+                    center_lat, center_lon = cluster['geo_center']
+                    co2_cluster_centers[cluster_id] = (center_lat, center_lon)
+
+                    # 保存聚类成员坐标和对应的聚类信息
+                    # member_coords格式: [[lat1, lon1], [lat2, lon2], ...]
+                    for member_coord in cluster.get('member_coords', []):
+                        member_lat, member_lon = member_coord[0], member_coord[1]
+                        co2_cluster_members.append({
+                            'lat': member_lat,
+                            'lon': member_lon,
+                            'cluster_id': cluster_id,
+                            'center_lat': center_lat,
+                            'center_lon': center_lon
+                        })
+
+                print(f"收集到 {len(co2_cluster_centers)} 个活跃CO2聚类中心（过滤后）")
+                print(f"收集到 {len(co2_cluster_members)} 个活跃聚类成员坐标（过滤后）")
+
+                # 绘制CO2源点（只绘制实际运输的源点）
+                co2_sources_in_clusters = set()
+                co2_lines_drawn = 0
+
+                print(f"\n开始绘制CO2源点和Layer1连线...")
+
+                # 定义坐标匹配函数（允许小误差）
+                def coords_match(lat1, lon1, lat2, lon2, tolerance=0.001):  # 增加容差到0.001度（约100米）
+                    return abs(lat1 - lat2) < tolerance and abs(lon1 - lon2) < tolerance
+
+                for _, source in north_china_co2_sources.iterrows():
+                    source_lat = source['latitude']
+                    source_lon = source['longitude']
+
+                    # ========== 修改：用坐标匹配活跃的CO2源点 ==========
+                    is_active = False
+                    for active_lat, active_lon in active_co2_source_coords:
+                        if coords_match(source_lat, source_lon, active_lat, active_lon):
+                            is_active = True
+                            break
+
+                    if not is_active:
+                        continue  # 跳过不活跃的源点
+                    # ========== 修改结束 ==========
+
+                    # 查找匹配的聚类成员
+                    matched_cluster = None
+                    for member in co2_cluster_members:
+                        if coords_match(source_lat, source_lon, member['lat'], member['lon'], tolerance=0.001):
+                            matched_cluster = member
+                            break
+
+                    # 只绘制在聚类中的源点
+                    if matched_cluster:
+                        # CO2源点用棕色下三角形标记（缩小尺寸）
+                        main_ax.scatter(
+                            source_lon, source_lat,
+                            c='#8B4513',  # 棕色
+                            s=40,  # 从80缩小到40
+                            marker='v',  # 下三角形
+                            edgecolors='black',
+                            linewidth=0.8,  # 从1缩小到0.8
+                            transform=self.data_crs,
+                            zorder=20,
+                            alpha=0.9
+                        )
+
+                        co2_sources_in_clusters.add((source_lat, source_lon))
+
+                        # 绘制CO2源点到聚类中心的连线（Layer1，棕色虚线）
+                        main_ax.plot(
+                            [source_lon, matched_cluster['center_lon']],
+                            [source_lat, matched_cluster['center_lat']],
+                            color='#8B4513',
+                            alpha=0.5,
+                            linewidth=1.5,
+                            linestyle='--',
+                            zorder=19,
+                            transform=self.data_crs
+                        )
+                        co2_lines_drawn += 1
+
+                print(f"绘制了 {len(co2_sources_in_clusters)} 个活跃CO2源点（过滤后）")
+                print(f"绘制了 {co2_lines_drawn} 条Layer1连线（源点->聚类中心）")
+
+                # 绘制CO2聚类中心（已经过滤为活跃的聚类）
+                north_china_co2_cluster_centers = {
+                    cid: (clat, clon)
+                    for cid, (clat, clon) in co2_cluster_centers.items()
+                    if 35.0 <= clat <= 45.0 and 110.0 <= clon <= 120.0
+                }
+
+                if north_china_co2_cluster_centers:
+                    print(f"正在绘制 {len(north_china_co2_cluster_centers)} 个活跃CO2聚类中心（过滤后）...")
+                    for cluster_id, (center_lat, center_lon) in north_china_co2_cluster_centers.items():
+                        # CO2聚类中心用方形标记（缩小尺寸）
+                        main_ax.scatter(
+                            center_lon, center_lat,
+                            c='#8B4513',  # 棕色
+                            s=60,  # 从100缩小到60
+                            marker='s',  # 方形标记
+                            edgecolors='black',
+                            linewidth=1.0,  # 从1.5缩小到1.0
+                            transform=self.data_crs,
+                            zorder=30,
+                            alpha=1.0
+                        )
+
+                # 用于图例统计
+                co2_layer1_count = len(co2_sources_in_clusters)
+                co2_layer2_count = 0  # 这里暂时设为0,因为还没有Layer2数据
+            else:
+                print("未找到CO2聚类数据")
+                co2_layer1_count = 0
+                co2_layer2_count = 0
+                north_china_co2_sources = pd.DataFrame()
+                north_china_co2_cluster_centers = {}
+                co2_cluster_centers = {}  # 初始化CO2聚类中心字典
+                co2_cluster_members = []  # 初始化聚类成员列表
+
+            # 绘制CO2聚类路径（从transport_summary中读取,如果存在）
+            if len(co2_cluster_data) > 0:
+                print(f"\n找到 {len(co2_cluster_data)} 条CO2聚类路径")
+
+                # 收集CO2聚类中心
+                co2_cluster_centers_from_transport = {}
+                for _, row in co2_cluster_data.iterrows():
+                    cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(row.get('聚类信息'))
+                    if cluster_id is not None and is_co2_cluster:  # 只收集CO2聚类中心
+                        co2_cluster_centers_from_transport[cluster_id] = (center_lat, center_lon)
+
+                print(f"从transport_summary收集到 {len(co2_cluster_centers_from_transport)} 个CO2聚类中心")
+
+                # 绘制CO2聚类路径（三层结构，使用不同颜色）
+                co2_layer1_count = 0
+                co2_layer2_count = 0
+
+                for idx, row in co2_cluster_data.iterrows():
+                    cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(row.get('聚类信息'))
+
+                    if cluster_id is not None and is_co2_cluster:  # 只处理CO2聚类
+                        # CO2聚类使用不同的颜色（棕色系）
+                        co2_color = '#8B4513'  # 棕色，区别于H2的紫色/灰色
+
+                        # Layer1: CO2源 -> 聚类中心 (棕色虚线)
+                        layer1_dist = row.get('Layer1距离(km)', 0)
+                        print(f"  CO2聚类{cluster_id} 行{idx}: Layer1距离={layer1_dist}, Layer2距离={row.get('Layer2距离(km)', 0)}")
+
+                        if layer1_dist > 0:
+                            main_ax.plot(
+                                [row['起点经度'], center_lon],
+                                [row['起点纬度'], center_lat],
+                                color=co2_color,
+                                alpha=0.7,
+                                linewidth=2,
+                                linestyle='--',  # 虚线
+                                zorder=20,
+                                transform=self.data_crs
+                            )
+                            co2_layer1_count += 1
+
+                        # Layer2: 聚类中心 -> 管道接入点 (棕色实线)
+                        layer2_dist = row.get('Layer2距离(km)', 0)
+                        if layer2_dist > 0 and '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+                            try:
+                                import json
+                                from math import radians, cos, sin, asin, sqrt
+
+                                path_coords = json.loads(row['路径坐标'])
+
+                                def haversine(lon1, lat1, lon2, lat2):
+                                    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+                                    dlon = lon2 - lon1
+                                    dlat = lat2 - lat1
+                                    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+                                    c = 2 * asin(sqrt(a))
+                                    r = 6371
+                                    return c * r
+
+                                # 找最接近聚类中心的点作为起点
+                                min_dist_to_center = float('inf')
+                                start_idx = 0
+                                for i, coord in enumerate(path_coords):
+                                    dist = haversine(center_lon, center_lat, coord[0], coord[1])
+                                    if dist < min_dist_to_center:
+                                        min_dist_to_center = dist
+                                        start_idx = i
+
+                                # 从起点开始累计距离找Layer2终点
+                                cumulative_dist = 0
+                                pipeline_access_point = None
+                                for i in range(start_idx + 1, len(path_coords)):
+                                    seg_dist = haversine(
+                                        path_coords[i-1][0], path_coords[i-1][1],
+                                        path_coords[i][0], path_coords[i][1]
+                                    )
+                                    cumulative_dist += seg_dist
+
+                                    if abs(cumulative_dist - layer2_dist) < 1:  # 1km容差
+                                        pipeline_access_point = path_coords[i]
+                                        break
+
+                                # 绘制Layer2：聚类中心 -> 管道接入点 (棕色实线)
+                                if pipeline_access_point:
+                                    main_ax.plot(
+                                        [center_lon, pipeline_access_point[0]],
+                                        [center_lat, pipeline_access_point[1]],
+                                        color=co2_color,
+                                        alpha=0.7,
+                                        linewidth=2,
+                                        linestyle='-',  # 实线
+                                        zorder=20,
+                                        transform=self.data_crs
+                                    )
+                                    co2_layer2_count += 1
+
+                            except Exception as e:
+                                print(f"    错误：解析CO2路径坐标失败 - {e}")
+
+
+                print(f"绘制了 CO2 Layer1:{co2_layer1_count}条（聚类结果）, Layer2:{co2_layer2_count}条（聚类中心->管道）")
+
+            # 绘制独立CO2点（噪声点）到管道的连线
+            # 从transport_summary中提取独立CO2点（没有聚类信息的CO2运输）
+            co2_standalone_data = region_transport[
+                (region_transport['聚类信息'].isna()) &
+                (region_transport['起点类型'].str.contains('co2|CO2', case=False, na=False))
+            ] if len(region_transport) > 0 else pd.DataFrame()
+
+            if len(co2_standalone_data) > 0:
+                print(f"\n找到 {len(co2_standalone_data)} 条独立CO2点路径（噪声点）")
+
+                # 收集独立CO2点
+                co2_standalone_sources = set()
+                for _, row in co2_standalone_data.iterrows():
+                    co2_standalone_sources.add((row['起点'], row['起点纬度'], row['起点经度']))
+
+                # 绘制独立CO2源点
+                for source_name, source_lat, source_lon in co2_standalone_sources:
+                    main_ax.scatter(
+                        source_lon, source_lat,
+                        c='#A0522D',  # 稍浅的棕色（与聚类成员区分）
+                        s=35,  # 从70缩小到35
+                        marker='v',
+                        edgecolors='black',
+                        linewidth=0.8,
+                        transform=self.data_crs,
+                        zorder=20,
+                        alpha=0.8
+                    )
+
+                # 绘制独立CO2点到管道的连线
+                for _, row in co2_standalone_data.iterrows():
+                    main_ax.plot(
+                        [row['起点经度'], row['终点经度']],
+                        [row['起点纬度'], row['终点纬度']],
+                        color='#8B4513',
+                        alpha=0.4,
+                        linewidth=1.5,
+                        linestyle=':',  # 点线（与聚类路径区分）
+                        zorder=18,
+                        transform=self.data_crs
+                    )
+
+                print(f"绘制了 {len(co2_standalone_sources)} 个独立CO2源点（噪声点）")
+                print(f"绘制了 {len(co2_standalone_data)} 条独立CO2点到管道的连线")
+
             # 更新图例
             if len(cluster_data) > 0 or len(standalone_data) > 0:
                 legend_elements.append(plt.Line2D([0], [0], color='none', label='─── 氢气运输 ───'))
@@ -1188,7 +1579,7 @@ class TransportRouteVisualizer:
                     legend_elements.append(
                         plt.scatter([], [], c='purple', s=80, marker='*',
                                   edgecolors='black', linewidth=1.5,
-                                  label=f'聚类中心 ({len(cluster_centers)}个)')
+                                  label=f'H2聚类中心 ({len(cluster_centers)}个)')
                     )
 
                 total_paths = len(cluster_data) * 2 + len(standalone_data)  # 聚类有2条线(Layer1+Layer2)
@@ -1196,6 +1587,38 @@ class TransportRouteVisualizer:
                     legend_elements.append(
                         plt.Line2D([0], [0], color='gray', linewidth=2, linestyle=':',
                                   alpha=0.6, label=f'氢气运输路径 ({total_paths}条)')
+                    )
+
+            # 添加CO2聚类图例
+            if len(co2_cluster_data) > 0 or (all_data.get('co2_clustering') is not None and len(north_china_co2_sources) > 0):
+                legend_elements.append(plt.Line2D([0], [0], color='none', label='─── CO2运输 ───'))
+
+                # CO2源点图例
+                if len(north_china_co2_sources) > 0:
+                    legend_elements.append(
+                        plt.scatter([], [], c='#8B4513', s=80, marker='v',
+                                  edgecolors='black', linewidth=1,
+                                  label=f'CO2源点 ({len(north_china_co2_sources)}个)')
+                    )
+
+                # CO2聚类中心图例
+                if len(north_china_co2_cluster_centers) > 0:
+                    legend_elements.append(
+                        plt.scatter([], [], c='#8B4513', s=100, marker='s',
+                                  edgecolors='black', linewidth=1.5,
+                                  label=f'CO2聚类中心 ({len(north_china_co2_cluster_centers)}个)')
+                    )
+
+                # CO2运输路径图例
+                if co2_layer1_count > 0:
+                    legend_elements.append(
+                        plt.Line2D([0], [0], color='#8B4513', linewidth=2, linestyle='--',
+                                  alpha=0.7, label=f'CO2→聚类中心 ({co2_layer1_count}条)')
+                    )
+                if co2_layer2_count > 0:
+                    legend_elements.append(
+                        plt.Line2D([0], [0], color='#8B4513', linewidth=2, linestyle='-',
+                                  alpha=0.7, label=f'CO2 Layer2路径 ({co2_layer2_count}条)')
                     )
 
             # 更新图例
@@ -1442,8 +1865,8 @@ class TransportRouteVisualizer:
                 cluster_info_value = row.get('聚类信息')
                 print(f"[调试] 行{idx} 聚类信息值: {cluster_info_value} (类型: {type(cluster_info_value)})")
 
-                cluster_id, center_lat, center_lon = self.parse_cluster_info(cluster_info_value)
-                if cluster_id is not None:
+                cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(cluster_info_value)
+                if cluster_id is not None and not is_co2_cluster:  # 只收集H2聚类中心
                     cluster_centers[cluster_id] = (center_lat, center_lon)
                     print(f"[调试] 解析到聚类{cluster_id}, 中心: ({center_lat}, {center_lon})")
 
@@ -1460,9 +1883,9 @@ class TransportRouteVisualizer:
             line_width = line_widths[idx] if hasattr(line_widths, '__getitem__') else line_widths
 
             # 检查是否为聚类路径
-            cluster_id, center_lat, center_lon = self.parse_cluster_info(row.get('聚类信息'))
+            cluster_id, center_lat, center_lon, is_co2_cluster = self.parse_cluster_info(row.get('聚类信息'))
 
-            if cluster_id is not None:
+            if cluster_id is not None and not is_co2_cluster:  # H2聚类路径
                 # 绘制聚类路径（三层结构）
                 route_stats['cluster'] += 1
                 cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
@@ -2360,6 +2783,7 @@ class TransportRouteVisualizer:
         fig, main_ax, mini_ax = self.create_base_map(figsize=(16, 12))
         
         legend_elements = []
+        connection_stats = {}
         stats_info = {"设施统计": {}, "运输统计": {}}
         
         # 1. 绘制可再生能源设施（氢能生产点）
@@ -2870,9 +3294,18 @@ def main():
     if latest_files['lng_terminals']:
         print(f"加载LNG终端数据: {latest_files['lng_terminals']}")
         all_data['lng_terminals'] = visualizer.load_lng_terminal_data(latest_files['lng_terminals'])
-    
+
+    # 加载CO2聚类数据
+    print("加载CO2聚类数据...")
+    co2_clustering_results, co2_sources_df = visualizer.load_co2_clustering_data()
+    if co2_clustering_results is not None:
+        all_data['co2_clustering'] = co2_clustering_results
+        all_data['co2_sources'] = co2_sources_df
+        print(f"  - CO2聚类数: {co2_clustering_results.get('total_clusters', 0)} 个")
+        print(f"  - CO2源点数: {len(co2_sources_df)} 个")
+
     # 检查是否有任何数据加载成功
-    valid_data = {k: v for k, v in all_data.items() if v is not None and len(v) > 0}
+    valid_data = {k: v for k, v in all_data.items() if v is not None and (isinstance(v, dict) or len(v) > 0)}
     
     if not valid_data:
         print("[ERROR] 未找到任何有效的数据文件")

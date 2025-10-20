@@ -400,6 +400,48 @@ clustering_parameters:
                                            # 用于计算集中化收益
 
 # =============================================================================
+# CO2聚类参数 (CO2 Clustering Parameters)
+# 用于CO2捕获源的地理聚类，使用比H2更小的聚类半径
+# 因为煤电厂分布更密集，需要避免过度聚集
+# =============================================================================
+co2_clustering_parameters:
+  # 聚类功能开关 - CO2 Clustering Control
+  enable_clustering: true                  # 启用CO2聚类功能 | Enable CO2 clustering
+  enable_pipeline_optimization: true       # 启用管道优化 | Enable pipeline optimization
+  export_clustering_results: true          # 导出聚类结果 | Export clustering results
+  clustering_output_path: co2_clustering_results.json  # 聚类结果输出路径 | Output file path
+
+  # DBSCAN核心参数 - DBSCAN Core Parameters (Optimized for CO2 sources)
+  eps_distance_km: 30.0                    # CO2聚类半径30km（比H2的60km小一半）| CO2 clustering radius 30km
+                                           # 原因：煤电厂分布密集，避免形成超大聚类
+                                           # Reason: Coal power plants are densely distributed, avoid over-clustering
+                                           # 调参说明：
+                                           #   - 30km适合煤电厂密集区域
+                                           #   - 可避免单个聚类中心聚集过多源点
+                                           #   - 基于运输成本vs基础设施成本平衡
+
+  min_samples: 3                           # 最小样本数：3个煤电厂形成聚类 | Min samples: 3 coal plants per cluster
+                                           # 保持合理的成簇门槛，避免过小聚类
+
+  max_clusters: 200                        # 最大聚类数：200个 | Maximum number of clusters
+                                           # CO2源点更多（3445个），允许更多聚类中心
+                                           # 限制总数以控制集中点数量
+
+  # 噪声点处理 - Noise Point Handling
+  noise_plant_handling: direct_connection  # 噪声点处理策略 | Noise point handling strategy
+                                           # direct_connection: 孤立煤电厂直接连接到主网络
+
+  # 成本和权重参数 - Cost and Weight Parameters
+  pipeline_weight: 0.3                     # 管道成本权重 | Pipeline cost weight
+                                           # 用于平衡管道建设成本在总成本中的权重
+
+  shared_pipeline_discount_factor: 0.65    # 共享管道折扣系数 | Shared pipeline discount factor
+                                           # 多个煤电厂共享管道时的成本折扣
+
+  processing_cost_base: 10.0               # 处理成本基准(元/kg) | Processing cost base (yuan/kg)
+                                           # 集中处理点的单位处理成本
+
+# =============================================================================
 # 成本参数 (Cost Parameters)
 # 定义原材料价格、能源成本和运输费用
 # =============================================================================

@@ -20,6 +20,7 @@ import traceback
 import yaml
 from datetime import datetime
 from collections import defaultdict
+from math import radians, sin, cos, sqrt, atan2
 try:
     from shared.utils.log_preserver import mount_file_logging
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
@@ -99,6 +100,27 @@ except ImportError:
         print(f"警告：氢气聚类优化器模块不可用: {e}")
         HydrogenClusteringOptimizer = None
         ClusteringResult = None
+
+# 导入CO2聚类优化器
+try:
+    try:
+        from ..hydrogen.co2_clustering_optimizer import CO2ClusteringOptimizer, CO2ClusteringResult
+    except ImportError:
+        from hydrogen.co2_clustering_optimizer import CO2ClusteringOptimizer, CO2ClusteringResult
+except ImportError:
+    # 确保src目录在路径中
+    import sys
+    current_file = os.path.abspath(__file__)
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+    try:
+        from hydrogen.co2_clustering_optimizer import CO2ClusteringOptimizer, CO2ClusteringResult
+    except ImportError as e:
+        # logger还未定义，暂时使用print
+        print(f"警告：CO2聚类优化器模块不可用: {e}")
+        CO2ClusteringOptimizer = None
+        CO2ClusteringResult = None
 
 # 导入约束诊断工具
 try:
@@ -668,6 +690,11 @@ class GreenHydrogenSupplyChainOptimizer:
         self.hydrogen_clustering_optimizer = None
         self.clustering_results = None
         self.clustered_routes = {}
+
+        # CO2聚类相关属性
+        self.co2_clustering_optimizer = None
+        self.co2_clustering_results = None
+        self.co2_clustered_routes = {}
 
         # 跳过路径统计（记录无法找到管道路径的位置对）
         self.skipped_routes = {
@@ -1435,6 +1462,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
         self._build_mtj_locations()
         self._initialize_hydrogen_clustering()
+        self._initialize_co2_clustering()
 
     def _initialize_hydrogen_clustering(self):
         if not self.config.get('basic_parameters', {}).get('use_hydrogen_pipeline_distance', False):
@@ -1511,6 +1539,97 @@ class GreenHydrogenSupplyChainOptimizer:
                 f"     当前氢气位置数量: {len(self.hydrogen_locations)}\n"
                 "  2. cluster_hydrogen_plants函数返回了None\n"
                 "请检查数据和聚类优化器实现。"
+            )
+
+    def _initialize_co2_clustering(self):
+        """初始化CO2捕获源聚类（与氢气聚类类似）"""
+        # 检查是否启用CO2管道距离计算
+        if not self.config.get('basic_parameters', {}).get('use_co2_pipeline_distance', False):
+            logger.info("CO2管道距离计算未启用，跳过CO2聚类初始化")
+            return
+
+        # 检查CO2聚类优化器是否可用
+        if CO2ClusteringOptimizer is None:
+            raise ImportError(
+                "CO2聚类优化器模块不可用，无法进行CO2聚类。\n"
+                "请检查以下内容：\n"
+                "  1. co2_clustering_optimizer.py文件是否存在于hydrogen/目录下\n"
+                "  2. CO2ClusteringOptimizer类是否正确实现\n"
+                "  3. 模块导入路径是否正确"
+            )
+
+        try:
+            logger.info("="*60)
+            logger.info("开始初始化CO2捕获源聚类...")
+            logger.info(f"CO2捕获源数量: {len(self.co2_capture_sources)}")
+
+            # 初始化CO2聚类优化器（使用与氢气相同的管道距离计算器）
+            self.co2_clustering_optimizer = CO2ClusteringOptimizer(
+                self.config,
+                pipeline_distance_calculator=self.hydrogen_pipeline_calculator
+            )
+            logger.info("CO2聚类优化器创建成功")
+
+            # 准备CO2捕获源字典（格式：{location_id: {latitude, longitude, co2_capture_capacity_ton_per_week}}）
+            co2_location_dict = {}
+            for location_id, coords in self.co2_capture_sources.items():
+                co2_location_dict[location_id] = {
+                    'latitude': coords['latitude'],
+                    'longitude': coords['longitude'],
+                    'co2_capture_capacity_ton_per_week': coords.get('co2_capture_capacity_ton_per_week', 0)
+                }
+
+            logger.info(f"准备聚类CO2捕获源字典，共{len(co2_location_dict)}个位置")
+
+            # 执行CO2聚类（可选：传入目标位置坐标用于优化聚类中心）
+            # 这里使用机场的平均位置作为目标位置（与氢气运输目标一致）
+            if len(self.airports) > 0:
+                airport_lats = [airport['latitude'] for airport in self.airports.values()]
+                airport_lons = [airport['longitude'] for airport in self.airports.values()]
+                destination_coords = (
+                    sum(airport_lats) / len(airport_lats),
+                    sum(airport_lons) / len(airport_lons)
+                )
+            else:
+                destination_coords = None
+
+            # 调用聚类方法
+            self.co2_clustering_results = self.co2_clustering_optimizer.cluster_co2_sources(
+                co2_location_dict,
+                destination_coords=destination_coords
+            )
+
+            logger.info(f"CO2聚类完成！")
+            logger.info(f"  - 聚类数量: {self.co2_clustering_results.total_clusters}")
+            logger.info(f"  - 独立点数量: {self.co2_clustering_results.total_noise_points}")
+            logger.info(f"  - 总CO2捕获源: {len(co2_location_dict)}")
+            logger.info("="*60)
+
+            # 初始化聚类路径字典（用于存储聚类运输路径）
+            self.co2_clustered_routes = {}
+
+        except Exception as e:
+            logger.error(f"初始化CO2聚类失败: {e}")
+            import traceback
+            traceback.print_exc()
+            raise RuntimeError(
+                f"CO2聚类初始化失败: {str(e)}\n"
+                "请检查以下内容：\n"
+                "  1. CO2捕获源数据是否正确加载\n"
+                "  2. 聚类参数设置是否合理\n"
+                "  3. 管道距离计算器是否正常工作\n"
+                "  4. 查看完整错误堆栈信息"
+            )
+
+        # 验证聚类结果是否正确初始化
+        if self.co2_clustering_results is None:
+            raise RuntimeError(
+                "CO2聚类初始化函数执行完成，但co2_clustering_results仍为None！\n"
+                "这可能是由于以下原因：\n"
+                "  1. co2_location_dict为空（没有CO2捕获源）\n"
+                f"     当前CO2捕获源数量: {len(self.co2_capture_sources)}\n"
+                "  2. cluster_co2_sources函数返回了None\n"
+                "请检查数据和CO2聚类优化器实现。"
             )
 
     def _get_location_coordinates(self, location: str) -> tuple:
@@ -2830,12 +2949,34 @@ class GreenHydrogenSupplyChainOptimizer:
         if missing_cache_keys:
             logger.warning(f"⚠️ 发现{len(missing_cache_keys)}条CO₂路径未缓存，补充计算直线距离")
             for key in missing_cache_keys:
-                self.co2_distance_cache[key] = self._calculate_location_distance(key[0], key[1])
+                # 为缺失的路径创建简单的距离字典（直线距离，无聚类）
+                distance = self._calculate_location_distance(key[0], key[1])
+
+                # 获取起点和终点坐标用于路径可视化
+                co2_source = self.co2_capture_sources.get(key[0])
+                if co2_source and key[1] in self.locations:
+                    co2_coords = (co2_source['latitude'], co2_source['longitude'])
+                    mtj_coords = (self.locations[key[1]]['latitude'], self.locations[key[1]]['longitude'])
+                    route_coords = [co2_coords, mtj_coords]
+                else:
+                    route_coords = []  # 如果坐标获取失败，保持为空
+
+                self.co2_distance_cache[key] = {
+                    'total_distance_km': distance,
+                    'layer1_distance_km': 0,
+                    'layer2_distance_km': 0,
+                    'layer3_distance_km': distance,
+                    'cluster_id': None,
+                    'cluster_center_coords': None,
+                    'pipeline_access_coords': None,
+                    'is_noise': False,
+                    'route_coordinates': route_coords  # 修复：添加实际坐标
+                }
 
         self.cost_expressions['co2_pipeline_transport_cost'] = gp.quicksum(
             self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
             co2_pipeline_unit_cost *
-            self.co2_distance_cache[(co2_source_id, methanol_loc)] * lifecycle_operation_factor  # 直接使用缓存值，已验证完整性
+            self.co2_distance_cache[(co2_source_id, methanol_loc)]['total_distance_km'] * lifecycle_operation_factor  # 从字典提取总距离
             for co2_source_id in self.co2_capture_sources
             for methanol_loc in sum(self.mtj_locations.values(), [])
             if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
@@ -4526,68 +4667,169 @@ class GreenHydrogenSupplyChainOptimizer:
             f"请检查聚类配置或位置数据的一致性。"
         )
 
-    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> float:
+    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> dict:
         """
-        使用聚类和管道路权算法计算CO₂管道运输距离
+        使用CO2聚类和管道路权算法计算CO₂管道运输距离（三层结构）
+
+        三层运输结构：
+        - Layer 1: CO2捕获源 -> 聚类中心（直线距离）
+        - Layer 2: 聚类中心 -> 管道接入点（管道距离）
+        - Layer 3: 管道网络 -> 甲醇生产位置（管道距离）
 
         Args:
             co2_source_id: CO₂捕获源ID
             mtj_loc: 甲醇生产位置
 
         Returns:
-            CO₂管道运输距离(公里)
+            dict: {
+                'total_distance_km': float,
+                'layer1_distance_km': float,  # CO2源 -> 聚类中心
+                'layer2_distance_km': float,  # 聚类中心 -> 管道接入点
+                'layer3_distance_km': float,  # 管道网络 -> 目的地
+                'cluster_id': int or None,    # 聚类ID（-1表示独立点）
+                'cluster_center_coords': tuple or None,
+                'pipeline_access_coords': tuple or None,
+                'is_noise': bool,
+                'route_coordinates': list  # 完整路径坐标
+            }
 
         Raises:
-            RuntimeError: 如果聚类结果未初始化
+            RuntimeError: 如果CO2聚类结果未初始化
         """
-        if not hasattr(self, 'clustering_results') or self.clustering_results is None:
+        # 检查CO2聚类结果是否初始化
+        if not hasattr(self, 'co2_clustering_results') or self.co2_clustering_results is None:
             raise RuntimeError(
-                f"聚类结果未初始化，无法计算CO₂管道距离。\n"
+                f"CO2聚类结果未初始化，无法计算CO₂管道距离。\n"
                 f"起点: {co2_source_id}, 终点: {mtj_loc}\n"
                 f"请检查配置文件中的 'use_co2_pipeline_distance' 参数是否启用。\n"
                 f"该参数路径: basic_parameters.use_co2_pipeline_distance"
             )
 
-        # CO₂捕获源坐标
+        # 验证CO₂捕获源和目的地
         if co2_source_id not in self.co2_capture_sources:
             raise ValueError(f"无效的CO₂捕获源ID: {co2_source_id}")
-
-        co2_source = self.co2_capture_sources[co2_source_id]
-        co2_coords = (co2_source['latitude'], co2_source['longitude'])
-
-        # 甲醇生产位置坐标
         if mtj_loc not in self.locations:
             raise ValueError(f"无效的甲醇生产位置: {mtj_loc}")
 
+        # 获取坐标
+        co2_source = self.co2_capture_sources[co2_source_id]
+        co2_coords = (co2_source['latitude'], co2_source['longitude'])
         mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
 
-        # 使用管道距离计算器
-        try:
-            route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+        # 查找CO2源所属的聚类
+        cluster_id = None
+        cluster_center_coords = None
+        is_noise = False
+
+        # 检查是否在聚类中
+        for cluster in self.co2_clustering_results.clusters:
+            if co2_source_id in cluster.member_locations:
+                cluster_id = cluster.cluster_id
+                cluster_center_coords = cluster.center_coord
+                break
+
+        # 如果不在聚类中，说明是独立点（noise）
+        if cluster_id is None:
+            is_noise = True
+            for noise_loc, noise_coords in self.co2_clustering_results.noise_points:
+                if noise_loc == co2_source_id:
+                    break
+
+        # 计算三层距离
+        if is_noise:
+            # 独立点：直接计算管道距离（不经过聚类中心）
+            try:
+                route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+                    co2_coords[0], co2_coords[1],
+                    mtj_coords[0], mtj_coords[1]
+                )
+                return {
+                    'total_distance_km': max(route.total_distance_km, 5),
+                    'layer1_distance_km': 0,
+                    'layer2_distance_km': 0,
+                    'layer3_distance_km': max(route.total_distance_km, 5),
+                    'cluster_id': -1,
+                    'cluster_center_coords': None,
+                    'pipeline_access_coords': route.access_point_coords if hasattr(route, 'access_point_coords') else None,
+                    'is_noise': True,
+                    'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, mtj_coords]
+                }
+            except PipelineRouteNotFoundError as e:
+                # 管道路径未找到，使用直线距离
+                logger.warning(f"CO2独立点管道路径未找到，使用直线距离: {co2_source_id} -> {mtj_loc}")
+                distance = self._calculate_haversine_distance(
+                    co2_coords[0], co2_coords[1],
+                    mtj_coords[0], mtj_coords[1]
+                )
+                return {
+                    'total_distance_km': max(distance, 5),
+                    'layer1_distance_km': 0,
+                    'layer2_distance_km': 0,
+                    'layer3_distance_km': max(distance, 5),
+                    'cluster_id': -1,
+                    'cluster_center_coords': None,
+                    'pipeline_access_coords': None,
+                    'is_noise': True,
+                    'route_coordinates': [co2_coords, mtj_coords]  # 修复：使用直线路径坐标
+                }
+        else:
+            # 聚类成员：使用三层运输结构
+            # Layer 1: CO2源 -> 聚类中心（直线距离）
+            layer1_distance = self._calculate_haversine_distance(
                 co2_coords[0], co2_coords[1],
-                mtj_coords[0], mtj_coords[1]
+                cluster_center_coords[0], cluster_center_coords[1]
             )
-            return max(route.total_distance_km, 5)
-        except PipelineRouteNotFoundError as e:
-            # 找不到CO₂管道路径，使用直线距离作为降级方案
-            logger.warning(f"管道路径未找到（CO₂），使用直线距离: {co2_source_id} -> {mtj_loc}, 原因: {str(e)}")
-            self.skipped_routes['co2_pipeline'].append({
-                'from': co2_source_id,
-                'from_coords': co2_coords,
-                'to': mtj_loc,
-                'to_coords': mtj_coords,
-                'reason': str(e),
-                'type': 'co2_transport'
-            })
-            return self._calculate_location_distance(co2_source_id, mtj_loc)  # 使用直线距离
-        except Exception as e:
-            # 其他未预期的错误仍然抛出
-            raise RuntimeError(
-                f"CO₂管道路径计算失败（非路径查找错误）。\n"
-                f"起点: {co2_source_id} ({co2_coords[0]:.6f}, {co2_coords[1]:.6f})\n"
-                f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
-                f"错误: {str(e)}"
-            )
+
+            # Layer 2+3: 聚类中心 -> 管道网络 -> 目的地（管道距离）
+            try:
+                route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+                    cluster_center_coords[0], cluster_center_coords[1],
+                    mtj_coords[0], mtj_coords[1]
+                )
+
+                # Layer 2: 聚类中心 -> 管道接入点
+                # Layer 3: 管道网络 -> 目的地
+                # 这里简化处理：将管道距离拆分为Layer2和Layer3
+                pipeline_access_coords = route.pipeline_access_point if hasattr(route, 'pipeline_access_point') else cluster_center_coords
+
+                # 计算Layer2和Layer3距离
+                if hasattr(route, 'access_distance_km') and hasattr(route, 'pipeline_distance_km'):
+                    layer2_distance = route.access_distance_km
+                    layer3_distance = route.pipeline_distance_km
+                else:
+                    # 如果路径对象没有细分距离，按50-50拆分
+                    layer2_distance = route.total_distance_km * 0.3
+                    layer3_distance = route.total_distance_km * 0.7
+
+                return {
+                    'total_distance_km': max(layer1_distance + route.total_distance_km, 5),
+                    'layer1_distance_km': layer1_distance,
+                    'layer2_distance_km': layer2_distance,
+                    'layer3_distance_km': layer3_distance,
+                    'cluster_id': cluster_id,
+                    'cluster_center_coords': cluster_center_coords,
+                    'pipeline_access_coords': pipeline_access_coords,
+                    'is_noise': False,
+                    'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, cluster_center_coords, mtj_coords]
+                }
+            except PipelineRouteNotFoundError as e:
+                # 管道路径未找到，使用直线距离
+                logger.warning(f"CO2聚类路径管道未找到，使用直线距离: cluster_{cluster_id} -> {mtj_loc}")
+                layer2_layer3_distance = self._calculate_haversine_distance(
+                    cluster_center_coords[0], cluster_center_coords[1],
+                    mtj_coords[0], mtj_coords[1]
+                )
+                return {
+                    'total_distance_km': max(layer1_distance + layer2_layer3_distance, 5),
+                    'layer1_distance_km': layer1_distance,
+                    'layer2_distance_km': layer2_layer3_distance * 0.3,
+                    'layer3_distance_km': layer2_layer3_distance * 0.7,
+                    'cluster_id': cluster_id,
+                    'cluster_center_coords': cluster_center_coords,
+                    'pipeline_access_coords': None,
+                    'is_noise': False,
+                    'route_coordinates': [co2_coords, cluster_center_coords, mtj_coords]  # 修复：三层路径坐标
+                }
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
@@ -4985,6 +5227,81 @@ class GreenHydrogenSupplyChainOptimizer:
         if solution['hydrogen_transport']:
             total_h2_transport = sum(info['transport_kg_h2'] for info in solution['hydrogen_transport'].values())
             print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
+        print("=======================\n")
+
+        # 提取CO2管道运输数据（与氢气运输类似，包含聚类信息）
+        solution['co2_transport'] = {}
+        co2_pipeline_count = 0
+        co2_pipeline_positive = 0
+
+        if hasattr(self, 'co2_pipeline_transport_vars') and self.co2_pipeline_transport_vars:
+            for (co2_source_id, mtj_loc), var in self.co2_pipeline_transport_vars.items():
+                co2_pipeline_count += 1
+                if var.x > 0:
+                    co2_pipeline_positive += 1
+                    transport_key = f"{co2_source_id}_{mtj_loc}_co2_pipeline"
+
+                    # 获取CO2源和目的地坐标
+                    co2_source = self.co2_capture_sources.get(co2_source_id, {})
+                    co2_coords = (co2_source.get('latitude', 0), co2_source.get('longitude', 0))
+                    mtj_coords = self._get_location_coordinates(mtj_loc)
+
+                    # 从缓存获取距离和聚类信息
+                    distance_info = self.co2_distance_cache.get((co2_source_id, mtj_loc), {})
+                    if isinstance(distance_info, dict):
+                        distance_km = distance_info.get('total_distance_km', 0)
+                        layer1_distance = distance_info.get('layer1_distance_km', 0)
+                        layer2_distance = distance_info.get('layer2_distance_km', 0)
+                        layer3_distance = distance_info.get('layer3_distance_km', 0)
+                        cluster_id = distance_info.get('cluster_id')
+                        cluster_center = distance_info.get('cluster_center_coords')
+                        route_coordinates = distance_info.get('route_coordinates', [])
+                        is_noise = distance_info.get('is_noise', False)
+                    else:
+                        # 兼容旧的float格式
+                        distance_km = float(distance_info) if distance_info else 0
+                        layer1_distance = 0
+                        layer2_distance = 0
+                        layer3_distance = distance_km
+                        cluster_id = None
+                        cluster_center = None
+                        route_coordinates = []
+                        is_noise = False
+
+                    solution['co2_transport'][transport_key] = {
+                        'from_location': co2_source_id,
+                        'to_location': mtj_loc,
+                        'transport_kg_co2': var.x,  # CO2运输量 (kg/week)
+                        'distance_km': distance_km,
+                        'from_latitude': co2_coords[0],
+                        'from_longitude': co2_coords[1],
+                        'to_latitude': mtj_coords[0],
+                        'to_longitude': mtj_coords[1],
+                        'route_coordinates': route_coordinates,
+                        'transport_type': 'CO2',
+                        'transport_mode': 'pipeline',
+                        'cluster_id': cluster_id,
+                        'cluster_center': cluster_center,
+                        'layer1_distance_km': layer1_distance,
+                        'layer2_distance_km': layer2_distance,
+                        'layer3_distance_km': layer3_distance,
+                        'is_noise': is_noise
+                    }
+
+        # 输出CO2运输统计信息
+        print(f"\n=== CO2管道运输决策统计 ===")
+        print(f"CO2管道运输变量: {co2_pipeline_count} 个, 其中非零: {co2_pipeline_positive} 个")
+        print(f"总CO2运输记录: {len(solution['co2_transport'])} 条")
+        if solution['co2_transport']:
+            total_co2_transport = sum(info['transport_kg_co2'] for info in solution['co2_transport'].values())
+            print(f"总CO2运输量: {total_co2_transport:.2f} kg/week")
+
+            # 统计聚类和独立点
+            co2_clustered = sum(1 for info in solution['co2_transport'].values()
+                              if info['cluster_id'] is not None and info['cluster_id'] >= 0)
+            co2_noise = sum(1 for info in solution['co2_transport'].values() if info.get('is_noise', False))
+            print(f"  - 聚类路径: {co2_clustered} 条")
+            print(f"  - 独立点路径: {co2_noise} 条")
         print("=======================\n")
 
         # 提取库存信息
@@ -5654,6 +5971,7 @@ class GreenHydrogenSupplyChainOptimizer:
             # 'hydrogen_transport_operation': '氢气罐车运输成本(元)',  # 【禁用罐车运输】
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'hydrogen_pipeline_investment': '氢能管道建设投资(元)',
+            'co2_pipeline_transport_cost': 'CO₂管道运输成本(元)',
             'transport_operation_cost': 'MTJ运输运营成本(元)',
             'storage_operation_cost': 'MTJ储存运营成本(元)',
             'h2_storage_operation': '氢气储存运营成本(元)',
@@ -6001,6 +6319,38 @@ class GreenHydrogenSupplyChainOptimizer:
                 "运输方式": info.get("transport_mode", "truck"),
                 "日运输量(kg)": info.get("transport_kg_h2", 0),
                 "时间单位": "天"
+            })
+
+        # 添加CO2运输路径（类似氢气运输）
+        for transport_id, info in solution.get("co2_transport", {}).items():
+            # 序列化路径坐标为JSON字符串
+            route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
+
+            cluster_info = ""
+            if info.get("cluster_id") is not None and info.get("cluster_id") >= 0:
+                cluster_center = info.get("cluster_center", (0, 0))
+                cluster_info = f"CO2聚类{info.get('cluster_id')}_(中心:{cluster_center[0]:.4f},{cluster_center[1]:.4f})"
+            elif info.get("is_noise"):
+                cluster_info = "独立点"
+
+            all_transport_summary.append({
+                "路径ID": transport_id,
+                "起点": info.get("from_location", ""),
+                "终点": info.get("to_location", ""),
+                "起点类型": "CO2捕获源",
+                "终点类型": "MTJ工厂",
+                "距离(km)": info.get("distance_km", 0),
+                "聚类信息": cluster_info,
+                "Layer1距离(km)": info.get("layer1_distance_km", 0),
+                "Layer2距离(km)": info.get("layer2_distance_km", 0),
+                "Layer3距离(km)": info.get("layer3_distance_km", 0),
+                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
+                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
+                "路径坐标": route_coords_str,
+                "货物类型": "CO2",
+                "运输方式": info.get("transport_mode", "pipeline"),
+                "周运输量(kg)": info.get("transport_kg_co2", 0),
+                "时间单位": "周"
             })
 
         if all_transport_summary:
@@ -6485,6 +6835,16 @@ class GreenHydrogenSupplyChainOptimizer:
         
         return summary
 
+
+    def _calculate_haversine_distance(self, lat1: float, lon1: float,
+                                     lat2: float, lon2: float) -> float:
+        """计算两点间的Haversine距离（公里）"""
+        lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1-a))
+        return 6371 * c
 
     def _calculate_average_distances(self):
         """计算并更新平均运输距离统计"""
