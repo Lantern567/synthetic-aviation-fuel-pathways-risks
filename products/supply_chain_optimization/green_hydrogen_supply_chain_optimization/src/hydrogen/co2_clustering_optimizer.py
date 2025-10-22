@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
-from sklearn.cluster import DBSCAN
 from math import radians, sin, cos, sqrt, atan2
 import logging
 import json
@@ -69,6 +68,92 @@ class CO2ClusteringOptimizer:
         c = 2 * atan2(sqrt(a), sqrt(1-a))
         return 6371 * c
 
+    def _dbscan_cluster(self, coords_rad: np.ndarray, eps_rad: float, min_samples: int) -> np.ndarray:
+        """
+        手写DBSCAN聚类算法（基于Haversine距离）
+        替换sklearn.cluster.DBSCAN，消除NumPy版本冲突
+
+        Args:
+            coords_rad: 坐标数组（弧度），shape (n, 2) - [lat_rad, lon_rad]
+            eps_rad: 邻域半径（弧度）
+            min_samples: 核心点最小邻居数
+
+        Returns:
+            labels: 聚类标签数组，-1表示噪声点
+        """
+        n_points = len(coords_rad)
+        labels = np.full(n_points, -1, dtype=int)  # -1表示未访问
+        cluster_id = 0
+
+        def get_neighbors(point_idx: int) -> List[int]:
+            """获取点的所有邻居（Haversine距离 <= eps）"""
+            neighbors = []
+            lat1, lon1 = coords_rad[point_idx]
+
+            for i in range(n_points):
+                if i == point_idx:
+                    neighbors.append(i)
+                    continue
+
+                lat2, lon2 = coords_rad[i]
+                # Haversine距离计算
+                dlat = lat2 - lat1
+                dlon = lon2 - lon1
+                a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+                c = 2 * atan2(sqrt(a), sqrt(1-a))
+
+                if c <= eps_rad:
+                    neighbors.append(i)
+
+            return neighbors
+
+        def expand_cluster(point_idx: int, neighbors: List[int], cluster_id: int):
+            """扩展聚类（深度优先搜索）"""
+            labels[point_idx] = cluster_id
+
+            i = 0
+            while i < len(neighbors):
+                neighbor_idx = neighbors[i]
+
+                # 如果是噪声点，标记为当前聚类
+                if labels[neighbor_idx] == -1:
+                    labels[neighbor_idx] = cluster_id
+
+                    # 如果是核心点，添加其邻居
+                    neighbor_neighbors = get_neighbors(neighbor_idx)
+                    if len(neighbor_neighbors) >= min_samples:
+                        # 添加新邻居（避免重复）
+                        for nn in neighbor_neighbors:
+                            if nn not in neighbors:
+                                neighbors.append(nn)
+
+                # 如果已经属于其他聚类，跳过
+                elif labels[neighbor_idx] >= 0:
+                    pass
+
+                i += 1
+
+        # 主循环：遍历所有点
+        for point_idx in range(n_points):
+            # 跳过已处理的点
+            if labels[point_idx] >= 0:
+                continue
+
+            # 获取邻居
+            neighbors = get_neighbors(point_idx)
+
+            # 如果不是核心点，标记为噪声（-1）
+            if len(neighbors) < min_samples:
+                labels[point_idx] = -1
+                continue
+
+            # 是核心点，创建新聚类
+            expand_cluster(point_idx, neighbors, cluster_id)
+            cluster_id += 1
+
+        logger.info(f"手写DBSCAN完成: 发现{cluster_id}个聚类")
+        return labels
+
     def cluster_co2_sources(self, co2_sources: Dict,
                            destination_coords: Optional[Tuple[float, float]] = None) -> CO2ClusteringResult:
         """
@@ -102,13 +187,9 @@ class CO2ClusteringOptimizer:
 
         coords_rad = np.radians(coords)
 
-        # DBSCAN聚类
-        dbscan = DBSCAN(
-            eps=self.eps_km / 6371.0,  # 转换为弧度
-            min_samples=self.min_samples,
-            metric='haversine'
-        )
-        labels = dbscan.fit_predict(coords_rad)
+        # 使用手写DBSCAN聚类（替换sklearn，消除NumPy版本冲突）
+        eps_rad = self.eps_km / 6371.0  # 转换为弧度
+        labels = self._dbscan_cluster(coords_rad, eps_rad, self.min_samples)
 
         unique_labels = set(labels)
         n_clusters = len(unique_labels) - (1 if -1 in unique_labels else 0)
