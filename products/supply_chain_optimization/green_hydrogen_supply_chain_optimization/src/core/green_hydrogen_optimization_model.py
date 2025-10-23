@@ -6673,7 +6673,7 @@ class GreenHydrogenSupplyChainOptimizer:
     def _load_co2_capture_data(self):
         """加载CO₂捕获源数据"""
         try:
-            from co2.co2_capture_calculator import CO2CaptureCalculator
+            from src.co2.co2_capture_calculator import CO2CaptureCalculator
 
             project_root = get_project_base_dir()
 
