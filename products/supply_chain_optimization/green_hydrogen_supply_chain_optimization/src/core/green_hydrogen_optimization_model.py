@@ -800,7 +800,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 graphhopper_host=basic_params['graphhopper_host'],
                 graphhopper_port=basic_params['graphhopper_port'],
                 cache_dir=cache_dir,
-                enable_cache=True
+                enable_cache=False  # 禁用数据库缓存（查询比计算更慢）
             )
             self.distance_calculator = GraphHopperDistanceCalculator(self.routing_engine)
             logger.info(f"GraphHopper路径规划引擎初始化完成，OSM数据文件: {self.osm_pbf_path}")
@@ -1667,7 +1667,10 @@ class GreenHydrogenSupplyChainOptimizer:
             gis_data_path = os.path.join(project_root, "products", "gis_energy_mapping",
                                         "gis_data_scraper", "scraped_gis_data")
 
-            self.hydrogen_pipeline_calculator = HydrogenPipelineDistanceCalculator(gis_data_path)
+            self.hydrogen_pipeline_calculator = HydrogenPipelineDistanceCalculator(
+                gis_data_path,
+                enable_cache=False  # 禁用数据库缓存（查询比计算更慢）
+            )
             self.hydrogen_pipeline_calculator.load_pipeline_data()
             logger.info("氢气管道距离计算器初始化完成")
 

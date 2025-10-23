@@ -53,7 +53,7 @@ class HydrogenTransportVisualizer:
         # 初始化氢气管道距离计算器
         self.pipeline_calculator = HydrogenPipelineDistanceCalculator(
             gis_data_path=str(self.gis_data_path),
-            enable_cache=True
+            enable_cache=False  # 禁用数据库缓存（查询比计算更慢）
         )
 
         # 初始化能源基础设施可视化器

@@ -96,7 +96,7 @@ class GraphHopperRoutingEngine:
             self.cache_dir = cache_dir or "cache/graphhopper_routes"
             self.max_retries = max_retries or 3
             self.request_timeout = request_timeout or 30
-            self.enable_cache = enable_cache if enable_cache is not None else True
+            self.enable_cache = enable_cache if enable_cache is not None else False  # 默认禁用（查询比计算更慢）
             self.enable_batch_processing = False
             self.preload_popular_routes = False
             self.cache_ttl_hours = 48
