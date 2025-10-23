@@ -21,6 +21,9 @@ import yaml
 from datetime import datetime
 from collections import defaultdict
 from math import radians, sin, cos, sqrt, atan2
+from multiprocessing import Pool, cpu_count
+from functools import partial
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 try:
     from shared.utils.log_preserver import mount_file_logging
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
@@ -202,6 +205,147 @@ def is_within_beijing_range(lat: float, lon: float, max_distance_km: float = 500
     
     distance = calculate_distance_km(lat, lon, beijing_lat, beijing_lon)
     return distance <= max_distance_km
+
+# ==================== 并行计算辅助函数 ====================
+
+def _process_plant_data_worker(args):
+    """并行处理单个电站数据的worker函数
+
+    Args:
+        args: (plant_name, plant_data, total_hours) 元组
+
+    Returns:
+        tuple: (plant_name, location_dict) 或 None（如果数据不足）
+    """
+    plant_name, plant_data, total_hours = args
+
+    # 取前total_hours小时数据
+    if len(plant_data) >= total_hours:
+        hourly_data = plant_data.head(total_hours)
+
+        # 确定电站类型
+        plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
+
+        location_dict = {
+            'type': plant_type,
+            'latitude': hourly_data.iloc[0].get('latitude', 30.0),
+            'longitude': hourly_data.iloc[0].get('longitude', 104.0),
+            'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
+            'hourly_generation': hourly_data['power_output_mw'].tolist(),
+        }
+
+        return (plant_name, location_dict)
+    else:
+        return None
+
+
+def _filter_renewable_plant_worker(args):
+    """并行过滤单个可再生能源电站的worker函数
+
+    Args:
+        args: (plant_name, plant_data, max_distance_km) 元组
+
+    Returns:
+        pd.DataFrame or None: 过滤后的电站数据
+    """
+    plant_name, plant_data, max_distance_km = args
+
+    if len(plant_data) > 0:
+        # 获取电站坐标（使用第一行数据）
+        plant_lat = plant_data.iloc[0].get('latitude', 30.0)
+        plant_lon = plant_data.iloc[0].get('longitude', 104.0)
+
+        # 检查坐标是否在北京指定范围内
+        if is_within_beijing_range(plant_lat, plant_lon, max_distance_km):
+            return plant_data
+
+    return None
+
+
+def _process_airport_data_worker(args):
+    """并行处理单个机场数据的worker函数
+
+    Args:
+        args: (airport_name, airport_df) 元组
+
+    Returns:
+        tuple: (airport_name, airport_dict)
+    """
+    airport_name, airport_df = args
+
+    # 排序确保周数据顺序正确
+    airport_df = airport_df.sort_values('week_number')
+
+    # 提取52周的燃油需求序列
+    weekly_series = airport_df['weekly_total_fuel_kg_total'].tolist()
+
+    # 获取机场地理位置（使用第一行数据）
+    first_row = airport_df.iloc[0]
+    latitude = first_row['departure_airport_latitude']
+    longitude = first_row['departure_airport_longitude']
+
+    # 计算统计信息
+    total_flights = airport_df['total_flights'].sum()
+    avg_weekly_demand = np.mean(weekly_series)
+    max_weekly_demand = np.max(weekly_series)
+    total_annual_demand = np.sum(weekly_series)
+
+    airport_dict = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'weekly_demand_series': weekly_series,
+        'avg_weekly_demand_kg': avg_weekly_demand,
+        'max_weekly_demand_kg': max_weekly_demand,
+        'total_annual_demand_kg': total_annual_demand,
+        'flight_count': total_flights
+    }
+
+    return (airport_name, airport_dict)
+
+
+def _calculate_distance_worker(args):
+    """并行计算单对位置间距离的worker函数
+
+    Args:
+        args: (optimizer_instance, loc1, loc2) 元组
+            optimizer_instance可以是routing_engine或距离计算方法
+
+    Returns:
+        tuple: ((loc1, loc2), distance_km)
+    """
+    routing_engine, locations, co2_sources, loc1, loc2 = args
+
+    # 辅助函数：从多个数据源查找位置坐标
+    def get_location_coords(loc_name):
+        """从locations或co2_capture_sources中获取位置坐标"""
+        if loc_name in locations:
+            return locations[loc_name]['latitude'], locations[loc_name]['longitude']
+        elif loc_name in co2_sources:
+            return co2_sources[loc_name]['latitude'], co2_sources[loc_name]['longitude']
+        else:
+            raise KeyError(f"位置 '{loc_name}' 既不在 locations 也不在 co2_capture_sources 中")
+
+    try:
+        # 获取两个位置的坐标
+        loc1_lat, loc1_lon = get_location_coords(loc1)
+        loc2_lat, loc2_lon = get_location_coords(loc2)
+
+        # 使用GraphHopper路径规划计算真实距离
+        result = routing_engine.calculate_route_distance(
+            loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="truck", include_route_geometry=False
+        )
+        distance_km = result.get('distance_km', 0)
+
+        # 如果路径规划失败，使用直线距离
+        if not result.get('route_found', False):
+            distance_km = calculate_distance_km(loc1_lat, loc1_lon, loc2_lat, loc2_lon)
+
+        return ((loc1, loc2), max(distance_km, 5))  # 最小距离5km
+    except Exception as e:
+        # 出错时返回一个大值
+        logger.warning(f"距离计算失败 {loc1} -> {loc2}: {e}, 使用默认值1000km")
+        return ((loc1, loc2), 1000.0)
+
 
 def get_project_base_dir():
     """
@@ -603,6 +747,14 @@ class GreenHydrogenSupplyChainOptimizer:
         self.airports = {}
         self.costs = {}
 
+        # 并行计算配置
+        import os
+        self.parallel_workers = override_params.get('parallel_workers', None)
+        if self.parallel_workers is None:
+            # 自动检测: 使用所有CPU核心
+            self.parallel_workers = os.cpu_count() or 4
+        logger.info(f"并行计算workers数量: {self.parallel_workers}")
+
         # CO₂捕获源数据（绿氢供应链专用）
         self.co2_capture_sources = {}     # CO₂捕获源数据
 
@@ -845,26 +997,25 @@ class GreenHydrogenSupplyChainOptimizer:
                 logger.info("缓存无效或不存在，执行完整处理和过滤")
                 filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
             
-            # 按地点聚合小时级发电数据
+            # 按地点聚合小时级发电数据 - 使用并行处理
             plant_names = filtered_renewable_data['plant_name'].unique()
-            for plant_name in plant_names:
-                plant_data = filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name]
-                
-                # 取前total_hours小时数据
-                if len(plant_data) >= self.total_hours:
-                    hourly_data = plant_data.head(self.total_hours)
-                    
-                    # 确定电站类型
-                    plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
-                    
-                    self.locations[plant_name] = {
-                        'type': plant_type,  # 'solar_plant' 或 'wind_farm'
-                        'latitude': hourly_data.iloc[0].get('latitude', 30.0),
-                        'longitude': hourly_data.iloc[0].get('longitude', 104.0),
-                        'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                        'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW)
-                    }
-            
+            logger.info(f"使用{self.parallel_workers}个并行workers处理{len(plant_names)}个电站的小时级数据")
+
+            # 准备并行处理的参数
+            plant_data_list = [
+                (plant_name, filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name], self.total_hours)
+                for plant_name in plant_names
+            ]
+
+            # 使用线程池并行处理电站数据
+            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                results = list(executor.map(_process_plant_data_worker, plant_data_list))
+
+                for result in results:
+                    if result is not None:
+                        plant_name, location_dict = result
+                        self.locations[plant_name] = location_dict
+
             logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站")
             
             # 统计电站类型
@@ -882,34 +1033,35 @@ class GreenHydrogenSupplyChainOptimizer:
             self._process_renewable_data_fallback(renewable_data)
     
     def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str) -> pd.DataFrame:
-        """过滤可再生能源数据（500km范围内）"""
+        """过滤可再生能源数据（500km范围内）- 使用并行处理"""
         logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录")
-        
-        # 按电站分组过滤
+
+        plant_names = renewable_data['plant_name'].unique()
+        logger.info(f"使用{self.parallel_workers}个并行workers处理{len(plant_names)}个电站")
+
+        # 准备并行处理的参数
+        plant_data_list = [
+            (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], 500)
+            for plant_name in plant_names
+        ]
+
+        # 使用线程池并行过滤（线程池更适合I/O密集型任务）
         filtered_plants = []
-        for plant_name in renewable_data['plant_name'].unique():
-            plant_data = renewable_data[renewable_data['plant_name'] == plant_name]
-            
-            if len(plant_data) > 0:
-                # 获取电站坐标（使用第一行数据）
-                plant_lat = plant_data.iloc[0].get('latitude', 30.0)
-                plant_lon = plant_data.iloc[0].get('longitude', 104.0)
-                
-                # 检查坐标是否在北京500公里范围内
-                if is_within_beijing_range(plant_lat, plant_lon, 500):
-                    filtered_plants.append(plant_data)
-                else:
-                    distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.debug(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
-        
+        with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+            results = list(executor.map(_filter_renewable_plant_worker, plant_data_list))
+
+            for result in results:
+                if result is not None:
+                    filtered_plants.append(result)
+
         # 合并过滤后的数据
         if filtered_plants:
             filtered_df = pd.concat(filtered_plants, ignore_index=True)
         else:
             filtered_df = pd.DataFrame()
-        
+
         logger.info(f"500km范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
-        
+
         # 保存到缓存
         if len(filtered_df) > 0:
             cache_manager.save_filtered_data('renewable_plants', filtered_df, temp_file)
@@ -1398,77 +1550,65 @@ class GreenHydrogenSupplyChainOptimizer:
     
     
     def _process_airport_data(self, airport_data: pd.DataFrame):
-        """处理机场周时间序列数据"""
+        """处理机场周时间序列数据 - 使用并行处理"""
         # 直接从Excel文件读取真实的52周时间序列需求数据
         # 构建绝对路径 - 修正后的路径
         project_root = get_project_base_dir()
-        excel_path = os.path.join(project_root, "products", "aviation_fuel_analysis", 
-                                "resource_flight_data_process", "data", 
+        excel_path = os.path.join(project_root, "products", "aviation_fuel_analysis",
+                                "resource_flight_data_process", "data",
                                 "capital_binhai_airports_data_20250726_123415.xlsx")
-        
+
         try:
             # 读取Excel文件中的真实数据
             excel_df = pd.read_excel(excel_path, sheet_name='All_Airports')
             logger.info(f"成功读取Excel文件: {excel_path}")
             logger.info(f"Excel数据包含 {len(excel_df)} 行，{excel_df['departure_airport_name'].nunique()} 个机场")
-            
-            # 按机场分组处理数据
-            for airport_name in excel_df['departure_airport_name'].unique():
-                airport_df = excel_df[excel_df['departure_airport_name'] == airport_name].sort_values('week_number')
-                
-                # 提取52周的燃油需求序列
-                weekly_series = airport_df['weekly_total_fuel_kg_total'].tolist()
-                
-                # 获取机场地理位置（使用第一行数据）
-                first_row = airport_df.iloc[0]
-                latitude = first_row['departure_airport_latitude']
-                longitude = first_row['departure_airport_longitude']
-                
-                # 计算统计信息
-                total_flights = airport_df['total_flights'].sum()
-                avg_weekly_demand = np.mean(weekly_series)
-                max_weekly_demand = np.max(weekly_series)
-                total_annual_demand = np.sum(weekly_series)
-                
-                self.airports[airport_name] = {
-                    'latitude': latitude,
-                    'longitude': longitude, 
-                    'weekly_demand_series': weekly_series,  # 52周的真实需求序列
-                    'avg_weekly_demand_kg': avg_weekly_demand,
-                    'max_weekly_demand_kg': max_weekly_demand,
-                    'total_annual_demand_kg': total_annual_demand,
-                    'flight_count': total_flights
-                }
-                
-                logger.info(f"处理机场 {airport_name}: {len(weekly_series)} 周真实数据，年需求 {total_annual_demand:,.0f} kg")
-                
+
+            # 按机场分组处理数据 - 使用并行处理
+            airport_names = excel_df['departure_airport_name'].unique()
+            logger.info(f"使用{self.parallel_workers}个并行workers处理{len(airport_names)}个机场")
+
+            # 准备并行处理的参数
+            airport_data_list = [
+                (airport_name, excel_df[excel_df['departure_airport_name'] == airport_name])
+                for airport_name in airport_names
+            ]
+
+            # 使用线程池并行处理机场数据
+            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                results = list(executor.map(_process_airport_data_worker, airport_data_list))
+
+                for airport_name, airport_dict in results:
+                    self.airports[airport_name] = airport_dict
+                    logger.info(f"处理机场 {airport_name}: {len(airport_dict['weekly_demand_series'])} 周真实数据，年需求 {airport_dict['total_annual_demand_kg']:,.0f} kg")
+
         except Exception as e:
             logger.error(f"读取Excel文件失败: {e}")
             logger.info("使用传统方法处理airport_data参数")
-            
+
             # 如果Excel文件读取失败，使用传统方法处理airport_data参数（向后兼容）
             for _, airport in airport_data.iterrows():
                 airport_name = airport['airport_name']
-                
+
                 if 'weekly_fuel_series' in airport and isinstance(airport['weekly_fuel_series'], list):
                     weekly_series = airport['weekly_fuel_series']
                     logger.info(f"使用真实数据：机场 {airport_name} 包含 {len(weekly_series)} 周的真实需求数据")
                 else:
                     logger.error(f"机场 {airport_name} 缺少必要的燃油需求时间序列数据")
                     raise ValueError(f"机场 {airport_name} 数据不完整，缺少weekly_fuel_series字段")
-                
+
                 self.airports[airport_name] = {
                     'latitude': airport['latitude'],
-                    'longitude': airport['longitude'], 
+                    'longitude': airport['longitude'],
                     'weekly_demand_series': weekly_series,
                     'avg_weekly_demand_kg': airport.get('avg_weekly_fuel_kg', sum(weekly_series) / len(weekly_series)),
                     'max_weekly_demand_kg': airport.get('max_weekly_fuel_kg', max(weekly_series)),
                     'total_annual_demand_kg': airport.get('total_fuel_kg', sum(weekly_series)),
                     'flight_count': airport.get('flight_count', 100)
                 }
-        
+
         logger.info(f"处理了 {len(self.airports)} 个机场，每个机场包含52周时间序列数据")
-        
+
         # 统计需求信息
         total_annual_demand = sum(airport['total_annual_demand_kg'] for airport in self.airports.values())
         avg_weekly_demand = sum(airport['avg_weekly_demand_kg'] for airport in self.airports.values())
@@ -6885,25 +7025,48 @@ class GreenHydrogenSupplyChainOptimizer:
         return 6371 * c
 
     def _calculate_average_distances(self):
-        """计算并更新平均运输距离统计"""
-        logger.info("开始计算平均运输距离统计...")
-        
+        """计算并更新平均运输距离统计 - 使用并行计算"""
+        logger.info("开始计算平均运输距离统计 (并行模式)...")
+
         # 计算氢气运输平均距离（可再生能源站到MTJ工厂）
-        hydrogen_distances = []
-        renewable_locations = [loc for loc, info in self.locations.items() 
+        renewable_locations = [loc for loc, info in self.locations.items()
                              if info['type'] in ['solar_plant', 'wind_farm']]
         mtj_locations = [loc for loc, info in self.locations.items()
                         if info['type'] in ['industrial_park', 'port']]
-        
-        for h_loc in renewable_locations[:5]:  # 限制样本数以节省时间
-            for mtj_loc in mtj_locations[:5]:
-                distance = self._calculate_location_distance(h_loc, mtj_loc)
-                hydrogen_distances.append(distance)
-        
-        if hydrogen_distances:
-            self.avg_hydrogen_transport_distance = np.mean(hydrogen_distances)
-            logger.info(f"氢气运输平均距离: {self.avg_hydrogen_transport_distance:.1f}km "
-                       f"(基于{len(hydrogen_distances)}个样本)")
+
+        # 限制样本数以节省时间
+        renewable_sample = renewable_locations[:min(10, len(renewable_locations))]
+        mtj_sample = mtj_locations[:min(10, len(mtj_locations))]
+
+        # 生成所有位置对组合
+        location_pairs = [(h_loc, mtj_loc) for h_loc in renewable_sample for mtj_loc in mtj_sample]
+
+        if location_pairs:
+            logger.info(f"使用{self.parallel_workers}个并行workers计算{len(location_pairs)}对氢气运输距离")
+
+            # 准备并行计算的参数
+            distance_args = [
+                (self.routing_engine, self.locations, self.co2_capture_sources, loc1, loc2)
+                for loc1, loc2 in location_pairs
+            ]
+
+            # 使用线程池并行计算距离
+            hydrogen_distances = []
+            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                results = list(executor.map(_calculate_distance_worker, distance_args))
+
+                for (loc1, loc2), distance in results:
+                    hydrogen_distances.append(distance)
+                    # 缓存结果
+                    cache_key = f"{loc1}_{loc2}"
+                    self.distance_cache[cache_key] = distance
+                    reverse_cache_key = f"{loc2}_{loc1}"
+                    self.distance_cache[reverse_cache_key] = distance
+
+            if hydrogen_distances:
+                self.avg_hydrogen_transport_distance = np.mean(hydrogen_distances)
+                logger.info(f"氢气运输平均距离: {self.avg_hydrogen_transport_distance:.1f}km "
+                           f"(基于{len(hydrogen_distances)}个样本, 并行计算)")
         else:
             # 从配置文件读取默认氢气运输距离
             distance_config = self.config.get('operational_parameters', {}).get('default_transport_distances', {})
@@ -6911,21 +7074,41 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.warning("无法计算氢气运输平均距离，使用默认值50km")
 
         # 计算机场运输平均距离
-        airport_distances = []
-        production_locations = list(self.locations.keys())[:10]  # 限制样本数
-        airports = list(self.airports.keys())[:5]
-        
-        for loc in production_locations:
-            for airport in airports:
-                distance = self._calculate_distance(loc, airport)
-                airport_distances.append(distance)
-        
-        if airport_distances:
-            avg_airport_distance = np.mean(airport_distances)
-            logger.info(f"机场运输平均距离: {avg_airport_distance:.1f}km "
-                       f"(基于{len(airport_distances)}个样本)")
-        
-        logger.info("距离统计计算完成")
+        production_sample = list(self.locations.keys())[:min(15, len(self.locations))]
+        airport_sample = list(self.airports.keys())[:min(10, len(self.airports))]
+
+        # 生成所有位置对组合
+        airport_pairs = [(loc, airport) for loc in production_sample for airport in airport_sample]
+
+        if airport_pairs:
+            logger.info(f"使用{self.parallel_workers}个并行workers计算{len(airport_pairs)}对机场运输距离")
+
+            # 准备并行计算的参数
+            airport_args = [
+                (self.routing_engine, self.locations, self.co2_capture_sources, loc, airport)
+                for loc, airport in airport_pairs
+            ]
+
+            # 使用线程池并行计算距离
+            airport_distances = []
+            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                results = list(executor.map(_calculate_distance_worker, airport_args))
+
+                for (loc, airport), distance in results:
+                    airport_distances.append(distance)
+                    # 缓存结果
+                    cache_key = f"{loc}_{airport}"
+                    self.distance_cache[cache_key] = distance
+                    reverse_cache_key = f"{airport}_{loc}"
+                    self.distance_cache[reverse_cache_key] = distance
+
+            if airport_distances:
+                avg_airport_distance = np.mean(airport_distances)
+                logger.info(f"机场运输平均距离: {avg_airport_distance:.1f}km "
+                           f"(基于{len(airport_distances)}个样本, 并行计算)")
+
+        logger.info("距离统计计算完成 (并行计算加速)")
+
 
     def _add_co2_supply_balance_constraints(self):
         """添加CO₂供应平衡约束（周级）
