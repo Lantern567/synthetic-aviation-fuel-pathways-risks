@@ -1,0 +1,37 @@
+{
+  "dataset_name": "ev_battery_factories",
+  "feature_count": 343,
+  "geometry_type": "Point",
+  "bounds": [
+    101.641214,
+    22.046164,
+    126.500495,
+    45.687508
+  ],
+  "crs": "EPSG:4326",
+  "fields": [
+    "Province",
+    "Name",
+    "ChineseName",
+    "Capacity",
+    "CapUnit",
+    "PlannedCapAddition",
+    "PlannedTotalCapacity",
+    "Ownership_Structure",
+    "Note",
+    "Status",
+    "YearOnline",
+    "Operator",
+    "LocationEstimated_",
+    "Lat",
+    "Long",
+    "Source",
+    "Location",
+    "Detail",
+    "source2",
+    "source3",
+    "source4",
+    "ObjectId"
+  ],
+  "scrape_time": "2025-07-15T12:59:31.904884"
+}
