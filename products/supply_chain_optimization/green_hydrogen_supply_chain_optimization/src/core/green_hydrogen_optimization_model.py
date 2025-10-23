@@ -721,6 +721,9 @@ class GreenHydrogenSupplyChainOptimizer:
         # 处理可再生能源数据（在机场和CO₂数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
         self._process_renewable_data(renewable_data)
 
+        # 将CO₂捕获点加入locations，作为潜在建设位置
+        self._add_co2_sources_to_locations()
+
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
 
@@ -796,6 +799,9 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 处理可再生能源数据（在机场和CO₂数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
         self._process_renewable_data(renewable_data)
+
+        # 将CO₂捕获点加入locations，作为潜在建设位置
+        self._add_co2_sources_to_locations()
 
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
@@ -960,7 +966,7 @@ class GreenHydrogenSupplyChainOptimizer:
             for airport_name, airport_info in self.airports.items():
                 # 使用机场名称作为位置标识符
                 location_id = f"airport_{airport_name}"
-                
+
                 # 添加到基础locations字典
                 self.locations[location_id] = {
                     'type': 'airport',  # 新的位置类型
@@ -971,11 +977,43 @@ class GreenHydrogenSupplyChainOptimizer:
                     'original_airport_name': airport_name,  # 保留原始机场名称
                     'fuel_demand_weekly': airport_info.get('weekly_fuel_series', [])
                 }
-            
+
             airport_count = sum(1 for loc in self.locations.values() if loc['type'] == 'airport')
             logger.info(f"  添加了 {airport_count} 个机场位置到基础locations中")
         else:
             logger.warning("机场数据尚未加载，无法添加机场位置")
+
+    def _add_co2_sources_to_locations(self):
+        """将CO₂捕获源添加到locations，作为潜在的生产/建设位置。"""
+        if not getattr(self, 'co2_capture_sources', None):
+            return
+
+        added_count = 0
+        for source_id, source_info in self.co2_capture_sources.items():
+            latitude = source_info.get('latitude')
+            longitude = source_info.get('longitude')
+
+            if latitude is None or longitude is None:
+                logger.warning(f"CO₂捕获源 {source_id} 缺少坐标，跳过添加到locations")
+                continue
+
+            self.locations[source_id] = {
+                'type': 'co2_capture',
+                'latitude': latitude,
+                'longitude': longitude,
+                'capacity_mw': 0,
+                'hourly_generation': [0] * self.total_hours,
+                'facility_name': source_info.get('facility_name', source_id),
+                'facility_type': source_info.get('facility_type', 'co2_capture'),
+                'province': source_info.get('province', 'Unknown'),
+                'co2_capture_capacity_ton_per_week': source_info.get('co2_capture_capacity_ton_per_week', 0),
+                'capture_cost_yuan_per_ton': source_info.get('capture_cost_yuan_per_ton', 0),
+                'capture_efficiency': source_info.get('capture_efficiency', 0)
+            }
+            added_count += 1
+
+        if added_count > 0:
+            logger.info(f"  添加了 {added_count} 个CO₂捕获源到基础locations中")
 
     def _process_excel_airport_data(self, excel_data: pd.DataFrame) -> pd.DataFrame:
         """

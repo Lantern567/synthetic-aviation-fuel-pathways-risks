@@ -13,7 +13,7 @@
 # (MILP) with Gurobi solver.
 #
 # 主要功能 | Main Features:
-# - 绿氢+CO₂制SAF技术路线优化
+# - 绿氢+CO₂一步法直接制SAF (RWGS-FT串联工艺)
 # - 全生命周期碳排放计算
 # - CO₂捕获源整合
 # - 地理聚类与分层运输策略
@@ -26,8 +26,8 @@
 # See metadata section for detailed category descriptions
 #
 # 版本信息 | Version Info:
-# Version: 2.0.0
-# Last Updated: 2025-10-13
+# Version: 2.1.0 (一步法直接费托合成 RWGS-FT)
+# Last Updated: 2025-10-23
 # =============================================================================
 
 # =============================================================================
@@ -91,19 +91,19 @@ capacity_limits:
                                            # 作用：用于逻辑约束的线性化表示
 
   # SAF生产设施容量限制 - SAF Production Facility Capacity Limits
-  saf_reactor_max_capacity_kg_per_hour: 1000000  # SAF反应器最大产能(kg/h) | Max SAF reactor capacity (kg SAF/hour)
-                                           # 单个SAF反应器设施的最大SAF生产能力
+  rwgs_ft_reactor_max_capacity_kg_per_hour: 1000000  # RWGS-FT反应器最大产能(kg/h) | Max RWGS-FT reactor capacity
+                                           # 一步法RWGS-FT串联反应器的最大SAF生产能力
                                            # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+  rwgs_ft_reactor_min_capacity_kg_per_hour: 0       # RWGS-FT反应器最小经济规模(kg/h) | Min economic scale
                                            # 暂不设置最小规模约束，由优化器自由决策
 
-  # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
-  saf_capacity_estimates:
-    default: 2000                          # 默认容量估算(kg/h) | Default capacity estimate
-    industrial: 3000                       # 工业基地容量(kg/h) | Industrial base capacity
-    petrochemical_base: 5000               # 石化基地容量(kg/h) | Petrochemical base capacity
-                                           # 说明：根据不同位置类型设定的SAF反应器生产容量估算值
+  # RWGS-FT反应器容量估算 - RWGS-FT Reactor Capacity Estimates by Location Type
+  rwgs_ft_capacity_estimates:
+    default: 1800                          # 默认容量估算(kg/h) | Default capacity (一步法略低于两步法2000)
+    industrial: 2700                       # 工业基地容量(kg/h) | Industrial base capacity
+    petrochemical_base: 4500               # 石化基地容量(kg/h) | Petrochemical base capacity
+                                           # 说明：一步法工艺复杂度高，容量估算略低于两步法
 
   # 氢气生产容量 - Hydrogen Production Capacity
   electrolyzer_max_capacity_kg_per_hour: 100000  # 电解槽最大产能(kg H₂/h) | Max electrolyzer capacity
@@ -293,14 +293,20 @@ carbon_emission_parameters:
     h2_electrolysis_emission: 0.05         # 电解制氢过程排放(kgCO₂e/kg H₂) | H₂ electrolysis emissions
                                            # 不含电力排放的工艺过程排放
 
-    saf_synthesis_emission: 0.3            # SAF合成过程排放(kgCO₂e/kg SAF) | SAF synthesis emissions
-                                           # 合成反应过程的直接碳排放
+    saf_synthesis_emission: 0.25           # SAF合成过程排放(kgCO₂e/kg SAF) | SAF synthesis emissions
+                                           # 一步法降低(无甲醇中间步骤): 0.25 vs 两步法0.3
 
-    saf_process_energy: 3.0                # SAF生产工艺能耗(kWh/kg SAF) | SAF production energy (kWh/kg SAF)
-                                           # 包括反应、精制、分离等全过程
+    saf_process_energy: 6.0                # SAF生产工艺能耗(kWh/kg SAF) | SAF production energy
+                                           # 一步法总能耗: RWGS(2.5) + FT(3.5) = 6.0
 
-    mtj_process_energy: 800                # 甲醇制SAF工艺能耗(kWh/t SAF) | MTJ process energy (kWh/t SAF)
-                                           # 包括反应、精制、分离等全过程
+    rwgs_process_energy: 2.5               # RWGS工艺能耗(kWh/kg SAF) | RWGS process energy
+                                           # 高温吸热反应能耗
+
+    ft_process_energy: 3.5                 # FT工艺能耗(kWh/kg SAF) | FT process energy
+                                           # 包括反应、精制、分离等
+
+    # ❌ 移除两步法MTJ参数
+    # mtj_process_energy: 800              # 两步法特有，一步法不需要
 
     renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI (kgCO₂e/kWh)
                                            # 风电/光伏的全生命周期碳排放
@@ -805,17 +811,22 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 1000  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
-                                           # 【修复】从10元/kg放宽至50元/kg
-                                           # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
-                                           # 50元/kg更符合实际成本水平
+  levelized_cost_threshold_yuan_per_kg: 1200  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+                                           # 【一步法调整】从1000元/kg放宽至1200元/kg
+                                           # 一步法投资和运营成本更高，需要放宽阈值
                                            # 用于经济性边界约束
 
   # 设备寿命参数 - Equipment Lifetime
   electrolyzer_lifetime: 15                # 电解槽寿命(年) | Electrolyzer lifetime (years)
                                            # 碱性/PEM电解槽的典型使用寿命
 
-  saf_reactor_lifetime: 25                 # SAF反应器寿命(年) | SAF reactor lifetime (years)
+  rwgs_reactor_lifetime: 20                # RWGS反应器寿命(年) | RWGS reactor lifetime (years)
+                                           # 高温反应器设计使用寿命
+
+  ft_reactor_lifetime: 25                  # FT反应器寿命(年) | FT reactor lifetime (years)
+                                           # 费托合成反应器设计使用寿命
+
+  saf_reactor_lifetime: 25                 # SAF反应器寿命(年) | SAF reactor lifetime (years) (兼容性保留)
                                            # 化工装置的设计使用寿命
 
   pipeline_lifetime: 30                    # 管道寿命(年) | Pipeline lifetime (years)
@@ -844,7 +855,8 @@ economic_parameters:
 
 # =============================================================================
 # 设备原始成本 (Equipment Raw Costs)
-# 电解槽、SAF反应器和储存设施的资本支出(CAPEX)和运营支出(OPEX)
+# RWGS反应器、FT反应器和储存设施的资本支出(CAPEX)和运营支出(OPEX)
+# 一步法需要RWGS + FT双反应器系统
 # =============================================================================
 equipment_raw_costs:
   # 电解槽成本 - Electrolyzer Costs
@@ -855,13 +867,28 @@ equipment_raw_costs:
     opex_raw: 200000                       # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
                                            # 包括维护、备件、人工等固定运营费用
 
-  # SAF反应器成本 - SAF Reactor Costs
-  saf_reactor:
-    capex_raw: 6000000                     # SAF反应器资本支出(元/单位) | SAF reactor CAPEX (yuan/unit)
-                                           # 600万元/套，包含设备采购、安装和调试
+  # 🆕 RWGS反应器成本 - RWGS Reactor Costs (一步法新增)
+  rwgs_reactor:
+    capex_raw: 8000000                     # RWGS反应器资本支出(元/单位) | RWGS reactor CAPEX (yuan/unit)
+                                           # 800万元/套，高温耐压反应器，成本较高
+                                           # 包括设备采购、耐高温材料、安装和调试
 
-    opex_raw: 150000                       # SAF反应器年运营成本(元/年) | SAF reactor annual OPEX (yuan/year)
-                                           # 包括维护、备件、人工等固定运营费用
+    opex_raw: 250000                       # RWGS反应器年运营成本(元/年) | RWGS reactor annual OPEX (yuan/year)
+                                           # 25万元/年，高温设备维护成本高
+                                           # 包括催化剂更换、维护、备件、人工等
+
+  # FT反应器成本 - FT Reactor Costs (原SAF反应器改名并调整)
+  ft_reactor:
+    capex_raw: 7000000                     # FT反应器资本支出(元/单位) | FT reactor CAPEX (yuan/unit)
+                                           # 700万元/套(从600万增加)，包含设备采购、安装和调试
+
+    opex_raw: 180000                       # FT反应器年运营成本(元/年) | FT reactor annual OPEX (yuan/year)
+                                           # 18万元/年(从15万增加)，包括维护、备件、人工等
+
+  # SAF反应器成本 (兼容性保留，指向FT反应器)
+  saf_reactor:
+    capex_raw: 7000000                     # SAF反应器资本支出(元/单位) | SAF reactor CAPEX (yuan/unit)
+    opex_raw: 180000                       # SAF反应器年运营成本(元/年) | SAF reactor annual OPEX (yuan/year)
 
   # 储存设施成本 - Storage Facility Costs
   storage:
@@ -872,20 +899,21 @@ equipment_raw_costs:
 
 # =============================================================================
 # SAF设施平准化成本参数 (SAF Facility LCOE Parameters)
-# 用于计算SAF反应器设施的平准化成本
+# 用于计算RWGS-FT一步法SAF生产设施的平准化成本
+# 一步法投资和运营成本均高于两步法
 # =============================================================================
 facility_lcoe_parameters:
-  fixed_capex: 60000000                    # 固定资本支出(元) | Fixed CAPEX (yuan)
-                                           # SAF设施基础设施建设的固定投资部分
-                                           # 6000万元包括土地、厂房、公用工程等
+  fixed_capex: 80000000                    # 固定资本支出(元) | Fixed CAPEX (yuan)
+                                           # 一步法增加至8000万元(vs 两步法6000万)
+                                           # 包括土地、厂房、公用工程、RWGS高温系统等
 
-  fixed_opex_annual: 18000000              # 年固定运营成本(元/年) | Annual fixed OPEX (yuan/year)
-                                           # 管理、人工、公用事业等固定费用
-                                           # 1800万元/年
+  fixed_opex_annual: 22000000              # 年固定运营成本(元/年) | Annual fixed OPEX (yuan/year)
+                                           # 一步法增加至2200万元/年(vs 两步法1800万)
+                                           # 管理、人工、公用事业、高温设备维护等固定费用
 
-  variable_capex_per_capacity: 35000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 40000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity
+                                           # 一步法增加至4万元/(kg/h)(vs 两步法3.5万)
                                            # 随产能规模变化的投资
-                                           # 3.5万元/(kg/h产能)
                                            # 注意：这里的capacity单位是kg/h(小时产能)
 
   variable_opex_per_kg: 0.8                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
@@ -1040,63 +1068,103 @@ solver_parameters:
 # 技术类型: Green H₂ + CO₂ → SAF (Fischer-Tropsch synthesis)
 # =============================================================================
 technologies:
-  # 绿氢+CO₂制SAF - Green Hydrogen + CO₂ to SAF
-  green_h2_co2_to_saf:
-    name: 绿氢+CO₂费托合成制SAF  # 技术名称 | Technology name
-    technology_type: GreenH2_CO2_FT       # 技术类型 | Technology type
-    transport_mode: renewable_h2_pipeline  # 运输模式：可再生能源电解制氢+管道 | Transport mode
+  # 绿氢+CO₂一步法直接制SAF - Green Hydrogen + CO₂ Direct to SAF (RWGS-FT)
+  green_h2_co2_direct_saf:
+    name: 绿氢+CO₂直接费托合成制SAF (RWGS-FT一步法)  # 技术名称 | Technology name
+    technology_type: GreenH2_CO2_Direct_FT    # 技术类型 | Technology type (一步法)
+    transport_mode: renewable_h2_pipeline     # 运输模式：可再生能源电解制氢+管道 | Transport mode
 
     # 适用位置 - Suitable Locations
     suitable_locations:                   # 可部署位置类型 | Deployable location types
-    - solar_plant                         # 太阳能发电站（修复：匹配代码实际类型）
-    - wind_farm                           # 风电场（修复：匹配代码实际类型）
+    - solar_plant                         # 太阳能发电站
+    - wind_farm                           # 风电场
     - airport                             # 机场附近
     - co2_capture                         # CO₂捕获点
 
-    # 工艺参数 - Process Parameters
-    efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
-                                          # H₂+CO₂到SAF的碳转化效率60%
+    # 工艺参数 - Process Parameters (一步法RWGS-FT)
+    efficiency: 0.58                      # 整体合成效率 | Overall synthesis efficiency
+                                          # RWGS-FT串联工艺的碳转化效率58% (稍低于两步法)
 
-    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 生产1kg SAF需要0.15kg氢气
+    h2_consumption_ratio: 0.19            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 一步法需要更多氢气: 0.19 kg H₂/kg SAF (vs 两步法0.15)
 
-    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 生产1kg SAF需要3.0kg CO₂
+    co2_consumption_ratio: 3.1            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 一步法CO₂消耗略增: 3.1 kg CO₂/kg SAF (vs 两步法3.0)
 
-    # 🆕 两步法转化比例参数（H₂+CO₂→甲醇→SAF）
-    methanol_intermediate_ratio: 3.125    # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
-                                          # 中间产物甲醇的生成比例
+    # ❌ 移除两步法参数 (一步法不需要甲醇中间步骤)
+    # methanol_intermediate_ratio: N/A
+    # methanol_to_saf_ratio: N/A
 
-    methanol_to_saf_ratio: 0.64           # kg SAF/kg甲醇（第二步：甲醇→SAF）
-                                          # 甲醇转化为SAF的转化率
+    # 🆕 一步法特有参数 - RWGS反应阶段 (Reverse Water-Gas Shift)
+    rwgs_temperature_celsius: 700         # RWGS反应温度(°C) | RWGS reactor temperature
+                                          # 高温吸热反应: 600-800°C范围
 
-    co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
-                                          # 负值表示净减排（使用捕获的CO₂）
+    rwgs_pressure_bar: 2.5                # RWGS反应压力(bar) | RWGS reactor pressure
+                                          # 低压运行: 1-4 bar
 
-    # 反应器参数 - Reactor Parameters
-    reactor_temperature_celsius: 250      # 反应器温度(°C) | Reactor temperature
+    rwgs_h2_co2_ratio: 2.5                # RWGS进料H₂/CO₂摩尔比 | RWGS feed H₂/CO₂ ratio
+                                          # 提高CO₂转化率的最优比例
 
-    reactor_pressure_mpa: 3.0             # 反应器压力(MPa) | Reactor pressure
+    rwgs_co2_conversion: 0.85             # RWGS CO₂转化率 | RWGS CO₂ conversion rate
+                                          # 工业可行转化率85%
 
-    catalyst_type: Iron-based             # 催化剂类型 | Catalyst type
-                                          # 铁基催化剂（适合CO₂加氢）
+    rwgs_h2_co_outlet_ratio: 2.0          # RWGS出口H₂/CO比 | RWGS outlet H₂/CO ratio
+                                          # 为FT反应提供理想进料比
 
-    catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
+    rwgs_catalyst_type: Mo-P              # RWGS催化剂类型 | RWGS catalyst type
+                                          # Mo-P催化剂: 高选择性、抗积碳
+
+    rwgs_catalyst_cost_yuan_per_kg_saf: 0.05  # RWGS催化剂成本(元/kg SAF)
+
+    # 🆕 一步法特有参数 - FT反应阶段 (Fischer-Tropsch Synthesis)
+    ft_temperature_celsius: 230           # FT反应温度(°C) | FT reactor temperature
+                                          # 低温费托合成(LTFT): 200-250°C
+
+    ft_pressure_bar: 22                   # FT反应压力(bar) | FT reactor pressure
+                                          # 提高CO转化率和C5+选择性: 20-25 bar
+
+    ft_h2_co_ratio: 2.0                   # FT进料H₂/CO摩尔比 | FT feed H₂/CO ratio
+                                          # FT反应标准化学计量比
+
+    ft_co_conversion: 0.87                # FT CO转化率 | FT CO conversion rate
+                                          # 钴基催化剂高转化率: 85-90%
+
+    ft_c5plus_selectivity: 0.82           # FT C5+选择性 | FT C5+ selectivity
+                                          # 航空燃料范围长链烃选择性: 80-85%
+
+    ft_catalyst_type: Co-TiO2             # FT催化剂类型 | FT catalyst type
+                                          # 钴基催化剂: 工业成熟、高活性
+
+    ft_catalyst_cost_yuan_per_kg_saf: 0.09    # FT催化剂成本(元/kg SAF)
+
+    # 总催化剂成本 (RWGS + FT)
+    catalyst_cost_yuan_per_kg_saf: 0.14   # 总催化剂成本(元/kg SAF) | Total catalyst cost
+                                          # RWGS(0.05) + FT(0.09) = 0.14
+
+    co2_emission_factor: -2.0             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
+                                          # 一步法净负排放: -2.0 kg CO₂eq/kg SAF (vs 两步法-2.5)
+
+    # 反应器参数汇总 - Overall Reactor Parameters
+    reactor_temperature_celsius: 230      # 代表FT反应器温度 | Representative FT temperature
+    reactor_pressure_mpa: 2.2             # 代表FT反应器压力(MPa) | Representative FT pressure (22 bar)
 
     # 能源消耗参数 - Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 6.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
-                                          # 包括压缩、泵送、分离等
+    energy_consumption_kwh_per_kg_saf: 6.0  # 总电力消耗(kWh/kg SAF) | Total electricity consumption
+                                          # 包括RWGS压缩、FT反应、分离等
 
-    heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
-                                          # 反应热的回收利用效率
+    rwgs_process_energy_kwh_per_kg_saf: 2.5   # RWGS工艺能耗(kWh/kg SAF)
+    ft_process_energy_kwh_per_kg_saf: 3.5     # FT工艺能耗(kWh/kg SAF)
+
+    heat_integration_efficiency: 0.75     # 热集成效率 | Heat integration efficiency
+                                          # RWGS吸热+FT放热的热集成效率提升至75%
 
     hydrogen_transport_required: true     # 是否需要氢气运输 | Hydrogen transport required
-                                          # true: 需要从电解槽运输氢气到合成装置
+                                          # true: 需要从电解槽运输氢气到RWGS-FT装置
 
   # 技术复杂度系数 - Technology Complexity Factors
   complexity_factors:
-    green_h2_co2_to_saf: 1.2              # 绿氢+CO₂技术复杂度 | Green H₂+CO₂ complexity
-                                          # 1.2表示比传统路线复杂20%
+    green_h2_co2_direct_saf: 1.35         # 一步法技术复杂度 | Direct FT complexity
+                                          # 1.35表示比两步法更复杂(RWGS高温+FT精密控制)
 
 # =============================================================================
 # 运输约束 (Transport Constraints)
