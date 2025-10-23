@@ -3041,11 +3041,74 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+            # 🚀 性能优化：预先缓存所有氢气管道运输距离（延迟计算模式 + 大批量并行）
+            # 避免在quicksum循环中重复计算，显著提升性能
+            if not hasattr(self, 'hydrogen_distance_cache'):
+                self.hydrogen_distance_cache = {}
+
+                # 收集所有需要计算的路径对
+                h2_route_pairs = [
+                    (h2_loc, mtj_loc)
+                    for h2_loc in self.hydrogen_locations
+                    for mtj_loc in sum(self.mtj_locations.values(), [])
+                    if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
+                    and h2_loc != mtj_loc
+                ]
+
+                total_h2_routes = len(h2_route_pairs)
+                logger.info(f"开始缓存氢气管道运输距离: {total_h2_routes}条路径...")
+                logger.info(f"使用{self.parallel_workers}个并行workers进行批量计算")
+                h2_start_time = time.time()
+
+                # 使用并行处理，批量大小10000
+                batch_size = 10000
+                h2_calculated = 0
+
+                with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                    # 分批处理
+                    for batch_start in range(0, total_h2_routes, batch_size):
+                        batch_end = min(batch_start + batch_size, total_h2_routes)
+                        batch_pairs = h2_route_pairs[batch_start:batch_end]
+
+                        # 并行计算这一批
+                        futures = {
+                            executor.submit(self._get_hydrogen_transport_distance_with_clustering, h2_loc, mtj_loc): (h2_loc, mtj_loc)
+                            for h2_loc, mtj_loc in batch_pairs
+                        }
+
+                        # 收集结果
+                        for future in as_completed(futures):
+                            h2_loc, mtj_loc = futures[future]
+                            try:
+                                distance_km = future.result()
+                                self.hydrogen_distance_cache[(h2_loc, mtj_loc)] = distance_km
+                                h2_calculated += 1
+
+                                # 每1000条输出进度
+                                if h2_calculated % 1000 == 0:
+                                    elapsed = time.time() - h2_start_time
+                                    avg_time = elapsed / h2_calculated
+                                    remaining = (total_h2_routes - h2_calculated) * avg_time
+                                    logger.info(f"氢气距离缓存进度: {h2_calculated}/{total_h2_routes} "
+                                              f"({h2_calculated/total_h2_routes*100:.1f}%), "
+                                              f"预计剩余: {remaining:.1f}秒")
+                            except Exception as e:
+                                logger.warning(f"氢气距离计算失败 {h2_loc} -> {mtj_loc}: {e}")
+                                # 使用默认距离
+                                self.hydrogen_distance_cache[(h2_loc, mtj_loc)] = 50.0
+                                h2_calculated += 1
+
+                h2_elapsed_time = time.time() - h2_start_time
+                logger.info(f"氢气距离缓存完成: {len(self.hydrogen_distance_cache)}条路径, "
+                           f"耗时: {h2_elapsed_time:.2f}秒, "
+                           f"平均速度: {total_h2_routes/h2_elapsed_time:.1f}条/秒")
+
             # 管道运输成本（基于图像拟合的成本函数，已包含所有投资和运营成本）
+            # 使用预先缓存的距离，避免重复计算
             self.cost_expressions['hydrogen_pipeline_operation'] = gp.quicksum(
                 self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] *
                 self._calculate_hydrogen_pipeline_cost_by_distance(
-                    self._get_hydrogen_transport_distance_with_clustering(h2_loc, mtj_loc)
+                    self.hydrogen_distance_cache[(h2_loc, mtj_loc)]  # 从缓存获取距离
                 ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
                 for h2_loc in self.hydrogen_locations
                 for mtj_loc in sum(self.mtj_locations.values(), [])
@@ -3076,44 +3139,65 @@ class GreenHydrogenSupplyChainOptimizer:
         co2_pipeline_cost_cfg = self.config.get('unified_costs', {}).get('co2_transport', {}).get('pipeline', {})
         co2_pipeline_unit_cost = float(co2_pipeline_cost_cfg.get('transport_cost_yuan_per_kg_km', 0.0001))  # 元/(kg·km)
 
-        # 🚀 性能优化：预先缓存所有CO₂管道运输距离（延迟计算模式）
+        # 🚀 性能优化：预先缓存所有CO₂管道运输距离（延迟计算模式 + 大批量并行）
         # 避免在quicksum循环中重复计算，显著提升性能
         if not hasattr(self, 'co2_distance_cache'):
             self.co2_distance_cache = {}
 
-            # 统计需要计算的路径数量
-            total_routes = sum(
-                1 for co2_source_id in self.co2_capture_sources
+            # 收集所有需要计算的路径对
+            route_pairs = [
+                (co2_source_id, methanol_loc)
+                for co2_source_id in self.co2_capture_sources
                 for methanol_loc in sum(self.mtj_locations.values(), [])
                 if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
                 and co2_source_id != methanol_loc
-            )
+            ]
 
+            total_routes = len(route_pairs)
             logger.info(f"开始缓存CO₂管道运输距离: {total_routes}条路径...")
+            logger.info(f"使用{self.parallel_workers}个并行workers进行批量计算")
             start_time = time.time()
 
+            # 使用并行处理，批量大小10000
+            batch_size = 10000
             calculated = 0
-            for co2_source_id in self.co2_capture_sources:
-                for methanol_loc in sum(self.mtj_locations.values(), []):
-                    if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars and co2_source_id != methanol_loc:
-                        cache_key = (co2_source_id, methanol_loc)
-                        self.co2_distance_cache[cache_key] = self._get_co2_transport_distance_with_clustering(
-                            co2_source_id, methanol_loc
-                        )
-                        calculated += 1
 
-                        # 每计算50条路径输出进度
-                        if calculated % 50 == 0:
-                            elapsed = time.time() - start_time
-                            avg_time = elapsed / calculated
-                            remaining = (total_routes - calculated) * avg_time
-                            logger.info(f"CO₂距离缓存进度: {calculated}/{total_routes} "
-                                      f"({calculated/total_routes*100:.1f}%), "
-                                      f"预计剩余: {remaining:.1f}秒")
+            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                # 分批处理
+                for batch_start in range(0, total_routes, batch_size):
+                    batch_end = min(batch_start + batch_size, total_routes)
+                    batch_pairs = route_pairs[batch_start:batch_end]
+
+                    # 并行计算这一批
+                    futures = {
+                        executor.submit(self._get_co2_transport_distance_with_clustering, co2_id, mtj_loc): (co2_id, mtj_loc)
+                        for co2_id, mtj_loc in batch_pairs
+                    }
+
+                    # 收集结果
+                    for future in as_completed(futures):
+                        co2_id, mtj_loc = futures[future]
+                        try:
+                            distance_result = future.result()
+                            self.co2_distance_cache[(co2_id, mtj_loc)] = distance_result
+                            calculated += 1
+
+                            # 每1000条输出进度
+                            if calculated % 1000 == 0:
+                                elapsed = time.time() - start_time
+                                avg_time = elapsed / calculated
+                                remaining = (total_routes - calculated) * avg_time
+                                logger.info(f"CO₂距离缓存进度: {calculated}/{total_routes} "
+                                          f"({calculated/total_routes*100:.1f}%), "
+                                          f"预计剩余: {remaining:.1f}秒")
+                        except Exception as e:
+                            logger.warning(f"CO₂距离计算失败 {co2_id} -> {mtj_loc}: {e}")
+                            calculated += 1
 
             elapsed_time = time.time() - start_time
             logger.info(f"CO₂距离缓存完成: {len(self.co2_distance_cache)}条路径, "
-                       f"耗时: {elapsed_time:.2f}秒")
+                       f"耗时: {elapsed_time:.2f}秒, "
+                       f"平均速度: {total_routes/elapsed_time:.1f}条/秒")
 
         # 验证缓存完整性：确保所有需要的路径都已缓存
         missing_cache_keys = []
@@ -3481,13 +3565,14 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 氢气管道运输碳排放（修复：之前遗漏了这部分）
         # 注：hydrogen_pipeline_transport_vars单位为kg H2/week，h2_pipeline为kg CO2eq/kg·km
+        # 使用预先缓存的距离，避免重复计算
         self.carbon_expressions['h2_pipeline_transport'] = gp.quicksum(
             self.hydrogen_pipeline_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
-            self._get_hydrogen_transport_distance_with_clustering(h2_loc, mtj_loc) * h2_pipeline
+            self.hydrogen_distance_cache.get((h2_loc, mtj_loc), 50.0) * h2_pipeline  # 从缓存获取距离
             for h2_loc in self.hydrogen_locations
             for mtj_loc in self.locations
             if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
-        ) if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars else gp.LinExpr(0)
+        ) if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars and hasattr(self, 'hydrogen_distance_cache') else gp.LinExpr(0)
 
         # 氢气总运输碳排放（【禁用罐车运输】仅包含管道运输）
         self.carbon_expressions['h2_transport'] = (
@@ -5344,7 +5429,8 @@ class GreenHydrogenSupplyChainOptimizer:
                     from_coords = self._get_location_coordinates(h_loc)
                     to_coords = self._get_location_coordinates(mtj_loc)
 
-                    distance_km = self._get_hydrogen_transport_distance_with_clustering(h_loc, mtj_loc)
+                    distance_km = self.hydrogen_distance_cache.get((h_loc, mtj_loc),
+                                    self._get_hydrogen_transport_distance_with_clustering(h_loc, mtj_loc))
 
                     cluster_id = None
                     cluster_center = None
@@ -6673,7 +6759,22 @@ class GreenHydrogenSupplyChainOptimizer:
     def _load_co2_capture_data(self):
         """加载CO₂捕获源数据"""
         try:
+<<<<<<< HEAD
             from src.co2.co2_capture_calculator import CO2CaptureCalculator
+=======
+            # 尝试多种导入路径
+            CO2CaptureCalculator = None
+            try:
+                from ..co2.co2_capture_calculator import CO2CaptureCalculator
+            except ImportError:
+                try:
+                    from src.co2.co2_capture_calculator import CO2CaptureCalculator
+                except ImportError:
+                    from co2.co2_capture_calculator import CO2CaptureCalculator
+
+            if CO2CaptureCalculator is None:
+                raise ImportError("无法导入CO2CaptureCalculator模块")
+>>>>>>> 5264d59a1a981f893d6d912d3c7b8b7f93accaeb
 
             project_root = get_project_base_dir()
 
