@@ -35,8 +35,13 @@ from pathlib import Path
 from typing import Optional, Dict, Any, Union
 from datetime import datetime
 
-# 添加项目根目录到Python路径
-project_root = Path(__file__).resolve().parents[2]
+# 添加项目路径到Python路径
+# __file__ 是 src/runner/unified_optimizer_runner.py
+# parents[2] 是 green_hydrogen_supply_chain_optimization/
+# parents[5] 是项目根目录 green_methanol_for_port_transportation-main/
+project_root = Path(__file__).resolve().parents[2]  # green_hydrogen_supply_chain_optimization/
+repo_root = Path(__file__).resolve().parents[5]     # green_methanol_for_port_transportation-main/
+
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
@@ -128,7 +133,8 @@ class UnifiedSAFOptimizer:
         if process_type == 'custom':
             self.config_path = Path(config_path)
         else:
-            self.config_path = project_root / self.CONFIG_MAPPING[process_type]
+            # 配置文件在项目根目录的shared/data/下
+            self.config_path = repo_root / self.CONFIG_MAPPING[process_type]
 
         if not self.config_path.exists():
             raise FileNotFoundError(f"Configuration file not found: {self.config_path}")
