@@ -34,16 +34,20 @@ python run_optimizer.py --process one_step --config shared/data/my_config.yaml -
 
 ## 命令行参数
 
-| 参数 | 必选 | 默认值 | 说明 |
-|------|-----|--------|------|
-| `--process` | ✓ | - | `two_step` 或 `one_step` |
-| `--config` | ✗ | 内置配置 | 自定义配置文件路径 |
-| `--threads` | ✗ | CPU核心数-2 | Gurobi求解器线程数 |
-| `--parallel-workers` | ✗ | CPU核心数 | 数据处理+距离计算并行数 |
-| `--time-limit` | ✗ | 3600 | 求解时间限制(秒) |
-| `--mip-gap` | ✗ | 0.01 | MIP优化间隙(1%) |
-| `--weeks` | ✗ | 1 | 优化时间范围(周) |
-| `--log-level` | ✗ | INFO | 日志级别 |
+| 参数 | 必选 | 默认值 | 说明 | 控制阶段 |
+|------|-----|--------|------|---------|
+| `--process` | ✓ | - | `two_step` 或 `one_step` | - |
+| `--config` | ✗ | 内置配置 | 自定义配置文件路径 | - |
+| `--threads` | ✗ | CPU核心数-2 | **Gurobi求解器**线程数 | Stage 3 |
+| `--parallel-workers` | ✗ | CPU核心数 | **数据处理+距离计算**并行数 | Stage 1+2 |
+| `--time-limit` | ✗ | 3600 | 求解时间限制(秒) | Stage 3 |
+| `--mip-gap` | ✗ | 0.01 | MIP优化间隙(1%) | Stage 3 |
+| `--weeks` | ✗ | 1 | 优化时间范围(周) | - |
+| `--log-level` | ✗ | INFO | 日志级别 | - |
+
+**重要说明**:
+- `--threads`: 只影响**Gurobi求解器**阶段（Stage 3）
+- `--parallel-workers`: 同时影响**数据处理**（Stage 1）和**距离计算**（Stage 2），包括GraphHopper API并行调用，实现30-60倍加速
 
 ## 性能配置建议
 

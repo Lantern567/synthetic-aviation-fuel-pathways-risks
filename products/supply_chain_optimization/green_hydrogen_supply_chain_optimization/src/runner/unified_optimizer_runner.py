@@ -73,6 +73,7 @@ class UnifiedSAFOptimizer:
         time_limit: int = 3600,
         mip_gap: float = 0.01,
         time_horizon_weeks: int = 1,
+        parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
         airport_excel_path: Optional[str] = None,
         results_dir: Optional[str] = None,
@@ -88,10 +89,11 @@ class UnifiedSAFOptimizer:
                 - 'two_step': 两步法 (H₂+CO₂→甲醇→SAF)
                 - 'one_step': 一步法 (H₂+CO₂→RWGS→FT→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
-            threads: CPU线程数,None时自动检测(推荐cpu_count-2)
+            threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
             time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
             mip_gap: MIP相对最优间隙,默认0.01(1%)
             time_horizon_weeks: 优化时间范围(周数),默认1周
+            parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
             airport_excel_path: 机场数据Excel路径,None时使用默认
             results_dir: 结果保存目录,None时使用默认
@@ -135,6 +137,7 @@ class UnifiedSAFOptimizer:
 
         # CPU线程数设置
         self.threads = self._determine_threads(threads)
+        self.parallel_workers = parallel_workers  # 保存parallel_workers参数
         self.time_limit = time_limit
         self.mip_gap = mip_gap
 
@@ -269,9 +272,16 @@ class UnifiedSAFOptimizer:
         try:
             # Step 1: 初始化优化器
             self.logger.info("\n[Step 1/4] Initializing optimizer...")
+
+            # 准备override_params传递parallel_workers
+            override_params = {}
+            if self.parallel_workers is not None:
+                override_params['parallel_workers'] = self.parallel_workers
+
             self.optimizer = GreenHydrogenSupplyChainOptimizer(
                 time_horizon_weeks=self.time_horizon_weeks,
                 osm_pbf_path=self.osm_pbf_path,
+                override_params=override_params if override_params else None,
             )
             self._monitor_memory()
             self.logger.info("Optimizer initialized successfully")
