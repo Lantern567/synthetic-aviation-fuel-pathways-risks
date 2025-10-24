@@ -70,8 +70,8 @@ class CO2ClusteringOptimizer:
 
     def _dbscan_cluster(self, coords_rad: np.ndarray, eps_rad: float, min_samples: int) -> np.ndarray:
         """
-        手写DBSCAN聚类算法（基于Haversine距离）
-        替换sklearn.cluster.DBSCAN，消除NumPy版本冲突
+        手写DBSCAN聚类算法（基于Haversine距离）- 优化版本
+        使用向量化计算加速距离矩阵计算，将O(n²)的多次调用优化为一次矩阵运算
 
         Args:
             coords_rad: 坐标数组（弧度），shape (n, 2) - [lat_rad, lon_rad]
@@ -85,27 +85,28 @@ class CO2ClusteringOptimizer:
         labels = np.full(n_points, -1, dtype=int)  # -1表示未访问
         cluster_id = 0
 
+        # 🚀 性能优化：预计算所有点对之间的距离矩阵（向量化）
+        # 将O(n²)的重复计算优化为一次矩阵运算
+        logger.info(f"预计算{n_points}个CO2源的距离矩阵（向量化）...")
+
+        lats = coords_rad[:, 0]  # shape: (n,)
+        lons = coords_rad[:, 1]  # shape: (n,)
+
+        # 广播计算：lat差值矩阵 (n, n)
+        dlat = lats[:, np.newaxis] - lats[np.newaxis, :]  # shape: (n, n)
+        dlon = lons[:, np.newaxis] - lons[np.newaxis, :]  # shape: (n, n)
+
+        # 向量化Haversine公式
+        a = np.sin(dlat/2)**2 + np.cos(lats[:, np.newaxis]) * np.cos(lats[np.newaxis, :]) * np.sin(dlon/2)**2
+        distance_rad_matrix = 2 * np.arctan2(np.sqrt(a), np.sqrt(1-a))  # shape: (n, n)
+
+        # 创建邻接矩阵：距离 <= eps 的为True
+        adjacency_matrix = distance_rad_matrix <= eps_rad  # shape: (n, n)
+        logger.info(f"距离矩阵计算完成，平均每个点的邻居数: {adjacency_matrix.sum(axis=1).mean():.1f}")
+
         def get_neighbors(point_idx: int) -> List[int]:
-            """获取点的所有邻居（Haversine距离 <= eps）"""
-            neighbors = []
-            lat1, lon1 = coords_rad[point_idx]
-
-            for i in range(n_points):
-                if i == point_idx:
-                    neighbors.append(i)
-                    continue
-
-                lat2, lon2 = coords_rad[i]
-                # Haversine距离计算
-                dlat = lat2 - lat1
-                dlon = lon2 - lon1
-                a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-                c = 2 * atan2(sqrt(a), sqrt(1-a))
-
-                if c <= eps_rad:
-                    neighbors.append(i)
-
-            return neighbors
+            """从预计算的邻接矩阵获取邻居（O(1)查询）"""
+            return np.where(adjacency_matrix[point_idx])[0].tolist()
 
         def expand_cluster(point_idx: int, neighbors: List[int], cluster_id: int):
             """扩展聚类（深度优先搜索）"""

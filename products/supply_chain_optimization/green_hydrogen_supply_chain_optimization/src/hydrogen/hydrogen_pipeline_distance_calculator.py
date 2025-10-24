@@ -66,14 +66,14 @@ except ImportError:
 class HydrogenPipelineDistanceCalculator:
     """氢气管道运输距离计算器"""
 
-    def __init__(self, gis_data_path: str, enable_cache: bool = True,
+    def __init__(self, gis_data_path: str, enable_cache: bool = False,
                  cache_dir: str = None, use_unified_config: bool = True):
         """
         初始化计算器
 
         Args:
             gis_data_path: GIS数据目录路径
-            enable_cache: 是否启用计算缓存
+            enable_cache: 是否启用计算缓存（默认False，数据库缓存查询比计算更慢）
             cache_dir: 缓存目录路径
             use_unified_config: 是否使用统一配置系统
         """

@@ -224,7 +224,7 @@ class TransportRouteVisualizer:
                 graphhopper_host="localhost",
                 graphhopper_port=8989,
                 cache_dir=str(self.graphhopper_cache_path.parent),
-                enable_cache=True
+                enable_cache=False  # 禁用数据库缓存（查询比计算更慢）
             )
             
             # 获取详细路径（包含路径坐标）
