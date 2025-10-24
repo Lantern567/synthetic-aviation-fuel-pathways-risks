@@ -6759,9 +6759,7 @@ class GreenHydrogenSupplyChainOptimizer:
     def _load_co2_capture_data(self):
         """加载CO₂捕获源数据"""
         try:
-<<<<<<< HEAD
             from src.co2.co2_capture_calculator import CO2CaptureCalculator
-=======
             # 尝试多种导入路径
             CO2CaptureCalculator = None
             try:
@@ -6774,7 +6772,6 @@ class GreenHydrogenSupplyChainOptimizer:
 
             if CO2CaptureCalculator is None:
                 raise ImportError("无法导入CO2CaptureCalculator模块")
->>>>>>> 5264d59a1a981f893d6d912d3c7b8b7f93accaeb
 
             project_root = get_project_base_dir()
 
