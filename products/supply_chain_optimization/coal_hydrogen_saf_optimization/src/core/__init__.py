@@ -1,7 +1,11 @@
-"""
-核心优化模型模块
-"""
+﻿"""Core optimizer exports."""
 
-from .green_hydrogen_optimization_model import GreenHydrogenSupplyChainOptimizer
+from .coal_hydrogen_optimization_model import CoalHydrogenSAFOptimizer
 
-__all__ = ['GreenHydrogenSupplyChainOptimizer']
+try:
+    from .green_hydrogen_optimization_model import GreenHydrogenSupplyChainOptimizer
+except ModuleNotFoundError:  # Optional dependency (Gurobi)
+    GreenHydrogenSupplyChainOptimizer = None
+
+__all__ = ["CoalHydrogenSAFOptimizer", "GreenHydrogenSupplyChainOptimizer"]
+
