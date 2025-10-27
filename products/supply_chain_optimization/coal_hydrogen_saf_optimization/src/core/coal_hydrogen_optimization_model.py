@@ -5105,7 +5105,7 @@ class CoalHydrogenSAFOptimizer:
             total_h2_pipeline = sum_var_dict(getattr(self, 'hydrogen_pipeline_transport_vars', {}))
             total_methanol = sum_var_dict(getattr(self, 'methanol_production_vars', {}))
             total_saf = sum_var_dict(getattr(self, 'production_vars', {}))
-            total_co2_pipeline = sum_var_dict(getattr(self, 'co2_pipeline_transport_vars', {}))
+            total_coal_purchase = sum_var_dict(getattr(self, 'coal_purchase_vars', {}))  # v3.0: 煤炭采购
             total_shortage = sum_var_dict(getattr(self, 'shortage_vars', {}))
 
             logger.info("[调试] 求解后关键变量汇总：")
@@ -5113,7 +5113,7 @@ class CoalHydrogenSAFOptimizer:
             logger.info(f"    氢气管道运输总量: {total_h2_pipeline:,.2f} kg")
             logger.info(f"    甲醇总产量: {total_methanol:,.2f} kg")
             logger.info(f"    SAF 总产量: {total_saf:,.2f} kg")
-            logger.info(f"    CO₂ 管道运输总量: {total_co2_pipeline:,.2f} kg")
+            logger.info(f"    煤炭采购总量: {total_coal_purchase:,.2f} kg (v3.0)")  # v3.0: 替换CO₂运输
             logger.info(f"    缺货总量: {total_shortage:,.2f} kg")
 
             h2_prod_by_location = aggregate_by_index(getattr(self, 'hydrogen_production_vars', {}), 0)
@@ -5361,79 +5361,36 @@ class CoalHydrogenSAFOptimizer:
             print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
         print("=======================\n")
 
-        # 提取CO2管道运输数据（与氢气运输类似，包含聚类信息）
-        solution['co2_transport'] = {}
-        co2_pipeline_count = 0
-        co2_pipeline_positive = 0
+        # v3.0: 提取煤炭采购数据（替代CO₂运输）
+        solution['coal_purchase'] = {}
+        coal_purchase_count = 0
+        coal_purchase_positive = 0
 
-        if hasattr(self, 'co2_pipeline_transport_vars') and self.co2_pipeline_transport_vars:
-            for (co2_source_id, mtj_loc), var in self.co2_pipeline_transport_vars.items():
-                co2_pipeline_count += 1
+        if hasattr(self, 'coal_purchase_vars') and self.coal_purchase_vars:
+            for (methanol_loc, week), var in self.coal_purchase_vars.items():
+                coal_purchase_count += 1
                 if var.x > 0:
-                    co2_pipeline_positive += 1
-                    transport_key = f"{co2_source_id}_{mtj_loc}_co2_pipeline"
+                    coal_purchase_positive += 1
+                    purchase_key = f"{methanol_loc}_week_{week}"
 
-                    # 获取CO2源和目的地坐标
-                    co2_source = self.co2_capture_sources.get(co2_source_id, {})
-                    co2_coords = (co2_source.get('latitude', 0), co2_source.get('longitude', 0))
-                    mtj_coords = self._get_location_coordinates(mtj_loc)
-
-                    # 从缓存获取距离和聚类信息
-                    distance_info = self.co2_distance_cache.get((co2_source_id, mtj_loc), {})
-                    if isinstance(distance_info, dict):
-                        distance_km = distance_info.get('total_distance_km', 0)
-                        layer1_distance = distance_info.get('layer1_distance_km', 0)
-                        layer2_distance = distance_info.get('layer2_distance_km', 0)
-                        layer3_distance = distance_info.get('layer3_distance_km', 0)
-                        cluster_id = distance_info.get('cluster_id')
-                        cluster_center = distance_info.get('cluster_center_coords')
-                        route_coordinates = distance_info.get('route_coordinates', [])
-                        is_noise = distance_info.get('is_noise', False)
-                    else:
-                        # 兼容旧的float格式
-                        distance_km = float(distance_info) if distance_info else 0
-                        layer1_distance = 0
-                        layer2_distance = 0
-                        layer3_distance = distance_km
-                        cluster_id = None
-                        cluster_center = None
-                        route_coordinates = []
-                        is_noise = False
-
-                    solution['co2_transport'][transport_key] = {
-                        'from_location': co2_source_id,
-                        'to_location': mtj_loc,
-                        'transport_kg_co2': var.x,  # CO2运输量 (kg/week)
-                        'distance_km': distance_km,
-                        'from_latitude': co2_coords[0],
-                        'from_longitude': co2_coords[1],
-                        'to_latitude': mtj_coords[0],
-                        'to_longitude': mtj_coords[1],
-                        'route_coordinates': route_coordinates,
-                        'transport_type': 'CO2',
-                        'transport_mode': 'pipeline',
-                        'cluster_id': cluster_id,
-                        'cluster_center': cluster_center,
-                        'layer1_distance_km': layer1_distance,
-                        'layer2_distance_km': layer2_distance,
-                        'layer3_distance_km': layer3_distance,
-                        'is_noise': is_noise
+                    solution['coal_purchase'][purchase_key] = {
+                        'location': methanol_loc,
+                        'week': week,
+                        'coal_kg': var.x,  # 煤炭采购量 (kg/week)
+                        'co2_generated_kg': var.x * self.coal_supply.co2_per_kg_coal  # 气化产生CO₂量
                     }
 
-        # 输出CO2运输统计信息
-        print(f"\n=== CO2管道运输决策统计 ===")
-        print(f"CO2管道运输变量: {co2_pipeline_count} 个, 其中非零: {co2_pipeline_positive} 个")
-        print(f"总CO2运输记录: {len(solution['co2_transport'])} 条")
-        if solution['co2_transport']:
-            total_co2_transport = sum(info['transport_kg_co2'] for info in solution['co2_transport'].values())
-            print(f"总CO2运输量: {total_co2_transport:.2f} kg/week")
-
-            # 统计聚类和独立点
-            co2_clustered = sum(1 for info in solution['co2_transport'].values()
-                              if info['cluster_id'] is not None and info['cluster_id'] >= 0)
-            co2_noise = sum(1 for info in solution['co2_transport'].values() if info.get('is_noise', False))
-            print(f"  - 聚类路径: {co2_clustered} 条")
-            print(f"  - 独立点路径: {co2_noise} 条")
+        # 输出煤炭采购统计信息
+        print(f"\n=== 煤炭采购决策统计 (v3.0) ===")
+        print(f"煤炭采购变量: {coal_purchase_count} 个, 其中非零: {coal_purchase_positive} 个")
+        print(f"总煤炭采购记录: {len(solution['coal_purchase'])} 条")
+        if solution['coal_purchase']:
+            total_coal = sum(info['coal_kg'] for info in solution['coal_purchase'].values())
+            total_co2_from_coal = sum(info['co2_generated_kg'] for info in solution['coal_purchase'].values())
+            print(f"总煤炭采购量: {total_coal:.2f} kg")
+            print(f"气化产生CO₂总量: {total_co2_from_coal:.2f} kg")
+            print(f"煤炭价格: {self.coal_supply.coal_price_yuan_per_ton} 元/吨")
+            print(f"CO₂产率: {self.coal_supply.co2_per_kg_coal} kg CO₂/kg 煤")
         print("=======================\n")
 
         # 提取库存信息
