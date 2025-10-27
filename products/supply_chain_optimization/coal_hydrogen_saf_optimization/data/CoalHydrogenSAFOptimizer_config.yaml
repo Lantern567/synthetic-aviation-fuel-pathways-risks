@@ -327,6 +327,44 @@ carbon_emission_parameters:
     green_h2_intensity: 1.1                # 绿氢碳强度(kgCO₂e/kg H₂) | Green H₂ CI (kgCO₂e/kg H₂)
                                            # 已包含电解能耗 55 kWh/kg × 0.02 kgCO₂e/kWh = 1.1
 
+    # ========================================================================
+    # 煤炭特有碳排放参数 - Coal-Specific Carbon Emission Parameters
+    # ========================================================================
+    coal_mining_emission: 0.04             # 煤炭开采碳排放(kgCO₂e/kg coal) | Coal mining emissions
+                                           # 包括开采、通风、排水等过程的碳排放
+                                           # 来源：IPCC Guidelines for National GHG Inventories
+
+    coal_transport_emission: 0.05          # 煤炭运输碳排放(kgCO₂e/kg coal) | Coal transport emissions
+                                           # 假设平均运输距离200km，柴油卡车运输
+                                           # 基于: 0.25 kgCO₂e/t·km × 200 km = 0.05 kgCO₂e/kg
+
+    coal_gasification_direct_emission: 0.15  # 煤炭气化过程直接排放(kgCO₂e/kg coal) | Coal gasification direct emissions
+                                           # 气化过程中的直接工艺排放
+                                           # 不包括CO₂产品本身
+
+    coal_gasification_energy_kwh_per_kg: 2.22  # 煤炭气化能耗(kWh/kg coal) | Coal gasification energy consumption
+                                           # 8 MJ/kg ÷ 3.6 MJ/kWh = 2.22 kWh/kg coal
+                                           # 气化炉加热、压缩等能耗
+
+    gasification_electricity_intensity: 0.6  # 气化用电碳强度(kgCO₂e/kWh) | Gasification electricity CI
+                                           # 使用电网电力，中国电网平均碳强度
+                                           # 来源：中国电网排放因子
+
+    co2_capture_energy_kwh_per_ton: 120    # CO₂捕获能耗(kWh/ton CO₂) | CO₂ capture energy consumption
+                                           # 后燃烧捕获技术能耗
+                                           # 来源：IEA CCS Report 2024
+
+    co2_capture_efficiency: 0.85           # CO₂捕获率 | CO₂ capture efficiency
+                                           # 实际捕获率85%，15%逸散到大气
+                                           # 来源：Global CCS Institute
+
+    coal_co2_yield_kg_per_kg: 2.44         # 单位煤炭CO₂产量(kg CO₂/kg coal) | CO₂ yield per kg coal
+                                           # 完全燃烧理论值（基于碳含量）
+                                           # C + O₂ → CO₂: 12 → 44, 碳含量75%: 0.75 × 44/12 = 2.44
+
+    coal_consumption_kg_per_kg_saf: 1.8    # 单位SAF煤炭消耗(kg coal/kg SAF) | Coal consumption per kg SAF
+                                           # 基于煤炭气化CO₂产率和SAF转化效率
+
   # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
     h2_storage_energy: 2                   # 氢气储存能耗(kWh/kg/天) | H₂ storage energy (kWh/kg/day)

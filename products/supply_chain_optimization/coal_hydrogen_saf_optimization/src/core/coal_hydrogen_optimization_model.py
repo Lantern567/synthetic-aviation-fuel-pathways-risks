@@ -3297,8 +3297,95 @@ class CoalHydrogenSAFOptimizer:
         # =========================================================================
         # 1. 原料获取阶段碳排放 (Raw Material Extraction)
         # =========================================================================
-        # 绿氢供应链：原料主要是CO₂捕获（已在捕获成本中包含能耗排放）
-        # 此处不再需要天然气开采排放
+        # 煤炭供应链特有碳排放：煤炭开采、运输、气化过程
+
+        # 从配置获取煤炭碳排放参数
+        coal_mining = production.get('coal_mining_emission', 0.04)  # kg CO2e/kg coal
+        coal_transport = production.get('coal_transport_emission', 0.05)  # kg CO2e/kg coal
+        coal_gasif_direct = production.get('coal_gasification_direct_emission', 0.15)  # kg CO2e/kg coal
+        coal_gasif_energy = production.get('coal_gasification_energy_kwh_per_kg', 2.22)  # kWh/kg coal
+        gasif_elec_intensity = production.get('gasification_electricity_intensity', 0.6)  # kg CO2e/kWh
+        co2_capture_energy = production.get('co2_capture_energy_kwh_per_ton', 120)  # kWh/ton CO2
+        co2_capture_eff = production.get('co2_capture_efficiency', 0.85)  # 85%
+        coal_co2_yield = production.get('coal_co2_yield_kg_per_kg', 2.44)  # kg CO2/kg coal
+        coal_consumption = production.get('coal_consumption_kg_per_kg_saf', 1.8)  # kg coal/kg SAF
+
+        # 1.1 煤炭开采排放
+        # 排放 = SAF产量 × 单位SAF煤炭消耗 × 开采排放因子
+        self.carbon_expressions['coal_mining'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_mining  # kg SAF × kg coal/kg SAF × kg CO2e/kg coal
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 1.2 煤炭运输排放
+        self.carbon_expressions['coal_transport'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_transport
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 1.3 煤炭气化过程直接排放（不包括CO₂产品）
+        self.carbon_expressions['coal_gasification_direct'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_gasif_direct
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 1.4 煤炭气化能耗排放
+        # 气化能耗排放 = SAF产量 × 煤炭消耗 × 气化能耗 × 电网碳强度
+        self.carbon_expressions['coal_gasification_energy'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_gasif_energy * gasif_elec_intensity
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 1.5 气化产生的CO₂逸散排放（未被捕获部分）
+        # CO₂逸散 = SAF产量 × 煤炭消耗 × CO₂产量 × (1 - 捕获率)
+        co2_fugitive_rate = 1.0 - co2_capture_eff  # 15%逸散率
+        self.carbon_expressions['coal_co2_fugitive'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_co2_yield * co2_fugitive_rate
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 1.6 CO₂捕获能耗排放
+        # 捕获能耗排放 = SAF产量 × 煤炭消耗 × CO₂产量 × 捕获率 × 捕获能耗 × 电网碳强度
+        self.carbon_expressions['co2_capture_energy'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            coal_consumption * coal_co2_yield * co2_capture_eff *
+            (co2_capture_energy / 1000) * gasif_elec_intensity  # kWh/ton → kWh/kg
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        logger.info("煤炭碳排放参数:")
+        logger.info(f"  煤炭开采排放: {coal_mining} kg CO2e/kg coal")
+        logger.info(f"  煤炭运输排放: {coal_transport} kg CO2e/kg coal")
+        logger.info(f"  气化直接排放: {coal_gasif_direct} kg CO2e/kg coal")
+        logger.info(f"  气化能耗: {coal_gasif_energy} kWh/kg coal")
+        logger.info(f"  气化电网碳强度: {gasif_elec_intensity} kg CO2e/kWh")
+        logger.info(f"  CO₂捕获率: {co2_capture_eff*100:.1f}%")
+        logger.info(f"  CO₂逸散率: {co2_fugitive_rate*100:.1f}%")
+        logger.info(f"  单位SAF煤炭消耗: {coal_consumption} kg coal/kg SAF")
+        logger.info(f"  单位煤炭CO₂产量: {coal_co2_yield} kg CO2/kg coal")
 
         # =========================================================================
         # 2. 设施建设阶段碳排放（年摊销）(Facility Construction)
@@ -3497,8 +3584,15 @@ class CoalHydrogenSAFOptimizer:
         # =========================================================================
 
         # 各类别汇总
-        # 绿氢供应链：无原料开采排放（CO₂来自捕获，电力来自可再生能源）
-        self.carbon_aggregates['raw_material_emissions'] = gp.LinExpr(0)
+        # 煤炭基SAF供应链：包含煤炭全生命周期排放
+        self.carbon_aggregates['raw_material_emissions'] = (
+            self.carbon_expressions['coal_mining'] +
+            self.carbon_expressions['coal_transport'] +
+            self.carbon_expressions['coal_gasification_direct'] +
+            self.carbon_expressions['coal_gasification_energy'] +
+            self.carbon_expressions['coal_co2_fugitive'] +
+            self.carbon_expressions['co2_capture_energy']
+        )
 
         self.carbon_aggregates['facility_emissions'] = (
             self.carbon_expressions['saf_facility'] +
