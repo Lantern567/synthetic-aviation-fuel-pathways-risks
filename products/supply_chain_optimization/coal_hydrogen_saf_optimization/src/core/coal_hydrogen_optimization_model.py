@@ -462,7 +462,7 @@ class CoalHydrogenSAFOptimizer:
         4. 获取结果: results = optimizer.get_optimization_results()
 
     配置文件:
-        shared/data/CoalSupplyManager_config.yaml
+        products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml
         - basic_parameters: 基础参数(时间范围、路径规划等)
         - coal_parameters: 煤炭供应和气化参数 (v3.0)
         - hydrogen_parameters: H₂生产和运输参数
@@ -601,7 +601,14 @@ class CoalHydrogenSAFOptimizer:
         if config_path is None:
             # 使用默认配置文件路径 (v3.0煤炭气化路线)
             project_root = get_project_base_dir()
-            config_path = os.path.join(project_root, "shared", "data", "CoalSupplyManager_config.yaml")
+            config_path = os.path.join(
+                project_root,
+                "products",
+                "supply_chain_optimization",
+                "coal_hydrogen_saf_optimization",
+                "data",
+                "CoalHydrogenSAFOptimizer_config.yaml"
+            )
         
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"配置文件不存在: {config_path}")
@@ -709,7 +716,7 @@ class CoalHydrogenSAFOptimizer:
 
         Args:
             config_path (str, optional): YAML配置文件路径。
-                默认: shared/data/CoalSupplyManager_config.yaml (v3.0)
+                默认: products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml
 
             **override_params: 关键字参数覆盖配置文件参数。
                 常用覆盖参数:
