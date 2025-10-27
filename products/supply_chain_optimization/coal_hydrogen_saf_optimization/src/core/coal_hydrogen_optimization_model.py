@@ -329,23 +329,20 @@ def _calculate_distance_worker(args):
     """并行计算单对位置间距离的worker函数
 
     Args:
-        args: (optimizer_instance, loc1, loc2) 元组
-            optimizer_instance可以是routing_engine或距离计算方法
+        args: (routing_engine, locations, loc1, loc2) 元组
 
     Returns:
         tuple: ((loc1, loc2), distance_km)
     """
-    routing_engine, locations, co2_sources, loc1, loc2 = args
+    routing_engine, locations, loc1, loc2 = args
 
-    # 辅助函数：从多个数据源查找位置坐标
+    # 辅助函数：从locations中获取位置坐标
     def get_location_coords(loc_name):
-        """从locations或co2_capture_sources中获取位置坐标"""
+        """从locations中获取位置坐标（v3.0: 仅使用locations）"""
         if loc_name in locations:
             return locations[loc_name]['latitude'], locations[loc_name]['longitude']
-        elif loc_name in co2_sources:
-            return co2_sources[loc_name]['latitude'], co2_sources[loc_name]['longitude']
         else:
-            raise KeyError(f"位置 '{loc_name}' 既不在 locations 也不在 co2_capture_sources 中")
+            raise KeyError(f"位置 '{loc_name}' 不在 locations 中")
 
     try:
         # 获取两个位置的坐标
@@ -1637,7 +1634,8 @@ class CoalHydrogenSAFOptimizer:
         # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
         self._build_mtj_locations()
         self._initialize_hydrogen_clustering()
-        self._initialize_co2_clustering()
+        # v3.0: 煤炭气化路线不需要CO₂聚类
+        # self._initialize_co2_clustering()
 
     def _initialize_hydrogen_clustering(self):
         if not self.config.get('basic_parameters', {}).get('use_hydrogen_pipeline_distance', False):
@@ -1720,7 +1718,11 @@ class CoalHydrogenSAFOptimizer:
             )
 
     def _initialize_co2_clustering(self):
-        """初始化CO2捕获源聚类（与氢气聚类类似）"""
+        """初始化CO2捕获源聚类（v3.0: 已禁用，煤炭气化路线不需要CO₂捕获和运输）"""
+        logger.info("v3.0煤炭气化路线不需要CO₂聚类，跳过初始化")
+        return
+
+        # 以下代码在v3.0中不再使用（保留供参考）
         # 检查是否启用CO2管道距离计算
         if not self.config.get('basic_parameters', {}).get('use_co2_pipeline_distance', False):
             logger.info("CO2管道距离计算未启用，跳过CO2聚类初始化")
@@ -2680,8 +2682,8 @@ class CoalHydrogenSAFOptimizer:
         # 9.1. 氢能管道运输约束
         self._add_hydrogen_pipeline_transport_constraints()
 
-        # 10. CO₂供应平衡约束（周级）
-        self._add_co2_supply_balance_constraints()
+        # v3.0: 煤炭气化路线不需要CO₂供应平衡约束（CO₂来自煤炭气化）
+        # self._add_co2_supply_balance_constraints()
 
         # 11. 甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
         self._add_methanol_production_constraints()
@@ -4792,8 +4794,14 @@ class CoalHydrogenSAFOptimizer:
 
     def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> dict:
         """
-        使用CO2聚类和管道路权算法计算CO₂管道运输距离（三层结构）
+        使用CO2聚类和管道路权算法计算CO₂管道运输距离（v3.0: 已禁用）
 
+        v3.0煤炭气化路线不需要CO₂运输，此方法保留供参考。
+        """
+        raise NotImplementedError("v3.0煤炭气化路线不需要CO₂运输距离计算")
+
+        # 以下代码在v3.0中不再使用（保留供参考）
+        """
         三层运输结构：
         - Layer 1: CO2捕获源 -> 聚类中心（直线距离）
         - Layer 2: 聚类中心 -> 管道接入点（管道距离）
@@ -6893,7 +6901,7 @@ class CoalHydrogenSAFOptimizer:
 
             # 准备并行计算的参数
             distance_args = [
-                (self.routing_engine, self.locations, self.co2_capture_sources, loc1, loc2)
+                (self.routing_engine, self.locations, loc1, loc2)
                 for loc1, loc2 in location_pairs
             ]
 
@@ -6932,7 +6940,7 @@ class CoalHydrogenSAFOptimizer:
 
             # 准备并行计算的参数
             airport_args = [
-                (self.routing_engine, self.locations, self.co2_capture_sources, loc, airport)
+                (self.routing_engine, self.locations, loc, airport)
                 for loc, airport in airport_pairs
             ]
 
@@ -6958,8 +6966,16 @@ class CoalHydrogenSAFOptimizer:
 
 
     def _add_co2_supply_balance_constraints(self):
-        """添加CO₂供应平衡约束（周级）
+        """添加CO₂供应平衡约束（v3.0: 已禁用，煤炭气化路线通过CO₂库存平衡约束处理）
 
+        v3.0变更：CO₂供应来自煤炭气化，通过_add_co2_inventory_balance_constraints()中
+        的库存平衡约束直接处理，不再需要单独的周级供应平衡约束。
+        """
+        logger.info("v3.0煤炭气化路线不需要CO₂供应平衡约束，跳过")
+        return
+
+        # 以下代码在v3.0中不再使用（保留供参考）
+        """
         约束逻辑：
         - CO₂来源：碳捕获源通过管道和罐车运输供应（周级决策）
         - CO₂去向：进入甲醇生产工厂的CO₂库存
