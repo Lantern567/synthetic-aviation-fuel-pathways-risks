@@ -462,9 +462,9 @@ class CoalHydrogenSAFOptimizer:
         4. 获取结果: results = optimizer.get_optimization_results()
 
     配置文件:
-        shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+        shared/data/CoalSupplyManager_config.yaml
         - basic_parameters: 基础参数(时间范围、路径规划等)
-        - co2_parameters: CO₂捕获和运输参数
+        - coal_parameters: 煤炭供应和气化参数 (v3.0)
         - hydrogen_parameters: H₂生产和运输参数
         - technologies: 技术参数(green_h2_co2_to_saf)
         - cost_parameters: 成本参数
@@ -599,9 +599,9 @@ class CoalHydrogenSAFOptimizer:
             配置字典
         """
         if config_path is None:
-            # 使用默认配置文件路径
+            # 使用默认配置文件路径 (v3.0煤炭气化路线)
             project_root = get_project_base_dir()
-            config_path = os.path.join(project_root, "shared", "data", "GreenHydrogenSupplyChainOptimizer_config.yaml")
+            config_path = os.path.join(project_root, "shared", "data", "CoalSupplyManager_config.yaml")
         
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"配置文件不存在: {config_path}")
@@ -709,7 +709,7 @@ class CoalHydrogenSAFOptimizer:
 
         Args:
             config_path (str, optional): YAML配置文件路径。
-                默认: shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+                默认: shared/data/CoalSupplyManager_config.yaml (v3.0)
 
             **override_params: 关键字参数覆盖配置文件参数。
                 常用覆盖参数:
@@ -732,16 +732,16 @@ class CoalHydrogenSAFOptimizer:
 
         示例:
             # 使用默认配置
-            optimizer = GreenHydrogenSupplyChainOptimizer()
+            optimizer = CoalHydrogenSAFOptimizer()
 
             # 自定义时间范围和关闭GraphHopper
-            optimizer = GreenHydrogenSupplyChainOptimizer(
+            optimizer = CoalHydrogenSAFOptimizer(
                 time_horizon_weeks=4,
                 use_graphhopper_routing=False
             )
 
             # 使用自定义配置文件
-            optimizer = GreenHydrogenSupplyChainOptimizer(
+            optimizer = CoalHydrogenSAFOptimizer(
                 config_path="/path/to/custom_config.yaml",
                 solver_time_limit=7200,
                 solver_mip_gap=0.05
@@ -7281,7 +7281,7 @@ if __name__ == '__main__':
         osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization",
                                    "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf")
 
-        optimizer = GreenHydrogenSupplyChainOptimizer(
+        optimizer = CoalHydrogenSAFOptimizer(
             time_horizon_weeks=1,
             osm_pbf_path=osm_file_path
         )
