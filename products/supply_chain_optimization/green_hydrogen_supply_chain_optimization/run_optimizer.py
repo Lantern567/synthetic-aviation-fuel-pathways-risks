@@ -19,15 +19,13 @@ SAF供应链优化命令行工具
 """
 
 import sys
+import os
 import argparse
 from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
-
-from src.runner import UnifiedSAFOptimizer
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -110,6 +108,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    os.environ["GH_SUPPLY_CHAIN_PROCESS"] = args.process
+
+    from src.runner import UnifiedSAFOptimizer
 
     # 打印配置信息
     print("=" * 80)

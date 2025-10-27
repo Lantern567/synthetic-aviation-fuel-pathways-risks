@@ -127,7 +127,14 @@ class UnifiedSAFOptimizer:
         self.time_horizon_weeks = time_horizon_weeks
         self.osm_pbf_path = osm_pbf_path
         self.airport_excel_path = airport_excel_path
-        self.results_dir = results_dir
+
+        if results_dir is None:
+            resolved_results_dir = project_root / 'results' / self.process_type
+        else:
+            resolved_results_dir = Path(results_dir)
+
+        resolved_results_dir.mkdir(parents=True, exist_ok=True)
+        self.results_dir = resolved_results_dir
 
         # 确定配置文件路径
         if process_type == 'custom':
