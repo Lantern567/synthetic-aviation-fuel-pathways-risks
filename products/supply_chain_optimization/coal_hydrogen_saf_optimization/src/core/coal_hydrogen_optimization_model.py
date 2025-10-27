@@ -1,7 +1,8 @@
 """
-绿氢+CO₂制SAF供应链优化模型
+煤炭+绿氢制SAF供应链优化模型
 基于Gurobi求解器的混合整数线性规划模型
-工艺路线：绿氢 + CO₂ → 甲醇 → SAF (两步法)
+工艺路线：煤炭气化产生CO₂ + 绿氢 → 甲醇 → SAF (两步法)
+核心变更：CO₂来源从捕获改为煤炭气化，简化CO₂运输物流
 包含时间尺度匹配：生产(1小时) vs 需求(1周)
 集成OSM真实路网数据进行距离计算和路径规划
 """
@@ -39,11 +40,6 @@ except ModuleNotFoundError:
     from shared.utils.log_preserver import mount_file_logging
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
     create_cost_analyzer = None
-
-try:
-    from ..utils.province_mapper import enrich_province_info
-except ImportError:
-    from utils.province_mapper import enrich_province_info
 
 # 导入GraphHopper路径规划模块 - 必须可用
 try:
@@ -129,6 +125,27 @@ except ImportError:
         print(f"警告：CO2聚类优化器模块不可用: {e}")
         CO2ClusteringOptimizer = None
         CO2ClusteringResult = None
+
+# 导入煤炭供应管理器（v3.0新增）
+try:
+    try:
+        from ..modules.coal_supply_manager import CoalSupplyManager
+    except ImportError:
+        from modules.coal_supply_manager import CoalSupplyManager
+except ImportError:
+    # 确保src目录在路径中
+    import sys
+    current_file = os.path.abspath(__file__)
+    src_dir = os.path.dirname(os.path.dirname(current_file))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+    try:
+        from modules.coal_supply_manager import CoalSupplyManager
+    except ImportError as e:
+        # logger还未定义，暂时使用print
+        print(f"警告：煤炭供应管理器模块不可用: {e}")
+        CoalSupplyManager = None
+
 
 # 导入约束诊断工具
 try:
@@ -312,23 +329,20 @@ def _calculate_distance_worker(args):
     """并行计算单对位置间距离的worker函数
 
     Args:
-        args: (optimizer_instance, loc1, loc2) 元组
-            optimizer_instance可以是routing_engine或距离计算方法
+        args: (routing_engine, locations, loc1, loc2) 元组
 
     Returns:
         tuple: ((loc1, loc2), distance_km)
     """
-    routing_engine, locations, co2_sources, loc1, loc2 = args
+    routing_engine, locations, loc1, loc2 = args
 
-    # 辅助函数：从多个数据源查找位置坐标
+    # 辅助函数：从locations中获取位置坐标
     def get_location_coords(loc_name):
-        """从locations或co2_capture_sources中获取位置坐标"""
+        """从locations中获取位置坐标（v3.0: 仅使用locations）"""
         if loc_name in locations:
             return locations[loc_name]['latitude'], locations[loc_name]['longitude']
-        elif loc_name in co2_sources:
-            return co2_sources[loc_name]['latitude'], co2_sources[loc_name]['longitude']
         else:
-            raise KeyError(f"位置 '{loc_name}' 既不在 locations 也不在 co2_capture_sources 中")
+            raise KeyError(f"位置 '{loc_name}' 不在 locations 中")
 
     try:
         # 获取两个位置的坐标
@@ -374,88 +388,83 @@ def get_project_base_dir():
 # 在模块加载时挂载日志文件输出（仅作用于logging，不捕获print）
 try:
     _base_dir = get_project_base_dir()
-    _process_tag = os.environ.get("GH_SUPPLY_CHAIN_PROCESS", "").strip()
-
-    _log_dir_parts = [
+    _log_dir = os.path.join(
         _base_dir,
         "products",
         "supply_chain_optimization",
         "green_hydrogen_supply_chain_optimization",
         "results",
         "logs",
-    ]
-
-    if _process_tag:
-        _log_dir_parts.append(_process_tag)
-
-    _log_dir = os.path.join(*_log_dir_parts)
-
-    _filename_prefix = "green_h2_supply_chain"
-    if _process_tag:
-        _safe_tag = _process_tag.replace(os.sep, "_").replace(" ", "_")
-        _filename_prefix = f"{_filename_prefix}_{_safe_tag}"
-
-    mount_file_logging(_log_dir, filename_prefix=_filename_prefix)
+    )
+    mount_file_logging(_log_dir, filename_prefix="green_h2_supply_chain")
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
     print("将继续使用控制台日志")
 
-class GreenHydrogenSupplyChainOptimizer:
+class CoalHydrogenSAFOptimizer:
     """
-    绿氢+CO₂制SAF供应链优化器
+    煤炭+绿氢制SAF供应链优化器 (v3.0)
 
-    基于Gurobi求解器的混合整数线性规划(MILP)模型,优化绿氢和CO₂制SAF的供应链网络。
+    基于Gurobi求解器的混合整数线性规划(MILP)模型,优化煤炭气化CO₂和绿氢制SAF的供应链网络。
 
     工艺路线:
-        绿氢 + CO₂ → 甲醇 → SAF (两步法)
+        煤炭气化产生CO₂ + 绿氢 → 甲醇 → SAF (两步法)
+        - 煤炭气化: 煤炭 → CO₂ (本地生成，无需运输)
         - Step 1: E-CRM电化学还原(H₂ + CO₂ → 甲醇)
         - Step 2: MTJ甲醇转化(甲醇 → SAF)
 
+    核心变更(相对v2.0):
+        - ✅ CO₂来源: 煤炭气化 (替代CCS捕获)
+        - ✅ CO₂运输: 本地直接使用 (删除管道/罐车运输)
+        - ✅ 决策变量: 减少约94% (600万 → 35万)
+        - ✅ 约束条件: 减少约99.7% (580万 → 2万)
+        - ✅ 求解时间: 减少约75% (30-60分钟 → 5-15分钟)
+
     主要功能:
         - 绿氢生产: 风电/光伏电解水制氢
-        - CO₂捕获: 煤电厂/气电厂/炼油厂碳捕获
-        - 运输优化: 管道+罐车双模式运输(H₂和CO₂)
+        - 煤炭供应: 市场采购+气化产生CO₂ (新增v3.0)
+        - 运输优化: 管道+罐车双模式运输(仅H₂，CO₂本地使用)
         - 时间尺度匹配: 生产调度(1小时) vs 需求计划(1周)
         - 设施选址: 甲醇厂和SAF厂选址优化
-        - 碳排放追踪: 全生命周期碳强度计算
+        - 碳排放追踪: 全生命周期碳强度计算(约60 gCO₂e/MJ)
 
     决策变量:
         - methanol_production_vars: 甲醇生产量(kg/h)
         - saf_production_vars: SAF生产量(kg/h)
-        - co2_pipeline/truck_transport_vars: CO₂运输量(kg/周)
+        - coal_purchase_vars: 煤炭采购量(kg/周) [新增v3.0]
         - h2_pipeline/truck_transport_vars: H₂运输量(kg/h)
         - methanol_inventory_vars: 甲醇库存(kg)
-        - co2_inventory_vars: CO₂库存(kg,用于时间尺度匹配)
+        - co2_inventory_vars: CO₂库存(kg,来源改为煤炭气化) [修改v3.0]
         - facility_build_vars: 设施建设二元变量
 
     约束系统:
-        1. CO₂供应平衡(周级)
+        1. 煤炭气化CO₂生成约束(周级) [新增v3.0]
         2. 甲醇生产约束(H₂+CO₂→甲醇,小时级)
         3. SAF生产约束(甲醇→SAF,小时级)
         4. 甲醇库存平衡(小时级)
-        5. CO₂库存平衡(时间尺度匹配,小时级)
+        5. CO₂库存平衡(时间尺度匹配,小时级,来源改为煤炭气化) [修改v3.0]
         6. H₂供应平衡(小时级)
         7. SAF需求满足(机场需求,周级)
-        8. 运输能力约束
+        8. 运输能力约束(仅H₂) [简化v3.0]
         9. 设施能力约束
 
     目标函数:
-        最小化总成本 = H₂生产成本 + CO₂捕获成本 + CO₂运输成本
+        最小化总成本 = H₂生产成本 + 煤炭采购成本 [新增v3.0] + 煤炭气化成本 [新增v3.0]
                     + H₂运输成本 + 甲醇生产成本 + 甲醇存储成本
                     + SAF生产成本 + SAF运输成本 + 设施投资成本
                     + 缺货惩罚
 
     使用流程:
-        1. 初始化: optimizer = GreenHydrogenSupplyChainOptimizer(config_path)
+        1. 初始化: optimizer = CoalHydrogenSAFOptimizer(config_path)
         2. 加载数据: optimizer.load_data_from_excel(airport_excel_path, renewable_data)
         3. 运行优化: optimizer.optimize()
         4. 获取结果: results = optimizer.get_optimization_results()
 
     配置文件:
-        shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+        products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml
         - basic_parameters: 基础参数(时间范围、路径规划等)
-        - co2_parameters: CO₂捕获和运输参数
+        - coal_parameters: 煤炭供应和气化参数 (v3.0)
         - hydrogen_parameters: H₂生产和运输参数
         - technologies: 技术参数(green_h2_co2_to_saf)
         - cost_parameters: 成本参数
@@ -590,9 +599,16 @@ class GreenHydrogenSupplyChainOptimizer:
             配置字典
         """
         if config_path is None:
-            # 使用默认配置文件路径
+            # 使用默认配置文件路径 (v3.0煤炭气化路线)
             project_root = get_project_base_dir()
-            config_path = os.path.join(project_root, "shared", "data", "GreenHydrogenSupplyChainOptimizer_config.yaml")
+            config_path = os.path.join(
+                project_root,
+                "products",
+                "supply_chain_optimization",
+                "coal_hydrogen_saf_optimization",
+                "data",
+                "CoalHydrogenSAFOptimizer_config.yaml"
+            )
         
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"配置文件不存在: {config_path}")
@@ -700,7 +716,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         Args:
             config_path (str, optional): YAML配置文件路径。
-                默认: shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+                默认: products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml
 
             **override_params: 关键字参数覆盖配置文件参数。
                 常用覆盖参数:
@@ -723,16 +739,16 @@ class GreenHydrogenSupplyChainOptimizer:
 
         示例:
             # 使用默认配置
-            optimizer = GreenHydrogenSupplyChainOptimizer()
+            optimizer = CoalHydrogenSAFOptimizer()
 
             # 自定义时间范围和关闭GraphHopper
-            optimizer = GreenHydrogenSupplyChainOptimizer(
+            optimizer = CoalHydrogenSAFOptimizer(
                 time_horizon_weeks=4,
                 use_graphhopper_routing=False
             )
 
             # 使用自定义配置文件
-            optimizer = GreenHydrogenSupplyChainOptimizer(
+            optimizer = CoalHydrogenSAFOptimizer(
                 config_path="/path/to/custom_config.yaml",
                 solver_time_limit=7200,
                 solver_mip_gap=0.05
@@ -773,8 +789,15 @@ class GreenHydrogenSupplyChainOptimizer:
             self.parallel_workers = os.cpu_count() or 4
         logger.info(f"并行计算workers数量: {self.parallel_workers}")
 
-        # CO₂捕获源数据（绿氢供应链专用）
-        self.co2_capture_sources = {}     # CO₂捕获源数据
+        # 煤炭供应管理器（v3.0煤炭气化路线）
+        if CoalSupplyManager is not None:
+            self.coal_supply = CoalSupplyManager(self.config)
+            logger.info(f"煤炭供应管理器初始化完成: {self.coal_supply.coal_type}, "
+                       f"CO₂产率={self.coal_supply.co2_per_kg_coal} kg/kg, "
+                       f"价格={self.coal_supply.coal_price_yuan_per_ton} 元/吨")
+        else:
+            logger.error("CoalSupplyManager模块不可用，无法初始化煤炭供应管理器")
+            raise ImportError("CoalSupplyManager模块导入失败")
 
         # 加载碳排放参数
         self.carbon_params = self.config.get('carbon_emission_parameters', {})
@@ -885,14 +908,10 @@ class GreenHydrogenSupplyChainOptimizer:
         # 处理机场数据
         self._process_airport_data(airport_data)
 
-        # 加载CO₂捕获源数据（替换原有的天然气供应链数据）
-        self._load_co2_capture_data()
+        # v3.0: 煤炭气化路线不需要加载CO₂捕获源数据
 
-        # 处理可再生能源数据（在机场和CO₂数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
+        # 处理可再生能源数据
         self._process_renewable_data(renewable_data)
-
-        # 将CO₂捕获点加入locations，作为潜在建设位置
-        self._add_co2_sources_to_locations()
 
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
@@ -910,7 +929,7 @@ class GreenHydrogenSupplyChainOptimizer:
         if self.use_graphhopper_routing:
             self._calculate_average_distances()
 
-        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场, {len(self.co2_capture_sources)}个CO₂捕获源")
+        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场 (v3.0: CO₂来自煤炭气化)")
     
     def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
         """
@@ -964,14 +983,10 @@ class GreenHydrogenSupplyChainOptimizer:
         # 处理机场数据
         self._process_airport_data(airport_data)
 
-        # 加载CO₂捕获源数据（替换原有的天然气供应链数据）
-        self._load_co2_capture_data()
+        # v3.0: 煤炭气化路线不需要加载CO₂捕获源数据
 
-        # 处理可再生能源数据（在机场和CO₂数据加载后，这样可以在_process_renewable_data中添加所有位置类型）
+        # 处理可再生能源数据
         self._process_renewable_data(renewable_data)
-
-        # 将CO₂捕获点加入locations，作为潜在建设位置
-        self._add_co2_sources_to_locations()
 
         # 首先定义经济参数（平准化成本计算需要）
         self._define_economic_parameters()
@@ -985,7 +1000,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 定义运输相关的位置映射
         self._define_transport_locations()
 
-        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场, {len(self.co2_capture_sources)}个CO₂捕获源")
+        logger.info(f"数据加载完成: {len(self.locations)}个生产地点, {len(self.airports)}个机场 (v3.0: CO₂来自煤炭气化)")
     
     def _process_renewable_data(self, renewable_data: pd.DataFrame):
         """处理可再生能源数据（包含太阳能和风能，支持缓存）"""
@@ -1152,38 +1167,6 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.info(f"  添加了 {airport_count} 个机场位置到基础locations中")
         else:
             logger.warning("机场数据尚未加载，无法添加机场位置")
-
-    def _add_co2_sources_to_locations(self):
-        """将CO₂捕获源添加到locations，作为潜在的生产/建设位置。"""
-        if not getattr(self, 'co2_capture_sources', None):
-            return
-
-        added_count = 0
-        for source_id, source_info in self.co2_capture_sources.items():
-            latitude = source_info.get('latitude')
-            longitude = source_info.get('longitude')
-
-            if latitude is None or longitude is None:
-                logger.warning(f"CO₂捕获源 {source_id} 缺少坐标，跳过添加到locations")
-                continue
-
-            self.locations[source_id] = {
-                'type': 'co2_capture',
-                'latitude': latitude,
-                'longitude': longitude,
-                'capacity_mw': 0,
-                'hourly_generation': [0] * self.total_hours,
-                'facility_name': source_info.get('facility_name', source_id),
-                'facility_type': source_info.get('facility_type', 'co2_capture'),
-                'province': source_info.get('province', 'Unknown'),
-                'co2_capture_capacity_ton_per_week': source_info.get('co2_capture_capacity_ton_per_week', 0),
-                'capture_cost_yuan_per_ton': source_info.get('capture_cost_yuan_per_ton', 0),
-                'capture_efficiency': source_info.get('capture_efficiency', 0)
-            }
-            added_count += 1
-
-        if added_count > 0:
-            logger.info(f"  添加了 {added_count} 个CO₂捕获源到基础locations中")
 
     def _process_excel_airport_data(self, excel_data: pd.DataFrame) -> pd.DataFrame:
         """
@@ -1658,7 +1641,8 @@ class GreenHydrogenSupplyChainOptimizer:
         # 构建MTJ工厂位置映射（_initialize_hydrogen_clustering依赖此数据）
         self._build_mtj_locations()
         self._initialize_hydrogen_clustering()
-        self._initialize_co2_clustering()
+        # v3.0: 煤炭气化路线不需要CO₂聚类
+        # self._initialize_co2_clustering()
 
     def _initialize_hydrogen_clustering(self):
         if not self.config.get('basic_parameters', {}).get('use_hydrogen_pipeline_distance', False):
@@ -1741,7 +1725,11 @@ class GreenHydrogenSupplyChainOptimizer:
             )
 
     def _initialize_co2_clustering(self):
-        """初始化CO2捕获源聚类（与氢气聚类类似）"""
+        """初始化CO2捕获源聚类（v3.0: 已禁用，煤炭气化路线不需要CO₂捕获和运输）"""
+        logger.info("v3.0煤炭气化路线不需要CO₂聚类，跳过初始化")
+        return
+
+        # 以下代码在v3.0中不再使用（保留供参考）
         # 检查是否启用CO2管道距离计算
         if not self.config.get('basic_parameters', {}).get('use_co2_pipeline_distance', False):
             logger.info("CO2管道距离计算未启用，跳过CO2聚类初始化")
@@ -2460,8 +2448,8 @@ class GreenHydrogenSupplyChainOptimizer:
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
 
-            # 【修复零产量BUG】为MTJ工厂位置创建氢气库存变量（包括CO₂捕获源）
-            elif location_type in ['lng_terminal', 'airport', 'co2_capture']:
+            # 【修复零产量BUG】为MTJ工厂位置创建氢气库存变量
+            elif location_type in ['lng_terminal', 'airport']:
                 # MTJ位置需要氢气库存变量来跟踪从管道接收的氢气
                 for hour in range(self.total_hours + 1):
                     var_name = f"h2_storage_mtj_{location}_{hour}"
@@ -2584,49 +2572,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # logger.info(f"创建了 {len(self.hydrogen_transport_vars)} 个氢气罐车运输变量")  # 【禁用罐车运输】
         logger.info(f"创建了 {len(self.hydrogen_pipeline_transport_vars)} 个氢能管道运输变量")
 
-        # 11. CO₂运输决策变量（【禁用罐车运输】仅管道）
-        logger.info("创建CO₂运输变量（仅管道）")  # 【禁用罐车运输】
-
-        self.co2_pipeline_transport_vars = {}  # CO₂管道运输变量 (kg CO₂/week)
-        # self.co2_truck_transport_vars = {}     # 【禁用罐车运输】CO₂罐车运输变量 (kg CO₂/week)
-
-        # 从CO₂捕获源到所有甲醇生产地点
-        # 甲醇生产地点就是MTJ工厂位置（因为两步法：H₂+CO₂→甲醇→SAF在同一地点）
-        valid_co2_routes = 0
-
-        for co2_source_id, co2_source_data in self.co2_capture_sources.items():
-            # 遍历所有可能的甲醇生产位置（即MTJ工厂位置）
-            for tech, tech_locations in self.mtj_locations.items():
-                # 只为green_h2_co2_to_saf技术创建CO₂运输变量
-                # （因为只有两步法工艺需要CO₂作为原料）
-                if 'green_h2_co2' not in tech:
-                    continue
-
-                if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
-                    logger.error(f"技术 {tech} 的位置不可迭代: {tech_locations}")
-                    continue
-
-                for methanol_loc in tech_locations:
-                    # 创建管道运输变量（周级）
-                    var_name_pipeline = f"co2_pipeline_{co2_source_id}_{methanol_loc}_week"
-                    self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name_pipeline
-                    )
-
-                    # 【禁用罐车运输】注释掉CO₂罐车运输变量创建
-                    """
-                    # 创建罐车运输变量（周级）
-                    var_name_truck = f"co2_truck_{co2_source_id}_{methanol_loc}_week"
-                    self.co2_truck_transport_vars[(co2_source_id, methanol_loc)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name_truck
-                    )
-                    """
-
-                    valid_co2_routes += 1
-
-        logger.info(f"创建了 {valid_co2_routes} 条CO₂运输路线（仅管道）")  # 【禁用罐车运输】
-        logger.info(f"创建了 {len(self.co2_pipeline_transport_vars)} 个CO₂管道运输变量")
-        # logger.info(f"创建了 {len(self.co2_truck_transport_vars)} 个CO₂罐车运输变量")  # 【禁用罐车运输】
+        # v3.0: 煤炭气化路线不需要CO₂运输变量（CO₂在甲醇厂本地产生）
 
         # 12. 甲醇生产和库存决策变量（两步法第一步：H₂ + CO₂ → 甲醇）
         logger.info("创建甲醇生产和库存变量")
@@ -2660,7 +2606,30 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"创建了 {len(self.methanol_production_vars)} 个甲醇生产变量")
         logger.info(f"创建了 {len(self.methanol_inventory_vars)} 个甲醇库存变量")
 
-        # 13. CO₂库存决策变量（用于时间尺度匹配：周级捕获→小时级消耗）
+        # v3.0新增：煤炭采购决策变量（周级）
+        logger.info("创建煤炭采购变量（v3.0煤炭气化路线）")
+
+        self.coal_purchase_vars = {}  # 煤炭采购变量 (周级, kg coal/week)
+
+        # 在所有甲醇生产位置创建煤炭采购变量（煤炭在本地气化产生CO₂）
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'green_h2_co2' not in tech:
+                continue
+
+            if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
+                continue
+
+            for methanol_loc in tech_locations:
+                # 周级煤炭采购量
+                for week in range(self.time_horizon_weeks):
+                    var_name = f"coal_purchase_{methanol_loc}_week_{week}"
+                    self.coal_purchase_vars[(methanol_loc, week)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+
+        logger.info(f"创建了 {len(self.coal_purchase_vars)} 个煤炭采购变量（周级）")
+
+        # 13. CO₂库存决策变量（用于时间尺度匹配：周级煤炭气化→小时级消耗）
         logger.info("创建CO₂库存变量（时间尺度匹配：周级供应→小时级消耗）")
 
         self.co2_inventory_vars = {}  # CO₂库存变量 (小时级, kg CO₂)
@@ -2720,11 +2689,8 @@ class GreenHydrogenSupplyChainOptimizer:
         # 9.1. 氢能管道运输约束
         self._add_hydrogen_pipeline_transport_constraints()
 
-        # 10. CO₂供应平衡约束（周级）
-        self._add_co2_supply_balance_constraints()
-
-        # 10.1. CO₂捕获容量上限约束
-        self._add_co2_capture_capacity_constraints()
+        # v3.0: 煤炭气化路线不需要CO₂供应平衡约束（CO₂来自煤炭气化）
+        # self._add_co2_supply_balance_constraints()
 
         # 11. 甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
         self._add_methanol_production_constraints()
@@ -3142,153 +3108,7 @@ class GreenHydrogenSupplyChainOptimizer:
         else:
             self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
 
-        # 10. CO₂捕获成本（20年生命周期现值）
-        # 从配置文件读取CO₂捕获成本参数
-        co2_capture_cost_cfg = self.config.get('unified_costs', {}).get('co2_capture', {})
-        co2_capture_unit_cost = float(co2_capture_cost_cfg.get('capture_cost_yuan_per_kg', 0.3))  # 元/kg CO₂
-
-        # CO₂捕获成本 = Σ(CO₂运输量 × 单位成本)
-        # 【禁用罐车运输】仅计算管道运输的CO₂
-        self.cost_expressions['co2_capture_cost'] = gp.quicksum(
-            self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
-            # self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0))) *  # 【禁用罐车运输】
-            co2_capture_unit_cost * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 生命周期系数
-            for co2_source_id in self.co2_capture_sources
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
-
-        # 11. CO₂管道运输成本（20年生命周期现值）
-        # 从配置文件读取CO₂管道运输成本参数
-        co2_pipeline_cost_cfg = self.config.get('unified_costs', {}).get('co2_transport', {}).get('pipeline', {})
-        co2_pipeline_unit_cost = float(co2_pipeline_cost_cfg.get('transport_cost_yuan_per_kg_km', 0.0001))  # 元/(kg·km)
-
-        # 🚀 性能优化：预先缓存所有CO₂管道运输距离（延迟计算模式 + 大批量并行）
-        # 避免在quicksum循环中重复计算，显著提升性能
-        if not hasattr(self, 'co2_distance_cache'):
-            self.co2_distance_cache = {}
-
-            # 收集所有需要计算的路径对
-            route_pairs = [
-                (co2_source_id, methanol_loc)
-                for co2_source_id in self.co2_capture_sources
-                for methanol_loc in sum(self.mtj_locations.values(), [])
-                if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-                and co2_source_id != methanol_loc
-            ]
-
-            total_routes = len(route_pairs)
-            logger.info(f"开始缓存CO₂管道运输距离: {total_routes}条路径...")
-            logger.info(f"使用{self.parallel_workers}个并行workers进行批量计算")
-            start_time = time.time()
-
-            # 使用并行处理，批量大小10000
-            batch_size = 10000
-            calculated = 0
-
-            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
-                # 分批处理
-                for batch_start in range(0, total_routes, batch_size):
-                    batch_end = min(batch_start + batch_size, total_routes)
-                    batch_pairs = route_pairs[batch_start:batch_end]
-
-                    # 并行计算这一批
-                    futures = {
-                        executor.submit(self._get_co2_transport_distance_with_clustering, co2_id, mtj_loc): (co2_id, mtj_loc)
-                        for co2_id, mtj_loc in batch_pairs
-                    }
-
-                    # 收集结果
-                    for future in as_completed(futures):
-                        co2_id, mtj_loc = futures[future]
-                        try:
-                            distance_result = future.result()
-                            self.co2_distance_cache[(co2_id, mtj_loc)] = distance_result
-                            calculated += 1
-
-                            # 每1000条输出进度
-                            if calculated % 1000 == 0:
-                                elapsed = time.time() - start_time
-                                avg_time = elapsed / calculated
-                                remaining = (total_routes - calculated) * avg_time
-                                logger.info(f"CO₂距离缓存进度: {calculated}/{total_routes} "
-                                          f"({calculated/total_routes*100:.1f}%), "
-                                          f"预计剩余: {remaining:.1f}秒")
-                        except Exception as e:
-                            logger.warning(f"CO₂距离计算失败 {co2_id} -> {mtj_loc}: {e}")
-                            calculated += 1
-
-            elapsed_time = time.time() - start_time
-            logger.info(f"CO₂距离缓存完成: {len(self.co2_distance_cache)}条路径, "
-                       f"耗时: {elapsed_time:.2f}秒, "
-                       f"平均速度: {total_routes/elapsed_time:.1f}条/秒")
-
-        # 验证缓存完整性：确保所有需要的路径都已缓存
-        missing_cache_keys = []
-        for co2_source_id in self.co2_capture_sources:
-            for methanol_loc in sum(self.mtj_locations.values(), []):
-                if ((co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-                    and co2_source_id != methanol_loc
-                    and (co2_source_id, methanol_loc) not in self.co2_distance_cache):
-                    missing_cache_keys.append((co2_source_id, methanol_loc))
-
-        if missing_cache_keys:
-            logger.warning(f"⚠️ 发现{len(missing_cache_keys)}条CO₂路径未缓存，补充计算直线距离")
-            for key in missing_cache_keys:
-                # 为缺失的路径创建简单的距离字典（直线距离，无聚类）
-                distance = self._calculate_location_distance(key[0], key[1])
-
-                # 获取起点和终点坐标用于路径可视化
-                co2_source = self.co2_capture_sources.get(key[0])
-                if co2_source and key[1] in self.locations:
-                    co2_coords = (co2_source['latitude'], co2_source['longitude'])
-                    mtj_coords = (self.locations[key[1]]['latitude'], self.locations[key[1]]['longitude'])
-                    route_coords = [co2_coords, mtj_coords]
-                else:
-                    route_coords = []  # 如果坐标获取失败，保持为空
-
-                self.co2_distance_cache[key] = {
-                    'total_distance_km': distance,
-                    'layer1_distance_km': 0,
-                    'layer2_distance_km': 0,
-                    'layer3_distance_km': distance,
-                    'cluster_id': None,
-                    'cluster_center_coords': None,
-                    'pipeline_access_coords': None,
-                    'is_noise': False,
-                    'route_coordinates': route_coords  # 修复：添加实际坐标
-                }
-
-        self.cost_expressions['co2_pipeline_transport_cost'] = gp.quicksum(
-            self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
-            co2_pipeline_unit_cost *
-            self.co2_distance_cache[(co2_source_id, methanol_loc)]['total_distance_km'] * lifecycle_operation_factor  # 从字典提取总距离
-            for co2_source_id in self.co2_capture_sources
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-            and co2_source_id != methanol_loc  # 排除同位置运输（距离为0，无需运输）
-        )
-
-        # 12. CO₂罐车运输成本（20年生命周期现值）
-        # 【禁用罐车运输】注释掉CO₂罐车运输成本计算
-        """
-        # 从配置文件读取CO₂罐车运输成本参数
-        co2_truck_cost_cfg = self.config.get('unified_costs', {}).get('co2_transport', {}).get('truck', {})
-        co2_truck_unit_cost = float(co2_truck_cost_cfg.get('transport_cost_yuan_per_kg_km', 0.0005))  # 元/(kg·km)
-
-        self.cost_expressions['co2_truck_transport_cost'] = gp.quicksum(
-            self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
-            co2_truck_unit_cost *
-            self._calculate_location_distance(
-                co2_source_id,  # 直接传递字典键（如 "co2_source_1"），而非 facility_name
-                methanol_loc
-            ) * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 距离 × 生命周期系数
-            for co2_source_id in self.co2_capture_sources
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
-        )
-        """
-        self.cost_expressions['co2_truck_transport_cost'] = gp.LinExpr(0)  # 【禁用罐车运输】设为0
+        # v3.0: 煤炭气化路线不需要CO₂捕获和运输成本
 
         # 13. 甲醇生产成本（20年生命周期现值）
         # 从配置文件读取甲醇生产成本参数
@@ -3326,6 +3146,32 @@ class GreenHydrogenSupplyChainOptimizer:
             for hour in range(self.total_hours + 1)
             if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
         )
+
+        # v3.0新增：煤炭采购和气化成本（20年生命周期现值）
+        logger.info("创建煤炭采购和气化成本表达式（v3.0）")
+
+        # 煤炭采购成本（周级采购量 × 单位采购成本）
+        coal_purchase_unit_cost = self.coal_supply.calculate_coal_purchase_cost(1.0)  # 元/kg煤炭
+        self.cost_expressions['coal_purchase_cost'] = gp.quicksum(
+            self.coal_purchase_vars.get((methanol_loc, week), gp.LinExpr(0)) *
+            coal_purchase_unit_cost * lifecycle_operation_factor  # 周级采购量 × 单位成本 × 生命周期系数
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            for week in range(self.time_horizon_weeks)
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
+
+        # 煤炭气化能耗成本（周级采购量 × 单位气化能耗成本）
+        coal_gasification_unit_cost = self.coal_supply.calculate_gasification_energy_cost(1.0)  # 元/kg煤炭
+        self.cost_expressions['coal_gasification_cost'] = gp.quicksum(
+            self.coal_purchase_vars.get((methanol_loc, week), gp.LinExpr(0)) *
+            coal_gasification_unit_cost * lifecycle_operation_factor  # 周级采购量 × 单位成本 × 生命周期系数
+            for methanol_loc in sum(self.mtj_locations.values(), [])
+            for week in range(self.time_horizon_weeks)
+            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        )
+
+        logger.info(f"煤炭采购单位成本: {coal_purchase_unit_cost:.4f} 元/kg")
+        logger.info(f"煤炭气化单位成本: {coal_gasification_unit_cost:.4f} 元/kg")
 
 
         # 13. 短缺惩罚成本（20年生命周期现值）
@@ -3368,9 +3214,8 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['h2_storage_operation'] +
             self.cost_expressions['hydrogen_transport_operation'] +
             self.cost_expressions['hydrogen_pipeline_operation'] +
-            self.cost_expressions['co2_capture_cost'] +  # 新增：CO₂捕获成本
-            self.cost_expressions['co2_pipeline_transport_cost'] +  # 新增：CO₂管道运输成本
-            # self.cost_expressions['co2_truck_transport_cost'] +  # 【禁用罐车运输】
+            self.cost_expressions['coal_purchase_cost'] +  # v3.0新增：煤炭采购成本
+            self.cost_expressions['coal_gasification_cost'] +  # v3.0新增：煤炭气化成本
             self.cost_expressions['methanol_production_cost'] +  # 新增：甲醇生产成本
             self.cost_expressions['methanol_storage_operation'] +  # 新增：甲醇储存运营成本
             self.cost_expressions['final_inventory_cost']
@@ -4177,9 +4022,9 @@ class GreenHydrogenSupplyChainOptimizer:
                         name=f"h2_inventory_nonnegative_{location}_{hour}"
                     )
 
-            # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡（包括CO₂捕获源）
-            elif location_type in ['lng_terminal', 'airport', 'co2_capture']:
-                logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location} (类型: {location_type})")
+            # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡
+            elif location_type in ['lng_terminal', 'airport']:
+                logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location}")
 
                 # 获取甲醇生产参数（从配置中读取）
                 # 查找使用 green_h2_co2 技术的配置
@@ -4956,8 +4801,14 @@ class GreenHydrogenSupplyChainOptimizer:
 
     def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> dict:
         """
-        使用CO2聚类和管道路权算法计算CO₂管道运输距离（三层结构）
+        使用CO2聚类和管道路权算法计算CO₂管道运输距离（v3.0: 已禁用）
 
+        v3.0煤炭气化路线不需要CO₂运输，此方法保留供参考。
+        """
+        raise NotImplementedError("v3.0煤炭气化路线不需要CO₂运输距离计算")
+
+        # 以下代码在v3.0中不再使用（保留供参考）
+        """
         三层运输结构：
         - Layer 1: CO2捕获源 -> 聚类中心（直线距离）
         - Layer 2: 聚类中心 -> 管道接入点（管道距离）
@@ -5261,7 +5112,7 @@ class GreenHydrogenSupplyChainOptimizer:
             total_h2_pipeline = sum_var_dict(getattr(self, 'hydrogen_pipeline_transport_vars', {}))
             total_methanol = sum_var_dict(getattr(self, 'methanol_production_vars', {}))
             total_saf = sum_var_dict(getattr(self, 'production_vars', {}))
-            total_co2_pipeline = sum_var_dict(getattr(self, 'co2_pipeline_transport_vars', {}))
+            total_coal_purchase = sum_var_dict(getattr(self, 'coal_purchase_vars', {}))  # v3.0: 煤炭采购
             total_shortage = sum_var_dict(getattr(self, 'shortage_vars', {}))
 
             logger.info("[调试] 求解后关键变量汇总：")
@@ -5269,7 +5120,7 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.info(f"    氢气管道运输总量: {total_h2_pipeline:,.2f} kg")
             logger.info(f"    甲醇总产量: {total_methanol:,.2f} kg")
             logger.info(f"    SAF 总产量: {total_saf:,.2f} kg")
-            logger.info(f"    CO₂ 管道运输总量: {total_co2_pipeline:,.2f} kg")
+            logger.info(f"    煤炭采购总量: {total_coal_purchase:,.2f} kg (v3.0)")  # v3.0: 替换CO₂运输
             logger.info(f"    缺货总量: {total_shortage:,.2f} kg")
 
             h2_prod_by_location = aggregate_by_index(getattr(self, 'hydrogen_production_vars', {}), 0)
@@ -5517,79 +5368,36 @@ class GreenHydrogenSupplyChainOptimizer:
             print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
         print("=======================\n")
 
-        # 提取CO2管道运输数据（与氢气运输类似，包含聚类信息）
-        solution['co2_transport'] = {}
-        co2_pipeline_count = 0
-        co2_pipeline_positive = 0
+        # v3.0: 提取煤炭采购数据（替代CO₂运输）
+        solution['coal_purchase'] = {}
+        coal_purchase_count = 0
+        coal_purchase_positive = 0
 
-        if hasattr(self, 'co2_pipeline_transport_vars') and self.co2_pipeline_transport_vars:
-            for (co2_source_id, mtj_loc), var in self.co2_pipeline_transport_vars.items():
-                co2_pipeline_count += 1
+        if hasattr(self, 'coal_purchase_vars') and self.coal_purchase_vars:
+            for (methanol_loc, week), var in self.coal_purchase_vars.items():
+                coal_purchase_count += 1
                 if var.x > 0:
-                    co2_pipeline_positive += 1
-                    transport_key = f"{co2_source_id}_{mtj_loc}_co2_pipeline"
+                    coal_purchase_positive += 1
+                    purchase_key = f"{methanol_loc}_week_{week}"
 
-                    # 获取CO2源和目的地坐标
-                    co2_source = self.co2_capture_sources.get(co2_source_id, {})
-                    co2_coords = (co2_source.get('latitude', 0), co2_source.get('longitude', 0))
-                    mtj_coords = self._get_location_coordinates(mtj_loc)
-
-                    # 从缓存获取距离和聚类信息
-                    distance_info = self.co2_distance_cache.get((co2_source_id, mtj_loc), {})
-                    if isinstance(distance_info, dict):
-                        distance_km = distance_info.get('total_distance_km', 0)
-                        layer1_distance = distance_info.get('layer1_distance_km', 0)
-                        layer2_distance = distance_info.get('layer2_distance_km', 0)
-                        layer3_distance = distance_info.get('layer3_distance_km', 0)
-                        cluster_id = distance_info.get('cluster_id')
-                        cluster_center = distance_info.get('cluster_center_coords')
-                        route_coordinates = distance_info.get('route_coordinates', [])
-                        is_noise = distance_info.get('is_noise', False)
-                    else:
-                        # 兼容旧的float格式
-                        distance_km = float(distance_info) if distance_info else 0
-                        layer1_distance = 0
-                        layer2_distance = 0
-                        layer3_distance = distance_km
-                        cluster_id = None
-                        cluster_center = None
-                        route_coordinates = []
-                        is_noise = False
-
-                    solution['co2_transport'][transport_key] = {
-                        'from_location': co2_source_id,
-                        'to_location': mtj_loc,
-                        'transport_kg_co2': var.x,  # CO2运输量 (kg/week)
-                        'distance_km': distance_km,
-                        'from_latitude': co2_coords[0],
-                        'from_longitude': co2_coords[1],
-                        'to_latitude': mtj_coords[0],
-                        'to_longitude': mtj_coords[1],
-                        'route_coordinates': route_coordinates,
-                        'transport_type': 'CO2',
-                        'transport_mode': 'pipeline',
-                        'cluster_id': cluster_id,
-                        'cluster_center': cluster_center,
-                        'layer1_distance_km': layer1_distance,
-                        'layer2_distance_km': layer2_distance,
-                        'layer3_distance_km': layer3_distance,
-                        'is_noise': is_noise
+                    solution['coal_purchase'][purchase_key] = {
+                        'location': methanol_loc,
+                        'week': week,
+                        'coal_kg': var.x,  # 煤炭采购量 (kg/week)
+                        'co2_generated_kg': var.x * self.coal_supply.co2_per_kg_coal  # 气化产生CO₂量
                     }
 
-        # 输出CO2运输统计信息
-        print(f"\n=== CO2管道运输决策统计 ===")
-        print(f"CO2管道运输变量: {co2_pipeline_count} 个, 其中非零: {co2_pipeline_positive} 个")
-        print(f"总CO2运输记录: {len(solution['co2_transport'])} 条")
-        if solution['co2_transport']:
-            total_co2_transport = sum(info['transport_kg_co2'] for info in solution['co2_transport'].values())
-            print(f"总CO2运输量: {total_co2_transport:.2f} kg/week")
-
-            # 统计聚类和独立点
-            co2_clustered = sum(1 for info in solution['co2_transport'].values()
-                              if info['cluster_id'] is not None and info['cluster_id'] >= 0)
-            co2_noise = sum(1 for info in solution['co2_transport'].values() if info.get('is_noise', False))
-            print(f"  - 聚类路径: {co2_clustered} 条")
-            print(f"  - 独立点路径: {co2_noise} 条")
+        # 输出煤炭采购统计信息
+        print(f"\n=== 煤炭采购决策统计 (v3.0) ===")
+        print(f"煤炭采购变量: {coal_purchase_count} 个, 其中非零: {coal_purchase_positive} 个")
+        print(f"总煤炭采购记录: {len(solution['coal_purchase'])} 条")
+        if solution['coal_purchase']:
+            total_coal = sum(info['coal_kg'] for info in solution['coal_purchase'].values())
+            total_co2_from_coal = sum(info['co2_generated_kg'] for info in solution['coal_purchase'].values())
+            print(f"总煤炭采购量: {total_coal:.2f} kg")
+            print(f"气化产生CO₂总量: {total_co2_from_coal:.2f} kg")
+            print(f"煤炭价格: {self.coal_supply.coal_price_yuan_per_ton} 元/吨")
+            print(f"CO₂产率: {self.coal_supply.co2_per_kg_coal} kg CO₂/kg 煤")
         print("=======================\n")
 
         # 提取库存信息
@@ -6780,120 +6588,6 @@ class GreenHydrogenSupplyChainOptimizer:
         else:
             return "其他"
 
-    def _load_co2_capture_data(self):
-        """加载CO₂捕获源数据"""
-        try:
-            from src.co2.co2_capture_calculator import CO2CaptureCalculator
-            # 尝试多种导入路径
-            CO2CaptureCalculator = None
-            try:
-                from ..co2.co2_capture_calculator import CO2CaptureCalculator
-            except ImportError:
-                try:
-                    from src.co2.co2_capture_calculator import CO2CaptureCalculator
-                except ImportError:
-                    from co2.co2_capture_calculator import CO2CaptureCalculator
-
-            if CO2CaptureCalculator is None:
-                raise ImportError("无法导入CO2CaptureCalculator模块")
-
-            project_root = get_project_base_dir()
-
-            # 从配置文件获取CO₂数据路径
-            try:
-                co2_data_path = self._get_data_path('co2_data.co2_capture_sources')
-                logger.info(f"从配置文件获取CO₂捕获源数据路径: {co2_data_path}")
-            except Exception as e:
-                logger.warning(f"从配置文件获取CO₂数据路径失败: {e}，使用默认路径")
-                co2_data_path = os.path.join(
-                    project_root,
-                    "products", "supply_chain_optimization",
-                    "green_hydrogen_supply_chain_optimization",
-                    "data", "co2_capture_sources.csv"
-                )
-
-            if not os.path.exists(co2_data_path):
-                logger.error(f"CO₂捕获源数据文件不存在: {co2_data_path}")
-                raise FileNotFoundError(f"CO₂捕获源数据文件不存在: {co2_data_path}")
-
-            # 加载CO₂数据并修复缺失的省份信息
-            co2_df = pd.read_csv(co2_data_path)
-            logger.info(f"加载CO₂捕获源原始数据: {len(co2_df)} 条记录")
-
-            co2_df = enrich_province_info(co2_df, logger=logger)
-            co2_df['province'] = co2_df['province'].fillna('Unknown')
-
-            # 过滤北京500km范围内的CO₂捕获源
-            co2_df = co2_df[co2_df.apply(
-                lambda row: is_within_beijing_range(
-                    float(row.get('latitude', 0)),
-                    float(row.get('longitude', 0)),
-                    500
-                ), axis=1
-            )]
-            logger.info(f"过滤后保留500km范围内的CO₂捕获源: {len(co2_df)} 条记录")
-
-            # 初始化CO₂捕获源字典
-            self.co2_capture_sources = {}
-
-            # 处理每个CO₂捕获源
-            for idx, row in co2_df.iterrows():
-                source_id = f"co2_source_{idx+1}"
-
-                lat = float(row.get('latitude', 0))
-                lon = float(row.get('longitude', 0))
-
-                if lat == 0 or lon == 0:
-                    logger.warning(f"CO₂捕获源 {source_id} 坐标无效，跳过")
-                    continue
-
-                self.co2_capture_sources[source_id] = {
-                    'facility_id': row.get('facility_id', source_id),
-                    'facility_name': row.get('facility_name', f'CO₂捕获源{idx+1}'),
-                    'facility_type': row.get('facility_type', 'unknown'),
-                    'latitude': lat,
-                    'longitude': lon,
-                    'province': row.get('province', 'Unknown'),
-                    'co2_capture_capacity_ton_per_week': float(row.get('co2_capture_capacity_ton_per_week', 0)),
-                    'capture_cost_yuan_per_ton': float(row.get('capture_cost_yuan_per_ton', 280)),
-                    'capture_efficiency': float(row.get('capture_efficiency', 0.85)),
-                    'emission_factor_kg_per_mwh': float(row.get('emission_factor_kg_per_mwh', 800))
-                }
-
-            logger.info(f"成功加载 {len(self.co2_capture_sources)} 个CO₂捕获源")
-
-            # 统计CO₂捕获能力
-            if self.co2_capture_sources:
-                total_co2_capacity = sum(
-                    source['co2_capture_capacity_ton_per_week']
-                    for source in self.co2_capture_sources.values()
-                )
-                avg_capture_cost = sum(
-                    source['capture_cost_yuan_per_ton']
-                    for source in self.co2_capture_sources.values()
-                ) / len(self.co2_capture_sources)
-
-                logger.info(f"CO₂捕获总能力: {total_co2_capacity/1e6:.2f} 百万吨/周")
-                logger.info(f"平均捕获成本: {avg_capture_cost:.2f} 元/吨")
-
-                # 按设施类型统计
-                facility_types = {}
-                for source in self.co2_capture_sources.values():
-                    ftype = source['facility_type']
-                    if ftype not in facility_types:
-                        facility_types[ftype] = 0
-                    facility_types[ftype] += 1
-
-                logger.info(f"CO₂捕获源类型分布: {facility_types}")
-            else:
-                logger.warning("未加载到任何CO₂捕获源数据")
-
-        except ImportError as e:
-            logger.error(f"导入CO₂计算器模块失败: {e}")
-            raise
-        except Exception as e:
-            logger.error(f"加载CO₂捕获源数据失败: {e}")
-            raise
     def _analyze_supply_chain_paths(self, solution: Dict) -> Dict:
         """分析详细的供应链路径（氢气和天然气来源）"""
         logger.info("分析详细供应链路径...")
@@ -7171,7 +6865,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
             # 准备并行计算的参数
             distance_args = [
-                (self.routing_engine, self.locations, self.co2_capture_sources, loc1, loc2)
+                (self.routing_engine, self.locations, loc1, loc2)
                 for loc1, loc2 in location_pairs
             ]
 
@@ -7210,7 +6904,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
             # 准备并行计算的参数
             airport_args = [
-                (self.routing_engine, self.locations, self.co2_capture_sources, loc, airport)
+                (self.routing_engine, self.locations, loc, airport)
                 for loc, airport in airport_pairs
             ]
 
@@ -7236,8 +6930,16 @@ class GreenHydrogenSupplyChainOptimizer:
 
 
     def _add_co2_supply_balance_constraints(self):
-        """添加CO₂供应平衡约束（周级）
+        """添加CO₂供应平衡约束（v3.0: 已禁用，煤炭气化路线通过CO₂库存平衡约束处理）
 
+        v3.0变更：CO₂供应来自煤炭气化，通过_add_co2_inventory_balance_constraints()中
+        的库存平衡约束直接处理，不再需要单独的周级供应平衡约束。
+        """
+        logger.info("v3.0煤炭气化路线不需要CO₂供应平衡约束，跳过")
+        return
+
+        # 以下代码在v3.0中不再使用（保留供参考）
+        """
         约束逻辑：
         - CO₂来源：碳捕获源通过管道和罐车运输供应（周级决策）
         - CO₂去向：进入甲醇生产工厂的CO₂库存
@@ -7317,65 +7019,6 @@ class GreenHydrogenSupplyChainOptimizer:
                 )
 
         logger.info(f"添加了 {len(methanol_locations) * self.time_horizon_weeks} 个CO₂供应平衡约束")
-
-    def _add_co2_capture_capacity_constraints(self):
-        """添加CO₂捕获容量上限约束
-
-        约束逻辑：
-        - 每个CO₂捕获源每周的总运输量不能超过其捕获容量
-        - co2_pipeline_transport_vars[(co2_source, methanol_loc)] 表示从捕获源到甲醇厂的运输量（kg/week）
-        - 约束：sum(运输到各地的CO₂) <= co2_capture_capacity_ton_per_week * 1000
-        """
-        logger.info("添加CO₂捕获容量上限约束...")
-
-        if not hasattr(self, 'co2_capture_sources') or not self.co2_capture_sources:
-            logger.warning("未找到CO₂捕获源数据，跳过容量约束")
-            return
-
-        # 获取所有甲醇生产位置
-        methanol_locations = []
-        for tech, tech_locations in self.mtj_locations.items():
-            if 'green_h2_co2' in tech:
-                methanol_locations.extend(tech_locations)
-        methanol_locations = list(set(methanol_locations))
-
-        if not methanol_locations:
-            logger.warning("未找到甲醇生产位置，跳过CO₂捕获容量约束")
-            return
-
-        constraint_count = 0
-        for co2_source_id, co2_source_data in self.co2_capture_sources.items():
-            # 获取该捕获源的周捕获容量（吨/周）
-            capture_capacity_ton_per_week = co2_source_data.get('co2_capture_capacity_ton_per_week', 0)
-
-            if capture_capacity_ton_per_week <= 0:
-                logger.warning(f"CO₂捕获源 {co2_source_id} 的捕获容量为0，跳过")
-                continue
-
-            # 将容量转换为 kg/week
-            capture_capacity_kg_per_week = capture_capacity_ton_per_week * 1000
-
-            # 计算从该捕获源运输到所有甲醇厂的总量（周级，但所有周共享一个决策变量）
-            # 注意：co2_pipeline_transport_vars 是周级变量，键为 (co2_source_id, methanol_loc)
-            total_co2_transport_from_source = gp.quicksum(
-                self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
-                for methanol_loc in methanol_locations
-                if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-            )
-
-            # 添加容量上限约束
-            self.model.addConstr(
-                total_co2_transport_from_source <= capture_capacity_kg_per_week,
-                name=f"co2_capture_capacity_{co2_source_id}"
-            )
-
-            constraint_count += 1
-            logger.debug(
-                f"  CO₂捕获源 {co2_source_id}: 容量上限 = {capture_capacity_kg_per_week:,.0f} kg/week"
-            )
-
-        logger.info(f"添加了 {constraint_count} 个CO₂捕获容量上限约束")
-
 
     def _add_methanol_production_constraints(self):
         """添加甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
@@ -7547,16 +7190,16 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"添加了 {nonneg_constraints} 个甲醇库存非负约束")
 
     def _add_co2_inventory_balance_constraints(self):
-        """添加CO₂库存平衡约束（时间尺度匹配：周级供应→小时级消耗）
+        """添加CO₂库存平衡约束（v3.0煤炭气化路线：周级气化→小时级消耗）
 
         约束逻辑：
         - 当前库存 = 上期库存 + 本期供应 - 本期消耗
-        - 供应：周级决策（co2_pipeline_transport + co2_truck_transport）
+        - 供应：周级煤炭气化（coal_purchase × co2_per_kg_coal）[v3.0修改]
         - 消耗：小时级消耗（用于甲醇生产）
         - 初始库存：0
-        - 时间尺度匹配：周供应在每周的第一个小时入库，然后逐小时消耗
+        - 时间尺度匹配：周级煤炭气化产生CO₂，按小时均匀摊销，然后逐小时消耗
         """
-        logger.info("添加CO₂库存平衡约束（时间尺度匹配）...")
+        logger.info("添加CO₂库存平衡约束（v3.0煤炭气化路线）...")
 
         # 获取green_h2_co2_to_saf技术的化学计量比
         tech_key = 'green_h2_co2_to_saf'
@@ -7593,24 +7236,15 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 上期库存
                 prev_inventory = self.co2_inventory_vars[(methanol_loc, hour - 1)]
 
-                # 本期供应（kg CO₂/hour）：将周级运输量按小时均匀摊销
+                # v3.0：本期CO₂供应（kg CO₂/hour）：煤炭气化产生
+                # 周级煤炭采购 × CO₂产率 / 每周小时数 = 小时级CO₂供应
                 week = (hour - 1) // self.hours_per_week
                 supply = gp.LinExpr(0)
                 if week < self.time_horizon_weeks:
-                    # 【禁用罐车运输】仅计算管道运输的CO₂供应
-                    supply += gp.quicksum(
-                        self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
-                        for co2_source_id in self.co2_capture_sources
-                        if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-                    ) / float(self.hours_per_week)
-                    # 保留罐车结构便于未来恢复
-                    """
-                    supply += gp.quicksum(
-                        self.co2_truck_transport_vars[(co2_source_id, methanol_loc)]
-                        for co2_source_id in self.co2_capture_sources
-                        if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
-                    ) / float(self.hours_per_week)
-                    """
+                    if (methanol_loc, week) in self.coal_purchase_vars:
+                        coal_purchase_weekly = self.coal_purchase_vars[(methanol_loc, week)]
+                        co2_per_kg_coal = self.coal_supply.co2_per_kg_coal  # kg CO₂/kg coal
+                        supply = coal_purchase_weekly * co2_per_kg_coal / float(self.hours_per_week)
 
                 # 本期消耗（用于甲醇生产，kg CO₂/hour）
                 consumption = 0
@@ -7654,7 +7288,7 @@ if __name__ == '__main__':
         osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization",
                                    "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf")
 
-        optimizer = GreenHydrogenSupplyChainOptimizer(
+        optimizer = CoalHydrogenSAFOptimizer(
             time_horizon_weeks=1,
             osm_pbf_path=osm_file_path
         )

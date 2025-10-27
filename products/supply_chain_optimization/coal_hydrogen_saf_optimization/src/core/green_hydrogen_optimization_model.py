@@ -40,11 +40,6 @@ except ModuleNotFoundError:
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
     create_cost_analyzer = None
 
-try:
-    from ..utils.province_mapper import enrich_province_info
-except ImportError:
-    from utils.province_mapper import enrich_province_info
-
 # 导入GraphHopper路径规划模块 - 必须可用
 try:
     # 尝试相对导入（当作为包使用时）
@@ -374,28 +369,15 @@ def get_project_base_dir():
 # 在模块加载时挂载日志文件输出（仅作用于logging，不捕获print）
 try:
     _base_dir = get_project_base_dir()
-    _process_tag = os.environ.get("GH_SUPPLY_CHAIN_PROCESS", "").strip()
-
-    _log_dir_parts = [
+    _log_dir = os.path.join(
         _base_dir,
         "products",
         "supply_chain_optimization",
         "green_hydrogen_supply_chain_optimization",
         "results",
         "logs",
-    ]
-
-    if _process_tag:
-        _log_dir_parts.append(_process_tag)
-
-    _log_dir = os.path.join(*_log_dir_parts)
-
-    _filename_prefix = "green_h2_supply_chain"
-    if _process_tag:
-        _safe_tag = _process_tag.replace(os.sep, "_").replace(" ", "_")
-        _filename_prefix = f"{_filename_prefix}_{_safe_tag}"
-
-    mount_file_logging(_log_dir, filename_prefix=_filename_prefix)
+    )
+    mount_file_logging(_log_dir, filename_prefix="green_h2_supply_chain")
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
@@ -2460,8 +2442,8 @@ class GreenHydrogenSupplyChainOptimizer:
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
 
-            # 【修复零产量BUG】为MTJ工厂位置创建氢气库存变量（包括CO₂捕获源）
-            elif location_type in ['lng_terminal', 'airport', 'co2_capture']:
+            # 【修复零产量BUG】为MTJ工厂位置创建氢气库存变量
+            elif location_type in ['lng_terminal', 'airport']:
                 # MTJ位置需要氢气库存变量来跟踪从管道接收的氢气
                 for hour in range(self.total_hours + 1):
                     var_name = f"h2_storage_mtj_{location}_{hour}"
@@ -2722,9 +2704,6 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 10. CO₂供应平衡约束（周级）
         self._add_co2_supply_balance_constraints()
-
-        # 10.1. CO₂捕获容量上限约束
-        self._add_co2_capture_capacity_constraints()
 
         # 11. 甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
         self._add_methanol_production_constraints()
@@ -4177,9 +4156,9 @@ class GreenHydrogenSupplyChainOptimizer:
                         name=f"h2_inventory_nonnegative_{location}_{hour}"
                     )
 
-            # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡（包括CO₂捕获源）
-            elif location_type in ['lng_terminal', 'airport', 'co2_capture']:
-                logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location} (类型: {location_type})")
+            # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡
+            elif location_type in ['lng_terminal', 'airport']:
+                logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location}")
 
                 # 获取甲醇生产参数（从配置中读取）
                 # 查找使用 green_h2_co2 技术的配置
@@ -6816,12 +6795,9 @@ class GreenHydrogenSupplyChainOptimizer:
                 logger.error(f"CO₂捕获源数据文件不存在: {co2_data_path}")
                 raise FileNotFoundError(f"CO₂捕获源数据文件不存在: {co2_data_path}")
 
-            # 加载CO₂数据并修复缺失的省份信息
+            # 加载CO₂数据
             co2_df = pd.read_csv(co2_data_path)
             logger.info(f"加载CO₂捕获源原始数据: {len(co2_df)} 条记录")
-
-            co2_df = enrich_province_info(co2_df, logger=logger)
-            co2_df['province'] = co2_df['province'].fillna('Unknown')
 
             # 过滤北京500km范围内的CO₂捕获源
             co2_df = co2_df[co2_df.apply(
@@ -7317,65 +7293,6 @@ class GreenHydrogenSupplyChainOptimizer:
                 )
 
         logger.info(f"添加了 {len(methanol_locations) * self.time_horizon_weeks} 个CO₂供应平衡约束")
-
-    def _add_co2_capture_capacity_constraints(self):
-        """添加CO₂捕获容量上限约束
-
-        约束逻辑：
-        - 每个CO₂捕获源每周的总运输量不能超过其捕获容量
-        - co2_pipeline_transport_vars[(co2_source, methanol_loc)] 表示从捕获源到甲醇厂的运输量（kg/week）
-        - 约束：sum(运输到各地的CO₂) <= co2_capture_capacity_ton_per_week * 1000
-        """
-        logger.info("添加CO₂捕获容量上限约束...")
-
-        if not hasattr(self, 'co2_capture_sources') or not self.co2_capture_sources:
-            logger.warning("未找到CO₂捕获源数据，跳过容量约束")
-            return
-
-        # 获取所有甲醇生产位置
-        methanol_locations = []
-        for tech, tech_locations in self.mtj_locations.items():
-            if 'green_h2_co2' in tech:
-                methanol_locations.extend(tech_locations)
-        methanol_locations = list(set(methanol_locations))
-
-        if not methanol_locations:
-            logger.warning("未找到甲醇生产位置，跳过CO₂捕获容量约束")
-            return
-
-        constraint_count = 0
-        for co2_source_id, co2_source_data in self.co2_capture_sources.items():
-            # 获取该捕获源的周捕获容量（吨/周）
-            capture_capacity_ton_per_week = co2_source_data.get('co2_capture_capacity_ton_per_week', 0)
-
-            if capture_capacity_ton_per_week <= 0:
-                logger.warning(f"CO₂捕获源 {co2_source_id} 的捕获容量为0，跳过")
-                continue
-
-            # 将容量转换为 kg/week
-            capture_capacity_kg_per_week = capture_capacity_ton_per_week * 1000
-
-            # 计算从该捕获源运输到所有甲醇厂的总量（周级，但所有周共享一个决策变量）
-            # 注意：co2_pipeline_transport_vars 是周级变量，键为 (co2_source_id, methanol_loc)
-            total_co2_transport_from_source = gp.quicksum(
-                self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
-                for methanol_loc in methanol_locations
-                if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-            )
-
-            # 添加容量上限约束
-            self.model.addConstr(
-                total_co2_transport_from_source <= capture_capacity_kg_per_week,
-                name=f"co2_capture_capacity_{co2_source_id}"
-            )
-
-            constraint_count += 1
-            logger.debug(
-                f"  CO₂捕获源 {co2_source_id}: 容量上限 = {capture_capacity_kg_per_week:,.0f} kg/week"
-            )
-
-        logger.info(f"添加了 {constraint_count} 个CO₂捕获容量上限约束")
-
 
     def _add_methanol_production_constraints(self):
         """添加甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）

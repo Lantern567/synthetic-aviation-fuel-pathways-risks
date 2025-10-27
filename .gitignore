@@ -345,3 +345,4 @@ gurobi.lic
 !**/test_*.csv 
 products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
 products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf
+products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/china-latest.osm.pbf
