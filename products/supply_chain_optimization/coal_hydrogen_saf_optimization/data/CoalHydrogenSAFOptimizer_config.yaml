@@ -1,393 +1,584 @@
-﻿# =============================================================================
-# CoalHydrogenSAFOptimizer 閰嶇疆鏂囦欢
+# =============================================================================
+# CoalHydrogenSAFOptimizer 配置文件
 # Configuration File for Coal Hydrogen SAF Supply Chain Optimizer
 # =============================================================================
 #
-# 鏂囦欢璇存槑 | File Description:
-# 鏈厤缃枃浠剁敤浜庣叅鐐?缁挎阿骞惰璺嚎浼樺寲鍣紝鑱氱劍鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鍒跺彲鎸佺画鑸┖鐕冩枡(SAF)鐨?# 鐢熶骇瑙勫垝涓庝緵搴旈摼浼樺寲銆傞噰鐢ㄦ贩鍚堟暣鏁扮嚎鎬ц鍒?MILP)寤烘ā锛屼娇鐢℅urobi姹傝В鍣ㄣ€?#
+# 文件说明 | File Description:
+# 本配置文件用于煤炭+绿氢SAF供应链优化器，支持煤炭气化CO₂+绿氢两步法制SAF的
+# 生产规划与供应链优化。采用混合整数线性规划(MILP)建模，使用Gurobi求解器。
+#
 # This configuration file is for the Coal Hydrogen SAF Supply Chain Optimizer,
-# supporting coal gasification CO鈧?+ green hydrogen to sustainable aviation fuel (SAF) production
+# supporting coal gasification CO₂ + green hydrogen to sustainable aviation fuel (SAF) production
 # planning and supply chain optimization using Mixed Integer Linear Programming
 # (MILP) with Gurobi solver.
 #
-# 涓昏鍔熻兘 | Main Features:
-# - 鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鍒禨AF鎶€鏈矾绾夸紭鍖?# - 鍏ㄧ敓鍛藉懆鏈熺⒊鎺掓斁璇勪及
-# - 鐓ょ偔渚涘簲涓庢皵鍖栨垚鏈缓妯?# - 鍦扮悊鑱氱被涓庡垎灞傝繍杈撶瓥鐣?# - GraphHopper瀹為檯璺緞瑙勫垝
-# - 缁忔祹鎬ц竟鐣岀害鏉?(LCOE闃堝€?
-# - 姘㈡皵鍜孋O鈧傜閬撹矾鐢变紭鍖?#
-# 閰嶇疆缁撴瀯 | Configuration Structure:
-# 19涓富瑕佸弬鏁扮被鍒紝娑电洊鎶€鏈€佺粡娴庛€佹垚鏈€佽矾寰勭瓑鍚勬柟闈?# See metadata section for detailed category descriptions
+# 主要功能 | Main Features:
+# - 煤炭气化CO₂+绿氢两步法制SAF技术路线优化
+# - 全生命周期碳排放计算
+# - 煤炭气化本地CO₂供应
+# - 地理聚类与分层运输策略
+# - GraphHopper实际路径规划
+# - 经济性边界约束 (LCOE阈值)
+# - 氢气管道路由优化（无需外部CO₂运输）
 #
-# 鐗堟湰淇℃伅 | Version Info:
+# 配置结构 | Configuration Structure:
+# 19个主要参数类别，涵盖技术、经济、成本、路径等各方面
+# See metadata section for detailed category descriptions
+#
+# 版本信息 | Version Info:
 # Version: 3.0.0
-# Last Updated: 2025-10-26
+# Last Updated: 2025-10-27
 # =============================================================================
 
 # =============================================================================
-# 鍩虹绯荤粺鍙傛暟 (Basic System Parameters)
-# 鎺у埗浼樺寲鍣ㄧ殑鍩烘湰琛屼负銆佹椂闂磋寖鍥村拰璺緞瑙勫垝璁剧疆
+# 基础系统参数 (Basic System Parameters)
+# 控制优化器的基本行为、时间范围和路径规划设置
 # =============================================================================
 basic_parameters:
-  # 鏃堕棿鑼冨洿鍙傛暟 - Time Horizon Parameters
-  time_horizon_weeks: 1                    # 浼樺寲鏃堕棿鑼冨洿(鍛ㄦ暟) | Optimization time horizon in weeks
-                                           # 鐢ㄩ€旓細瀹氫箟浼樺寲闂鐨勬椂闂磋法搴︼紝褰卞搷鍐崇瓥鍙橀噺鏁伴噺鍜岃绠楀鏉傚害
-                                           # 璋冨弬寤鸿锛氳皟璇曢樁娈典娇鐢?鍛紝鐢熶骇鐜鏍规嵁鍐崇瓥闇€姹傞€夋嫨4鍛ㄦ垨鏇撮暱
+  # 时间范围参数 - Time Horizon Parameters
+  time_horizon_weeks: 1                    # 优化时间范围(周数) | Optimization time horizon in weeks
+                                           # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
+                                           # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
 
-  hours_per_week: 168                      # 姣忓懆灏忔椂鏁?(7澶?脳 24灏忔椂) | Hours per week (7 days 脳 24 hours)
-                                           # 鐢ㄩ€旓細鏃堕棿棰楃矑搴﹁缃紝瀹氫箟灏忔椂绾у喅绛栧彉閲忕殑鏁伴噺
-                                           # 娉ㄦ剰锛氶€氬父涓嶉渶瑕佷慨鏀癸紝闄ら潪瑕佹敼鍙樻椂闂村崟浣?
-  # GraphHopper璺緞瑙勫垝璁剧疆 - GraphHopper Routing Configuration
-  use_graphhopper_routing: true            # 鏄惁浣跨敤GraphHopper璺緞瑙勫垝 | Enable GraphHopper routing service
-                                           # true: 浣跨敤瀹為檯閬撹矾璺濈锛屾洿鍑嗙‘浣嗛渶瑕丟raphHopper鏈嶅姟
-                                           # false: 浣跨敤鐩寸嚎璺濈浼扮畻锛屽揩閫熶絾绮惧害杈冧綆
+  hours_per_week: 168                      # 每周小时数 (7天 × 24小时) | Hours per week (7 days × 24 hours)
+                                           # 用途：时间颗粒度设置，定义小时级决策变量的数量
+                                           # 注意：通常不需要修改，除非要改变时间单位
 
-  graphhopper_host: localhost              # GraphHopper鏈嶅姟涓绘満鍦板潃 | GraphHopper service host
-                                           # 榛樿涓烘湰鍦版湇鍔★紝鍙厤缃繙绋嬫湇鍔″櫒IP鍦板潃
+  # GraphHopper路径规划设置 - GraphHopper Routing Configuration
+  use_graphhopper_routing: true            # 是否使用GraphHopper路径规划 | Enable GraphHopper routing service
+                                           # true: 使用实际道路距离，更准确但需要GraphHopper服务
+                                           # false: 使用直线距离估算，快速但精度较低
 
-  graphhopper_port: 8989                   # GraphHopper鏈嶅姟绔彛 | GraphHopper service port
-                                           # 榛樿8989绔彛锛岄渶涓嶨raphHopper鏈嶅姟閰嶇疆淇濇寔涓€鑷?
-  max_transport_distance_km: 1000.0        # 鏈€澶ц繍杈撹窛绂婚檺鍒?鍏噷) | Max transport distance limit (km)
-                                           # 瓒呰繃姝よ窛绂荤殑杩愯緭璺嚎灏嗕娇鐢ㄧ洿绾胯窛绂讳及绠?                                           # 寤鸿锛氬尯鍩熶紭鍖?00-800km锛屽叏鍥借寖鍥?500-2000km
+  graphhopper_host: localhost              # GraphHopper服务主机地址 | GraphHopper service host
+                                           # 默认为本地服务，可配置远程服务器IP地址
 
-  use_routing_for_short_distance: true     # 鐭窛绂绘槸鍚︿娇鐢ㄧ簿纭矾寰勮鍒?| Use routing for short distances
-                                           # true: 鐭窛绂讳篃浣跨敤绮剧‘璺緞瑙勫垝
-                                           # false: 鐭窛绂讳娇鐢ㄧ洿绾胯窛绂伙紝鎻愬崌鎬ц兘
+  graphhopper_port: 8989                   # GraphHopper服务端口 | GraphHopper service port
+                                           # 默认8989端口，需与GraphHopper服务配置保持一致
 
-  # 姘㈡皵绠￠亾杩愯緭璁剧疆 - Hydrogen Pipeline Configuration
-  use_hydrogen_pipeline_distance: true     # 鏄惁浣跨敤姘㈡皵绠￠亾璺濈璁＄畻 | Enable hydrogen pipeline distance calculation
-                                           # 鍚敤鍚庝娇鐢ㄧ閬撹矾寰勮繘琛岀簿纭殑姘㈡皵杩愯緭璺濈璁＄畻
-                                           # 渚濊禆锛氬熀浜庤仛绫诲拰绠￠亾璺潈鐨勪笓鐢ㄧ畻娉?
-  # CO鈧傜閬撹繍杈撹缃?- CO鈧?Pipeline Configuration
-  use_co2_pipeline_distance: false          # 鏄惁浣跨敤CO鈧傜閬撹窛绂昏绠?| Enable CO鈧?pipeline distance calculation
-                                           # 鍚敤鍚庝娇鐢ㄧ閬撹矾寰勮繘琛岀簿纭殑CO鈧傝繍杈撹窛绂昏绠?                                           # 渚濊禆锛氬熀浜庤仛绫诲拰绠￠亾璺潈鐨勪笓鐢ㄧ畻娉?
-  # 缂撳瓨璁剧疆 - Cache Configuration
-  cache_base_dir: shared/data/cache        # 缂撳瓨鍩虹鐩綍 | Base directory for cache files
-                                           # 瀛樺偍GraphHopper璺緞缂撳瓨銆佸彲鍐嶇敓鑳芥簮鏁版嵁缂撳瓨绛?
-  cache_expiry_hours: 168                  # 缂撳瓨杩囨湡鏃堕棿(灏忔椂) | Cache expiry time in hours
-                                           # 168灏忔椂 = 7澶╋紝瓒呰繃姝ゆ椂闂寸殑缂撳瓨灏嗚瑙嗕负杩囨湡
+  max_transport_distance_km: 1000.0        # 最大运输距离限制(公里) | Max transport distance limit (km)
+                                           # 超过此距离的运输路线将使用直线距离估算
+                                           # 建议：区域优化500-800km，全国范围1500-2000km
+
+  use_routing_for_short_distance: true     # 短距离是否使用精确路径规划 | Use routing for short distances
+                                           # true: 短距离也使用精确路径规划
+                                           # false: 短距离使用直线距离，提升性能
+
+  # 氢气管道运输设置 - Hydrogen Pipeline Configuration
+  use_hydrogen_pipeline_distance: true     # 是否使用氢气管道距离计算 | Enable hydrogen pipeline distance calculation
+                                           # 启用后使用管道路径进行精确的氢气运输距离计算
+                                           # 依赖：基于聚类和管道路权的专用算法
+
+  # CO₂管道运输设置 - CO₂ Pipeline Configuration
+  use_co2_pipeline_distance: false         # v3.0煤炭气化路线CO₂本地产生，无需运输 | v3.0: CO₂ from local coal gasification, no transport needed
+                                           # 启用后使用管道路径进行精确的CO₂运输距离计算
+                                           # 依赖：基于聚类和管道路权的专用算法
+
+  # 缓存设置 - Cache Configuration
+  cache_base_dir: shared/data/cache        # 缓存基础目录 | Base directory for cache files
+                                           # 存储GraphHopper路径缓存、可再生能源数据缓存等
+
+  cache_expiry_hours: 168                  # 缓存过期时间(小时) | Cache expiry time in hours
+                                           # 168小时 = 7天，超过此时间的缓存将被视为过期
 
 # =============================================================================
-# 瀹归噺闄愬埗鍙傛暟 (Capacity Limits)
-# 瀹氫箟鍚勭被璁炬柦鍜岃繍杈撴柟寮忕殑浜ц兘涓婇檺
+# 容量限制参数 (Capacity Limits)
+# 定义各类设施和运输方式的产能上限
 # =============================================================================
 capacity_limits:
-  # 浼樺寲妯″瀷鍙傛暟 - Optimization Model Parameters
-  big_m_constant: 10000                    # Big-M甯告暟 | Big-M constant for MILP modeling
-                                           # 鐢ㄩ€旓細娣峰悎鏁存暟绾挎€ц鍒?MILP)涓殑澶ф暟甯告暟
-                                           # 浣滅敤锛氱敤浜庨€昏緫绾︽潫鐨勭嚎鎬у寲琛ㄧず
+  # 优化模型参数 - Optimization Model Parameters
+  big_m_constant: 10000                    # Big-M常数 | Big-M constant for MILP modeling
+                                           # 用途：混合整数线性规划(MILP)中的大数常数
+                                           # 作用：用于逻辑约束的线性化表示
 
-  # SAF鐢熶骇璁炬柦瀹归噺闄愬埗 - SAF Production Facility Capacity Limits
-  saf_reactor_max_capacity_kg_per_hour: 1000000  # SAF鍙嶅簲鍣ㄦ渶澶т骇鑳?kg/h) | Max SAF reactor capacity (kg SAF/hour)
-                                           # 鍗曚釜SAF鍙嶅簲鍣ㄨ鏂界殑鏈€澶AF鐢熶骇鑳藉姏
-                                           # 璁剧疆涓?00涓噆g/h锛屽熀鏈笉鏋勬垚瀹為檯绾︽潫
+  # SAF生产设施容量限制 - SAF Production Facility Capacity Limits
+  saf_reactor_max_capacity_kg_per_hour: 1000000  # SAF反应器最大产能(kg/h) | Max SAF reactor capacity (kg SAF/hour)
+                                           # 单个SAF反应器设施的最大SAF生产能力
+                                           # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 0       # SAF鍙嶅簲鍣ㄦ渶灏忕粡娴庤妯?kg/h) | Min economic scale (kg SAF/hour)
-                                           # 鏆備笉璁剧疆鏈€灏忚妯＄害鏉燂紝鐢变紭鍖栧櫒鑷敱鍐崇瓥
+  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 暂不设置最小规模约束，由优化器自由决策
 
-  # SAF鍙嶅簲鍣ㄥ閲忎及绠?- SAF Reactor Capacity Estimates by Location Type
+  # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:
-    default: 2000                          # 榛樿瀹归噺浼扮畻(kg/h) | Default capacity estimate
-    industrial: 3000                       # 宸ヤ笟鍩哄湴瀹归噺(kg/h) | Industrial base capacity
-    petrochemical_base: 5000               # 鐭冲寲鍩哄湴瀹归噺(kg/h) | Petrochemical base capacity
-                                           # 璇存槑锛氭牴鎹笉鍚屼綅缃被鍨嬭瀹氱殑SAF鍙嶅簲鍣ㄧ敓浜у閲忎及绠楀€?
-  # 姘㈡皵鐢熶骇瀹归噺 - Hydrogen Production Capacity
-  electrolyzer_max_capacity_kg_per_hour: 100000  # 鐢佃В妲芥渶澶т骇鑳?kg H鈧?h) | Max electrolyzer capacity
-                                           # 鍗曚釜鐢佃В妲借鏂界殑鏈€澶ф阿姘旂敓浜ц兘鍔?
-  electrolyzer_min_capacity_kg_per_hour: 100     # 鐢佃В妲芥渶灏忕粡娴庤妯?kg H鈧?h) | Min economic electrolyzer scale
-                                           # 鏈€灏忕粡娴庤妯＄害鏉燂紝灏忎簬姝よ妯′笉缁忔祹
+    default: 2000                          # 默认容量估算(kg/h) | Default capacity estimate
+    industrial: 3000                       # 工业基地容量(kg/h) | Industrial base capacity
+    petrochemical_base: 5000               # 石化基地容量(kg/h) | Petrochemical base capacity
+                                           # 说明：根据不同位置类型设定的SAF反应器生产容量估算值
+
+  # 氢气生产容量 - Hydrogen Production Capacity
+  electrolyzer_max_capacity_kg_per_hour: 100000  # 电解槽最大产能(kg H₂/h) | Max electrolyzer capacity
+                                           # 单个电解槽设施的最大氢气生产能力
+
+  electrolyzer_min_capacity_kg_per_hour: 100     # 电解槽最小经济规模(kg H₂/h) | Min economic electrolyzer scale
+                                           # 最小经济规模约束，小于此规模不经济
+
 # =============================================================================
-# 鐓ょ偔渚涘簲鍙傛暟 (Coal Supply Parameters)
-# 瀹氫箟鐓ょ偔姘斿寲璺嚎鐨勬牳蹇冨師鏂欎笌宸ヨ壓鍙傛暟
+# CO₂捕获与供应参数 (CO₂ Capture and Supply Parameters)
+# 定义CO₂捕获源的类型、排放因子、捕获率、成本和运输参数
+# 按照PRD v2.0第3.2.3节和第5节要求配置
+# =============================================================================
+co2_parameters:
+  # CO₂捕获源参数 - CO₂ Capture Source Parameters
+  capture_sources:
+    # 燃煤电厂参数 - Coal Power Plant Parameters
+    coal_power_capture_rate: 0.85          # 捕获率 | Capture rate (85%)
+                                           # 后燃烧捕获技术(Post-combustion Capture)典型值
+                                           # 来源：Global CCS Institute
+
+    coal_power_emission_factor: 0.95       # 排放因子(tCO₂/MWh) | Emission factor (tCO₂/MWh)
+                                           # IPCC燃煤发电碳排放标准值
+
+    coal_power_capacity_factor: 0.70       # 容量因子 | Capacity factor (70%)
+                                           # 基于中国燃煤电厂平均运行率
+                                           # 来源：中国电力年鉴2023
+
+    # 天然气/LNG发电厂参数 - LNG/Gas Power Plant Parameters
+    lng_power_capture_rate: 0.90           # 捕获率 | Capture rate (90%)
+                                           # 天然气燃烧烟气CO₂浓度较高，捕获效率优于燃煤
+
+    lng_power_emission_factor: 0.42        # 排放因子(tCO₂/MWh) | Emission factor (tCO₂/MWh)
+                                           # IPCC天然气联合循环发电碳排放标准值
+
+    lng_power_capacity_factor: 0.75        # 容量因子 | Capacity factor (75%)
+                                           # 天然气电厂调峰运行典型值
+
+    # 石油炼厂参数 - Oil Refinery Parameters
+    oil_refinery_capture_rate: 0.80        # 捕获率 | Capture rate (80%)
+                                           # 工业过程CO₂捕获技术典型值
+
+    oil_refinery_emission_factor: 0.6      # 排放因子(tCO₂/吨原油) | Emission factor (tCO₂/ton crude oil)
+                                           # 炼油过程综合排放因子
+                                           # 来源：IPCC工业过程排放指南
+
+    oil_refinery_capacity_factor: 0.85     # 容量因子 | Capacity factor (85%)
+                                           # 石油炼厂连续运行率
+                                           # 来源：石化行业统计数据
+
+  # CO₂捕获成本 - CO₂ Capture Costs
+  capture_costs:
+    coal_power_yuan_per_ton: 150           # 燃煤电厂CCS成本(元/吨) | Coal power CCS cost (yuan/ton)
+                                           # 基于现有CCS项目平均成本
+                                           # 来源：IEA CCS Cost Report 2024
+
+    lng_power_yuan_per_ton: 180            # 天然气电厂CCS成本(元/吨) | LNG power CCS cost (yuan/ton)
+                                           # 天然气CCS成本略高于燃煤（技术要求更高）
+
+    oil_refinery_yuan_per_ton: 120         # 石油炼厂CCS成本(元/吨) | Oil refinery CCS cost (yuan/ton)
+                                           # 炼厂CCS成本相对较低（浓度较高，捕获容易）
+
+  # CO₂运输参数 - CO₂ Transportation Parameters
+  transport:
+    # 管道运输成本函数（分段线性）- Pipeline Transport Cost Function (Piecewise Linear)
+    pipeline_transport_cost_function:
+      function_type: piecewise_linear      # 函数类型：分段线性 | Function type: piecewise linear
+      unit: yuan_per_ton_co2_per_100km     # 成本单位：元/(吨CO₂·百公里) | Unit: yuan/(ton CO₂·100km)
+      description: |
+        CO₂管道运输成本曲线（包含建设成本摊销）
+        CO₂ pipeline transport cost curve (including construction cost amortization)
+        模仿氢气管道成本结构，基于实际工程数据
+
+      # 成本数据点 [距离(km), 成本(元/吨/100km)] - Cost data points [distance(km), cost(yuan/ton/100km)]
+      data_points:
+        - [25, 12.0]                       # 25km: 12元/吨/100km
+        - [50, 8.5]                        # 50km: 8.5元/吨/100km
+        - [100, 5.0]                       # 100km: 5元/吨/100km
+        - [200, 3.0]                       # 200km: 3元/吨/100km
+        - [300, 2.2]                       # 300km: 2.2元/吨/100km
+        - [400, 1.8]                       # 400km: 1.8元/吨/100km
+        - [500, 1.5]                       # 500km: 1.5元/吨/100km
+
+      notes: |
+        ⚠️ 重要说明 Important Notes:
+        - 成本函数已包含以下所有费用（与氢气管道成本处理方式一致）:
+          * 管道建设投资摊销 (Pipeline construction amortization)
+          * 压缩机站投资和运营 (Compressor station CAPEX & OPEX)
+          * 管道维护和检测 (Pipeline maintenance & inspection)
+          * 能耗成本 (Energy cost for compression)
+          * 人工和管理成本 (Labor & management)
+
+        - 管道建设成本（pipeline_capex_yuan_per_km）已摊销到分段线性成本函数中
+        - 目标函数中不需要单独添加管道建设成本项
+        - 当SAF工厂位置 = CO₂捕获源位置时，运输距离 = 0，运输成本 = 0（本地供应）
+
+        单位转换说明 Unit Conversion:
+        - 配置单位：元/(吨CO₂·百公里) yuan/(ton CO₂·100km)
+        - 计算公式：总成本 = 单位成本 × (运输距离km ÷ 100) Total cost = unit cost × (distance_km ÷ 100)
+        - 最终单位：元/吨CO₂ yuan/ton CO₂
+
+    # 罐车运输成本 - Truck Transport Cost
+    truck_cost_yuan_per_ton_per_100km: 50  # 罐车运输成本(元/吨/100km) | Truck transport cost (yuan/ton/100km)
+
+    liquefaction_cost_yuan_per_ton: 80     # CO₂液化成本(元/吨) | CO₂ liquefaction cost (yuan/ton)
+                                           # 罐车运输需要液化
+
+    # 运输容量限制 - Transport Capacity Limits
+    max_pipeline_capacity_ton_per_day: 5000  # 管道日最大容量(吨/天) | Max pipeline capacity (ton/day)
+    max_truck_capacity_ton_per_day: 500    # 罐车日最大容量(吨/天) | Max truck capacity (ton/day)
+
+  # CO₂储存参数 - CO₂ Storage Parameters
+  storage:
+    storage_cost_yuan_per_ton_per_day: 0.5 # 储存成本(元/吨/天) | Storage cost (yuan/ton/day)
+    max_storage_capacity_ton: 50000        # 最大储存容量(吨) | Max storage capacity (tons)
+    storage_density_ton_per_m3: 0.8        # 储存密度(吨/m³) | Storage density (ton/m³)
+                                           # 液态CO₂密度
+
+# =============================================================================
+
+# =============================================================================
+# 煤炭供应参数 (Coal Supply Parameters)
+# 定义煤炭气化路线的核心原料与工艺参数
 # =============================================================================
 coal_parameters:
-  coal_type: bituminous                    # 鐓ょ偔绫诲瀷 | Coal type
-  carbon_content: 0.75                     # 纰冲惈閲?璐ㄩ噺鍒嗘暟) | Carbon content (mass fraction)
-  co2_per_kg_coal: 2.44                    # 鍗曚綅鐓ょ偔CO鈧備骇閲?kg/kg) | CO鈧?yield per kg coal
-  coal_price_yuan_per_ton: 525             # 鐓ょ偔閲囪喘鎴愭湰(鍏?鍚? | Coal purchase cost (yuan/ton)
-  gasification_efficiency: 0.75            # 鐓ょ偔姘斿寲鏁堢巼 | Coal gasification efficiency
-  gasification_energy_mj_per_kg: 8.0       # 姘斿寲鑳借€?MJ/kg) | Gasification energy demand
-  gasification_energy_cost_yuan_per_mj: 0.5  # 姘斿寲鑳借€楁垚鏈?鍏?MJ) | Gasification energy cost
-  coal_consumption_kg_per_kg_saf: 1.8      # 鍗曚綅SAF鐓ょ偔娑堣€?kg/kg SAF) | Coal required per kg SAF
-  base_co2_yield_kg_per_kg_saf: 3.5        # 鍗曚綅SAF鐢熸垚CO鈧傞渶姹?kg/kg SAF) | CO鈧?required per kg SAF
+  coal_type: bituminous                    # 煤炭类型 | Coal type
+  carbon_content: 0.75                     # 碳含量(质量分数) | Carbon content (mass fraction)
+  co2_per_kg_coal: 2.44                    # 单位煤炭CO₂产量(kg/kg) | CO₂ yield per kg coal
+  coal_price_yuan_per_ton: 525             # 煤炭采购成本(元/吨) | Coal purchase cost (yuan/ton)
+  gasification_efficiency: 0.75            # 煤炭气化效率 | Coal gasification efficiency
+  gasification_energy_mj_per_kg: 8.0       # 气化能耗(MJ/kg) | Gasification energy demand
+  gasification_energy_cost_yuan_per_mj: 0.5  # 气化能耗成本(元/MJ) | Gasification energy cost
+  coal_consumption_kg_per_kg_saf: 1.8      # 单位SAF煤炭消耗(kg/kg SAF) | Coal required per kg SAF
+  base_co2_yield_kg_per_kg_saf: 3.5        # 单位SAF生成CO₂需求(kg/kg SAF) | CO₂ required per kg SAF
 
+# 碳排放参数 (Carbon Emission Parameters)
+# 用于全生命周期碳排放计算和环境影响评估
 # =============================================================================
-# 纰虫帓鏀惧弬鏁?(Carbon Emission Parameters)
-# 鐢ㄤ簬鍏ㄧ敓鍛藉懆鏈熺⒊鎺掓斁璇勪及鍜岀幆澧冨奖鍝嶈瘎浼?# =============================================================================
 carbon_emission_parameters:
-  # 鍩哄噯鏁版嵁 - Benchmark Values
+  # 基准数据 - Benchmark Values
   benchmarks:
-    traditional_jet_fuel: 89               # 浼犵粺鑸┖鐓ゆ补纰冲己搴?gCO鈧俥/MJ) | Traditional jet fuel CI (gCO鈧俥/MJ)
-                                           # 鏉ユ簮锛欼CAO鏍囧噯鏁版嵁锛岀敤浜庡姣斿垎鏋?
-    saf_energy_content: 43.15              # SAF鑳介噺鍚噺(MJ/kg) | SAF energy content (MJ/kg)
-    saf_carbon_intensity_gco2e_per_mj: 60.0       # 鐓ょ偔璺嚎SAF纰冲己搴?| SAF carbon intensity for coal route
-                                           # 鍙寔缁埅绌虹噧鏂欑殑浣庝綅鐑€?
-    corsia_limit: 30                       # CORSIA纰虫帓鏀鹃檺鍊?gCO鈧俥/MJ) | CORSIA emission limit (gCO鈧俥/MJ)
-                                           # 鍥介檯姘戣埅缁勭粐纰虫姷娑堣鍒掔殑鎺掓斁涓婇檺
+    traditional_jet_fuel: 89               # 传统航空煤油碳强度(gCO₂e/MJ) | Traditional jet fuel CI (gCO₂e/MJ)
+                                           # 来源：ICAO标准数据，用于对比分析
 
-  # 璁＄畻鎺у埗鍙傛暟 - Calculation Control
+    saf_energy_content: 43.15              # SAF能量含量(MJ/kg) | SAF energy content (MJ/kg)
+                                           # 可持续航空燃料的低位热值
+
+    corsia_limit: 30                       # CORSIA碳排放限值(gCO₂e/MJ) | CORSIA emission limit (gCO₂e/MJ)
+                                           # 国际民航组织碳抵消计划的排放上限
+
+  # 计算控制参数 - Calculation Control
   calculation_control:
-    enable_carbon_tracking: true           # 鍚敤纰虫帓鏀捐窡韪?| Enable carbon emission tracking
-                                           # true: 璁＄畻骞惰褰曞叏鐢熷懡鍛ㄦ湡纰虫帓鏀?
-    include_facility_construction: true    # 鍖呭惈璁炬柦寤鸿鎺掓斁 | Include facility construction emissions
-                                           # true: 璁＄畻鍖呭惈璁炬柦寤洪€犵殑闂存帴鎺掓斁
+    enable_carbon_tracking: true           # 启用碳排放跟踪 | Enable carbon emission tracking
+                                           # true: 计算并记录全生命周期碳排放
 
-    use_lifecycle_amortization: true       # 浣跨敤鐢熷懡鍛ㄦ湡鎽婇攢 | Use lifecycle amortization
-                                           # true: 灏嗚鏂藉缓璁炬帓鏀炬寜浣跨敤瀵垮懡鎽婇攢
+    include_facility_construction: true    # 包含设施建设排放 | Include facility construction emissions
+                                           # true: 计算包含设施建造的间接排放
 
-    save_carbon_csv: true                  # 淇濆瓨纰虫帓鏀綜SV鎶ュ憡 | Save carbon emission CSV report
-                                           # true: 鐢熸垚璇︾粏鐨勭⒊鎺掓斁鏁版嵁鏂囦欢
+    use_lifecycle_amortization: true       # 使用生命周期摊销 | Use lifecycle amortization
+                                           # true: 将设施建设排放按使用寿命摊销
 
-    carbon_log_level: INFO                 # 纰虫帓鏀炬棩蹇楃骇鍒?| Carbon logging level
-                                           # 閫夐」锛欴EBUG, INFO, WARNING, ERROR
+    save_carbon_csv: true                  # 保存碳排放CSV报告 | Save carbon emission CSV report
+                                           # true: 生成详细的碳排放数据文件
 
-    carbon_report_detail_level: 2          # 纰虫帓鏀炬姤鍛婅缁嗙▼搴?| Carbon report detail level
-                                           # 0: 绠€瑕? 1: 鏍囧噯, 2: 璇︾粏, 3: 瀹屾暣
+    carbon_log_level: INFO                 # 碳排放日志级别 | Carbon logging level
+                                           # 选项：DEBUG, INFO, WARNING, ERROR
 
-  # 璁炬柦寤鸿鎺掓斁 - Facility Construction Emissions
+    carbon_report_detail_level: 2          # 碳排放报告详细程度 | Carbon report detail level
+                                           # 0: 简要, 1: 标准, 2: 详细, 3: 完整
+
+  # 设施建设排放 - Facility Construction Emissions
   facility_construction:
-    electrolyzer_embodied: 1500            # 鐢佃В妲介殣鍚⒊鎺掓斁(kgCO鈧俥/kW) | Electrolyzer embodied emissions
-                                           # 鍒堕€犮€佽繍杈撳拰瀹夎杩囩▼鐨勬€绘帓鏀?
-    electrolyzer_lifetime: 15              # 鐢佃В妲借璁″鍛?骞? | Electrolyzer design lifetime (years)
+    electrolyzer_embodied: 1500            # 电解槽隐含碳排放(kgCO₂e/kW) | Electrolyzer embodied emissions
+                                           # 制造、运输和安装过程的总排放
 
-    saf_reactor_embodied: 2000             # SAF鍙嶅簲鍣ㄩ殣鍚⒊鎺掓斁(kgCO鈧俥/kW) | SAF reactor embodied emissions
+    electrolyzer_lifetime: 15              # 电解槽设计寿命(年) | Electrolyzer design lifetime (years)
 
-    saf_reactor_lifetime: 25               # SAF鍙嶅簲鍣ㄨ璁″鍛?骞? | SAF reactor design lifetime (years)
+    saf_reactor_embodied: 2000             # SAF反应器隐含碳排放(kgCO₂e/kW) | SAF reactor embodied emissions
 
-    saf_facility_embodied: 150             # SAF璁炬柦闅愬惈纰虫帓鏀?kgCO鈧俥/骞翠骇鍚? | SAF facility embodied emissions
+    saf_reactor_lifetime: 25               # SAF反应器设计寿命(年) | SAF reactor design lifetime (years)
 
-    saf_facility_lifetime: 25              # SAF璁炬柦璁捐瀵垮懡(骞? | SAF facility lifetime (years)
+    saf_facility_embodied: 150             # SAF设施隐含碳排放(kgCO₂e/年产吨) | SAF facility embodied emissions
 
-    storage_facility_embodied: 75          # 鍌ㄥ瓨璁炬柦闅愬惈纰虫帓鏀?kgCO鈧俥/m鲁) | Storage facility embodied emissions
+    saf_facility_lifetime: 25              # SAF设施设计寿命(年) | SAF facility lifetime (years)
 
-    storage_facility_lifetime: 30          # 鍌ㄥ瓨璁炬柦璁捐瀵垮懡(骞? | Storage facility lifetime (years)
+    storage_facility_embodied: 75          # 储存设施隐含碳排放(kgCO₂e/m³) | Storage facility embodied emissions
 
-  # 鍙啀鐢熻兘婧愬彂鐢垫帓鏀?- Renewable Energy Emissions
+    storage_facility_lifetime: 30          # 储存设施设计寿命(年) | Storage facility lifetime (years)
+
+  # 可再生能源发电排放 - Renewable Energy Emissions
   renewable_energy:
-    wind_power_intensity: 0.015            # 椋庣數纰冲己搴?kgCO鈧俥/kWh) | Wind power CI (kgCO鈧俥/kWh)
-                                           # 鍖呮嫭鍒堕€犮€佸畨瑁呫€佽繍缁寸殑鍏ㄧ敓鍛藉懆鏈熸帓鏀?
-    solar_power_intensity: 0.045           # 鍏変紡纰冲己搴?kgCO鈧俥/kWh) | Solar power CI (kgCO鈧俥/kWh)
-                                           # 鍖呮嫭纭呯墖鐢熶骇銆佺粍浠跺埗閫犮€佸畨瑁呰繍缁?
-    grid_electricity_intensity: 0.6        # 鐢电綉鐢靛姏纰冲己搴?kgCO鈧俥/kWh) | Grid electricity CI
-                                           # 涓浗鐢电綉骞冲潎纰冲己搴︼紙澶囩敤鐢垫簮锛?
-  # 鐢熶骇杩囩▼鎺掓斁 - Production Process Emissions
+    wind_power_intensity: 0.015            # 风电碳强度(kgCO₂e/kWh) | Wind power CI (kgCO₂e/kWh)
+                                           # 包括制造、安装、运维的全生命周期排放
+
+    solar_power_intensity: 0.045           # 光伏碳强度(kgCO₂e/kWh) | Solar power CI (kgCO₂e/kWh)
+                                           # 包括硅片生产、组件制造、安装运维
+
+    grid_electricity_intensity: 0.6        # 电网电力碳强度(kgCO₂e/kWh) | Grid electricity CI
+                                           # 中国电网平均碳强度（备用电源）
+
+  # 生产过程排放 - Production Process Emissions
   production_process:
-    h2_electrolysis_emission: 0.05         # 鐢佃В鍒舵阿杩囩▼鎺掓斁(kgCO鈧俥/kg H鈧? | H鈧?electrolysis emissions
-                                           # 涓嶅惈鐢靛姏鎺掓斁鐨勫伐鑹鸿繃绋嬫帓鏀?
-    saf_synthesis_emission: 0.3            # SAF鍚堟垚杩囩▼鎺掓斁(kgCO鈧俥/kg SAF) | SAF synthesis emissions
-                                           # 鍚堟垚鍙嶅簲杩囩▼鐨勭洿鎺ョ⒊鎺掓斁
+    h2_electrolysis_emission: 0.05         # 电解制氢过程排放(kgCO₂e/kg H₂) | H₂ electrolysis emissions
+                                           # 不含电力排放的工艺过程排放
 
-    saf_process_energy: 3.0                # SAF鐢熶骇宸ヨ壓鑳借€?kWh/kg SAF) | SAF production energy (kWh/kg SAF)
-                                           # 鍖呮嫭鍙嶅簲銆佺簿鍒躲€佸垎绂荤瓑鍏ㄨ繃绋?
-    mtj_process_energy: 800                # 鐢查唶鍒禨AF宸ヨ壓鑳借€?kWh/t SAF) | MTJ process energy (kWh/t SAF)
-                                           # 鍖呮嫭鍙嶅簲銆佺簿鍒躲€佸垎绂荤瓑鍏ㄨ繃绋?
-    renewable_electricity: 0.02            # 鍙啀鐢熺數鍔涚⒊寮哄害(kgCO鈧俥/kWh) | Renewable electricity CI (kgCO鈧俥/kWh)
-                                           # 椋庣數/鍏変紡鐨勫叏鐢熷懡鍛ㄦ湡纰虫帓鏀?
-    electrolysis_energy: 55                # 鐢佃В鍒舵阿鑳借€?kWh/kg H鈧? | Electrolysis energy (kWh/kg H鈧?
-                                           # 鍖呮嫭绯荤粺鎹熻€?
-    green_h2_intensity: 1.1                # 缁挎阿纰冲己搴?kgCO鈧俥/kg H鈧? | Green H鈧?CI (kgCO鈧俥/kg H鈧?
-                                           # 宸插寘鍚數瑙ｈ兘鑰?55 kWh/kg 脳 0.02 kgCO鈧俥/kWh = 1.1
+    saf_synthesis_emission: 0.3            # SAF合成过程排放(kgCO₂e/kg SAF) | SAF synthesis emissions
+                                           # 合成反应过程的直接碳排放
 
-  # 鍌ㄥ瓨鍜屽鐞嗘帓鏀?- Storage and Handling Emissions
+    saf_process_energy: 3.0                # SAF生产工艺能耗(kWh/kg SAF) | SAF production energy (kWh/kg SAF)
+                                           # 包括反应、精制、分离等全过程
+
+    mtj_process_energy: 800                # 甲醇制SAF工艺能耗(kWh/t SAF) | MTJ process energy (kWh/t SAF)
+                                           # 包括反应、精制、分离等全过程
+
+    renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI (kgCO₂e/kWh)
+                                           # 风电/光伏的全生命周期碳排放
+
+    electrolysis_energy: 55                # 电解制氢能耗(kWh/kg H₂) | Electrolysis energy (kWh/kg H₂)
+                                           # 包括系统损耗
+
+    green_h2_intensity: 1.1                # 绿氢碳强度(kgCO₂e/kg H₂) | Green H₂ CI (kgCO₂e/kg H₂)
+                                           # 已包含电解能耗 55 kWh/kg × 0.02 kgCO₂e/kWh = 1.1
+
+  # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
-    h2_storage_energy: 2                   # 姘㈡皵鍌ㄥ瓨鑳借€?kWh/kg/澶? | H鈧?storage energy (kWh/kg/day)
+    h2_storage_energy: 2                   # 氢气储存能耗(kWh/kg/天) | H₂ storage energy (kWh/kg/day)
 
-    saf_storage_energy: 5                  # SAF鍌ㄥ瓨鑳借€?kWh/鍚?澶? | SAF storage energy (kWh/ton/day)
+    saf_storage_energy: 5                  # SAF储存能耗(kWh/吨/天) | SAF storage energy (kWh/ton/day)
 
-    mtj_storage_energy: 5                  # 鐢查唶鍌ㄥ瓨鑳借€?kWh/t路澶? | MTJ storage energy (kWh/t路day)
-                                           # 鐢查唶鍌ㄧ綈娓╂帶銆佹车閫佺瓑鑳借€?
-    storage_loss_rate: 0.001               # 鍌ㄥ瓨鎹熻€楃巼(%/澶? | Storage loss rate (%/day)
-                                           # 鎸ュ彂銆佹硠婕忕瓑瀵艰嚧鐨勭墿鏂欐崯澶?
-  # 杩愯緭鎺掓斁 - Transportation Emissions
+    mtj_storage_energy: 5                  # 甲醇储存能耗(kWh/t·天) | MTJ storage energy (kWh/t·day)
+                                           # 甲醇储罐温控、泵送等能耗
+
+    storage_loss_rate: 0.001               # 储存损耗率(%/天) | Storage loss rate (%/day)
+                                           # 挥发、泄漏等导致的物料损失
+
+  # 运输排放 - Transportation Emissions
   transportation:
-    h2_truck_intensity: 0.15               # 姘㈡皵缃愯溅纰冲己搴?kgCO鈧俥/kg/100km) | H鈧?truck CI
+    h2_truck_intensity: 0.15               # 氢气罐车碳强度(kgCO₂e/kg/100km) | H₂ truck CI
 
+    co2_truck_intensity: 0.08              # CO₂罐车碳强度(kgCO₂e/kg/100km) | CO₂ truck CI
 
-    saf_truck_intensity: 0.12              # SAF缃愯溅纰冲己搴?kgCO鈧俥/kg/100km) | SAF truck CI
+    saf_truck_intensity: 0.12              # SAF罐车碳强度(kgCO₂e/kg/100km) | SAF truck CI
 
-    mtj_truck_intensity: 0.12              # 鐢查唶缃愯溅纰冲己搴?kgCO鈧俥/t路km) | MTJ truck CI
-                                           # 鐢查唶缃愯溅杩愯緭鐨勫叏鐢熷懡鍛ㄦ湡纰虫帓鏀?
-    h2_pipeline_intensity: 0.02            # 姘㈡皵绠￠亾纰冲己搴?kgCO鈧俥/kg/100km) | H鈧?pipeline CI
+    mtj_truck_intensity: 0.12              # 甲醇罐车碳强度(kgCO₂e/t·km) | MTJ truck CI
+                                           # 甲醇罐车运输的全生命周期碳排放
 
+    h2_pipeline_intensity: 0.02            # 氢气管道碳强度(kgCO₂e/kg/100km) | H₂ pipeline CI
+
+    co2_pipeline_intensity: 0.01           # CO₂管道碳强度(kgCO₂e/kg/100km) | CO₂ pipeline CI
 
 # =============================================================================
-# 鑱氱被鍙傛暟 (Clustering Parameters)
-# 鐢ㄤ簬鍙啀鐢熻兘婧愬彂鐢靛巶鐨勫湴鐞嗚仛绫诲拰杩愯緭璺緞浼樺寲
-# 鍩轰簬DBSCAN绠楁硶瀹炵幇鍒嗗眰杩愯緭绛栫暐
+# 聚类参数 (Clustering Parameters)
+# 用于可再生能源发电厂的地理聚类和运输路径优化
+# 基于DBSCAN算法实现分层运输策略
 # =============================================================================
 clustering_parameters:
-  # 鑱氱被鍔熻兘寮€鍏?- Clustering Control
-  enable_clustering: true                  # 鍚敤鑱氱被鍔熻兘 | Enable clustering functionality
-                                           # true: 瀵瑰彲鍐嶇敓鑳芥簮鍙戠數鍘傝繘琛屽湴鐞嗚仛绫?                                           # 鏁堟灉锛氬噺灏戣繍杈撳熀纭€璁炬柦鎴愭湰锛屽疄鐜板垎灞傝繍杈?
-  enable_pipeline_optimization: true       # 鍚敤绠￠亾浼樺寲 | Enable pipeline optimization
-                                           # true: 浼樺寲绠￠亾甯冨眬鍜岃繛鎺ユ柟妗?                                           # 浣滅敤锛氭渶灏忓寲绠￠亾寤鸿鎴愭湰
+  # 聚类功能开关 - Clustering Control
+  enable_clustering: true                  # 启用聚类功能 | Enable clustering functionality
+                                           # true: 对可再生能源发电厂进行地理聚类
+                                           # 效果：减少运输基础设施成本，实现分层运输
 
-  enable_clustering_visualization: false   # 鍚敤鑱氱被鍙鍖?| Enable clustering visualization
-                                           # true: 鐢熸垚鑱氱被缁撴灉鐨勫湴鍥惧彲瑙嗗寲
-                                           # 娉ㄦ剰锛氶渶瑕侀澶栫殑鍦板浘搴撴敮鎸?
-  export_clustering_results: true          # 瀵煎嚭鑱氱被缁撴灉 | Export clustering results
-                                           # true: 淇濆瓨鑱氱被缁撴灉鍒癑SON鏂囦欢
+  enable_pipeline_optimization: true       # 启用管道优化 | Enable pipeline optimization
+                                           # true: 优化管道布局和连接方案
+                                           # 作用：最小化管道建设成本
 
-  clustering_output_path: clustering_results.json  # 鑱氱被缁撴灉杈撳嚭璺緞 | Clustering output file path
+  enable_clustering_visualization: false   # 启用聚类可视化 | Enable clustering visualization
+                                           # true: 生成聚类结果的地图可视化
+                                           # 注意：需要额外的地图库支持
 
-  # DBSCAN鏍稿績鍙傛暟 - DBSCAN Core Parameters
-  eps_distance_km: 60.0                    # DBSCAN璺濈闃堝€?km) | DBSCAN epsilon distance (km)
-                                           # 瀹氫箟"閭昏繎"鍙戠數鍘傜殑鏈€澶ц窛绂?                                           # 璋冨弬寤鸿锛?                                           #   - 30-50km: 閫傚悎澶у鏁板疄闄呭満鏅?                                           #   - <30km: 瀵嗛泦鍒嗗竷鍖哄煙锛堝煄甯傚懆杈癸級
-                                           #   - >60km: 绋€鐤忓垎甯冨尯鍩燂紙瑗块儴鍦板尯锛?                                           # 缁忔祹鑰冭檻锛氬熀浜庤繍杈撴垚鏈瑅s鍩虹璁炬柦鎴愭湰骞宠　鐐?
-  min_samples: 2                           # 褰㈡垚鑱氱被鐨勬渶灏忔牱鏈暟 | Minimum samples for cluster
-                                           # 鑷冲皯闇€瑕佸嚑涓彂鐢靛巶鎵嶈兘褰㈡垚涓€涓仛绫?                                           # 2: 浠绘剰涓や釜閭昏繎鍙戠數鍘傚嵆鍙舰鎴愯仛绫?                                           # 寤鸿锛氭牴鎹彂鐢靛巶瀵嗗害璋冩暣
+  export_clustering_results: true          # 导出聚类结果 | Export clustering results
+                                           # true: 保存聚类结果到JSON文件
 
-  max_clusters: 50                         # 鏈€澶ц仛绫绘暟閲?| Maximum number of clusters
-                                           # 闄愬埗鑱氱被鎬绘暟锛岄伩鍏嶈繃搴﹀垎鏁?                                           # 浣滅敤锛氭帶鍒堕泦涓偣鏁伴噺
+  clustering_output_path: clustering_results.json  # 聚类结果输出路径 | Clustering output file path
 
-  # 鍣０鐐瑰鐞?- Noise Point Handling
-  noise_plant_handling: direct_connection  # 鍣０鐐瑰鐞嗙瓥鐣?| Noise point handling strategy
-                                           # direct_connection: 瀛ょ珛鍙戠數鍘傜洿鎺ヨ繛鎺ュ埌涓荤綉缁?                                           # 鍏朵粬閫夐」锛氬彲鎵╁睍涓篴ssign_to_nearest绛夌瓥鐣?
-  # 鎴愭湰鍜屾潈閲嶅弬鏁?- Cost and Weight Parameters
-  pipeline_weight: 0.3                     # 绠￠亾鎴愭湰鏉冮噸 | Pipeline cost weight
-                                           # 鐢ㄤ簬骞宠　绠￠亾寤鸿鎴愭湰鍦ㄦ€绘垚鏈腑鐨勬潈閲?                                           # 鑼冨洿锛?-1锛屽€艰秺澶ц秺鍊惧悜浜庡噺灏戠閬撴暟閲?
-  shared_pipeline_discount_factor: 0.65    # 鍏变韩绠￠亾鎶樻墸绯绘暟 | Shared pipeline discount factor
-                                           # 澶氫釜鍙戠數鍘傚叡浜閬撴椂鐨勬垚鏈姌鎵?                                           # 0.65琛ㄧず鍏变韩绠￠亾鎴愭湰涓哄崟鐙缓璁剧殑65%
-                                           # 浣撶幇瑙勬ā缁忔祹鏁堝簲
+  # DBSCAN核心参数 - DBSCAN Core Parameters
+  eps_distance_km: 60.0                    # DBSCAN距离阈值(km) | DBSCAN epsilon distance (km)
+                                           # 定义"邻近"发电厂的最大距离
+                                           # 调参建议：
+                                           #   - 30-50km: 适合大多数实际场景
+                                           #   - <30km: 密集分布区域（城市周边）
+                                           #   - >60km: 稀疏分布区域（西部地区）
+                                           # 经济考虑：基于运输成本vs基础设施成本平衡点
 
-  processing_cost_base: 10.0               # 澶勭悊鎴愭湰鍩哄噯(鍏?kg) | Processing cost base (yuan/kg)
-                                           # 闆嗕腑澶勭悊鐐圭殑鍗曚綅澶勭悊鎴愭湰
-                                           # 鐢ㄤ簬璁＄畻闆嗕腑鍖栨敹鐩?# =============================================================================
-# 鎴愭湰鍙傛暟 (Cost Parameters)
-# 瀹氫箟鍘熸潗鏂欎环鏍笺€佽兘婧愭垚鏈拰杩愯緭璐圭敤
+  min_samples: 2                           # 形成聚类的最小样本数 | Minimum samples for cluster
+                                           # 至少需要几个发电厂才能形成一个聚类
+                                           # 2: 任意两个邻近发电厂即可形成聚类
+                                           # 建议：根据发电厂密度调整
+
+  max_clusters: 50                         # 最大聚类数量 | Maximum number of clusters
+                                           # 限制聚类总数，避免过度分散
+                                           # 作用：控制集中点数量
+
+  # 噪声点处理 - Noise Point Handling
+  noise_plant_handling: direct_connection  # 噪声点处理策略 | Noise point handling strategy
+                                           # direct_connection: 孤立发电厂直接连接到主网络
+                                           # 其他选项：可扩展为assign_to_nearest等策略
+
+  # 成本和权重参数 - Cost and Weight Parameters
+  pipeline_weight: 0.3                     # 管道成本权重 | Pipeline cost weight
+                                           # 用于平衡管道建设成本在总成本中的权重
+                                           # 范围：0-1，值越大越倾向于减少管道数量
+
+  shared_pipeline_discount_factor: 0.65    # 共享管道折扣系数 | Shared pipeline discount factor
+                                           # 多个发电厂共享管道时的成本折扣
+                                           # 0.65表示共享管道成本为单独建设的65%
+                                           # 体现规模经济效应
+
+  processing_cost_base: 10.0               # 处理成本基准(元/kg) | Processing cost base (yuan/kg)
+                                           # 集中处理点的单位处理成本
+                                           # 用于计算集中化收益
+
+# 成本参数 (Cost Parameters)
+# 定义原材料价格、能源成本和运输费用
 # =============================================================================
 cost_parameters:
-  # 姘㈡皵鐢熶骇鍜岃繍杈撳弬鏁?- Hydrogen Production and Transport Parameters
+  # 氢气生产和运输参数 - Hydrogen Production and Transport Parameters
   hydrogen:
-    electrolysis_cost_yuan_per_kg: 25.0    # 鐢佃В鍒舵阿鎴愭湰(鍏?kg H鈧? | Electrolysis cost (yuan/kg H鈧?
-                                           # 鍖呮嫭鐢靛姏鎴愭湰銆佽澶囨姌鏃с€佽繍缁寸瓑
+    electrolysis_cost_yuan_per_kg: 25.0    # 电解制氢成本(元/kg H₂) | Electrolysis cost (yuan/kg H₂)
+                                           # 包括电力成本、设备折旧、运维等
 
-    # 鍩轰簬鍏紡鐨勮繍杈撴垚鏈?- Formula-based Transport Cost
+    # 基于公式的运输成本 - Formula-based Transport Cost
     formula_based_transport:
-      vehicle_payload_kg: 500              # 杞﹁締杞介噸(kg) | Vehicle payload capacity (kg)
-                                           # 鍗曡溅娆¤繍杈撹兘鍔涳紙姘㈡皵缃愯溅锛?
-      trip_fixed_cost: 3000                # 鍗曟杩愯緭鍥哄畾鎴愭湰(鍏? | Fixed cost per trip (yuan)
-                                           # 鍖呮嫭鍙告満宸ヨ祫銆佽溅杈嗘姌鏃с€佺壒娈婂畨鍏ㄨ姹傜瓑
+      vehicle_payload_kg: 500              # 车辆载重(kg) | Vehicle payload capacity (kg)
+                                           # 单车次运输能力（氢气罐车）
 
-      variable_cost_per_km: 20.0           # 鍙彉鎴愭湰(鍏?km) | Variable cost per km (yuan/km)
-                                           # 鐕冩补銆佺淮鎶ょ瓑闅忚窛绂诲彉鍖栫殑鎴愭湰
+      trip_fixed_cost: 3000                # 单次运输固定成本(元) | Fixed cost per trip (yuan)
+                                           # 包括司机工资、车辆折旧、特殊安全要求等
 
-      utilization_rate: 0.75               # 杞﹁締鍒╃敤鐜?| Vehicle utilization rate
-                                           # 鑰冭檻绌洪┒銆佺瓑寰呯瓑鍥犵礌鐨勬湁鏁堝埄鐢ㄧ巼
+      variable_cost_per_km: 20.0           # 可变成本(元/km) | Variable cost per km (yuan/km)
+                                           # 燃油、维护等随距离变化的成本
 
-  # 鍙啀鐢熻兘婧愮數鍔涗环鏍?- Renewable Energy Prices
+      utilization_rate: 0.75               # 车辆利用率 | Vehicle utilization rate
+                                           # 考虑空驶、等待等因素的有效利用率
+
+  # 可再生能源电力价格 - Renewable Energy Prices
   renewable_energy:
-    wind_power_price_yuan_per_kwh: 0.35    # 椋庣數浠锋牸(鍏?kWh) | Wind power price (yuan/kWh)
-                                           # 鍩轰簬2025骞翠腑鍥介鐢典笂缃戠數浠?
-    solar_power_price_yuan_per_kwh: 0.40   # 鍏変紡浠锋牸(鍏?kWh) | Solar power price (yuan/kWh)
-                                           # 鍩轰簬2025骞翠腑鍥藉厜浼忎笂缃戠數浠?
-    grid_electricity_price_yuan_per_kwh: 0.70  # 鐢电綉鐢典环(鍏?kWh) | Grid electricity price
-                                           # 宸ヤ笟鐢ㄧ數浠锋牸锛堝鐢ㄧ數婧愶級
+    wind_power_price_yuan_per_kwh: 0.35    # 风电价格(元/kWh) | Wind power price (yuan/kWh)
+                                           # 基于2025年中国风电上网电价
 
-  # 鍘熸潗鏂欎环鏍煎弬鏁?- Raw Material Prices
+    solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
+                                           # 基于2025年中国光伏上网电价
+
+    grid_electricity_price_yuan_per_kwh: 0.70  # 电网电价(元/kWh) | Grid electricity price
+                                           # 工业用电价格（备用电源）
+
+  # 原材料价格参数 - Raw Material Prices
   raw_materials:
-    hydrogen_market_price_yuan_per_kg: 25.0    # 姘㈡皵甯傚満浠锋牸(鍏?kg H鈧? | Hydrogen market price (yuan/kg H鈧?
-                                           # 澶栬喘姘㈡皵鐨勫競鍦轰环鏍硷紙濡傛灉涓嶈嚜浜э級
-                                           # 鍖呮嫭閲囪喘銆佽川妫€绛夋垚鏈?
-    renewable_electricity_cost_yuan_per_mwh: 350  # 鍙啀鐢熺數鍔涙垚鏈?鍏?MWh) | Renewable electricity cost (yuan/MWh)
-                                           # 0.35鍏?kWh = 350鍏?MWh
-                                           # 鐢ㄤ簬鐢佃В鍒舵阿鐨勭數鍔涙垚鏈?                                           # 鍩轰簬椋庣數鍜屽厜浼忕殑骞冲潎涓婄綉鐢典环
+    hydrogen_market_price_yuan_per_kg: 25.0    # 氢气市场价格(元/kg H₂) | Hydrogen market price (yuan/kg H₂)
+                                           # 外购氢气的市场价格（如果不自产）
+                                           # 包括采购、质检等成本
 
-  # 鐢佃В鍒舵阿鍙傛暟 - Electrolysis Parameters
+    renewable_electricity_cost_yuan_per_mwh: 350  # 可再生电力成本(元/MWh) | Renewable electricity cost (yuan/MWh)
+                                           # 0.35元/kWh = 350元/MWh
+                                           # 用于电解制氢的电力成本
+                                           # 基于风电和光伏的平均上网电价
+
+  # 电解制氢参数 - Electrolysis Parameters
   electrolysis:
-    electrolysis_efficiency: 0.70              # 鐢佃В妲芥晥鐜?| Electrolysis efficiency (70%)
-                                           # 鐢佃兘鍒版阿鑳界殑杞崲鏁堢巼
-                                           # 纰辨€?PEM鐢佃В妲界殑鍏稿瀷鏁堢巼
+    electrolysis_efficiency: 0.70              # 电解槽效率 | Electrolysis efficiency (70%)
+                                           # 电能到氢能的转换效率
+                                           # 碱性/PEM电解槽的典型效率
 
-    electrolysis_power_consumption: 50         # 鍒舵阿鑳借€?kWh/kg H鈧? | Electrolysis power consumption (kWh/kg H鈧?
-                                           # 鐢佃В鍒舵阿鍗曚綅鑳借€楋紙鍖呮嫭绯荤粺鎹熻€楋級
-                                           # 鍏稿瀷鍊硷細50 kWh/kg H鈧?
-  # 缂鸿揣鎯╃綒 - Shortage Penalty
-  shortage_penalty_yuan_per_kg: 2500       # 缂鸿揣鎯╃綒鎴愭湰(鍏?kg) | Shortage penalty (yuan/kg)
-                                           # 鏈弧瓒抽渶姹傛椂鐨勬儵缃氭垚鏈?                                           # 浣滅敤锛氱‘淇濅紭鍖栧櫒浼樺厛婊¤冻闇€姹?                                           # 璁剧疆杈冮珮鍊间互寮哄埗婊¤冻鍏抽敭闇€姹?
+    electrolysis_power_consumption: 50         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
+                                           # 电解制氢单位能耗（包括系统损耗）
+                                           # 典型值：50 kWh/kg H₂
+
+  # 缺货惩罚 - Shortage Penalty
+  shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
+                                           # 未满足需求时的惩罚成本
+                                           # 作用：确保优化器优先满足需求
+                                           # 设置较高值以强制满足关键需求
+
 # =============================================================================
-# 璇︾粏鎴愭湰鏁版嵁 (Detailed Cost Data)
-# 鍖呭惈姘㈡皵杩愯緭鍜孲AF宸ヨ壓鎴愭湰
+# 详细成本数据 (Detailed Cost Data)
+# 包含氢气运输和SAF工艺成本
 # =============================================================================
 costs:
-  # 姘㈡皵绠￠亾鎴愭湰 - Hydrogen Pipeline Costs
+  # 氢气管道成本 - Hydrogen Pipeline Costs
   hydrogen_pipeline_costs:
-    capex_yuan_per_km: 5000000             # 绠￠亾璧勬湰鏀嚭(鍏?km) | Pipeline CAPEX (yuan/km)
-                                           # 鍖呮嫭绠￠亾鏈綋銆佸帇缂╂満绔欍€侀榾闂ㄧ瓑璁炬柦鐨勫缓璁炬垚鏈?                                           # 500涓囧厓/km鏄腑绛夎鏍兼阿姘旂閬撶殑鍏稿瀷鍊?
-    # 杩愯緭鎴愭湰鍑芥暟 - Transport Cost Function
+    capex_yuan_per_km: 5000000             # 管道资本支出(元/km) | Pipeline CAPEX (yuan/km)
+                                           # 包括管道本体、压缩机站、阀门等设施的建设成本
+                                           # 500万元/km是中等规格氢气管道的典型值
+
+    # 运输成本函数 - Transport Cost Function
     transport_cost_function:
-      function_type: piecewise_linear      # 鍑芥暟绫诲瀷锛氬垎娈电嚎鎬?| Function type: piecewise linear
-                                           # 閲囩敤鍒嗘绾挎€ф彃鍊硷紝妯℃嫙瑙勬ā缁忔祹鏁堝簲
+      function_type: piecewise_linear      # 函数类型：分段线性 | Function type: piecewise linear
+                                           # 采用分段线性插值，模拟规模经济效应
 
-      unit: yuan_per_kg_hydrogen_per_100km # 鎴愭湰鍗曚綅 | Cost unit
-                                           # 鍏?(kg姘㈡皵路鐧惧叕閲?
-                                           # 璁＄畻鍏紡锛氭€绘垚鏈?= 鍗曚綅鎴愭湰 脳 (璺濈km 梅 100)
+      unit: yuan_per_kg_hydrogen_per_100km # 成本单位 | Cost unit
+                                           # 元/(kg氢气·百公里)
+                                           # 计算公式：总成本 = 单位成本 × (距离km ÷ 100)
 
-      description: 鍩轰簬鍥捐〃33绠￠亾杈撻€佹阿姘旀垚鏈洸绾? # 鏁版嵁鏉ユ簮 | Data source
-                                           # 鍙傝€冭涓氭爣鍑嗘垚鏈洸绾?
-      # 鎴愭湰鏁版嵁鐐?- Cost Data Points [璺濈(km), 鎴愭湰(鍏?kg/100km)]
+      description: 基于图表33管道输送氢气成本曲线  # 数据来源 | Data source
+                                           # 参考行业标准成本曲线
+
+      # 成本数据点 - Cost Data Points [距离(km), 成本(元/kg/100km)]
       data_points:
-      - - 25                               # 25km: 1.91鍏?kg/100km | Short distance
+      - - 25                               # 25km: 1.91元/kg/100km | Short distance
         - 1.91
-      - - 50                               # 50km: 1.04鍏?kg/100km | Medium-short
+      - - 50                               # 50km: 1.04元/kg/100km | Medium-short
         - 1.04
-      - - 100                              # 100km: 0.56鍏?kg/100km | Medium
+      - - 100                              # 100km: 0.56元/kg/100km | Medium
         - 0.56
-      - - 200                              # 200km: 0.30鍏?kg/100km | Medium-long
+      - - 200                              # 200km: 0.30元/kg/100km | Medium-long
         - 0.3
-      - - 300                              # 300km: 0.21鍏?kg/100km | Long
+      - - 300                              # 300km: 0.21元/kg/100km | Long
         - 0.21
-      - - 400                              # 400km: 0.16鍏?kg/100km | Very long
+      - - 400                              # 400km: 0.16元/kg/100km | Very long
         - 0.16
-      - - 500                              # 500km: 0.13鍏?kg/100km | Extra long
+      - - 500                              # 500km: 0.13元/kg/100km | Extra long
         - 0.13
-                                           # 瑙勫緥锛氳窛绂昏秺闀匡紝鍗曚綅鎴愭湰瓒婁綆锛堣妯＄粡娴庯級
+                                           # 规律：距离越长，单位成本越低（规模经济）
 
-  notes: |
-    閰嶇疆鏂囦欢璇存槑:
-    - 姝ら厤缃枃浠堕拡瀵笴oalHydrogenSAFOptimizer骞惰鐗堟湰(v3.0)
-    - 鑱氱劍鐓ょ偔姘斿寲CO鈧?+ 缁挎阿涓ゆ娉昐AF璺嚎
-    - 淇濈暀姘㈡皵銆佺敳閱囥€丼AF鐢熶骇鐩稿叧鏍稿績鍙傛暟
-    - 宸茬Щ闄O鈧傛崟鑾蜂笌杩愯緭鐩稿叧閰嶇疆锛屾敼鐢ㄧ叅鐐競鍦洪噰璐亣璁?    - 鍙€氳繃璋冩暣coal_parameters涓巋ydrogen_parameters杩涜鏁忔劅鎬у垎鏋?# =============================================================================
-# 缁挎阿渚涘簲鍙傛暟 (Green Hydrogen Supply Parameters)
-# 瀹氫箟缁挎阿鐢熶骇銆佽繍杈撳拰鍌ㄥ瓨鐨勬妧鏈粡娴庡弬鏁?# 鎸夌収PRD v2.0绗?.2.3鑺傝姹傞厤缃?# =============================================================================
+      notes: |                             # 成本函数说明 | Cost function notes
+        成本函数已包含以下所有费用：
+        - 管道建设投资摊销 (Pipeline construction amortization)
+        - 压缩机站投资和运营 (Compressor station CAPEX & OPEX)
+        - 管道维护和检测 (Pipeline maintenance & inspection)
+        - 能耗成本（压缩机电力） (Energy cost for compression)
+        - 人工和管理成本 (Labor & management)
+
+        单位转换说明：
+        - 配置单位：元/(kg氢气·百公里)
+        - 计算公式：总成本 = 单位成本 × (运输距离km ÷ 100)
+        - 最终单位：元/kg氢气
+        - 与罐车运输单位保持一致
+
+# =============================================================================
+# 绿氢供应参数 (Green Hydrogen Supply Parameters)
+# 定义绿氢生产、运输和储存的技术经济参数
+# 按照PRD v2.0第3.2.3节要求配置
+# =============================================================================
 green_hydrogen_supply:
-  # 鐢熶骇鎴愭湰鍙傛暟 - Production Cost Parameters
-  production_cost_yuan_per_kg: 25            # 缁挎阿鐢熶骇鎴愭湰(鍏?kg H鈧? | Green H鈧?production cost (yuan/kg H鈧?
-                                             # 鍖呮嫭鐢靛姏鎴愭湰銆佽澶囨姌鏃с€佽繍缁寸瓑
-                                             # 鍩轰簬2024-2025骞翠腑鍥界豢姘㈡垚鏈娴?                                             # 鏉ユ簮锛欼EA Hydrogen Report 2024, IRENA Green Hydrogen Cost 2024
+  # 生产成本参数 - Production Cost Parameters
+  production_cost_yuan_per_kg: 25            # 绿氢生产成本(元/kg H₂) | Green H₂ production cost (yuan/kg H₂)
+                                             # 包括电力成本、设备折旧、运维等
+                                             # 基于2024-2025年中国绿氢成本预测
+                                             # 来源：IEA Hydrogen Report 2024, IRENA Green Hydrogen Cost 2024
 
-  production_energy_kwh_per_kg: 50           # 鍒舵阿鑳借€?kWh/kg H鈧? | H鈧?production energy (kWh/kg H鈧?
-                                             # 鐢佃В鍒舵阿鑳借€楋紙鍖呮嫭绯荤粺鎹熻€楋級
-                                             # 鍏稿瀷PEM/纰辨€х數瑙ｆЫ鑳借€?
-  electrolyzer_efficiency: 0.70              # 鐢佃В妲芥晥鐜?| Electrolyzer efficiency (70%)
-                                             # 鐢佃兘鍒版阿鑳界殑杞崲鏁堢巼
-                                             # 纰辨€х數瑙ｆЫ鍏稿瀷鍊?
-  # 杩愯緭鍙傛暟 - Transport Parameters
+  production_energy_kwh_per_kg: 50           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
+                                             # 电解制氢能耗（包括系统损耗）
+                                             # 典型PEM/碱性电解槽能耗
+
+  electrolyzer_efficiency: 0.70              # 电解槽效率 | Electrolyzer efficiency (70%)
+                                             # 电能到氢能的转换效率
+                                             # 碱性电解槽典型值
+
+  # 运输参数 - Transport Parameters
   transport:
-    pipeline_cost_yuan_per_kg_per_100km: 0.5  # 绠￠亾杩愯緭鎴愭湰(鍏?kg/100km) | Pipeline transport cost (yuan/kg/100km)
-                                             # 姘㈡皵绠￠亾杩愯緭鍗曚綅鎴愭湰
-                                             # 宸插寘鍚閬撳缓璁炬垚鏈憡閿€
+    pipeline_cost_yuan_per_kg_per_100km: 0.5  # 管道运输成本(元/kg/100km) | Pipeline transport cost (yuan/kg/100km)
+                                             # 氢气管道运输单位成本
+                                             # 已包含管道建设成本摊销
 
-    truck_cost_yuan_per_kg_per_100km: 2.0   # 缃愯溅杩愯緭鎴愭湰(鍏?kg/100km) | Truck transport cost (yuan/kg/100km)
-                                             # 姘㈡皵缃愯溅杩愯緭鍗曚綅鎴愭湰
-                                             # 鍖呮嫭娑插寲/鍘嬬缉銆佽繍杈撱€佺壒娈婂鍣ㄧ瓑
+    truck_cost_yuan_per_kg_per_100km: 2.0   # 罐车运输成本(元/kg/100km) | Truck transport cost (yuan/kg/100km)
+                                             # 氢气罐车运输单位成本
+                                             # 包括液化/压缩、运输、特殊容器等
 
-    pipeline_capex_yuan_per_km: 5000000      # 姘㈡皵绠￠亾寤鸿(鍏?km) | H鈧?pipeline CAPEX (yuan/km)
-                                             # 绠￠亾璧勬湰鏀嚭锛堝凡鎽婇攢鍒拌繍杈撴垚鏈腑锛?                                             # 500涓囧厓/km锛屽寘鍚璁°€佹柦宸ャ€佽澶?
-  # 鍌ㄥ瓨鍙傛暟 - Storage Parameters
+    pipeline_capex_yuan_per_km: 5000000      # 氢气管道建设(元/km) | H₂ pipeline CAPEX (yuan/km)
+                                             # 管道资本支出（已摊销到运输成本中）
+                                             # 500万元/km，包含设计、施工、设备
+
+  # 储存参数 - Storage Parameters
   storage:
-    storage_cost_yuan_per_kg_per_day: 1.0   # 姘㈡皵鍌ㄥ瓨鎴愭湰(鍏?kg/澶? | H鈧?storage cost (yuan/kg/day)
-                                             # 鍖呮嫭鍌ㄧ綈銆佺淮鎶ゃ€佹崯鑰楃瓑
+    storage_cost_yuan_per_kg_per_day: 1.0   # 氢气储存成本(元/kg/天) | H₂ storage cost (yuan/kg/day)
+                                             # 包括储罐、维护、损耗等
 
-    compression_cost_yuan_per_kg: 2.0        # 鍘嬬缉鎴愭湰(鍏?kg) | Compression cost (yuan/kg)
-                                             # 鍘嬬缉鍒板偍瀛樺帇鍔涚殑鎴愭湰
+    compression_cost_yuan_per_kg: 2.0        # 压缩成本(元/kg) | Compression cost (yuan/kg)
+                                             # 压缩到储存压力的成本
 
-    liquefaction_cost_yuan_per_kg: 5.0       # 娑插寲鎴愭湰(鍏?kg) | Liquefaction cost (yuan/kg)
-                                             # 娑插寲姘㈢殑鍒跺鎴愭湰锛堝闇€瑕侊級
+    liquefaction_cost_yuan_per_kg: 5.0       # 液化成本(元/kg) | Liquefaction cost (yuan/kg)
+                                             # 液化氢的制备成本（如需要）
 
 
 # =============================================================================
-# 鏁版嵁璺緞閰嶇疆 (Data Paths Configuration)
+# 数据路径配置 (Data Paths Configuration)
 # =============================================================================
 data_paths:
   aviation_data:
@@ -405,10 +596,14 @@ data_paths:
   gis_data:
     renewable_plants_cache_prefix: temp_renewable
 
-    # GIS杈撳叆鏁版嵁璺緞 - GIS Input Data Paths
-    # CO鈧傛崟鑾锋簮鏁版嵁鏂囦欢锛堢敱CO2CaptureCalculator浠嶨IS鏁版嵁璁＄畻鐢熸垚锛?    coal_power_plants: products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/coal_power_plants.csv
+    # GIS输入数据路径 - GIS Input Data Paths
+    # CO₂捕获源数据文件（由CO2CaptureCalculator从GIS数据计算生成）
+    coal_power_plants: products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/coal_power_plants.csv
     gas_power_plants: products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/gas_power_plants.csv
     oil_refineries: products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/oil_refineries.csv
+
+  co2_data:
+    co2_capture_sources: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
 
   output_paths:
     file_templates:
@@ -420,105 +615,116 @@ data_paths:
       infrastructure_summary: infrastructure_summary_{timestamp}.csv
       inventory_levels: inventory_levels_{timestamp}.csv
       renewable_energy_plants: renewable_energy_plants_{timestamp}.csv
+      co2_transport_plan: co2_transport_plan_{timestamp}.csv
       saf_transport_plan: saf_transport_plan_{timestamp}.csv
       optimization_summary: optimization_summary_{timestamp}.csv
       transport_summary: transport_summary_{timestamp}.csv
-    results_base_dir: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results
+    results_base_dir: products/supply_chain_optimization/coal_hydrogen_saf_optimization/results
 
 # =============================================================================
-# 渚濊禆鍏崇郴 (Dependencies)
+# 依赖关系 (Dependencies)
 # =============================================================================
 dependencies:
   cache_and_temp:
     graphhopper_route_cache_dir: shared/data/cache/graphhopper_routes
     graphhopper_sqlite: shared/data/cache/graphhopper_routes/route_cache.db
-    naming_convention: temp_renewable_<records>_<plants>.csv 鐢ㄤ簬鍒ゅ畾缂撳瓨鏈夋晥鎬?    renewable_filter_cache_dir: cache/filtered_500km_data
+    naming_convention: temp_renewable_<records>_<plants>.csv 用于判定缓存有效性
+    renewable_filter_cache_dir: cache/filtered_500km_data
 
   data_inputs:
     airports_excel: products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx
     airports_excel_backup: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
+    co2_capture_sources: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
     osm_pbf_default: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
-    renewable_plants_in_memory: '璇存槑: 鍙啀鐢熻兘婧愭暟鎹€氳繃DataFrame浼犲叆锛屼笉鍥哄畾鏂囦欢锛屽彲閫夊啓鍏ヤ复鏃剁紦瀛?
+    renewable_plants_in_memory: '说明: 可再生能源数据通过DataFrame传入，不固定文件，可选写入临时缓存'
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/solar_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/3hourly_generation
 
   environment_recommendation:
     memory_suggestion_gb: 8
-    notes: '鑻ュ惎鐢℅raphHopper璇风‘淇濇湰鍦板凡鍚姩: java -Xmx8g -jar graphhopper-web-*.jar server config.yml
+    notes: '若启用GraphHopper请确保本地已启动: java -Xmx8g -jar graphhopper-web-*.jar server config.yml
 
-      骞朵繚璇?OSM PBF 鏂囦欢涓庣紦瀛樼洰褰曞叿鏈夊啓鏉冮檺銆俫urobipy 闇€鏈夋晥License銆?
+      并保证 OSM PBF 文件与缓存目录具有写权限。gurobipy 需有效License。
+
       '
     python_version: '>=3.10'
 
   external_libraries:
   - import_example: import gurobipy as gp
     name: gurobipy
-    purpose: MILP浼樺寲姹傝В鍣?(鏍稿績)
+    purpose: MILP优化求解器 (核心)
     required: true
   - name: pandas
-    purpose: 鏁版嵁琛ㄨ鍙?娓呮礂 (Excel/CSV/鑱氬悎)
+    purpose: 数据表读取/清洗 (Excel/CSV/聚合)
     required: true
   - name: numpy
-    purpose: 鏁板€艰绠?缁熻
+    purpose: 数值计算/统计
     required: true
   - name: pyyaml
     package: PyYAML
-    purpose: 璇诲彇鏈厤缃枃浠?    required: true
+    purpose: 读取本配置文件
+    required: true
   - name: requests
-    purpose: 璋冪敤GraphHopper HTTP API (鍚敤璺緞瑙勫垝鏃?
+    purpose: 调用GraphHopper HTTP API (启用路径规划时)
     required: false
   - name: openpyxl
-    purpose: 璇诲彇Excel鏈哄満/鍩虹璁炬柦鏁版嵁 (pandas engine)
+    purpose: 读取Excel机场/基础设施数据 (pandas engine)
     required: false
   - name: sqlite3
-    purpose: 鏍囧噯搴擄細GraphHopper璺緞缁撴灉鏈湴缂撳瓨 (route_cache.db)
+    purpose: 标准库：GraphHopper路径结果本地缓存 (route_cache.db)
     required: builtin
   - name: logging
-    purpose: 鏍囧噯搴擄細缁熶竴鏃ュ織杈撳嚭
+    purpose: 标准库：统一日志输出
     required: builtin
   - name: hashlib
-    purpose: 鏍囧噯搴擄細鐢熸垚缂撳瓨Key
+    purpose: 标准库：生成缓存Key
     required: builtin
   - name: math
-    purpose: 鏍囧噯搴擄細Haversine璺濈璁＄畻
+    purpose: 标准库：Haversine距离计算
     required: builtin
 
   internal_modules:
   - module: shared.utils.log_preserver
     path: shared/utils/log_preserver.py
-    purpose: 鎸傝浇鏂囦欢鏃ュ織 (鍒濆鍖栨椂)
+    purpose: 挂载文件日志 (初始化时)
     symbols:
     - mount_file_logging
-  - conditional: use_graphhopper_routing=true 鏃跺繀闇€
+  - conditional: use_graphhopper_routing=true 时必需
     module: products.supply_chain_optimization.green_hydrogen_supply_chain_optimization.src.graphhopper_routing_engine
     path: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/graphhopper_routing_engine.py
-    purpose: GraphHopper璺緞瑙勫垝涓庤窛绂昏绠?    symbols:
+    purpose: GraphHopper路径规划与距离计算
+    symbols:
     - GraphHopperRoutingEngine
     - GraphHopperDistanceCalculator
     - DistanceCalculator
   - module: products.supply_chain_optimization.green_hydrogen_supply_chain_optimization.src.data_cache_manager
     path: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/data_cache_manager.py
-    purpose: 鍙啀鐢熻兘婧愭暟鎹?00km杩囨护涓庣紦瀛?    symbols:
+    purpose: 可再生能源数据500km过滤与缓存
+    symbols:
     - cache_manager
-    purpose: CO鈧傛崟鑾锋簮璁＄畻鍜屾暟鎹鐞?    symbols:
+  - module: products.supply_chain_optimization.green_hydrogen_supply_chain_optimization.src.co2.co2_capture_calculator
+    path: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/co2/co2_capture_calculator.py
+    purpose: CO₂捕获源计算和数据处理
+    symbols:
     - CO2CaptureCalculator
   - module: products.supply_chain_optimization.green_hydrogen_supply_chain_optimization.src.transport_route_visualizer
     optional: true
     path: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/transport_route_visualizer.py
-    purpose: (鍙€? 璺敱/杩愯緭鏂规鍙鍖?  - module: shared.utils.geographic_calculator
+    purpose: (可选) 路由/运输方案可视化
+  - module: shared.utils.geographic_calculator
     optional: true
     path: shared/utils/geographic_calculator.py
-    purpose: (鍙€? 閫氱敤鍦扮悊璺濈/鏂逛綅璁＄畻 (鑻ヤ唬鐮佷腑鎵╁睍璋冪敤)
+    purpose: (可选) 通用地理距离/方位计算 (若代码中扩展调用)
 
   main_entry:
-    class: CoalHydrogenSAFOptimizer
-    construction_steps: '1. _load_config -> 璇诲彇鏈琘AML
+    class: GreenHydrogenSupplyChainOptimizer
+    construction_steps: '1. _load_config -> 读取本YAML
 
-      2. 鍒濆鍖朑raphHopper (鍙€? & 鏃ュ織绯荤粺
+      2. 初始化GraphHopper (可选) & 日志系统
 
-      3. 璋冪敤 load_data(...) 鎴?load_data_from_excel(...) 鏋勫缓妯″瀷鏁版嵁
+      3. 调用 load_data(...) 或 load_data_from_excel(...) 构建模型数据
 
-      4. 瀹氫箟鎶€鏈?鎴愭湰/浣嶇疆鏄犲皠 -> 鏋勫缓MILP妯″瀷 -> optimize
+      4. 定义技术/成本/位置映射 -> 构建MILP模型 -> optimize
 
       '
     key_init_args:
@@ -527,9 +733,9 @@ dependencies:
     - osm_pbf_path
     source_file: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/core/green_hydrogen_optimization_model.py
 
-  maintenance: '- 濡傛柊澧炲唴閮ㄦā鍧楋紝璇峰湪 internal_modules 杩藉姞鏉＄洰
+  maintenance: '- 如新增内部模块，请在 internal_modules 追加条目
 
-    - 濡傝皟鏁存暟鎹矾寰勶紝璇峰悓姝ヤ慨鏀?data_paths 涓庢湰鑺?data_inputs
+    - 如调整数据路径，请同步修改 data_paths 与本节 data_inputs
 
     '
 
@@ -541,184 +747,222 @@ dependencies:
     - facility_decisions_{timestamp}.csv
     - complete_solution_{timestamp}.json
 
-  quick_validation_checklist: '1. pip install -r requirements.txt (纭繚gurobipy宸插氨缁?
+  quick_validation_checklist: '1. pip install -r requirements.txt (确保gurobipy已就绪)
 
-    2. 妫€鏌?airports_excel 鏄惁瀛樺湪
+    2. 检查 airports_excel 是否存在
 
-    3. 妫€鏌?wind/solar 鐩綍瀛樺湪涓斿惈CSV
+    3. 检查 wind/solar 目录存在且含CSV
 
+    4. 检查 co2_capture_sources.csv 是否存在
 
-    5. (鍙€? 鍚姩GraphHopper鏈嶅姟; 涓嶅惎鐢ㄥ垯璁?use_graphhopper_routing=false
+    5. (可选) 启动GraphHopper服务; 不启用则设 use_graphhopper_routing=false
 
-    6. 杩愯涓€涓渶灏忕ず渚? 瀹炰緥鍖栦紭鍖栧櫒 -> 鏋勯€犲皯閲忔娊鏍锋暟鎹?-> optimize
+    6. 运行一个最小示例: 实例化优化器 -> 构造少量抽样数据 -> optimize
 
     '
 
   runtime_flags:
-    use_graphhopper_routing: true=HTTP璺緞瑙勫垝 (requests) | false=闄嶇骇鐩寸嚎璺濈
-    use_routing_for_short_distance: 鎺у埗鐭窛绂绘槸鍚︿粛璋冪敤GraphHopper
+    use_graphhopper_routing: true=HTTP路径规划 (requests) | false=降级直线距离
+    use_routing_for_short_distance: 控制短距离是否仍调用GraphHopper
 
 # =============================================================================
-# 缁忔祹鍙傛暟 (Economic Parameters)
-# 鐢ㄤ簬骞冲噯鍖栨垚鏈?LCOE)璁＄畻鍜岀粡娴庢€ц瘎浼?# =============================================================================
+# 经济参数 (Economic Parameters)
+# 用于平准化成本(LCOE)计算和经济性评估
+# =============================================================================
 economic_parameters:
-  # 椤圭洰缁忔祹鍙傛暟 - Project Economics
-  project_lifespan: 20                     # 椤圭洰鐢熷懡鍛ㄦ湡(骞? | Project lifespan (years)
-                                           # 鐢ㄤ簬鎴愭湰鎽婇攢鍜岀粡娴庢€ц瘎浼扮殑鏃堕棿璺ㄥ害
+  # 项目经济参数 - Project Economics
+  project_lifespan: 20                     # 项目生命周期(年) | Project lifespan (years)
+                                           # 用于成本摊销和经济性评估的时间跨度
 
-  discount_rate: 0.08                      # 璐寸幇鐜?| Discount rate
-                                           # 8%骞磋创鐜扮巼锛岀敤浜庡噣鐜板€?NPV)璁＄畻
-                                           # 鍙嶆槧璧勯噾鏃堕棿浠峰€煎拰鎶曡祫椋庨櫓
+  discount_rate: 0.08                      # 贴现率 | Discount rate
+                                           # 8%年贴现率，用于净现值(NPV)计算
+                                           # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 1000  # 骞冲噯鍖栨垚鏈槇鍊?鍏?kg) | LCOE threshold (yuan/kg)
-                                           # 銆愪慨澶嶃€戜粠10鍏?kg鏀惧鑷?0鍏?kg
-                                           # 鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鍒禨AF鎴愭湰杈冮珮锛?0鍏?kg杩囦簬涓ユ牸瀵艰嚧鏃犲彲琛岃В
-                                           # 50鍏?kg鏇寸鍚堝疄闄呮垚鏈按骞?                                           # 鐢ㄤ簬缁忔祹鎬ц竟鐣岀害鏉?
-  # 璁惧瀵垮懡鍙傛暟 - Equipment Lifetime
-  electrolyzer_lifetime: 15                # 鐢佃В妲藉鍛?骞? | Electrolyzer lifetime (years)
-                                           # 纰辨€?PEM鐢佃В妲界殑鍏稿瀷浣跨敤瀵垮懡
+  levelized_cost_threshold_yuan_per_kg: 1000  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+                                           # 【修复】从10元/kg放宽至50元/kg
+                                           # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
+                                           # 50元/kg更符合实际成本水平
+                                           # 用于经济性边界约束
 
-  saf_reactor_lifetime: 25                 # SAF鍙嶅簲鍣ㄥ鍛?骞? | SAF reactor lifetime (years)
-                                           # 鍖栧伐瑁呯疆鐨勮璁′娇鐢ㄥ鍛?
-  pipeline_lifetime: 30                    # 绠￠亾瀵垮懡(骞? | Pipeline lifetime (years)
-                                           # 绠￠亾鍩虹璁炬柦鐨勮璁′娇鐢ㄥ鍛?
-  storage_lifetime: 25                     # 鍌ㄥ瓨璁炬柦瀵垮懡(骞? | Storage facility lifetime (years)
+  # 设备寿命参数 - Equipment Lifetime
+  electrolyzer_lifetime: 15                # 电解槽寿命(年) | Electrolyzer lifetime (years)
+                                           # 碱性/PEM电解槽的典型使用寿命
 
-  transport_vehicle_lifetime: 20           # 杩愯緭杞﹁締瀵垮懡(骞? | Transport vehicle lifetime (years)
+  saf_reactor_lifetime: 25                 # SAF反应器寿命(年) | SAF reactor lifetime (years)
+                                           # 化工装置的设计使用寿命
 
-  # 瀹归噺绯绘暟 - Capacity Factors (瀹為檯鍒╃敤鐜?
+  pipeline_lifetime: 30                    # 管道寿命(年) | Pipeline lifetime (years)
+                                           # 管道基础设施的设计使用寿命
+
+  storage_lifetime: 25                     # 储存设施寿命(年) | Storage facility lifetime (years)
+
+  transport_vehicle_lifetime: 20           # 运输车辆寿命(年) | Transport vehicle lifetime (years)
+
+  # 容量系数 - Capacity Factors (实际利用率)
   capacity_factors:
-    electrolyzer_capacity_factor: 0.75     # 鐢佃В妲藉閲忕郴鏁?| Electrolyzer capacity factor
-                                           # 鑰冭檻缁存姢銆佹淇瓑鍥犵礌鐨勫疄闄呰繍琛岀巼
-                                           # 75% = 骞磋繍琛?570灏忔椂
+    electrolyzer_capacity_factor: 0.75     # 电解槽容量系数 | Electrolyzer capacity factor
+                                           # 考虑维护、检修等因素的实际运行率
+                                           # 75% = 年运行6570小时
 
-    saf_reactor_capacity_factor: 0.85      # SAF鍙嶅簲鍣ㄥ閲忕郴鏁?| SAF reactor capacity factor
-                                           # 鍖栧伐瑁呯疆鐨勫吀鍨嬪勾杩愯鐜?
-    pipeline_capacity_factor: 0.95         # 绠￠亾瀹归噺绯绘暟 | Pipeline capacity factor
-                                           # 绠￠亾绯荤粺鐨勯珮鍙敤鎬?
-    storage_capacity_factor: 0.9           # 鍌ㄥ瓨璁炬柦瀹归噺绯绘暟 | Storage facility capacity factor
+    saf_reactor_capacity_factor: 0.85      # SAF反应器容量系数 | SAF reactor capacity factor
+                                           # 化工装置的典型年运行率
 
-    transport_capacity_factor: 0.75        # 杩愯緭绯荤粺瀹归噺绯绘暟 | Transport system capacity factor
-                                           # 鑰冭檻澶╂皵銆佺淮鎶ゃ€佽皟搴︾瓑鍥犵礌
+    pipeline_capacity_factor: 0.95         # 管道容量系数 | Pipeline capacity factor
+                                           # 管道系统的高可用性
+
+    storage_capacity_factor: 0.9           # 储存设施容量系数 | Storage facility capacity factor
+
+    transport_capacity_factor: 0.75        # 运输系统容量系数 | Transport system capacity factor
+                                           # 考虑天气、维护、调度等因素
 
 # =============================================================================
-# 璁惧鍘熷鎴愭湰 (Equipment Raw Costs)
-# 鐢佃В妲姐€丼AF鍙嶅簲鍣ㄥ拰鍌ㄥ瓨璁炬柦鐨勮祫鏈敮鍑?CAPEX)鍜岃繍钀ユ敮鍑?OPEX)
+# 设备原始成本 (Equipment Raw Costs)
+# 电解槽、SAF反应器和储存设施的资本支出(CAPEX)和运营支出(OPEX)
 # =============================================================================
 equipment_raw_costs:
-  # 鐢佃В妲芥垚鏈?- Electrolyzer Costs
+  # 电解槽成本 - Electrolyzer Costs
   electrolyzer:
-    capex_raw: 8000000                     # 鐢佃В妲借祫鏈敮鍑?鍏?鍗曚綅) | Electrolyzer CAPEX (yuan/unit)
-                                           # 800涓囧厓/濂楋紝鍖呭惈璁惧閲囪喘銆佸畨瑁呭拰璋冭瘯
+    capex_raw: 8000000                     # 电解槽资本支出(元/单位) | Electrolyzer CAPEX (yuan/unit)
+                                           # 800万元/套，包含设备采购、安装和调试
 
-    opex_raw: 200000                       # 鐢佃В妲藉勾杩愯惀鎴愭湰(鍏?骞? | Electrolyzer annual OPEX (yuan/year)
-                                           # 鍖呮嫭缁存姢銆佸浠躲€佷汉宸ョ瓑鍥哄畾杩愯惀璐圭敤
+    opex_raw: 200000                       # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
+                                           # 包括维护、备件、人工等固定运营费用
 
-  # SAF鍙嶅簲鍣ㄦ垚鏈?- SAF Reactor Costs
+  # SAF反应器成本 - SAF Reactor Costs
   saf_reactor:
-    capex_raw: 6000000                     # SAF鍙嶅簲鍣ㄨ祫鏈敮鍑?鍏?鍗曚綅) | SAF reactor CAPEX (yuan/unit)
-                                           # 600涓囧厓/濂楋紝鍖呭惈璁惧閲囪喘銆佸畨瑁呭拰璋冭瘯
+    capex_raw: 6000000                     # SAF反应器资本支出(元/单位) | SAF reactor CAPEX (yuan/unit)
+                                           # 600万元/套，包含设备采购、安装和调试
 
-    opex_raw: 150000                       # SAF鍙嶅簲鍣ㄥ勾杩愯惀鎴愭湰(鍏?骞? | SAF reactor annual OPEX (yuan/year)
-                                           # 鍖呮嫭缁存姢銆佸浠躲€佷汉宸ョ瓑鍥哄畾杩愯惀璐圭敤
+    opex_raw: 150000                       # SAF反应器年运营成本(元/年) | SAF reactor annual OPEX (yuan/year)
+                                           # 包括维护、备件、人工等固定运营费用
 
-  # 鍌ㄥ瓨璁炬柦鎴愭湰 - Storage Facility Costs
+  # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 2000                        # 鍌ㄥ瓨璁炬柦璧勬湰鏀嚭(鍏?鍗曚綅) | Storage CAPEX (yuan/unit)
-                                           # 鍖呮嫭鍌ㄧ綈銆佺閬撱€佹车绛夎澶?
-    opex_raw: 30                           # 鍌ㄥ瓨璁炬柦骞磋繍钀ユ垚鏈?鍏?骞? | Storage annual OPEX (yuan/year)
+    capex_raw: 2000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+                                           # 包括储罐、管道、泵等设备
+
+    opex_raw: 30                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
 
 # =============================================================================
-# SAF璁炬柦骞冲噯鍖栨垚鏈弬鏁?(SAF Facility LCOE Parameters)
-# 鐢ㄤ簬璁＄畻SAF鍙嶅簲鍣ㄨ鏂界殑骞冲噯鍖栨垚鏈?# =============================================================================
+# SAF设施平准化成本参数 (SAF Facility LCOE Parameters)
+# 用于计算SAF反应器设施的平准化成本
+# =============================================================================
 facility_lcoe_parameters:
-  fixed_capex: 60000000                    # 鍥哄畾璧勬湰鏀嚭(鍏? | Fixed CAPEX (yuan)
-                                           # SAF璁炬柦鍩虹璁炬柦寤鸿鐨勫浐瀹氭姇璧勯儴鍒?                                           # 6000涓囧厓鍖呮嫭鍦熷湴銆佸巶鎴裤€佸叕鐢ㄥ伐绋嬬瓑
+  fixed_capex: 60000000                    # 固定资本支出(元) | Fixed CAPEX (yuan)
+                                           # SAF设施基础设施建设的固定投资部分
+                                           # 6000万元包括土地、厂房、公用工程等
 
-  fixed_opex_annual: 18000000              # 骞村浐瀹氳繍钀ユ垚鏈?鍏?骞? | Annual fixed OPEX (yuan/year)
-                                           # 绠＄悊銆佷汉宸ャ€佸叕鐢ㄤ簨涓氱瓑鍥哄畾璐圭敤
-                                           # 1800涓囧厓/骞?
-  variable_capex_per_capacity: 35000       # 鍗曚綅浜ц兘璧勬湰鏀嚭(鍏?(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
-                                           # 闅忎骇鑳借妯″彉鍖栫殑鎶曡祫
-                                           # 3.5涓囧厓/(kg/h浜ц兘)
-                                           # 娉ㄦ剰锛氳繖閲岀殑capacity鍗曚綅鏄痥g/h(灏忔椂浜ц兘)
+  fixed_opex_annual: 18000000              # 年固定运营成本(元/年) | Annual fixed OPEX (yuan/year)
+                                           # 管理、人工、公用事业等固定费用
+                                           # 1800万元/年
 
-  variable_opex_per_kg: 0.8                # 鍗曚綅浜у搧杩愯惀鎴愭湰(鍏?kg) | Variable OPEX per product (yuan/kg)
-                                           # 鍘熸潗鏂欍€佽兘婧愩€佸偓鍖栧墏绛夊彲鍙樻垚鏈?                                           # 0.8鍏?kg浜у搧
+  variable_capex_per_capacity: 35000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+                                           # 随产能规模变化的投资
+                                           # 3.5万元/(kg/h产能)
+                                           # 注意：这里的capacity单位是kg/h(小时产能)
 
-  # SAF宸ヨ壓鐗瑰畾鍙傛暟 - SAF Process Specific Parameters
-  catalyst_cost_yuan_per_kg_saf: 0.10      # 鍌寲鍓傛垚鏈?鍏?kg SAF) | Catalyst cost (yuan/kg SAF)
-                                           # 鍚堟垚鍌寲鍓傜殑鍗曚綅浜у搧鎴愭湰
+  variable_opex_per_kg: 0.8                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
+                                           # 原材料、能源、催化剂等可变成本
+                                           # 0.8元/kg产品
 
-  energy_cost_yuan_per_kwh: 0.5            # 鑳芥簮鎴愭湰(鍏?kWh) | Energy cost (yuan/kWh)
-                                           # SAF鍙嶅簲鍣ㄦ墍闇€鐨勭數鍔涘拰鐑兘鎴愭湰
+  # SAF工艺特定参数 - SAF Process Specific Parameters
+  catalyst_cost_yuan_per_kg_saf: 0.10      # 催化剂成本(元/kg SAF) | Catalyst cost (yuan/kg SAF)
+                                           # 合成催化剂的单位产品成本
+
+  energy_cost_yuan_per_kwh: 0.5            # 能源成本(元/kWh) | Energy cost (yuan/kWh)
+                                           # SAF反应器所需的电力和热能成本
 
 # =============================================================================
-# 鍦扮悊鏁版嵁 (Geographic Data)
+# 地理数据 (Geographic Data)
 # =============================================================================
 geographic_data:
   airport_coordinates:
-    鍖椾含:
+    北京:
       latitude: 40.0801
       longitude: 116.5846
-    鍖椾含鍗楄嫅鏈哄満:
+    北京南苑机场:
       latitude: 39.7827
       longitude: 116.3878
-    鍖椾含棣栭兘鍥介檯鏈哄満:
+    北京首都国际机场:
       latitude: 40.0801
       longitude: 116.5846
-    鍗楄嫅鏈哄満:
+    南苑机场:
       latitude: 39.7827
       longitude: 116.3878
-    澶╂触:
+    天津:
       latitude: 39.1244
       longitude: 117.3462
-    澶╂触婊ㄦ捣鍥介檯鏈哄満:
+    天津滨海国际机场:
       latitude: 39.1244
       longitude: 117.3462
-    姝ｅ畾鏈哄満:
+    正定机场:
       latitude: 38.2807
       longitude: 114.6956
-    婊ㄦ捣鏈哄満:
+    滨海机场:
       latitude: 39.1244
       longitude: 117.3462
-    鐭冲搴?
+    石家庄:
       latitude: 38.2807
       longitude: 114.6956
-    鐭冲搴勬瀹氬浗闄呮満鍦?
+    石家庄正定国际机场:
       latitude: 38.2807
       longitude: 114.6956
-    閭兏:
+    邯郸:
       latitude: 36.5258
       longitude: 114.4253
-    閭兏鏈哄満:
+    邯郸机场:
       latitude: 36.5258
       longitude: 114.4253
-    棣栭兘鏈哄満:
+    首都机场:
       latitude: 40.0801
       longitude: 116.5846
 
 # =============================================================================
-# 閰嶇疆鏂囦欢鍏冩暟鎹?(Configuration Metadata)
+# 配置文件元数据 (Configuration Metadata)
 # =============================================================================
 metadata:
-  version: 3.0.0                           # 閰嶇疆鏂囦欢鐗堟湰 | Configuration version
-  project_name: CoalHydrogenSAFOptimizer   # 椤圭洰鍚嶇О | Project name
-  author: 绯荤粺鑷姩鐢熸垚                      # 浣滆€?| Author
-  created_date: '2025-10-26'               # 鍒涘缓鏃ユ湡 | Creation date
-  last_updated: '2025-10-26'               # 鏈€鍚庢洿鏂版棩鏈?| Last updated
+  version: 3.0.0                           # 配置文件版本 | Configuration version
+  author: 系统自动生成                      # 作者 | Author
+  created_date: '2025-10-27'               # 创建日期 | Creation date
+  last_updated: '2025-10-27'               # 最后更新日期 | Last updated
 
   description: |
-    CoalHydrogenSAFOptimizer缁煎悎鍙傛暟閰嶇疆鏂囦欢
+    CoalHydrogenSAFOptimizer综合参数配置文件
     Coal Hydrogen SAF Supply Chain Optimizer Comprehensive Configuration File
 
   notes: |
-    閰嶇疆鏂囦欢璇存槑:
-    - 姝ら厤缃枃浠堕拡瀵笴oalHydrogenSAFOptimizer骞惰鐗堟湰(v3.0)
-    - 鑱氱劍鐓ょ偔姘斿寲CO鈧?+ 缁挎阿涓ゆ娉昐AF璺嚎
-    - 淇濈暀姘㈡皵銆佺敳閱囥€丼AF鐢熶骇鐩稿叧鏍稿績鍙傛暟
-    - 宸茬Щ闄O鈧傛崟鑾蜂笌杩愯緭鐩稿叧閰嶇疆锛屾敼鐢ㄧ叅鐐競鍦洪噰璐亣璁?    - 鍙€氳繃璋冩暣coal_parameters涓巋ydrogen_parameters杩涜鏁忔劅鎬у垎鏋?# =============================================================================
-# 鐩爣鍑芥暟绯绘暟 (Objective Coefficients)
+    配置文件说明:
+    - 此配置文件包含了CoalHydrogenSAFOptimizer类的所有参数配置
+    - 修改此文件可以调整优化器的行为，无需修改源代码
+    - 参数分为15个主要类别，涵盖了经济、技术、成本、数据路径等各个方面
+    - v2.0.0更新:
+      * 从绿氢+外部CO₂捕获路线迁移到煤炭气化+绿氢路线
+      * 添加煤炭供应参数配置(coal_parameters)
+      * 移除CO₂外部捕获和运输配置（CO₂聚类、管道运输等）
+      * 更新技术路线为煤炭气化CO₂+绿氢→SAF
+
+    主要配置类别:
+    1. basic_parameters: 基础系统参数（时间范围、路径规划）
+    2. capacity_limits: 容量限制（设施产能、运输能力）
+    3. co2_capture_parameters: CO₂捕获源参数（NEW）
+    4. carbon_emission_parameters: 碳排放参数（全生命周期评估）
+    5. clustering_parameters: 聚类参数（DBSCAN地理聚类）
+    6. cost_parameters: 成本参数（氢气价格、运输成本）
+    7. costs: 详细成本数据
+    8. data_paths: 数据路径配置（输入输出文件路径）
+    9. dependencies: 依赖关系说明（模块、库、数据依赖）
+    10. economic_parameters: 经济参数（LCOE计算、贴现率）
+    11. equipment_raw_costs: 设备原始成本（CAPEX/OPEX）
+    12. facility_lcoe_parameters: 设施平准化成本参数
+    13. geographic_data: 地理数据（机场坐标）
+    14. objective_coefficients: 目标函数系数
+    15. operational_parameters: 运营参数
+    16. solver_parameters: Gurobi求解器参数
+    17. technologies: 技术路线参数（绿氢+CO₂→SAF）
+    18. transport_modes: 运输模式配置
+
+# =============================================================================
+# 目标函数系数 (Objective Coefficients)
 # =============================================================================
 objective_coefficients:
   final_inventory_disposal_cost_per_kg: 100
@@ -730,113 +974,150 @@ objective_coefficients:
     equipment_unit_cost_yuan_per_kg: 10
 
 # =============================================================================
-# 杩愯惀鍙傛暟 (Operational Parameters)
+# 运营参数 (Operational Parameters)
 # =============================================================================
 operational_parameters:
   default_transport_distances:
     h2_transport_distance_km: 100
+    co2_transport_distance_km: 80
   operational_efficiency: 0.9
-  default_coal_saf_demand_kg_per_hour: 1000
-  initial_co2_inventory_kg: 0.0
-  final_co2_inventory_target_kg: 0.0
 
 # =============================================================================
-# 姹傝В鍣ㄥ弬鏁?(Solver Parameters)
-# Gurobi浼樺寲姹傝В鍣ㄧ殑鎺у埗鍙傛暟
+# 求解器参数 (Solver Parameters)
+# Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 3600                          # 姹傝В鏃堕棿闄愬埗(绉? | Time limit (seconds)
-                                           # 3600绉?= 1灏忔椂锛岃秴鏃跺悗杩斿洖褰撳墠鏈€浼樿В
-                                           # 璋冨弬寤鸿锛?                                           #   - 灏忚妯￠棶棰? 600-1800绉?                                           #   - 涓瓑瑙勬ā: 3600-7200绉?                                           #   - 澶ц妯￠棶棰? 7200-14400绉?
-  MIPGap: 0.01                             # 娣峰悎鏁存暟瑙勫垝姹傝В绮惧害 | MIP optimality gap
-                                           # 0.01 = 1%锛屽厑璁歌В涓庢渶浼樿В鐨勭浉瀵瑰樊璺?                                           # 杈冨皬鐨凪IPGap鎻愰珮绮惧害浣嗗鍔犳眰瑙ｆ椂闂?                                           # 璋冨弬寤鸿锛?                                           #   - 楂樼簿搴? 0.001-0.005
-                                           #   - 骞宠　: 0.01-0.02
-                                           #   - 蹇€? 0.05-0.1
+  TimeLimit: 3600                          # 求解时间限制(秒) | Time limit (seconds)
+                                           # 3600秒 = 1小时，超时后返回当前最优解
+                                           # 调参建议：
+                                           #   - 小规模问题: 600-1800秒
+                                           #   - 中等规模: 3600-7200秒
+                                           #   - 大规模问题: 7200-14400秒
 
-  Threads: 128                             # 骞惰璁＄畻绾跨▼鏁?| Number of parallel threads
-                                           # 浣跨敤128涓嚎绋嬭繘琛屽苟琛岃绠?                                           # 寤鸿璁剧疆涓篊PU鏍稿績鏁版垨绋嶅
-                                           # 娉ㄦ剰锛氳繃澶氱嚎绋嬪彲鑳藉鑷村唴瀛樻孩鍑?
+  MIPGap: 0.01                             # 混合整数规划求解精度 | MIP optimality gap
+                                           # 0.01 = 1%，允许解与最优解的相对差距
+                                           # 较小的MIPGap提高精度但增加求解时间
+                                           # 调参建议：
+                                           #   - 高精度: 0.001-0.005
+                                           #   - 平衡: 0.01-0.02
+                                           #   - 快速: 0.05-0.1
+
+  Threads: 128                             # 并行计算线程数 | Number of parallel threads
+                                           # 使用128个线程进行并行计算
+                                           # 建议设置为CPU核心数或稍多
+                                           # 注意：过多线程可能导致内存溢出
+
 # =============================================================================
-# 鎶€鏈矾绾垮弬鏁?(Technology Parameters)
-# 瀹氫箟鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鍒禨AF鎶€鏈矾绾垮拰杞崲鏁堢巼
-# 鎶€鏈被鍨? Green H鈧?+ CO鈧?鈫?SAF (Fischer-Tropsch synthesis)
+# 技术路线参数 (Technology Parameters)
+# 定义绿氢+CO₂制SAF技术路线和转换效率
+# 技术类型: Green H₂ + CO₂ → SAF (Fischer-Tropsch synthesis)
 # =============================================================================
 technologies:
-  # 鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鍒禨AF - Green Hydrogen + CO鈧?to SAF
+  # 绿氢+CO₂制SAF - Green Hydrogen + CO₂ to SAF
   green_h2_co2_to_saf:
-    name: 鐓ょ偔姘斿寲CO鈧?+ 缁挎阿璐规墭鍚堟垚鍒禨AF  # 鎶€鏈悕绉?| Technology name
-    technology_type: GreenH2_CO2_FT       # 鎶€鏈被鍨?| Technology type
-    transport_mode: renewable_h2_pipeline  # 杩愯緭妯″紡锛氬彲鍐嶇敓鑳芥簮鐢佃В鍒舵阿+绠￠亾 | Transport mode
+    name: 绿氢+CO₂费托合成制SAF  # 技术名称 | Technology name
+    technology_type: GreenH2_CO2_FT       # 技术类型 | Technology type
+    transport_mode: renewable_h2_pipeline  # 运输模式：可再生能源电解制氢+管道 | Transport mode
 
-    # 閫傜敤浣嶇疆 - Suitable Locations
-    suitable_locations:                   # 鍙儴缃蹭綅缃被鍨?| Deployable location types
-    - solar_plant                         # 澶槼鑳藉彂鐢电珯锛堜慨澶嶏細鍖归厤浠ｇ爜瀹為檯绫诲瀷锛?    - wind_farm                           # 椋庣數鍦猴紙淇锛氬尮閰嶄唬鐮佸疄闄呯被鍨嬶級
-    - airport                             # 鏈哄満闄勮繎
-    - co2_capture                         # CO鈧傛崟鑾风偣
+    # 适用位置 - Suitable Locations
+    suitable_locations:                   # 可部署位置类型 | Deployable location types
+    - solar_plant                         # 太阳能发电站（修复：匹配代码实际类型）
+    - wind_farm                           # 风电场（修复：匹配代码实际类型）
+    - airport                             # 机场附近
+    - co2_capture                         # CO₂捕获点
 
-    # 宸ヨ壓鍙傛暟 - Process Parameters
-    efficiency: 0.60                      # 鏁翠綋鍚堟垚鏁堢巼 | Overall synthesis efficiency
-                                          # H鈧?CO鈧傚埌SAF鐨勭⒊杞寲鏁堢巼60%
+    # 工艺参数 - Process Parameters
+    efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
+                                          # H₂+CO₂到SAF的碳转化效率60%
 
-    h2_consumption_ratio: 0.15            # 姘㈡皵娑堣€楁瘮(kg H鈧?kg SAF) | H鈧?consumption ratio
-                                          # 鐢熶骇1kg SAF闇€瑕?.15kg姘㈡皵
+    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 生产1kg SAF需要0.15kg氢气
 
-    co2_consumption_ratio: 3.0            # CO鈧傛秷鑰楁瘮(kg CO鈧?kg SAF) | CO鈧?consumption ratio
-                                          # 鐢熶骇1kg SAF闇€瑕?.0kg CO鈧?
-    # 馃啎 涓ゆ娉曡浆鍖栨瘮渚嬪弬鏁帮紙H鈧?CO鈧傗啋鐢查唶鈫扴AF锛?    methanol_intermediate_ratio: 3.125    # kg鐢查唶/kg SAF锛堢涓€姝ワ細H鈧?CO鈧傗啋鐢查唶锛?                                          # 涓棿浜х墿鐢查唶鐨勭敓鎴愭瘮渚?
-    methanol_to_saf_ratio: 0.64           # kg SAF/kg鐢查唶锛堢浜屾锛氱敳閱団啋SAF锛?                                          # 鐢查唶杞寲涓篠AF鐨勮浆鍖栫巼
+    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 生产1kg SAF需要3.0kg CO₂
 
-    co2_emission_factor: -2.5             # CO鈧傛帓鏀剧郴鏁?kg CO鈧?kg SAF) | CO鈧?emission factor
-                                          # 璐熷€艰〃绀哄噣鍑忔帓锛堜娇鐢ㄦ崟鑾风殑CO鈧傦級
+    # 🆕 两步法转化比例参数（H₂+CO₂→甲醇→SAF）
+    methanol_intermediate_ratio: 3.125    # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
+                                          # 中间产物甲醇的生成比例
 
-    # 鍙嶅簲鍣ㄥ弬鏁?- Reactor Parameters
-    reactor_temperature_celsius: 250      # 鍙嶅簲鍣ㄦ俯搴?掳C) | Reactor temperature
+    methanol_to_saf_ratio: 0.64           # kg SAF/kg甲醇（第二步：甲醇→SAF）
+                                          # 甲醇转化为SAF的转化率
 
-    reactor_pressure_mpa: 3.0             # 鍙嶅簲鍣ㄥ帇鍔?MPa) | Reactor pressure
+    co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
+                                          # 负值表示净减排（使用捕获的CO₂）
 
-    catalyst_type: Iron-based             # 鍌寲鍓傜被鍨?| Catalyst type
-                                          # 閾佸熀鍌寲鍓傦紙閫傚悎CO鈧傚姞姘級
+    # 反应器参数 - Reactor Parameters
+    reactor_temperature_celsius: 250      # 反应器温度(°C) | Reactor temperature
 
-    catalyst_cost_yuan_per_kg_saf: 0.12   # 鍌寲鍓傛垚鏈?鍏?kg SAF) | Catalyst cost per kg SAF
+    reactor_pressure_mpa: 3.0             # 反应器压力(MPa) | Reactor pressure
 
-    # 鑳芥簮娑堣€楀弬鏁?- Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 6.0  # 鐢靛姏娑堣€?kWh/kg SAF) | Electricity consumption
-                                          # 鍖呮嫭鍘嬬缉銆佹车閫併€佸垎绂荤瓑
+    catalyst_type: Iron-based             # 催化剂类型 | Catalyst type
+                                          # 铁基催化剂（适合CO₂加氢）
 
-    heat_integration_efficiency: 0.70     # 鐑泦鎴愭晥鐜?| Heat integration efficiency
-                                          # 鍙嶅簲鐑殑鍥炴敹鍒╃敤鏁堢巼
+    catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
 
-    hydrogen_transport_required: true     # 鏄惁闇€瑕佹阿姘旇繍杈?| Hydrogen transport required
-                                          # true: 闇€瑕佷粠鐢佃В妲借繍杈撴阿姘斿埌鍚堟垚瑁呯疆
+    # 能源消耗参数 - Energy Consumption Parameters
+    energy_consumption_kwh_per_kg_saf: 6.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # 包括压缩、泵送、分离等
 
-  # 鎶€鏈鏉傚害绯绘暟 - Technology Complexity Factors
+    heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
+                                          # 反应热的回收利用效率
+
+    hydrogen_transport_required: true     # 是否需要氢气运输 | Hydrogen transport required
+                                          # true: 需要从电解槽运输氢气到合成装置
+
+  # 技术复杂度系数 - Technology Complexity Factors
   complexity_factors:
-    green_h2_co2_to_saf: 1.2              # 鐓ょ偔姘斿寲CO鈧?+ 缁挎阿鎶€鏈鏉傚害 | Green H鈧?CO鈧?complexity
-                                          # 1.2琛ㄧず姣斾紶缁熻矾绾垮鏉?0%
+    green_h2_co2_to_saf: 1.2              # 绿氢+CO₂技术复杂度 | Green H₂+CO₂ complexity
+                                          # 1.2表示比传统路线复杂20%
 
 # =============================================================================
-# 杩愯緭绾︽潫 (Transport Constraints)
+# 运输约束 (Transport Constraints)
 # =============================================================================
 transport_constraints:
   h2_truck_transport:
     max_trucks_per_day: 15
     truck_capacity_kg: 500
+
+  co2_truck_transport:
+    max_trucks_per_day: 25
+    truck_capacity_ton: 20
+
 # =============================================================================
-# 杩愯緭妯″紡 (Transport Modes)
+# 运输模式 (Transport Modes)
 # =============================================================================
 transport_modes:
   renewable_h2_pipeline:
     capacity_factor: 0.92
-    description: 鍙啀鐢熻兘婧愬彂鐢靛巶鐢佃В鍒舵阿锛岀閬撹緭閫佽嚦SAF璁炬柦
+    description: 可再生能源发电厂电解制氢，管道输送至SAF设施
     distance_limit_km: 500
-    name: 鍙啀鐢熻兘婧愭阿姘旂閬?    suitable_sources:
+    name: 可再生能源氢气管道
+    suitable_sources:
     - renewable_plant
+
+  co2_pipeline_transport:
+    capacity_factor: 0.95
+    description: 从CO₂捕获源管道输送至SAF设施
+    distance_limit_km: 500
+    name: CO₂管道运输
+    suitable_sources:
+    - co2_capture_site
+
+  co2_truck_transport:
+    capacity_factor: 0.85
+    cost_yuan_per_ton_km: 0.8
+    description: CO₂罐车运输
+    distance_limit_km: 300
+    name: CO₂罐车运输
+    suitable_sources:
+    - co2_capture_site
+
   h2_truck_transport:
     capacity_factor: 0.80
     cost_yuan_per_kg_km: 2.0
-    description: 姘㈡皵缃愯溅杩愯緭
+    description: 氢气罐车运输
     distance_limit_km: 200
-    name: 姘㈡皵缃愯溅杩愯緭
+    name: 氢气罐车运输
     suitable_sources:
     - renewable_plant
     - electrolyzer_station
@@ -844,14 +1125,15 @@ transport_modes:
   airport_integrated:
     capacity_factor: 0.90
     cost_yuan_per_kg: 5.0
-    description: 鍦ㄦ満鍦哄氨杩戝缓璁剧叅鐐皵鍖朇O鈧?+ 缁挎阿鍒禨AF璁炬柦
+    description: 在机场就近建设绿氢+CO₂制SAF设施
     distance_limit_km: 100
-    name: 鏈哄満闆嗘垚
+    name: 机场集成
     suitable_sources:
     - renewable_plant
+    - co2_capture_site
 
 # =============================================================================
-# 缁熶竴鎴愭湰閰嶇疆 (Unified Costs)
+# 统一成本配置 (Unified Costs)
 # =============================================================================
 unified_costs:
   production:
@@ -860,6 +1142,7 @@ unified_costs:
 
   raw_materials:
     renewable_electricity_base_price_yuan_per_kwh: 0.35
+    co2_capture_base_cost_yuan_per_ton: 280
 
   storage:
     facility_investment_yuan_per_kg: 2000
