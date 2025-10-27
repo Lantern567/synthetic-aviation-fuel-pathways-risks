@@ -40,6 +40,11 @@ except ModuleNotFoundError:
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
     create_cost_analyzer = None
 
+try:
+    from ..utils.province_mapper import enrich_province_info
+except ImportError:
+    from utils.province_mapper import enrich_province_info
+
 # 导入GraphHopper路径规划模块 - 必须可用
 try:
     # 尝试相对导入（当作为包使用时）
@@ -369,15 +374,28 @@ def get_project_base_dir():
 # 在模块加载时挂载日志文件输出（仅作用于logging，不捕获print）
 try:
     _base_dir = get_project_base_dir()
-    _log_dir = os.path.join(
+    _process_tag = os.environ.get("GH_SUPPLY_CHAIN_PROCESS", "").strip()
+
+    _log_dir_parts = [
         _base_dir,
         "products",
         "supply_chain_optimization",
         "green_hydrogen_supply_chain_optimization",
         "results",
         "logs",
-    )
-    mount_file_logging(_log_dir, filename_prefix="green_h2_supply_chain")
+    ]
+
+    if _process_tag:
+        _log_dir_parts.append(_process_tag)
+
+    _log_dir = os.path.join(*_log_dir_parts)
+
+    _filename_prefix = "green_h2_supply_chain"
+    if _process_tag:
+        _safe_tag = _process_tag.replace(os.sep, "_").replace(" ", "_")
+        _filename_prefix = f"{_filename_prefix}_{_safe_tag}"
+
+    mount_file_logging(_log_dir, filename_prefix=_filename_prefix)
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
@@ -6795,9 +6813,12 @@ class GreenHydrogenSupplyChainOptimizer:
                 logger.error(f"CO₂捕获源数据文件不存在: {co2_data_path}")
                 raise FileNotFoundError(f"CO₂捕获源数据文件不存在: {co2_data_path}")
 
-            # 加载CO₂数据
+            # 加载CO₂数据并修复缺失的省份信息
             co2_df = pd.read_csv(co2_data_path)
             logger.info(f"加载CO₂捕获源原始数据: {len(co2_df)} 条记录")
+
+            co2_df = enrich_province_info(co2_df, logger=logger)
+            co2_df['province'] = co2_df['province'].fillna('Unknown')
 
             # 过滤北京500km范围内的CO₂捕获源
             co2_df = co2_df[co2_df.apply(
