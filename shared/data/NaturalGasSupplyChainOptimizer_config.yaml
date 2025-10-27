@@ -604,8 +604,8 @@ economic_parameters:
 equipment_raw_costs:
   # 电解槽成本 - Electrolyzer Costs
   electrolyzer:
-    capex_raw: 800000                      # 电解槽资本支出(元/单位) | Electrolyzer CAPEX (yuan/unit)
-                                           # 80万元/套，包含设备采购、安装和调试
+    capex_raw: 800000                      # 电解槽单位产能投资(元/(kg H₂/hour)) | Electrolyzer unit capacity CAPEX (yuan/(kg H₂/hour))
+                                           # 每kg/h产能需要80万元投资，包含设备采购、安装和调试
 
     opex_raw: 800                          # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
                                            # 包括维护、备件、人工等固定运营费用

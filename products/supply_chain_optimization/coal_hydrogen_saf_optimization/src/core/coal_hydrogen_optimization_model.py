@@ -2962,7 +2962,7 @@ class CoalHydrogenSAFOptimizer:
 
         # 6. 电解槽投资成本（一次性投资）
         electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H2/hour)")
+        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H₂/hour) [单位产能投资]")
         self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
             self.electrolyzer_capacity_vars[location] *
             electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
