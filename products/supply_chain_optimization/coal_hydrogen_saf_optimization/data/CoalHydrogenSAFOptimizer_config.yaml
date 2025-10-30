@@ -95,14 +95,15 @@ capacity_limits:
                                            # 单个SAF反应器设施的最大SAF生产能力
                                            # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
-                                           # 暂不设置最小规模约束，由优化器自由决策
+  saf_reactor_min_capacity_kg_per_hour: 100     # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 修正：从0改为100，防止建设空壳工厂
+                                           # 最小经济规模约束，确保设施具有合理产能
 
   # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:
     default: 2000                          # 默认容量估算(kg/h) | Default capacity estimate
     industrial: 3000                       # 工业基地容量(kg/h) | Industrial base capacity
-    petrochemical_base: 5000               # 石化基地容量(kg/h) | Petrochemical base capacity
+    petrochemical_base: 5000             # 石化基地容量(kg/h) | Petrochemical base capacity
                                            # 说明：根据不同位置类型设定的SAF反应器生产容量估算值
 
   # 氢气生产容量 - Hydrogen Production Capacity
@@ -111,6 +112,11 @@ capacity_limits:
 
   electrolyzer_min_capacity_kg_per_hour: 100     # 电解槽最小经济规模(kg H₂/h) | Min economic electrolyzer scale
                                            # 最小经济规模约束，小于此规模不经济
+
+  # 氢气管道运输容量 - Hydrogen Pipeline Transport Capacity
+  hydrogen_pipeline_max_daily_capacity_kg: 500000  # 氢气管道日最大运输容量(kg H₂/天) | Max daily H2 pipeline capacity
+                                           # 单条管道每天的最大氢气运输能力
+                                           # 原默认值50000太小,会限制大规模电解槽的氢气输送
 
 # =============================================================================
 # CO₂捕获与供应参数 (CO₂ Capture and Supply Parameters)
@@ -233,9 +239,12 @@ coal_parameters:
   carbon_content: 0.75                     # 碳含量(质量分数) | Carbon content (mass fraction)
   co2_per_kg_coal: 2.44                    # 单位煤炭CO₂产量(kg/kg) | CO₂ yield per kg coal
   coal_price_yuan_per_ton: 525             # 煤炭采购成本(元/吨) | Coal purchase cost (yuan/ton)
+                                           # 注意：代码中请换算为元/kg (525元/吨 = 0.525元/kg)
   gasification_efficiency: 0.75            # 煤炭气化效率 | Coal gasification efficiency
-  gasification_energy_mj_per_kg: 8.0       # 气化能耗(MJ/kg) | Gasification energy demand
-  gasification_energy_cost_yuan_per_mj: 0.5  # 气化能耗成本(元/MJ) | Gasification energy cost
+  gasification_energy_mj_per_kg: 8.0       # 气化能耗(MJ/kg) | Gasification energy demand (MJ/kg coal)
+  gasification_energy_kwh_per_kg: 2.22     # 气化能耗(kWh/kg) | Gasification energy demand (kWh/kg coal)
+                                           # 换算：8.0 MJ/kg ÷ 3.6 MJ/kWh = 2.22 kWh/kg
+  gasification_energy_cost_yuan_per_mj: 0.5  # 气化能耗成本(元/MJ) | Gasification energy cost (yuan/MJ)
   coal_consumption_kg_per_kg_saf: 1.8      # 单位SAF煤炭消耗(kg/kg SAF) | Coal required per kg SAF
   base_co2_yield_kg_per_kg_saf: 3.5        # 单位SAF生成CO₂需求(kg/kg SAF) | CO₂ required per kg SAF
 
@@ -362,8 +371,8 @@ carbon_emission_parameters:
                                            # 完全燃烧理论值（基于碳含量）
                                            # C + O₂ → CO₂: 12 → 44, 碳含量75%: 0.75 × 44/12 = 2.44
 
-    coal_consumption_kg_per_kg_saf: 1.8    # 单位SAF煤炭消耗(kg coal/kg SAF) | Coal consumption per kg SAF
-                                           # 基于煤炭气化CO₂产率和SAF转化效率
+    # 注意：煤炭消耗参数(coal_consumption_kg_per_kg_saf)已在coal_parameters中定义
+    # 避免重复定义，统一使用coal_parameters.coal_consumption_kg_per_kg_saf
 
   # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
@@ -504,12 +513,12 @@ cost_parameters:
                                            # 电能到氢能的转换效率
                                            # 碱性/PEM电解槽的典型效率
 
-    electrolysis_power_consumption: 50         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
+    electrolysis_power_consumption: 55         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
                                            # 电解制氢单位能耗（包括系统损耗）
-                                           # 典型值：50 kWh/kg H₂
+                                           # 修正：从50改为55，统一能耗参数，更符合PEM电解槽实际值
 
   # 缺货惩罚 - Shortage Penalty
-  shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
+  shortage_penalty_yuan_per_kg: 5000000       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
                                            # 未满足需求时的惩罚成本
                                            # 作用：确保优化器优先满足需求
                                            # 设置较高值以强制满足关键需求
@@ -581,8 +590,9 @@ green_hydrogen_supply:
                                              # 基于2024-2025年中国绿氢成本预测
                                              # 来源：IEA Hydrogen Report 2024, IRENA Green Hydrogen Cost 2024
 
-  production_energy_kwh_per_kg: 50           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
+  production_energy_kwh_per_kg: 55           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
                                              # 电解制氢能耗（包括系统损耗）
+                                             # 修正：从50改为55，与其他位置统一
                                              # 典型PEM/碱性电解槽能耗
 
   electrolyzer_efficiency: 0.70              # 电解槽效率 | Electrolyzer efficiency (70%)
@@ -816,11 +826,10 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 1000  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
-                                           # 【修复】从10元/kg放宽至50元/kg
-                                           # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
-                                           # 50元/kg更符合实际成本水平
-                                           # 用于经济性边界约束
+  levelized_cost_threshold_yuan_per_kg: 50  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+                                           # 修正：从1000元/kg改为50元/kg
+                                           # 绿氢+煤炭CO₂制SAF合理成本区间：30-50元/kg
+                                           # 用于经济性边界约束，确保方案经济可行
 
   # 设备寿命参数 - Equipment Lifetime
   electrolyzer_lifetime: 15                # 电解槽寿命(年) | Electrolyzer lifetime (years)
@@ -876,10 +885,12 @@ equipment_raw_costs:
 
   # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 2000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+    capex_raw: 200000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
                                            # 包括储罐、管道、泵等设备
+                                           # 修正：从2000改为200000，更符合实际工程成本
 
-    opex_raw: 30                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+    opex_raw: 5000                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+                                           # 修正：从30改为5000，更符合实际运维成本
 
 # =============================================================================
 # SAF设施平准化成本参数 (SAF Facility LCOE Parameters)
@@ -978,6 +989,15 @@ metadata:
       * 添加煤炭供应参数配置(coal_parameters)
       * 移除CO₂外部捕获和运输配置（CO₂聚类、管道运输等）
       * 更新技术路线为煤炭气化CO₂+绿氢→SAF
+    - v3.0.0更新（2025-10-28）:
+      * 修正甲醇转化比例: methanol_intermediate_ratio 从 3.125 改为 1.5625
+      * 统一电解制氢能耗: 所有位置统一为 55 kWh/kg H₂
+      * 修正SAF反应器最小经济规模: 从 0 改为 100 kg/h
+      * 修正储存设施成本: CAPEX从2000改为200000元, OPEX从30改为5000元/年
+      * 修正平准化成本阈值: 从 1000 改为 50 元/kg
+      * 优化求解器线程数: 从 128 改为 0 (自动检测)
+      * 删除煤炭消耗参数重复定义，统一使用 coal_parameters.coal_consumption_kg_per_kg_saf
+      * 添加煤炭气化能耗kWh单位，方便代码使用
 
     主要配置类别:
     1. basic_parameters: 基础系统参数（时间范围、路径规划）
@@ -1040,10 +1060,11 @@ solver_parameters:
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
 
-  Threads: 128                             # 并行计算线程数 | Number of parallel threads
-                                           # 使用128个线程进行并行计算
-                                           # 建议设置为CPU核心数或稍多
-                                           # 注意：过多线程可能导致内存溢出
+  Threads: 0                               # 并行计算线程数 | Number of parallel threads
+                                           # 修正：从128改为0（自动检测CPU核心数）
+                                           # 0 = 让Gurobi自动选择最优线程数
+                                           # 建议：小于等于CPU核心数，避免过度上下文切换
+                                           # 注意：过多线程可能导致内存溢出和性能下降
 
 # =============================================================================
 # 技术路线参数 (Technology Parameters)
@@ -1057,29 +1078,60 @@ technologies:
     technology_type: GreenH2_CO2_FT       # 技术类型 | Technology type
     transport_mode: renewable_h2_pipeline  # 运输模式：可再生能源电解制氢+管道 | Transport mode
 
+    # ========================================================================
+    # 🆕 工艺模式选择 - Process Mode Selection
+    # ========================================================================
+    process_mode: one_step                # 工艺模式：one_step (一步法) | two_step (两步法)
+                                          # one_step: H₂+CO₂→SAF (直接转化，无甲醇中间变量)
+                                          # two_step: H₂+CO₂→甲醇→SAF (两步法，已禁用)
+
     # 适用位置 - Suitable Locations
+    # 一步法可以在多种位置生产:
+    # 1. 可再生能源站: 如果就地生产SAF,H₂无需运输,节省运输成本
+    # 2. 机场/工业基地: 靠近需求点,减少SAF运输成本
+    # 优化器会通过约束自动决定是否在各位置建设SAF工厂
     suitable_locations:                   # 可部署位置类型 | Deployable location types
-    - solar_plant                         # 太阳能发电站（修复：匹配代码实际类型）
-    - wind_farm                           # 风电场（修复：匹配代码实际类型）
-    - airport                             # 机场附近
-    - co2_capture                         # CO₂捕获点
+    - solar_plant                         # 太阳能发电站（可选:就地制氢+制SAF）
+    - wind_farm                           # 风电场（可选:就地制氢+制SAF）
+    - airport                             # 机场附近（靠近需求点）
+    - lng_terminal                        # LNG终端（工业基地）
 
     # 工艺参数 - Process Parameters
     efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
                                           # H₂+CO₂到SAF的碳转化效率60%
 
+    # ========================================================================
+    # ✅ 一步法直接转化参数（当前启用）
+    # ========================================================================
     h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 生产1kg SAF需要0.15kg氢气
+                                          # 一步法：生产1kg SAF需要0.15kg氢气
+                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
 
     co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 生产1kg SAF需要3.0kg CO₂
+                                          # 一步法：生产1kg SAF需要3.0kg CO₂
+                                          # 直接从H₂和CO₂合成SAF
 
-    # 🆕 两步法转化比例参数（H₂+CO₂→甲醇→SAF）
-    methanol_intermediate_ratio: 3.125    # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
-                                          # 中间产物甲醇的生成比例
-
-    methanol_to_saf_ratio: 0.64           # kg SAF/kg甲醇（第二步：甲醇→SAF）
-                                          # 甲醇转化为SAF的转化率
+    # ========================================================================
+    # 🔧 两步法分步转化参数（已禁用，仅作参考）
+    # 如需切换回两步法，将 process_mode 改为 two_step 并取消下面注释
+    # ========================================================================
+    # methanol_h2_consumption_ratio: 0.096  # kg H₂ / kg 甲醇 | H₂ consumption for methanol production
+    #                                       # 第一步反应的H₂消耗比
+    #                                       # 推导：0.15 kg H₂/kg SAF ÷ 1.5625 kg 甲醇/kg SAF = 0.096 kg H₂/kg 甲醇
+    #
+    # methanol_co2_consumption_ratio: 1.92  # kg CO₂ / kg 甲醇 | CO₂ consumption for methanol production
+    #                                       # 第一步反应的CO₂消耗比
+    #                                       # 推导：3.0 kg CO₂/kg SAF ÷ 1.5625 kg 甲醇/kg SAF = 1.92 kg CO₂/kg 甲醇
+    #
+    # methanol_intermediate_ratio: 1.5625   # kg 甲醇 / kg SAF | Methanol intermediate ratio
+    #                                       # 生产1kg SAF需要的甲醇量
+    #                                       # 计算：1 / methanol_to_saf_ratio = 1 / 0.64 = 1.5625
+    #
+    # # ========================================================================
+    # # 第二步：甲醇 → SAF
+    # # ========================================================================
+    # methanol_to_saf_ratio: 0.64           # kg SAF / kg 甲醇 | Methanol to SAF conversion ratio
+    #                                       # 第二步反应的转化率：1kg甲醇生成0.64kg SAF
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）

@@ -568,8 +568,8 @@ class CoalHydrogenSAFOptimizer:
         
         try:
             # 获取结果基础目录
-            results_dir = self._get_data_path('output_paths.results_base_dir', 
-                                            'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results')
+            results_dir = self._get_data_path('output_paths.results_base_dir',
+                                            'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results')
             
             # 获取文件名模板
             file_templates = self.config.get('data_paths', {}).get('output_paths', {}).get('file_templates', {})
@@ -583,8 +583,8 @@ class CoalHydrogenSAFOptimizer:
             logger.error(f"获取输出路径失败: {e}")
             # 使用默认路径
             project_root = get_project_base_dir()
-            results_dir = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                     "green_hydrogen_supply_chain_optimization", "results")
+            results_dir = os.path.join(project_root, "products", "supply_chain_optimization",
+                                     "coal_hydrogen_saf_optimization", "results")
             return os.path.join(results_dir, f"{file_type}_{timestamp}.csv")
 
     def _load_config(self, config_path: str = None, override_params: dict = None) -> dict:
@@ -3110,64 +3110,32 @@ class CoalHydrogenSAFOptimizer:
 
         # v3.0: 煤炭气化路线不需要CO₂捕获和运输成本
 
-        # 13. 甲醇生产成本（20年生命周期现值）
-        # 从配置文件读取甲醇生产成本参数
-        methanol_production_cost_cfg = self.config.get('unified_costs', {}).get('methanol_production', {})
-        methanol_production_unit_cost = float(methanol_production_cost_cfg.get('production_cost_yuan_per_kg', 0.5))  # 元/kg 甲醇
+        # 注意：一步法（process_mode: one_step）不需要甲醇成本
+        # H₂+CO₂ 直接转化为 SAF，甲醇不作为成本项
+        # 甲醇变量仍存在（用于约束建模），但不计入成本
+        self.cost_expressions['methanol_production_cost'] = gp.LinExpr(0)
+        self.cost_expressions['methanol_storage_investment'] = gp.LinExpr(0)
+        self.cost_expressions['methanol_storage_operation'] = gp.LinExpr(0)
 
-        self.cost_expressions['methanol_production_cost'] = gp.quicksum(
-            self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_production_unit_cost * lifecycle_operation_factor  # 小时级生产量 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
-
-        # 14. 甲醇存储成本（20年生命周期现值）
-        # 从配置文件读取甲醇存储成本参数
-        methanol_storage_cost_cfg = self.config.get('unified_costs', {}).get('methanol_storage', {})
-        methanol_storage_equipment_cost = float(methanol_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 15))  # 元/kg
-        methanol_storage_operation_cost = float(methanol_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.002))  # 元/(kg·hour)
-
-        # 甲醇储存设备投资成本
-        max_methanol_storage = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
-        self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
-
-        # 甲醇储存运营成本
-        self.cost_expressions['methanol_storage_operation'] = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+        logger.info("一步法模式：甲醇成本已设置为0（甲醇不作为独立成本项）")
 
         # v3.0新增：煤炭采购和气化成本（20年生命周期现值）
         logger.info("创建煤炭采购和气化成本表达式（v3.0）")
 
         # 煤炭采购成本（周级采购量 × 单位采购成本）
         coal_purchase_unit_cost = self.coal_supply.calculate_coal_purchase_cost(1.0)  # 元/kg煤炭
+        # 直接遍历已创建的煤炭采购变量，避免复杂的过滤条件导致漏掉变量
         self.cost_expressions['coal_purchase_cost'] = gp.quicksum(
-            self.coal_purchase_vars.get((methanol_loc, week), gp.LinExpr(0)) *
-            coal_purchase_unit_cost * lifecycle_operation_factor  # 周级采购量 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for week in range(self.time_horizon_weeks)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            var * coal_purchase_unit_cost * lifecycle_operation_factor
+            for var in self.coal_purchase_vars.values()
         )
 
         # 煤炭气化能耗成本（周级采购量 × 单位气化能耗成本）
         coal_gasification_unit_cost = self.coal_supply.calculate_gasification_energy_cost(1.0)  # 元/kg煤炭
+        # 直接遍历已创建的煤炭采购变量，避免复杂的过滤条件导致漏掉变量
         self.cost_expressions['coal_gasification_cost'] = gp.quicksum(
-            self.coal_purchase_vars.get((methanol_loc, week), gp.LinExpr(0)) *
-            coal_gasification_unit_cost * lifecycle_operation_factor  # 周级采购量 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for week in range(self.time_horizon_weeks)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+            var * coal_gasification_unit_cost * lifecycle_operation_factor
+            for var in self.coal_purchase_vars.values()
         )
 
         logger.info(f"煤炭采购单位成本: {coal_purchase_unit_cost:.4f} 元/kg")
@@ -3199,8 +3167,8 @@ class CoalHydrogenSAFOptimizer:
             self.cost_expressions['storage_equipment_cost'] +
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
-            self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['methanol_storage_investment']  # 新增：甲醇储存设备投资
+            self.cost_expressions['hydrogen_transport_investment']
+            # 注意：一步法不包含甲醇储存投资成本
         )
 
         # 运营成本聚合
@@ -3216,8 +3184,7 @@ class CoalHydrogenSAFOptimizer:
             self.cost_expressions['hydrogen_pipeline_operation'] +
             self.cost_expressions['coal_purchase_cost'] +  # v3.0新增：煤炭采购成本
             self.cost_expressions['coal_gasification_cost'] +  # v3.0新增：煤炭气化成本
-            self.cost_expressions['methanol_production_cost'] +  # 新增：甲醇生产成本
-            self.cost_expressions['methanol_storage_operation'] +  # 新增：甲醇储存运营成本
+            # 注意：一步法不包含甲醇生产成本和甲醇储存运营成本
             self.cost_expressions['final_inventory_cost']
         )
 
@@ -7518,7 +7485,7 @@ if __name__ == '__main__':
 
             # 保存结果到results目录
             base_dir = get_project_base_dir()
-            results_dir = os.path.join(base_dir, "products", "supply_chain_optimization", "green_hydrogen_supply_chain_optimization", "results")
+            results_dir = os.path.join(base_dir, "products", "supply_chain_optimization", "coal_hydrogen_saf_optimization", "results")
             os.makedirs(results_dir, exist_ok=True)
             optimizer.save_results(solution, results_dir)
             print(f"\n结果已保存到目录: {results_dir}")
