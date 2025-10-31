@@ -1807,6 +1807,9 @@ class GreenHydrogenSupplyChainOptimizer:
             # 初始化聚类路径字典（用于存储聚类运输路径）
             self.co2_clustered_routes = {}
 
+            # 🚀 初始化超级图优化器（用于加速CO2距离查询）
+            self._initialize_super_graph_optimizer()
+
         except Exception as e:
             logger.error(f"初始化CO2聚类失败: {e}")
             import traceback
@@ -1830,6 +1833,54 @@ class GreenHydrogenSupplyChainOptimizer:
                 "  2. cluster_co2_sources函数返回了None\n"
                 "请检查数据和CO2聚类优化器实现。"
             )
+
+    def _initialize_super_graph_optimizer(self) -> None:
+        """初始化超级图优化器（加速CO2距离查询）"""
+        # 检查配置是否启用超级图优化
+        use_super_graph = self.config.get('optimization', {}).get('use_super_graph_precompute', True)
+
+        if not use_super_graph:
+            logger.info("超级图预计算已禁用（配置文件设置）")
+            self.super_graph_optimizer = None
+            return
+
+        try:
+            from ..optimizer.super_graph_optimizer import SuperGraphOptimizer, SuperGraphConfig
+
+            # 读取配置
+            k_connections = self.config.get('optimization', {}).get('super_graph_k_connections', 10)
+
+            super_graph_config = SuperGraphConfig(
+                k_connections=k_connections,
+                algorithm='johnson',  # 使用Johnson算法
+                include_route_geometry=False,  # 不需要几何信息，节省内存
+                cache_to_disk=False  # 暂不缓存到磁盘
+            )
+
+            logger.info("初始化超级图优化器...")
+            self.super_graph_optimizer = SuperGraphOptimizer(
+                pipeline_calculator=self.hydrogen_pipeline_calculator,
+                co2_clustering_results=self.co2_clustering_results,
+                co2_capture_sources=self.co2_capture_sources,
+                locations=self.locations,
+                config=super_graph_config
+            )
+
+            # 构建超级图并预计算所有距离
+            self.super_graph_optimizer.build_and_precompute()
+
+            logger.info("✓ 超级图优化器初始化成功！")
+
+        except ImportError as e:
+            logger.warning(f"超级图优化器模块导入失败: {e}")
+            logger.warning("将使用传统方法计算CO2距离")
+            self.super_graph_optimizer = None
+        except Exception as e:
+            logger.error(f"超级图优化器初始化失败: {e}")
+            import traceback
+            traceback.print_exc()
+            logger.warning("降级到传统距离计算方法")
+            self.super_graph_optimizer = None
 
     def _get_location_coordinates(self, location: str) -> tuple:
         """
@@ -2710,8 +2761,11 @@ class GreenHydrogenSupplyChainOptimizer:
         
         # 8. 氢气平衡约束
         self._add_hydrogen_balance_constraints()
-        
-        # 8.1. 氢气每日产量限制MTJ每日产量约束
+
+        # 8.1 电解槽最小产能约束（确保能满足氢气需求）
+        self._add_minimum_electrolyzer_capacity_constraint()
+
+        # 8.2. 氢气每日产量限制MTJ每日产量约束
         self._add_daily_hydrogen_mtj_constraints()
         
         # 9. 氢气运输约束
@@ -3005,8 +3059,10 @@ class GreenHydrogenSupplyChainOptimizer:
         )
 
         # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
+        # 兼容两种参数名：hydrogen_internal_cost_yuan_per_kg 和 h2_production_cost_yuan_per_kg
         hydrogen_production_unit_cost = float(
-            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
+            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg') or
+            self.config.get('unified_costs', {}).get('production', {}).get('h2_production_cost_yuan_per_kg', 0)
         )
         self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
             self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
@@ -3015,15 +3071,36 @@ class GreenHydrogenSupplyChainOptimizer:
             if (location, hour) in self.hydrogen_production_vars
         )
 
-        # 8. 电解制氢电力成本（20年生命周期现值）
-        # 8. 电力成本（基于实际氢气生产的电力消耗）
-        self.cost_expressions['electricity_cost'] = gp.quicksum(
+        # 8. 电力成本（20年生命周期现值）
+        # 8.1 电解制氢电力成本（基于实际氢气生产的电力消耗）
+        h2_electrolysis_power_cost = gp.quicksum(
             self.hydrogen_production_vars[(location, hour)] *
             self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
-            self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本，不乘以生命周期系数
+            self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本
             for location in self.locations
             for hour in range(self.total_hours)
             if (location, hour) in self.hydrogen_production_vars
+        )
+
+        # 8.2 SAF合成工艺电力成本（RWGS + FT 或 其他工艺）
+        # 从配置文件中获取SAF合成能耗参数
+        saf_synthesis_energy_kwh_per_kg = float(
+            self.config.get('technologies', {}).get('green_h2_co2_direct_saf', {}).get('energy_consumption_kwh_per_kg_saf', 0)
+        )
+
+        saf_synthesis_power_cost = gp.quicksum(
+            self.production_vars[(location, tech, hour)] *
+            saf_synthesis_energy_kwh_per_kg / 1000 *  # kWh -> MWh
+            self.costs['renewable_electricity_cost_yuan_per_mwh']
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        # 8.3 总电力成本（电解制氢 + SAF合成）
+        self.cost_expressions['electricity_cost'] = (
+            h2_electrolysis_power_cost + saf_synthesis_power_cost
         ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
 
         # 9. 氢气储存投资 + 20年运营成本现值
@@ -3179,49 +3256,148 @@ class GreenHydrogenSupplyChainOptimizer:
 
             total_routes = len(route_pairs)
             logger.info(f"开始缓存CO₂管道运输距离: {total_routes}条路径...")
-            logger.info(f"使用{self.parallel_workers}个并行workers进行批量计算")
             start_time = time.time()
 
-            # 使用并行处理，批量大小10000
-            batch_size = 10000
-            calculated = 0
+            # 🚀 尝试使用超级图O(1)查询加速距离计算
+            if hasattr(self, 'super_graph_optimizer') and self.super_graph_optimizer:
+                logger.info(f"使用超级图O(1)并行查询加速距离计算（{self.parallel_workers}个workers）...")
 
-            with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
-                # 分批处理
-                for batch_start in range(0, total_routes, batch_size):
-                    batch_end = min(batch_start + batch_size, total_routes)
-                    batch_pairs = route_pairs[batch_start:batch_end]
+                successful_queries = 0
+                failed_queries = []
 
-                    # 并行计算这一批
+                # 定义单个查询任务（用于并行执行）
+                def query_single_distance(pair):
+                    """单个距离查询任务"""
+                    co2_id, mtj_loc = pair
+                    distance_result = self.super_graph_optimizer.get_distance(co2_id, mtj_loc)
+
+                    if distance_result:
+                        # 转换超级图结果为期望的格式
+                        cache_entry = {
+                            'total_distance_km': distance_result['total_distance_km'],
+                            'layer1_distance_km': distance_result['layer1_distance_km'],
+                            'layer2_distance_km': 0,  # Layer 2已包含在layer23中
+                            'layer3_distance_km': distance_result['layer23_distance_km'],
+                            'cluster_id': distance_result['cluster_id'],
+                            'cluster_center_coords': None,  # 超级图不返回坐标详情
+                            'pipeline_access_coords': None,
+                            'is_noise': distance_result['is_noise'],
+                            'route_coordinates': []  # 超级图不返回路径详情
+                        }
+                        return (pair, cache_entry, True)  # 成功
+                    else:
+                        return (pair, None, False)  # 失败
+
+                # 直接并行查询所有路径（一次性提交）
+                with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                    # 提交所有查询任务
                     futures = {
-                        executor.submit(self._get_co2_transport_distance_with_clustering, co2_id, mtj_loc): (co2_id, mtj_loc)
-                        for co2_id, mtj_loc in batch_pairs
+                        executor.submit(query_single_distance, pair): pair
+                        for pair in route_pairs
                     }
 
                     # 收集结果
                     for future in as_completed(futures):
-                        co2_id, mtj_loc = futures[future]
                         try:
-                            distance_result = future.result()
-                            self.co2_distance_cache[(co2_id, mtj_loc)] = distance_result
-                            calculated += 1
+                            pair, cache_entry, success = future.result()
 
-                            # 每1000条输出进度
-                            if calculated % 1000 == 0:
+                            if success:
+                                self.co2_distance_cache[pair] = cache_entry
+                                successful_queries += 1
+                            else:
+                                failed_queries.append(pair)
+
+                            # 每10000条输出进度
+                            if (successful_queries + len(failed_queries)) % 10000 == 0:
+                                processed = successful_queries + len(failed_queries)
                                 elapsed = time.time() - start_time
-                                avg_time = elapsed / calculated
-                                remaining = (total_routes - calculated) * avg_time
-                                logger.info(f"CO₂距离缓存进度: {calculated}/{total_routes} "
-                                          f"({calculated/total_routes*100:.1f}%), "
+                                avg_time = elapsed / processed if processed > 0 else 0
+                                remaining = (total_routes - processed) * avg_time
+                                logger.info(f"CO₂距离超级图并行查询进度: {processed}/{total_routes} "
+                                          f"({processed/total_routes*100:.1f}%), "
+                                          f"成功: {successful_queries}, 失败: {len(failed_queries)}, "
                                           f"预计剩余: {remaining:.1f}秒")
-                        except Exception as e:
-                            logger.warning(f"CO₂距离计算失败 {co2_id} -> {mtj_loc}: {e}")
-                            calculated += 1
 
-            elapsed_time = time.time() - start_time
-            logger.info(f"CO₂距离缓存完成: {len(self.co2_distance_cache)}条路径, "
-                       f"耗时: {elapsed_time:.2f}秒, "
-                       f"平均速度: {total_routes/elapsed_time:.1f}条/秒")
+                        except Exception as e:
+                            pair = futures[future]
+                            logger.warning(f"并行查询异常 {pair}: {e}")
+                            failed_queries.append(pair)
+
+                elapsed_time = time.time() - start_time
+                logger.info(f"✓ 超级图查询完成: {successful_queries}条路径成功, {len(failed_queries)}条失败, "
+                           f"耗时: {elapsed_time:.2f}秒, "
+                           f"平均速度: {total_routes/elapsed_time:.1f}条/秒")
+
+                # 对失败的查询，降级使用传统方法
+                if failed_queries:
+                    logger.info(f"对{len(failed_queries)}条失败路径使用传统方法补充计算...")
+                    fallback_start = time.time()
+
+                    with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                        futures = {
+                            executor.submit(self._get_co2_transport_distance_with_clustering, co2_id, mtj_loc): (co2_id, mtj_loc)
+                            for co2_id, mtj_loc in failed_queries
+                        }
+
+                        fallback_calculated = 0
+                        for future in as_completed(futures):
+                            co2_id, mtj_loc = futures[future]
+                            try:
+                                distance_result = future.result()
+                                self.co2_distance_cache[(co2_id, mtj_loc)] = distance_result
+                                fallback_calculated += 1
+                            except Exception as e:
+                                logger.warning(f"传统方法也失败 {co2_id} -> {mtj_loc}: {e}")
+                                fallback_calculated += 1
+
+                    fallback_time = time.time() - fallback_start
+                    logger.info(f"传统方法补充计算完成: {fallback_calculated}条路径, 耗时: {fallback_time:.2f}秒")
+
+            else:
+                # 降级：超级图不可用，使用传统ThreadPoolExecutor方法
+                logger.info("超级图不可用，使用传统方法...")
+                logger.info(f"使用{self.parallel_workers}个并行workers进行批量计算")
+
+                # 使用并行处理，批量大小10000
+                batch_size = 10000
+                calculated = 0
+
+                with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                    # 分批处理
+                    for batch_start in range(0, total_routes, batch_size):
+                        batch_end = min(batch_start + batch_size, total_routes)
+                        batch_pairs = route_pairs[batch_start:batch_end]
+
+                        # 并行计算这一批
+                        futures = {
+                            executor.submit(self._get_co2_transport_distance_with_clustering, co2_id, mtj_loc): (co2_id, mtj_loc)
+                            for co2_id, mtj_loc in batch_pairs
+                        }
+
+                        # 收集结果
+                        for future in as_completed(futures):
+                            co2_id, mtj_loc = futures[future]
+                            try:
+                                distance_result = future.result()
+                                self.co2_distance_cache[(co2_id, mtj_loc)] = distance_result
+                                calculated += 1
+
+                                # 每1000条输出进度
+                                if calculated % 1000 == 0:
+                                    elapsed = time.time() - start_time
+                                    avg_time = elapsed / calculated
+                                    remaining = (total_routes - calculated) * avg_time
+                                    logger.info(f"CO₂距离缓存进度: {calculated}/{total_routes} "
+                                              f"({calculated/total_routes*100:.1f}%), "
+                                              f"预计剩余: {remaining:.1f}秒")
+                            except Exception as e:
+                                logger.warning(f"CO₂距离计算失败 {co2_id} -> {mtj_loc}: {e}")
+                                calculated += 1
+
+                elapsed_time = time.time() - start_time
+                logger.info(f"CO₂距离缓存完成: {len(self.co2_distance_cache)}条路径, "
+                           f"耗时: {elapsed_time:.2f}秒, "
+                           f"平均速度: {total_routes/elapsed_time:.1f}条/秒")
 
         # 验证缓存完整性：确保所有需要的路径都已缓存
         missing_cache_keys = []
@@ -4231,6 +4407,62 @@ class GreenHydrogenSupplyChainOptimizer:
                     )
 
         logger.info("氢气平衡约束添加完成（包含发电站和MTJ工厂）")
+
+    def _add_minimum_electrolyzer_capacity_constraint(self):
+        """添加电解槽最小产能约束：确保电解槽总产能能满足氢气需求"""
+        logger.info("添加电解槽最小产能约束...")
+
+        # 计算总氢气需求
+        # 从所有SAF生产技术中获取氢气消耗比
+        h2_consumption_ratios = []
+        for tech in self.technologies:
+            h2_ratio = self.technologies[tech].get('h2_consumption_ratio', 0)
+            if h2_ratio > 0:
+                h2_consumption_ratios.append(h2_ratio)
+
+        if not h2_consumption_ratios:
+            logger.warning("未找到任何技术的氢气消耗比参数，跳过最小产能约束")
+            return
+
+        # 使用最大氢气消耗比（保守估计）
+        max_h2_consumption_ratio = max(h2_consumption_ratios)
+        logger.info(f"使用最大氢气消耗比: {max_h2_consumption_ratio:.4f} kg H₂/kg SAF")
+
+        # 计算总SAF需求（时间窗口内）
+        # 使用正确的数据结构：self.airports[airport]['weekly_demand_series']
+        demand_terms = []
+        for airport in self.airports:
+            weekly_demand_series = self.airports[airport]['weekly_demand_series']
+            for week in range(self.time_horizon_weeks):
+                if week < len(weekly_demand_series):
+                    demand_terms.append(weekly_demand_series[week])
+                else:
+                    logger.warning(f"机场 {airport} 的第 {week} 周超出需求序列范围，使用0")
+
+        total_saf_demand = gp.quicksum(demand_terms)
+        logger.info(f"计算总SAF需求: {len(demand_terms)} 个需求项，总计时间窗口 {self.time_horizon_weeks} 周")
+
+        # 计算总氢气需求
+        total_h2_demand = total_saf_demand * max_h2_consumption_ratio
+
+        # 计算电解槽总产能（考虑容量因子）
+        electrolyzer_capacity_factor = self.economic_params.get('electrolyzer_capacity_factor', 0.75)
+
+        # 电解槽总产能 = Σ(单个产能) × 总小时数 × 容量因子
+        total_electrolyzer_capacity = gp.quicksum(
+            self.electrolyzer_capacity_vars[location] * self.total_hours * electrolyzer_capacity_factor
+            for location in self.locations
+            if location in self.electrolyzer_capacity_vars
+        )
+
+        # 添加约束：电解槽产能 >= 氢气需求 × 安全系数
+        safety_factor = 1.1  # 10%安全余量
+        self.model.addConstr(
+            total_electrolyzer_capacity >= total_h2_demand * safety_factor,
+            name="minimum_electrolyzer_capacity"
+        )
+
+        logger.info(f"电解槽最小产能约束已添加: 总产能 >= {total_h2_demand.getValue() if hasattr(total_h2_demand, 'getValue') else '(待优化)'} kg H₂ × {safety_factor}")
 
     def _add_daily_hydrogen_mtj_constraints(self):
         """添加氢气每日产量限制下一日MTJ每日产量约束"""
