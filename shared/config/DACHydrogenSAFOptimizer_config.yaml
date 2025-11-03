@@ -530,6 +530,33 @@ unified_costs:
     facility_investment_yuan_per_kg: 2000
     facility_operation_yuan_per_kg_year: 25
     saf_equipment_cost_yuan_per_kg: 12
+  # ===== v4.1新增：CO₂运输和库存成本 =====
+  co2_transport:
+    pipeline:
+      transport_cost_yuan_per_kg_km: 0.0001  # 0.1元/(kg CO₂·km)
+      # 分段线性成本函数（参考氢气管道）
+      transport_cost_function:
+        function_type: piecewise_linear
+        unit: yuan_per_kg_co2_per_100km
+        description: 基于CO₂管道输送成本曲线
+        data_points:
+          - [25, 0.15]   # 25km: 0.15元/(kg·100km)
+          - [50, 0.08]   # 50km: 0.08元/(kg·100km)
+          - [100, 0.045] # 100km: 0.045元/(kg·100km)
+          - [200, 0.025] # 200km: 0.025元/(kg·100km)
+          - [300, 0.018] # 300km: 0.018元/(kg·100km)
+        notes: |
+          成本函数已包含以下所有费用：
+          - 管道建设投资摊销 (Pipeline construction amortization)
+          - 压缩机站投资和运营 (Compressor station CAPEX & OPEX)
+          - 管道维护和检测 (Pipeline maintenance & inspection)
+          - 能耗成本（压缩机电力） (Energy cost for compression)
+          - 人工和管理成本 (Labor & management)
+  co2_storage:
+    storage_cost_yuan_per_kg_per_day: 0.5  # CO₂库存日成本（0.5元/kg/天）
+    equipment_cost_yuan_per_kg: 5  # CO₂储罐设备成本（5元/kg）
+    initial_inventory_yuan_per_kg: 0  # 初始库存成本（可选）
+    handling_cost_yuan_per_kg: 0.05  # 库存装卸成本（0.05元/kg）
 dac_parameters:
   technology: solid_sorbent
   technology_cn: 固体吸附剂DAC
@@ -558,13 +585,20 @@ dac_parameters:
   module_lifetime_years: 20
   land_area_hectare_per_kton_year: 0.1
   water_consumption_liter_per_ton_co2: 5
-  deployment_strategy: collocated_with_saf_plant
-  transport_distance_km: 0
+  # v4.1变更：DAC改为独立部署模式
+  deployment_strategy: independent_deployment  # 从 collocated_with_saf_plant 改为 independent_deployment
+  transport_distance_km: variable  # 从0改为variable（需要通过管道运输）
   co2_per_kg_saf: 3.5
   co2_per_kg_methanol: 2.8
   dac_energy_share: 0.86
   supply_assumptions:
-    supply_model: on_site_equipment
+    supply_model: independent_facility  # 从 on_site_equipment 改为 independent_facility
     supply_unlimited: true
     scaling: modular
     location_flexibility: high
+  # v4.1新增：DAC设施参数
+  facility_parameters:
+    suitable_locations: [solar_plant, wind_farm, airport]  # DAC可部署位置类型
+    facility_construction_cost_yuan: 50000000  # DAC设施建设成本（5000万元/设施）
+    can_colocate_with_saf: true  # 允许与SAF工厂共址部署
+    max_capacity_kg_per_hour: 100000  # 单个DAC设施最大捕获容量（无限制则设为很大值）
