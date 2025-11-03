@@ -1765,11 +1765,10 @@ class DACHydrogenSAFOptimizer:
             logger.info("CO₂管道距离计算未启用，跳过CO₂聚类初始化")
             return
 
-        if CO2ClusteringOptimizer is None or HydrogenPipelineDistanceCalculator is None:
+        if HydrogenPipelineDistanceCalculator is None:
             raise ImportError(
-                "CO₂聚类所需模块不可用！\n"
-                f"CO2ClusteringOptimizer: {'✓' if CO2ClusteringOptimizer else '✗'}\n"
-                f"HydrogenPipelineDistanceCalculator: {'✓' if HydrogenPipelineDistanceCalculator else '✗'}"
+                "氢气管道距离计算器不可用，无法复用聚类结果\n"
+                "HydrogenPipelineDistanceCalculator: ✗"
             )
 
         if self.hydrogen_pipeline_calculator is None:
@@ -1795,79 +1794,53 @@ class DACHydrogenSAFOptimizer:
         logger.info("开始初始化CO₂捕获聚类...")
         logger.info(f"DAC候选位置数量: {len(self.dac_candidate_locations)}")
 
-        try:
-            self.co2_clustering_optimizer = CO2ClusteringOptimizer(
-                self.config,
-                pipeline_distance_calculator=self.hydrogen_pipeline_calculator
+        candidate_dict = {}
+        invalid_candidates = []
+        for loc in self.dac_candidate_locations:
+            loc_info = self.locations.get(loc, {})
+            lat = loc_info.get('latitude')
+            lon = loc_info.get('longitude')
+            if lat is None or lon is None:
+                invalid_candidates.append((loc, lat, lon, "缺少坐标"))
+                continue
+            try:
+                lat_f = float(lat)
+                lon_f = float(lon)
+            except (TypeError, ValueError):
+                invalid_candidates.append((loc, lat, lon, "坐标无法转换为浮点数"))
+                continue
+
+            candidate_dict[loc] = {
+                'latitude': lat_f,
+                'longitude': lon_f,
+                'co2_capture_capacity_ton_per_week': capacity_ton_per_week
+            }
+
+        if invalid_candidates:
+            logger.warning(
+                "发现 %d 个DAC候选位置坐标无效，已从候选列表剔除。样例: %s",
+                len(invalid_candidates),
+                invalid_candidates[:3]
             )
 
-            candidate_dict = {}
-            invalid_candidates = []
-            for loc in self.dac_candidate_locations:
-                loc_info = self.locations.get(loc, {})
-                lat = loc_info.get('latitude')
-                lon = loc_info.get('longitude')
-                if lat is None or lon is None:
-                    invalid_candidates.append((loc, lat, lon, "缺少坐标"))
-                    continue
-                try:
-                    lat_f = float(lat)
-                    lon_f = float(lon)
-                except (TypeError, ValueError):
-                    invalid_candidates.append((loc, lat, lon, "坐标无法转换为浮点数"))
-                    continue
+        if not candidate_dict:
+            raise RuntimeError("所有DAC候选位置的坐标均无效，无法进行CO₂管道建模")
 
-                candidate_dict[loc] = {
-                    'latitude': lat_f,
-                    'longitude': lon_f,
-                    'co2_capture_capacity_ton_per_week': capacity_ton_per_week
-                }
+        # 与旧版保持兼容，保留co2_capture_sources
+        self.co2_capture_sources = candidate_dict.copy()
 
-            if invalid_candidates:
-                logger.warning(
-                    "发现 %d 个DAC候选位置坐标无效，已从聚类中剔除。样例: %s",
-                    len(invalid_candidates),
-                    invalid_candidates[:3]
-                )
+        if self.clustering_results is None:
+            raise RuntimeError("氢气聚类结果为空，无法复用作为CO₂聚类")
 
-            if not candidate_dict:
-                raise RuntimeError("所有DAC候选位置的坐标均无效，无法进行CO₂聚类")
+        self.co2_clustering_optimizer = None  # 不再单独初始化
+        self.co2_clustering_results = self.clustering_results
+        self.co2_clustered_routes = {}
 
-            # 与旧版保持兼容，更新co2_capture_sources
-            self.co2_capture_sources = candidate_dict.copy()
-
-            if len(self.airports) > 0:
-                airport_coords = []
-                for airport_name, airport in self.airports.items():
-                    lat = airport.get('latitude')
-                    lon = airport.get('longitude')
-                    if lat is None or lon is None:
-                        logger.warning("机场 %s 缺少坐标，跳过用于CO₂聚类终点优化", airport_name)
-                        continue
-                    try:
-                        airport_coords.append((float(lat), float(lon)))
-                    except (TypeError, ValueError):
-                        logger.warning("机场 %s 坐标无法转换为浮点数，跳过", airport_name)
-                destination_coords = airport_coords if airport_coords else None
-            else:
-                destination_coords = None
-
-            self.co2_clustering_results = self.co2_clustering_optimizer.cluster_co2_sources(
-                candidate_dict,
-                destination_coords=destination_coords
-            )
-
-            self.co2_clustered_routes = {}
-
-            if self.co2_clustering_results:
-                logger.info(f"CO₂聚类完成: {self.co2_clustering_results.total_clusters}个聚类, "
-                            f"{self.co2_clustering_results.total_noise_points}个独立点")
-            logger.info("=" * 60)
-
-        except Exception as e:
-            logger.error(f"初始化CO₂聚类失败: {e}")
-            traceback.print_exc()
-            raise RuntimeError(f"CO₂聚类初始化失败: {e}")
+        logger.info("复用氢气聚类结果作为CO₂聚类: "
+                    f"{self.co2_clustering_results.total_clusters}个聚类, "
+                    f"{self.co2_clustering_results.total_noise_points}个独立点")
+        logger.info("无需单独运行CO₂聚类优化器")
+        logger.info("=" * 60)
 
         if self.co2_clustering_results is None:
             raise RuntimeError("CO₂聚类初始化后co2_clustering_results仍为空，请检查数据与配置")
@@ -3607,42 +3580,33 @@ class DACHydrogenSAFOptimizer:
         # - CO₂距离缓存逻辑
         # 替代方案: DAC捕获成本将在_define_dac_supply()中添加
 
-        # 13. 甲醇生产成本（20年生命周期现值）
-        # 从配置文件读取甲醇生产成本参数
-        methanol_production_cost_cfg = self.config.get('unified_costs', {}).get('methanol_production', {})
-        methanol_production_unit_cost = float(methanol_production_cost_cfg.get('production_cost_yuan_per_kg', 0.5))  # 元/kg 甲醇
+        # 13. 甲醇生产成本（一步法：甲醇作为中间产物，不计入独立成本）
+        # 甲醇生产成本已包含在SAF生产成本中
+        logger.info("⚠️  一步法：甲醇成本不再独立计算，已包含在SAF生产成本中")
+        self.cost_expressions['methanol_production_cost'] = gp.LinExpr(0)  # 设为0
 
-        self.cost_expressions['methanol_production_cost'] = gp.quicksum(
-            self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_production_unit_cost * lifecycle_operation_factor  # 小时级生产量 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+        # 14. 甲醇存储成本（一步法：甲醇不再储存，作为中间产物直接转化）
+        logger.info("⚠️  一步法：甲醇不再储存，存储成本为0")
+        self.cost_expressions['methanol_storage_equipment_cost'] = gp.LinExpr(0)  # 设为0
+        self.cost_expressions['methanol_storage_operation_cost'] = gp.LinExpr(0)  # 设为0
 
-        # 14. 甲醇存储成本（20年生命周期现值）
-        # 从配置文件读取甲醇存储成本参数
-        methanol_storage_cost_cfg = self.config.get('unified_costs', {}).get('methanol_storage', {})
-        methanol_storage_equipment_cost = float(methanol_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 15))  # 元/kg
-        methanol_storage_operation_cost = float(methanol_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.002))  # 元/(kg·hour)
+        # 甲醇储存设备投资成本（一步法：已注释）
+        # max_methanol_storage = gp.quicksum(
+        #     self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
+        #     for methanol_loc in sum(self.mtj_locations.values(), [])
+        #     for hour in range(self.total_hours + 1)
+        #     if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        # )
+        # self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
 
-        # 甲醇储存设备投资成本
-        max_methanol_storage = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
-        self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
-
-        # 甲醇储存运营成本
-        self.cost_expressions['methanol_storage_operation'] = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+        # 甲醇储存运营成本（一步法：已注释）
+        # self.cost_expressions['methanol_storage_operation'] = gp.quicksum(
+        #     self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
+        #     methanol_storage_operation_cost * lifecycle_operation_factor
+        #     for methanol_loc in sum(self.mtj_locations.values(), [])
+        #     for hour in range(self.total_hours + 1)
+        #     if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
+        # )
 
 
         # 13. 短缺惩罚成本（20年生命周期现值）
@@ -3671,7 +3635,7 @@ class DACHydrogenSAFOptimizer:
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
             self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['methanol_storage_investment'] +  # 新增：甲醇储存设备投资
+            self.cost_expressions.get('methanol_storage_equipment_cost', 0) +  # 一步法：甲醇储存设备（已设为0）
             self.cost_expressions.get('dac_facility_investment', 0) +  # v4.1新增：DAC设施建设投资
             self.cost_expressions.get('hydrogen_pipeline_investment', 0)  # 氢能管道建设投资
         )
@@ -3692,8 +3656,8 @@ class DACHydrogenSAFOptimizer:
             self.cost_expressions.get('dac_grid_electricity_cost', 0) +  # v4.1：DAC市电购买成本
             self.cost_expressions.get('co2_pipeline_transport_cost', 0) +  # v4.1: CO₂管道运输成本
             # self.cost_expressions.get('co2_storage_cost', 0) +  # v4.1: CO₂库存成本
-            self.cost_expressions['methanol_production_cost'] +  # 新增：甲醇生产成本
-            self.cost_expressions['methanol_storage_operation'] +  # 新增：甲醇储存运营成本
+            self.cost_expressions.get('methanol_production_cost', 0) +  # 一步法：甲醇生产成本（已设为0）
+            self.cost_expressions.get('methanol_storage_operation_cost', 0) +  # 一步法：甲醇储存运营成本（已设为0）
             self.cost_expressions['final_inventory_cost']
         )
 
@@ -3934,10 +3898,44 @@ class DACHydrogenSAFOptimizer:
             if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars
         ) if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars and hasattr(self, 'hydrogen_distance_cache') else gp.LinExpr(0)
 
+        # CO₂管道运输碳排放（v4.1：DAC独立部署后恢复计算）
+        co2_pipeline = transportation.get('co2_pipeline_intensity', 0.01)  # kg CO2eq/kg·100km
+        co2_truck = transportation.get('co2_truck_intensity', 0.08)        # kg CO2eq/kg·100km
+
+        if hasattr(self, 'co2_pipeline_flow_vars') and self.co2_pipeline_flow_vars:
+            # 确保距离缓存完备
+            self._ensure_co2_pipeline_distance_cache()
+
+            distance_lookup = {}
+            for (dac_loc, saf_loc, _) in self.co2_pipeline_flow_vars.keys():
+                if (dac_loc, saf_loc) not in distance_lookup:
+                    info = self.co2_pipeline_distance_cache.get((dac_loc, saf_loc))
+                    if info is None:
+                        info = self._get_co2_transport_distance_with_clustering(dac_loc, saf_loc)
+                        self.co2_pipeline_distance_cache[(dac_loc, saf_loc)] = info
+                    distance_lookup[(dac_loc, saf_loc)] = info.get('total_distance_km', info.get('distance_km', 0))
+
+            self.carbon_expressions['co2_pipeline_transport'] = gp.quicksum(
+                var *
+                (distance_lookup[(dac_loc, saf_loc)] / 100.0) * co2_pipeline
+                for (dac_loc, saf_loc, hour), var in self.co2_pipeline_flow_vars.items()
+            )
+        else:
+            self.carbon_expressions['co2_pipeline_transport'] = gp.LinExpr(0)
+
+        # 暂未启用CO₂罐车运输，保持为0（保留接口以备将来扩展）
+        self.carbon_expressions['co2_truck_transport'] = gp.LinExpr(0)
+
         # 氢气总运输碳排放（【禁用罐车运输】仅包含管道运输）
         self.carbon_expressions['h2_transport'] = (
             # self.carbon_expressions['h2_truck_transport'] +  # 【禁用罐车运输】
             self.carbon_expressions['h2_pipeline_transport']
+        )
+
+        # CO₂总运输碳排放（目前仅包含管道运输）
+        self.carbon_expressions['co2_transport'] = (
+            self.carbon_expressions['co2_pipeline_transport'] +
+            self.carbon_expressions['co2_truck_transport']
         )
 
         # MTJ运输碳排放
@@ -3955,7 +3953,9 @@ class DACHydrogenSAFOptimizer:
         transport_params = [
             # (h2_truck, 0.05, 0.50, "氢气罐车运输碳强度"),  # 【禁用罐车运输】
             (h2_pipeline, 0.001, 0.020, "氢气管道运输碳强度"),
-            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度")
+            (mtj_truck, 0.05, 0.30, "MTJ罐车运输碳强度"),
+            (co2_pipeline, 0.001, 0.050, "CO₂管道运输碳强度"),
+            (co2_truck, 0.02, 0.20, "CO₂罐车运输碳强度")
         ]
         for value, min_val, max_val, name in transport_params:
             if not (min_val <= value <= max_val):
@@ -3964,6 +3964,8 @@ class DACHydrogenSAFOptimizer:
         # logger.info(f"氢气罐车运输: {h2_truck} kg CO2eq/kg·km")  # 【禁用罐车运输】
         logger.info(f"氢气管道运输: {h2_pipeline} kg CO2eq/kg·km")
         logger.info(f"MTJ罐车运输: {mtj_truck} kg CO2eq/t·km")
+        logger.info(f"CO₂管道运输: {co2_pipeline} kg CO2eq/kg·100km")
+        logger.info(f"CO₂罐车运输: {co2_truck} kg CO2eq/kg·100km")
         # logger.info(f"[调试] 氢气罐车变量数量: {len([k for k in self.hydrogen_transport_vars.keys()])}") if hasattr(self, 'hydrogen_transport_vars') else logger.warning("[调试] 未找到氢气罐车变量")  # 【禁用罐车运输】
         logger.info(f"[调试] 氢气管道变量数量: {len([k for k in self.hydrogen_pipeline_transport_vars.keys()])}") if hasattr(self, 'hydrogen_pipeline_transport_vars') else logger.warning("[调试] 未找到氢气管道变量")
         logger.info(f"[调试] MTJ运输变量数量: {len([k for k in self.transport_vars.keys()])}") if hasattr(self, 'transport_vars') else logger.warning("[调试] 未找到MTJ运输变量")
@@ -4031,7 +4033,8 @@ class DACHydrogenSAFOptimizer:
 
         self.carbon_aggregates['transport_emissions'] = (
             self.carbon_expressions['h2_transport'] +
-            self.carbon_expressions['mtj_transport']
+            self.carbon_expressions['mtj_transport'] +
+            self.carbon_expressions['co2_transport']
         )
 
         # 总碳排放
@@ -4566,8 +4569,7 @@ class DACHydrogenSAFOptimizer:
                         if (h_loc, location) in self.hydrogen_pipeline_transport_vars
                     )
 
-                    # MTJ消耗：甲醇生产消耗的氢气
-                    # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
+                    # MTJ消耗：甲醇生产消耗的氢气（两步法：H₂+CO₂→甲醇，甲醇→SAF）
                     h2_consumption = gp.LinExpr(0)
                     if (location, hour) in self.methanol_production_vars:
                         methanol_prod = self.methanol_production_vars[(location, hour)]
@@ -5897,6 +5899,11 @@ class DACHydrogenSAFOptimizer:
                     distance_info = self._get_co2_transport_distance_with_clustering(dac_loc, saf_loc)
                     self.co2_pipeline_distance_cache[cache_key] = distance_info
 
+                from_lat = self.locations.get(dac_loc, {}).get('latitude', 0.0)
+                from_lon = self.locations.get(dac_loc, {}).get('longitude', 0.0)
+                to_lat = self.locations.get(saf_loc, {}).get('latitude', 0.0)
+                to_lon = self.locations.get(saf_loc, {}).get('longitude', 0.0)
+
                 total_weekly = info['transport_kg_co2']
                 solution_key = f"{dac_loc}_{saf_loc}"
                 solution['co2_transport'][solution_key] = {
@@ -5911,7 +5918,13 @@ class DACHydrogenSAFOptimizer:
                     'layer3_distance_km': distance_info.get('layer3_distance_km', distance_info.get('total_distance_km', 0)),
                     'cluster_id': distance_info.get('cluster_id', None),
                     'is_noise': distance_info.get('is_noise', False),
-                    'route_coordinates': distance_info.get('route_coordinates', [])
+                    'route_coordinates': distance_info.get('route_coordinates', []),
+                    'cluster_center_coords': distance_info.get('cluster_center_coords'),
+                    'from_latitude': from_lat,
+                    'from_longitude': from_lon,
+                    'to_latitude': to_lat,
+                    'to_longitude': to_lon,
+                    'transport_mode': 'pipeline'
                 }
 
         # 输出CO₂运输统计
@@ -6981,10 +6994,23 @@ class DACHydrogenSAFOptimizer:
 
             cluster_info = ""
             if info.get("cluster_id") is not None and info.get("cluster_id") >= 0:
-                cluster_center = info.get("cluster_center", (0, 0))
+                cluster_center = info.get("cluster_center_coords") or info.get("cluster_center") or (0.0, 0.0)
                 cluster_info = f"CO2聚类{info.get('cluster_id')}_(中心:{cluster_center[0]:.4f},{cluster_center[1]:.4f})"
             elif info.get("is_noise"):
                 cluster_info = "独立点"
+
+            try:
+                from_lat, from_lon = self._get_location_coordinates(info.get("from_location", ""))
+            except Exception:
+                from_lat, from_lon = (0.0, 0.0)
+
+            try:
+                to_lat, to_lon = self._get_location_coordinates(info.get("to_location", ""))
+            except Exception:
+                to_lat, to_lon = (0.0, 0.0)
+
+            distance_km = info.get("total_distance_km", info.get("distance_km", 0))
+            weekly_transport = info.get("transport_kg_co2_per_week", info.get("transport_kg_co2", 0))
 
             all_transport_summary.append({
                 "路径ID": transport_id,
@@ -6992,17 +7018,17 @@ class DACHydrogenSAFOptimizer:
                 "终点": info.get("to_location", ""),
                 "起点类型": "CO2捕获源",
                 "终点类型": "MTJ工厂",
-                "距离(km)": info.get("distance_km", 0),
+                "距离(km)": distance_km,
                 "聚类信息": cluster_info,
                 "Layer1距离(km)": info.get("layer1_distance_km", 0),
                 "Layer2距离(km)": info.get("layer2_distance_km", 0),
-                "Layer3距离(km)": info.get("layer3_distance_km", 0),
-                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
-                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
+                "Layer3距离(km)": info.get("layer3_distance_km", distance_km),
+                "起点坐标": f"({from_lat:.4f}, {from_lon:.4f})",
+                "终点坐标": f"({to_lat:.4f}, {to_lon:.4f})",
                 "路径坐标": route_coords_str,
                 "货物类型": "CO2",
                 "运输方式": info.get("transport_mode", "pipeline"),
-                "周运输量(kg)": info.get("transport_kg_co2", 0),
+                "周运输量(kg)": weekly_transport,
                 "时间单位": "周"
             })
 
@@ -7546,13 +7572,13 @@ class DACHydrogenSAFOptimizer:
         else:
             logger.info(f"   示例位置: {methanol_locations[:3]}")
 
-        # ✅ 修复：删除过严的H₂和CO₂实时供应约束
-        # 原约束要求：hydrogen_storage[(loc, hour)] >= h2_required
-        #           co2_inventory[(loc, hour)] >= co2_required
-        # 问题：检查的是hour时刻开始时的库存，初始库存=0会卡死hour=0的生产
-        # 正确做法：由氢气库存平衡约束和CO₂库存平衡约束保证供需平衡
+        # ⚠️ 重要说明：甲醇是中间产物，不需要独立的生产约束
+        # H₂和CO₂的供应约束已经通过氢气/CO₂库存平衡约束保证
+        # 这里不再添加额外约束，避免过度约束导致无解
 
-        logger.info("甲醇生产约束：依赖氢气和CO₂库存平衡约束保证原料供需平衡")
+        logger.info("⚠️  甲醇作为中间产物，不设置独立的H₂/CO₂供应约束")
+        logger.info(f"   参数: h2_ratio={h2_consumption_ratio}, co2_ratio={co2_consumption_ratio}, methanol_ratio={methanol_intermediate_ratio}")
+        logger.info("   → H₂和CO₂供应由各自的库存平衡约束保证")
 
     def _add_saf_production_from_methanol_constraints(self):
         """添加SAF生产约束（甲醇→SAF，两步法第二步，小时级）
@@ -7562,7 +7588,10 @@ class DACHydrogenSAFOptimizer:
         - 输出：SAF（最终产物）
         - 化学计量比：methanol_to_saf_ratio = kg SAF / kg 甲醇
 
-        注意：甲醇供需平衡由甲醇库存平衡约束保证，无需额外约束
+        ⚠️ 重要说明：
+        - 甲醇供需平衡由甲醇库存平衡约束保证
+        - 不需要额外约束"SAF生产前必须有甲醇库存"
+        - 库存平衡约束会自然保证物料流动的正确性
         """
         logger.info("添加SAF生产约束（甲醇→SAF）...")
 
@@ -7575,15 +7604,52 @@ class DACHydrogenSAFOptimizer:
         tech_info = self.technologies[tech_key]
         methanol_to_saf_ratio = tech_info['methanol_to_saf_ratio']  # kg SAF / kg 甲醇
 
-        # ✅ 修复：删除过严的实时甲醇供应约束
-        # 原约束要求：methanol_production[(loc, hour)] >= saf_production[(loc, hour)] * (1/ratio)
-        # 问题：要求甲醇实时满足SAF消耗，消除了库存缓冲作用
-        # 正确做法：由甲醇库存平衡约束(_add_methanol_inventory_balance_constraints)保证供需平衡
+        logger.info(f"   methanol_to_saf_ratio = {methanol_to_saf_ratio}")
+        logger.info("   → 甲醇供应由甲醇库存平衡约束自动保证，不设置额外约束")
 
-        logger.info("SAF生产约束：依赖甲醇库存平衡约束保证甲醇供需平衡")
+        # 🔧 关键修复：添加SAF周运输量与小时生产量的关联约束
+        # 这是确保物料平衡的关键约束！确保运输的SAF必须来自实际生产
+        logger.info("添加SAF周运输与小时生产关联约束...")
+
+        # 获取所有SAF生产位置
+        saf_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'green_h2_co2' in tech:
+                saf_locations.extend(tech_locations)
+        saf_locations = list(set(saf_locations))
+
+        link_constraint_count = 0
+        for saf_loc in saf_locations:
+            for week in range(self.time_horizon_weeks):
+                # 该周的小时范围
+                week_start_hour = week * self.hours_per_week
+                week_end_hour = (week + 1) * self.hours_per_week
+
+                # 该周从该位置的总SAF运输量（周级变量）
+                total_transport_from_loc = gp.LinExpr(0)
+                for airport in self.airports:
+                    if (saf_loc, airport, week) in self.transport_vars:
+                        total_transport_from_loc += self.transport_vars[(saf_loc, airport, week)]
+
+                # 该周在该位置的总SAF生产量（小时级变量累加）
+                total_production_in_week = gp.LinExpr(0)
+                for hour in range(week_start_hour, min(week_end_hour, self.total_hours)):
+                    if (saf_loc, tech_key, hour) in self.production_vars:
+                        total_production_in_week += self.production_vars[(saf_loc, tech_key, hour)]
+
+                # 约束：该周运输量 ≤ 该周生产量
+                # 这确保不能凭空运输SAF,必须先生产
+                self.model.addConstr(
+                    total_transport_from_loc <= total_production_in_week,
+                    name=f"saf_transport_production_link_{saf_loc}_w{week}"
+                )
+                link_constraint_count += 1
+
+        logger.info(f"添加了 {link_constraint_count} 个SAF周运输-小时生产关联约束")
+        logger.info("这是确保物料平衡的关键约束！")
 
     def _add_methanol_inventory_balance_constraints(self):
-        """添加甲醇库存平衡约束（小时级）
+        """添加甲醇库存平衡约束（小时级）- 两步法
 
         约束逻辑：
         - 当前库存 = 上期库存 + 本期生产 - 本期消耗
@@ -7591,7 +7657,9 @@ class DACHydrogenSAFOptimizer:
         - 消耗：用于SAF生产
         - 初始库存：0
         """
-        logger.info("添加甲醇库存平衡约束...")
+        logger.info("=" * 60)
+        logger.info("添加甲醇库存平衡约束（两步法）")
+        logger.info("=" * 60)
 
         # 获取green_h2_co2_to_saf技术的转化率
         tech_key = 'green_h2_co2_to_saf'
@@ -7730,11 +7798,10 @@ class DACHydrogenSAFOptimizer:
                 if (saf_loc, hour) in self.dac_co2_supply:
                     co2_inflow += self.dac_co2_supply[(saf_loc, hour)]
 
-                # CO₂消耗量（甲醇生产）
+                # CO₂消耗量（甲醇生产）- 两步法：H₂+CO₂→甲醇，甲醇→SAF
                 co2_consumption = gp.LinExpr(0)
                 if (saf_loc, hour) in self.methanol_production_vars:
                     methanol_prod = self.methanol_production_vars[(saf_loc, hour)]
-                    # methanol_prod (kg/h) × (kg SAF / kg methanol) × (kg CO₂ / kg SAF)
                     co2_consumption = (
                         methanol_prod *
                         (1.0 / methanol_intermediate_ratio) *
