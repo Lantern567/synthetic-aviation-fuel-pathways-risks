@@ -444,7 +444,7 @@ operational_parameters:
   operational_efficiency: 0.9
 solver_parameters:
   TimeLimit: 3600
-  MIPGap: 0.01
+  MIPGap: 0.05
   Threads: 128
 technologies:
   green_h2_co2_to_saf:
@@ -456,19 +456,54 @@ technologies:
     - wind_farm
     - airport
     # co2_capture 已移除 - v4.0 DAC版本使用本地DAC捕获，不需要独立CO₂捕获点
-    efficiency: 0.6
-    h2_consumption_ratio: 0.15
-    co2_consumption_ratio: 3.0
-    methanol_intermediate_ratio: 3.125
-    methanol_to_saf_ratio: 0.64
-    co2_emission_factor: -2.5
-    reactor_temperature_celsius: 250
-    reactor_pressure_mpa: 3.0
-    catalyst_type: Iron-based
-    catalyst_cost_yuan_per_kg_saf: 0.12
-    energy_consumption_kwh_per_kg_saf: 6.0
-    heat_integration_efficiency: 0.7
-    hydrogen_transport_required: true
+
+    # 工艺参数 - Process Parameters
+    efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
+                                          # H₂+CO₂到SAF的碳转化效率60%
+
+    # ========================================================================
+    # ✅ 一步法直接转化参数（当前启用）
+    # ========================================================================
+    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要0.15kg氢气
+                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
+
+    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要3.0kg CO₂
+                                          # 直接从H₂和CO₂合成SAF
+
+    # ========================================================================
+    # 🔧 两步法分步转化参数（当前启用）
+    # ========================================================================
+    methanol_intermediate_ratio: 1.5625   # kg 甲醇 / kg SAF | Methanol intermediate ratio
+                                          # 生产1kg SAF需要的甲醇量
+                                          # 计算：1 / methanol_to_saf_ratio = 1 / 0.64 = 1.5625
+
+    methanol_to_saf_ratio: 0.64           # kg SAF / kg 甲醇 | Methanol to SAF conversion ratio
+                                          # 第二步反应的转化率：1kg甲醇生成0.64kg SAF
+
+    co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
+                                          # 负值表示净减排（使用捕获的CO₂）
+
+    # 反应器参数 - Reactor Parameters
+    reactor_temperature_celsius: 250      # 反应器温度(°C) | Reactor temperature
+
+    reactor_pressure_mpa: 3.0             # 反应器压力(MPa) | Reactor pressure
+
+    catalyst_type: Iron-based             # 催化剂类型 | Catalyst type
+                                          # 铁基催化剂（适合CO₂加氢）
+
+    catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
+
+    # 能源消耗参数 - Energy Consumption Parameters
+    energy_consumption_kwh_per_kg_saf: 6.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # 包括压缩、泵送、分离等
+
+    heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
+                                          # 反应热的回收利用效率
+
+    hydrogen_transport_required: true     # 是否需要氢气运输 | Hydrogen transport required
+                                          # true: 需要从电解槽运输氢气到合成装置
   complexity_factors:
     green_h2_co2_to_saf: 1.2
 transport_constraints:

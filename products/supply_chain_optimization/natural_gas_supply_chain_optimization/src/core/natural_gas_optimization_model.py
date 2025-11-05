@@ -2067,9 +2067,9 @@ class NaturalGasSupplyChainOptimizer:
         # 6. 氢气运输决策变量 (从制氢地到MTJ工厂)
         self.hydrogen_transport_vars = {}  # 氢气运输量 (kg H2/week)
         
-        # 7. 天然气运输决策变量 (从管道到MTJ工厂，罐车运输)  
+        # 7. 天然气运输决策变量 (从管道到MTJ工厂，罐车运输)
         self.ng_transport_vars = {}  # 天然气运输量 (m³/day)
-        
+
         for location in self.locations:
             location_type = self.locations[location]['type']
             # 只在可再生能源地点创建制氢变量
@@ -2079,28 +2079,38 @@ class NaturalGasSupplyChainOptimizer:
                 self.electrolyzer_facility_vars[location] = self.model.addVar(
                     vtype=GRB.BINARY, name=var_name
                 )
-                
+
                 # 电解槽容量 (连续变量，kg H2/hour)
                 var_name = f"electrolyzer_capacity_{location}"
                 self.electrolyzer_capacity_vars[location] = self.model.addVar(
-                    lb=0, ub=self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000), 
+                    lb=0, ub=self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000),
                     vtype=GRB.CONTINUOUS, name=var_name
                 )
-                
+
                 # 小时级制氢量
                 for hour in range(self.total_hours):
                     var_name = f"h2_prod_{location}_{hour}"
                     self.hydrogen_production_vars[(location, hour)] = self.model.addVar(
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
-                
-                # 氢气库存
+
+                # 氢气库存（氢气生产站）
                 for hour in range(self.total_hours + 1):
                     var_name = f"h2_storage_{location}_{hour}"
                     self.hydrogen_storage_vars[(location, hour)] = self.model.addVar(
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
-        
+
+            # 为MTJ工厂（airport, lng_terminal）创建氢气库存变量
+            elif location_type in ['airport', 'lng_terminal']:
+                # 氢气库存（MTJ工厂）
+                for hour in range(self.total_hours + 1):
+                    var_name = f"h2_storage_mtj_{location}_{hour}"
+                    self.hydrogen_storage_vars[(location, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+                logger.debug(f"为MTJ工厂 {location} 创建氢气库存变量")
+
         # 8. 创建氢气运输变量 (仅为需要氢气运输的模式，无距离限制)
         logger.info("创建氢气运输变量，无距离限制")
         
@@ -3532,12 +3542,24 @@ class NaturalGasSupplyChainOptimizer:
                         )
                         
     def _add_hydrogen_balance_constraints(self):
-        """添加氢气平衡约束"""
-        logger.info("添加氢气平衡约束...")
-        
+        """添加氢气平衡约束（流水线模式：hour=167发货 + hour=0接收）
+
+        核心逻辑：
+        1. 生产点：hour=167扣减整周运输量 → "本周生产完成后发货给下周"
+        2. 消纳点：hour=0入库整周运输量 → "下周初收到上周的货"
+        3. 生产点初始库存 >= 周运输量（代表上周累积的库存）
+        4. 消纳点初始库存 = 0（本周初尚未收货）
+
+        优势：
+        - 符合"生产要在运输前168小时"的跨周运输逻辑
+        - 生产点在week末发货，消纳点在下week初接收
+        - 库存缓冲机制保持灵活性
+        """
+        logger.info("添加氢气平衡约束（流水线模式：hour=167发货 + hour=0接收）...")
+
         for location in self.locations:
             location_type = self.locations[location]['type']
-            
+
             if location_type in ['solar_plant', 'wind_farm']:
                 # 氢气库存平衡（加入运输影响）
                 for hour in range(self.total_hours):
@@ -3554,9 +3576,9 @@ class NaturalGasSupplyChainOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（周级运输量在最后一小时统一扣减）
+                    # 氢气运输出库（在hour=167统一扣减周运输量）
                     h2_transport_outflow = 0
-                    if hour == self.total_hours - 1:  # 在最后一小时统一扣减周运输量
+                    if hour == self.total_hours - 1:  # 在hour=167扣减本周累积的运输量
                         # 整周的氢气运输出库量（周级变量）
                         weekly_outbound_transport = gp.quicksum(
                             self.hydrogen_transport_vars[(location, dest_loc)]
@@ -3575,17 +3597,45 @@ class NaturalGasSupplyChainOptimizer:
 
                         h2_transport_outflow = weekly_outbound_transport
 
+                        logger.debug(f"[氢源库存] {location}: 在hour=167扣减周运输量（本周累积的库存，发往下周）")
+
                     # 氢气库存平衡方程
                     self.model.addConstr(
                         current_h2_inventory == previous_h2_inventory + h2_production - h2_local_consumption - h2_transport_outflow,
                         name=f"h2_balance_{location}_{hour}"
                     )
 
-                # 初始氢气库存为0
-                self.model.addConstr(
-                    self.hydrogen_storage_vars[(location, 0)] == 0,
-                    name=f"initial_h2_inventory_{location}"
-                )
+                # 初始氢气库存下界：需要足够的库存来满足周运输量
+                # Inventory[0] >= WeeklyTransport（代表上周累积的库存）
+                weekly_outbound_total = gp.LinExpr(0)
+
+                # 罐车运输
+                if hasattr(self, 'hydrogen_transport_vars') and self.hydrogen_transport_vars:
+                    weekly_outbound_total += gp.quicksum(
+                        self.hydrogen_transport_vars[(location, dest_loc)]
+                        for dest_loc in self.locations
+                        if (location, dest_loc) in self.hydrogen_transport_vars
+                    )
+
+                # 管道运输
+                if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                    weekly_outbound_total += gp.quicksum(
+                        self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
+                        for dest_loc in self.locations
+                        if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
+                    )
+
+                if weekly_outbound_total.size() > 0:
+                    self.model.addConstr(
+                        self.hydrogen_storage_vars[(location, 0)] >= weekly_outbound_total,
+                        name=f"initial_h2_inventory_lower_bound_{location}"
+                    )
+                    logger.debug(f"[氢源库存] {location}: 初始库存 >= 周运输量（代表上周累积）")
+                else:
+                    self.model.addConstr(
+                        self.hydrogen_storage_vars[(location, 0)] >= 0,
+                        name=f"initial_h2_inventory_nonneg_{location}"
+                    )
 
                 # 添加氢气库存非负约束
                 for hour in range(self.total_hours + 1):
@@ -3593,7 +3643,68 @@ class NaturalGasSupplyChainOptimizer:
                         self.hydrogen_storage_vars[(location, hour)] >= 0,
                         name=f"h2_inventory_nonnegative_{location}_{hour}"
                     )
-    
+
+            # 为MTJ工厂（airport, lng_terminal）添加氢气入库约束
+            elif location_type in ['airport', 'lng_terminal']:
+                logger.debug(f"[MTJ工厂] 为 {location} 添加氢气库存平衡约束...")
+
+                # 小时级库存平衡
+                for hour in range(self.total_hours):
+                    current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
+                    previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
+
+                    # 氢气消耗（用于MTJ生产）
+                    h2_consumption = gp.quicksum(
+                        self.production_vars[(location, tech, hour)] *
+                        self.technologies[tech]['h2_consumption_ratio']
+                        for tech in self.technologies
+                        if (location, tech, hour) in self.production_vars and
+                           self.technologies[tech]['h2_consumption_ratio'] > 0
+                    )
+
+                    # 氢气运输入库（在第0小时统一入库周运输量）
+                    h2_transport_inflow = 0
+                    if hour == 0:  # 在第0小时（hour=0）统一入库周运输量
+                        # 罐车运输（周级变量）
+                        weekly_inbound_transport = gp.quicksum(
+                            self.hydrogen_transport_vars[(h_loc, location)]
+                            for h_loc in self.hydrogen_locations
+                            if (h_loc, location) in self.hydrogen_transport_vars
+                        )
+
+                        # 管道运输（周级变量）
+                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                            weekly_inbound_pipeline = gp.quicksum(
+                                self.hydrogen_pipeline_transport_vars[(h_loc, location)]
+                                for h_loc in self.hydrogen_locations
+                                if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                            )
+                            weekly_inbound_transport += weekly_inbound_pipeline
+
+                        h2_transport_inflow = weekly_inbound_transport
+                        logger.debug(f"[MTJ工厂] {location}: 在第0小时入库周运输量")
+
+                    # 库存平衡方程：当前库存 = 上期库存 + 运输入库 - MTJ消耗
+                    self.model.addConstr(
+                        current_h2_inventory == previous_h2_inventory + h2_transport_inflow - h2_consumption,
+                        name=f"h2_balance_mtj_{location}_{hour}"
+                    )
+
+                # 初始氢气库存为0
+                self.model.addConstr(
+                    self.hydrogen_storage_vars[(location, 0)] == 0,
+                    name=f"initial_h2_inventory_mtj_{location}"
+                )
+
+                # 添加氢气库存非负约束
+                for hour in range(self.total_hours + 1):
+                    self.model.addConstr(
+                        self.hydrogen_storage_vars[(location, hour)] >= 0,
+                        name=f"h2_inventory_nonnegative_mtj_{location}_{hour}"
+                    )
+
+        logger.info("氢气平衡约束添加完成（流水线模式：生产点hour=167发货，消纳点hour=0接收）")
+
     def _add_daily_hydrogen_mtj_constraints(self):
         """添加氢气每日产量限制下一日MTJ每日产量约束"""
         logger.info("添加氢气每日产量限制MTJ每日产量约束...")

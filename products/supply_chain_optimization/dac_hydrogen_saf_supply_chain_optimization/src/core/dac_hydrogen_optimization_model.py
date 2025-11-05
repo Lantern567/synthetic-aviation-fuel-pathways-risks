@@ -4484,36 +4484,14 @@ class DACHydrogenSAFOptimizer:
             location_type = self.locations[location]['type']
             
             if location_type in ['solar_plant', 'wind_farm']:
-                # 氢气库存平衡（加入运输影响）
-                pipeline_outflow_per_hour = gp.LinExpr(0)
-                if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                    pipeline_outflow_per_hour = gp.quicksum(
-                        self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
-                        for dest_loc in self.locations
-                        if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                    ) / float(self.hours_per_week)
-                    connected_destinations = [
-                        dest_loc for dest_loc in self.locations
-                        if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                    ]
-                    if connected_destinations:
-                        logger.debug(
-                            f"[调试][氢源库存] {location}: 管道出库平均/小时表达式 -> {pipeline_outflow_per_hour}, "
-                            f"连接目的地数量 {len(connected_destinations)} "
-                            f"示例 {connected_destinations[:5]}"
-                        )
-                    else:
-                        logger.debug(f"[调试][氢源库存] {location}: 未发现管道连接")
-                else:
-                    logger.debug(f"[调试][氢源库存] {location}: 未创建管道运输变量")
-
+                # 氢气库存平衡（周级运输模式：在hour=167统一出库）
                 for hour in range(self.total_hours):
-                    # 当前氢气库存 = 上期库存 + 制氢生产 - 本地MTJ消耗 - 运输出库
+                    # 当前氢气库存 = 上期库存 + 制氢生产 - 本地SAF消耗 - 运输出库
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
                     h2_production = self.hydrogen_production_vars[(location, hour)]
 
-                    # 氢气消耗（用于本地MTJ生产）
+                    # 氢气消耗（用于本地SAF生产）
                     h2_local_consumption = gp.quicksum(
                         self.production_vars[(location, tech, hour)] *
                         self.technologies[tech]['h2_consumption_ratio']
@@ -4521,8 +4499,27 @@ class DACHydrogenSAFOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（按小时摊分周级运输量）
-                    h2_transport_outflow = pipeline_outflow_per_hour
+                    # 氢气运输出库（在hour=167统一扣减整周运输量）
+                    h2_transport_outflow = 0
+                    if hour == self.total_hours - 1:  # hour=167
+                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                            # 整周的氢气运输出库量（周级变量）
+                            weekly_outbound_transport = gp.quicksum(
+                                self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
+                                for dest_loc in self.locations
+                                if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
+                            )
+                            h2_transport_outflow = weekly_outbound_transport
+
+                            connected_destinations = [
+                                dest_loc for dest_loc in self.locations
+                                if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
+                            ]
+                            if connected_destinations:
+                                logger.debug(
+                                    f"[周级运输] {location}: hour=167运出整周氢气，"
+                                    f"连接目的地数量 {len(connected_destinations)}"
+                                )
 
                     # 氢气库存平衡方程
                     self.model.addConstr(
@@ -4561,13 +4558,27 @@ class DACHydrogenSAFOptimizer:
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
 
-                    # MTJ位置：氢气入库 = 管道运输到达量（周级运输量摊分到小时）
-                    # 周级变量平均分配到每小时
-                    h2_inflow = gp.quicksum(
-                        self.hydrogen_pipeline_transport_vars[(h_loc, location)] / float(self.hours_per_week)
-                        for h_loc in self.hydrogen_locations
-                        if (h_loc, location) in self.hydrogen_pipeline_transport_vars
-                    )
+                    # MTJ位置：氢气入库（在hour=0统一入库整周运输量）
+                    h2_inflow = 0
+                    if hour == 0:  # hour=0入库
+                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                            # 整周的氢气运输入库量（周级变量）
+                            weekly_inbound_transport = gp.quicksum(
+                                self.hydrogen_pipeline_transport_vars[(h_loc, location)]
+                                for h_loc in self.hydrogen_locations
+                                if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                            )
+                            h2_inflow = weekly_inbound_transport
+
+                            inbound_sources = [
+                                h_loc for h_loc in self.hydrogen_locations
+                                if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                            ]
+                            if inbound_sources:
+                                logger.debug(
+                                    f"[周级运输] {location}: hour=0入库整周氢气，"
+                                    f"来源数量 {len(inbound_sources)}"
+                                )
 
                     # MTJ消耗：甲醇生产消耗的氢气（两步法：H₂+CO₂→甲醇，甲醇→SAF）
                     h2_consumption = gp.LinExpr(0)
