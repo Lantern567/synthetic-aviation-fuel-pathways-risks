@@ -392,11 +392,11 @@ try:
         _base_dir,
         "products",
         "supply_chain_optimization",
-        "green_hydrogen_supply_chain_optimization",
+        "coal_hydrogen_saf_optimization",  # 修正路径：coal_hydrogen_saf_optimization
         "results",
         "logs",
     )
-    mount_file_logging(_log_dir, filename_prefix="green_h2_supply_chain")
+    mount_file_logging(_log_dir, filename_prefix="coal_h2_saf_supply_chain")  # 修正前缀
 except Exception as e:
     # 如果文件日志挂载失败，输出警告但不中断程序
     print(f"警告：文件日志挂载失败: {e}")
@@ -820,8 +820,8 @@ class CoalHydrogenSAFOptimizer:
         if osm_pbf_path is None:
             # 使用项目中的默认OSM数据文件
             project_root = get_project_base_dir()
-            self.osm_pbf_path = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                           "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf")
+            self.osm_pbf_path = os.path.join(project_root, "products", "supply_chain_optimization",
+                                           "coal_hydrogen_saf_optimization", "data", "china-latest.osm.pbf")
         else:
             self.osm_pbf_path = osm_pbf_path
             
@@ -4017,36 +4017,51 @@ class CoalHydrogenSAFOptimizer:
                         )
                         
     def _add_hydrogen_balance_constraints(self):
-        """添加氢气平衡约束"""
-        logger.info("添加氢气平衡约束...")
+        """添加氢气平衡约束
+
+        【修改说明 v4.0】
+        1. 氢气生产位置（solar_plant/wind_farm）：
+           - 改为累计库存模式，不强制平均出库
+           - 在167h（第168小时，一周最后一小时）时统一出库全部周级运输量
+           - 库存平衡：当前库存 = 上期库存 + 生产 - 本地消耗 - 出库（仅167h）
+
+        2. 氢气消纳位置（lng_terminal/airport）：
+           - 在0h（第1小时）时统一接收全部周级运输量
+           - 库存平衡：当前库存 = 上期库存 + 入库（仅0h） - 甲醇生产消耗
+
+        3. 此修改允许氢气在生产地累积，避免强制每小时平均出库的约束
+        """
+        logger.info("添加氢气平衡约束（v4.0: 累计库存，167h出库/0h入库）...")
         
         for location in self.locations:
             location_type = self.locations[location]['type']
             
             if location_type in ['solar_plant', 'wind_farm']:
-                # 氢气库存平衡（加入运输影响）
-                pipeline_outflow_per_hour = gp.LinExpr(0)
+                # 氢气库存平衡（改为累计库存模式，167h时统一出库）
+                # 计算周级运输总量
+                weekly_pipeline_outflow = gp.LinExpr(0)
                 if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                    pipeline_outflow_per_hour = gp.quicksum(
+                    weekly_pipeline_outflow = gp.quicksum(
                         self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
                         for dest_loc in self.locations
                         if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                    ) / float(self.hours_per_week)
+                    )
                     connected_destinations = [
                         dest_loc for dest_loc in self.locations
                         if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
                     ]
                     if connected_destinations:
                         logger.debug(
-                            f"[调试][氢源库存] {location}: 管道出库平均/小时表达式 -> {pipeline_outflow_per_hour}, "
-                            f"连接目的地数量 {len(connected_destinations)} "
+                            f"[调试][氢源库存v4.0] {location}: 周级管道运输总量（167h统一出库）, "
+                            f"连接目的地数量 {len(connected_destinations)}, "
                             f"示例 {connected_destinations[:5]}"
                         )
                     else:
-                        logger.debug(f"[调试][氢源库存] {location}: 未发现管道连接")
+                        logger.debug(f"[调试][氢源库存v4.0] {location}: 未发现管道连接")
                 else:
-                    logger.debug(f"[调试][氢源库存] {location}: 未创建管道运输变量")
+                    logger.debug(f"[调试][氢源库存v4.0] {location}: 未创建管道运输变量")
 
+                logger.info(f"[氢源库存v4.0] {location}: 添加累计库存约束（167h统一出库）")
                 for hour in range(self.total_hours):
                     # 当前氢气库存 = 上期库存 + 制氢生产 - 本地MTJ消耗 - 运输出库
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
@@ -4061,10 +4076,13 @@ class CoalHydrogenSAFOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（按小时摊分周级运输量）
-                    h2_transport_outflow = pipeline_outflow_per_hour
+                    # 氢气运输出库：仅在167h时统一出库
+                    # hour是从0开始的，167h对应索引167（第168小时）
+                    h2_transport_outflow = gp.LinExpr(0)
+                    if hour == 167:
+                        h2_transport_outflow = weekly_pipeline_outflow
 
-                    # 氢气库存平衡方程
+                    # 氢气库存平衡方程（累计库存模式）
                     self.model.addConstr(
                         current_h2_inventory == previous_h2_inventory + h2_production - h2_local_consumption - h2_transport_outflow,
                         name=f"h2_balance_{location}_{hour}"
@@ -4085,7 +4103,7 @@ class CoalHydrogenSAFOptimizer:
 
             # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡
             elif location_type in ['lng_terminal', 'airport']:
-                logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location}")
+                logger.info(f"[MTJ库存v4.0] {location}: 添加氢气库存平衡（0h统一入库）")
 
                 # 获取甲醇生产参数（从配置中读取）
                 # 查找使用 green_h2_co2 技术的配置
@@ -4097,17 +4115,31 @@ class CoalHydrogenSAFOptimizer:
                         methanol_intermediate_ratio = tech_info.get('methanol_intermediate_ratio', 1.0)
                         break
 
+                # 计算周级运输总入库量
+                weekly_h2_inflow = gp.quicksum(
+                    self.hydrogen_pipeline_transport_vars[(h_loc, location)]
+                    for h_loc in self.hydrogen_locations
+                    if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                )
+
+                # 统计入库来源
+                h2_source_count = sum(
+                    1 for h_loc in self.hydrogen_locations
+                    if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                )
+                if h2_source_count > 0:
+                    logger.debug(f"[MTJ库存v4.0] {location}: 氢气来源数量 {h2_source_count}")
+                else:
+                    logger.warning(f"[MTJ库存v4.0] {location}: 没有氢气管道入库来源！")
+
                 for hour in range(self.total_hours):
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
 
-                    # MTJ位置：氢气入库 = 管道运输到达量（周级运输量摊分到小时）
-                    # 周级变量平均分配到每小时
-                    h2_inflow = gp.quicksum(
-                        self.hydrogen_pipeline_transport_vars[(h_loc, location)] / float(self.hours_per_week)
-                        for h_loc in self.hydrogen_locations
-                        if (h_loc, location) in self.hydrogen_pipeline_transport_vars
-                    )
+                    # MTJ位置：氢气入库仅在0h时统一入库
+                    h2_inflow = gp.LinExpr(0)
+                    if hour == 0:
+                        h2_inflow = weekly_h2_inflow
 
                     # MTJ消耗：甲醇生产消耗的氢气
                     # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
@@ -7347,7 +7379,7 @@ if __name__ == '__main__':
         # 设置正确的OSM文件路径
         base_dir = get_project_base_dir()
         osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization",
-                                   "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf")
+                                   "coal_hydrogen_saf_optimization", "data", "china-latest.osm.pbf")
 
         optimizer = CoalHydrogenSAFOptimizer(
             time_horizon_weeks=1,

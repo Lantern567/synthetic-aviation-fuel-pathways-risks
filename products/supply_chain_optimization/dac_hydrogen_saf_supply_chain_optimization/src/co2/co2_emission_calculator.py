@@ -301,31 +301,29 @@ class CO2EmissionCalculator:
         transport_mode: str
     ) -> float:
         """
-        计算CO₂运输排放（v4.0 DAC版本 - 始终返回零）
-
-        v4.0变更说明:
-        - DAC与SAF工厂完全一体化部署（collocated_with_saf_plant）
-        - CO₂从大气捕获后直接进入甲醇反应器
-        - 运输距离 = 0 km（无需管道或罐车运输）
-        - 运输排放 = 0 kgCO₂e
-
-        保留此方法以维持接口兼容性，但始终返回0。
-
-        排放对比（生产1吨SAF，运输3.5吨CO₂）:
-        - v2.0 CCS: 3500 kg × 100 km × 0.01 / 100 = 35 kgCO₂e（管道）
-        - v4.0 DAC: 0 kgCO₂e（本地捕获，零运输）
-        - 减排: -100%
+        计算CO₂运输排放（v4.1：支持管道/罐车两种模式）
 
         Args:
-            co2_kg: CO₂运输量 (kg) [v4.0中未使用]
-            distance_km: 运输距离 (km) [v4.0中未使用，始终为0]
-            transport_mode: 运输方式 [v4.0中未使用]
+            co2_kg: CO₂运输量 (kg)
+            distance_km: 运输距离 (km)
+            transport_mode: 运输方式 ('pipeline' or 'truck')
 
         Returns:
-            排放量 (kgCO₂e) - v4.0中始终返回0.0
+            排放量 (kgCO₂e)
         """
-        logger.debug("CO₂运输排放: 0.00 kgCO₂e (DAC本地捕获，零运输距离)")
-        return 0.0
+        if transport_mode == 'pipeline':
+            intensity = self.transportation.get('co2_pipeline_intensity', 0.01)  # kgCO₂e/kg·100km
+        elif transport_mode == 'truck':
+            intensity = self.transportation.get('co2_truck_intensity', 0.08)  # kgCO₂e/kg·100km
+        else:
+            logger.warning(f"未知的CO₂运输方式: {transport_mode}，使用管道默认值")
+            intensity = self.transportation.get('co2_pipeline_intensity', 0.01)
+
+        emission = co2_kg * (distance_km / 100.0) * intensity
+
+        logger.debug(f"CO₂运输排放 ({transport_mode}): {emission:.2f} kgCO₂e")
+
+        return emission
 
     def _calc_saf_transport_emission(
         self,

@@ -78,7 +78,7 @@ class UnifiedSAFOptimizer:
         process_type: str = 'two_step',
         threads: Optional[int] = None,
         time_limit: int = 3600,
-        mip_gap: float = 0.01,
+        mip_gap: float = 0.05,
         time_horizon_weeks: int = 1,
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
@@ -98,7 +98,7 @@ class UnifiedSAFOptimizer:
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
             time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
-            mip_gap: MIP相对最优间隙,默认0.01(1%)
+            mip_gap: MIP相对最优间隙,默认0.05(5%)
             time_horizon_weeks: 优化时间范围(周数),默认1周
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
@@ -182,7 +182,7 @@ class UnifiedSAFOptimizer:
         self.logger.info(f"Initialized {process_type} optimizer")
         self.logger.info(f"CPU threads: {self.threads}")
         self.logger.info(f"Time limit: {self.time_limit}s")
-        self.logger.info(f"MIP gap: {self.mip_gap:.1%}")
+        self.logger.info(f"MIP gap: {self.mip_gap:.2%}")
 
     def _setup_logging(self, log_level: str):
         """设置日志系统"""
@@ -568,7 +568,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')
-    parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance')
+    parser.add_argument('--mip-gap', type=float, default=0.05, help='MIP gap tolerance')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()
