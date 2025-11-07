@@ -2942,22 +2942,41 @@ class CoalHydrogenSAFOptimizer:
         )
 
         # 5. 储存设施投资成本 + 20年运营成本现值
-        max_storage_needed = gp.quicksum(
-            self.storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-        )
+        # 修正：储存设备成本应基于各地点的最大库存量之和，而非所有时间点库存量之和
+        # 创建辅助变量来捕获各地点的最大库存量
+        max_storage_by_location = {}
+        for location in self.locations:
+            max_var = self.model.addVar(
+                lb=0, ub=GRB.INFINITY,
+                vtype=GRB.CONTINUOUS,
+                name=f'max_mtj_storage_{location}'
+            )
+            # 约束：max_var必须大于等于该地点在任何时刻的库存量
+            for hour in range(self.total_hours + 1):
+                self.model.addConstr(
+                    max_var >= self.storage_vars[(location, hour)],
+                    name=f'max_mtj_storage_constr_{location}_h{hour}'
+                )
+            max_storage_by_location[location] = max_var
+
+        # 总的储存设备需求 = 各地点最大库存量之和
+        max_storage_needed = gp.quicksum(max_storage_by_location.values())
+
         # 优先使用统一成本配置中的MTJ储存设备成本
         storage_unit_cost = float(
             self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
             storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
         )
         self.cost_expressions['storage_equipment_cost'] = max_storage_needed * storage_unit_cost
-        self.cost_expressions['storage_operation_cost'] = gp.quicksum(
-            self.storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
+
+        # MTJ库存运营成本：使用平均库存（峰值/2）而非所有时刻库存总和
+        # 运营成本 = Σ(各地点最大库存/2) × 小时成本 × 总小时数 × 生命周期系数
+        average_storage_total = gp.quicksum(max_storage_by_location.values()) / 2.0
+        self.cost_expressions['storage_operation_cost'] = (
+            average_storage_total *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            self.total_hours *
+            lifecycle_operation_factor
         )
 
         # 6. 电解槽投资成本（一次性投资）
@@ -2993,24 +3012,43 @@ class CoalHydrogenSAFOptimizer:
         ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
 
         # 9. 氢气储存投资 + 20年运营成本现值
-        max_h2_storage = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
-        )
+        # 修正：氢气储存设备成本应基于各地点的最大库存量之和，而非所有时间点库存量之和
+        # 创建辅助变量来捕获各地点的最大氢气库存量
+        max_h2_storage_by_location = {}
+        for location in self.locations:
+            if any((location, hour) in self.hydrogen_storage_vars for hour in range(self.total_hours + 1)):
+                max_var = self.model.addVar(
+                    lb=0, ub=GRB.INFINITY,
+                    vtype=GRB.CONTINUOUS,
+                    name=f'max_h2_storage_{location}'
+                )
+                # 约束：max_var必须大于等于该地点在任何时刻的氢气库存量
+                for hour in range(self.total_hours + 1):
+                    if (location, hour) in self.hydrogen_storage_vars:
+                        self.model.addConstr(
+                            max_var >= self.hydrogen_storage_vars[(location, hour)],
+                            name=f'max_h2_storage_constr_{location}_h{hour}'
+                        )
+                max_h2_storage_by_location[location] = max_var
+
+        # 总的氢气储存设备需求 = 各地点最大氢气库存量之和
+        max_h2_storage = gp.quicksum(max_h2_storage_by_location.values())
+
         # 优先使用统一成本配置中的氢气储存设备成本
         h2_storage_unit_cost = float(
             self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
             storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
         )
         self.cost_expressions['h2_storage_investment'] = max_h2_storage * h2_storage_unit_cost
-        self.cost_expressions['h2_storage_operation'] = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
+
+        # 氢气库存运营成本：使用平均库存（峰值/2）而非所有时刻库存总和
+        # 运营成本 = Σ(各地点最大氢气库存/2) × 小时成本 × 总小时数 × 生命周期系数
+        average_h2_storage_total = gp.quicksum(max_h2_storage_by_location.values()) / 2.0
+        self.cost_expressions['h2_storage_operation'] = (
+            average_h2_storage_total *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            self.total_hours *
+            lifecycle_operation_factor
         )
 
         # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
@@ -3881,32 +3919,50 @@ class CoalHydrogenSAFOptimizer:
         logger.info("氢气运输能力限制约束添加完成")
     
     def _add_inventory_balance_constraints(self):
-        """添加库存平衡约束"""
+        """添加库存平衡约束
+
+        【修改说明 v5.0】
+        SAF库存改为周积累模式：
+        - 生产地累积库存，不再每小时平摊出库
+        - 在每周的第167小时（最后一小时）统一出库运输到机场
+        - 库存平衡：仅在167h时出库，其他时间只生产累积
+        """
         for location in self.locations:
+            # 计算该location所有周的运输总量
+            weekly_transports = {}
+            for week in range(self.time_horizon_weeks):
+                weekly_transports[week] = gp.quicksum(
+                    self.transport_vars[(location, airport, week)]
+                    for airport in self.airports
+                    if (location, airport, week) in self.transport_vars
+                )
+
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
                 current_inventory = self.storage_vars[(location, hour + 1)]
                 previous_inventory = self.storage_vars[(location, hour)]
-                
+
                 # 当前小时总生产
                 production = gp.quicksum(
                     self.production_vars[(location, tech, hour)]
                     for tech in self.technologies
                     if (location, tech, hour) in self.production_vars
                 )
-                
-                # 出库量（用于运输的部分，按小时平摊）
-                outflow = gp.quicksum(
-                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
-                    for airport in self.airports
-                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
-                )
-                
+
+                # 出库量：仅在每周的第167小时（最后一小时）统一出库
+                current_week = hour // self.hours_per_week
+                hour_in_week = hour % self.hours_per_week
+
+                if hour_in_week == 167:  # 每周最后一小时统一出库
+                    outflow = weekly_transports.get(current_week, gp.LinExpr(0))
+                else:
+                    outflow = gp.LinExpr(0)
+
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
                     name=f"inventory_balance_{location}_{hour}"
                 )
-            
+
             # 初始库存为0
             self.model.addConstr(
                 self.storage_vars[(location, 0)] == 0,

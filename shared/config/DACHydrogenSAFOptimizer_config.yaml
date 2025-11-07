@@ -588,10 +588,10 @@ unified_costs:
           - 能耗成本（压缩机电力） (Energy cost for compression)
           - 人工和管理成本 (Labor & management)
   co2_storage:
-    storage_cost_yuan_per_kg_per_day: 0.5  # CO₂库存日成本（0.5元/kg/天）
+    operation_cost_yuan_per_kg_hour: 0.000208  # CO₂库存小时成本（0.005元/kg/天 ÷ 24 = 0.000208元/kg/小时，年化1.825元/kg/年）
     equipment_cost_yuan_per_kg: 5  # CO₂储罐设备成本（5元/kg）
     initial_inventory_yuan_per_kg: 0  # 初始库存成本（可选）
-    handling_cost_yuan_per_kg: 0.05  # 库存装卸成本（0.05元/kg）
+    handling_cost_yuan_per_kg: 0.05  # 库存装卸成本（0.05元/kg，一次性）
 dac_parameters:
   technology: solid_sorbent
   technology_cn: 固体吸附剂DAC

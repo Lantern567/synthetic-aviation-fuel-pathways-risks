@@ -1640,7 +1640,24 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 self.storage_vars[(location, hour)] = self.model.addVar(
                     lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                 )
-        
+
+        # 4.5. 氢气库存变量 (添加氢气库存追踪，小时级)
+        logger.info("创建氢气库存变量（小时级追踪）")
+
+        self.hydrogen_storage_vars = {}  # 氢气库存 (kg H2)
+
+        # 为所有FT设施候选位置创建氢气库存变量
+        # 注：FT一步法虽然内部产氢，但增加库存变量可追踪氢气流动
+        for candidate in self.ft_facility_candidates:
+            location_id = candidate['location_id']
+            for hour in range(self.total_hours + 1):  # +1 for final inventory
+                var_name = f"h2_storage_{location_id}_{hour}"
+                self.hydrogen_storage_vars[(location_id, hour)] = self.model.addVar(
+                    lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                )
+
+        logger.info(f"创建了 {len(self.hydrogen_storage_vars)} 个氢气库存变量")
+
         # 5. FT反应器设施决策变量 (基于候选位置)
         self.ft_facility_vars = {}      # FT设施建设决策 (二进制)
         self.ft_capacity_vars = {}      # FT设施产能 (kg SAF/hour)
@@ -1750,6 +1767,9 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         # 3. 库存平衡约束（SAF库存进出平衡）
         self._add_inventory_balance_constraints()
+
+        # 3.5. 氢气库存平衡约束（追踪FT工艺内部氢气流动）
+        self._add_hydrogen_inventory_balance_constraints()
 
         # 4. 机场需求约束（SAF需求满足）
         self._add_airport_demand_constraints()
@@ -2000,22 +2020,80 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         )
 
         # 5. 储存设施投资成本 + 20年运营成本现值
-        max_storage_needed = gp.quicksum(
-            self.storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-        )
+        # 修正：储存设备成本应基于各地点的最大库存量之和，而非所有时间点库存量之和
+        # 创建辅助变量来捕获各地点的最大库存量
+        max_storage_by_location = {}
+        for location in self.locations:
+            max_var = self.model.addVar(
+                lb=0, ub=GRB.INFINITY,
+                vtype=GRB.CONTINUOUS,
+                name=f'max_mtj_storage_{location}'
+            )
+            # 约束：max_var必须大于等于该地点在任何时刻的库存量
+            for hour in range(self.total_hours + 1):
+                self.model.addConstr(
+                    max_var >= self.storage_vars[(location, hour)],
+                    name=f'max_mtj_storage_constr_{location}_h{hour}'
+                )
+            max_storage_by_location[location] = max_var
+
+        # 总的储存设备需求 = 各地点最大库存量之和
+        max_storage_needed = gp.quicksum(max_storage_by_location.values())
+
         # 优先使用统一成本配置中的MTJ储存设备成本
         storage_unit_cost = float(
             self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
             storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
         )
         self.cost_expressions['storage_equipment_cost'] = max_storage_needed * storage_unit_cost
-        self.cost_expressions['storage_operation_cost'] = gp.quicksum(
-            self.storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
+
+        # MTJ库存运营成本：使用平均库存（峰值/2）而非所有时刻库存总和
+        # 运营成本 = Σ(各地点最大库存/2) × 小时成本 × 总小时数 × 生命周期系数
+        average_storage_total = gp.quicksum(max_storage_by_location.values()) / 2.0
+        self.cost_expressions['storage_operation_cost'] = (
+            average_storage_total *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            self.total_hours *
+            lifecycle_operation_factor
+        )
+
+        # 5.1. 氢气储存设施投资成本 + 20年运营成本现值
+        # 创建辅助变量来捕获各FT设施的最大氢气库存量
+        max_h2_storage_by_location = {}
+        for candidate in self.ft_facility_candidates:
+            location_id = candidate['location_id']
+            max_var = self.model.addVar(
+                lb=0, ub=GRB.INFINITY,
+                vtype=GRB.CONTINUOUS,
+                name=f'max_h2_storage_{location_id}'
+            )
+            # 约束：max_var必须大于等于该FT设施在任何时刻的氢气库存量
+            for hour in range(self.total_hours + 1):
+                if (location_id, hour) in self.hydrogen_storage_vars:
+                    self.model.addConstr(
+                        max_var >= self.hydrogen_storage_vars[(location_id, hour)],
+                        name=f'max_h2_storage_constr_{location_id}_h{hour}'
+                    )
+            max_h2_storage_by_location[location_id] = max_var
+
+        # 总的氢气储存设备需求 = 各FT设施最大氢气库存量之和
+        max_h2_storage_needed = gp.quicksum(max_h2_storage_by_location.values())
+
+        # 优先使用统一成本配置中的氢气储存设备成本
+        h2_storage_unit_cost = float(
+            self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
+            storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
+        )
+        self.cost_expressions['h2_storage_investment'] = max_h2_storage_needed * h2_storage_unit_cost
+
+        # 氢气库存运营成本：使用平均库存（峰值/2）而非所有时刻库存总和
+        # 运营成本 = Σ(各地点最大氢气库存/2) × 小时成本 × 总小时数 × 生命周期系数
+        average_h2_storage_total = gp.quicksum(max_h2_storage_by_location.values()) / 2.0
+        self.cost_expressions['h2_storage_operation'] = (
+            average_h2_storage_total *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            self.total_hours *
+            lifecycle_operation_factor
         )
 
         # 6. FT反应器投资成本（一次性投资）
@@ -2164,6 +2242,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             self.cost_expressions['facility_investment_cost'] +
             self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
+            self.cost_expressions['h2_storage_investment'] +
             self.cost_expressions['ft_reactor_investment_cost'] +
             self.cost_expressions['ng_transport_investment'] +
             self.cost_expressions['saf_transport_investment']
@@ -2175,6 +2254,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             self.cost_expressions['production_cost'] +
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
+            self.cost_expressions['h2_storage_operation'] +
             self.cost_expressions['ft_reactor_operation_cost'] +
             self.cost_expressions['ft_production_cost'] +
             self.cost_expressions['ng_transport_operation'] +
@@ -2710,38 +2790,140 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info(f"为每个设施每周添加了4小时维护停机约束")
 
     def _add_inventory_balance_constraints(self):
-        """添加库存平衡约束"""
+        """添加库存平衡约束
+
+        【修改说明 v5.0】
+        SAF库存改为周积累模式：
+        - 生产地累积库存，不再每小时平摊出库
+        - 在每周的第167小时（最后一小时）统一出库运输到机场
+        - 库存平衡：仅在167h时出库，其他时间只生产累积
+        """
         for location in self.locations:
+            # 计算该location所有周的运输总量
+            weekly_transports = {}
+            for week in range(self.time_horizon_weeks):
+                weekly_transports[week] = gp.quicksum(
+                    self.transport_vars[(location, airport, week)]
+                    for airport in self.airports
+                    if (location, airport, week) in self.transport_vars
+                )
+
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
                 current_inventory = self.storage_vars[(location, hour + 1)]
                 previous_inventory = self.storage_vars[(location, hour)]
-                
+
                 # 当前小时总生产
                 production = gp.quicksum(
                     self.production_vars[(location, tech, hour)]
                     for tech in self.technologies
                     if (location, tech, hour) in self.production_vars
                 )
-                
-                # 出库量（用于运输的部分，按小时平摊）
-                outflow = gp.quicksum(
-                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
-                    for airport in self.airports
-                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
-                )
-                
+
+                # 出库量：仅在每周的第167小时（最后一小时）统一出库
+                current_week = hour // self.hours_per_week
+                hour_in_week = hour % self.hours_per_week
+
+                if hour_in_week == 167:  # 每周最后一小时统一出库
+                    outflow = weekly_transports.get(current_week, gp.LinExpr(0))
+                else:
+                    outflow = gp.LinExpr(0)
+
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
                     name=f"inventory_balance_{location}_{hour}"
                 )
-            
+
             # 初始库存为0
             self.model.addConstr(
                 self.storage_vars[(location, 0)] == 0,
                 name=f"initial_inventory_{location}"
             )
-    
+
+    def _add_hydrogen_inventory_balance_constraints(self):
+        """添加氢气库存平衡约束
+
+        【说明】
+        虽然Natural Gas模块使用FT一步法（天然气直接转SAF），但FT工艺内部会产生氢气。
+        添加氢气库存约束可以追踪FT工艺中氢气的流动和累积。
+
+        约束逻辑：
+        - 当前库存 = 上期库存 + 本期生产（FT内部制氢） - 本期消耗（FT合成SAF）
+        - 假设FT工艺的氢气产率和消耗率相匹配，库存变化应该很小或为0
+        - 初始库存为0
+        """
+        logger.info("=" * 60)
+        logger.info("添加氢气库存平衡约束（FT工艺内部氢气追踪）")
+        logger.info("=" * 60)
+
+        # 获取FT工艺的氢气相关参数
+        # 注：FT一步法中氢气是内部产物，这里假设一个典型的氢气产率和消耗率
+        # H2产率：天然气 → 氢气转化率（kg H2 / m³ NG）
+        h2_production_rate = 0.08  # 假设：1 m³ NG → 0.08 kg H2（典型值）
+
+        # H2消耗率：氢气 → SAF转化率（kg H2 / kg SAF）
+        # 根据FT合成反应：2H2 + CO → -CH2- + H2O
+        # 典型值约0.1-0.15 kg H2/kg SAF
+        h2_consumption_rate = 0.12  # kg H2 / kg SAF
+
+        constraint_count = 0
+        init_constraints = 0
+
+        # 为每个FT设施候选位置添加氢气库存平衡约束
+        for candidate in self.ft_facility_candidates:
+            location_id = candidate['location_id']
+
+            # 初始库存约束（hour 0 = 0）
+            if (location_id, 0) in self.hydrogen_storage_vars:
+                self.model.addConstr(
+                    self.hydrogen_storage_vars[(location_id, 0)] == 0,
+                    name=f"h2_init_inventory_{location_id}"
+                )
+                init_constraints += 1
+
+            for hour in range(self.total_hours):
+                # 上一时刻库存
+                prev_inventory = self.hydrogen_storage_vars.get((location_id, hour), gp.LinExpr(0))
+
+                # 当前时刻库存
+                curr_inventory = self.hydrogen_storage_vars.get((location_id, hour + 1), gp.LinExpr(0))
+
+                # H2生产量（从天然气消耗推算）
+                # 获取该位置该小时的天然气消耗（通过SAF生产量反推）
+                h2_production = gp.LinExpr(0)
+                if (location_id, hour) in self.production_vars:
+                    # 遍历所有技术（FT一步法可能有多种技术）
+                    for tech in self.technologies.keys():
+                        if (location_id, tech, hour) in self.production_vars:
+                            saf_production = self.production_vars[(location_id, tech, hour)]
+                            # 天然气消耗（m³/hour） = SAF生产 × ng_consumption_ratio
+                            ng_consumption_ratio = self.technologies[tech]['ng_consumption_ratio']
+                            ng_consumption = saf_production * ng_consumption_ratio
+                            # H2生产 = 天然气消耗 × h2_production_rate
+                            h2_production += ng_consumption * h2_production_rate
+
+                # H2消耗量（用于SAF合成）
+                h2_consumption = gp.LinExpr(0)
+                if (location_id, hour) in self.production_vars:
+                    for tech in self.technologies.keys():
+                        if (location_id, tech, hour) in self.production_vars:
+                            saf_production = self.production_vars[(location_id, tech, hour)]
+                            # H2消耗 = SAF生产 × h2_consumption_rate
+                            h2_consumption += saf_production * h2_consumption_rate
+
+                # 库存平衡约束
+                self.model.addConstr(
+                    curr_inventory == prev_inventory + h2_production - h2_consumption,
+                    name=f"h2_inv_balance_{location_id}_h{hour}"
+                )
+                constraint_count += 1
+
+        logger.info(f"添加了 {init_constraints} 个H2初始库存约束")
+        logger.info(f"添加了 {constraint_count} 个H2库存平衡约束")
+        logger.info(f"H2产率假设: {h2_production_rate} kg H2/m³ NG")
+        logger.info(f"H2消耗率假设: {h2_consumption_rate} kg H2/kg SAF")
+        logger.info("=" * 60)
+
     def _add_airport_demand_constraints(self):
         """添加机场周时间序列需求约束（软约束：允许缺货但有惩罚）"""
         for airport in self.airports:
