@@ -444,7 +444,7 @@ operational_parameters:
   operational_efficiency: 0.9
 solver_parameters:
   TimeLimit: 3600
-  MIPGap: 0.05
+  MIPGap: 0.01
   Threads: 128
 technologies:
   green_h2_co2_to_saf:

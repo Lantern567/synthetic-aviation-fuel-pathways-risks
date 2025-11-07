@@ -785,9 +785,12 @@ class CoalHydrogenSAFOptimizer:
         import os
         self.parallel_workers = override_params.get('parallel_workers', None)
         if self.parallel_workers is None:
-            # 自动检测: 使用所有CPU核心
-            self.parallel_workers = os.cpu_count() or 4
-        logger.info(f"并行计算workers数量: {self.parallel_workers}")
+            # 自动检测: 使用所有CPU核心，但最多128个
+            self.parallel_workers = min(os.cpu_count() or 4, 128)
+        else:
+            # 用户指定的worker数量也限制在128以内
+            self.parallel_workers = min(self.parallel_workers, 128)
+        logger.info(f"并行计算workers数量: {self.parallel_workers} (最大限制: 128)")
 
         # 煤炭供应管理器（v3.0煤炭气化路线）
         if CoalSupplyManager is not None:

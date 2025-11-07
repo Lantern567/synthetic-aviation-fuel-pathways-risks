@@ -775,9 +775,12 @@ class GreenHydrogenSupplyChainOptimizer:
         import os
         self.parallel_workers = override_params.get('parallel_workers', None)
         if self.parallel_workers is None:
-            # 自动检测: 使用所有CPU核心
-            self.parallel_workers = os.cpu_count() or 4
-        logger.info(f"并行计算workers数量: {self.parallel_workers}")
+            # 自动检测: 使用所有CPU核心，但最多128个
+            self.parallel_workers = min(os.cpu_count() or 4, 128)
+        else:
+            # 用户指定的worker数量也限制在128以内
+            self.parallel_workers = min(self.parallel_workers, 128)
+        logger.info(f"并行计算workers数量: {self.parallel_workers} (最大限制: 128)")
 
         # CO₂捕获源数据（绿氢供应链专用）
         self.co2_capture_sources = {}     # CO₂捕获源数据
@@ -2754,11 +2757,14 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"创建了 {len(self.methanol_inventory_vars)} 个甲醇库存变量")
 
         # 13. CO₂库存决策变量（用于时间尺度匹配：周级捕获→小时级消耗）
-        logger.info("创建CO₂库存变量（时间尺度匹配：周级供应→小时级消耗）")
+        logger.info("创建CO₂库存变量（时间尺度匹配：周级供应/捕获→小时级消耗）")
 
         self.co2_inventory_vars = {}  # CO₂库存变量 (小时级, kg CO₂)
 
-        # 在所有接收CO₂的甲醇生产位置创建库存变量
+        # 在所有SAF生产位置创建CO₂库存变量（包括接收外来CO₂或使用本地捕获CO₂）
+        co2_storage_locations = set()
+
+        # 收集所有甲醇生产位置
         for tech, tech_locations in self.mtj_locations.items():
             if 'green_h2_co2' not in tech:
                 continue
@@ -2767,14 +2773,19 @@ class GreenHydrogenSupplyChainOptimizer:
                 continue
 
             for methanol_loc in tech_locations:
-                # CO₂库存（小时级，用于周级到小时级的时间匹配）
-                for hour in range(self.total_hours + 1):  # +1 for final inventory
-                    var_name = f"co2_storage_{methanol_loc}_{hour}"
-                    self.co2_inventory_vars[(methanol_loc, hour)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
+                co2_storage_locations.add(methanol_loc)
+
+        # 为所有需要CO₂库存的位置创建变量
+        for co2_loc in co2_storage_locations:
+            # CO₂库存（小时级，用于周级到小时级的时间匹配）
+            for hour in range(self.total_hours + 1):  # +1 for final inventory
+                var_name = f"co2_storage_{co2_loc}_{hour}"
+                self.co2_inventory_vars[(co2_loc, hour)] = self.model.addVar(
+                    lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                )
 
         logger.info(f"创建了 {len(self.co2_inventory_vars)} 个CO₂库存变量")
+        logger.info(f"CO₂库存位置数量: {len(co2_storage_locations)}")
 
     def _create_constraints(self):
         """创建约束条件"""
@@ -2805,7 +2816,7 @@ class GreenHydrogenSupplyChainOptimizer:
         self._add_hydrogen_balance_constraints()
 
         # 8.1 电解槽最小产能约束（确保能满足氢气需求）
-        self._add_minimum_electrolyzer_capacity_constraint()
+        # self._add_minimum_electrolyzer_capacity_constraint()  # ⚠️ 已删除：过严约束导致不可行
 
         # 8.2. 氢气每日产量限制MTJ每日产量约束
         self._add_daily_hydrogen_mtj_constraints()
@@ -3071,23 +3082,53 @@ class GreenHydrogenSupplyChainOptimizer:
             if (location, airport, week) in self.transport_vars
         )
 
-        # 5. 储存设施投资成本 + 20年运营成本现值
-        max_storage_needed = gp.quicksum(
-            self.storage_vars[(location, hour)]
+        # 【修正】5. SAF储存设施投资成本 + 20年运营成本现值
+        # 使用线性化方式求每个位置库存的最大值
+
+        # 为每个位置创建SAF峰值库存辅助变量
+        saf_peak_inventory_vars = {}
+        for location in self.locations:
+            var_name = f"saf_peak_inventory_{location}"
+            saf_peak_inventory_vars[location] = self.model.addVar(
+                lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+            )
+
+        # 添加约束：峰值库存 >= 所有时刻的库存
+        # 如果使用两步法，SAF库存存储在methanol_inventory_vars中
+        if hasattr(self, 'methanol_inventory_vars'):
+            for location in self.locations:
+                for hour in range(self.total_hours + 1):
+                    if (location, hour) in self.methanol_inventory_vars:
+                        self.model.addConstr(
+                            saf_peak_inventory_vars[location] >= self.methanol_inventory_vars[(location, hour)],
+                            name=f"saf_peak_inventory_def_{location}_h{hour}"
+                        )
+
+        # SAF总峰值库存 = 所有位置的峰值库存之和
+        total_saf_peak_inventory = gp.quicksum(
+            saf_peak_inventory_vars[location]
             for location in self.locations
-            for hour in range(self.total_hours + 1)
         )
+
         # 优先使用统一成本配置中的MTJ储存设备成本
         storage_unit_cost = float(
             self.config.get('unified_costs', {}).get('storage', {}).get('mtj_equipment_cost_yuan_per_kg') or
             storage_cfg.get('equipment_unit_cost_yuan_per_kg', 10)
         )
-        self.cost_expressions['storage_equipment_cost'] = max_storage_needed * storage_unit_cost
-        self.cost_expressions['storage_operation_cost'] = gp.quicksum(
-            self.storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
+
+        # SAF储存设备投资 = 峰值库存 × 设备单价
+        self.cost_expressions['storage_equipment_cost'] = total_saf_peak_inventory * storage_unit_cost
+
+        # SAF储存运营成本 = 平均库存 × 运营单价 × 时间 × 生命周期系数
+        # SAF库存从0线性增长到峰值,平均库存 = 峰值/2
+        average_saf_inventory = total_saf_peak_inventory / 2
+        hours_per_week = self.config['basic_parameters']['hours_per_week']
+
+        self.cost_expressions['storage_operation_cost'] = (
+            average_saf_inventory *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            hours_per_week *
+            lifecycle_operation_factor  # 20年运营成本现值
         )
 
         # 6. 电解槽投资成本（一次性投资）
@@ -3146,25 +3187,54 @@ class GreenHydrogenSupplyChainOptimizer:
         ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
 
         # 9. 氢气储存投资 + 20年运营成本现值
-        max_h2_storage = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)]
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
+        # 使用线性化方式求每个位置库存的最大值
+
+        # 为每个氢气储存位置创建峰值库存辅助变量
+        h2_peak_inventory_vars = {}
+        for h_loc in self.hydrogen_locations:
+            var_name = f"h2_peak_inventory_{h_loc}"
+            h2_peak_inventory_vars[h_loc] = self.model.addVar(
+                lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+            )
+
+        # 添加约束：峰值库存 >= 所有时刻的库存
+        if hasattr(self, 'hydrogen_storage_vars'):
+            for h_loc in self.hydrogen_locations:
+                for hour in range(self.total_hours + 1):
+                    if (h_loc, hour) in self.hydrogen_storage_vars:
+                        self.model.addConstr(
+                            h2_peak_inventory_vars[h_loc] >= self.hydrogen_storage_vars[(h_loc, hour)],
+                            name=f"h2_peak_inventory_def_{h_loc}_h{hour}"
+                        )
+
+        # 氢气总峰值库存 = 所有位置的峰值库存之和
+        total_h2_peak_inventory = gp.quicksum(
+            h2_peak_inventory_vars[h_loc]
+            for h_loc in self.hydrogen_locations
         )
+
         # 优先使用统一成本配置中的氢气储存设备成本
         h2_storage_unit_cost = float(
             self.config.get('unified_costs', {}).get('storage', {}).get('hydrogen_equipment_cost_yuan_per_kg') or
             storage_cfg.get('hydrogen_equipment_unit_cost_yuan_per_kg', 20)
         )
-        self.cost_expressions['h2_storage_investment'] = max_h2_storage * h2_storage_unit_cost
-        self.cost_expressions['h2_storage_operation'] = gp.quicksum(
-            self.hydrogen_storage_vars[(location, hour)] *
-            self._calculate_total_storage_cost_per_kg_hour() * lifecycle_operation_factor  # 20年运营成本现值
-            for location in self.locations
-            for hour in range(self.total_hours + 1)
-            if (location, hour) in self.hydrogen_storage_vars
+
+        # 氢气储存设备投资 = 峰值库存 × 设备单价
+        self.cost_expressions['h2_storage_investment'] = total_h2_peak_inventory * h2_storage_unit_cost
+
+        # 氢气储存运营成本 = 平均库存 × 运营单价 × 时间 × 生命周期系数
+        # H₂库存从峰值线性递减到0,平均库存 = 峰值/2
+        average_h2_inventory = total_h2_peak_inventory / 2
+        hours_per_week = self.config['basic_parameters']['hours_per_week']
+
+        self.cost_expressions['h2_storage_operation'] = (
+            average_h2_inventory *
+            self._calculate_total_storage_cost_per_kg_hour() *
+            hours_per_week *
+            lifecycle_operation_factor
         )
+
+        logger.info("氢气储存成本计算（基于周供应量峰值库存）")
 
         # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
         self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化氢气运输成本中
@@ -3344,16 +3414,25 @@ class GreenHydrogenSupplyChainOptimizer:
         co2_capture_cost_cfg = self.config.get('unified_costs', {}).get('co2_capture', {})
         co2_capture_unit_cost = float(co2_capture_cost_cfg.get('capture_cost_yuan_per_kg', 0.3))  # 元/kg CO₂
 
-        # CO₂捕获成本 = Σ(CO₂运输量 × 单位成本)
-        # 【禁用罐车运输】仅计算管道运输的CO₂
-        self.cost_expressions['co2_capture_cost'] = gp.quicksum(
-            self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
-            # self.co2_truck_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0))) *  # 【禁用罐车运输】
-            co2_capture_unit_cost * lifecycle_operation_factor  # 周级运输量 × 单位成本 × 生命周期系数
-            for co2_source_id in self.co2_capture_sources
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+        # 【修正】CO₂捕获成本 = Σ(SAF产量 × CO₂消耗比 × 捕获单价)
+        # 原错误逻辑：基于运输量计算，导致本地生产时捕获成本为0
+        # 正确逻辑：基于实际消耗量计算，无论CO₂是运输来的还是本地捕获的
+        tech_key = 'green_h2_co2_to_saf'
+        if tech_key in self.technologies:
+            co2_consumption_ratio = self.technologies[tech_key]['co2_consumption_ratio']  # kg CO₂/kg SAF
+            self.cost_expressions['co2_capture_cost'] = gp.quicksum(
+                self.production_vars[(location, tech, hour)] *
+                co2_consumption_ratio *
+                co2_capture_unit_cost *
+                lifecycle_operation_factor  # SAF产量 × CO₂消耗比 × 捕获单价 × 生命周期系数
+                for location in self.locations
+                for tech in self.technologies
+                for hour in range(self.total_hours)
+                if (location, tech, hour) in self.production_vars and 'green_h2_co2' in tech
+            )
+        else:
+            self.cost_expressions['co2_capture_cost'] = gp.LinExpr(0)
+            logger.warning(f"未找到技术 {tech_key}，CO₂捕获成本设为0")
 
         # 11. CO₂管道运输成本（20年生命周期现值）
         # 从配置文件读取CO₂管道运输成本参数
@@ -3600,53 +3679,127 @@ class GreenHydrogenSupplyChainOptimizer:
         )
 
         # 14. 甲醇存储成本（20年生命周期现值）
+        # 【修正】基于周级甲醇生产量计算峰值库存
+        # 原错误：对所有小时库存求和，导致成本虚高
+        # 正确逻辑：设备投资和运营成本均基于峰值库存
+        # 注意：一步法直接制SAF无需甲醇库存，此处为兼容两步法保留
+
         # 从配置文件读取甲醇存储成本参数
         methanol_storage_cost_cfg = self.config.get('unified_costs', {}).get('methanol_storage', {})
         methanol_storage_equipment_cost = float(methanol_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 15))  # 元/kg
         methanol_storage_operation_cost = float(methanol_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.002))  # 元/(kg·hour)
 
-        # 甲醇储存设备投资成本
-        max_methanol_storage = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
-        self.cost_expressions['methanol_storage_investment'] = max_methanol_storage * methanol_storage_equipment_cost
+        # 检查是否有甲醇库存变量（一步法可能为空）
+        if hasattr(self, 'methanol_inventory_vars') and self.methanol_inventory_vars:
+            # 计算周甲醇生产总量作为峰值库存近似
+            methanol_locations_list = []
+            for tech, tech_locations in self.mtj_locations.items():
+                if 'green_h2_co2' in tech:
+                    methanol_locations_list.extend(tech_locations)
+            methanol_locations_list = list(set(methanol_locations_list))
 
-        # 甲醇储存运营成本
-        self.cost_expressions['methanol_storage_operation'] = gp.quicksum(
-            self.methanol_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+            # 周甲醇生产量 = Σ(每小时生产量)
+            weekly_methanol_production = gp.quicksum(
+                self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0))
+                for methanol_loc in methanol_locations_list
+                for hour in range(self.total_hours)
+                if (methanol_loc, hour) in self.methanol_production_vars
+            )
+
+            # 甲醇储存设备投资 = 周生产量（峰值库存）× 设备单价
+            self.cost_expressions['methanol_storage_investment'] = weekly_methanol_production * methanol_storage_equipment_cost
+
+            # 甲醇储存运营成本 = 平均库存 × 运营单价 × 时间 × 生命周期系数
+            # 甲醇库存从0线性增长到峰值,平均库存 = 峰值/2
+            average_methanol_inventory = weekly_methanol_production / 2
+            hours_per_week = self.config['basic_parameters']['hours_per_week']
+
+            self.cost_expressions['methanol_storage_operation'] = (
+                average_methanol_inventory *
+                methanol_storage_operation_cost *
+                hours_per_week *
+                lifecycle_operation_factor
+            )
+
+            logger.info("甲醇储存成本计算（设备投资基于峰值库存，运营成本基于平均库存）")
+        else:
+            # 一步法直接制SAF，无甲醇库存
+            self.cost_expressions['methanol_storage_investment'] = gp.LinExpr(0)
+            self.cost_expressions['methanol_storage_operation'] = gp.LinExpr(0)
+            logger.info("一步法直接制SAF，无甲醇库存成本")
 
 
         # 15. CO₂存储成本（20年生命周期现值）
+        # 【修正】基于周级CO₂供应量计算峰值库存
+        # 原错误：对所有小时库存求和，导致成本虚高（占总成本97%）
+        # 正确逻辑：设备投资和运营成本均基于峰值库存（周入库量）
+
         # 从配置文件读取CO₂存储成本参数
         co2_storage_cost_cfg = self.config.get('unified_costs', {}).get('co2_storage', {})
-        co2_storage_equipment_cost = float(co2_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 8))  # 元/kg，低于H2
-        co2_storage_operation_cost = float(co2_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.001))  # 元/(kg·hour)
+        co2_storage_equipment_cost = float(co2_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 5))  # 元/kg,默认5
 
-        # CO₂储存设备投资成本
-        max_co2_storage = gp.quicksum(
-            self.co2_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0))
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if (methanol_loc, hour) in self.co2_inventory_vars
-        )
-        self.cost_expressions['co2_storage_investment'] = max_co2_storage * co2_storage_equipment_cost
+        # 支持两种运营成本参数格式:
+        # 1. storage_cost_yuan_per_kg_per_day (元/(kg·天))
+        # 2. operation_cost_yuan_per_kg_hour (元/(kg·小时))
+        if 'storage_cost_yuan_per_kg_per_day' in co2_storage_cost_cfg:
+            daily_cost = float(co2_storage_cost_cfg['storage_cost_yuan_per_kg_per_day'])
+            co2_storage_operation_cost = daily_cost / 24  # 转换为小时单价
+        else:
+            co2_storage_operation_cost = float(co2_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.0002083))  # 元/(kg·hour)
 
-        # CO₂储存运营成本
-        self.cost_expressions['co2_storage_operation'] = gp.quicksum(
-            self.co2_inventory_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            co2_storage_operation_cost * lifecycle_operation_factor  # 小时级库存 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours + 1)
-            if (methanol_loc, hour) in self.co2_inventory_vars
+        # 收集所有甲醇/SAF生产位置
+        methanol_locations = []
+        for tech, tech_locations in self.mtj_locations.items():
+            if 'green_h2_co2' in tech:
+                methanol_locations.extend(tech_locations)
+        methanol_locations = list(set(methanol_locations))
+
+        # 计算每个位置的CO₂峰值库存（线性化求最大值）
+        # 为每个位置创建峰值库存辅助变量
+        co2_peak_inventory_vars = {}
+        for methanol_loc in methanol_locations:
+            var_name = f"co2_peak_inventory_{methanol_loc}"
+            co2_peak_inventory_vars[methanol_loc] = self.model.addVar(
+                lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+            )
+
+        logger.info(f"创建了 {len(co2_peak_inventory_vars)} 个CO₂峰值库存辅助变量")
+
+        # 添加约束：峰值库存 >= 所有时刻的库存
+        constraint_count = 0
+        for methanol_loc in methanol_locations:
+            for hour in range(self.total_hours + 1):
+                if (methanol_loc, hour) in self.co2_inventory_vars:
+                    self.model.addConstr(
+                        co2_peak_inventory_vars[methanol_loc] >= self.co2_inventory_vars[(methanol_loc, hour)],
+                        name=f"co2_peak_inventory_def_{methanol_loc}_h{hour}"
+                    )
+                    constraint_count += 1
+
+        logger.info(f"添加了 {constraint_count} 个CO₂峰值库存约束")
+
+        # CO₂总峰值库存 = 所有位置的峰值库存之和
+        total_co2_peak_inventory = gp.quicksum(
+            co2_peak_inventory_vars[methanol_loc]
+            for methanol_loc in methanol_locations
         )
+
+        # CO₂储存设备投资成本 = 峰值库存 × 设备单价
+        self.cost_expressions['co2_storage_investment'] = total_co2_peak_inventory * co2_storage_equipment_cost
+
+        # CO₂储存运营成本 = 平均库存 × 运营单价 × 时间 × 生命周期系数
+        # CO₂库存从峰值线性递减到0,平均库存 = 峰值/2
+        average_co2_inventory = total_co2_peak_inventory / 2
+        hours_per_week = self.config['basic_parameters']['hours_per_week']
+
+        self.cost_expressions['co2_storage_operation'] = (
+            average_co2_inventory *
+            co2_storage_operation_cost *
+            hours_per_week *
+            lifecycle_operation_factor
+        )
+
+        logger.info("CO₂储存成本计算（设备基于峰值库存，运营基于平均库存）")
 
 
         # 16. 短缺惩罚成本（20年生命周期现值）
@@ -4088,38 +4241,21 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("需求满足比例表达式创建完成")
 
     def _add_time_scale_matching_constraints(self):
-        """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
-        logger.info("添加改进的时间尺度匹配约束...")
-        
-        for location in self.locations:
-            for airport in self.airports:
-                for week in range(self.time_horizon_weeks):
-                    week_end_hour = (week + 1) * self.hours_per_week
-                    
-                    # 累积生产量：从项目开始到该周结束的所有生产
-                    cumulative_production = gp.quicksum(
-                        self.production_vars[(location, tech, hour)]
-                        for tech in self.technologies
-                        for hour in range(week_end_hour)
-                        if (location, tech, hour) in self.production_vars
-                    )
-                    
-                    # 累积运输量：从项目开始到该周的所有运输
-                    cumulative_transport = gp.quicksum(
-                        self.transport_vars[(location, airport, w)]
-                        for w in range(week + 1)
-                        if (location, airport, w) in self.transport_vars
-                    )
-                    
-                    # 当前库存水平（项目开始时库存为0）
-                    current_inventory = self.storage_vars[(location, week_end_hour)]
-                    
-                    # 改进约束：累积运输 ≤ 累积生产 - 当前库存
-                    # 这允许使用历史生产和释放库存来支持运输
-                    self.model.addConstr(
-                        cumulative_transport <= cumulative_production - current_inventory,
-                        name=f"cumulative_balance_{location}_{airport}_{week}"
-                    )
+        """【已禁用】累积平衡约束与逐小时库存平衡约束冗余
+
+        此函数原本用于确保累积运输不超过累积生产，但该逻辑已被
+        _add_inventory_balance_constraints() 中的逐小时库存平衡完全覆盖。
+
+        冗余原因：
+        1. 库存平衡约束已确保：每小时库存 = 上期库存 + 生产 - 出库
+        2. 初始库存 = 0，且只在167h出库，自然保证了不能运输未生产的SAF
+        3. 该累积约束反而造成过度限制，导致模型不可行
+
+        修复日期：2025-11-06
+        """
+        logger.info("跳过冗余的时间尺度匹配约束（已被库存平衡约束覆盖）")
+        # 不添加任何约束
+        pass
     
     def _add_production_capacity_constraints(self):
         """添加生产能力约束：基于产能决策变量"""
@@ -4298,32 +4434,44 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("氢气运输能力限制约束添加完成")
     
     def _add_inventory_balance_constraints(self):
-        """添加库存平衡约束"""
+        """添加库存平衡约束
+
+        修改：
+        - SAF出库只在每周167h（最后一小时）进行
+        - 不再按小时平摊周级运输量
+        """
+        logger.info("添加SAF库存平衡约束...")
+        logger.info("【新机制】SAF出库仅在每周167h进行")
+
         for location in self.locations:
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
                 current_inventory = self.storage_vars[(location, hour + 1)]
                 previous_inventory = self.storage_vars[(location, hour)]
-                
+
                 # 当前小时总生产
                 production = gp.quicksum(
                     self.production_vars[(location, tech, hour)]
                     for tech in self.technologies
                     if (location, tech, hour) in self.production_vars
                 )
-                
-                # 出库量（用于运输的部分，按小时平摊）
-                outflow = gp.quicksum(
-                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
-                    for airport in self.airports
-                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
-                )
-                
+
+                # 出库量（只在167h时出库）
+                week = hour // self.hours_per_week
+                outflow = gp.LinExpr(0)
+                if hour % self.hours_per_week == 167:  # 只在每周最后一小时出库
+                    outflow = gp.quicksum(
+                        self.transport_vars[(location, airport, week)]
+                        for airport in self.airports
+                        if (location, airport, week) in self.transport_vars
+                    )
+                    logger.debug(f"[调试][SAF库存] {location}: 在第{hour}h (week {week}) 出库SAF")
+
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
                     name=f"inventory_balance_{location}_{hour}"
                 )
-            
+
             # 初始库存为0
             self.model.addConstr(
                 self.storage_vars[(location, 0)] == 0,
@@ -4434,28 +4582,34 @@ class GreenHydrogenSupplyChainOptimizer:
                         )
                         
     def _add_hydrogen_balance_constraints(self):
-        """添加氢气平衡约束"""
+        """添加氢气平衡约束
+
+        修改：
+        - 氢气出库只在每周167h（最后一小时）进行
+        - 不再按小时平摊周级运输量
+        """
         logger.info("添加氢气平衡约束...")
-        
+        logger.info("【新机制】氢气出库仅在每周167h进行")
+
         for location in self.locations:
             location_type = self.locations[location]['type']
-            
+
             if location_type in ['solar_plant', 'wind_farm']:
-                # 氢气库存平衡（加入运输影响）
-                pipeline_outflow_per_hour = gp.LinExpr(0)
+                # 获取该位置的管道运输出库总量（周级）
+                pipeline_transport_outflow_total = gp.LinExpr(0)
                 if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                    pipeline_outflow_per_hour = gp.quicksum(
+                    pipeline_transport_outflow_total = gp.quicksum(
                         self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
                         for dest_loc in self.locations
                         if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                    ) / float(self.hours_per_week)
+                    )
                     connected_destinations = [
                         dest_loc for dest_loc in self.locations
                         if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
                     ]
                     if connected_destinations:
                         logger.debug(
-                            f"[调试][氢源库存] {location}: 管道出库平均/小时表达式 -> {pipeline_outflow_per_hour}, "
+                            f"[调试][氢源库存] {location}: 管道出库总量表达式 -> {pipeline_transport_outflow_total}, "
                             f"连接目的地数量 {len(connected_destinations)} "
                             f"示例 {connected_destinations[:5]}"
                         )
@@ -4464,8 +4618,27 @@ class GreenHydrogenSupplyChainOptimizer:
                 else:
                     logger.debug(f"[调试][氢源库存] {location}: 未创建管道运输变量")
 
+                # 获取该位置的管道运输入库总量（周级）- 新增
+                pipeline_transport_inflow_total = gp.LinExpr(0)
+                if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
+                    pipeline_transport_inflow_total = gp.quicksum(
+                        self.hydrogen_pipeline_transport_vars[(h_loc, location)]
+                        for h_loc in self.hydrogen_locations
+                        if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                    )
+                    connected_sources = [
+                        h_loc for h_loc in self.hydrogen_locations
+                        if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                    ]
+                    if connected_sources:
+                        logger.debug(
+                            f"[调试][氢源库存] {location}: 管道入库总量表达式, "
+                            f"连接来源数量 {len(connected_sources)} "
+                            f"示例 {connected_sources[:5]}"
+                        )
+
                 for hour in range(self.total_hours):
-                    # 当前氢气库存 = 上期库存 + 制氢生产 - 本地MTJ消耗 - 运输出库
+                    # 当前氢气库存 = 上期库存 + 制氢生产 + 管道入库 - 本地MTJ消耗 - 管道出库
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
                     h2_production = self.hydrogen_production_vars[(location, hour)]
@@ -4478,12 +4651,21 @@ class GreenHydrogenSupplyChainOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（按小时摊分周级运输量）
-                    h2_transport_outflow = pipeline_outflow_per_hour
+                    # 氢气管道入库（只在0h时入库）- 新增
+                    h2_transport_inflow = gp.LinExpr(0)
+                    if hour == 0:  # 只在每周第一个小时入库
+                        h2_transport_inflow = pipeline_transport_inflow_total
+                        logger.debug(f"[调试][氢源库存] {location}: 在第0h入库氢气")
 
-                    # 氢气库存平衡方程
+                    # 氢气管道出库（只在167h时出库）
+                    h2_transport_outflow = gp.LinExpr(0)
+                    if hour == 167:  # 只在每周最后一小时出库
+                        h2_transport_outflow = pipeline_transport_outflow_total
+                        logger.debug(f"[调试][氢源库存] {location}: 在第167h出库氢气")
+
+                    # 氢气库存平衡方程（新增管道入库项）
                     self.model.addConstr(
-                        current_h2_inventory == previous_h2_inventory + h2_production - h2_local_consumption - h2_transport_outflow,
+                        current_h2_inventory == previous_h2_inventory + h2_production + h2_transport_inflow - h2_local_consumption - h2_transport_outflow,
                         name=f"h2_balance_{location}_{hour}"
                     )
 
@@ -4503,6 +4685,7 @@ class GreenHydrogenSupplyChainOptimizer:
             # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡（包括CO₂捕获源）
             elif location_type in ['lng_terminal', 'airport', 'co2_capture']:
                 logger.info(f"为MTJ工厂位置添加氢气库存平衡: {location} (类型: {location_type})")
+                logger.info(f"【新机制】氢气入库仅在每周0h进行")
 
                 # 获取甲醇生产参数（从配置中读取）
                 # 查找使用 green_h2_co2 技术的配置
@@ -4514,17 +4697,22 @@ class GreenHydrogenSupplyChainOptimizer:
                         methanol_intermediate_ratio = tech_info.get('methanol_intermediate_ratio', 1.0)
                         break
 
+                # 获取该位置的管道运输总量（周级）
+                h2_inflow_total = gp.quicksum(
+                    self.hydrogen_pipeline_transport_vars[(h_loc, location)]
+                    for h_loc in self.hydrogen_locations
+                    if (h_loc, location) in self.hydrogen_pipeline_transport_vars
+                )
+
                 for hour in range(self.total_hours):
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
 
-                    # MTJ位置：氢气入库 = 管道运输到达量（周级运输量摊分到小时）
-                    # 周级变量平均分配到每小时
-                    h2_inflow = gp.quicksum(
-                        self.hydrogen_pipeline_transport_vars[(h_loc, location)] / float(self.hours_per_week)
-                        for h_loc in self.hydrogen_locations
-                        if (h_loc, location) in self.hydrogen_pipeline_transport_vars
-                    )
+                    # MTJ位置：氢气入库（只在0h时入库）
+                    h2_inflow = gp.LinExpr(0)
+                    if hour == 0:  # 只在每周第一个小时入库
+                        h2_inflow = h2_inflow_total
+                        logger.debug(f"[调试][MTJ库存] {location}: 在第0h入库氢气")
 
                     # MTJ消耗：甲醇生产消耗的氢气
                     # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
@@ -5589,6 +5777,10 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.error("模型不可行")
             # 计算IIS（不可行不可约子系统）来找出冲突约束
             logger.info("正在计算不可行不可约子系统(IIS)...")
+            # 设置IIS计算的时间限制为500秒
+            self.model.setParam('IISMethod', 0)  # 使用默认IIS方法
+            self.model.setParam('TimeLimit', 500)  # 限制IIS计算时间为500秒
+            logger.info("IIS计算时间限制设置为500秒")
             self.model.computeIIS()
             
             # 输出IIS信息
@@ -5964,8 +6156,9 @@ class GreenHydrogenSupplyChainOptimizer:
             print(f"总CO2运输量: {total_co2_transport:.2f} kg/week")
 
             # 统计聚类和独立点
+            # 修复：cluster_id 可能是字符串或整数，统一判断是否为None即可
             co2_clustered = sum(1 for info in solution['co2_transport'].values()
-                              if info['cluster_id'] is not None and info['cluster_id'] >= 0)
+                              if info['cluster_id'] is not None and not info.get('is_noise', False))
             co2_noise = sum(1 for info in solution['co2_transport'].values() if info.get('is_noise', False))
             print(f"  - 聚类路径: {co2_clustered} 条")
             print(f"  - 独立点路径: {co2_noise} 条")
@@ -7000,7 +7193,8 @@ class GreenHydrogenSupplyChainOptimizer:
             route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
 
             cluster_info = ""
-            if info.get("cluster_id") is not None and info.get("cluster_id") >= 0:
+            # 修复：cluster_id 可能是字符串或整数，只判断是否为None
+            if info.get("cluster_id") is not None and not info.get("is_noise", False):
                 cluster_center = info.get("cluster_center")
                 if cluster_center and len(cluster_center) >= 2:
                     cluster_info = f"CO2聚类{info.get('cluster_id')}_(中心:{cluster_center[0]:.4f},{cluster_center[1]:.4f})"
@@ -7661,6 +7855,8 @@ class GreenHydrogenSupplyChainOptimizer:
         for methanol_loc in methanol_locations:
             for week in range(self.time_horizon_weeks):
                 # 该周通过管道运输供应的CO₂总量（kg CO₂/week）
+                # 注意：co2_pipeline_supply已经包含了本地捕获（如果methanol_loc本身是CO₂捕获源）
+                # 通过co2_pipeline_transport_vars[(methanol_loc, methanol_loc)]表示
                 co2_pipeline_supply = gp.quicksum(
                     self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
                     for co2_source_id in self.co2_capture_sources
@@ -7678,7 +7874,8 @@ class GreenHydrogenSupplyChainOptimizer:
                 """
                 co2_truck_supply = gp.LinExpr(0)  # 【禁用罐车运输】
 
-                # 总CO₂供应（kg CO₂/week）（【禁用罐车运输】仅管道供应）
+                # 总CO₂供应（kg CO₂/week）= 管道供应
+                # co2_pipeline_supply已包含所有CO₂来源（包括本地捕获via自对自管道变量）
                 total_co2_supply = co2_pipeline_supply + co2_truck_supply
 
                 # 该周进入CO₂库存的量 = 周末库存 - 周初库存
@@ -7698,9 +7895,11 @@ class GreenHydrogenSupplyChainOptimizer:
                     if (methanol_loc, h) in self.methanol_production_vars
                 )
 
-                # CO₂供应平衡约束：周运输量 = 周库存增量 + 周内消耗量
+                # CO₂供应平衡约束：周运输量 >= 周库存增量 + 周内消耗量
+                # 【修复】改为 >= 以解决"同一变量被多周等式约束"的不可行问题
+                # 允许运输量大于实际需求（多余部分可能损耗或浪费）
                 self.model.addConstr(
-                    total_co2_supply == co2_inventory_inflow + weekly_consumption,
+                    total_co2_supply >= co2_inventory_inflow + weekly_consumption,
                     name=f"co2_supply_balance_{methanol_loc}_week{week}"
                 )
 
@@ -7710,11 +7909,14 @@ class GreenHydrogenSupplyChainOptimizer:
         """添加CO₂捕获容量上限约束
 
         约束逻辑：
-        - 每个CO₂捕获源每周的总运输量不能超过其捕获容量
+        - 每个CO₂捕获源每周的总使用量不能超过其捕获容量
         - co2_pipeline_transport_vars[(co2_source, methanol_loc)] 表示从捕获源到甲醇厂的运输量（kg/week）
-        - 约束：sum(运输到各地的CO₂) <= co2_capture_capacity_ton_per_week * 1000
+        - 如果捕获源本身也是SAF生产地，co2_pipeline_transport_vars[(co2_source, co2_source)]表示本地捕获并直接使用的量
+        - 约束：sum(运输到各地的CO₂，包括自对自) <= co2_capture_capacity_ton_per_week * 1000
+
+        注意：不需要单独添加local_co2_consumption，因为本地使用已通过自对自管道变量表示
         """
-        logger.info("添加CO₂捕获容量上限约束...")
+        logger.info("添加CO₂捕获容量上限约束（包含本地使用）...")
 
         if not hasattr(self, 'co2_capture_sources') or not self.co2_capture_sources:
             logger.warning("未找到CO₂捕获源数据，跳过容量约束")
@@ -7731,6 +7933,17 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.warning("未找到甲醇生产位置，跳过CO₂捕获容量约束")
             return
 
+        # 获取化学计量比用于计算本地消耗
+        tech_key = 'green_h2_co2_to_saf'
+        if tech_key in self.technologies:
+            tech_info = self.technologies[tech_key]
+            co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
+            methanol_to_saf_ratio = tech_info['methanol_to_saf_ratio']  # kg SAF / kg 甲醇
+        else:
+            logger.warning(f"未找到技术 {tech_key}，无法计算本地CO₂消耗")
+            co2_consumption_ratio = 0
+            methanol_to_saf_ratio = 1.0
+
         constraint_count = 0
         for co2_source_id, co2_source_data in self.co2_capture_sources.items():
             # 获取该捕获源的周捕获容量（吨/周）
@@ -7743,15 +7956,18 @@ class GreenHydrogenSupplyChainOptimizer:
             # 将容量转换为 kg/week
             capture_capacity_kg_per_week = capture_capacity_ton_per_week * 1000
 
-            # 计算从该捕获源运输到所有甲醇厂的总量（周级，但所有周共享一个决策变量）
-            # 注意：co2_pipeline_transport_vars 是周级变量，键为 (co2_source_id, methanol_loc)
+            # 1. 计算从该捕获源运输到所有甲醇厂的总量（周级）
+            # 注意：这已经包含了自对自运输co2_pipeline_transport_vars[(co2_source_id, co2_source_id)]
+            # 如果该捕获源本身也是SAF生产地
             total_co2_transport_from_source = gp.quicksum(
                 self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
                 for methanol_loc in methanol_locations
                 if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
             )
 
-            # 添加容量上限约束
+            # 添加容量上限约束：所有管道出库量（包括自对自） <= 捕获容量
+            # 注意：total_co2_transport_from_source已经包含本地使用（通过自对自管道变量）
+            # 不需要再单独添加local_co2_consumption，否则会重复计数
             self.model.addConstr(
                 total_co2_transport_from_source <= capture_capacity_kg_per_week,
                 name=f"co2_capture_capacity_{co2_source_id}"
@@ -7935,16 +8151,18 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"添加了 {nonneg_constraints} 个甲醇库存非负约束")
 
     def _add_co2_inventory_balance_constraints(self):
-        """添加CO₂库存平衡约束（时间尺度匹配：周级供应→小时级消耗）
+        """添加CO₂库存平衡约束（时间尺度匹配：周级供应/捕获→小时级消耗）
 
         约束逻辑：
-        - 当前库存 = 上期库存 + 本期供应 - 本期消耗
-        - 供应：周级决策（co2_pipeline_transport + co2_truck_transport）
+        - 当前库存 = 上期库存 + 本期供应 + 本地捕获 - 本期消耗
+        - 供应：周级决策（co2_pipeline_transport，从其他捕获源接收）
+        - 本地捕获：如果该位置是CO₂捕获源，在0h时入库周捕获量
         - 消耗：小时级消耗（用于甲醇生产）
         - 初始库存：0
-        - 时间尺度匹配：周供应在每周的第一个小时入库，然后逐小时消耗
+        - 修改：CO2入库只在每周0h进行，不再按小时平摊
         """
         logger.info("添加CO₂库存平衡约束（时间尺度匹配）...")
+        logger.info("【新机制】CO₂入库（管道+本地捕获）仅在每周0h进行")
 
         # 获取green_h2_co2_to_saf技术的化学计量比
         tech_key = 'green_h2_co2_to_saf'
@@ -7973,6 +8191,20 @@ class GreenHydrogenSupplyChainOptimizer:
                 )
                 constraint_count += 1
 
+            # 获取该位置的CO₂总供应量（周级决策变量）
+            # 包括：
+            # 1. 从其他CO₂捕获源通过管道运输来的CO₂
+            # 2. 如果本地是CO₂捕获源，通过co2_pipeline_transport_vars[(methanol_loc, methanol_loc)]表示本地捕获量
+            co2_supply_total = gp.quicksum(
+                self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
+                for co2_source_id in self.co2_capture_sources
+                if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
+            )
+
+            # 注意：co2_supply_total已经包含了所有CO₂来源（包括本地捕获）
+            # 如果methanol_loc本身是CO₂捕获源，会有co2_pipeline_transport_vars[(methanol_loc, methanol_loc)]
+            # 这个变量代表本地捕获并直接使用的CO₂量，是决策变量
+
             # 库存平衡约束（hour 1 到 total_hours）
             for hour in range(1, self.total_hours + 1):
                 if (methanol_loc, hour) not in self.co2_inventory_vars:
@@ -7981,31 +8213,20 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 上期库存
                 prev_inventory = self.co2_inventory_vars[(methanol_loc, hour - 1)]
 
-                # 本期供应（kg CO₂/hour）：将周级运输量按小时均匀摊销
-                week = (hour - 1) // self.hours_per_week
+                # 本期供应（只在0h时入库）
                 supply = gp.LinExpr(0)
-                if week < self.time_horizon_weeks:
-                    # 【禁用罐车运输】仅计算管道运输的CO₂供应
-                    supply += gp.quicksum(
-                        self.co2_pipeline_transport_vars[(co2_source_id, methanol_loc)]
-                        for co2_source_id in self.co2_capture_sources
-                        if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
-                    ) / float(self.hours_per_week)
-                    # 保留罐车结构便于未来恢复
-                    """
-                    supply += gp.quicksum(
-                        self.co2_truck_transport_vars[(co2_source_id, methanol_loc)]
-                        for co2_source_id in self.co2_capture_sources
-                        if (co2_source_id, methanol_loc) in self.co2_truck_transport_vars
-                    ) / float(self.hours_per_week)
-                    """
+                if hour == 1:  # hour 1 = 第0小时的下一个状态，表示第0h时入库
+                    # CO₂供应总量（包括从其他源运输来的 + 本地捕获的）
+                    # co2_supply_total已经包含了co2_pipeline_transport_vars[(methanol_loc, methanol_loc)]（如果存在）
+                    supply = co2_supply_total
+                    logger.debug(f"[调试][CO2库存] {methanol_loc}: 在第0h入库CO₂（总供应量，含本地捕获和管道运输）")
 
                 # 本期消耗（用于甲醇生产，kg CO₂/hour）
                 consumption = 0
                 if (methanol_loc, hour - 1) in self.methanol_production_vars:
                     methanol_prod = self.methanol_production_vars[(methanol_loc, hour - 1)]
                     # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg CO₂ / kg SAF)
-                    consumption = methanol_prod * (1.0 / methanol_intermediate_ratio) * co2_consumption_ratio
+                    consumption = methanol_prod * methanol_to_saf_ratio * co2_consumption_ratio
 
                 # 库存平衡：当前库存 = 上期库存 + 供应 - 消耗
                 self.model.addConstr(

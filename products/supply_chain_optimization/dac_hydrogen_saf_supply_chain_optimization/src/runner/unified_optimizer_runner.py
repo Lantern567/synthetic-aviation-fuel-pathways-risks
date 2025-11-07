@@ -221,11 +221,11 @@ class UnifiedSAFOptimizer:
             self.logger.warning("Could not detect CPU count, defaulting to 4 threads")
             return 4
 
-        # 推荐策略:保留2核给操作系统,但至少使用1核
-        recommended = max(1, available_cpus - 2)
+        # 推荐策略:保留2核给操作系统,但至少使用1核，最多128核
+        recommended = min(max(1, available_cpus - 2), 128)
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
-        self.logger.info(f"Recommended threads: {recommended} (leaving 2 cores for system)")
+        self.logger.info(f"Recommended threads: {recommended} (leaving 2 cores for system, max 128)")
 
         return recommended
 

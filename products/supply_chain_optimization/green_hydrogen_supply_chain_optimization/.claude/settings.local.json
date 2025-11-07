@@ -1,0 +1,11 @@
+{
+  "enabledMcpjsonServers": [
+    "context7",
+    "sequential-thinking",
+    "playwright",
+    "mcp-server-time",
+    "mcp-server-firecrawl",
+    "desktop-commander",
+    "github"
+  ]
+}

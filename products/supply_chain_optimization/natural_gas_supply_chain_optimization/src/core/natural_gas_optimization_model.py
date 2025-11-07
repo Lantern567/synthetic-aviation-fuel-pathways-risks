@@ -6449,54 +6449,49 @@ class NaturalGasSupplyChainOptimizer:
             raise
 
     def _load_lng_terminal_data(self):
-        """加载LNG接收站数据（使用预处理的容量数据，支持缓存）"""
+        """加载LNG接收站数据（使用预处理的容量数据）"""
         try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
             project_root = get_project_base_dir()
-            
+
             # 优先使用预处理的容量数据文件
-            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping", 
-                                           "gis_data_scraper", "scraped_gis_data", 
+            preprocessed_file = os.path.join(project_root, "products", "gis_energy_mapping",
+                                           "gis_data_scraper", "scraped_gis_data",
                                            "lng_terminals_with_capacity.xlsx")
-            
+
             if os.path.exists(preprocessed_file):
                 logger.info("使用预处理的LNG接收站容量数据")
                 lng_df = pd.read_excel(preprocessed_file)
                 # 过滤北京500km范围内的LNG接收站
                 lng_df = lng_df[lng_df.apply(
                     lambda row: is_within_beijing_range(
-                        float(row.get('Lat', 0)), 
-                        float(row.get('Long', 0)), 
+                        float(row.get('Lat', 0)),
+                        float(row.get('Long', 0)),
                         500
                     ), axis=1
                 )]
                 logger.info(f"预处理数据过滤后: {len(lng_df)} 条LNG接收站记录")
             else:
-                # 备用方案：使用原有数据文件
+                # 备用方案：直接读取原有数据文件
                 logger.warning("预处理容量数据文件不存在，使用原有数据")
                 lng_file = os.path.join(project_root, "products", "gis_energy_mapping", "gis_data_scraper", "scraped_gis_data", "lng_terminals.csv")
                 if not os.path.exists(lng_file):
                     logger.error(f"LNG接收站数据文件不存在: {lng_file}")
                     raise FileNotFoundError(f"无法找到LNG接收站数据文件: {lng_file}")
-                
-                # 检查缓存是否有效
-                if cache_manager.is_cache_valid('lng_terminals', lng_file):
-                    logger.info("使用缓存的LNG接收站数据（500km过滤）")
-                    cached_df = cache_manager.load_filtered_data('lng_terminals')
-                    if cached_df is not None:
-                        lng_df = cached_df
-                        logger.info(f"从缓存加载LNG接收站数据: {len(lng_df)} 条记录")
-                    else:
-                        logger.warning("缓存加载失败，执行完整加载")
-                        lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
-                else:
-                    logger.info("缓存无效或不存在，执行完整加载和过滤")
-                    lng_df = self._load_and_filter_lng_data(lng_file, cache_manager)
+
+                # 直接加载CSV文件
+                logger.info("直接加载LNG接收站数据")
+                lng_df = pd.read_csv(lng_file)
+                logger.info(f"加载LNG接收站原始数据: {len(lng_df)} 条记录")
+
+                # 过滤北京500km范围内的LNG接收站
+                lng_df = lng_df[lng_df.apply(
+                    lambda row: is_within_beijing_range(
+                        float(row.get('Lat', 0)) if pd.notna(row.get('Lat')) else 0,
+                        float(row.get('Long', 0)) if pd.notna(row.get('Long')) else 0,
+                        500
+                    ), axis=1
+                )]
+                logger.info(f"500km范围内的LNG接收站: {len(lng_df)} 条记录")
             
             # 处理过滤后的数据
             for idx, row in lng_df.iterrows():
