@@ -46,7 +46,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # 导入核心优化模型
-from src.core.green_hydrogen_optimization_model import GreenHydrogenSupplyChainOptimizer
+from src.core.coal_hydrogen_optimization_model import CoalHydrogenSAFOptimizer
 
 
 class UnifiedSAFOptimizer:

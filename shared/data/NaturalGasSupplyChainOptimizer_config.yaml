@@ -88,9 +88,12 @@ capacity_limits:
                                            # 作用：用于逻辑约束的线性化表示
 
   # 制氢设施容量 - Electrolyzer Capacity
-  electrolyzer_max_capacity_kg_per_hour: 2000  # 电解槽最大产能(kg/h) | Max electrolyzer capacity (kg H₂/hour)
+  electrolyzer_max_capacity_kg_per_hour: 100000  # 电解槽最大产能(kg/h) | Max electrolyzer capacity (kg H₂/hour)
                                            # 单个电解槽设施的最大氢气生产能力
                                            # 基于当前主流大型电解槽技术参数
+
+  electrolyzer_min_capacity_kg_per_hour: 100  # 电解槽最小经济规模(kg/h) | Min economic scale (kg H₂/hour)
+                                           # 电解槽的最小经济运行规模
 
   # 氢气运输容量 - Hydrogen Transport Capacity
   hydrogen_pipeline_max_daily_capacity_kg: 50000  # 氢气管道日最大容量(kg/天) | Max H₂ pipeline daily capacity (kg/day)
@@ -104,6 +107,11 @@ capacity_limits:
   # MTJ航煤生产容量 - MTJ Fuel Production Capacity
   mtj_max_capacity_kg_per_hour: 100000     # MTJ设施最大产能(kg/h) | Max MTJ production capacity (kg/hour)
                                            # 单个MTJ航煤生产设施的最大产能
+
+  mtj_min_annual_production_kg: 100        # MTJ设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                           # 如果建设MTJ设施，必须达到的最小年产量
+                                           # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                           # 修正日期：2025-11-08 (新增最小规模约束)
 
   # MTJ设施容量估算 - MTJ Facility Capacity Estimates by Location Type
   mtj_capacity_estimates:
@@ -288,7 +296,7 @@ cost_parameters:
                                            # 电能转化为氢能的效率
                                            # 0.8 = 80%能量转换效率（当前主流技术水平）
 
-    electrolysis_power_consumption: 45     # 电解能耗(kWh/kgH₂) | Power consumption (kWh/kg H₂)
+    electrolysis_power_consumption: 55     # 电解能耗(kWh/kgH₂) | Power consumption (kWh/kg H₂)
                                            # 生产1kg氢气所需的电力消耗
                                            # 45 kWh/kg是当前先进碱性/PEM电解槽的典型值
 
@@ -306,6 +314,17 @@ cost_parameters:
       utilization_rate: 0.8                # 车辆利用率 | Vehicle utilization rate
                                            # 考虑空驶、等待等因素的有效利用率
 
+  # 可再生能源电力价格 - Renewable Energy Prices
+  renewable_energy:
+    wind_power_price_yuan_per_kwh: 0.35    # 风电价格(元/kWh) | Wind power price (yuan/kWh)
+                                           # 基于2025年中国风电上网电价
+
+    solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
+                                           # 基于2025年中国光伏上网电价
+
+    grid_electricity_price_yuan_per_kwh: 0.60  # 电网电价(元/kWh) | Grid electricity price
+                                           # 工业用电价格（备用电源）
+
   # 原材料价格 - Raw Material Prices
   raw_materials:
     natural_gas_price_yuan_per_m3: 4.2     # 天然气价格(元/m³) | Natural gas price (yuan/m³)
@@ -314,9 +333,9 @@ cost_parameters:
     hydrogen_market_price_yuan_per_kg: 30  # 氢气市场价格(元/kg) | Hydrogen market price (yuan/kg)
                                            # 外购氢气的市场价格（如不自产）
 
-    renewable_electricity_cost_yuan_per_mwh: 500  # 可再生电力成本(元/MWh) | Renewable electricity cost (yuan/MWh)
-                                           # 风电/光伏上网电价
-                                           # 500元/MWh = 0.5元/kWh
+    renewable_electricity_cost_yuan_per_mwh: 350  # 可再生电力成本(元/MWh) | Renewable electricity cost (yuan/MWh)
+                                           # 统一修正：从500改为350 (0.35元/kWh)，与风电价格保持一致
+                                           # 用于成本计算的平均可再生能源电价
 
   # 缺货惩罚 - Shortage Penalty
   shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
@@ -607,15 +626,18 @@ equipment_raw_costs:
     capex_raw: 800000                      # 电解槽单位产能投资(元/(kg H₂/hour)) | Electrolyzer unit capacity CAPEX (yuan/(kg H₂/hour))
                                            # 每kg/h产能需要80万元投资，包含设备采购、安装和调试
 
-    opex_raw: 800                          # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
+    opex_raw: 200000                       # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
                                            # 包括维护、备件、人工等固定运营费用
+                                           # 修正：从800元/年改为200,000元/年，与其他项目保持一致(OPEX/CAPEX=25%)
 
   # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 1500                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+    capex_raw: 2000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
                                            # 包括储罐、管道、泵等设备
+                                           # 统一修正：与其他项目保持一致
 
-    opex_raw: 20                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+    opex_raw: 30                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+                                           # 统一修正：与其他项目保持一致
 
 # =============================================================================
 # 设施平准化成本参数 (Facility LCOE Parameters)
@@ -805,14 +827,17 @@ technologies:
     efficiency: 0.85                       # 转换效率 | Conversion efficiency
                                            # 整体能量转换效率85%
 
-    ng_consumption_ratio: 0.8              # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg product)
-                                           # 生产1kg MTJ需要0.8m³天然气
+    ng_consumption_ratio: 1.8              # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg product)
+                                           # 生产1kg MTJ需要1.8m³天然气
+                                           # 修正日期：2025-11-07 (从0.8更新为1.8)
 
-    h2_consumption_ratio: 0.12             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
-                                           # 生产1kg MTJ需要0.12kg氢气
+    h2_consumption_ratio: 0.05             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
+                                           # 生产1kg MTJ需要0.05kg氢气
+                                           # 修正日期：2025-11-07 (从0.12更新为0.05)
 
-    methanol_intermediate_ratio: 1.2       # 甲醇中间体比率 | Methanol intermediate ratio
-                                           # 生产1kg MTJ需要1.2kg甲醇中间体
+    methanol_intermediate_ratio: 2.6       # 甲醇中间体比率 | Methanol intermediate ratio
+                                           # 生产1kg MTJ需要2.6kg甲醇中间体
+                                           # 修正日期：2025-11-07 (从1.2更新为2.6)
 
     hydrogen_transport_required: true      # 是否需要氢气运输 | Hydrogen transport required
                                            # true: 需要外部氢气供应和运输

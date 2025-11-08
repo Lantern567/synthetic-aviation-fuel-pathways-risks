@@ -29,8 +29,8 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.lines import Line2D
 
-# 配置中文字体
-matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'Arial Unicode MS']
+# 配置中文字体 - 支持Linux和Windows系统,移除DejaVu Sans避免回退
+matplotlib.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'Noto Sans CJK TC', 'WenQuanYi Zen Hei', 'Microsoft YaHei', 'SimHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
 
 # 添加frykit路径
@@ -69,25 +69,25 @@ class ThreeModulesMapVisualizer:
 
         logger.info(f"输出目录: {self.session_dir}")
 
-        # 模块配置
+        # 模块配置 - 使用自动查找最新文件
         self.modules = {
             'Coal Hydrogen': {
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',
-                'h2_transport_file': '../coal_hydrogen_saf_optimization/results/hydrogen_transport_plan_20251106_113130.csv',
-                'mtj_transport_file': '../coal_hydrogen_saf_optimization/results/mtj_transport_plan_20251106_113130.csv'
+                'h2_transport_pattern': '../coal_hydrogen_saf_optimization/results/hydrogen_transport_plan_*.csv',
+                'mtj_transport_pattern': '../coal_hydrogen_saf_optimization/results/mtj_transport_plan_*.csv'
             },
             'DAC Hydrogen': {
                 'name_cn': 'DAC制氢',
                 'color': '#3498DB',
-                'h2_transport_file': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/hydrogen_transport_plan_20251106_015557.csv',
-                'mtj_transport_file': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/mtj_transport_plan_20251106_015557.csv'
+                'h2_transport_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/hydrogen_transport_plan_*.csv',
+                'mtj_transport_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/mtj_transport_plan_*.csv'
             },
             'Natural Gas': {
                 'name_cn': '天然气',
                 'color': '#2ECC71',
-                'h2_transport_file': '../natural_gas_supply_chain_optimization/results/hydrogen_transport_plan_20251106_115306.csv',
-                'mtj_transport_file': '../natural_gas_supply_chain_optimization/results/mtj_transport_plan_20251106_115306.csv'
+                'h2_transport_pattern': '../natural_gas_supply_chain_optimization/results/hydrogen_transport_plan_*.csv',
+                'mtj_transport_pattern': '../natural_gas_supply_chain_optimization/results/mtj_transport_plan_*.csv'
             }
         }
 
@@ -121,27 +121,38 @@ class ThreeModulesMapVisualizer:
             }
 
             try:
-                # 加载氢气运输数据
-                if config['h2_transport_file']:
-                    h2_file = (base_dir / config['h2_transport_file']).resolve()
-                    if h2_file.exists():
+                # 加载氢气运输数据（自动查找最新文件）
+                import glob
+                if 'h2_transport_pattern' in config:
+                    h2_pattern = (base_dir / config['h2_transport_pattern']).resolve()
+                    h2_files = sorted(glob.glob(str(h2_pattern)), reverse=True)
+
+                    if h2_files:
+                        h2_file = Path(h2_files[0])
+                        logger.info(f"  使用最新的氢气运输文件: {h2_file.name}")
                         module_data['h2_transport'] = pd.read_csv(h2_file, encoding='utf-8')
                         logger.info(f"  ✓ 氢气运输路线: {len(module_data['h2_transport'])} 条")
                     else:
-                        logger.warning(f"  ⚠ 氢气运输文件不存在: {h2_file}")
+                        logger.warning(f"  ⚠ 未找到氢气运输文件: {config['h2_transport_pattern']}")
 
-                # 加载SAF运输数据
-                mtj_file = (base_dir / config['mtj_transport_file']).resolve()
-                if mtj_file.exists():
+                # 加载SAF运输数据（自动查找最新文件）
+                mtj_pattern = (base_dir / config['mtj_transport_pattern']).resolve()
+                mtj_files = sorted(glob.glob(str(mtj_pattern)), reverse=True)
+
+                if mtj_files:
+                    mtj_file = Path(mtj_files[0])
+                    logger.info(f"  使用最新的SAF运输文件: {mtj_file.name}")
                     module_data['mtj_transport'] = pd.read_csv(mtj_file, encoding='utf-8')
                     logger.info(f"  ✓ SAF运输路线: {len(module_data['mtj_transport'])} 条")
                 else:
-                    logger.warning(f"  ⚠ SAF运输文件不存在: {mtj_file}")
+                    logger.warning(f"  ⚠ 未找到SAF运输文件: {config['mtj_transport_pattern']}")
 
                 self.transport_data[module_name] = module_data
 
             except Exception as e:
                 logger.error(f"  ✗ 加载失败: {e}")
+                import traceback
+                traceback.print_exc()
                 raise
 
         logger.info("\n" + "=" * 60)
@@ -162,9 +173,9 @@ class ThreeModulesMapVisualizer:
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(projection=self.map_crs)
 
-        # 设置地图范围 - 京津冀及周边地区
+        # 设置地图范围 - 京津冀及周边地区,扩大到44°N
         if extent is None:
-            extent = [111, 121, 35, 43]
+            extent = [111, 121, 35, 44]
 
         min_lon, max_lon, min_lat, max_lat = extent
 
@@ -465,7 +476,9 @@ class ThreeModulesMapVisualizer:
                           label=f'{pipeline_names[pipeline_type]} ({count}段)')
                 )
 
-        ax.legend(handles=legend_elements, loc='upper left', fontsize=10, framealpha=0.9)
+        # 将图例放到图外右侧
+        ax.legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1.02, 0.5),
+                 fontsize=10, framealpha=0.9)
 
         # 添加标题
         h2_count = len(data['h2_transport']) if data['h2_transport'] is not None else 0
@@ -477,7 +490,8 @@ class ThreeModulesMapVisualizer:
                 f"H₂路线: {h2_count} 条 | SAF路线: {mtj_count} 条 | 管道: {total_pipelines} 段")
         ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
 
-        plt.tight_layout()
+        # 调整布局以容纳外部图例
+        plt.tight_layout(rect=[0, 0, 0.85, 1])  # 为右侧图例留出空间
 
         # 保存图片
         output_path = self.session_dir / f"transport_map_{module_name.replace(' ', '_').lower()}.png"
@@ -489,14 +503,15 @@ class ThreeModulesMapVisualizer:
         """创建三模块对比地图"""
         logger.info("\n生成三模块对比地图...")
 
-        fig = plt.figure(figsize=(20, 16))
+        # 创建2x2子图,为图例留出专门空间
+        fig = plt.figure(figsize=(22, 16))
 
         # 为每个模块创建子图
         for idx, (module_name, config) in enumerate(self.modules.items(), 1):
             ax = fig.add_subplot(2, 2, idx, projection=self.map_crs)
 
-            # 设置地图范围
-            ax.set_extent([111, 121, 35, 43], crs=self.data_crs)
+            # 设置地图范围 - 扩大到44°N
+            ax.set_extent([111, 121, 35, 44], crs=self.data_crs)
 
             # 添加中国地图底图
             fplt.add_cn_province(ax, lw=0.5, ec='gray', fc='none', alpha=0.5)
@@ -622,13 +637,16 @@ class ThreeModulesMapVisualizer:
             Line2D([0], [0], marker='o', color='w', markerfacecolor='black',
                    markersize=8, label='设施 Facilities')
         ]
-        ax.legend(handles=legend_elements, loc='upper left', fontsize=10, framealpha=0.9)
+        # 将图例放到图外右侧
+        ax.legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1.02, 0.5),
+                 fontsize=10, framealpha=0.9)
 
         # 添加标题
         ax.set_title('三模块SAF供应链综合运输网络\nThree Modules SAF Supply Chain Integrated Transport Network',
                     fontsize=14, fontweight='bold', pad=20)
 
-        plt.tight_layout()
+        # 调整布局以容纳外部图例
+        plt.tight_layout(rect=[0, 0, 0.85, 1])  # 为右侧图例留出空间
 
         # 保存图片
         output_path = self.session_dir / "transport_map_combined.png"

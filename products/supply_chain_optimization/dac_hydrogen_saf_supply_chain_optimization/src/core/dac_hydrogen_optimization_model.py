@@ -3140,6 +3140,44 @@ class DACHydrogenSAFOptimizer:
         # 15. 平准化成本约束
         self._add_levelized_cost_constraint()  # 已修复门槛值配置，重新启用
 
+        # 16. SAF设施最小产量约束
+        self._add_minimum_production_constraints()
+
+    def _add_minimum_production_constraints(self):
+        """添加SAF设施最小产量约束：如果建设设施，年产量必须达到最小值"""
+        logger.info("添加SAF设施最小产量约束...")
+
+        # 从配置读取最小年产量
+        min_annual_production = self.config.get('capacity_limits', {}).get('saf_min_annual_production_kg', 100)
+        logger.info(f"SAF最小年产量配置: {min_annual_production} kg/年")
+
+        # 计算生命周期系数（按1周时间范围调整到年产量）
+        weeks_per_year = 52
+        annual_multiplier = weeks_per_year / self.time_horizon_weeks
+
+        # 为每个位置和技术添加约束
+        for location in self.locations:
+            for tech in self.technologies:
+                # 计算该位置该技术的总产量
+                total_production = gp.quicksum(
+                    self.production_vars[(location, tech, hour)]
+                    for hour in range(self.total_hours)
+                    if (location, tech, hour) in self.production_vars
+                )
+
+                # 年化产量 = 周产量 × (52周/年 / 优化周数)
+                annual_production = total_production * annual_multiplier
+
+                # 如果建设了设施（facility_vars = 1），年产量必须 >= 最小值
+                # 如果未建设设施（facility_vars = 0），不限制
+                # 约束：annual_production >= min_annual_production * facility_vars
+                self.model.addConstr(
+                    annual_production >= min_annual_production * self.facility_vars[(location, tech)],
+                    name=f"min_production_{location}_{tech}"
+                )
+
+        logger.info(f"已添加 {len(self.locations) * len(self.technologies)} 个最小产量约束")
+
     def _add_levelized_cost_constraint(self):
         """添加平准化成本约束：(总成本 - 短缺成本) / 总产量现值 <= 门槛值"""
         logger.info("添加平准化成本约束...")
@@ -5073,8 +5111,10 @@ class DACHydrogenSAFOptimizer:
     def _calculate_co2_pipeline_cost_by_distance(self, distance_km: float) -> float:
         """计算CO₂管道运输的单位成本（元/kg）
 
-        优先使用配置中的分段线性成本函数（单位：元/(kg·百公里)），
+        优先使用配置中的分段线性成本函数（单位：元/(吨·百公里)），
         若无则退化为简单的元/(kg·km) 单价。
+
+        注意：配置文件单位已统一为 元/(吨CO₂·百公里)，代码需除以1000转换为kg
         """
         if distance_km <= 0:
             return 0.0
@@ -5083,7 +5123,7 @@ class DACHydrogenSAFOptimizer:
         function_cfg = pipeline_cfg.get('transport_cost_function', {}) or {}
         data_points = function_cfg.get('data_points') or []
 
-        # 如果提供了分段线性数据点，按元/(kg·百公里)插值
+        # 如果提供了分段线性数据点，按元/(吨·百公里)插值，然后转换为元/kg
         if data_points:
             unit_cost_per_100km = None
 
@@ -5104,7 +5144,8 @@ class DACHydrogenSAFOptimizer:
                 else:
                     unit_cost_per_100km = data_points[-1][1]
 
-            return max(0.0, unit_cost_per_100km * (distance_km / 100.0))
+            # 单位转换：元/(吨·百公里) × (距离km ÷ 100) ÷ 1000 = 元/kg
+            return max(0.0, unit_cost_per_100km * (distance_km / 100.0) / 1000.0)
 
         # 否则使用简单的元/(kg·km) 单位成本
         unit_cost_per_km = float(pipeline_cfg.get('transport_cost_yuan_per_kg_km', 0.0001))

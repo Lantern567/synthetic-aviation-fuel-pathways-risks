@@ -118,6 +118,11 @@ capacity_limits:
   saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
                                            # 暂不设置最小规模约束，由优化器自由决策
 
+  saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                           # 如果建设SAF设施，必须达到的最小年产量
+                                           # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                           # 修正日期：2025-11-08 (新增最小规模约束)
+
   # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:
     default: 2000                          # 默认容量估算(kg/h) | Default capacity estimate
@@ -493,8 +498,9 @@ cost_parameters:
     solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
                                            # 基于2025年中国光伏上网电价
 
-    grid_electricity_price_yuan_per_kwh: 0.70  # 电网电价(元/kWh) | Grid electricity price
+    grid_electricity_price_yuan_per_kwh: 0.60  # 电网电价(元/kWh) | Grid electricity price
                                            # 工业用电价格（备用电源）
+                                           # 统一修正：从0.70降至0.60
 
   # 原材料价格参数 - Raw Material Prices
   raw_materials:
@@ -513,9 +519,9 @@ cost_parameters:
                                            # 电能到氢能的转换效率
                                            # 碱性/PEM电解槽的典型效率
 
-    electrolysis_power_consumption: 50         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
+    electrolysis_power_consumption: 55         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
                                            # 电解制氢单位能耗（包括系统损耗）
-                                           # 典型值：50 kWh/kg H₂
+                                           # 统一修正：从50更新为55 kWh/kg H₂
 
   # 缺货惩罚 - Shortage Penalty
   shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
@@ -590,9 +596,9 @@ green_hydrogen_supply:
                                              # 基于2024-2025年中国绿氢成本预测
                                              # 来源：IEA Hydrogen Report 2024, IRENA Green Hydrogen Cost 2024
 
-  production_energy_kwh_per_kg: 50           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
+  production_energy_kwh_per_kg: 55           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
                                              # 电解制氢能耗（包括系统损耗）
-                                             # 典型PEM/碱性电解槽能耗
+                                             # 典型PEM/碱性电解槽能耗，已统一修正为55
 
   electrolyzer_efficiency: 0.70              # 电解槽效率 | Electrolyzer efficiency (70%)
                                              # 电能到氢能的转换效率
@@ -1077,15 +1083,20 @@ technologies:
     efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
                                           # H₂+CO₂到SAF的碳转化效率60%
 
-    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 生产1kg SAF需要0.15kg氢气
+    h2_consumption_ratio: 0.45            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 生产1kg SAF需要0.45kg氢气
+                                          # 修正日期：2025-11-07 (从0.15更新为0.45)
 
     co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 生产1kg SAF需要3.0kg CO₂
+                                          # 修正为3.0 kg CO₂/kg SAF (2025-11-08)
 
     # 🆕 两步法转化比例参数（H₂+CO₂→甲醇→SAF）
-    methanol_intermediate_ratio: 3.125    # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
+    methanol_intermediate_ratio: 1.5625   # kg甲醇/kg SAF（第一步：H₂+CO₂→甲醇）
                                           # 中间产物甲醇的生成比例
+                                          # 修正：从3.125改为1.5625（2025-11-07）
+                                          # 计算：1 / methanol_to_saf_ratio = 1 / 0.64 = 1.5625
+                                          # 验证：1.5625 kg甲醇 × 0.64 = 1.0 kg SAF ✓
+                                          # 参考：DAC和Coal项目均使用1.5625
 
     methanol_to_saf_ratio: 0.64           # kg SAF/kg甲醇（第二步：甲醇→SAF）
                                           # 甲醇转化为SAF的转化率

@@ -98,6 +98,11 @@ capacity_limits:
   rwgs_ft_reactor_min_capacity_kg_per_hour: 0       # RWGS-FT反应器最小经济规模(kg/h) | Min economic scale
                                            # 暂不设置最小规模约束，由优化器自由决策
 
+  saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                           # 如果建设SAF设施，必须达到的最小年产量
+                                           # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                           # 修正日期：2025-11-08 (新增最小规模约束)
+
   # RWGS-FT反应器容量估算 - RWGS-FT Reactor Capacity Estimates by Location Type
   rwgs_ft_capacity_estimates:
     default: 1800                          # 默认容量估算(kg/h) | Default capacity (一步法略低于两步法2000)
@@ -479,8 +484,9 @@ cost_parameters:
     solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
                                            # 基于2025年中国光伏上网电价
 
-    grid_electricity_price_yuan_per_kwh: 0.70  # 电网电价(元/kWh) | Grid electricity price
+    grid_electricity_price_yuan_per_kwh: 0.60  # 电网电价(元/kWh) | Grid electricity price
                                            # 工业用电价格（备用电源）
+                                           # 统一修正：从0.70降至0.60
 
   # 原材料价格参数 - Raw Material Prices
   raw_materials:
@@ -576,7 +582,7 @@ green_hydrogen_supply:
                                              # 基于2024-2025年中国绿氢成本预测
                                              # 来源：IEA Hydrogen Report 2024, IRENA Green Hydrogen Cost 2024
 
-  production_energy_kwh_per_kg: 50           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
+  production_energy_kwh_per_kg: 55           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
                                              # 电解制氢能耗（包括系统损耗）
                                              # 典型PEM/碱性电解槽能耗
 
@@ -1088,8 +1094,8 @@ technologies:
     h2_consumption_ratio: 0.19            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
                                           # 一步法需要更多氢气: 0.19 kg H₂/kg SAF (vs 两步法0.15)
 
-    co2_consumption_ratio: 3.1            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 一步法CO₂消耗略增: 3.1 kg CO₂/kg SAF (vs 两步法3.0)
+    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 修正为3.0 kg CO₂/kg SAF (2025-11-08)
 
     # ❌ 移除两步法参数 (一步法不需要甲醇中间步骤)
     # methanol_intermediate_ratio: N/A

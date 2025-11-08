@@ -1873,12 +1873,33 @@ class CoalHydrogenSAFOptimizer:
         for tech_key in ['green_h2_co2_to_saf']:
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
+                # 读取碳消耗比参数(优先carbon_consumption_ratio,兼容旧的co2_consumption_ratio)
+                # carbon_consumption_ratio: kg C / kg SAF (碳原子质量)
+                # CO₂中碳含量: C/CO₂ = 12/44 ≈ 0.273
+                carbon_ratio = tech_info.get('carbon_consumption_ratio', None)
+                co2_ratio = tech_info.get('co2_consumption_ratio', None)
+
+                if carbon_ratio is not None:
+                    # 使用碳消耗比(kg C/kg SAF)
+                    # 转换为CO₂消耗比: CO₂ = C × (44/12) = C × 3.667
+                    carbon_consumption_ratio = carbon_ratio
+                    co2_consumption_ratio = carbon_ratio * (44.0 / 12.0)  # kg CO₂/kg SAF
+                elif co2_ratio is not None:
+                    # 使用CO₂消耗比(向后兼容)
+                    co2_consumption_ratio = co2_ratio
+                    carbon_consumption_ratio = co2_ratio * (12.0 / 44.0)  # kg C/kg SAF
+                else:
+                    # 默认值
+                    carbon_consumption_ratio = 0.75  # kg C/kg SAF
+                    co2_consumption_ratio = 2.75  # kg CO₂/kg SAF
+
                 self.technologies[tech_key] = {
                     'name': tech_info['name'],
                     'lcop_yuan_per_kg': base_lcop * complexity_factors.get(tech_key, 1.0),
                     'efficiency': tech_info['efficiency'],
                     'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
-                    'co2_consumption_ratio': tech_info.get('co2_consumption_ratio', 2.75),  # H₂+CO₂→甲醇的CO₂消耗比
+                    'carbon_consumption_ratio': carbon_consumption_ratio,  # kg C / kg SAF (碳原子质量)
+                    'co2_consumption_ratio': co2_consumption_ratio,  # kg CO₂ / kg SAF (向后兼容)
                     'methanol_intermediate_ratio': tech_info.get('methanol_intermediate_ratio', 3.125),  # H₂→甲醇的中间产物比
                     'methanol_to_saf_ratio': tech_info.get('methanol_to_saf_ratio', 0.64),  # 甲醇→SAF的转化率
                     'suitable_locations': tech_info['suitable_locations'],
@@ -1890,6 +1911,13 @@ class CoalHydrogenSAFOptimizer:
 
         logger.info(f"定义了 {len(self.technologies)} 种SAF生产技术（绿氢+CO₂两步法）")
         logger.info(f"基础平准化成本: {base_lcop:.0f} 元/kg")
+
+        # 输出碳消耗比参数信息
+        for tech_key, tech_data in self.technologies.items():
+            logger.info(f"  技术 {tech_key}:")
+            logger.info(f"    - 碳消耗比: {tech_data.get('carbon_consumption_ratio', 0):.3f} kg C/kg SAF")
+            logger.info(f"    - CO₂消耗比: {tech_data.get('co2_consumption_ratio', 0):.3f} kg CO₂/kg SAF")
+            logger.info(f"    - H₂消耗比: {tech_data.get('h2_consumption_ratio', 0):.3f} kg H₂/kg SAF")
         
         # 检查技术参数中的NaN值
         for tech, config in self.technologies.items():
@@ -7199,6 +7227,8 @@ class CoalHydrogenSAFOptimizer:
         tech_info = self.technologies[tech_key]
 
         # 🆕 验证关键参数
+        # 注意: co2_consumption_ratio 由 carbon_consumption_ratio 自动计算得出
+        # carbon_consumption_ratio (kg C/kg SAF) × (44/12) = co2_consumption_ratio (kg CO₂/kg SAF)
         required_params = ['h2_consumption_ratio', 'co2_consumption_ratio', 'methanol_intermediate_ratio']
         missing_params = [p for p in required_params if p not in tech_info]
         if missing_params:
@@ -7206,8 +7236,14 @@ class CoalHydrogenSAFOptimizer:
             logger.warning(f"   将使用默认值")
 
         h2_consumption_ratio = tech_info['h2_consumption_ratio']  # kg H₂ / kg SAF
-        co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
+        co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF (由carbon_consumption_ratio计算)
+        carbon_consumption_ratio = tech_info.get('carbon_consumption_ratio', co2_consumption_ratio * 12.0 / 44.0)  # kg C / kg SAF
         methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']  # kg 甲醇 / kg SAF
+
+        logger.info(f"[参数] 技术 {tech_key} 的消耗比:")
+        logger.info(f"  - 碳消耗: {carbon_consumption_ratio:.3f} kg C/kg SAF")
+        logger.info(f"  - CO₂消耗: {co2_consumption_ratio:.3f} kg CO₂/kg SAF")
+        logger.info(f"  - H₂消耗: {h2_consumption_ratio:.3f} kg H₂/kg SAF")
 
         # 获取所有甲醇生产位置
         methanol_locations = []
@@ -7360,8 +7396,14 @@ class CoalHydrogenSAFOptimizer:
             return
 
         tech_info = self.technologies[tech_key]
-        co2_consumption_ratio = tech_info['co2_consumption_ratio']
+        co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
+        carbon_consumption_ratio = tech_info.get('carbon_consumption_ratio', co2_consumption_ratio * 12.0 / 44.0)  # kg C / kg SAF
         methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']
+
+        logger.info(f"[CO₂库存平衡] 碳消耗参数:")
+        logger.info(f"  - 碳消耗比: {carbon_consumption_ratio:.3f} kg C/kg SAF")
+        logger.info(f"  - CO₂消耗比: {co2_consumption_ratio:.3f} kg CO₂/kg SAF")
+        logger.info(f"  - 甲醇中间产物比: {methanol_intermediate_ratio:.3f} kg 甲醇/kg SAF")
 
         # 获取所有甲醇生产位置
         methanol_locations = []

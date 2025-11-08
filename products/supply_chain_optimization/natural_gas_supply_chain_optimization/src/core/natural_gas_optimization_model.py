@@ -2286,6 +2286,44 @@ class NaturalGasSupplyChainOptimizer:
         # 11. 平准化成本约束
         self._add_levelized_cost_constraint()  # 已修复门槛值配置，重新启用
 
+        # 12. MTJ设施最小产量约束
+        self._add_minimum_production_constraints()
+
+    def _add_minimum_production_constraints(self):
+        """添加MTJ设施最小产量约束：如果建设设施，年产量必须达到最小值"""
+        logger.info("添加MTJ设施最小产量约束...")
+
+        # 从配置读取最小年产量
+        min_annual_production = self.config.get('capacity_limits', {}).get('mtj_min_annual_production_kg', 100)
+        logger.info(f"MTJ最小年产量配置: {min_annual_production} kg/年")
+
+        # 计算生命周期系数（按1周时间范围调整到年产量）
+        weeks_per_year = 52
+        annual_multiplier = weeks_per_year / self.time_horizon_weeks
+
+        # 为每个位置和技术添加约束
+        for location in self.locations:
+            for tech in self.technologies:
+                # 计算该位置该技术的总产量
+                total_production = gp.quicksum(
+                    self.production_vars[(location, tech, hour)]
+                    for hour in range(self.total_hours)
+                    if (location, tech, hour) in self.production_vars
+                )
+
+                # 年化产量 = 周产量 × (52周/年 / 优化周数)
+                annual_production = total_production * annual_multiplier
+
+                # 如果建设了设施（facility_vars = 1），年产量必须 >= 最小值
+                # 如果未建设设施（facility_vars = 0），不限制
+                # 约束：annual_production >= min_annual_production * facility_vars
+                self.model.addConstr(
+                    annual_production >= min_annual_production * self.facility_vars[(location, tech)],
+                    name=f"min_production_{location}_{tech}"
+                )
+
+        logger.info(f"已添加 {len(self.locations) * len(self.technologies)} 个最小产量约束")
+
     def _add_levelized_cost_constraint(self):
         """添加平准化成本约束：(总成本 - 短缺成本) / 总产量现值 <= 门槛值"""
         logger.info("添加平准化成本约束...")
@@ -6388,64 +6426,114 @@ class NaturalGasSupplyChainOptimizer:
         return filtered_df
             
     def _load_original_pipeline_data(self):
-        """加载原始天然气管段数据（备用方法）"""
+        """加载天然气管段数据（备用方法 - 从集成文件加载但不使用缓存）"""
         try:
-            # 使用相对路径的真实GIS数据
             base_dir = get_project_base_dir()
-            pipeline_file = os.path.join(base_dir, "products", "gis_energy_mapping", "scraped_gis_data", "natural_gas_pipelines.csv")
-            if not os.path.exists(pipeline_file):
-                logger.error(f"天然气管段数据文件不存在: {pipeline_file}")
-                raise FileNotFoundError(f"无法找到天然气管段数据文件: {pipeline_file}")
-                
-            pipeline_df = pd.read_csv(pipeline_file)
-            logger.info(f"加载原始天然气管段数据: {len(pipeline_df)} 条记录")
-            logger.info("注意: 管道长度数据不用于模型计算，实际距离通过坐标计算")
-            
+
+            # 优先使用集成数据文件（包含价格信息）
+            integrated_file = os.path.join(base_dir, "products", "supply_chain_optimization",
+                                         "natural_gas_supply_chain_optimization", "data",
+                                         "integrated_gas_pipeline_price_data_with_coords.csv")
+
+            if not os.path.exists(integrated_file):
+                logger.warning(f"集成数据文件不存在: {integrated_file}，尝试使用原始GIS数据")
+                # 降级到原始GIS数据（没有价格）
+                pipeline_file = os.path.join(base_dir, "products", "gis_energy_mapping",
+                                            "scraped_gis_data", "natural_gas_pipelines.csv")
+                if not os.path.exists(pipeline_file):
+                    logger.error(f"天然气管段数据文件不存在: {pipeline_file}")
+                    raise FileNotFoundError(f"无法找到天然气管段数据文件")
+
+                pipeline_df = pd.read_csv(pipeline_file)
+                logger.info(f"加载原始GIS数据: {len(pipeline_df)} 条记录（无价格信息）")
+                has_price_column = False
+            else:
+                pipeline_df = pd.read_csv(integrated_file)
+                logger.info(f"加载集成管道数据（备用方法，不使用缓存）: {len(pipeline_df)} 条记录")
+                has_price_column = 'natural_gas_price_yuan_per_10k_m3' in pipeline_df.columns
+
+            # 获取配置中的默认天然气价格作为备用
+            default_ng_price = self.config.get('cost_parameters', {}).get('raw_materials', {}).get('natural_gas_price_yuan_per_m3', 4.2)
+            logger.info(f"默认天然气价格: {default_ng_price} 元/m³")
+
+            # 过滤北京500km范围内的管道
+            filtered_count = 0
             for idx, row in pipeline_df.iterrows():
-                pipeline_id = f"pipeline_{idx+1}"
-                
-                # 处理容量数据 - 将BCF/D转换为万立方米/天
-                capacity_raw = row.get('Capacity', 0.0)
-                try:
-                    capacity_bcf_d = float(capacity_raw) if capacity_raw else 0.0
-                    # 1 BCF = 28.3168万立方米
-                    capacity_mcm_per_day = capacity_bcf_d * 28.3168
-                except (ValueError, TypeError):
-                    capacity_mcm_per_day = row.get('capacity_mcm_per_day', None)
-                    if capacity_mcm_per_day is None:
-                        pipeline_name = row.get('Name', f'管段{idx+1}')
-                        logger.error(f"管道 {pipeline_name} 缺少容量数据")
-                        continue
-                
-                # 管道长度数据不用于实际计算，只需要坐标数据
-                note = str(row.get('Note', ''))
-                length_km = row.get('length_km', 0)  # 默认值，不影响实际计算
-                if 'Length:' in note:
+                # 获取坐标（支持不同的列名）
+                lat = row.get('center_latitude') or row.get('lat') or row.get('Lat')
+                lon = row.get('center_longitude') or row.get('lon') or row.get('Long')
+
+                if lat is None or lon is None or pd.isna(lat) or pd.isna(lon):
+                    continue
+
+                lat, lon = float(lat), float(lon)
+
+                # 检查是否在500km范围内
+                if not is_within_beijing_range(lat, lon, 500):
+                    continue
+
+                filtered_count += 1
+
+                # 生成管道ID
+                if 'pipeline_id' in row and pd.notna(row['pipeline_id']):
+                    pipeline_id = row['pipeline_id']
+                else:
+                    pipeline_id = f"pipeline_{filtered_count}"
+
+                # 处理容量数据
+                if 'capacity_mcm_per_day' in row and pd.notna(row['capacity_mcm_per_day']):
+                    capacity_mcm_per_day = float(row['capacity_mcm_per_day'])
+                else:
+                    # 从BCF/D转换
+                    capacity_raw = row.get('Capacity', 0.0)
                     try:
-                        length_str = note.split('Length:')[1].split('km')[0].strip()
-                        length_km = float(length_str)
-                    except:
-                        length_km = 0
-                
+                        capacity_bcf_d = float(capacity_raw) if capacity_raw else 0.0
+                        capacity_mcm_per_day = capacity_bcf_d * 28.3168
+                    except (ValueError, TypeError):
+                        logger.warning(f"管道 {pipeline_id} 容量数据无效，跳过")
+                        continue
+
+                # 获取价格信息
+                if has_price_column:
+                    ng_price = row.get('natural_gas_price_yuan_per_10k_m3')
+                    if ng_price is None or pd.isna(ng_price):
+                        ng_price = default_ng_price
+                    else:
+                        try:
+                            ng_price = float(ng_price)
+                        except (ValueError, TypeError):
+                            ng_price = default_ng_price
+                else:
+                    ng_price = default_ng_price
+
+                # 获取管道名称
+                pipeline_name = row.get('pipeline_name') or row.get('Name', f'管道_{filtered_count}')
+
                 self.ng_pipeline_sources[pipeline_id] = {
-                    'name': row.get('Name', f'管段{idx+1}'),
-                    'operator': row.get('Operator', '未知'),
-                    'status': row.get('Status', 'Operating'),
-                    'year_online': row.get('YearOnline', 2020),
-                    'capacity_mcm_per_day': capacity_mcm_per_day,  # 万立方米/天
-                    'length_km': length_km,
-                    'natural_gas_price_yuan_per_10k_m3': None,  # 需要从实际数据获取价格
-                    'pipeline_cost_yuan_per_mcm': 150 + idx * 10,  # 根据索引调整成本
-                    'transport_cost_yuan_per_mcm_km': 0.8,
-                    'supply_reliability': 0.92 + (idx % 5) * 0.01,  # 0.92-0.96之间
-                    'shape_length': row.get('Shape__Length', 0),
-                    'object_id': row.get('ObjectId', idx+1)
+                    'name': pipeline_name,
+                    'operator': row.get('operator') or row.get('Operator', '未知'),
+                    'status': row.get('status') or row.get('Status', 'Operating'),
+                    'year_online': row.get('year_online') or row.get('YearOnline', 2020),
+                    'capacity_mcm_per_day': capacity_mcm_per_day,
+                    'length_km': row.get('length_km', 0),
+                    'natural_gas_price_yuan_per_10k_m3': ng_price,
+                    'pipeline_cost_yuan_per_mcm': row.get('pipeline_cost_yuan_per_mcm', 150),
+                    'transport_cost_yuan_per_mcm_km': row.get('transport_cost_yuan_per_mcm_km', 0.8),
+                    'supply_reliability': row.get('supply_reliability', 0.95),
+                    'lat': lat,
+                    'lon': lon,
                 }
-                
-            logger.info(f"成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据")
-            
+
+            logger.info(f"备用方法成功加载 {len(self.ng_pipeline_sources)} 条天然气管段数据（500km范围内）")
+            if has_price_column and len(self.ng_pipeline_sources) > 0:
+                prices = [p['natural_gas_price_yuan_per_10k_m3'] for p in self.ng_pipeline_sources.values()]
+                avg_price = sum(prices) / len(prices)
+                logger.info(f"平均天然气价格: {avg_price:.2f} 元/m³")
+            else:
+                logger.info(f"所有管道使用默认价格: {default_ng_price} 元/m³")
+
         except Exception as e:
-            logger.error(f"加载天然气管段数据失败: {e}")
+            logger.error(f"备用方法加载天然气管段数据失败: {e}")
             raise
 
     def _load_lng_terminal_data(self):

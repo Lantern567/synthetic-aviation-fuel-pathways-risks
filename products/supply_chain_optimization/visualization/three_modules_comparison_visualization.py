@@ -26,8 +26,8 @@ import matplotlib as mpl
 from matplotlib import rcParams
 import seaborn as sns
 
-# 配置中文字体
-plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'Arial Unicode MS']
+# 配置中文字体 - 支持Linux和Windows系统,移除DejaVu Sans避免回退
+plt.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'Noto Sans CJK TC', 'WenQuanYi Zen Hei', 'Microsoft YaHei', 'SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # 配置日志
@@ -62,25 +62,25 @@ class ThreeModulesComparisonVisualizer:
 
         logger.info(f"输出目录: {self.session_dir}")
 
-        # 模块配置
+        # 模块配置 - 使用自动查找最新文件
         self.modules = {
             'Coal Hydrogen': {
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',  # 红色
-                'solution_file': 'coal_hydrogen_saf_optimization/results/complete_solution_20251106_113130.json',
-                'carbon_file': 'coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_20251106_113130.json'
+                'solution_pattern': 'coal_hydrogen_saf_optimization/results/complete_solution_*.json',
+                'carbon_pattern': 'coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_*.json'
             },
             'DAC Hydrogen': {
                 'name_cn': 'DAC制氢',
                 'color': '#3498DB',  # 蓝色
-                'solution_file': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_20251106_015557.json',
-                'carbon_file': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20251106_015557.json'
+                'solution_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
+                'carbon_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json'
             },
             'Natural Gas': {
                 'name_cn': '天然气',
                 'color': '#2ECC71',  # 绿色
-                'solution_file': 'natural_gas_supply_chain_optimization/results/complete_solution_20251106_115306.json',
-                'carbon_file': 'natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_20251106_115306.json'
+                'solution_pattern': 'natural_gas_supply_chain_optimization/results/complete_solution_*.json',
+                'carbon_pattern': 'natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json'
             }
         }
 
@@ -103,17 +103,35 @@ class ThreeModulesComparisonVisualizer:
         logger.info("加载模块数据")
         logger.info("=" * 60)
 
+        import glob
+
         for module_name, config in self.modules.items():
             logger.info(f"\n正在加载: {module_name} ({config['name_cn']})")
 
             try:
-                # 加载解决方案文件
-                solution_path = base_dir / config['solution_file']
+                # 加载解决方案文件（自动查找最新文件）
+                solution_pattern = base_dir / config['solution_pattern']
+                solution_files = sorted(glob.glob(str(solution_pattern)), reverse=True)
+
+                if not solution_files:
+                    logger.warning(f"  ⚠ 未找到解决方案文件: {config['solution_pattern']}")
+                    continue
+
+                solution_path = Path(solution_files[0])
+                logger.info(f"  使用最新的解决方案文件: {solution_path.name}")
                 with open(solution_path, 'r', encoding='utf-8') as f:
                     solution_data = json.load(f)
 
-                # 加载碳排放文件
-                carbon_path = base_dir / config['carbon_file']
+                # 加载碳排放文件（自动查找最新文件）
+                carbon_pattern = base_dir / config['carbon_pattern']
+                carbon_files = sorted(glob.glob(str(carbon_pattern)), reverse=True)
+
+                if not carbon_files:
+                    logger.warning(f"  ⚠ 未找到碳排放文件: {config['carbon_pattern']}")
+                    continue
+
+                carbon_path = Path(carbon_files[0])
+                logger.info(f"  使用最新的碳排放文件: {carbon_path.name}")
                 with open(carbon_path, 'r', encoding='utf-8') as f:
                     carbon_data = json.load(f)
 

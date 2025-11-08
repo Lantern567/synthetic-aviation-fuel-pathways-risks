@@ -91,6 +91,10 @@ capacity_limits:
   ft_reactor_min_capacity_kg_per_hour: 0       # FT反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
                                            # 暂不设置最小规模约束，由优化器自由决策
 
+  saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                           # 如果建设SAF设施，必须达到的最小年产量
+                                           # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                           # 修正日期：2025-11-08 (新增最小规模约束)
 
   # MTJ航煤生产容量 - MTJ Fuel Production Capacity (FT费托合成)
   mtj_max_capacity_kg_per_hour: 100000     # MTJ设施最大产能(kg/h) | Max MTJ production capacity (kg/hour)
@@ -275,10 +279,26 @@ cost_parameters:
       utilization_rate: 0.8                # 车辆利用率 | Vehicle utilization rate
                                            # 考虑空驶、等待等因素的有效利用率
 
+  # 可再生能源电力价格 - Renewable Energy Prices
+  renewable_energy:
+    wind_power_price_yuan_per_kwh: 0.35    # 风电价格(元/kWh) | Wind power price (yuan/kWh)
+                                           # 基于2025年中国风电上网电价
+
+    solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
+                                           # 基于2025年中国光伏上网电价
+
+    grid_electricity_price_yuan_per_kwh: 0.60  # 电网电价(元/kWh) | Grid electricity price
+                                           # 工业用电价格（备用电源）
+                                           # 统一修正：从0.70降至0.60
+
   # 原材料价格 - Raw Material Prices
   raw_materials:
     natural_gas_price_yuan_per_m3: 4.2     # 天然气价格(元/m³) | Natural gas price (yuan/m³)
                                            # 基于2025年中国市场工业天然气价格
+
+    renewable_electricity_cost_yuan_per_mwh: 350  # 可再生电力成本(元/MWh) | Renewable electricity cost (yuan/MWh)
+                                           # 统一修正：从500改为350 (0.35元/kWh)，与风电价格保持一致
+                                           # 用于成本计算的平均可再生能源电价
 
   # 缺货惩罚 - Shortage Penalty
   shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
@@ -525,10 +545,12 @@ equipment_raw_costs:
 
   # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 1500                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+    capex_raw: 2000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
                                            # 包括储罐、管道、泵等设备
+                                           # 统一修正：与其他项目保持一致
 
-    opex_raw: 20                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+    opex_raw: 30                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+                                           # 统一修正：与其他项目保持一致
 
 # =============================================================================
 # FT设施平准化成本参数 (FT Facility LCOE Parameters)
@@ -726,9 +748,10 @@ technologies:
                                           # 天然气到SAF的整体碳转化效率55%
                                           # 基于低温费托合成(LTFT)技术参数
 
-    ng_consumption_ratio: 2.0             # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg SAF product)
-                                          # 生产1kg SAF需要2.0m³天然气
+    ng_consumption_ratio: 2.3             # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg SAF product)
+                                          # 生产1kg SAF需要2.3m³天然气
                                           # 包括合成气制备和FT合成全过程
+                                          # 修正日期：2025-11-07 (从2.0更新为2.3)
 
     h2_consumption_ratio: 0               # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
                                           # FT一步法不需要外部氢气供应（内部产氢）

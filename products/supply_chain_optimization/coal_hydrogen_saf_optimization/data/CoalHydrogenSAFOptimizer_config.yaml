@@ -95,9 +95,9 @@ capacity_limits:
                                            # 单个SAF反应器设施的最大SAF生产能力
                                            # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 100     # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
-                                           # 修正：从0改为100，防止建设空壳工厂
-                                           # 最小经济规模约束，确保设施具有合理产能
+  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 设置为0，不限制最小规模，由优化器根据需求灵活决定
+                                           # 与DAC和Green Hydrogen项目保持一致
 
   # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:
@@ -493,8 +493,9 @@ cost_parameters:
     solar_power_price_yuan_per_kwh: 0.40   # 光伏价格(元/kWh) | Solar power price (yuan/kWh)
                                            # 基于2025年中国光伏上网电价
 
-    grid_electricity_price_yuan_per_kwh: 0.70  # 电网电价(元/kWh) | Grid electricity price
+    grid_electricity_price_yuan_per_kwh: 0.60  # 电网电价(元/kWh) | Grid electricity price
                                            # 工业用电价格（备用电源）
+                                           # 统一修正：从0.70降至0.60
 
   # 原材料价格参数 - Raw Material Prices
   raw_materials:
@@ -518,10 +519,10 @@ cost_parameters:
                                            # 修正：从50改为55，统一能耗参数，更符合PEM电解槽实际值
 
   # 缺货惩罚 - Shortage Penalty
-  shortage_penalty_yuan_per_kg: 5000000       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
+  shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
+                                           # 统一修正：从5000000改为2500，与其他项目保持一致
                                            # 未满足需求时的惩罚成本
                                            # 作用：确保优化器优先满足需求
-                                           # 设置较高值以强制满足关键需求
 
 # =============================================================================
 # 详细成本数据 (Detailed Cost Data)
@@ -885,12 +886,12 @@ equipment_raw_costs:
 
   # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 200000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+    capex_raw: 2000                          # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
                                            # 包括储罐、管道、泵等设备
-                                           # 修正：从2000改为200000，更符合实际工程成本
+                                           # 统一修正：与DAC、Green、Natural Gas项目保持一致
 
-    opex_raw: 5000                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
-                                           # 修正：从30改为5000，更符合实际运维成本
+    opex_raw: 30                             # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
+                                           # 统一修正：与其他项目保持一致
 
 # =============================================================================
 # SAF设施平准化成本参数 (SAF Facility LCOE Parameters)
@@ -1060,10 +1061,10 @@ solver_parameters:
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
 
-  Threads: 0                               # 并行计算线程数 | Number of parallel threads
-                                           # 修正：从128改为0（自动检测CPU核心数）
-                                           # 0 = 让Gurobi自动选择最优线程数
-                                           # 建议：小于等于CPU核心数，避免过度上下文切换
+  Threads: 128                               # 并行计算线程数 | Number of parallel threads
+                                           # 统一修正：从0改为128，与其他项目保持一致
+                                           # 128 = 使用最多128个线程进行并行计算
+                                           # 建议：根据服务器CPU核心数调整
                                            # 注意：过多线程可能导致内存溢出和性能下降
 
 # =============================================================================
@@ -1103,13 +1104,17 @@ technologies:
     # ========================================================================
     # ✅ 一步法直接转化参数（当前启用）
     # ========================================================================
-    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要0.15kg氢气
+    h2_consumption_ratio: 0.2             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要0.2kg氢气
                                           # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
+                                          # 修正日期：2025-11-08 (从0.45更新为0.2)
 
-    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要3.0kg CO₂
-                                          # 直接从H₂和CO₂合成SAF
+    carbon_consumption_ratio: 1.0         # 碳消耗比(kg C/kg SAF) | Carbon consumption ratio
+                                          # 一步法：生产1kg SAF需要1.0kg碳(C)
+                                          # 注意：这里配置的是碳(C)不是CO₂，碳原子质量
+                                          # CO₂中碳含量：C/CO₂ = 12/44 ≈ 0.273
+                                          # 因此 1.0 kg C 对应约 3.67 kg CO₂
+                                          # 修正日期：2025-11-08 (从co2_consumption_ratio改为carbon_consumption_ratio)
 
     # ========================================================================
     # 🔧 两步法分步转化参数（已禁用，仅作参考）

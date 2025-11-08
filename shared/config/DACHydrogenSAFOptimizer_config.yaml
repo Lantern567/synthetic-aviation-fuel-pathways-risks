@@ -14,6 +14,10 @@ capacity_limits:
   big_m_constant: 10000
   saf_reactor_max_capacity_kg_per_hour: 1000000
   saf_reactor_min_capacity_kg_per_hour: 0
+  saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                         # 如果建设SAF设施，必须达到的最小年产量
+                                         # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                         # 修正日期：2025-11-08 (新增最小规模约束)
   saf_capacity_estimates:
     default: 2000
     industrial: 3000
@@ -106,14 +110,14 @@ cost_parameters:
       utilization_rate: 0.75
   renewable_energy:
     wind_power_price_yuan_per_kwh: 0.35
-    solar_power_price_yuan_per_kwh: 0.4
-    grid_electricity_price_yuan_per_kwh: 0.7
+    solar_power_price_yuan_per_kwh: 0.40
+    grid_electricity_price_yuan_per_kwh: 0.60  # 统一修正：从0.70降至0.60
   raw_materials:
     hydrogen_market_price_yuan_per_kg: 25.0
     renewable_electricity_cost_yuan_per_mwh: 350
   electrolysis:
     electrolysis_efficiency: 0.7
-    electrolysis_power_consumption: 50
+    electrolysis_power_consumption: 55
   shortage_penalty_yuan_per_kg: 2500
 costs:
   hydrogen_pipeline_costs:
@@ -163,7 +167,7 @@ costs:
         '
 green_hydrogen_supply:
   production_cost_yuan_per_kg: 25
-  production_energy_kwh_per_kg: 50
+  production_energy_kwh_per_kg: 55
   electrolyzer_efficiency: 0.7
   transport:
     pipeline_cost_yuan_per_kg_per_100km: 0.5
@@ -464,13 +468,15 @@ technologies:
     # ========================================================================
     # ✅ 一步法直接转化参数（当前启用）
     # ========================================================================
-    h2_consumption_ratio: 0.15            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要0.15kg氢气
+    h2_consumption_ratio: 0.45            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要0.45kg氢气
                                           # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
+                                          # 修正日期：2025-11-07 (从0.15更新为0.45)
 
-    co2_consumption_ratio: 3.0            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要3.0kg CO₂
+    co2_consumption_ratio: 3.2            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要3.2kg CO₂
                                           # 直接从H₂和CO₂合成SAF
+                                          # 修正日期：2025-11-07 (从3.0更新为3.2)
 
     # ========================================================================
     # 🔧 两步法分步转化参数（当前启用）
@@ -572,14 +578,14 @@ unified_costs:
       # 分段线性成本函数（参考氢气管道）
       transport_cost_function:
         function_type: piecewise_linear
-        unit: yuan_per_kg_co2_per_100km
+        unit: yuan_per_ton_co2_per_100km  # 统一修改为吨单位
         description: 基于CO₂管道输送成本曲线
         data_points:
-          - [25, 0.15]   # 25km: 0.15元/(kg·100km)
-          - [50, 0.08]   # 50km: 0.08元/(kg·100km)
-          - [100, 0.045] # 100km: 0.045元/(kg·100km)
-          - [200, 0.025] # 200km: 0.025元/(kg·100km)
-          - [300, 0.018] # 300km: 0.018元/(kg·100km)
+          - [25, 150]    # 25km: 150元/(吨·100km) [修正: 0.15×1000]
+          - [50, 80]     # 50km: 80元/(吨·100km) [修正: 0.08×1000]
+          - [100, 45]    # 100km: 45元/(吨·100km) [修正: 0.045×1000]
+          - [200, 25]    # 200km: 25元/(吨·100km) [修正: 0.025×1000]
+          - [300, 18]    # 300km: 18元/(吨·100km) [修正: 0.018×1000]
         notes: |
           成本函数已包含以下所有费用：
           - 管道建设投资摊销 (Pipeline construction amortization)
