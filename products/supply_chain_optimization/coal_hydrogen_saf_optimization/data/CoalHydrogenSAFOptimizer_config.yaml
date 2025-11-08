@@ -68,6 +68,10 @@ basic_parameters:
                                            # 启用后使用管道路径进行精确的氢气运输距离计算
                                            # 依赖：基于聚类和管道路权的专用算法
 
+  use_super_graph_optimizer: true          # 是否使用超图优化器 | Enable super graph optimizer for pipeline routing
+                                           # true: 使用超图预计算所有最短路径，查询速度40,000倍提升
+                                           # false: 使用传统实时计算方法（每次查询40ms）
+
   # CO₂管道运输设置 - CO₂ Pipeline Configuration
   use_co2_pipeline_distance: false         # v3.0煤炭气化路线CO₂本地产生，无需运输 | v3.0: CO₂ from local coal gasification, no transport needed
                                            # 启用后使用管道路径进行精确的CO₂运输距离计算
@@ -1082,9 +1086,9 @@ technologies:
     # ========================================================================
     # 🆕 工艺模式选择 - Process Mode Selection
     # ========================================================================
-    process_mode: one_step                # 工艺模式：one_step (一步法) | two_step (两步法)
-                                          # one_step: H₂+CO₂→SAF (直接转化，无甲醇中间变量)
-                                          # two_step: H₂+CO₂→甲醇→SAF (两步法，已禁用)
+    process_mode: one_step                # 工艺模式：one_step (一步法)
+                                          # H₂+CO₂→SAF (直接转化，无甲醇中间变量)
+                                          # 注意：两步法已废弃，所有甲醇相关参数已删除
 
     # 适用位置 - Suitable Locations
     # 一步法可以在多种位置生产:
@@ -1104,39 +1108,17 @@ technologies:
     # ========================================================================
     # ✅ 一步法直接转化参数（当前启用）
     # ========================================================================
-    h2_consumption_ratio: 0.2             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要0.2kg氢气
+    h2_consumption_ratio: 0.3             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 一步法：生产1kg SAF需要0.3kg氢气
                                           # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
-                                          # 修正日期：2025-11-08 (从0.45更新为0.2)
+                                          # 修正日期：2025-11-08 (煤炭气化路线参数)
 
     carbon_consumption_ratio: 1.0         # 碳消耗比(kg C/kg SAF) | Carbon consumption ratio
                                           # 一步法：生产1kg SAF需要1.0kg碳(C)
                                           # 注意：这里配置的是碳(C)不是CO₂，碳原子质量
                                           # CO₂中碳含量：C/CO₂ = 12/44 ≈ 0.273
                                           # 因此 1.0 kg C 对应约 3.67 kg CO₂
-                                          # 修正日期：2025-11-08 (从co2_consumption_ratio改为carbon_consumption_ratio)
-
-    # ========================================================================
-    # 🔧 两步法分步转化参数（已禁用，仅作参考）
-    # 如需切换回两步法，将 process_mode 改为 two_step 并取消下面注释
-    # ========================================================================
-    # methanol_h2_consumption_ratio: 0.096  # kg H₂ / kg 甲醇 | H₂ consumption for methanol production
-    #                                       # 第一步反应的H₂消耗比
-    #                                       # 推导：0.15 kg H₂/kg SAF ÷ 1.5625 kg 甲醇/kg SAF = 0.096 kg H₂/kg 甲醇
-    #
-    # methanol_co2_consumption_ratio: 1.92  # kg CO₂ / kg 甲醇 | CO₂ consumption for methanol production
-    #                                       # 第一步反应的CO₂消耗比
-    #                                       # 推导：3.0 kg CO₂/kg SAF ÷ 1.5625 kg 甲醇/kg SAF = 1.92 kg CO₂/kg 甲醇
-    #
-    # methanol_intermediate_ratio: 1.5625   # kg 甲醇 / kg SAF | Methanol intermediate ratio
-    #                                       # 生产1kg SAF需要的甲醇量
-    #                                       # 计算：1 / methanol_to_saf_ratio = 1 / 0.64 = 1.5625
-    #
-    # # ========================================================================
-    # # 第二步：甲醇 → SAF
-    # # ========================================================================
-    # methanol_to_saf_ratio: 0.64           # kg SAF / kg 甲醇 | Methanol to SAF conversion ratio
-    #                                       # 第二步反应的转化率：1kg甲醇生成0.64kg SAF
+                                          # 修正日期：2025-11-08
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）
@@ -1243,3 +1225,40 @@ unified_costs:
     facility_investment_yuan_per_kg: 2000
     facility_operation_yuan_per_kg_year: 25
     saf_equipment_cost_yuan_per_kg: 12
+
+# =============================================================================
+# 超图优化器配置 (Super Graph Optimizer Configuration)
+# 用于管道路径预计算和快速查询
+# =============================================================================
+super_graph_config:
+  # 连接参数 - Connection Parameters
+  k_connections: 10                        # 每个业务节点连接k个最近管道节点 | Connect each node to k nearest pipeline nodes
+                                           # 默认10，平衡精度和计算效率
+                                           # 调参建议：稠密网络可降至5，稀疏网络可增至15
+
+  # 算法选择 - Algorithm Selection
+  algorithm: johnson                       # 全对最短路径算法 | All-pairs shortest path algorithm
+                                           # johnson: 适合稀疏图，复杂度O(V²logV + VE)
+                                           # floyd_warshall: 适合密集图，但大图很慢O(V³)
+                                           # 建议：节点数<500用floyd_warshall，>500用johnson
+
+  # 几何信息 - Geometry Information
+  include_route_geometry: false            # 是否包含路径几何坐标 | Include route geometry coordinates
+                                           # false: 仅计算距离，节省内存
+                                           # true: 保存完整路径坐标，用于可视化（占用更多内存）
+
+  # 缓存设置 - Cache Configuration
+  cache_to_disk: true                      # 是否缓存到磁盘 | Cache precomputed data to disk
+                                           # true: 第二次运行时快速加载，节省初始化时间
+                                           # false: 每次都重新计算
+
+  # 验证模式 - Validation Mode
+  validation_mode: false                   # 验证模式（对比新旧方法） | Validation mode (compare new vs old method)
+                                           # true: 同时运行新旧方法并对比结果，用于测试
+                                           # false: 仅使用超图方法，生产环境推荐
+                                           # 注意：validation_mode=true会显著降低性能
+
+  # 回退策略 - Fallback Strategy
+  fallback_on_failure: true                # 超图失败时是否回退到传统方法 | Fallback to traditional method on failure
+                                           # true: 如果超图查询失败，自动使用传统计算
+                                           # false: 超图失败时抛出异常

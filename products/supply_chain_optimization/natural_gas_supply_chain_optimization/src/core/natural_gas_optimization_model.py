@@ -93,6 +93,21 @@ except ImportError:
         HydrogenClusteringOptimizer = None
         ClusteringResult = None
 
+# 导入超图优化器（新增）
+try:
+    # 从共享模块导入
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+    sys.path.insert(0, project_root)
+    from shared.optimizers.super_graph_optimizer import SuperGraphOptimizer, SuperGraphConfig
+    from shared.types.pipeline_route_types import PipelineRouteNotFoundError as SharedPipelineRouteNotFoundError
+    SUPER_GRAPH_AVAILABLE = True
+except ImportError as e:
+    print(f"警告：超图优化器模块不可用: {e}")
+    SuperGraphOptimizer = None
+    SuperGraphConfig = None
+    SharedPipelineRouteNotFoundError = None
+    SUPER_GRAPH_AVAILABLE = False
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -1444,6 +1459,48 @@ class NaturalGasSupplyChainOptimizer:
                             mtj_coords
                         )
                         self.clustered_routes[(cluster.cluster_id, mtj_loc)] = route
+
+                # 🚀🚀 超图优化器：预计算所有最短路径（如果启用）
+                use_super_graph = self.config.get('basic_parameters', {}).get('use_super_graph_optimizer', False)
+                if use_super_graph and SUPER_GRAPH_AVAILABLE and SuperGraphOptimizer is not None:
+                    logger.info("=" * 70)
+                    logger.info("🚀 启用超图优化器，开始构建超级图...")
+                    logger.info("=" * 70)
+
+                    # 准备CO2捕获源数据（Natural Gas使用LNG终端/管道位置）
+                    co2_capture_sources = {}
+                    for loc_id in self.hydrogen_locations:
+                        if loc_id in self.locations:
+                            co2_capture_sources[loc_id] = {
+                                'latitude': self.locations[loc_id]['latitude'],
+                                'longitude': self.locations[loc_id]['longitude']
+                            }
+
+                    # 读取超图配置
+                    super_graph_config_dict = self.config.get('super_graph_config', {})
+                    super_graph_config = SuperGraphConfig(
+                        k_connections=super_graph_config_dict.get('k_connections', 10),
+                        algorithm=super_graph_config_dict.get('algorithm', 'johnson'),
+                        include_route_geometry=super_graph_config_dict.get('include_route_geometry', False),
+                        cache_to_disk=super_graph_config_dict.get('cache_to_disk', False)
+                    )
+
+                    # 初始化超图优化器
+                    self.super_graph_optimizer = SuperGraphOptimizer(
+                        pipeline_calculator=self.hydrogen_pipeline_calculator,
+                        co2_clustering_results=self.clustering_results,
+                        co2_capture_sources=co2_capture_sources,
+                        locations=self.locations,  # SAF工厂位置
+                        config=super_graph_config
+                    )
+
+                    # 构建超图并预计算所有距离
+                    self.super_graph_optimizer.build_and_precompute()
+                    logger.info("✓ 超图优化器初始化完成！后续距离查询将使用O(1)超图查找")
+                else:
+                    self.super_graph_optimizer = None
+                    if use_super_graph:
+                        logger.warning("配置启用了超图优化器，但模块不可用，将使用传统方法")
 
         except Exception as e:
             logger.error(f"初始化氢气聚类失败: {e}")
@@ -4661,6 +4718,33 @@ class NaturalGasSupplyChainOptimizer:
         if not hasattr(self, 'clustering_results') or self.clustering_results is None:
             return self._calculate_location_distance(h2_loc, mtj_loc)
 
+        # 🚀🚀 优先使用超图优化器（如果可用）
+        if hasattr(self, 'super_graph_optimizer') and self.super_graph_optimizer is not None:
+            try:
+                distance_result = self.super_graph_optimizer.get_distance(h2_loc, mtj_loc)
+                if distance_result:
+                    # 超图查询成功，直接返回
+                    return distance_result['total_distance_km']
+                else:
+                    # 超图查询失败（路径不可达），降级到直线距离
+                    logger.warning(f"超图查询路径不可达，使用直线距离: {h2_loc} -> {mtj_loc}")
+                    return self._calculate_location_distance(h2_loc, mtj_loc)
+            except Exception as e:
+                # 超图查询出错，检查是否允许回退
+                fallback_on_failure = self.config.get('super_graph_config', {}).get('fallback_on_failure', True)
+                if fallback_on_failure:
+                    logger.warning(f"超图查询失败，回退到传统方法: {h2_loc} -> {mtj_loc}, 错误: {e}")
+                    # 继续执行传统方法（下面的代码）
+                else:
+                    # 不允许回退，直接抛出异常
+                    raise RuntimeError(
+                        f"超图查询失败且不允许回退。\n"
+                        f"起点: {h2_loc}, 终点: {mtj_loc}\n"
+                        f"错误: {str(e)}\n"
+                        f"解决方法：设置 super_graph_config.fallback_on_failure: true"
+                    )
+
+        # 传统方法：聚类路径计算
         for cluster in self.clustering_results.clusters:
             if h2_loc in cluster.member_locations:
                 route_key = (cluster.cluster_id, mtj_loc)

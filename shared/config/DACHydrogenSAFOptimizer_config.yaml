@@ -8,6 +8,8 @@ basic_parameters:
   use_routing_for_short_distance: true
   use_hydrogen_pipeline_distance: true
   use_co2_pipeline_distance: true
+  use_super_graph_optimizer: true            # 是否使用超图优化器（氢气管道路径） | Enable super graph optimizer for H2 pipeline routing
+  use_co2_super_graph_optimizer: true        # 是否使用超图优化器（CO2管道路径） | Enable super graph optimizer for CO2 pipeline routing
   cache_base_dir: shared/data/cache
   cache_expiry_hours: 168
 capacity_limits:
@@ -455,6 +457,14 @@ technologies:
     name: 绿氢+CO₂费托合成制SAF
     technology_type: GreenH2_CO2_FT
     transport_mode: renewable_h2_pipeline
+
+    # ========================================================================
+    # 🆕 工艺模式选择 - Process Mode Selection
+    # ========================================================================
+    process_mode: one_step                # 工艺模式：one_step (一步法)
+                                          # H₂+CO₂→SAF (直接转化，无甲醇中间变量)
+                                          # 注意：两步法已废弃，所有甲醇相关参数已删除
+
     suitable_locations:
     - solar_plant
     - wind_farm
@@ -471,22 +481,12 @@ technologies:
     h2_consumption_ratio: 0.45            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
                                           # 一步法：生产1kg SAF需要0.45kg氢气
                                           # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
-                                          # 修正日期：2025-11-07 (从0.15更新为0.45)
+                                          # 修正日期：2025-11-08 (统一使用一步法)
 
     co2_consumption_ratio: 3.2            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
                                           # 一步法：生产1kg SAF需要3.2kg CO₂
-                                          # 直接从H₂和CO₂合成SAF
-                                          # 修正日期：2025-11-07 (从3.0更新为3.2)
-
-    # ========================================================================
-    # 🔧 两步法分步转化参数（当前启用）
-    # ========================================================================
-    methanol_intermediate_ratio: 1.5625   # kg 甲醇 / kg SAF | Methanol intermediate ratio
-                                          # 生产1kg SAF需要的甲醇量
-                                          # 计算：1 / methanol_to_saf_ratio = 1 / 0.64 = 1.5625
-
-    methanol_to_saf_ratio: 0.64           # kg SAF / kg 甲醇 | Methanol to SAF conversion ratio
-                                          # 第二步反应的转化率：1kg甲醇生成0.64kg SAF
+                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
+                                          # 修正日期：2025-11-08 (DAC+绿氢路线参数)
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）
@@ -643,3 +643,77 @@ dac_parameters:
     facility_construction_cost_yuan: 50000000  # DAC设施建设成本（5000万元/设施）
     can_colocate_with_saf: true  # 允许与SAF工厂共址部署
     max_capacity_kg_per_hour: 100000  # 单个DAC设施最大捕获容量（无限制则设为很大值）
+
+# =============================================================================
+# 超图优化器配置 - 氢气管道路径 (Super Graph Optimizer Configuration - H2 Pipeline Routing)
+# 用于氢气管道路径预计算和快速查询
+# =============================================================================
+super_graph_config:
+  # 连接参数 - Connection Parameters
+  k_connections: 10                        # 每个业务节点连接k个最近管道节点 | Connect each node to k nearest pipeline nodes
+                                           # 默认10，平衡精度和计算效率
+                                           # 调参建议：稠密网络可降至5，稀疏网络可增至15
+
+  # 算法选择 - Algorithm Selection
+  algorithm: johnson                       # 全对最短路径算法 | All-pairs shortest path algorithm
+                                           # johnson: 适合稀疏图，复杂度O(V²logV + VE)
+                                           # floyd_warshall: 适合密集图，但大图很慢O(V³)
+                                           # 建议：节点数<500用floyd_warshall，>500用johnson
+
+  # 几何信息 - Geometry Information
+  include_route_geometry: false            # 是否包含路径几何坐标 | Include route geometry coordinates
+                                           # false: 仅计算距离，节省内存
+                                           # true: 保存完整路径坐标，用于可视化（占用更多内存）
+
+  # 缓存设置 - Cache Configuration
+  cache_to_disk: true                      # 是否缓存到磁盘 | Cache precomputed data to disk
+                                           # true: 第二次运行时快速加载，节省初始化时间
+                                           # false: 每次都重新计算
+
+  # 验证模式 - Validation Mode
+  validation_mode: false                   # 验证模式（对比新旧方法） | Validation mode (compare new vs old method)
+                                           # true: 同时运行新旧方法并对比结果，用于测试
+                                           # false: 仅使用超图方法，生产环境推荐
+                                           # 注意：validation_mode=true会显著降低性能
+
+  # 回退策略 - Fallback Strategy
+  fallback_on_failure: true                # 超图失败时是否回退到传统方法 | Fallback to traditional method on failure
+                                           # true: 如果超图查询失败，自动使用传统计算
+                                           # false: 超图失败时抛出异常
+
+# =============================================================================
+# 超图优化器配置 - CO2管道路径 (Super Graph Optimizer Configuration - CO2 Pipeline Routing)
+# 用于CO2管道路径预计算和快速查询
+# =============================================================================
+co2_super_graph_config:
+  # 连接参数 - Connection Parameters
+  k_connections: 10                        # 每个业务节点连接k个最近管道节点 | Connect each node to k nearest pipeline nodes
+                                           # 默认10，平衡精度和计算效率
+                                           # 调参建议：稠密网络可降至5，稀疏网络可增至15
+
+  # 算法选择 - Algorithm Selection
+  algorithm: johnson                       # 全对最短路径算法 | All-pairs shortest path algorithm
+                                           # johnson: 适合稀疏图，复杂度O(V²logV + VE)
+                                           # floyd_warshall: 适合密集图，但大图很慢O(V³)
+                                           # 建议：节点数<500用floyd_warshall，>500用johnson
+
+  # 几何信息 - Geometry Information
+  include_route_geometry: false            # 是否包含路径几何坐标 | Include route geometry coordinates
+                                           # false: 仅计算距离，节省内存
+                                           # true: 保存完整路径坐标，用于可视化（占用更多内存）
+
+  # 缓存设置 - Cache Configuration
+  cache_to_disk: true                      # 是否缓存到磁盘 | Cache precomputed data to disk
+                                           # true: 第二次运行时快速加载，节省初始化时间
+                                           # false: 每次都重新计算
+
+  # 验证模式 - Validation Mode
+  validation_mode: false                   # 验证模式（对比新旧方法） | Validation mode (compare new vs old method)
+                                           # true: 同时运行新旧方法并对比结果，用于测试
+                                           # false: 仅使用超图方法，生产环境推荐
+                                           # 注意：validation_mode=true会显著降低性能
+
+  # 回退策略 - Fallback Strategy
+  fallback_on_failure: true                # 超图失败时是否回退到传统方法 | Fallback to traditional method on failure
+                                           # true: 如果超图查询失败，自动使用传统计算
+                                           # false: 超图失败时抛出异常

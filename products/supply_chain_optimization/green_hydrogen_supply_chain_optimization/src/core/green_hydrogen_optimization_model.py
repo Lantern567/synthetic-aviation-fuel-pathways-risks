@@ -74,10 +74,20 @@ except ImportError:
 try:
     try:
         from ..hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-        from ..cache.pipeline_route_types import PipelineRouteNotFoundError
+        # 修改：使用共享模块的 pipeline_route_types
+        import sys
+        import os
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+        sys.path.insert(0, project_root)
+        from shared.types.pipeline_route_types import PipelineRouteNotFoundError
     except ImportError:
         from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-        from cache.pipeline_route_types import PipelineRouteNotFoundError
+        # 修改：使用共享模块的 pipeline_route_types
+        import sys
+        import os
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+        sys.path.insert(0, project_root)
+        from shared.types.pipeline_route_types import PipelineRouteNotFoundError
 except ImportError:
     # 确保src目录在路径中
     import sys
@@ -87,7 +97,10 @@ except ImportError:
         sys.path.insert(0, src_dir)
     try:
         from hydrogen.hydrogen_pipeline_distance_calculator import HydrogenPipelineDistanceCalculator, ClusteredPipelineRoute
-        from cache.pipeline_route_types import PipelineRouteNotFoundError
+        # 修改：使用共享模块的 pipeline_route_types
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+        sys.path.insert(0, project_root)
+        from shared.types.pipeline_route_types import PipelineRouteNotFoundError
     except ImportError as e:
         # logger还未定义，暂时使用print
         print(f"警告：氢气管道距离计算器模块不可用: {e}")
@@ -1855,7 +1868,12 @@ class GreenHydrogenSupplyChainOptimizer:
             return
 
         try:
-            from ..optimizer.super_graph_optimizer import SuperGraphOptimizer, SuperGraphConfig
+            # 修改：使用共享模块的 SuperGraphOptimizer
+            import sys
+            import os
+            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+            sys.path.insert(0, project_root)
+            from shared.optimizers.super_graph_optimizer import SuperGraphOptimizer, SuperGraphConfig
 
             # 读取配置
             k_connections = self.config.get('optimization', {}).get('super_graph_k_connections', 10)
@@ -3665,68 +3683,17 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         self.cost_expressions['co2_truck_transport_cost'] = gp.LinExpr(0)  # 【禁用罐车运输】设为0
 
-        # 13. 甲醇生产成本（20年生命周期现值）
-        # 从配置文件读取甲醇生产成本参数
-        methanol_production_cost_cfg = self.config.get('unified_costs', {}).get('methanol_production', {})
-        methanol_production_unit_cost = float(methanol_production_cost_cfg.get('production_cost_yuan_per_kg', 0.5))  # 元/kg 甲醇
+        # 13. 甲醇相关成本（已全部删除 - 完全的中间产物不单独计费）
+        # ❌ 删除原因：
+        #    1. 甲醇生产成本(H2和CO2)已经在原料成本中计算
+        #    2. 甲醇储存成本应该包含在SAF合成成本中,不单独计费
+        #    3. 甲醇是完全的中间产物,整个生产过程应该作为SAF生产的一部分
 
-        self.cost_expressions['methanol_production_cost'] = gp.quicksum(
-            self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0)) *
-            methanol_production_unit_cost * lifecycle_operation_factor  # 小时级生产量 × 单位成本 × 生命周期系数
-            for methanol_loc in sum(self.mtj_locations.values(), [])
-            for hour in range(self.total_hours)
-            if 'green_h2_co2' in [tech for tech in self.mtj_locations if methanol_loc in self.mtj_locations[tech]]
-        )
+        self.cost_expressions['methanol_production_cost'] = gp.LinExpr(0)  # 已删除
+        self.cost_expressions['methanol_storage_investment'] = gp.LinExpr(0)  # 已删除
+        self.cost_expressions['methanol_storage_operation'] = gp.LinExpr(0)  # 已删除
 
-        # 14. 甲醇存储成本（20年生命周期现值）
-        # 【修正】基于周级甲醇生产量计算峰值库存
-        # 原错误：对所有小时库存求和，导致成本虚高
-        # 正确逻辑：设备投资和运营成本均基于峰值库存
-        # 注意：一步法直接制SAF无需甲醇库存，此处为兼容两步法保留
-
-        # 从配置文件读取甲醇存储成本参数
-        methanol_storage_cost_cfg = self.config.get('unified_costs', {}).get('methanol_storage', {})
-        methanol_storage_equipment_cost = float(methanol_storage_cost_cfg.get('equipment_cost_yuan_per_kg', 15))  # 元/kg
-        methanol_storage_operation_cost = float(methanol_storage_cost_cfg.get('operation_cost_yuan_per_kg_hour', 0.002))  # 元/(kg·hour)
-
-        # 检查是否有甲醇库存变量（一步法可能为空）
-        if hasattr(self, 'methanol_inventory_vars') and self.methanol_inventory_vars:
-            # 计算周甲醇生产总量作为峰值库存近似
-            methanol_locations_list = []
-            for tech, tech_locations in self.mtj_locations.items():
-                if 'green_h2_co2' in tech:
-                    methanol_locations_list.extend(tech_locations)
-            methanol_locations_list = list(set(methanol_locations_list))
-
-            # 周甲醇生产量 = Σ(每小时生产量)
-            weekly_methanol_production = gp.quicksum(
-                self.methanol_production_vars.get((methanol_loc, hour), gp.LinExpr(0))
-                for methanol_loc in methanol_locations_list
-                for hour in range(self.total_hours)
-                if (methanol_loc, hour) in self.methanol_production_vars
-            )
-
-            # 甲醇储存设备投资 = 周生产量（峰值库存）× 设备单价
-            self.cost_expressions['methanol_storage_investment'] = weekly_methanol_production * methanol_storage_equipment_cost
-
-            # 甲醇储存运营成本 = 平均库存 × 运营单价 × 时间 × 生命周期系数
-            # 甲醇库存从0线性增长到峰值,平均库存 = 峰值/2
-            average_methanol_inventory = weekly_methanol_production / 2
-            hours_per_week = self.config['basic_parameters']['hours_per_week']
-
-            self.cost_expressions['methanol_storage_operation'] = (
-                average_methanol_inventory *
-                methanol_storage_operation_cost *
-                hours_per_week *
-                lifecycle_operation_factor
-            )
-
-            logger.info("甲醇储存成本计算（设备投资基于峰值库存，运营成本基于平均库存）")
-        else:
-            # 一步法直接制SAF，无甲醇库存
-            self.cost_expressions['methanol_storage_investment'] = gp.LinExpr(0)
-            self.cost_expressions['methanol_storage_operation'] = gp.LinExpr(0)
-            logger.info("一步法直接制SAF，无甲醇库存成本")
+        logger.info("甲醇相关成本已全部删除（完全的中间产物不单独计费）")
 
 
         # 15. CO₂存储成本（20年生命周期现值）
@@ -3828,7 +3795,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
             self.cost_expressions['hydrogen_transport_investment'] +
-            self.cost_expressions['methanol_storage_investment'] +  # 甲醇储存设备投资
+            # self.cost_expressions['methanol_storage_investment'] +  # ❌ 已删除：甲醇储存设备投资也不单独计费
             self.cost_expressions['co2_storage_investment']  # 新增：CO₂储存设备投资
         )
 
@@ -3846,8 +3813,8 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['co2_capture_cost'] +  # CO₂捕获成本
             self.cost_expressions['co2_pipeline_transport_cost'] +  # CO₂管道运输成本
             # self.cost_expressions['co2_truck_transport_cost'] +  # 【禁用罐车运输】
-            self.cost_expressions['methanol_production_cost'] +  # 甲醇生产成本
-            self.cost_expressions['methanol_storage_operation'] +  # 甲醇储存运营成本
+            # self.cost_expressions['methanol_production_cost'] +  # ❌ 已删除：甲醇作为中间产物，不单独计费
+            # self.cost_expressions['methanol_storage_operation'] +  # ❌ 已删除：甲醇储存成本也不单独计费
             self.cost_expressions['co2_storage_operation'] +  # 新增：CO₂储存运营成本
             self.cost_expressions['final_inventory_cost']
         )
@@ -6835,11 +6802,11 @@ class GreenHydrogenSupplyChainOptimizer:
             'hydrogen_pipeline_investment': '氢能管道建设投资(元)',
             'co2_capture_cost': 'CO₂捕获成本(元)',
             'co2_pipeline_transport_cost': 'CO₂管道运输成本(元)',
-            'methanol_production_cost': '甲醇生产成本(元)',
+            # 'methanol_production_cost': '甲醇生产成本(元)',  # ❌ 已删除：甲醇作为中间产物，不单独计费
             'transport_operation_cost': 'MTJ运输运营成本(元)',
             'storage_operation_cost': 'MTJ储存运营成本(元)',
             'h2_storage_operation': '氢气储存运营成本(元)',
-            'methanol_storage_operation': '甲醇储存运营成本(元)',
+            # 'methanol_storage_operation': '甲醇储存运营成本(元)',  # ❌ 已删除：甲醇储存成本也不单独计费
             'co2_storage_operation': 'CO₂储存运营成本(元)',
             'electricity_cost': '电力成本(元)',
             'final_inventory_cost': '期末库存处置成本(元)',

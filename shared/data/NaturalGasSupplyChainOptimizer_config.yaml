@@ -67,6 +67,10 @@ basic_parameters:
                                            # 启用后使用管道路径进行精确的氢气运输距离计算
                                            # 依赖：需要GIS管道数据 (crude/refined/natural_gas_pipelines.geojson)
 
+  use_super_graph_optimizer: true          # 是否使用超图优化器 | Enable super graph optimizer for pipeline routing
+                                           # true: 使用超图预计算所有最短路径，查询速度40,000倍提升
+                                           # false: 使用传统实时计算方法（每次查询40ms）
+
   # LNG设施容量参数 - LNG Facility Capacity
   avg_lng_capacity_mcm_per_year: 1000      # LNG接收站平均容量(万立方米/年) | Average LNG terminal capacity (10k m³/year)
                                            # 当LNG接收站实际容量数据缺失时使用的默认值
@@ -932,3 +936,40 @@ unified_costs:
     facility_operation_yuan_per_kg_year: 20
     hydrogen_equipment_cost_yuan_per_kg: 20
     mtj_equipment_cost_yuan_per_kg: 10
+
+# =============================================================================
+# 超图优化器配置 (Super Graph Optimizer Configuration)
+# 用于管道路径预计算和快速查询
+# =============================================================================
+super_graph_config:
+  # 连接参数 - Connection Parameters
+  k_connections: 10                        # 每个业务节点连接k个最近管道节点 | Connect each node to k nearest pipeline nodes
+                                           # 默认10，平衡精度和计算效率
+                                           # 调参建议：稠密网络可降至5，稀疏网络可增至15
+
+  # 算法选择 - Algorithm Selection
+  algorithm: johnson                       # 全对最短路径算法 | All-pairs shortest path algorithm
+                                           # johnson: 适合稀疏图，复杂度O(V²logV + VE)
+                                           # floyd_warshall: 适合密集图，但大图很慢O(V³)
+                                           # 建议：节点数<500用floyd_warshall，>500用johnson
+
+  # 几何信息 - Geometry Information
+  include_route_geometry: false            # 是否包含路径几何坐标 | Include route geometry coordinates
+                                           # false: 仅计算距离，节省内存
+                                           # true: 保存完整路径坐标，用于可视化（占用更多内存）
+
+  # 缓存设置 - Cache Configuration
+  cache_to_disk: true                      # 是否缓存到磁盘 | Cache precomputed data to disk
+                                           # true: 第二次运行时快速加载，节省初始化时间
+                                           # false: 每次都重新计算
+
+  # 验证模式 - Validation Mode
+  validation_mode: false                   # 验证模式（对比新旧方法） | Validation mode (compare new vs old method)
+                                           # true: 同时运行新旧方法并对比结果，用于测试
+                                           # false: 仅使用超图方法，生产环境推荐
+                                           # 注意：validation_mode=true会显著降低性能
+
+  # 回退策略 - Fallback Strategy
+  fallback_on_failure: true                # 超图失败时是否回退到传统方法 | Fallback to traditional method on failure
+                                           # true: 如果超图查询失败，自动使用传统计算
+                                           # false: 超图失败时抛出异常
