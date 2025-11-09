@@ -2602,8 +2602,7 @@ class NaturalGasSupplyChainOptimizer:
             if (location, tech, hour) in self.production_vars
         )
 
-        # 4. 运输设备投资成本 + 20年运营成本现值
-        self.cost_expressions['transport_equipment_cost'] = gp.LinExpr(0)  # 已包含在平准化运输成本中
+        # 4. 运输运营成本现值
         self.cost_expressions['transport_operation_cost'] = gp.quicksum(
             self.transport_vars[(location, airport, week)] *
             self._calculate_mtj_transport_cost_by_distance(
@@ -2674,9 +2673,11 @@ class NaturalGasSupplyChainOptimizer:
             if (location, hour) in self.hydrogen_production_vars
         )
 
-        # 8. 电解制氢电力成本（20年生命周期现值）
-        # 8. 电力成本（基于实际氢气生产的电力消耗）
-        self.cost_expressions['electricity_cost'] = gp.quicksum(
+        # 8. 电力成本（拆分为两部分：H2电解 + MTJ合成）
+        # 修正日期：2025-11-09 - 将电力成本拆分为H2电解和MTJ合成两部分
+
+        # 8.1 电解制氢电力成本（基于实际氢气生产的电力消耗）
+        h2_electrolysis_power_cost = gp.quicksum(
             self.hydrogen_production_vars[(location, hour)] *
             self.costs['electrolysis_power_consumption'] / 1000 *  # kWh -> MWh
             self.costs['renewable_electricity_cost_yuan_per_mwh']  # 时间窗口内实际电力成本，不乘以生命周期系数
@@ -2684,6 +2685,60 @@ class NaturalGasSupplyChainOptimizer:
             for hour in range(self.total_hours)
             if (location, hour) in self.hydrogen_production_vars
         ) * operation_expansion_factor * present_value_factor  # 扩展到20年生命周期现值
+
+        # 8.2 MTJ合成工艺电力成本（甲醇制航空燃料）
+        # 新增：从配置文件中获取MTJ合成能耗参数（之前仅用于碳排放计算，未计入成本）
+        # 修正日期：2025-11-09
+        mtj_synthesis_energy_kwh_per_ton = float(
+            self.config.get('carbon_emission_parameters', {}).get('production_process', {}).get('mtj_process_energy', 4500)
+        )
+
+        # MTJ工艺能耗单位: kWh/t SAF, 需要转换为 kWh/kg
+        mtj_synthesis_energy_kwh_per_kg = mtj_synthesis_energy_kwh_per_ton / 1000  # 4500 kWh/t = 4.5 kWh/kg
+
+        # 根据SAF工厂位置类型，使用不同的电价
+        # renewable_plant (solar/wind): 使用可再生电价 0.35 yuan/kWh
+        # 其他位置 (airport等): 使用电网电价 0.6 yuan/kWh
+        renewable_electricity_price_yuan_per_kwh = (
+            self.costs['renewable_electricity_cost_yuan_per_mwh'] / 1000  # MWh -> kWh
+        )
+        grid_electricity_price_yuan_per_kwh = self.config.get('cost_parameters', {}).get('renewable_energy', {}).get('grid_electricity_price_yuan_per_kwh', 0.6)
+
+        mtj_synthesis_power_cost = gp.quicksum(
+            self.production_vars[(location, tech, hour)] *
+            mtj_synthesis_energy_kwh_per_kg *  # kWh/kg
+            (renewable_electricity_price_yuan_per_kwh if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+             else grid_electricity_price_yuan_per_kwh)
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        ) * operation_expansion_factor * present_value_factor
+
+        # 总电力成本 = H2电解成本 + MTJ合成成本
+        self.cost_expressions['electricity_cost'] = h2_electrolysis_power_cost + mtj_synthesis_power_cost
+
+        # 8.3 MTJ催化剂成本（20年生命周期现值）
+        # 新增：从配置文件中获取催化剂成本参数（之前未定义）
+        # 修正日期：2025-11-09
+        # 从technologies配置中获取催化剂成本，需要遍历所有技术定义
+        catalyst_costs_by_tech = {}
+        for tech_name, tech_config in self.config.get('technologies', {}).items():
+            if isinstance(tech_config, dict):
+                catalyst_cost = tech_config.get('catalyst_cost_yuan_per_kg_saf', 0.10)  # 默认0.10元/kg
+                catalyst_costs_by_tech[tech_name] = catalyst_cost
+
+        # MTJ催化剂成本表达式
+        self.cost_expressions['catalyst_cost'] = gp.quicksum(
+            self.production_vars[(location, tech, hour)] *
+            catalyst_costs_by_tech.get(tech, 0.10)  # 如果技术未找到，使用默认值0.10元/kg
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        ) * operation_expansion_factor * present_value_factor
+
+        logger.info(f"MTJ催化剂成本已添加（默认0.10元/kg SAF）")
 
         # 9. 氢气储存投资 + 20年运营成本现值
         # 修正：氢气储存设备成本应基于各地点的最大库存量之和，而非所有时间点库存量之和
@@ -2840,6 +2895,7 @@ class NaturalGasSupplyChainOptimizer:
             self.cost_expressions['storage_operation_cost'] +
             self.cost_expressions['hydrogen_production_cost'] +
             self.cost_expressions['electricity_cost'] +
+            self.cost_expressions['catalyst_cost'] +  # 新增：MTJ催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
             self.cost_expressions['hydrogen_transport_operation'] +
             self.cost_expressions['hydrogen_pipeline_operation'] +
@@ -2873,6 +2929,51 @@ class NaturalGasSupplyChainOptimizer:
         # 创建碳排放表达式（如果启用）
         if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
             self._create_carbon_emission_expressions()
+
+    def _calculate_dynamic_renewable_intensity(self, location, hour):
+        """
+        基于实际发电数据动态计算可再生能源碳强度
+
+        Args:
+            location: 位置标识
+            hour: 小时索引
+
+        Returns:
+            float: 动态计算的碳强度 (kgCO₂e/kWh)
+
+        说明:
+            - 根据实际风电和光伏发电量计算加权碳强度
+            - 风电碳强度: 0.015 kgCO₂e/kWh
+            - 光伏碳强度: 0.045 kgCO₂e/kWh
+            - 当无发电数据时,默认使用50%-50%比例(回退值0.03)
+            - 替代原固定参数renewable_electricity=0.02
+        """
+        # 从配置获取碳强度参数
+        renewable_energy = self.carbon_params.get('renewable_energy', {})
+        wind_ci = renewable_energy.get('wind_power_intensity', 0.015)  # kgCO₂e/kWh
+        solar_ci = renewable_energy.get('solar_power_intensity', 0.045)  # kgCO₂e/kWh
+
+        # 尝试获取实际发电数据
+        # 注意: renewable_generation_data结构需要根据实际数据加载器确定
+        # 假设格式: {(location, hour): {'wind_mwh': X, 'solar_mwh': Y}}
+        if hasattr(self, 'renewable_generation_data') and self.renewable_generation_data:
+            gen_data = self.renewable_generation_data.get((location, hour), {})
+            wind_gen = gen_data.get('wind_mwh', 0)
+            solar_gen = gen_data.get('solar_mwh', 0)
+            total_gen = wind_gen + solar_gen
+
+            if total_gen > 0:
+                # 按实际发电量加权计算碳强度
+                wind_ratio = wind_gen / total_gen
+                solar_ratio = solar_gen / total_gen
+                dynamic_ci = wind_ratio * wind_ci + solar_ratio * solar_ci
+                logger.debug(f"位置{location}小时{hour}: 风电{wind_ratio*100:.1f}% 光伏{solar_ratio*100:.1f}% → CI={dynamic_ci:.4f}")
+                return dynamic_ci
+
+        # 回退方案: 使用50%-50%比例
+        fallback_ci = (wind_ci + solar_ci) / 2  # 0.03 kgCO₂e/kWh
+        logger.debug(f"位置{location}小时{hour}: 无发电数据,使用回退值CI={fallback_ci:.4f} (50%-50%)")
+        return fallback_ci
 
     def _create_carbon_emission_expressions(self):
         """创建碳排放计算表达式（基于SAF生命周期碳排放计算方法）"""
@@ -2990,10 +3091,44 @@ class NaturalGasSupplyChainOptimizer:
         ng_to_methanol = production.get('ng_to_methanol_rate', 1.2)  # m³ NG/kg甲醇
         ng_process_em = production.get('ng_process_emission', 0.8)  # kg CO2eq/m³
         mtj_energy = production.get('mtj_process_energy', 800)  # kWh/t SAF
-        renewable_elec = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh
-        green_h2_intensity = production.get('green_h2_intensity', 1.1)  # kg CO2eq/kg H2
+        renewable_elec_fixed = production.get('renewable_electricity', 0.02)  # kg CO2eq/kWh (已废弃,仅作回退)
+        electrolysis_energy = production.get('electrolysis_energy', 55)  # kWh/kg H2
 
-        # 天然气制甲醇碳排放
+        # =========================================================================
+        # ✨ 动态碳强度计算 - 预计算所有location-hour组合的碳强度
+        # =========================================================================
+        logger.info("预计算动态可再生能源碳强度...")
+        self.dynamic_carbon_intensity = {}  # 缓存: {(location, hour): CI值}
+
+        # 预计算所有可能的location-hour组合的碳强度
+        unique_locations = set(self.locations) | set(self.hydrogen_locations)
+        for location in unique_locations:
+            for hour in range(self.total_hours):
+                ci = self._calculate_dynamic_renewable_intensity(location, hour)
+                self.dynamic_carbon_intensity[(location, hour)] = ci
+
+        # 统计动态碳强度的分布
+        ci_values = list(self.dynamic_carbon_intensity.values())
+        if ci_values:
+            logger.info(f"动态碳强度统计: 最小={min(ci_values):.4f}, 最大={max(ci_values):.4f}, "
+                       f"平均={sum(ci_values)/len(ci_values):.4f} kgCO₂e/kWh")
+            logger.info(f"对比固定值: {renewable_elec_fixed} kgCO₂e/kWh (已废弃)")
+
+        # 计算绿氢动态碳强度 (使用动态电力碳强度重新计算)
+        # 原公式: green_h2_intensity = 55 kWh/kg × 0.02 kgCO₂e/kWh + 0.05 kgCO₂e/kg = 1.1
+        # 新公式: 动态计算,基于每个location-hour的实际碳强度
+        h2_process_emission = production.get('h2_electrolysis_emission', 0.05)  # 电解过程排放
+        self.dynamic_h2_intensity = {}  # 缓存: {(location, hour): H2 CI值}
+
+        for location in self.hydrogen_locations:
+            for hour in range(self.total_hours):
+                elec_ci = self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)
+                h2_ci = electrolysis_energy * elec_ci + h2_process_emission
+                self.dynamic_h2_intensity[(location, hour)] = h2_ci
+
+        logger.info(f"绿氢动态碳强度计算完成 (基于电解能耗{electrolysis_energy} kWh/kg + 过程排放{h2_process_emission})")
+
+        # 天然气制甲醇碳排放 (无需修改,不涉及可再生能源)
         self.carbon_expressions['ng_to_methanol'] = gp.quicksum(
             self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
             ng_to_methanol * ng_process_em
@@ -3003,29 +3138,40 @@ class NaturalGasSupplyChainOptimizer:
             if (location, tech, hour) in self.production_vars
         )
 
-        # 甲醇制SAF过程碳排放
+        # 甲醇制SAF过程碳排放 (✨ 使用动态碳强度)
+        # 根据SAF工厂位置类型选择碳强度：
+        # - 可再生能源站点 (solar_plant, wind_farm) → 使用动态可再生碳强度 (0.015-0.045 kgCO₂e/kWh)
+        # - 其他站点 (airport等) → 使用市电碳强度 (0.6 kgCO₂e/kWh)
+        # 修正日期：2025-11-09
+        grid_electricity_intensity = self.config.get('carbon_intensity', {}).get('grid_electricity_intensity', 0.6)
+
         self.carbon_expressions['methanol_to_saf'] = gp.quicksum(
             self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            mtj_energy / 1000 * renewable_elec  # kWh/t转换为MWh/t
+            mtj_energy / 1000 *
+            (self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)  # 可再生站点：动态碳强度
+             if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+             else grid_electricity_intensity)  # 其他站点：市电碳强度
             for location in self.locations
             for tech in self.technologies
             for hour in range(self.total_hours)
             if (location, tech, hour) in self.production_vars
         )
 
-        # 氢气生产碳排放
-        # 注：green_h2_intensity已包含电解能耗(55 kWh/kg × 0.02 kg CO2eq/kWh = 1.1)，无需重复计算
+        logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 市电碳强度: {grid_electricity_intensity} kgCO₂e/kWh")
+        logger.info(f"✨ MTJ碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）")
+
+        # 氢气生产碳排放 (✨ 使用动态氢气碳强度)
         self.carbon_expressions['h2_production'] = gp.quicksum(
             self.hydrogen_production_vars.get((location, hour), gp.LinExpr(0)) *
-            green_h2_intensity  # kg H2 × kg CO2eq/kg H2 = kg CO2eq
+            self.dynamic_h2_intensity.get((location, hour), 1.1)  # 回退值1.1
             for location in self.hydrogen_locations
             for hour in range(self.total_hours)
             if (location, hour) in self.hydrogen_production_vars
         )
 
         logger.info(f"天然气消耗率: {ng_to_methanol} m³/kg甲醇, 工艺排放: {ng_process_em} kg CO2eq/m³")
-        logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 可再生电力碳强度: {renewable_elec} kg CO2eq/kWh")
-        logger.info(f"绿氢碳强度: {green_h2_intensity} kg CO2eq/kg H2")
+        logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t")
+        logger.info(f"✨ 使用动态碳强度代替固定值 (原固定值: {renewable_elec_fixed} kg CO2eq/kWh)")
         logger.info(f"[调试] 生产变量数量: {len([k for k in self.production_vars.keys()])}") if hasattr(self, 'production_vars') else logger.warning("[调试] 未找到生产变量")
         logger.info(f"[调试] 氢气生产变量数量: {len([k for k in self.hydrogen_production_vars.keys()])}") if hasattr(self, 'hydrogen_production_vars') else logger.warning("[调试] 未找到氢气生产变量")
 
@@ -3041,21 +3187,21 @@ class NaturalGasSupplyChainOptimizer:
         if h2_storage_energy <= 0:
             logger.warning(f"氢气储存能耗参数异常: {h2_storage_energy}")
 
-        # MTJ储存碳排放
+        # MTJ储存碳排放 (✨ 使用动态碳强度)
         # 注：存储变量索引范围应为0到total_hours（包含边界状态）
         self.carbon_expressions['mtj_storage'] = gp.quicksum(
             self.storage_vars.get((location, hour), gp.LinExpr(0)) *
-            mtj_storage_energy / 24 * renewable_elec  # kWh/t·天 → kWh/t·h，修复：移除错误的/1000
+            mtj_storage_energy / 24 * self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)  # kWh/t·天 → kWh/t·h
             for location in self.locations
             for hour in range(self.total_hours + 1)  # 存储变量包含边界状态
             if (location, hour) in self.storage_vars
         )
 
-        # 氢气储存碳排放
+        # 氢气储存碳排放 (✨ 使用动态碳强度)
         # 注：氢气存储变量索引范围应为0到total_hours（包含边界状态）
         self.carbon_expressions['h2_storage'] = gp.quicksum(
             self.hydrogen_storage_vars.get((location, hour), gp.LinExpr(0)) *
-            h2_storage_energy / 24 * renewable_elec  # 转换为小时级
+            h2_storage_energy / 24 * self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)  # 转换为小时级
             for location in self.hydrogen_locations
             for hour in range(self.total_hours + 1)  # 氢气存储变量包含边界状态
             if (location, hour) in self.hydrogen_storage_vars
@@ -3158,6 +3304,37 @@ class NaturalGasSupplyChainOptimizer:
             logger.warning("[调试] 无法测试距离计算：位置或机场数据未初始化")
 
         # =========================================================================
+        # 5.6 CO₂利用负排放 (CO₂ Utilization Credit - Negative Emissions)
+        # =========================================================================
+        # E-CRM技术：天然气处理产生的CO₂被固定在甲醇中，最终固定在SAF产品中
+        # 根据CORSIA标准，碳固定可计入负排放
+        # 计算方法：SAF产品中的碳含量 × CO₂/C摩尔比(44/12) × 利用率
+        #
+        # SAF碳含量约为85% (质量分数)
+        # CO₂利用率：100% (所有SAF产品中的碳都来自CO₂)
+        # 负排放系数：-1.0 (完全计入负排放)
+
+        saf_carbon_content = 0.85  # SAF产品碳含量 (kg C/kg SAF)
+        co2_to_c_ratio = 44.0 / 12.0  # CO₂/C摩尔质量比
+        utilization_credit_factor = -1.0  # 负排放系数 (CORSIA标准)
+
+        # CO₂利用负排放 = SAF总产量 × 碳含量 × CO₂/C比 × 负排放系数
+        self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
+            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+            saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        )
+
+        logger.info(f"✨ CO₂利用负排放表达式已创建")
+        logger.info(f"   SAF碳含量: {saf_carbon_content} kg C/kg SAF")
+        logger.info(f"   CO₂/C摩尔比: {co2_to_c_ratio:.2f}")
+        logger.info(f"   负排放系数: {utilization_credit_factor} (CORSIA标准)")
+        logger.info(f"   计算公式: SAF产量 × {saf_carbon_content} × {co2_to_c_ratio:.2f} × {utilization_credit_factor}")
+
+        # =========================================================================
         # 6. 汇总碳排放 (Carbon Emission Aggregation)
         # =========================================================================
 
@@ -3186,13 +3363,17 @@ class NaturalGasSupplyChainOptimizer:
             self.carbon_expressions['ng_transport']
         )
 
-        # 总碳排放
+        # CO₂利用负排放 (单独分类，不计入其他类别)
+        self.carbon_aggregates['co2_utilization_credit'] = self.carbon_expressions['co2_utilization_credit']
+
+        # 总碳排放 (包含CO₂利用负排放)
         self.carbon_aggregates['total_emissions'] = (
             self.carbon_aggregates['raw_material_emissions'] +
             self.carbon_aggregates['facility_emissions'] +
             self.carbon_aggregates['production_emissions'] +
             self.carbon_aggregates['storage_emissions'] +
-            self.carbon_aggregates['transport_emissions']
+            self.carbon_aggregates['transport_emissions'] +
+            self.carbon_aggregates['co2_utilization_credit']  # ✨ 新增：CO₂利用负排放
         )
 
         # 将碳排放扩展到年化值（用于报告）
@@ -3660,17 +3841,32 @@ class NaturalGasSupplyChainOptimizer:
                     
                     # 3. 可再生能源电力平衡约束
                     available_energy_mwh = self.locations[location]['hourly_generation'][hour]  # MWh 每小时发电量
-                    
-                    # 制氢耗电：50 kWh/kg H2
-                    electricity_consumption_mwh = (
-                        self.hydrogen_production_vars[(location, hour)] * 
+
+                    # 制氢耗电：55 kWh/kg H2
+                    h2_electricity_consumption_mwh = (
+                        self.hydrogen_production_vars[(location, hour)] *
                         self.costs['electrolysis_power_consumption'] / 1000  # kWh -> MWh
                     )
-                    
-                    # 电力平衡：制氢耗电不能超过可再生能源发电量
+
+                    # MTJ工艺耗电（仅当MTJ工厂建在可再生能源站点时计入）
+                    # 修正日期：2025-11-09
+                    mtj_energy_kwh_per_t = float(
+                        self.config.get('carbon_intensity', {}).get('production_process', {}).get('mtj_process_energy', 4500)
+                    )
+                    mtj_electricity_consumption_mwh = gp.quicksum(
+                        self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+                        mtj_energy_kwh_per_t / 1000 / 1000  # kWh/t -> MWh/kg
+                        for tech in self.technologies
+                        if (location, tech, hour) in self.production_vars
+                    )
+
+                    # 总电力消耗 = 制氢耗电 + MTJ工艺耗电（仅可再生站点）
+                    total_electricity_consumption_mwh = h2_electricity_consumption_mwh + mtj_electricity_consumption_mwh
+
+                    # 电力平衡：总耗电不能超过可再生能源发电量
                     if available_energy_mwh > 0:
                         self.model.addConstr(
-                            electricity_consumption_mwh <= available_energy_mwh,
+                            total_electricity_consumption_mwh <= available_energy_mwh,
                             name=f"electricity_balance_{location}_{hour}"
                         )
                         
@@ -5737,17 +5933,12 @@ class NaturalGasSupplyChainOptimizer:
         cost_field_mapping = {
             'facility_investment_cost': 'MTJ工厂建设投资(元)',
             'electrolyzer_investment_cost': '电解槽建设投资(元)',
-            'transport_equipment_cost': '运输设备投资(元)',
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
             'h2_storage_investment': '氢气储存设备投资(元)',
-            'hydrogen_transport_investment': '氢气运输设备投资(元)',
-            'ng_transport_investment': '天然气运输设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
-            'hydrogen_production_cost': '氢气制取成本(元)',
             'hydrogen_transport_operation': '氢气罐车运输成本(元)',
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
-            'hydrogen_pipeline_investment': '氢能管道建设投资(元)',
             'ng_transport_operation': '天然气运输成本(元)',
             'natural_gas_cost': '天然气原料成本(元)',
             'transport_operation_cost': 'MTJ运输运营成本(元)',

@@ -180,6 +180,17 @@ carbon_emission_parameters:
 
     storage_facility_lifetime: 30          # 储存设施设计寿命(年) | Storage facility lifetime (years)
 
+  # 可再生能源发电排放 - Renewable Energy Emissions
+  renewable_energy:
+    wind_power_intensity: 0.015            # 风电碳强度(kgCO₂e/kWh) | Wind power CI (kgCO₂e/kWh)
+                                           # 包括制造、安装、运维的全生命周期排放
+
+    solar_power_intensity: 0.045           # 光伏碳强度(kgCO₂e/kWh) | Solar power CI (kgCO₂e/kWh)
+                                           # 包括硅片生产、组件制造、安装运维
+
+    grid_electricity_intensity: 0.6        # 电网电力碳强度(kgCO₂e/kWh) | Grid electricity CI
+                                           # 中国电网平均碳强度（备用电源）
+
   # 原材料获取排放 - Raw Material Extraction
   raw_materials:
     ng_extraction_intensity: 0.25          # 天然气开采碳强度(kgCO₂e/m³) | NG extraction CI (kgCO₂e/m³)
@@ -189,8 +200,10 @@ carbon_emission_parameters:
 
   # 生产过程排放 - Production Process Emissions
   production_process:
-    renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI
-                                           # 风电、光伏的生命周期排放强度
+    renewable_electricity: 0.02            # ⚠️ DEPRECATED - 已废弃参数 (仅用作fallback)
+                                           # 动态碳强度现基于实际风电/光伏发电数据计算
+                                           # Dynamic CI now calculated from actual wind/solar generation data
+                                           # 详见: _calculate_dynamic_renewable_intensity() 方法
 
     electrolysis_energy: 55                # 电解制氢能耗(kWh/kgH₂) | Electrolysis energy consumption
                                            # 当前主流碱性/PEM电解槽参数
@@ -206,8 +219,9 @@ carbon_emission_parameters:
     h2_addition_rate: 40                   # 氢气添加率(%) | Hydrogen addition rate
                                            # 甲醇合成过程中氢气的添加比例
 
-    mtj_process_energy: 800                # MTJ生产工艺能耗(kWh/吨) | MTJ production energy (kWh/ton)
+    mtj_process_energy: 4500               # MTJ生产工艺能耗(kWh/吨) | MTJ production energy (kWh/ton)
                                            # 包括反应、精制、分离等全过程
+                                           # 修正日期：2025-11-09 (从800更新为4500，基于实际工业数据)
 
   # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
@@ -843,6 +857,10 @@ technologies:
                                            # 生产1kg MTJ需要2.6kg甲醇中间体
                                            # 修正日期：2025-11-07 (从1.2更新为2.6)
 
+    catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
+                                           # MTJ两步法催化剂成本
+                                           # 修正日期：2025-11-09 (新增参数)
+
     hydrogen_transport_required: true      # 是否需要氢气运输 | Hydrogen transport required
                                            # true: 需要外部氢气供应和运输
   # 技术复杂度系数 - Technology Complexity Factors
@@ -859,6 +877,7 @@ technologies:
     h2_consumption_ratio: 0.12
     hydrogen_transport_required: true
     methanol_intermediate_ratio: 1.2
+    catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)
     name: E-CRM+TRM MTJ航煤生产（LNG接收站）
     ng_consumption_ratio: 0.8
     suitable_locations:
@@ -870,6 +889,7 @@ technologies:
     h2_consumption_ratio: 0.12
     hydrogen_transport_required: false
     methanol_intermediate_ratio: 1.2
+    catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)
     name: E-CRM+TRM MTJ航煤生产（LNG转运+可再生能源站）
     ng_consumption_ratio: 0.8
     suitable_locations:
@@ -882,6 +902,7 @@ technologies:
     h2_consumption_ratio: 0.12
     hydrogen_transport_required: false
     methanol_intermediate_ratio: 1.2
+    catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)
     name: E-CRM+TRM MTJ航煤生产（在可再生能源站）
     ng_consumption_ratio: 0.8
     suitable_locations:

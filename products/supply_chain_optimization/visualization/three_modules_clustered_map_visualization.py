@@ -1,6 +1,6 @@
 """
-三模块聚类运输路线地图可视化（包含聚类和管道接入点）
-Three Modules Clustered Transport Route Map Visualization (with clustering and pipeline access points)
+五场景聚类运输路线地图可视化（包含聚类和管道接入点）
+Five Scenarios Clustered Transport Route Map Visualization (with clustering and pipeline access points)
 
 基于聚类JSON文件和运输CSV文件生成完整的多层级运输可视化
 Based on clustering JSON files and transport CSV files to generate comprehensive multi-layer transport visualization
@@ -11,15 +11,25 @@ Based on clustering JSON files and transport CSV files to generate comprehensive
    - Layer2: 聚类中心 → 管道接入点
    - Layer3: 管道网络 → 目的地
 2. CO2聚类运输可视化 (CO2 clustered transport visualization)
-3. 天然气运输可视化 (Natural gas transport visualization)
+3. 天然气聚类运输可视化 (Natural gas clustered transport visualization)
+   - Layer1: 天然气管道节点 → 聚类中心
+   - Layer2: 聚类中心 → SAF工厂
+4. 天然气直接运输可视化 (Natural gas direct transport visualization)
    - 天然气供应点 → SAF工厂
-4. SAF卡车运输可视化 (SAF truck transport visualization)
-5. 管道网络底图 (Pipeline network basemap)
-6. 三模块对比地图 (Three modules comparison maps)
+5. SAF卡车运输可视化 (SAF truck transport visualization)
+6. 管道网络底图 (Pipeline network basemap)
+7. 五场景对比地图 (Five scenarios comparison maps)
+
+支持场景 | Supported Scenarios:
+1. 煤制氢 (Coal Hydrogen)
+2. DAC制氢 (DAC Hydrogen)
+3. 天然气两步法 (Natural Gas Two-Step)
+4. 天然气一步法 (Natural Gas One-Step)
+5. 绿氢+工业捕获CO₂ (Green H2 + Industrial CO2)
 
 作者 | Author: Claude Code
 创建时间 | Created: 2025-11-06
-最后更新 | Last Updated: 2025-11-08
+最后更新 | Last Updated: 2025-11-09
 """
 
 import json
@@ -57,8 +67,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class ThreeModulesClusteredMapVisualizer:
-    """三模块聚类运输路线地图可视化器"""
+class FiveScenariosClusteredMapVisualizer:
+    """五场景聚类运输路线地图可视化器"""
 
     def __init__(self, output_dir: str = None):
         """
@@ -100,6 +110,7 @@ class ThreeModulesClusteredMapVisualizer:
                 'color': '#E74C3C',
                 'h2_clustering_file': '../coal_hydrogen_saf_optimization/clustering_results.json',
                 'co2_clustering_file': '../coal_hydrogen_saf_optimization/co2_clustering_results.json',
+                'ng_clustering_file': None,
                 'transport_summary_pattern': '../coal_hydrogen_saf_optimization/results/transport_summary_*.csv'
             },
             'DAC Hydrogen': {
@@ -107,14 +118,32 @@ class ThreeModulesClusteredMapVisualizer:
                 'color': '#3498DB',
                 'h2_clustering_file': '../dac_hydrogen_saf_supply_chain_optimization/clustering_results.json',
                 'co2_clustering_file': None,  # DAC从空气中捕获CO2，无需CO2运输
+                'ng_clustering_file': None,
                 'transport_summary_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/transport_summary_*.csv'
             },
-            'Natural Gas': {
-                'name_cn': '天然气',
+            'Natural Gas Two-Step': {
+                'name_cn': '天然气两步法',
                 'color': '#2ECC71',
                 'h2_clustering_file': '../natural_gas_supply_chain_optimization/clustering_results.json',
                 'co2_clustering_file': None,  # 天然气制氢过程中CO2作为副产物，无独立运输
+                'ng_clustering_file': None,
                 'transport_summary_pattern': '../natural_gas_supply_chain_optimization/results/transport_summary_*.csv'
+            },
+            'Natural Gas One-Step': {
+                'name_cn': '天然气一步法',
+                'color': '#F39C12',
+                'h2_clustering_file': None,  # 一步法不需要氢气聚类
+                'co2_clustering_file': None,
+                'ng_clustering_file': '../natural_gas_supply_chain_optimization/ng_clustering_results.json',  # 天然气聚类
+                'transport_summary_pattern': '../natural_gas_supply_chain_optimization/results/one_step/transport_summary_*.csv'
+            },
+            'Green H2 Industrial CO2': {
+                'name_cn': '绿氢+工业捕获CO₂',
+                'color': '#9B59B6',
+                'h2_clustering_file': '../green_hydrogen_supply_chain_optimization/clustering_results.json',
+                'co2_clustering_file': '../green_hydrogen_supply_chain_optimization/co2_clustering_results.json',
+                'ng_clustering_file': None,
+                'transport_summary_pattern': '../green_hydrogen_supply_chain_optimization/results/transport_summary_*.csv'
             }
         }
 
@@ -153,18 +182,22 @@ class ThreeModulesClusteredMapVisualizer:
             module_data = {
                 'h2_clustering': None,
                 'co2_clustering': None,
+                'ng_clustering': None,
                 'transport_summary': None
             }
 
             try:
-                # 加载H2聚类数据
-                h2_clustering_file = (base_dir / config['h2_clustering_file']).resolve()
-                if h2_clustering_file.exists():
-                    with open(h2_clustering_file, 'r', encoding='utf-8') as f:
-                        module_data['h2_clustering'] = json.load(f)
-                    logger.info(f"  ✓ H2聚类数据: {module_data['h2_clustering']['total_clusters']} 个聚类")
+                # 加载H2聚类数据（如果有）
+                if config['h2_clustering_file']:
+                    h2_clustering_file = (base_dir / config['h2_clustering_file']).resolve()
+                    if h2_clustering_file.exists():
+                        with open(h2_clustering_file, 'r', encoding='utf-8') as f:
+                            module_data['h2_clustering'] = json.load(f)
+                        logger.info(f"  ✓ H2聚类数据: {module_data['h2_clustering']['total_clusters']} 个聚类")
+                    else:
+                        logger.warning(f"  ⚠ H2聚类文件不存在: {h2_clustering_file}")
                 else:
-                    logger.warning(f"  ⚠ H2聚类文件不存在: {h2_clustering_file}")
+                    logger.info(f"  - 无H2聚类数据（不需要氢气运输）")
 
                 # 加载CO2聚类数据（如果有）
                 if config['co2_clustering_file']:
@@ -177,6 +210,18 @@ class ThreeModulesClusteredMapVisualizer:
                         logger.warning(f"  ⚠ CO2聚类文件不存在: {co2_clustering_file}")
                 else:
                     logger.info(f"  - 无CO2聚类数据（不需要CO2运输）")
+
+                # 加载天然气聚类数据（如果有）
+                if config['ng_clustering_file']:
+                    ng_clustering_file = (base_dir / config['ng_clustering_file']).resolve()
+                    if ng_clustering_file.exists():
+                        with open(ng_clustering_file, 'r', encoding='utf-8') as f:
+                            module_data['ng_clustering'] = json.load(f)
+                        logger.info(f"  ✓ 天然气聚类数据: {module_data['ng_clustering']['total_clusters']} 个聚类")
+                    else:
+                        logger.warning(f"  ⚠ 天然气聚类文件不存在: {ng_clustering_file}")
+                else:
+                    logger.info(f"  - 无天然气聚类数据（不需要天然气聚类运输）")
 
                 # 加载运输汇总数据（自动查找最新文件）
                 import glob
@@ -928,6 +973,127 @@ class ThreeModulesClusteredMapVisualizer:
             logger.info(f"    ✓ GraphHopper详细路径: {graphhopper_success_count} 条")
             logger.info(f"    ✓ 直线路径: {direct_line_count} 条")
 
+    def plot_ng_clustered_routes(self, ax, ng_clustering, transport_summary, module_name):
+        """
+        绘制天然气聚类运输路线（两层结构，用于天然气一步法场景）
+
+        Args:
+            ax: matplotlib axes对象
+            ng_clustering: 天然气聚类JSON数据
+            transport_summary: 运输汇总DataFrame（包含Layer信息）
+            module_name: 模块名称
+        """
+        if ng_clustering is None or transport_summary is None:
+            return
+
+        logger.info(f"  绘制天然气聚类路线...")
+
+        # 筛选出天然气运输数据
+        ng_data = transport_summary[transport_summary['货物类型'] == '天然气'].copy()
+        logger.info(f"    天然气运输数据: {len(ng_data)} 条")
+
+        # 筛选聚类数据（有聚类信息的行）
+        ng_cluster_data = ng_data[ng_data['聚类信息'].notna() & (ng_data['聚类信息'] != '')].copy()
+        logger.info(f"    聚类运输数据: {len(ng_cluster_data)} 条")
+
+        clusters = ng_clustering.get('clusters', [])
+        cluster_centers = {}
+
+        # 提取所有聚类中心
+        for cluster in clusters:
+            cluster_id = cluster['cluster_id']
+            center_lat, center_lon = cluster['geo_center']
+            cluster_centers[cluster_id] = (center_lat, center_lon)
+
+        # 统计计数
+        layer1_count = 0
+        layer2_count = 0
+
+        # 解析坐标字符串的辅助函数
+        def parse_coord(coord_str):
+            """解析 "(39.1244, 117.3462)" 格式的坐标字符串"""
+            if pd.isna(coord_str) or not coord_str:
+                return None, None
+            try:
+                import re
+                match = re.search(r'\(([\d.]+),\s*([\d.]+)\)', str(coord_str))
+                if match:
+                    lat = float(match.group(1))
+                    lon = float(match.group(2))
+                    return lat, lon
+            except:
+                pass
+            return None, None
+
+        # 绘制两层运输路线
+        for idx, row in ng_cluster_data.iterrows():
+            # 解析聚类信息 "聚类0_(中心:36.2153,114.4731)"
+            cluster_info = row.get('聚类信息', '')
+            if not cluster_info or pd.isna(cluster_info):
+                continue
+
+            # 提取聚类ID
+            try:
+                cluster_id = int(cluster_info.split('聚类')[1].split('_')[0])
+                if cluster_id not in cluster_centers:
+                    continue
+                center_lat, center_lon = cluster_centers[cluster_id]
+            except:
+                continue
+
+            # 解析起点和终点坐标
+            start_lat, start_lon = parse_coord(row.get('起点坐标'))
+            end_lat, end_lon = parse_coord(row.get('终点坐标'))
+
+            if start_lat is None or start_lon is None:
+                continue
+
+            # Layer1: 天然气管道节点 → 天然气聚类中心 (lime green虚线)
+            layer1_dist = row.get('Layer1距离(km)', 0)
+            if layer1_dist > 0:
+                ax.plot(
+                    [start_lon, center_lon],
+                    [start_lat, center_lat],
+                    color=self.transport_colors['NG'],
+                    alpha=0.6,
+                    linewidth=1.5,
+                    linestyle=':',
+                    zorder=10,
+                    transform=self.data_crs
+                )
+                layer1_count += 1
+
+            # Layer2: 天然气聚类中心 → SAF工厂 (lime green实线)
+            layer2_dist = row.get('Layer2距离(km)', 0)
+            if layer2_dist > 0 and end_lat is not None and end_lon is not None:
+                ax.plot(
+                    [center_lon, end_lon],
+                    [center_lat, end_lat],
+                    color=self.transport_colors['NG'],
+                    alpha=0.7,
+                    linewidth=2.0,
+                    linestyle='-',
+                    zorder=14,
+                    transform=self.data_crs
+                )
+                layer2_count += 1
+
+        # 绘制天然气聚类中心 - 使用菱形,与H2聚类区分
+        if cluster_centers:
+            for cluster_id, (center_lat, center_lon) in cluster_centers.items():
+                cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
+                ax.scatter(
+                    center_lon, center_lat,
+                    c=cluster_color, s=150, marker='D',  # 使用菱形'D',大小150
+                    edgecolors='black', linewidth=2.0,
+                    transform=self.data_crs, zorder=25, alpha=1.0
+                )
+
+        logger.info(f"    ✓ Layer1: {layer1_count} 条（管道节点→聚类中心）")
+        logger.info(f"    ✓ Layer2: {layer2_count} 条（聚类中心→SAF工厂）")
+        logger.info(f"    ✓ 聚类中心: {len(cluster_centers)} 个")
+
+
     def plot_facilities(self, ax, transport_summary, module_name):
         """
         绘制设施位置（三维张量分类: 原材料类型 × SAF生产 × 消纳地）
@@ -1099,11 +1265,16 @@ class ThreeModulesClusteredMapVisualizer:
         logger.info(f"  绘制管道网络...")
         pipeline_stats = self.plot_pipeline_networks(ax)
 
-        # 绘制H2聚类运输路线
-        self.plot_h2_clustered_routes(ax, data['h2_clustering'], data['transport_summary'], module_name)
+        # 绘制H2聚类运输路线（如果有H2聚类数据）
+        if data['h2_clustering']:
+            self.plot_h2_clustered_routes(ax, data['h2_clustering'], data['transport_summary'], module_name)
 
-        # 绘制天然气运输路线
-        self.plot_ng_routes(ax, data['transport_summary'])
+        # 绘制天然气聚类运输路线（如果有天然气聚类数据）
+        if data['ng_clustering']:
+            self.plot_ng_clustered_routes(ax, data['ng_clustering'], data['transport_summary'], module_name)
+        else:
+            # 如果没有天然气聚类，绘制普通天然气运输路线
+            self.plot_ng_routes(ax, data['transport_summary'])
 
         # 绘制SAF运输路线
         self.plot_saf_routes(ax, data['transport_summary'])
@@ -1194,6 +1365,7 @@ class ThreeModulesClusteredMapVisualizer:
 
         # 添加标题
         h2_clusters = data['h2_clustering']['total_clusters'] if data['h2_clustering'] else 0
+        ng_clusters = data['ng_clustering']['total_clusters'] if data['ng_clustering'] else 0
 
         # 统计SAF路线数量
         saf_routes = 0
@@ -1202,9 +1374,23 @@ class ThreeModulesClusteredMapVisualizer:
 
         total_pipelines = sum(pipeline_stats.values())
 
-        title = (f"{config['name_cn']} SAF供应链聚类运输网络（两层结构）\n"
-                f"{module_name} SAF Supply Chain Clustered Transport Network (Two Layers)\n"
-                f"H₂聚类: {h2_clusters} 个 | SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
+        # 根据场景类型生成不同的标题
+        if ng_clusters > 0:
+            # 天然气一步法场景
+            title = (f"{config['name_cn']} SAF供应链聚类运输网络（天然气聚类）\n"
+                    f"{module_name} SAF Supply Chain Clustered Transport Network (NG Clustering)\n"
+                    f"天然气聚类: {ng_clusters} 个 | SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
+        elif h2_clusters > 0:
+            # 氢气两步法场景
+            title = (f"{config['name_cn']} SAF供应链聚类运输网络（两层结构）\n"
+                    f"{module_name} SAF Supply Chain Clustered Transport Network (Two Layers)\n"
+                    f"H₂聚类: {h2_clusters} 个 | SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
+        else:
+            # 其他场景
+            title = (f"{config['name_cn']} SAF供应链运输网络\n"
+                    f"{module_name} SAF Supply Chain Transport Network\n"
+                    f"SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
+
         ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
 
         # 调整布局以容纳外部图例
@@ -1240,13 +1426,13 @@ class ThreeModulesClusteredMapVisualizer:
 def main():
     """主函数"""
     logger.info("=" * 60)
-    logger.info("三模块聚类运输路线地图可视化脚本")
-    logger.info("Three Modules Clustered Transport Route Map Visualization Script")
+    logger.info("五场景聚类运输路线地图可视化脚本")
+    logger.info("Five Scenarios Clustered Transport Route Map Visualization Script")
     logger.info("=" * 60)
 
     try:
         # 创建可视化器
-        visualizer = ThreeModulesClusteredMapVisualizer()
+        visualizer = FiveScenariosClusteredMapVisualizer()
 
         # 加载数据
         visualizer.load_data()

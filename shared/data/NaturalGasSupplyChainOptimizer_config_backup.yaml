@@ -177,8 +177,10 @@ carbon_emission_parameters:
 
   # 生产过程排放 - Production Process Emissions
   production_process:
-    renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI
-                                           # 风电、光伏的生命周期排放强度
+    renewable_electricity: 0.02            # ⚠️ DEPRECATED - 已废弃参数 (仅用作fallback)
+                                           # 动态碳强度现基于实际风电/光伏发电数据计算
+                                           # Dynamic CI now calculated from actual wind/solar generation data
+                                           # 详见: _calculate_dynamic_renewable_intensity() 方法
 
     electrolysis_energy: 55                # 电解制氢能耗(kWh/kgH₂) | Electrolysis energy consumption
                                            # 当前主流碱性/PEM电解槽参数

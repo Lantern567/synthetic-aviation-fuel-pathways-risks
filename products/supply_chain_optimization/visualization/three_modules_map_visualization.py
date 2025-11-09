@@ -1,18 +1,27 @@
 """
-三模块运输路线地图可视化
-Three Modules Transport Route Map Visualization
+五场景运输路线地图可视化
+Five Scenarios Transport Route Map Visualization
 
 使用frykit库生成地理地图可视化
 Using frykit library for geographical map visualization
 
 功能 | Features:
 1. 氢气运输路线可视化 (Hydrogen transport routes visualization)
-2. SAF运输路线可视化 (SAF transport routes visualization)
-3. 设施位置标注 (Facility location marking)
-4. 三模块对比地图 (Three modules comparison maps)
+2. 天然气运输路线可视化 (Natural gas transport routes visualization)
+3. SAF运输路线可视化 (SAF transport routes visualization)
+4. 设施位置标注 (Facility location marking)
+5. 五场景对比地图 (Five scenarios comparison maps)
+
+支持场景 | Supported Scenarios:
+1. 煤制氢 (Coal Hydrogen)
+2. DAC制氢 (DAC Hydrogen)
+3. 天然气两步法 (Natural Gas Two-Step)
+4. 天然气一步法 (Natural Gas One-Step)
+5. 绿氢+工业捕获CO₂ (Green H2 + Industrial CO2)
 
 作者 | Author: Claude Code
 创建时间 | Created: 2025-11-06
+最后更新 | Last Updated: 2025-11-09
 """
 
 import json
@@ -45,8 +54,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class ThreeModulesMapVisualizer:
-    """三模块运输路线地图可视化器"""
+class FiveScenariosMapVisualizer:
+    """五场景运输路线地图可视化器"""
 
     def __init__(self, output_dir: str = None):
         """
@@ -75,19 +84,36 @@ class ThreeModulesMapVisualizer:
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',
                 'h2_transport_pattern': '../coal_hydrogen_saf_optimization/results/hydrogen_transport_plan_*.csv',
+                'ng_transport_pattern': None,
                 'mtj_transport_pattern': '../coal_hydrogen_saf_optimization/results/mtj_transport_plan_*.csv'
             },
             'DAC Hydrogen': {
                 'name_cn': 'DAC制氢',
                 'color': '#3498DB',
                 'h2_transport_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/hydrogen_transport_plan_*.csv',
+                'ng_transport_pattern': None,
                 'mtj_transport_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/mtj_transport_plan_*.csv'
             },
-            'Natural Gas': {
-                'name_cn': '天然气',
+            'Natural Gas Two-Step': {
+                'name_cn': '天然气两步法',
                 'color': '#2ECC71',
                 'h2_transport_pattern': '../natural_gas_supply_chain_optimization/results/hydrogen_transport_plan_*.csv',
+                'ng_transport_pattern': '../natural_gas_supply_chain_optimization/results/natural_gas_transport_plan_*.csv',
                 'mtj_transport_pattern': '../natural_gas_supply_chain_optimization/results/mtj_transport_plan_*.csv'
+            },
+            'Natural Gas One-Step': {
+                'name_cn': '天然气一步法',
+                'color': '#F39C12',
+                'h2_transport_pattern': None,  # 一步法不需要氢气运输
+                'ng_transport_pattern': '../natural_gas_supply_chain_optimization/results/one_step/natural_gas_transport_plan_*.csv',
+                'mtj_transport_pattern': '../natural_gas_supply_chain_optimization/results/one_step/mtj_transport_plan_*.csv'
+            },
+            'Green H2 Industrial CO2': {
+                'name_cn': '绿氢+工业捕获CO₂',
+                'color': '#9B59B6',
+                'h2_transport_pattern': '../green_hydrogen_supply_chain_optimization/results/hydrogen_transport_plan_*.csv',
+                'ng_transport_pattern': None,
+                'mtj_transport_pattern': '../green_hydrogen_supply_chain_optimization/results/mtj_transport_plan_*.csv'
             }
         }
 
@@ -98,6 +124,7 @@ class ThreeModulesMapVisualizer:
         # 运输类型颜色
         self.transport_colors = {
             'H2': '#1E90FF',       # 氢气 - 道奇蓝
+            'NG': '#32CD32',       # 天然气 - lime green 青柠绿
             'SAF': '#FF4500'       # SAF - 橙红色
         }
 
@@ -105,7 +132,7 @@ class ThreeModulesMapVisualizer:
         self.transport_data = {}
 
     def load_data(self):
-        """加载三个模块的运输数据"""
+        """加载五场景的运输数据"""
         logger.info("=" * 60)
         logger.info("加载运输数据")
         logger.info("=" * 60)
@@ -117,13 +144,15 @@ class ThreeModulesMapVisualizer:
 
             module_data = {
                 'h2_transport': None,
+                'ng_transport': None,
                 'mtj_transport': None
             }
 
             try:
-                # 加载氢气运输数据（自动查找最新文件）
                 import glob
-                if 'h2_transport_pattern' in config:
+
+                # 加载氢气运输数据（自动查找最新文件，如果有）
+                if config.get('h2_transport_pattern'):
                     h2_pattern = (base_dir / config['h2_transport_pattern']).resolve()
                     h2_files = sorted(glob.glob(str(h2_pattern)), reverse=True)
 
@@ -134,6 +163,23 @@ class ThreeModulesMapVisualizer:
                         logger.info(f"  ✓ 氢气运输路线: {len(module_data['h2_transport'])} 条")
                     else:
                         logger.warning(f"  ⚠ 未找到氢气运输文件: {config['h2_transport_pattern']}")
+                else:
+                    logger.info(f"  - 无氢气运输数据（不需要氢气运输）")
+
+                # 加载天然气运输数据（自动查找最新文件，如果有）
+                if config.get('ng_transport_pattern'):
+                    ng_pattern = (base_dir / config['ng_transport_pattern']).resolve()
+                    ng_files = sorted(glob.glob(str(ng_pattern)), reverse=True)
+
+                    if ng_files:
+                        ng_file = Path(ng_files[0])
+                        logger.info(f"  使用最新的天然气运输文件: {ng_file.name}")
+                        module_data['ng_transport'] = pd.read_csv(ng_file, encoding='utf-8')
+                        logger.info(f"  ✓ 天然气运输路线: {len(module_data['ng_transport'])} 条")
+                    else:
+                        logger.warning(f"  ⚠ 未找到天然气运输文件: {config['ng_transport_pattern']}")
+                else:
+                    logger.info(f"  - 无天然气运输数据（不需要天然气运输）")
 
                 # 加载SAF运输数据（自动查找最新文件）
                 mtj_pattern = (base_dir / config['mtj_transport_pattern']).resolve()
@@ -684,13 +730,13 @@ class ThreeModulesMapVisualizer:
 def main():
     """主函数"""
     logger.info("=" * 60)
-    logger.info("三模块运输路线地图可视化脚本")
-    logger.info("Three Modules Transport Route Map Visualization Script")
+    logger.info("五场景运输路线地图可视化脚本")
+    logger.info("Five Scenarios Transport Route Map Visualization Script")
     logger.info("=" * 60)
 
     try:
         # 创建可视化器
-        visualizer = ThreeModulesMapVisualizer()
+        visualizer = FiveScenariosMapVisualizer()
 
         # 加载数据
         visualizer.load_data()

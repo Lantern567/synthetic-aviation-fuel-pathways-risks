@@ -1,6 +1,6 @@
 """
-三模块对比可视化脚本
-Three Modules Comparison Visualization Script
+五场景对比可视化脚本
+Five Scenarios Comparison Visualization Script
 
 功能 | Features:
 1. 成本构成对比 (Cost breakdown comparison)
@@ -8,8 +8,16 @@ Three Modules Comparison Visualization Script
 3. 碳排放三指标对比 (Carbon emissions three indicators comparison)
 4. 生命周期平准化成本对比 (Levelized cost comparison)
 
+支持场景 | Supported Scenarios:
+1. 煤制氢 (Coal Hydrogen)
+2. DAC制氢 (DAC Hydrogen)
+3. 天然气两步法 (Natural Gas Two-Step)
+4. 天然气一步法 (Natural Gas One-Step)
+5. 绿氢+工业捕获CO₂ (Green H2 + Industrial CO2)
+
 作者 | Author: Claude Code
 创建时间 | Created: 2025-11-06
+最后更新 | Last Updated: 2025-11-09
 """
 
 import json
@@ -38,8 +46,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class ThreeModulesComparisonVisualizer:
-    """三模块对比可视化器"""
+class FiveScenariosComparisonVisualizer:
+    """五场景对比可视化器"""
 
     def __init__(self, output_dir: str = None):
         """
@@ -76,11 +84,23 @@ class ThreeModulesComparisonVisualizer:
                 'solution_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
                 'carbon_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json'
             },
-            'Natural Gas': {
-                'name_cn': '天然气',
+            'Natural Gas Two-Step': {
+                'name_cn': '天然气两步法',
                 'color': '#2ECC71',  # 绿色
                 'solution_pattern': 'natural_gas_supply_chain_optimization/results/complete_solution_*.json',
                 'carbon_pattern': 'natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json'
+            },
+            'Natural Gas One-Step': {
+                'name_cn': '天然气一步法',
+                'color': '#F39C12',  # 橙色
+                'solution_pattern': 'natural_gas_supply_chain_optimization/results/one_step/complete_solution_*.json',
+                'carbon_pattern': 'natural_gas_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json'
+            },
+            'Green H2 Industrial CO2': {
+                'name_cn': '绿氢+工业捕获CO₂',
+                'color': '#9B59B6',  # 紫色
+                'solution_pattern': 'green_hydrogen_supply_chain_optimization/results/complete_solution_*.json',
+                'carbon_pattern': 'green_hydrogen_supply_chain_optimization/results/carbon_emissions_detailed_*.json'
             }
         }
 
@@ -694,13 +714,13 @@ class ThreeModulesComparisonVisualizer:
 def main():
     """主函数"""
     logger.info("=" * 60)
-    logger.info("三模块对比可视化脚本")
-    logger.info("Three Modules Comparison Visualization Script")
+    logger.info("五场景对比可视化脚本")
+    logger.info("Five Scenarios Comparison Visualization Script")
     logger.info("=" * 60)
 
     try:
         # 创建可视化器
-        visualizer = ThreeModulesComparisonVisualizer()
+        visualizer = FiveScenariosComparisonVisualizer()
 
         # 加载数据
         visualizer.load_data()

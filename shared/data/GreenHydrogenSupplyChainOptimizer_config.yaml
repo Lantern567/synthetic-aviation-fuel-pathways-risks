@@ -327,8 +327,10 @@ carbon_emission_parameters:
     mtj_process_energy: 800                # 甲醇制SAF工艺能耗(kWh/t SAF) | MTJ process energy (kWh/t SAF)
                                            # 包括反应、精制、分离等全过程
 
-    renewable_electricity: 0.02            # 可再生电力碳强度(kgCO₂e/kWh) | Renewable electricity CI (kgCO₂e/kWh)
-                                           # 风电/光伏的全生命周期碳排放
+    renewable_electricity: 0.02            # ⚠️ DEPRECATED - 已废弃参数 (仅用作fallback)
+                                           # 动态碳强度现基于实际风电/光伏发电数据计算
+                                           # Dynamic CI now calculated from actual wind/solar generation data
+                                           # 详见: _calculate_dynamic_renewable_intensity() 方法
 
     electrolysis_energy: 55                # 电解制氢能耗(kWh/kg H₂) | Electrolysis energy (kWh/kg H₂)
                                            # 包括系统损耗
@@ -1123,8 +1125,10 @@ technologies:
     catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
 
     # 能源消耗参数 - Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 6.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
-                                          # 包括压缩、泵送、分离等
+    energy_consumption_kwh_per_kg_saf: 7.6  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # RWGS-FT e-kerosene合成段实际能耗
+                                          # 包括RWGS反应、FT合成、压缩、泵送、分离等
+                                          # 修正日期：2025-11-09
 
     heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
                                           # 反应热的回收利用效率

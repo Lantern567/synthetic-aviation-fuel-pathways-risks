@@ -162,6 +162,17 @@ carbon_emission_parameters:
 
     storage_facility_lifetime: 30          # 储存设施设计寿命(年) | Storage facility lifetime (years)
 
+  # 可再生能源发电排放 - Renewable Energy Emissions
+  renewable_energy:
+    wind_power_intensity: 0.015            # 风电碳强度(kgCO₂e/kWh) | Wind power CI (kgCO₂e/kWh)
+                                           # 包括制造、安装、运维的全生命周期排放
+
+    solar_power_intensity: 0.045           # 光伏碳强度(kgCO₂e/kWh) | Solar power CI (kgCO₂e/kWh)
+                                           # 包括硅片生产、组件制造、安装运维
+
+    grid_electricity_intensity: 0.6        # 电网电力碳强度(kgCO₂e/kWh) | Grid electricity CI
+                                           # 中国电网平均碳强度（备用电源）
+
   # 原材料获取排放 - Raw Material Extraction
   raw_materials:
     ng_extraction_intensity: 0.25          # 天然气开采碳强度(kgCO₂e/m³) | NG extraction CI (kgCO₂e/m³)
@@ -553,26 +564,31 @@ equipment_raw_costs:
                                            # 统一修正：与其他项目保持一致
 
 # =============================================================================
-# FT设施平准化成本参数 (FT Facility LCOE Parameters)
-# 用于计算FT反应器设施的平准化成本
+# 设施平准化成本参数 (Facility LCOE Parameters)
+# 用于计算综合生产设施的平准化成本
+# 【与两步法对齐】使用相同的基础设施成本参数
 # =============================================================================
 facility_lcoe_parameters:
-  fixed_capex: 50000000                    # 固定资本支出(元) | Fixed CAPEX (yuan)
-                                           # FT设施基础设施建设的固定投资部分
-                                           # 5000万元包括土地、厂房、公用工程等
+  fixed_capex: 20000000                    # 固定资本支出(元) | Fixed CAPEX (yuan)
+                                           # 基础设施建设的固定投资部分
+                                           # 2000万元包括土地、厂房、公用工程等
+                                           # 【对齐】与两步法保持一致
 
-  fixed_opex_annual: 15000000              # 年固定运营成本(元/年) | Annual fixed OPEX (yuan/year)
+  fixed_opex_annual: 10000000              # 年固定运营成本(元/年) | Annual fixed OPEX (yuan/year)
                                            # 管理、人工、公用事业等固定费用
-                                           # 1500万元/年
+                                           # 1000万元/年
+                                           # 【对齐】与两步法保持一致
 
-  variable_capex_per_capacity: 30000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 20000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
                                            # 随产能规模变化的投资
-                                           # 3万元/(kg/h产能)
+                                           # 2万元/(kg/h产能)
                                            # 注意：这里的capacity单位是kg/h(小时产能)
+                                           # 【对齐】与两步法保持一致
 
-  variable_opex_per_kg: 0.5                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
-                                           # 原材料、能源、催化剂等可变成本
-                                           # 0.5元/kg产品
+  variable_opex_per_kg: 0.3                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
+                                           # 原材料、能源等可变成本
+                                           # 0.3元/kg产品
+                                           # 【对齐】与两步法保持一致，不含FT特定成本
 
   # FT工艺特定参数 - FT Process Specific Parameters
   catalyst_cost_yuan_per_kg_saf: 0.06      # 催化剂成本(元/kg SAF) | Catalyst cost (yuan/kg SAF)
@@ -744,14 +760,15 @@ technologies:
     - petrochemical_base                  # 石化基地
 
     # 工艺参数 - Process Parameters
-    efficiency: 0.55                      # FT合成效率 | FT synthesis efficiency
-                                          # 天然气到SAF的整体碳转化效率55%
-                                          # 基于低温费托合成(LTFT)技术参数
+    efficiency: 0.85                      # FT合成效率 | FT synthesis efficiency
+                                          # 天然气到SAF的整体碳转化效率85%
+                                          # 【对齐】与两步法保持一致的效率水平
+                                          # 修正日期：2025-11-09 (从0.55更新为0.85)
 
-    ng_consumption_ratio: 2.3             # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg SAF product)
-                                          # 生产1kg SAF需要2.3m³天然气
-                                          # 包括合成气制备和FT合成全过程
-                                          # 修正日期：2025-11-07 (从2.0更新为2.3)
+    ng_consumption_ratio: 1.9             # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg SAF product)
+                                          # 生产1kg SAF需要1.9m³天然气
+                                          # FT一步法的实际天然气消耗（包括合成气制备和FT合成全过程）
+                                          # 修正日期：2025-11-09 (从2.3更新为1.9，降低17.4%)
 
     h2_consumption_ratio: 0               # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
                                           # FT一步法不需要外部氢气供应（内部产氢）
@@ -772,8 +789,10 @@ technologies:
     catalyst_cost_yuan_per_kg_saf: 0.06   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
 
     # 能源消耗参数 - Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 5.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
+    energy_consumption_kwh_per_kg_saf: 0.8  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # 【对齐】与两步法MTJ工艺能耗保持一致(800 kWh/吨 = 0.8 kWh/kg)
                                           # 包括压缩机、泵、分离单元等
+                                          # 修正日期：2025-11-09 (从5.0更新为0.8)
 
     heat_integration_efficiency: 0.75     # 热集成效率 | Heat integration efficiency
                                           # FT反应放热的回收利用效率

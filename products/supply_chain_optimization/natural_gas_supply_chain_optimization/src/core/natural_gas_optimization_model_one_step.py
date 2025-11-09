@@ -57,12 +57,11 @@ except ImportError:
     except ImportError as e:
         raise ImportError(f"GraphHopper路径规划模块不可用，必须安装相关依赖: {e}. 请运行: pip install requests")
 
-# 导入父类 - 原两步法模型（backup版本）
-# 必须在routing模块导入之后，这样父类导入时routing已经可用
+# 导入父类 - 两步法模型作为基类
 try:
-    from .natural_gas_optimization_model_backup import NaturalGasSupplyChainOptimizer
+    from .natural_gas_optimization_model import NaturalGasSupplyChainOptimizer
 except ImportError:
-    from natural_gas_optimization_model_backup import NaturalGasSupplyChainOptimizer
+    from natural_gas_optimization_model import NaturalGasSupplyChainOptimizer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -179,178 +178,15 @@ except Exception as e:
 class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
     """
     FT一步法天然气供应链优化模型
-    继承自两步法模型，复用数据加载和基础功能
+    继承自两步法模型，复用基础设施代码
     主要差异：
-    1. 约束条件：FT一步法约束（无氢气生产、无可再生能源）
-    2. 成本计算：FT工艺成本
-    3. 碳排放：FT一步法碳排放计算
+    1. 技术参数：FT直接合成工艺(ng_consumption_ratio: 2.3, efficiency: 0.55)
+    2. 决策变量：无氢气生产、无电解槽、无氢气运输变量
+    3. 约束条件：无氢气平衡约束、无电解槽约束
+    4. 成本计算：简化的成本结构（无氢气相关成本）
+    5. 碳排放：FT一步法碳排放计算
     """
-    def _get_data_path(self, path_key: str, fallback_path: str = None) -> str:
-        """
-        从配置文件获取数据路径，支持相对路径自动转换为绝对路径
-        
-        Args:
-            path_key: 配置文件中的路径键，支持点号分隔的嵌套键（如'aviation_data.airport_excel_path'）
-            fallback_path: 当配置中找不到路径时的后备路径
-            
-        Returns:
-            绝对路径字符串
-        """
-        try:
-            # 解析嵌套的配置键
-            keys = path_key.split('.')
-            current_config = self.config.get('data_paths', {})
-            
-            for key in keys:
-                if isinstance(current_config, dict) and key in current_config:
-                    current_config = current_config[key]
-                else:
-                    logger.warning(f"配置路径 '{path_key}' 未找到，使用后备路径")
-                    if fallback_path is None:
-                        raise ValueError(f"配置路径 '{path_key}' 不存在且未提供后备路径")
-                    current_config = fallback_path
-                    break
-            
-            if not isinstance(current_config, str):
-                raise ValueError(f"配置路径 '{path_key}' 的值不是字符串类型")
-            
-            # 转换为绝对路径
-            if os.path.isabs(current_config):
-                return current_config
-            else:
-                project_root = get_project_base_dir()
-                return os.path.join(project_root, current_config)
-        except Exception as e:
-            logger.error(f"获取数据路径失败: {e}")
-            if fallback_path:
-                project_root = get_project_base_dir()
-                return os.path.join(project_root, fallback_path) if not os.path.isabs(fallback_path) else fallback_path
-            raise
-    
-    def _get_output_path(self, file_type: str, timestamp: str = None) -> str:
-        """
-        获取结果输出文件的完整路径
-        
-        Args:
-            file_type: 文件类型（如'optimization_summary'）
-            timestamp: 时间戳，如果为None则生成当前时间戳
-            
-        Returns:
-            完整的输出文件路径
-        """
-        if timestamp is None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
-        try:
-            # 获取结果基础目录
-            results_dir = self._get_data_path('output_paths.results_base_dir', 
-                                            'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results')
-            
-            # 获取文件名模板
-            file_templates = self.config.get('data_paths', {}).get('output_paths', {}).get('file_templates', {})
-            template = file_templates.get(file_type, f"{file_type}_{timestamp}.csv")
-            
-            # 格式化文件名
-            filename = template.format(timestamp=timestamp)
-            
-            return os.path.join(results_dir, filename)
-        except Exception as e:
-            logger.error(f"获取输出路径失败: {e}")
-            # 使用默认路径
-            project_root = get_project_base_dir()
-            results_dir = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                     "natural_gas_supply_chain_optimization", "results")
-            return os.path.join(results_dir, f"{file_type}_{timestamp}.csv")
 
-    def _load_config(self, config_path: str = None, override_params: dict = None) -> dict:
-        """
-        加载配置文件
-        
-        Args:
-            config_path: 配置文件路径，如果为None则使用默认路径
-            override_params: 用于覆盖配置文件中参数的字典
-            
-        Returns:
-            配置字典
-        """
-        if config_path is None:
-            # 使用默认配置文件路径
-            project_root = get_project_base_dir()
-            config_path = os.path.join(project_root, "shared", "data", "NaturalGasSupplyChainOptimizer_config.yaml")
-        
-        if not os.path.exists(config_path):
-            raise FileNotFoundError(f"配置文件不存在: {config_path}")
-        
-        try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = yaml.safe_load(f)
-            
-            # 应用参数覆盖
-            if override_params:
-                config = self._apply_config_overrides(config, override_params)
-            
-            logger.info(f"配置文件加载成功: {config_path}")
-            return config
-            
-        except Exception as e:
-            logger.error(f"配置文件加载失败: {e}")
-            raise
-    
-    def _apply_config_overrides(self, config: dict, overrides: dict) -> dict:
-        """
-        应用配置覆盖参数
-        
-        Args:
-            config: 原始配置字典
-            overrides: 覆盖参数字典
-            
-        Returns:
-            应用覆盖后的配置字典
-        """
-        import copy
-        new_config = copy.deepcopy(config)
-        
-        # 支持扁平化的参数覆盖，如 'time_horizon_weeks': 2
-        for key, value in overrides.items():
-            if key in ['time_horizon_weeks', 'use_graphhopper_routing', 'graphhopper_host',
-                      'graphhopper_port', 'max_transport_distance_km', 'use_routing_for_short_distance',
-                      'avg_lng_capacity_mcm_per_year']:
-                new_config['basic_parameters'][key] = value
-            elif key in ['levelized_cost_threshold_yuan_per_kg', 'discount_rate', 'project_lifespan']:
-                # 直接支持经济参数的覆盖
-                new_config['economic_parameters'][key] = value
-            elif key.startswith('basic_'):
-                param_key = key.replace('basic_', '')
-                new_config['basic_parameters'][param_key] = value
-            elif key.startswith('economic_'):
-                param_key = key.replace('economic_', '')
-                new_config['economic_parameters'][param_key] = value
-            elif key.startswith('cost_'):
-                param_key = key.replace('cost_', '')
-                new_config['cost_parameters'][param_key] = value
-            elif key.startswith('facility_lcoe_'):
-                # 允许通过 facility_lcoe_fixed_capex 等键覆盖
-                param_key = key.replace('facility_lcoe_', '')
-                if 'facility_lcoe_parameters' not in new_config:
-                    new_config['facility_lcoe_parameters'] = {}
-                new_config['facility_lcoe_parameters'][param_key] = value
-            # 可以继续添加其他类别的参数覆盖逻辑
-        
-        return new_config
-
-    def _build_mtj_locations(self):
-        """根据每种技术的 suitable_locations 动态生成 mtj_locations 映射。"""
-        self.mtj_locations = {}
-        for tech, tech_info in self.technologies.items():
-            suitable_types = tech_info.get('suitable_locations', [])
-            self.mtj_locations[tech] = [loc for loc, info in self.locations.items() if info['type'] in suitable_types]
-        # 非LNG接收站的MTJ工厂位置（用于天然气运输变量）
-        self.non_lng_mtj_locations = {}
-        for tech, locs in self.mtj_locations.items():
-            self.non_lng_mtj_locations[tech] = [loc for loc in locs if self.locations[loc]['type'] != 'lng_terminal']
-
-    """天然气基供应链优化器"""
-    
     def __init__(self, config_path: str = None, **override_params):
         """
         初始化FT一步法优化器
@@ -359,14 +195,13 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             config_path: 配置文件路径，默认使用项目内置配置文件
             **override_params: 可以通过关键字参数覆盖配置文件中的任何参数
         """
-        # 调用父类初始化
+        # 调用父类初始化，继承所有基础设施
         super().__init__(config_path, **override_params)
 
         # FT一步法模型专用属性
         self.ft_facility_candidates = []  # FT设施候选位置
 
-        # FT一步法模型不需要氢气管道计算器和聚类优化器
-        self.clustering_results = None
+        logger.info("FT一步法优化器初始化完成")
 
     def load_data(self, airport_data: pd.DataFrame):
         """
@@ -2006,8 +1841,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             if (location, tech, hour) in self.production_vars
         )
 
-        # 4. 运输设备投资成本 + 20年运营成本现值
-        self.cost_expressions['transport_equipment_cost'] = gp.LinExpr(0)  # 已包含在平准化运输成本中
+        # 4. 运输运营成本现值
         self.cost_expressions['transport_operation_cost'] = gp.quicksum(
             self.transport_vars[(location, airport, week)] *
             self._calculate_mtj_transport_cost_by_distance(
@@ -2115,20 +1949,48 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         )
 
         # 8. FT生产过程成本（20年生命周期现值）
-        # 包括催化剂成本和能源成本
+        # 修正日期：2025-11-09 - 实现催化剂成本和能源成本，并支持差异化电价
         ft_tech = self.config['technologies']['ft_direct_conversion']
         catalyst_cost_per_kg_saf = ft_tech.get('catalyst_cost_yuan_per_kg_saf', 0.06)
-        energy_consumption_kwh_per_kg = ft_tech.get('energy_consumption_kwh_per_kg_saf', 5.0)
-        energy_cost_per_kwh = self.config['facility_lcoe_parameters'].get('energy_cost_yuan_per_kwh', 0.6)
+        energy_consumption_kwh_per_kg = ft_tech.get('energy_consumption_kwh_per_kg_saf', 0.8)
 
-        # FT生产成本 = 催化剂成本 + 能源成本
-        ft_production_unit_cost = catalyst_cost_per_kg_saf + (energy_consumption_kwh_per_kg * energy_cost_per_kwh)
-        logger.info(f"FT生产单位成本: {ft_production_unit_cost:.2f} 元/kg SAF")
+        logger.info(f"FT催化剂成本: {catalyst_cost_per_kg_saf} 元/kg SAF")
+        logger.info(f"FT能耗: {energy_consumption_kwh_per_kg} kWh/kg SAF")
 
-        # 注意：这里需要基于实际的SAF产量变量来计算
-        # 由于FT一步法模型结构，暂时使用FT产能作为基准
-        # TODO: 需要根据实际的生产变量完善此成本项
-        self.cost_expressions['ft_production_cost'] = gp.LinExpr(0)  # 暂时设为0，待完善
+        # 8.1 催化剂成本
+        self.cost_expressions['ft_catalyst_cost'] = gp.quicksum(
+            self.production_vars[(location, tech, hour)] * catalyst_cost_per_kg_saf
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        ) * operation_expansion_factor * present_value_factor
+
+        # 8.2 FT合成能源成本（差异化电价）
+        # 根据SAF工厂位置类型，使用不同的电价
+        # renewable_plant (solar/wind): 使用可再生电价
+        # 其他位置 (airport等): 使用电网电价
+        renewable_electricity_price_yuan_per_kwh = self.config.get('cost_parameters', {}).get('renewable_energy', {}).get('wind_power_price_yuan_per_kwh', 0.35)
+        grid_electricity_price_yuan_per_kwh = self.config.get('cost_parameters', {}).get('renewable_energy', {}).get('grid_electricity_price_yuan_per_kwh', 0.6)
+
+        self.cost_expressions['ft_energy_cost'] = gp.quicksum(
+            self.production_vars[(location, tech, hour)] *
+            energy_consumption_kwh_per_kg *
+            (renewable_electricity_price_yuan_per_kwh if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+             else grid_electricity_price_yuan_per_kwh)
+            for location in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (location, tech, hour) in self.production_vars
+        ) * operation_expansion_factor * present_value_factor
+
+        # 总FT生产成本 = 催化剂成本 + 能源成本
+        self.cost_expressions['ft_production_cost'] = (
+            self.cost_expressions['ft_catalyst_cost'] +
+            self.cost_expressions['ft_energy_cost']
+        )
+
+        logger.info("FT生产成本已实现（催化剂成本 + 差异化电价能源成本）")
 
         # 9. 天然气运输成本（20年运营成本现值）
         # 从NG供应源（管道端点/LNG接收站）到FT设施的天然气运输
@@ -2280,7 +2142,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info("\n【FT一步法模型关键参数验证】")
         logger.info(f"FT反应器投资成本: {ft_reactor_capex_raw} 元/套")
         logger.info(f"FT反应器运营成本: {ft_reactor_opex_annual} 元/年")
-        logger.info(f"FT生产单位成本: {ft_production_unit_cost:.2f} 元/kg SAF")
+        # FT生产成本详见上方催化剂成本和能源成本的logger输出（行1958-1959）
 
         # 创建需求满足比例表达式
         self._create_demand_fulfillment_expression()
@@ -2792,22 +2654,13 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
     def _add_inventory_balance_constraints(self):
         """添加库存平衡约束
 
-        【修改说明 v5.0】
-        SAF库存改为周积累模式：
-        - 生产地累积库存，不再每小时平摊出库
-        - 在每周的第167小时（最后一小时）统一出库运输到机场
-        - 库存平衡：仅在167h时出库，其他时间只生产累积
+        【与两步法对齐】
+        库存出库按小时平摊：
+        - 周运输量均匀分配到每小时
+        - 库存水平更平滑，避免周中累积、周末骤降
+        - 与两步法保持一致的时间粒度处理
         """
         for location in self.locations:
-            # 计算该location所有周的运输总量
-            weekly_transports = {}
-            for week in range(self.time_horizon_weeks):
-                weekly_transports[week] = gp.quicksum(
-                    self.transport_vars[(location, airport, week)]
-                    for airport in self.airports
-                    if (location, airport, week) in self.transport_vars
-                )
-
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
                 current_inventory = self.storage_vars[(location, hour + 1)]
@@ -2820,14 +2673,12 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                     if (location, tech, hour) in self.production_vars
                 )
 
-                # 出库量：仅在每周的第167小时（最后一小时）统一出库
-                current_week = hour // self.hours_per_week
-                hour_in_week = hour % self.hours_per_week
-
-                if hour_in_week == 167:  # 每周最后一小时统一出库
-                    outflow = weekly_transports.get(current_week, gp.LinExpr(0))
-                else:
-                    outflow = gp.LinExpr(0)
+                # 出库量（用于运输的部分，按小时平摊）
+                outflow = gp.quicksum(
+                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
+                    for airport in self.airports
+                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
+                )
 
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
@@ -4128,9 +3979,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         # 建立表达式对象字段到CSV输出字段的映射
         cost_field_mapping = {
             'facility_investment_cost': 'MTJ工厂建设投资(元)',
-            'transport_equipment_cost': '运输设备投资(元)',
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
-            'ng_transport_investment': '天然气运输设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
             'ng_transport_operation': '天然气运输成本(元)',

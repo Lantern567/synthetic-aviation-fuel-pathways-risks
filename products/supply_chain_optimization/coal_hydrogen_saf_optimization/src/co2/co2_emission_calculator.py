@@ -1,8 +1,28 @@
 """
-CO₂排放量计算器 (CO2 Emission Calculator)
+⚠️ DEPRECATED - 本模块已废弃 (DEPRECATED)
+==================================================
 
-本模块计算绿氢+CO₂制SAF全生命周期碳排放，包括：
-1. 原材料排放（绿氢生产、CO₂捕获过程）
+本独立CO₂排放计算器已被废弃，所有碳排放计算已迁移到优化器内部实现。
+
+废弃日期：2025-11-09
+迁移到：coal_hydrogen_optimization_model.py 的 _create_carbon_emission_expressions() 方法
+
+废弃原因：
+1. 动态碳强度计算需要基于实际发电数据，独立计算器无法访问优化器内部状态
+2. Gurobi优化要求碳排放表达式与决策变量集成，无法分离计算
+3. 统一在优化器内部计算可确保数据一致性和计算效率
+
+替代方案：
+- 碳排放计算现已完全集成到优化器的约束和目标函数中
+- 使用 optimizer.carbon_expressions 和 optimizer.carbon_aggregates 获取结果
+
+如需继续使用本模块，请参考优化器源码中的实现
+==================================================
+
+煤制氢+CO₂制SAF碳排放量计算器 (Coal-based H2 + CO2 to SAF Emission Calculator)
+
+本模块计算煤制氢+CO₂制SAF全生命周期碳排放，包括：
+1. 原材料排放（煤制氢生产、CO₂捕获过程）
 2. 运输排放（H₂、CO₂、SAF运输）
 3. 生产过程排放（甲醇合成E-CRM、MTJ转化）
 4. 储存处理排放
@@ -12,16 +32,27 @@ CO₂排放量计算器 (CO2 Emission Calculator)
 
 作者：Claude Code
 创建日期：2025-10-13
-版本：v1.0
+修改日期：2025-11-09 (标记为废弃)
+版本：v3.0（已废弃 - DEPRECATED）
 
 参考文档：
-- 绿氢供应链优化产品需求文档_PRD_v2.0.md 第5.2节、3.2节
+- 煤制氢供应链优化产品需求文档_PRD_v3.0.md
 - IPCC碳排放计算指南
 - CORSIA可持续航空燃料标准
 """
 
 import logging
+import warnings
 from typing import Dict, List, Tuple, Optional
+
+# 废弃警告
+warnings.warn(
+    "CO2EmissionCalculator独立模块已废弃，请使用优化器内部的碳排放计算功能。"
+    "所有碳排放计算已迁移到 coal_hydrogen_optimization_model.py 的 _create_carbon_emission_expressions() 方法中。"
+    "详见模块顶部的废弃说明。",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 # 配置日志
 logging.basicConfig(

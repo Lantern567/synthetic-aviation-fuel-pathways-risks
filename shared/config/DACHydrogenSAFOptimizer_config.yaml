@@ -56,7 +56,7 @@ carbon_emission_parameters:
     saf_synthesis_emission: 0.3
     saf_process_energy: 3.0
     mtj_process_energy: 800
-    renewable_electricity: 0.02
+    renewable_electricity: 0.02  # ⚠️ DEPRECATED - 已废弃 (仅fallback)，现用动态CI
     electrolysis_energy: 55
     green_h2_intensity: 1.1
     dac_capture_emission: 7.0
@@ -502,8 +502,10 @@ technologies:
     catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
 
     # 能源消耗参数 - Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 6.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
-                                          # 包括压缩、泵送、分离等
+    energy_consumption_kwh_per_kg_saf: 7.6  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # RWGS-FT e-kerosene合成段实际能耗
+                                          # 包括RWGS反应、FT合成、压缩、泵送、分离等
+                                          # 修正日期：2025-11-09 (从6.0更新为7.6)
 
     heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
                                           # 反应热的回收利用效率
