@@ -4757,16 +4757,41 @@ class NaturalGasSupplyChainOptimizer:
         return capacity_estimates.get('default', 1500)  # 默认值
     
     def _calculate_distance(self, location: str, airport: str) -> float:
-        """使用OSM路径规划计算两点间真实道路距离"""
+        """使用OSM路径规划计算两点间真实道路距离
+
+        参数:
+            location: 第一个位置的ID（来自self.locations）
+            airport: 第二个位置的ID，可以是：
+                - location ID（如 'airport_天津'，带前缀，来自self.locations）
+                - airport name（如 '天津'，不带前缀，来自self.airports）
+        """
         # 创建缓存键
         cache_key = f"{location}_{airport}"
         if cache_key in self.distance_cache:
             return self.distance_cache[cache_key]
-        
+
         loc_lat = self.locations[location]['latitude']
         loc_lon = self.locations[location]['longitude']
-        air_lat = self.airports[airport]['latitude']
-        air_lon = self.airports[airport]['longitude']
+
+        # 智能处理第二个参数：可能是location ID（带前缀）或airport name（不带前缀）
+        if airport in self.locations:
+            # 如果在locations中找到，直接使用（例如 'airport_天津'）
+            air_lat = self.locations[airport]['latitude']
+            air_lon = self.locations[airport]['longitude']
+        elif airport in self.airports:
+            # 如果在airports中找到，使用（例如 '天津'）
+            air_lat = self.airports[airport]['latitude']
+            air_lon = self.airports[airport]['longitude']
+        elif airport.startswith('airport_'):
+            # 如果带有airport_前缀但不在locations中，去掉前缀再试
+            airport_name = airport.replace('airport_', '', 1)
+            if airport_name in self.airports:
+                air_lat = self.airports[airport_name]['latitude']
+                air_lon = self.airports[airport_name]['longitude']
+            else:
+                raise KeyError(f"无法找到机场位置: {airport} (尝试了locations、airports和去前缀查找)")
+        else:
+            raise KeyError(f"无法找到位置: {airport} (不在locations也不在airports中)")
         
         # 使用GraphHopper路径规划计算真实距离
         result = self.routing_engine.calculate_route_distance(
@@ -4787,17 +4812,42 @@ class NaturalGasSupplyChainOptimizer:
         return max(distance_km, 5)  # 最小距离5km（避免除零）
     
     def _calculate_distance_with_route(self, location: str, airport: str) -> tuple:
-        """使用OSM路径规划计算两点间真实道路距离并返回路径坐标"""
+        """使用OSM路径规划计算两点间真实道路距离并返回路径坐标
+
+        参数:
+            location: 第一个位置的ID（来自self.locations）
+            airport: 第二个位置的ID，可以是：
+                - location ID（如 'airport_天津'，带前缀，来自self.locations）
+                - airport name（如 '天津'，不带前缀，来自self.airports）
+        """
         # 创建缓存键
         route_cache_key = f"route_{location}_{airport}"
         if hasattr(self, 'route_cache') and route_cache_key in self.route_cache:
             cached_result = self.route_cache[route_cache_key]
             return cached_result['distance_km'], cached_result['route_coordinates']
-        
+
         loc_lat = self.locations[location]['latitude']
         loc_lon = self.locations[location]['longitude']
-        air_lat = self.airports[airport]['latitude']
-        air_lon = self.airports[airport]['longitude']
+
+        # 智能处理第二个参数：可能是location ID（带前缀）或airport name（不带前缀）
+        if airport in self.locations:
+            # 如果在locations中找到，直接使用（例如 'airport_天津'）
+            air_lat = self.locations[airport]['latitude']
+            air_lon = self.locations[airport]['longitude']
+        elif airport in self.airports:
+            # 如果在airports中找到，使用（例如 '天津'）
+            air_lat = self.airports[airport]['latitude']
+            air_lon = self.airports[airport]['longitude']
+        elif airport.startswith('airport_'):
+            # 如果带有airport_前缀但不在locations中，去掉前缀再试
+            airport_name = airport.replace('airport_', '', 1)
+            if airport_name in self.airports:
+                air_lat = self.airports[airport_name]['latitude']
+                air_lon = self.airports[airport_name]['longitude']
+            else:
+                raise KeyError(f"无法找到机场位置: {airport} (尝试了locations、airports和去前缀查找)")
+        else:
+            raise KeyError(f"无法找到位置: {airport} (不在locations也不在airports中)")
         
         # 使用GraphHopper路径规划计算真实距离并获取路径
         result = self.routing_engine.calculate_route_distance(

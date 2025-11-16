@@ -235,6 +235,16 @@ class HydrogenClusteringOptimizer:
     def _export_results(self, result: ClusteringResult):
         output_path = self.clustering_params.get('clustering_output_path', 'clustering_results.json')
 
+        # 如果是相对路径，则保存到green_hydrogen_supply_chain_optimization目录
+        # 确保可视化代码能找到文件
+        output_file = Path(output_path)
+        if not output_file.is_absolute():
+            # 获取当前文件所在目录（src/hydrogen/）
+            current_dir = Path(__file__).parent
+            # 向上两级到green_hydrogen_supply_chain_optimization目录
+            project_root = current_dir.parent.parent
+            output_file = project_root / output_path
+
         export_data = {
             'total_clusters': result.total_clusters,
             'total_noise_points': result.total_noise_points,
@@ -256,10 +266,9 @@ class HydrogenClusteringOptimizer:
             ]
         }
 
-        output_file = Path(output_path)
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(export_data, f, ensure_ascii=False, indent=2)
 
-        logger.info(f"聚类结果已导出到: {output_file}")
+        logger.info(f"聚类结果已导出到: {output_file.absolute()}")

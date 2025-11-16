@@ -25,6 +25,14 @@ from dataclasses import dataclass
 from functools import lru_cache
 import time
 
+# 🚀 性能优化：导入scipy空间索引
+try:
+    from scipy.spatial import cKDTree
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+    logger.warning("scipy不可用，将使用传统查找方法（性能较慢）。建议: pip install scipy")
+
 # 设置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,14 +66,14 @@ except ImportError:
 class HydrogenPipelineDistanceCalculator:
     """氢气管道运输距离计算器"""
 
-    def __init__(self, gis_data_path: str, enable_cache: bool = True,
+    def __init__(self, gis_data_path: str, enable_cache: bool = False,
                  cache_dir: str = None, use_unified_config: bool = True):
         """
         初始化计算器
 
         Args:
             gis_data_path: GIS数据目录路径
-            enable_cache: 是否启用计算缓存
+            enable_cache: 是否启用计算缓存（默认False，数据库缓存查询比计算更慢）
             cache_dir: 缓存目录路径
             use_unified_config: 是否使用统一配置系统
         """
@@ -109,6 +117,13 @@ class HydrogenPipelineDistanceCalculator:
 
         # 管道网络图
         self.pipeline_networks = {
+            'crude': None,
+            'refined': None,
+            'natural_gas': None
+        }
+
+        # 🚀 性能优化：空间索引，用于快速查找最近管道点
+        self.pipeline_spatial_indexes = {
             'crude': None,
             'refined': None,
             'natural_gas': None
@@ -162,6 +177,11 @@ class HydrogenPipelineDistanceCalculator:
 
         # 构建管道网络图
         self._build_pipeline_networks()
+
+        # 🚀 性能优化：构建空间索引
+        if SCIPY_AVAILABLE:
+            self._build_spatial_indexes()
+            logger.debug("管道空间索引构建完成")
 
         total_pipelines = sum(len(data['features']) for data in self.pipeline_data.values())
         logger.debug(f"管道数据加载完成，总管道数: {total_pipelines}")
@@ -256,8 +276,80 @@ class HydrogenPipelineDistanceCalculator:
             if not hasattr(self, 'edge_geometries'):
                 self.edge_geometries = {}
             self.edge_geometries[pipeline_type] = edge_geometry
-            logger.debug(f"{pipeline_type}管道网络: {graph.number_of_nodes()} 节点, "
-                       f"{graph.number_of_edges()} 边")
+
+            # 分析连通性
+            components = list(nx.connected_components(graph))
+            num_components = len(components)
+            largest_component_size = max(len(c) for c in components) if components else 0
+
+            logger.info(f"{pipeline_type}管道网络构建完成: "
+                       f"{graph.number_of_nodes()}节点, "
+                       f"{graph.number_of_edges()}边, "
+                       f"{num_components}个连通分量 "
+                       f"(最大分量{largest_component_size}节点)")
+
+            if num_components > 1:
+                # 显示各连通分量大小
+                component_sizes = sorted([len(c) for c in components], reverse=True)
+                logger.warning(f"{pipeline_type}管道网络不连通! "
+                             f"分量大小: {component_sizes[:5]}")
+            else:
+                logger.debug(f"{pipeline_type}管道网络完全连通")
+
+    def _build_spatial_indexes(self):
+        """
+        🚀 性能优化：构建管道的空间索引（KDTree）
+        用于快速查找最近管道点，复杂度从O(N×M)降至O(logN)
+        """
+        logger.debug("开始构建管道空间索引...")
+
+        for pipeline_type, data in self.pipeline_data.items():
+            if not data or 'features' not in data:
+                continue
+
+            points = []  # 存储线段中点坐标
+            segment_info = []  # 存储对应的线段信息
+
+            for feat_idx, feature in enumerate(data['features']):
+                if not feature.get('geometry') or feature['geometry'].get('type') != 'LineString':
+                    continue
+
+                coordinates = feature['geometry']['coordinates']
+                if not coordinates or len(coordinates) < 2:
+                    continue
+
+                # 对每个线段，存储其中点用于快速查询
+                for seg_idx in range(len(coordinates) - 1):
+                    start_coord = coordinates[seg_idx]
+                    end_coord = coordinates[seg_idx + 1]
+
+                    # 计算线段中点（lat, lon）
+                    mid_lat = (start_coord[1] + end_coord[1]) / 2
+                    mid_lon = (start_coord[0] + end_coord[0]) / 2
+
+                    points.append([mid_lat, mid_lon])
+
+                    # 存储原始线段信息，用于精确计算
+                    segment_info.append({
+                        'feature_idx': feat_idx,
+                        'segment_idx': seg_idx,
+                        'start': (start_coord[1], start_coord[0]),  # (lat, lon)
+                        'end': (end_coord[1], end_coord[0])
+                    })
+
+            if points:
+                # 构建KDTree
+                tree = cKDTree(np.array(points))
+
+                self.pipeline_spatial_indexes[pipeline_type] = {
+                    'tree': tree,
+                    'segments': segment_info,
+                    'points': np.array(points)
+                }
+
+                logger.debug(f"{pipeline_type}管道空间索引: {len(points)}个线段中点")
+            else:
+                self.pipeline_spatial_indexes[pipeline_type] = None
 
     def calculate_pipeline_distance(self, start_lat: float, start_lon: float,
                                   end_lat: float, end_lon: float,
@@ -467,6 +559,7 @@ class HydrogenPipelineDistanceCalculator:
                                    max_distance_km: float) -> Tuple[Optional[Tuple[float, float]], float]:
         """
         找到最近的管道点（点到管线的吸附算法）
+        🚀 性能优化：使用KDTree空间索引加速查找，从O(N×M)降至O(logN)
         注意：max_distance_km参数保留用于向后兼容，但实际不再限制搜索距离
 
         Args:
@@ -480,6 +573,11 @@ class HydrogenPipelineDistanceCalculator:
         if pipeline_type not in self.pipeline_data or not self.pipeline_data[pipeline_type]:
             return None, 0.0
 
+        # 🚀 性能优化：优先使用KDTree空间索引
+        if SCIPY_AVAILABLE and self.pipeline_spatial_indexes.get(pipeline_type):
+            return self._find_nearest_pipeline_point_fast(lat, lon, pipeline_type)
+
+        # 降级方案：使用传统线性搜索
         nearest_point = None
         min_distance = float('inf')
 
@@ -507,6 +605,63 @@ class HydrogenPipelineDistanceCalculator:
                 if distance < min_distance:
                     min_distance = distance
                     nearest_point = closest_point
+
+        if nearest_point:
+            return (nearest_point[0], nearest_point[1]), min_distance
+        else:
+            return None, 0.0
+
+    def _find_nearest_pipeline_point_fast(self, lat: float, lon: float,
+                                         pipeline_type: str) -> Tuple[Optional[Tuple[float, float]], float]:
+        """
+        🚀 性能优化：使用KDTree空间索引快速查找最近管道点
+        复杂度从O(N×M)降至O(logN)，预期50倍加速
+
+        Args:
+            lat, lon: 查询点坐标
+            pipeline_type: 管道类型
+
+        Returns:
+            Tuple: (最近管道点坐标, 距离) 或 (None, 0)
+        """
+        index_data = self.pipeline_spatial_indexes[pipeline_type]
+        if not index_data:
+            return None, 0.0
+
+        tree = index_data['tree']
+        segments = index_data['segments']
+
+        # Step 1: KDTree查询最近的k个线段中点（O(logN)）
+        k = min(10, len(segments))  # 查询最近10个候选线段
+        distances, indices = tree.query([lat, lon], k=k)
+
+        # Step 2: 对这k个候选线段进行精确距离计算
+        nearest_point = None
+        min_distance = float('inf')
+
+        # 处理单个结果和多个结果的情况
+        if k == 1:
+            distances = [distances]
+            indices = [indices]
+
+        for idx in indices:
+            if idx >= len(segments):
+                continue
+
+            segment_info = segments[idx]
+            start = segment_info['start']  # (lat, lon)
+            end = segment_info['end']      # (lat, lon)
+
+            # 计算查询点到该线段的精确距离
+            closest_point, distance = self._point_to_line_segment_distance(
+                lat, lon,
+                start[0], start[1],  # start lat, lon
+                end[0], end[1]       # end lat, lon
+            )
+
+            if distance < min_distance:
+                min_distance = distance
+                nearest_point = closest_point
 
         if nearest_point:
             return (nearest_point[0], nearest_point[1]), min_distance
@@ -586,8 +741,8 @@ class HydrogenPipelineDistanceCalculator:
         return distance
 
     def _calculate_network_distance(self, start_point: Tuple[float, float],
-                                   end_point: Tuple[float, float],
-                                   pipeline_type: str) -> Optional[Tuple[float, List[Tuple[float, float]]]]:
+                                    end_point: Tuple[float, float],
+                                    pipeline_type: str) -> Optional[Tuple[float, List[Tuple[float, float]]]]:
         """
         计算管道网络中两点间的最短路径距离和路径坐标
 
@@ -599,6 +754,13 @@ class HydrogenPipelineDistanceCalculator:
         Returns:
             Tuple[距离(km), 路径坐标列表]，如果路径不存在返回None
         """
+        # 特殊场景：起点终点重合时直接返回零距离，避免被判定为噪声点
+        if (
+            abs(start_point[0] - end_point[0]) < 1e-6
+            and abs(start_point[1] - end_point[1]) < 1e-6
+        ):
+            return 0.0, [start_point, end_point]
+
         graph = self.pipeline_networks.get(pipeline_type)
         if not graph:
             return None
@@ -642,9 +804,9 @@ class HydrogenPipelineDistanceCalculator:
 
             return path_length, path_coords
 
-        except (nx.NetworkXNoPath, nx.NodeNotFound):
+        except (nx.NetworkXNoPath, nx.NodeNotFound) as e:
             # 如果没有路径，检查是否是网络连通性问题
-            pass  # 静默处理路径未找到
+            logger.debug(f"NetworkX路径查找失败: {e}, 尝试使用直线距离连接不连通子图")
 
             # 尝试使用直线距离作为连接断开片段的桥梁
             try:
@@ -655,7 +817,7 @@ class HydrogenPipelineDistanceCalculator:
 
                     if len(components) > 1:
                         # 网络不连通，使用直线距离连接，但尝试收集沿途的管道几何信息
-                        pass  # 静默处理连通性问题
+                        logger.debug(f"{pipeline_type}管道网络有{len(components)}个不连通分量，使用直线距离连接")
 
                         # 计算直线距离
                         straight_distance = self._calculate_haversine_distance(
@@ -669,17 +831,28 @@ class HydrogenPipelineDistanceCalculator:
                         )
 
                         if enhanced_path and len(enhanced_path) > 2:
-                            pass  # 静默处理路径增强
+                            logger.debug(f"成功增强路径，包含{len(enhanced_path)}个几何点")
                             return straight_distance, enhanced_path
                         else:
                             # 如果无法增强，返回简单的直线路径
+                            logger.debug(f"使用简单直线路径，距离{straight_distance:.3f}km")
                             return straight_distance, [start_point, end_point]
+                    else:
+                        # 网络连通但找不到路径（不应该发生，但作为降级处理）
+                        logger.warning(f"{pipeline_type}管道网络连通但找不到路径，使用直线距离")
+                        straight_distance = self._calculate_haversine_distance(
+                            start_point[0], start_point[1],
+                            end_point[0], end_point[1]
+                        )
+                        return straight_distance, [start_point, end_point]
 
-                return 0.0, []
+                # 如果没有管道网络，返回None让上层处理
+                logger.error(f"{pipeline_type}管道网络不存在")
+                return None
 
-            except Exception as e:
-                pass  # 静默处理连通性检查失败
-                return 0.0, []
+            except Exception as ex:
+                logger.error(f"连通性检查失败: {ex}, 返回None")
+                return None
 
     def _find_nearest_graph_node(self, point: Tuple[float, float],
                                 graph: nx.Graph) -> Optional[str]:
