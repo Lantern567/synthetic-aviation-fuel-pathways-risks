@@ -1467,14 +1467,27 @@ class NaturalGasSupplyChainOptimizer:
                     logger.info("🚀 启用超图优化器，开始构建超级图...")
                     logger.info("=" * 70)
 
-                    # 准备CO2捕获源数据（Natural Gas使用LNG终端/管道位置）
-                    co2_capture_sources = {}
+                    # 准备氢气生产源数据（可再生能源站点：风电/光伏）
+                    h2_production_sources = {}
                     for loc_id in self.hydrogen_locations:
                         if loc_id in self.locations:
-                            co2_capture_sources[loc_id] = {
+                            h2_production_sources[loc_id] = {
                                 'latitude': self.locations[loc_id]['latitude'],
                                 'longitude': self.locations[loc_id]['longitude']
                             }
+
+                    # 构建不包含天然气管道的位置字典（氢气管道的目标位置）
+                    # 氢气管道应该连接：氢气源 → MTJ工厂（airport/lng_terminal/renewable_plant）
+                    # 不应包含天然气管道接入点（ng_pipeline_*）
+                    non_ng_pipeline_locations = {
+                        loc: info for loc, info in self.locations.items()
+                        if not loc.startswith('ng_pipeline_')  # 排除天然气管道位置
+                    }
+
+                    logger.info(f"超图优化器配置:")
+                    logger.info(f"  氢气源节点: {len(h2_production_sources)} 个（风电/光伏站点）")
+                    logger.info(f"  目标节点: {len(non_ng_pipeline_locations)} 个（排除天然气管道）")
+                    logger.info(f"  已排除: {len(self.locations) - len(non_ng_pipeline_locations)} 个天然气管道位置")
 
                     # 读取超图配置
                     super_graph_config_dict = self.config.get('super_graph_config', {})
@@ -1489,8 +1502,8 @@ class NaturalGasSupplyChainOptimizer:
                     self.super_graph_optimizer = SuperGraphOptimizer(
                         pipeline_calculator=self.hydrogen_pipeline_calculator,
                         co2_clustering_results=self.clustering_results,
-                        co2_capture_sources=co2_capture_sources,
-                        locations=self.locations,  # SAF工厂位置
+                        co2_capture_sources=h2_production_sources,  # 氢气源（重命名参数更清晰）
+                        locations=non_ng_pipeline_locations,  # 不包含天然气管道
                         config=super_graph_config
                     )
 
@@ -2169,38 +2182,44 @@ class NaturalGasSupplyChainOptimizer:
                 logger.debug(f"为MTJ工厂 {location} 创建氢气库存变量")
 
         # 8. 创建氢气运输变量 (仅为需要氢气运输的模式，无距离限制)
-        logger.info("创建氢气运输变量，无距离限制")
-        
-        valid_h2_routes = 0  # 计数有效路线
-        for h2_loc in self.hydrogen_locations:
-            for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
-                # 排除管段直供和LNG转运模式，因为它们在可再生能源站就地制备MTJ，氢气无需运输
-                if tech not in self.technologies:
-                    logger.warning(f"技术 {tech} 不在 technologies 中，跳过氢气运输变量创建")
-                    continue
-                    
-                if not self.technologies[tech]['hydrogen_transport_required']:
-                    continue
-                    
-                if tech not in self.mtj_locations:
-                    logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过氢气运输变量创建")
-                    continue
-                    
-                locations = self.mtj_locations[tech]
-                if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                    logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
-                    continue
-                
-                for mtj_loc in locations:
-                    # 不再检查距离限制，允许所有路径
-                    valid_h2_routes += 1
-                    # 修改为周级运输变量，与生产时间尺度一致
-                    var_name = f"h2_transport_{h2_loc}_{mtj_loc}_week"
-                    self.hydrogen_transport_vars[(h2_loc, mtj_loc)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-        
-        logger.info(f"创建了 {valid_h2_routes} 条氢气运输路线（无距离限制）")
+        # ========================================================================
+        # 【已禁用】氢气罐车运输变量创建
+        # 修正日期：2025-11-16
+        # 原因：氢气运输统一使用管道，不再使用罐车运输
+        # ========================================================================
+        # logger.info("创建氢气运输变量，无距离限制")
+        #
+        # valid_h2_routes = 0  # 计数有效路线
+        # for h2_loc in self.hydrogen_locations:
+        #     for tech in ['airport_integrated_conversion', 'lng_terminal_conversion']:
+        #         # 排除管段直供和LNG转运模式，因为它们在可再生能源站就地制备MTJ，氢气无需运输
+        #         if tech not in self.technologies:
+        #             logger.warning(f"技术 {tech} 不在 technologies 中，跳过氢气运输变量创建")
+        #             continue
+        #
+        #         if not self.technologies[tech]['hydrogen_transport_required']:
+        #             continue
+        #
+        #         if tech not in self.mtj_locations:
+        #             logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过氢气运输变量创建")
+        #             continue
+        #
+        #         locations = self.mtj_locations[tech]
+        #         if not hasattr(locations, '__iter__') or isinstance(locations, str):
+        #             logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
+        #             continue
+        #
+        #         for mtj_loc in locations:
+        #             # 不再检查距离限制，允许所有路径
+        #             valid_h2_routes += 1
+        #             # 修改为周级运输变量，与生产时间尺度一致
+        #             var_name = f"h2_transport_{h2_loc}_{mtj_loc}_week"
+        #             self.hydrogen_transport_vars[(h2_loc, mtj_loc)] = self.model.addVar(
+        #                 lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+        #             )
+        #
+        # logger.info(f"创建了 {valid_h2_routes} 条氢气运输路线（无距离限制）")
+        logger.info("氢气罐车运输已禁用，仅使用管道运输")
         
         # 9. 创建天然气运输变量 (从管道到所有非LNG接收站的MTJ工厂，改为天级罐车运输，无距离限制)
         logger.info("创建天然气罐车运输变量，无距离限制")
@@ -2780,17 +2799,19 @@ class NaturalGasSupplyChainOptimizer:
             lifecycle_operation_factor
         )
 
-        # 9. 氢气运输投资 + 20年运营成本现值（改为周级）
-        self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)  # 已包含在平准化氢气运输成本中
-        self.cost_expressions['hydrogen_transport_operation'] = gp.quicksum(
-            self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
-            self._calculate_hydrogen_transport_cost_by_distance(
-                self._calculate_location_distance(h_loc, mtj_loc)
-            ) * operation_expansion_factor * present_value_factor  # 周运输量 × 单位成本 × 年化系数 × 现值系数
-            for h_loc in self.hydrogen_locations
-            for mtj_loc in sum(self.mtj_locations.values(), [])
-            if (h_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
+        # 9. 氢气罐车运输投资 + 20年运营成本现值（已禁用，仅使用管道）
+        self.cost_expressions['hydrogen_transport_investment'] = gp.LinExpr(0)
+        # 【已禁用】氢气罐车运输成本 - 修正日期：2025-11-16
+        # self.cost_expressions['hydrogen_transport_operation'] = gp.quicksum(
+        #     self.hydrogen_transport_vars[(h_loc, mtj_loc)] *
+        #     self._calculate_hydrogen_transport_cost_by_distance(
+        #         self._calculate_location_distance(h_loc, mtj_loc)
+        #     ) * operation_expansion_factor * present_value_factor
+        #     for h_loc in self.hydrogen_locations
+        #     for mtj_loc in sum(self.mtj_locations.values(), [])
+        #     if (h_loc, mtj_loc) in self.hydrogen_transport_vars
+        # )
+        self.cost_expressions['hydrogen_transport_operation'] = gp.LinExpr(0)  # 氢气罐车已禁用
 
         # 9.1. 氢能管道运输成本现值（成本函数已包含所有费用）
         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
@@ -3219,15 +3240,16 @@ class NaturalGasSupplyChainOptimizer:
         mtj_truck = transportation.get('mtj_truck_intensity', 0.12)  # kg CO2eq/t·km
         ng_truck = transportation.get('ng_truck_intensity', 0.10)  # kg CO2eq/m³·km
 
-        # 氢气罐车运输碳排放
+        # 【已禁用】氢气罐车运输碳排放 - 修正日期：2025-11-16
         # 注：hydrogen_transport_vars单位为kg H2/week，h2_truck为kg CO2eq/kg·km
-        self.carbon_expressions['h2_truck_transport'] = gp.quicksum(
-            self.hydrogen_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
-            self._calculate_distance(h2_loc, mtj_loc) * h2_truck
-            for h2_loc in self.hydrogen_locations
-            for mtj_loc in self.locations
-            if (h2_loc, mtj_loc) in self.hydrogen_transport_vars
-        )
+        # self.carbon_expressions['h2_truck_transport'] = gp.quicksum(
+        #     self.hydrogen_transport_vars.get((h2_loc, mtj_loc), gp.LinExpr(0)) *
+        #     self._calculate_distance(h2_loc, mtj_loc) * h2_truck
+        #     for h2_loc in self.hydrogen_locations
+        #     for mtj_loc in self.locations
+        #     if (h2_loc, mtj_loc) in self.hydrogen_transport_vars
+        # )
+        self.carbon_expressions['h2_truck_transport'] = gp.LinExpr(0)  # 氢气罐车已禁用
 
         # 氢气管道运输碳排放（修复：之前遗漏了这部分）
         # 注：hydrogen_pipeline_transport_vars单位为kg H2/week，h2_pipeline为kg CO2eq/kg·km
@@ -3742,38 +3764,41 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"为每个设施每周添加了4小时维护停机约束")
     
     def _add_hydrogen_transport_capacity_constraints(self):
-        """添加氢气运输能力限制约束"""
-        logger.info("添加氢气运输能力限制约束...")
-        
-        if not hasattr(self, 'hydrogen_transport_vars'):
-            return
-        
-        # 氢气运输车辆调度约束（改为天级）
-        for h_loc in self.hydrogen_locations:
-            total_days = self.total_hours // 24
-            for day in range(total_days):
-                # 从配置文件读取氢气运输车辆参数
-                h2_transport_config = self.config.get('objective_coefficients', {}).get('hydrogen_transport_vehicle', {})
-                max_vehicles_per_day = h2_transport_config.get('max_vehicles_per_day', 48)  # 每天最多车次
-                vehicle_capacity_kg = h2_transport_config.get('vehicle_capacity_kg', 500)  # 每辆车氢气容量
-                max_h2_transport_per_day = max_vehicles_per_day * vehicle_capacity_kg
-                
-                # 从该地点运出的总氢气不能超过运输能力（周级）
-                total_h2_transport = gp.quicksum(
-                    self.hydrogen_transport_vars[(h_loc, dest)]
-                    for dest in sum(self.mtj_locations.values(), [])
-                    if (h_loc, dest) in self.hydrogen_transport_vars
-                )
-                
-                if total_h2_transport.size() > 0:
-                    # 周级约束：7天的运输能力
-                    max_h2_transport_per_week = max_h2_transport_per_day * 7
-                    self.model.addConstr(
-                        total_h2_transport <= max_h2_transport_per_week,
-                        name=f"h2_transport_capacity_{h_loc}_weekly"
-                    )
-        
-        logger.info("氢气运输能力限制约束添加完成")
+        """【已禁用】添加氢气罐车运输能力限制约束 - 修正日期：2025-11-16"""
+        logger.info("氢气罐车运输已禁用，跳过运输能力约束")
+        return
+
+        # logger.info("添加氢气运输能力限制约束...")
+        #
+        # if not hasattr(self, 'hydrogen_transport_vars'):
+        #     return
+        #
+        # # 氢气运输车辆调度约束（改为天级）
+        # for h_loc in self.hydrogen_locations:
+        #     total_days = self.total_hours // 24
+        #     for day in range(total_days):
+        #         # 从配置文件读取氢气运输车辆参数
+        #         h2_transport_config = self.config.get('objective_coefficients', {}).get('hydrogen_transport_vehicle', {})
+        #         max_vehicles_per_day = h2_transport_config.get('max_vehicles_per_day', 48)  # 每天最多车次
+        #         vehicle_capacity_kg = h2_transport_config.get('vehicle_capacity_kg', 500)  # 每辆车氢气容量
+        #         max_h2_transport_per_day = max_vehicles_per_day * vehicle_capacity_kg
+        #
+        #         # 从该地点运出的总氢气不能超过运输能力（周级）
+        #         total_h2_transport = gp.quicksum(
+        #             self.hydrogen_transport_vars[(h_loc, dest)]
+        #             for dest in sum(self.mtj_locations.values(), [])
+        #             if (h_loc, dest) in self.hydrogen_transport_vars
+        #         )
+        #
+        #         if total_h2_transport.size() > 0:
+        #             # 周级约束：7天的运输能力
+        #             max_h2_transport_per_week = max_h2_transport_per_day * 7
+        #             self.model.addConstr(
+        #                 total_h2_transport <= max_h2_transport_per_week,
+        #                 name=f"h2_transport_capacity_{h_loc}_weekly"
+        #             )
+        #
+        # logger.info("氢气运输能力限制约束添加完成")
     
     def _add_inventory_balance_constraints(self):
         """添加库存平衡约束"""
@@ -3948,12 +3973,13 @@ class NaturalGasSupplyChainOptimizer:
                     # 氢气运输出库（在hour=167统一扣减周运输量）
                     h2_transport_outflow = 0
                     if hour == self.total_hours - 1:  # 在hour=167扣减本周累积的运输量
-                        # 整周的氢气运输出库量（周级变量）
-                        weekly_outbound_transport = gp.quicksum(
-                            self.hydrogen_transport_vars[(location, dest_loc)]
-                            for dest_loc in self.locations
-                            if (location, dest_loc) in self.hydrogen_transport_vars
-                        )
+                        # 【已禁用】罐车运输出库 - 修正日期：2025-11-16
+                        # weekly_outbound_transport = gp.quicksum(
+                        #     self.hydrogen_transport_vars[(location, dest_loc)]
+                        #     for dest_loc in self.locations
+                        #     if (location, dest_loc) in self.hydrogen_transport_vars
+                        # )
+                        weekly_outbound_transport = gp.LinExpr(0)  # 罐车已禁用
 
                         # 管道运输（周级变量）
                         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
@@ -3978,13 +4004,13 @@ class NaturalGasSupplyChainOptimizer:
                 # Inventory[0] >= WeeklyTransport（代表上周累积的库存）
                 weekly_outbound_total = gp.LinExpr(0)
 
-                # 罐车运输
-                if hasattr(self, 'hydrogen_transport_vars') and self.hydrogen_transport_vars:
-                    weekly_outbound_total += gp.quicksum(
-                        self.hydrogen_transport_vars[(location, dest_loc)]
-                        for dest_loc in self.locations
-                        if (location, dest_loc) in self.hydrogen_transport_vars
-                    )
+                # 【已禁用】罐车运输 - 修正日期：2025-11-16
+                # if hasattr(self, 'hydrogen_transport_vars') and self.hydrogen_transport_vars:
+                #     weekly_outbound_total += gp.quicksum(
+                #         self.hydrogen_transport_vars[(location, dest_loc)]
+                #         for dest_loc in self.locations
+                #         if (location, dest_loc) in self.hydrogen_transport_vars
+                #     )
 
                 # 管道运输
                 if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
@@ -4034,12 +4060,13 @@ class NaturalGasSupplyChainOptimizer:
                     # 氢气运输入库（在第0小时统一入库周运输量）
                     h2_transport_inflow = 0
                     if hour == 0:  # 在第0小时（hour=0）统一入库周运输量
-                        # 罐车运输（周级变量）
-                        weekly_inbound_transport = gp.quicksum(
-                            self.hydrogen_transport_vars[(h_loc, location)]
-                            for h_loc in self.hydrogen_locations
-                            if (h_loc, location) in self.hydrogen_transport_vars
-                        )
+                        # 【已禁用】罐车运输入库 - 修正日期：2025-11-16
+                        # weekly_inbound_transport = gp.quicksum(
+                        #     self.hydrogen_transport_vars[(h_loc, location)]
+                        #     for h_loc in self.hydrogen_locations
+                        #     if (h_loc, location) in self.hydrogen_transport_vars
+                        # )
+                        weekly_inbound_transport = gp.LinExpr(0)  # 罐车已禁用
 
                         # 管道运输（周级变量）
                         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
