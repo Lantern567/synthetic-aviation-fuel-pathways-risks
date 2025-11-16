@@ -70,55 +70,53 @@ class FiveScenariosComparisonVisualizer:
 
         logger.info(f"输出目录: {self.session_dir}")
 
-        # 模块配置 - 使用自动查找最新文件
+        # 模块配置 - 使用绝对路径和自动查找最新文件
+        # 获取项目根目录
+        project_root = Path(__file__).parent.parent.parent.parent
+
         self.modules = {
             'Coal Hydrogen': {
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',  # 红色
-                'solution_pattern': 'coal_hydrogen_saf_optimization/results/complete_solution_*.json',
-                'carbon_pattern': 'coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_*.json'
+                # 煤制氢：结果直接在results/目录下
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_*.json')
             },
             'DAC Hydrogen': {
                 'name_cn': 'DAC制氢',
                 'color': '#3498DB',  # 蓝色
-                'solution_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
-                'carbon_pattern': 'dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json'
+                # DAC制氢：结果在results/two_step/子目录下
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json')
             },
             'Natural Gas Two-Step': {
                 'name_cn': '天然气两步法',
                 'color': '#2ECC71',  # 绿色
-                'solution_pattern': 'natural_gas_supply_chain_optimization/results/complete_solution_*.json',
-                'carbon_pattern': 'natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json'
+                # 天然气两步法：结果直接在results/目录下（没有two_step子目录！）
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
             },
             'Natural Gas One-Step': {
                 'name_cn': '天然气一步法',
                 'color': '#F39C12',  # 橙色
-                'solution_pattern': 'natural_gas_supply_chain_optimization/results/one_step/complete_solution_*.json',
-                'carbon_pattern': 'natural_gas_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json'
+                # 天然气一步法：结果在results/ft_one_step/子目录下
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_*.json')
             },
             'Green H2 Industrial CO2': {
                 'name_cn': '绿氢+工业捕获CO₂',
                 'color': '#9B59B6',  # 紫色
-                'solution_pattern': 'green_hydrogen_supply_chain_optimization/results/complete_solution_*.json',
-                'carbon_pattern': 'green_hydrogen_supply_chain_optimization/results/carbon_emissions_detailed_*.json'
+                # 绿氢：结果在results/two_step/子目录下
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json')
             }
         }
 
         # 数据存储
         self.data = {}
 
-    def load_data(self, base_dir: str = None):
-        """
-        加载三个模块的数据
-
-        Args:
-            base_dir: 基础目录，默认为项目根目录
-        """
-        if base_dir is None:
-            base_dir = Path(__file__).parent.parent.parent.parent / "products" / "supply_chain_optimization"
-        else:
-            base_dir = Path(base_dir)
-
+    def load_data(self):
+        """加载五个场景的数据"""
         logger.info("=" * 60)
         logger.info("加载模块数据")
         logger.info("=" * 60)
@@ -130,11 +128,11 @@ class FiveScenariosComparisonVisualizer:
 
             try:
                 # 加载解决方案文件（自动查找最新文件）
-                solution_pattern = base_dir / config['solution_pattern']
-                solution_files = sorted(glob.glob(str(solution_pattern)), reverse=True)
+                solution_pattern = config['solution_pattern']
+                solution_files = sorted(glob.glob(solution_pattern), reverse=True)
 
                 if not solution_files:
-                    logger.warning(f"  ⚠ 未找到解决方案文件: {config['solution_pattern']}")
+                    logger.warning(f"  ⚠ 未找到解决方案文件: {solution_pattern}")
                     continue
 
                 solution_path = Path(solution_files[0])
@@ -143,11 +141,11 @@ class FiveScenariosComparisonVisualizer:
                     solution_data = json.load(f)
 
                 # 加载碳排放文件（自动查找最新文件）
-                carbon_pattern = base_dir / config['carbon_pattern']
-                carbon_files = sorted(glob.glob(str(carbon_pattern)), reverse=True)
+                carbon_pattern = config['carbon_pattern']
+                carbon_files = sorted(glob.glob(carbon_pattern), reverse=True)
 
                 if not carbon_files:
-                    logger.warning(f"  ⚠ 未找到碳排放文件: {config['carbon_pattern']}")
+                    logger.warning(f"  ⚠ 未找到碳排放文件: {carbon_pattern}")
                     continue
 
                 carbon_path = Path(carbon_files[0])
@@ -193,13 +191,20 @@ class FiveScenariosComparisonVisualizer:
         }
 
         # 详细成本项
+        # 注意：某些成本项之间有包含关系，避免重复计算：
+        # - ft_production_cost = ft_catalyst_cost + ft_energy_cost (天然气一步法)
+        # - hydrogen_production_cost 已从绿氢场景移除 (2025-11-09) - 避免与电力成本重复计算
         detailed_costs = {
             'Facility Investment': ('设施投资', ['facility_investment_cost']),
             'Storage Equipment': ('储存设备', ['storage_equipment_cost', 'h2_storage_investment']),
             'Electrolyzer': ('电解槽', ['electrolyzer_investment_cost']),
             'DAC Equipment': ('DAC设备', ['dac_facility_investment']),
             'Raw Material': ('原料成本', ['coal_purchase_cost', 'coal_gasification_cost', 'natural_gas_cost', 'dac_capture_cost']),
+            # 'H2 Production': ('制氢成本', ['hydrogen_production_cost']),  # ❌ 已禁用 (2025-11-09)
+            'CO2 Capture': ('CO₂捕获', ['co2_capture_cost']),  # 绿氢场景
             'Production': ('生产成本', ['production_cost', 'facility_operation_cost']),
+            'FT Production': ('FT生产', ['ft_production_cost']),  # 天然气一步法（包含催化剂和能耗）
+            'Catalyst': ('催化剂', ['catalyst_cost']),  # 仅其他场景的催化剂，不包括ft_catalyst_cost
             'Electricity': ('电力成本', ['electricity_cost']),
             'Transport': ('运输成本', ['transport_operation_cost', 'ng_transport_operation', 'hydrogen_pipeline_operation', 'co2_pipeline_transport_cost']),
             'Storage Operation': ('储存运营', ['storage_operation_cost', 'h2_storage_operation'])
@@ -207,7 +212,7 @@ class FiveScenariosComparisonVisualizer:
 
         # 创建图形（两个子图）
         fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-        fig.suptitle('三模块成本对比 | Three Modules Cost Comparison', fontsize=16, fontweight='bold')
+        fig.suptitle('五场景成本对比 | Five Scenarios Cost Comparison', fontsize=16, fontweight='bold')
 
         # === 子图1: 总成本和投资/运营成本对比 ===
         ax1 = axes[0]
@@ -240,11 +245,11 @@ class FiveScenariosComparisonVisualizer:
                         f'{height:.0f}',
                         ha='center', va='bottom', fontsize=9)
 
-        ax1.set_xlabel('模块 | Module', fontsize=12)
+        ax1.set_xlabel('场景 | Scenario', fontsize=12)
         ax1.set_ylabel('成本（亿元）| Cost (100M CNY)', fontsize=12)
         ax1.set_title('生命周期总成本对比 | Lifecycle Total Cost', fontsize=13, fontweight='bold')
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax1.legend(loc='upper left')
         ax1.grid(axis='y', alpha=0.3)
 
@@ -265,9 +270,11 @@ class FiveScenariosComparisonVisualizer:
         bottom = np.zeros(len(modules_list))
         colors = plt.cm.Set3(np.linspace(0, 1, len(detailed_costs)))
 
+        x_positions = np.arange(len(modules_list))
+
         for (cat, (cn_name, _)), color in zip(detailed_costs.items(), colors):
             values = detailed_data[cat]
-            bars = ax2.bar(modules_list, values, bottom=bottom, label=f'{cat}\n{cn_name}',
+            bars = ax2.bar(x_positions, values, bottom=bottom, label=f'{cat}\n{cn_name}',
                           color=color, alpha=0.8, edgecolor='white', linewidth=1.5)
 
             # 添加数值标签（只显示大于10的值）
@@ -281,7 +288,8 @@ class FiveScenariosComparisonVisualizer:
 
         ax2.set_ylabel('成本（亿元）| Cost (100M CNY)', fontsize=12)
         ax2.set_title('详细成本构成 | Detailed Cost Breakdown', fontsize=13, fontweight='bold')
-        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax2.set_xticks(x_positions)
+        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax2.legend(loc='upper left', bbox_to_anchor=(1.02, 1), fontsize=9)
         ax2.grid(axis='y', alpha=0.3)
 
@@ -313,7 +321,8 @@ class FiveScenariosComparisonVisualizer:
             carbon_data = self.data[module]['carbon']
 
             fulfillment_ratios.append(solution_data.get('demand_fulfillment_ratio', 0) * 100)
-            actual_productions.append(carbon_data.get('total_production_kg', 0) / 1e6)  # 转换为千吨
+            # 从solution_data读取生命周期总产量，而非carbon_data中的周期产量
+            actual_productions.append(solution_data.get('lifecycle_total_production_kg', 0) / 1e6)  # 转换为千吨
 
         # 绘制柱状图和折线图
         color_map = {m: self.modules[m]['color'] for m in modules_list}
@@ -331,11 +340,11 @@ class FiveScenariosComparisonVisualizer:
         # 添加100%参考线
         ax.axhline(y=100, color='red', linestyle='--', linewidth=2, label='100% 满足线', alpha=0.7)
 
-        ax.set_xlabel('模块 | Module', fontsize=12)
+        ax.set_xlabel('场景 | Scenario', fontsize=12)
         ax.set_ylabel('需求满足率 (%) | Fulfillment Ratio (%)', fontsize=12)
         ax.set_title('SAF需求满足程度 | SAF Demand Fulfillment', fontsize=13, fontweight='bold')
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax.set_ylim([0, 110])
         ax.legend(loc='lower right')
         ax.grid(axis='y', alpha=0.3)
@@ -352,8 +361,8 @@ class FiveScenariosComparisonVisualizer:
         """可视化碳排放三指标"""
         logger.info("\n生成碳排放三指标对比图...")
 
-        # 创建图形（三个子图）
-        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+        # 创建图形（三个子图）- 增加宽度以适应五个场景
+        fig, axes = plt.subplots(1, 3, figsize=(20, 6))
         fig.suptitle('碳排放三指标对比 | Carbon Emissions Three Indicators Comparison',
                     fontsize=16, fontweight='bold')
 
@@ -387,7 +396,7 @@ class FiveScenariosComparisonVisualizer:
         ax1.set_ylabel('碳强度 | Carbon Intensity\n(kg CO₂/kg SAF)', fontsize=11)
         ax1.set_title('质量基碳强度 | Mass-based CI', fontsize=12, fontweight='bold')
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=10)
+        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=9, rotation=15, ha='right')
         ax1.grid(axis='y', alpha=0.3)
 
         # === 子图2: 碳强度 (g CO2/MJ) ===
@@ -403,7 +412,7 @@ class FiveScenariosComparisonVisualizer:
         ax2.set_ylabel('碳强度 | Carbon Intensity\n(g CO₂/MJ)', fontsize=11)
         ax2.set_title('能量基碳强度 | Energy-based CI', fontsize=12, fontweight='bold')
         ax2.set_xticks(x_pos)
-        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=10)
+        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=9, rotation=15, ha='right')
         ax2.grid(axis='y', alpha=0.3)
 
         # === 子图3: 相对传统航油减排比例 ===
@@ -427,7 +436,7 @@ class FiveScenariosComparisonVisualizer:
         ax3.set_ylabel('相对传统航油减排 (%)\nReduction vs Jet Fuel (%)', fontsize=11)
         ax3.set_title('减排效果 | Emission Reduction', fontsize=12, fontweight='bold')
         ax3.set_xticks(x_pos)
-        ax3.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=10)
+        ax3.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], fontsize=9, rotation=15, ha='right')
         ax3.grid(axis='y', alpha=0.3)
 
         # 添加减排效果说明
@@ -499,7 +508,7 @@ class FiveScenariosComparisonVisualizer:
         ax1.set_ylabel('碳排放（千吨CO₂）| Emissions (kt CO₂)', fontsize=12)
         ax1.set_title('各阶段碳排放量 | Emissions by Stage', fontsize=13, fontweight='bold')
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax1.legend(loc='upper left', fontsize=10)
         ax1.grid(axis='y', alpha=0.3)
 
@@ -532,7 +541,7 @@ class FiveScenariosComparisonVisualizer:
         ax2.set_ylabel('百分比 (%) | Percentage (%)', fontsize=12)
         ax2.set_title('各阶段碳排放占比 | Stage Contribution', fontsize=13, fontweight='bold')
         ax2.set_xticks(x_pos)
-        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax2.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax2.set_ylim([0, 100])
         ax2.legend(loc='upper left', fontsize=10)
         ax2.grid(axis='y', alpha=0.3)
@@ -570,8 +579,8 @@ class FiveScenariosComparisonVisualizer:
             lcoe = solution_data.get('lifecycle_levelized_cost_excluding_shortage_per_kg', 0)
             lcoe_values.append(lcoe)
 
-            # 读取产量和成本
-            production_kg = carbon_data.get('total_production_kg', 0)
+            # 从solution_data读取生命周期总产量，而非carbon_data中的周期产量
+            production_kg = solution_data.get('lifecycle_total_production_kg', 0)
             total_production.append(production_kg / 1e6)  # 转换为千吨
             total_costs.append(solution_data.get('total_cost_excluding_shortage', 0) / 1e9)  # 转换为亿元
 
@@ -593,7 +602,7 @@ class FiveScenariosComparisonVisualizer:
         ax1.set_ylabel('LCOE（元/kg SAF）| LCOE (CNY/kg SAF)', fontsize=12)
         ax1.set_title('SAF生产平准化成本 | SAF Production LCOE', fontsize=13, fontweight='bold')
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list])
+        ax1.set_xticklabels([f"{m}\n{self.modules[m]['name_cn']}" for m in modules_list], rotation=15, ha='right')
         ax1.grid(axis='y', alpha=0.3)
 
         # 添加航油价格参考线（假设传统航油价格约8元/kg）
@@ -625,6 +634,10 @@ class FiveScenariosComparisonVisualizer:
         ax2.legend(loc='upper left', fontsize=10)
         ax2.grid(True, alpha=0.3)
 
+        # 手动设置X轴范围，确保所有点可见
+        # 所有场景产量都在15391千吨左右，设置范围为 15000-16000
+        ax2.set_xlim([14500, 16500])
+
         plt.tight_layout()
 
         # 保存图片
@@ -647,10 +660,11 @@ class FiveScenariosComparisonVisualizer:
             # 直接读取LCOE值
             lcoe = solution_data.get('lifecycle_levelized_cost_excluding_shortage_per_kg', 0)
             total_cost = solution_data.get('total_cost_excluding_shortage', 0)
-            production_kg = carbon_data.get('total_production_kg', 0)
+            # 从solution_data读取生命周期总产量，而非carbon_data中的周期产量
+            production_kg = solution_data.get('lifecycle_total_production_kg', 0)
 
             summary_data.append({
-                '模块 Module': f"{module} ({self.modules[module]['name_cn']})",
+                '场景 Scenario': f"{module} ({self.modules[module]['name_cn']})",
                 '总成本 Total Cost (亿元)': f"{total_cost / 1e9:.2f}",
                 '投资成本 Investment (亿元)': f"{solution_data.get('total_investment_cost', 0) / 1e9:.2f}",
                 '运营成本 Operation (亿元)': f"{solution_data.get('total_operation_cost', 0) / 1e9:.2f}",

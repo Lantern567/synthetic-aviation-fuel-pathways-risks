@@ -104,46 +104,50 @@ class FiveScenariosClusteredMapVisualizer:
             self.graphhopper = None
 
         # 模块配置 - 使用自动查找最新文件
+        # 获取项目根目录
+        project_root = Path(__file__).parent.parent.parent.parent
+
         self.modules = {
             'Coal Hydrogen': {
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',
-                'h2_clustering_file': '../coal_hydrogen_saf_optimization/clustering_results.json',
-                'co2_clustering_file': '../coal_hydrogen_saf_optimization/co2_clustering_results.json',
+                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/clustering_results.json'),
+                'co2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/co2_clustering_results.json'),
                 'ng_clustering_file': None,
-                'transport_summary_pattern': '../coal_hydrogen_saf_optimization/results/transport_summary_*.csv'
+                'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/transport_summary_*.csv')
             },
             'DAC Hydrogen': {
                 'name_cn': 'DAC制氢',
                 'color': '#3498DB',
-                'h2_clustering_file': '../dac_hydrogen_saf_supply_chain_optimization/clustering_results.json',
+                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/clustering_results.json'),
                 'co2_clustering_file': None,  # DAC从空气中捕获CO2，无需CO2运输
                 'ng_clustering_file': None,
-                'transport_summary_pattern': '../dac_hydrogen_saf_supply_chain_optimization/results/two_step/transport_summary_*.csv'
+                'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/transport_summary_*.csv')
             },
             'Natural Gas Two-Step': {
                 'name_cn': '天然气两步法',
                 'color': '#2ECC71',
-                'h2_clustering_file': '../natural_gas_supply_chain_optimization/clustering_results.json',
+                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/clustering_results.json'),
                 'co2_clustering_file': None,  # 天然气制氢过程中CO2作为副产物，无独立运输
                 'ng_clustering_file': None,
-                'transport_summary_pattern': '../natural_gas_supply_chain_optimization/results/transport_summary_*.csv'
+                'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/transport_summary_*.csv')
             },
             'Natural Gas One-Step': {
                 'name_cn': '天然气一步法',
                 'color': '#F39C12',
                 'h2_clustering_file': None,  # 一步法不需要氢气聚类
                 'co2_clustering_file': None,
-                'ng_clustering_file': '../natural_gas_supply_chain_optimization/ng_clustering_results.json',  # 天然气聚类
-                'transport_summary_pattern': '../natural_gas_supply_chain_optimization/results/one_step/transport_summary_*.csv'
+                'ng_clustering_file': None,  # 一步法目前没有天然气聚类文件
+                # 一步法的transport_summary直接保存在results/目录下，不在ft_one_step子目录
+                'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/transport_summary_*.csv')
             },
             'Green H2 Industrial CO2': {
                 'name_cn': '绿氢+工业捕获CO₂',
                 'color': '#9B59B6',
-                'h2_clustering_file': '../green_hydrogen_supply_chain_optimization/clustering_results.json',
-                'co2_clustering_file': '../green_hydrogen_supply_chain_optimization/co2_clustering_results.json',
+                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/clustering_results.json'),
+                'co2_clustering_file': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/co2_clustering_results.json'),
                 'ng_clustering_file': None,
-                'transport_summary_pattern': '../green_hydrogen_supply_chain_optimization/results/transport_summary_*.csv'
+                'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/transport_summary_*.csv')
             }
         }
 
@@ -174,7 +178,7 @@ class FiveScenariosClusteredMapVisualizer:
         logger.info("加载聚类和运输数据")
         logger.info("=" * 60)
 
-        base_dir = Path(__file__).parent
+        # 不需要base_dir，所有路径都是绝对路径
 
         for module_name, config in self.modules.items():
             logger.info(f"\n正在加载: {module_name} ({config['name_cn']})")
@@ -189,7 +193,7 @@ class FiveScenariosClusteredMapVisualizer:
             try:
                 # 加载H2聚类数据（如果有）
                 if config['h2_clustering_file']:
-                    h2_clustering_file = (base_dir / config['h2_clustering_file']).resolve()
+                    h2_clustering_file = Path(config['h2_clustering_file'])
                     if h2_clustering_file.exists():
                         with open(h2_clustering_file, 'r', encoding='utf-8') as f:
                             module_data['h2_clustering'] = json.load(f)
@@ -201,7 +205,7 @@ class FiveScenariosClusteredMapVisualizer:
 
                 # 加载CO2聚类数据（如果有）
                 if config['co2_clustering_file']:
-                    co2_clustering_file = (base_dir / config['co2_clustering_file']).resolve()
+                    co2_clustering_file = Path(config['co2_clustering_file'])
                     if co2_clustering_file.exists():
                         with open(co2_clustering_file, 'r', encoding='utf-8') as f:
                             module_data['co2_clustering'] = json.load(f)
@@ -213,7 +217,7 @@ class FiveScenariosClusteredMapVisualizer:
 
                 # 加载天然气聚类数据（如果有）
                 if config['ng_clustering_file']:
-                    ng_clustering_file = (base_dir / config['ng_clustering_file']).resolve()
+                    ng_clustering_file = Path(config['ng_clustering_file'])
                     if ng_clustering_file.exists():
                         with open(ng_clustering_file, 'r', encoding='utf-8') as f:
                             module_data['ng_clustering'] = json.load(f)
@@ -225,8 +229,8 @@ class FiveScenariosClusteredMapVisualizer:
 
                 # 加载运输汇总数据（自动查找最新文件）
                 import glob
-                summary_pattern = (base_dir / config['transport_summary_pattern']).resolve()
-                summary_files = sorted(glob.glob(str(summary_pattern)), reverse=True)
+                summary_pattern = config['transport_summary_pattern']
+                summary_files = sorted(glob.glob(summary_pattern), reverse=True)
 
                 if summary_files:
                     summary_file = Path(summary_files[0])
@@ -379,28 +383,42 @@ class FiveScenariosClusteredMapVisualizer:
         # === 维度1: 原材料生产类型（可以是多个）===
         raw_material_types = set()
 
-        # CO2捕获设施
-        if any('co2' in t or '捕获' in t or 'capture' in t for t in types_lower):
+        # 【关键修改】优先根据实际发出的货物类型判断原材料生产能力
+        # 只有当设施作为起点发出某种原材料时，才认为它生产该原材料
+        if '氢气' in cargo_types:
+            raw_material_types.add('h2')
+        if 'CO2' in cargo_types:
             raw_material_types.add('co2')
-        # 从名称判断CO2设施
-        if any(keyword in name_lower for keyword in ['dac', 'carbon', 'co2', '碳', '捕获']):
-            raw_material_types.add('co2')
-
-        # 天然气供应点
-        if any('天然气' in t or 'natural gas' in t or 'ng' in t for t in types_lower):
-            raw_material_types.add('natural_gas')
-        if 'ng_pipeline' in name_lower or ('天然气' in name_lower and '管道' in name_lower):
-            raw_material_types.add('natural_gas')
         if '天然气' in cargo_types:
             raw_material_types.add('natural_gas')
 
-        # H2生产设施（光伏、风电、煤炭等）
-        if any('氢气' in t or 'hydrogen' in t or '生产设施' in t for t in types_lower):
-            raw_material_types.add('h2')
-        if any(keyword in name_lower for keyword in ['solar', 'wind', 'pv', 'photovoltaic', '光伏', '风能', '风电', 'coal', '煤炭', '煤制']):
-            raw_material_types.add('h2')
-        if '氢气' in cargo_types:
-            raw_material_types.add('h2')
+        # 【降级判断】如果cargo_types为空（没有作为起点发货），才根据名称和类型推断
+        # 这适用于某些设施可能在聚类过程中没有直接出现在起点的情况
+        if not raw_material_types:
+            # CO2捕获设施
+            if any('co2' in t or '捕获' in t or 'capture' in t for t in types_lower):
+                raw_material_types.add('co2')
+            # 从名称判断CO2设施
+            if any(keyword in name_lower for keyword in ['dac', 'carbon', 'co2', '碳', '捕获']):
+                raw_material_types.add('co2')
+
+            # 天然气供应点
+            if any('天然气' in t or 'natural gas' in t or 'ng' in t for t in types_lower):
+                raw_material_types.add('natural_gas')
+            if 'ng_pipeline' in name_lower or ('天然气' in name_lower and '管道' in name_lower):
+                raw_material_types.add('natural_gas')
+
+            # H2生产设施（光伏、风电、煤炭等）
+            # 注意：不匹配"生产设施"，因为"生产设施"可能是SAF工厂，不代表生产H2
+            if any('氢气' in t or 'hydrogen' in t for t in types_lower):
+                raw_material_types.add('h2')
+            if any(keyword in name_lower for keyword in ['solar', 'wind', 'pv', 'photovoltaic', '光伏', '风能', '风电', 'coal', '煤炭', '煤制']):
+                raw_material_types.add('h2')
+
+        # 【关键规则】如果是消纳地（机场），强制清空原材料生产能力
+        # 机场不能生产原材料（氢气、CO2、天然气），但可以有SAF工厂
+        if is_consumption == 'yes':
+            raw_material_types.clear()
 
         # 如果没有任何原材料生产，返回空集
         return (frozenset(raw_material_types), has_saf_production, is_consumption)
@@ -520,13 +538,16 @@ class FiveScenariosClusteredMapVisualizer:
         logger.info(f"    聚类运输数据: {len(h2_cluster_data)} 条")
 
         clusters = h2_clustering.get('clusters', [])
-        cluster_centers = {}
+        all_cluster_centers = {}
 
         # 提取所有聚类中心
         for cluster in clusters:
             cluster_id = cluster['cluster_id']
             center_lat, center_lon = cluster['geo_center']
-            cluster_centers[cluster_id] = (center_lat, center_lon)
+            all_cluster_centers[cluster_id] = (center_lat, center_lon)
+
+        # 【关键修改】只记录实际使用的聚类中心
+        used_cluster_centers = {}
 
         # 统计计数
         layer1_count = 0
@@ -550,6 +571,13 @@ class FiveScenariosClusteredMapVisualizer:
 
         # 绘制三层运输路线
         for idx, row in h2_cluster_data.iterrows():
+            # 【新增】过滤运输量为0的记录 - 支持周运输量和日运输量
+            volume_weekly = row.get('周运输量(kg)', 0)
+            volume_daily = row.get('日运输量(kg)', 0)
+            # 只要有一个运输量>0就保留
+            if (pd.isna(volume_weekly) or volume_weekly == 0) and (pd.isna(volume_daily) or volume_daily == 0):
+                continue
+
             # 解析聚类信息 "聚类0_(中心:36.2153,114.4731)"
             cluster_info = row.get('聚类信息', '')
             if not cluster_info or pd.isna(cluster_info):
@@ -558,9 +586,12 @@ class FiveScenariosClusteredMapVisualizer:
             # 提取聚类ID
             try:
                 cluster_id = int(cluster_info.split('聚类')[1].split('_')[0])
-                if cluster_id not in cluster_centers:
+                if cluster_id not in all_cluster_centers:
                     continue
-                center_lat, center_lon = cluster_centers[cluster_id]
+                center_lat, center_lon = all_cluster_centers[cluster_id]
+
+                # 【关键修改】只有运输量>0时才标记聚类中心为已使用
+                used_cluster_centers[cluster_id] = (center_lat, center_lon)
             except:
                 continue
 
@@ -634,9 +665,9 @@ class FiveScenariosClusteredMapVisualizer:
                 except Exception as e:
                     logger.warning(f"    解析路径坐标失败: {e}")
 
-        # 绘制聚类中心 - 使用五角星,与设施区分开
-        if cluster_centers:
-            for cluster_id, (center_lat, center_lon) in cluster_centers.items():
+        # 【关键修改】只绘制实际使用的聚类中心
+        if used_cluster_centers:
+            for cluster_id, (center_lat, center_lon) in used_cluster_centers.items():
                 cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
                 ax.scatter(
                     center_lon, center_lat,
@@ -647,7 +678,7 @@ class FiveScenariosClusteredMapVisualizer:
 
         logger.info(f"    ✓ Layer1: {layer1_count} 条（源点→聚类中心）")
         logger.info(f"    ✓ Layer2: {layer2_count} 条（聚类中心→管道接入点）")
-        logger.info(f"    ✓ 聚类中心: {len(cluster_centers)} 个")
+        logger.info(f"    ✓ 实际使用的聚类中心: {len(used_cluster_centers)} 个（总共{len(all_cluster_centers)}个）")
 
     def plot_pipeline_networks(self, ax):
         """
@@ -997,13 +1028,16 @@ class FiveScenariosClusteredMapVisualizer:
         logger.info(f"    聚类运输数据: {len(ng_cluster_data)} 条")
 
         clusters = ng_clustering.get('clusters', [])
-        cluster_centers = {}
+        all_cluster_centers = {}
 
         # 提取所有聚类中心
         for cluster in clusters:
             cluster_id = cluster['cluster_id']
             center_lat, center_lon = cluster['geo_center']
-            cluster_centers[cluster_id] = (center_lat, center_lon)
+            all_cluster_centers[cluster_id] = (center_lat, center_lon)
+
+        # 【关键修改】只记录实际使用的聚类中心
+        used_cluster_centers = {}
 
         # 统计计数
         layer1_count = 0
@@ -1027,6 +1061,16 @@ class FiveScenariosClusteredMapVisualizer:
 
         # 绘制两层运输路线
         for idx, row in ng_cluster_data.iterrows():
+            # 【新增】过滤运输量为0的记录
+            volume = 0
+            if '周运输量(kg)' in row:
+                volume = row.get('周运输量(kg)', 0)
+            elif '周运输量(m³)' in row:
+                volume = row.get('周运输量(m³)', 0)
+
+            if volume == 0 or pd.isna(volume):
+                continue
+
             # 解析聚类信息 "聚类0_(中心:36.2153,114.4731)"
             cluster_info = row.get('聚类信息', '')
             if not cluster_info or pd.isna(cluster_info):
@@ -1035,9 +1079,12 @@ class FiveScenariosClusteredMapVisualizer:
             # 提取聚类ID
             try:
                 cluster_id = int(cluster_info.split('聚类')[1].split('_')[0])
-                if cluster_id not in cluster_centers:
+                if cluster_id not in all_cluster_centers:
                     continue
-                center_lat, center_lon = cluster_centers[cluster_id]
+                center_lat, center_lon = all_cluster_centers[cluster_id]
+
+                # 【关键修改】只有运输量>0时才标记聚类中心为已使用
+                used_cluster_centers[cluster_id] = (center_lat, center_lon)
             except:
                 continue
 
@@ -1078,9 +1125,9 @@ class FiveScenariosClusteredMapVisualizer:
                 )
                 layer2_count += 1
 
-        # 绘制天然气聚类中心 - 使用菱形,与H2聚类区分
-        if cluster_centers:
-            for cluster_id, (center_lat, center_lon) in cluster_centers.items():
+        # 【关键修改】只绘制实际使用的天然气聚类中心
+        if used_cluster_centers:
+            for cluster_id, (center_lat, center_lon) in used_cluster_centers.items():
                 cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
                 ax.scatter(
                     center_lon, center_lat,
@@ -1091,7 +1138,7 @@ class FiveScenariosClusteredMapVisualizer:
 
         logger.info(f"    ✓ Layer1: {layer1_count} 条（管道节点→聚类中心）")
         logger.info(f"    ✓ Layer2: {layer2_count} 条（聚类中心→SAF工厂）")
-        logger.info(f"    ✓ 聚类中心: {len(cluster_centers)} 个")
+        logger.info(f"    ✓ 实际使用的聚类中心: {len(used_cluster_centers)} 个（总共{len(all_cluster_centers)}个）")
 
 
     def plot_facilities(self, ax, transport_summary, module_name):
@@ -1113,6 +1160,26 @@ class FiveScenariosClusteredMapVisualizer:
         logger.info(f"  绘制设施位置...")
         logger.info(f"    运输汇总数据行数: {len(transport_summary)}")
 
+        # 【特殊处理】天然气两步法：统计每个设施的SAF产量，用于筛选
+        facility_saf_production = {}  # {coord: total_saf_volume}
+        if module_name == 'Natural Gas Two-Step':
+            logger.info(f"    天然气两步法场景：统计SAF产量用于筛选（只显示>10kg的生产地）")
+            for _, row in transport_summary.iterrows():
+                cargo_type = row.get('货物类型', '')
+                if cargo_type == 'MTJ' or cargo_type == 'SAF':
+                    # 提取起点坐标和产量
+                    start_coord_str = row.get('起点坐标', '')
+                    volume = 0
+                    if '周运输量(kg)' in row:
+                        volume = row.get('周运输量(kg)', 0)
+                    elif '日运输量(kg)' in row:
+                        volume = row.get('日运输量(kg)', 0) * 7  # 转换为周产量
+
+                    if pd.notna(volume) and volume > 0:
+                        if start_coord_str not in facility_saf_production:
+                            facility_saf_production[start_coord_str] = 0
+                        facility_saf_production[start_coord_str] += volume
+
         # 解析坐标字符串的辅助函数
         def parse_coord(coord_str):
             """解析 "(39.1244, 117.3462)" 格式的坐标字符串"""
@@ -1129,10 +1196,30 @@ class FiveScenariosClusteredMapVisualizer:
                 pass
             return None, None
 
-        # 第一步: 收集每个设施的所有类型和货物类型（支持多角色）
-        facility_info = {}  # {(lon, lat, name): {'types': set(), 'cargos': set()}}
+        # 【关键修改】使用纯坐标作为key，确保每个地理位置只有一个点
+        # 第一步: 收集每个坐标位置的所有信息（过滤运输量为0的记录）
+        facility_info = {}  # {(lon, lat): {'names': set(), 'types': set(), 'cargos': set()}}
+
+        total_rows = len(transport_summary)
+        filtered_rows = 0
 
         for _, row in transport_summary.iterrows():
+            # 【新增】过滤条件：跳过运输量为0的记录
+            volume = 0
+            if '周运输量(kg)' in row:
+                volume = row.get('周运输量(kg)', 0)
+            elif '周运输量(m³)' in row:
+                volume = row.get('周运输量(m³)', 0)
+            elif '日运输量(kg)' in row:
+                volume = row.get('日运输量(kg)', 0)
+            elif '日运输量(m³)' in row:
+                volume = row.get('日运输量(m³)', 0)
+
+            # 如果运输量为0或NaN，跳过这条记录
+            if volume == 0 or pd.isna(volume):
+                filtered_rows += 1
+                continue
+
             start_name = row.get('起点', '')
             end_name = row.get('终点', '')
             start_type = str(row.get('起点类型', '')).strip()
@@ -1142,108 +1229,168 @@ class FiveScenariosClusteredMapVisualizer:
             start_lat, start_lon = parse_coord(row.get('起点坐标'))
             end_lat, end_lon = parse_coord(row.get('终点坐标'))
 
-            # 收集起点的所有类型和货物类型
+            # 收集起点：使用纯坐标作为key
+            # 【关键】只收集作为起点时发出的货物，用于判断该设施是否生产该原材料
             if start_lat is not None and start_lon is not None and start_name:
-                facility_key = (start_lon, start_lat, start_name)
-                if facility_key not in facility_info:
-                    facility_info[facility_key] = {'types': set(), 'cargos': set()}
+                coord_key = (start_lon, start_lat)
+
+                if coord_key not in facility_info:
+                    facility_info[coord_key] = {'names': set(), 'types': set(), 'cargos_as_source': set(), 'cargos_as_dest': set()}
+
+                facility_info[coord_key]['names'].add(start_name)
                 if start_type:
-                    facility_info[facility_key]['types'].add(start_type)
+                    facility_info[coord_key]['types'].add(start_type)
+                # 只有作为起点发出的货物才记录到cargos_as_source（用于判断原材料生产能力）
                 if cargo_type:
-                    facility_info[facility_key]['cargos'].add(cargo_type)
+                    facility_info[coord_key]['cargos_as_source'].add(cargo_type)
 
-            # 收集终点的所有类型（不收集货物类型，因为我们主要关心生产能力）
+            # 收集终点：使用纯坐标作为key
             if end_lat is not None and end_lon is not None and end_name:
-                facility_key = (end_lon, end_lat, end_name)
-                if facility_key not in facility_info:
-                    facility_info[facility_key] = {'types': set(), 'cargos': set()}
-                if end_type:
-                    facility_info[facility_key]['types'].add(end_type)
+                coord_key = (end_lon, end_lat)
 
-        logger.info(f"    收集到的设施总数: {len(facility_info)}")
+                if coord_key not in facility_info:
+                    facility_info[coord_key] = {'names': set(), 'types': set(), 'cargos_as_source': set(), 'cargos_as_dest': set()}
+
+                facility_info[coord_key]['names'].add(end_name)
+                if end_type:
+                    facility_info[coord_key]['types'].add(end_type)
+                # 记录作为终点接收的货物（用于判断是否为消纳地）
+                if cargo_type:
+                    facility_info[coord_key]['cargos_as_dest'].add(cargo_type)
+
+        logger.info(f"    运输记录总数: {total_rows}, 过滤掉运输量为0的记录: {filtered_rows} 条")
+        logger.info(f"    收集到的唯一坐标位置数: {len(facility_info)}")
+
+        # 【特殊处理】天然气两步法：过滤掉SAF产量≤10kg的设施
+        if module_name == 'Natural Gas Two-Step' and facility_saf_production:
+            filtered_facility_info = {}
+            filtered_count = 0
+            for coord, info in facility_info.items():
+                # 检查这个坐标的SAF产量
+                # 需要将coord转回字符串格式来查找
+                coord_str = f"({coord[1]}, {coord[0]})"  # (lat, lon)
+                saf_volume = facility_saf_production.get(coord_str, 0)
+
+                # 只保留SAF产量>10kg的设施，或者不生产SAF的设施（如原材料供应点）
+                if saf_volume > 10 or 'MTJ' not in info['cargos_as_source']:
+                    filtered_facility_info[coord] = info
+                else:
+                    filtered_count += 1
+
+            logger.info(f"    天然气两步法筛选：过滤掉SAF产量≤10kg的设施 {filtered_count} 个")
+            logger.info(f"    保留的设施数: {len(filtered_facility_info)}")
+            facility_info = filtered_facility_info
+
+        # 【调试日志】报告同一坐标有多个名称的情况
+        multi_name_coords = {coord: info['names'] for coord, info in facility_info.items() if len(info['names']) > 1}
+        if multi_name_coords:
+            logger.info(f"    发现 {len(multi_name_coords)} 个坐标有多个名称（这是正常的，将合并为一个点）：")
+            for coord, names in list(multi_name_coords.items())[:3]:  # 只显示前3个
+                logger.info(f"      坐标 {coord}: {names}")
+
         if len(facility_info) == 0:
             logger.warning("    未收集到任何设施，检查坐标解析和数据格式")
             logger.info("    运输汇总数据前5行:")
             logger.info(f"\n{transport_summary.head().to_string()}")
             return {}
 
-        # 第二步: 对每个设施进行三维分类（支持多角色）
-        facility_classifications = {}  # {(lon, lat, name): (raw_materials_frozenset, saf_production, consumption)}
+        # 第二步: 对每个坐标位置进行三维分类
+        facility_classifications = {}  # {(lon, lat): (raw_materials_frozenset, saf_production, consumption)}
 
-        for (lon, lat, name), info in facility_info.items():
+        for (lon, lat), info in facility_info.items():
+            # 使用所有名称中的第一个作为代表名称（仅用于分类判断）
+            representative_name = list(info['names'])[0] if info['names'] else ''
+
+            # 【关键修正】只传入作为起点发出的货物类型，用于判断原材料生产能力
             raw_materials, saf_production, consumption = self.classify_facility(
-                name, info['types'], info['cargos']
+                representative_name, info['types'], info['cargos_as_source']
             )
-            facility_key = (lon, lat, name)
-            facility_classifications[facility_key] = (raw_materials, saf_production, consumption)
+
+            facility_classifications[(lon, lat)] = (raw_materials, saf_production, consumption)
 
             # 调试输出：显示多角色设施
             if len(raw_materials) > 1:
-                logger.info(f"    发现多角色设施: {name} -> {raw_materials}")
+                names_str = ', '.join(list(info['names'])[:3])  # 最多显示3个名称
+                logger.info(f"    多角色设施 ({lon:.4f}, {lat:.4f}) [{names_str}] -> {raw_materials}")
 
-        # 第三步: 绘制设施（支持多角色可视化）
+            # 【新增】调试输出：检查消纳地是否被误判为生产设施
+            if consumption == 'yes' and len(raw_materials) > 0:
+                names_str = ', '.join(list(info['names'])[:3])
+                logger.info(f"    消纳地同时生产原材料 ({lon:.4f}, {lat:.4f}) [{names_str}]: "
+                          f"发出={info['cargos_as_source']}, 接收={info['cargos_as_dest']}, "
+                          f"原材料={raw_materials}")
+
+        # 第三步: 绘制设施（每个地理位置只绘制一个点）
         logger.info(f"    设施三维张量分类统计：")
 
         total_facilities_plotted = 0
-        total_markers_drawn = 0
 
         # 用于统计分类组合（用于图例）
         classification_stats = {}
 
-        for (lon, lat, name), (raw_materials, saf_production, consumption) in facility_classifications.items():
-            # 获取可视化属性列表（多角色返回多个标记）
+        for (lon, lat), (raw_materials, saf_production, consumption) in facility_classifications.items():
+            # 获取可视化属性列表（多角色返回多个标记描述）
             markers = self.get_facility_visualization_attrs(raw_materials, saf_production, consumption)
 
-            # 计算偏移量用于多角色设施（避免标记重叠）
-            num_markers = len(markers)
-            if num_markers > 1:
-                # 多标记时使用小偏移避免完全重叠
-                offset_step = 0.05  # 经纬度偏移量
-                base_offset = -(num_markers - 1) * offset_step / 2
+            # 【关键】每个地理位置只绘制一个点
+            # 策略：如果有多角色，使用第一个标记的属性，但增加尺寸表示复杂性
+            primary_marker = markers[0]
+            num_roles = len(raw_materials) if raw_materials else 1
+
+            # 多角色设施使用更大的标记尺寸
+            marker_size = primary_marker['size'] * (1 + 0.3 * (num_roles - 1))
+
+            # 绘制单一标记（精确坐标，无偏移）
+            ax.scatter(
+                lon, lat,  # 精确坐标，不使用offset
+                marker=primary_marker['marker'],
+                c=primary_marker['color'],
+                s=marker_size,
+                alpha=0.9,
+                edgecolors=primary_marker['edgecolor'],
+                linewidth=primary_marker['linewidth'],
+                transform=self.data_crs,
+                zorder=30
+            )
+
+            total_facilities_plotted += 1
+
+            # 统计分类（对于多角色设施，统计组合分类）
+            if len(markers) > 1:
+                # 多角色设施：生成组合标签
+                material_labels = [m['raw_material_label'] for m in markers]
+                combined_material_label = '+'.join(sorted(material_labels))
+                classification_key = (combined_material_label, saf_production, consumption)
+
+                # 记录组合标记属性
+                combined_attrs = primary_marker.copy()
+                combined_attrs['raw_material_label'] = combined_material_label
+                combined_attrs['size'] = marker_size
+                combined_attrs['full_label'] = f"{combined_material_label} × {primary_marker['saf_production_label']} × {primary_marker['consumption_label']}"
+
+                if classification_key not in classification_stats:
+                    classification_stats[classification_key] = {
+                        'count': 0,
+                        'attrs': combined_attrs
+                    }
+                classification_stats[classification_key]['count'] += 1
+
+                logger.info(f"    多角色设施 ({lon:.4f}, {lat:.4f}) -> {sorted(raw_materials)}")
             else:
-                base_offset = 0
-                offset_step = 0
-
-            # 绘制每个标记
-            for idx, marker_attrs in enumerate(markers):
-                offset = base_offset + idx * offset_step
-
-                # 绘制标记
-                ax.scatter(
-                    lon + offset, lat + offset,
-                    marker=marker_attrs['marker'],
-                    c=marker_attrs['color'],
-                    s=marker_attrs['size'],
-                    alpha=0.9,
-                    edgecolors=marker_attrs['edgecolor'],
-                    linewidth=marker_attrs['linewidth'],
-                    transform=self.data_crs,
-                    zorder=30
-                )
-
-                total_markers_drawn += 1
-
-                # 统计每个单一分类（用于图例）
-                material_label = marker_attrs['raw_material_label']
+                # 单角色设施
+                material_label = primary_marker['raw_material_label']
                 classification_key = (material_label, saf_production, consumption)
                 if classification_key not in classification_stats:
                     classification_stats[classification_key] = {
                         'count': 0,
-                        'attrs': marker_attrs
+                        'attrs': primary_marker
                     }
                 classification_stats[classification_key]['count'] += 1
 
-            # 统计多角色组合（用于日志）
-            if num_markers > 1:
-                logger.info(f"    多角色设施: {name} -> {sorted(raw_materials)}")
-
-            total_facilities_plotted += 1
-
-        logger.info(f"    总共绘制设施数: {total_facilities_plotted}")
-        logger.info(f"    总共绘制标记数: {total_markers_drawn}")
+        logger.info(f"    总共绘制设施数（唯一坐标位置）: {total_facilities_plotted}")
         logger.info(f"    设施三维张量分类统计（共{len(classification_stats)}种组合）：")
         for (material, saf, cons), stats in sorted(classification_stats.items()):
-            logger.info(f"      [{material} × {saf} × {cons}] {stats['count']}个标记")
+            logger.info(f"      [{material} × {saf} × {cons}] {stats['count']}个设施")
 
         return classification_stats
 
@@ -1261,26 +1408,37 @@ class FiveScenariosClusteredMapVisualizer:
 
         fig, ax = self.create_base_map(figsize=(18, 14))
 
-        # 先绘制管道网络（作为底层）
-        logger.info(f"  绘制管道网络...")
-        pipeline_stats = self.plot_pipeline_networks(ax)
+        # 【特殊处理】天然气一步法：只画机场，不读取其他设施数据
+        if module_name == 'Natural Gas One-Step':
+            logger.info(f"  天然气一步法场景：只绘制机场（生产地在机场）")
+            # 只绘制管道网络和机场
+            logger.info(f"  绘制管道网络...")
+            pipeline_stats = self.plot_pipeline_networks(ax)
 
-        # 绘制H2聚类运输路线（如果有H2聚类数据）
-        if data['h2_clustering']:
-            self.plot_h2_clustered_routes(ax, data['h2_clustering'], data['transport_summary'], module_name)
-
-        # 绘制天然气聚类运输路线（如果有天然气聚类数据）
-        if data['ng_clustering']:
-            self.plot_ng_clustered_routes(ax, data['ng_clustering'], data['transport_summary'], module_name)
+            # 只绘制机场设施（从transport_summary中提取机场位置）
+            facility_classification = self.plot_facilities(ax, data['transport_summary'], module_name)
         else:
-            # 如果没有天然气聚类，绘制普通天然气运输路线
-            self.plot_ng_routes(ax, data['transport_summary'])
+            # 其他场景的正常处理流程
+            # 先绘制管道网络（作为底层）
+            logger.info(f"  绘制管道网络...")
+            pipeline_stats = self.plot_pipeline_networks(ax)
 
-        # 绘制SAF运输路线
-        self.plot_saf_routes(ax, data['transport_summary'])
+            # 绘制H2聚类运输路线（如果有H2聚类数据）
+            if data['h2_clustering']:
+                self.plot_h2_clustered_routes(ax, data['h2_clustering'], data['transport_summary'], module_name)
 
-        # 绘制设施位置并获取分类统计
-        facility_classification = self.plot_facilities(ax, data['transport_summary'], module_name)
+            # 绘制天然气聚类运输路线（如果有天然气聚类数据）
+            if data['ng_clustering']:
+                self.plot_ng_clustered_routes(ax, data['ng_clustering'], data['transport_summary'], module_name)
+            else:
+                # 如果没有天然气聚类，绘制普通天然气运输路线
+                self.plot_ng_routes(ax, data['transport_summary'])
+
+            # 绘制SAF运输路线
+            self.plot_saf_routes(ax, data['transport_summary'])
+
+            # 绘制设施位置并获取分类统计
+            facility_classification = self.plot_facilities(ax, data['transport_summary'], module_name)
 
         # 添加装饰元素
         self.add_decorations(ax)

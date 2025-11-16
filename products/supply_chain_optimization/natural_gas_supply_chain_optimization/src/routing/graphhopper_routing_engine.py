@@ -201,7 +201,7 @@ class GraphHopperRoutingEngine:
             os.makedirs(cache_dir, exist_ok=True)
             logger.debug(f"确保缓存目录存在: {cache_dir}")
 
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 先检查是否需要数据库迁移
@@ -319,7 +319,7 @@ class GraphHopperRoutingEngine:
             return cache_data
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             cursor.execute('''
@@ -424,7 +424,7 @@ class GraphHopperRoutingEngine:
         start_time = time.time()
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 序列化路径坐标
@@ -873,7 +873,7 @@ class GraphHopperRoutingEngine:
 
     def calculate_distance_matrix_parallel(self, locations: List[Tuple[float, float]],
                                           location_names: Optional[List[str]] = None,
-                                          vehicle: str = "car", max_workers: int = 14) -> pd.DataFrame:
+                                          vehicle: str = "car", max_workers: int = None) -> pd.DataFrame:
         """
         并行计算位置点之间的距离矩阵（使用多核处理）
 
@@ -881,11 +881,15 @@ class GraphHopperRoutingEngine:
             locations: 位置列表，每个位置为(lat, lon)元组
             location_names: 位置名称列表
             vehicle: 车辆类型
-            max_workers: 最大并行工作进程数（默认14核）
+            max_workers: 最大并行工作进程数（默认使用所有CPU核心）
 
         Returns:
             距离矩阵DataFrame
         """
+        # 自动检测CPU核心数
+        if max_workers is None:
+            max_workers = cpu_count()
+            logger.info(f"自动检测到 {max_workers} 个CPU核心，将全部用于并行计算")
         n_locations = len(locations)
         if location_names is None:
             location_names = [f"Location_{i}" for i in range(n_locations)]
@@ -956,8 +960,8 @@ class GraphHopperRoutingEngine:
         i, j, loc_i, loc_j = task_data
 
         # 为每个进程创建新的GraphHopper引擎实例
-        # 注意：这是必要的，因为multiprocessing无法共享类实例
-        engine = GraphHopperRoutingEngine(enable_cache=False)  # 并行计算时禁用缓存以避免冲突
+        # 注意：启用缓存以避免重复计算相同路径
+        engine = GraphHopperRoutingEngine(enable_cache=True)  # 启用缓存，SQLite是进程安全的
 
         try:
             result = engine.calculate_route_distance(
@@ -1632,7 +1636,7 @@ class GraphHopperRoutingEngine:
 
         try:
             start_time = time.time()
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 清理过期条目
@@ -1693,7 +1697,7 @@ class GraphHopperRoutingEngine:
             return {}
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 获取基础统计
@@ -1861,7 +1865,7 @@ class GraphHopperRoutingEngine:
                 logger.info("内存缓存已清理")
 
             if cache_type in ["all", "database"]:
-                conn = sqlite3.connect(self.cache_db_path)
+                conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
                 cursor = conn.cursor()
                 cursor.execute('DELETE FROM route_cache')
                 cleared_count = cursor.rowcount
@@ -2092,7 +2096,7 @@ class GraphHopperDistanceCalculator:
         space_freed = 0
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 查询过期的条目信息
@@ -2167,7 +2171,7 @@ class GraphHopperDistanceCalculator:
         start_time = time.time()
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 计算当前条目数
@@ -2244,7 +2248,7 @@ class GraphHopperDistanceCalculator:
     def get_enhanced_cache_statistics(self) -> Dict:
         """获取增强的缓存统计信息"""
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 基本统计
@@ -2359,7 +2363,7 @@ class GraphHopperDistanceCalculator:
             self.memory_cache.clear()
 
             # 清空数据库缓存
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 获取清理前的统计
@@ -2420,7 +2424,7 @@ class GraphHopperDistanceCalculator:
         optimizations = []
 
         try:
-            conn = sqlite3.connect(self.cache_db_path)
+            conn = sqlite3.connect(self.cache_db_path, check_same_thread=False, timeout=30.0)
             cursor = conn.cursor()
 
             # 1. 清理过期条目

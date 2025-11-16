@@ -68,9 +68,10 @@ class UnifiedSAFOptimizer:
 
     # ===== v4.0变更: 使用DAC版本配置文件 =====
     # v4.0.1: 配置文件移至shared/config目录
+    # v4.1: 支持一步法和两步法不同配置文件
     CONFIG_MAPPING = {
-        'two_step': 'shared/config/DACHydrogenSAFOptimizer_config.yaml',
-        'one_step': 'shared/config/DACHydrogenSAFOptimizer_config.yaml',  # v4.0使用同一配置
+        'two_step': 'shared/config/DACHydrogenSAFOptimizer_config_two_step.yaml',
+        'one_step': 'shared/config/DACHydrogenSAFOptimizer_config.yaml',
     }
 
     def __init__(
@@ -288,26 +289,21 @@ class UnifiedSAFOptimizer:
             # Step 1: 初始化优化器
             self.logger.info("\n[Step 1/4] Initializing optimizer...")
 
-            # 准备override_params传递parallel_workers
+            # ===== v4.0变更: 实例化DAC版本优化器 =====
+            # ===== v4.1修复: 传递process_mode参数 =====
             override_params = {}
             if self.parallel_workers is not None:
                 override_params['parallel_workers'] = self.parallel_workers
+            if self.time_horizon_weeks is not None:
+                override_params['time_horizon_weeks'] = self.time_horizon_weeks
+            if self.osm_pbf_path is not None:
+                override_params['osm_pbf_path'] = self.osm_pbf_path
 
-            # ===== v4.0变更: 实例化DAC版本优化器 =====
-            # ===== v4.0修复: 解包override_params字典传递给优化器 =====
-            if override_params:
-                self.optimizer = DACHydrogenSAFOptimizer(
-                    config_path=str(self.config_path),  # 传递配置文件路径
-                    time_horizon_weeks=self.time_horizon_weeks,
-                    osm_pbf_path=self.osm_pbf_path,
-                    **override_params  # 解包字典以传递各个参数
-                )
-            else:
-                self.optimizer = DACHydrogenSAFOptimizer(
-                    config_path=str(self.config_path),  # 传递配置文件路径
-                    time_horizon_weeks=self.time_horizon_weeks,
-                    osm_pbf_path=self.osm_pbf_path
-                )
+            self.optimizer = DACHydrogenSAFOptimizer(
+                config_path=str(self.config_path),
+                process_mode=self.process_type,
+                **override_params,
+            )
             self._monitor_memory()
             self.logger.info("Optimizer initialized successfully")
 
@@ -561,7 +557,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run SAF Supply Chain Optimization')
     parser.add_argument(
+        '--process',
         '--process-type',
+        dest='process_type',
         choices=['two_step', 'one_step'],
         default='two_step',
         help='Process type to use'
@@ -572,6 +570,9 @@ if __name__ == '__main__':
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()
+
+    # 设置环境变量（用于模块级别的日志路径）
+    os.environ["DAC_SUPPLY_CHAIN_PROCESS"] = args.process_type
 
     optimizer = UnifiedSAFOptimizer(
         process_type=args.process_type,

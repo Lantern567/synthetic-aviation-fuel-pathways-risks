@@ -371,7 +371,7 @@ equipment_raw_costs:
 facility_lcoe_parameters:
   fixed_capex: 60000000
   fixed_opex_annual: 18000000
-  variable_capex_per_capacity: 160000
+  variable_capex_per_capacity: 240000
   variable_opex_per_kg: 0.8
   catalyst_cost_yuan_per_kg_saf: 0.1
   energy_cost_yuan_per_kwh: 0.5
@@ -478,15 +478,15 @@ technologies:
     # ========================================================================
     # ✅ 一步法直接转化参数（当前启用）
     # ========================================================================
-    h2_consumption_ratio: 0.45            # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要0.45kg氢气
-                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
-                                          # 修正日期：2025-11-08 (统一使用一步法)
+    h2_consumption_ratio: 0.7             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 两步法：生产1kg SAF需要0.7kg氢气
+                                          # H₂+CO₂→甲醇→SAF（两步法工艺）
+                                          # 修正日期：2025-11-16 (两步法参数)
 
-    co2_consumption_ratio: 3.2            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要3.2kg CO₂
-                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
-                                          # 修正日期：2025-11-08 (DAC+绿氢路线参数)
+    co2_consumption_ratio: 3.5            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 两步法：生产1kg SAF需要3.5kg CO₂
+                                          # H₂+CO₂→甲醇→SAF（两步法工艺）
+                                          # 修正日期：2025-11-16 (两步法参数)
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）

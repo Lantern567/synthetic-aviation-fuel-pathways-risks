@@ -444,31 +444,27 @@ class CoalHydrogenSAFOptimizer:
         - 设施选址: 甲醇厂和SAF厂选址优化
         - 碳排放追踪: 全生命周期碳强度计算(约60 gCO₂e/MJ)
 
-    决策变量:
-        - methanol_production_vars: 甲醇生产量(kg/h)
-        - saf_production_vars: SAF生产量(kg/h)
-        - coal_purchase_vars: 煤炭采购量(kg/周) [新增v3.0]
+    决策变量 (v3.1一步法):
+        - saf_production_vars: SAF生产量(kg/h) [直接从H₂+CO₂生产]
+        - coal_purchase_vars: 煤炭采购量(kg/周) [v3.0]
         - h2_pipeline/truck_transport_vars: H₂运输量(kg/h)
-        - methanol_inventory_vars: 甲醇库存(kg)
-        - co2_inventory_vars: CO₂库存(kg,来源改为煤炭气化) [修改v3.0]
+        - co2_inventory_vars: CO₂库存(kg,来源改为煤炭气化) [v3.0]
         - facility_build_vars: 设施建设二元变量
 
-    约束系统:
-        1. 煤炭气化CO₂生成约束(周级) [新增v3.0]
-        2. 甲醇生产约束(H₂+CO₂→甲醇,小时级)
-        3. SAF生产约束(甲醇→SAF,小时级)
-        4. 甲醇库存平衡(小时级)
-        5. CO₂库存平衡(时间尺度匹配,小时级,来源改为煤炭气化) [修改v3.0]
-        6. H₂供应平衡(小时级)
-        7. SAF需求满足(机场需求,周级)
-        8. 运输能力约束(仅H₂) [简化v3.0]
-        9. 设施能力约束
+    约束系统 (v3.1一步法):
+        1. 煤炭气化CO₂生成约束(周级) [v3.0]
+        2. SAF生产约束(H₂+CO₂→SAF,小时级,一步法) [v3.1修改]
+        3. CO₂库存平衡(小时级,来源为煤炭气化) [v3.0]
+        4. H₂供应平衡(小时级)
+        5. SAF需求满足(机场需求,周级)
+        6. 运输能力约束(仅H₂) [v3.0简化]
+        7. 设施能力约束
 
     目标函数:
-        最小化总成本 = H₂生产成本 + 煤炭采购成本 [新增v3.0] + 煤炭气化成本 [新增v3.0]
+        最小化总成本 = H₂生产成本 + 煤炭采购成本 [v3.0] + 煤炭气化成本 [v3.0]
                     + H₂运输成本 + SAF生产成本 + SAF运输成本 + 设施投资成本
                     + 缺货惩罚
-                    # 注意：一步法不包含甲醇成本（甲醇是完全的中间产物）
+                    # v3.1一步法: 无甲醇中间成本
 
     使用流程:
         1. 初始化: optimizer = CoalHydrogenSAFOptimizer(config_path)
@@ -1957,8 +1953,9 @@ class CoalHydrogenSAFOptimizer:
                     'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
                     'carbon_consumption_ratio': carbon_consumption_ratio,  # kg C / kg SAF (碳原子质量)
                     'co2_consumption_ratio': co2_consumption_ratio,  # kg CO₂ / kg SAF (向后兼容)
-                    'methanol_intermediate_ratio': tech_info.get('methanol_intermediate_ratio', 3.125),  # H₂→甲醇的中间产物比
-                    'methanol_to_saf_ratio': tech_info.get('methanol_to_saf_ratio', 0.64),  # 甲醇→SAF的转化率
+                    # ✅ v3.1.0: 删除两步法参数，使用一步法（煤制合成气+H₂→SAF）
+                    # 'methanol_intermediate_ratio': 已删除
+                    # 'methanol_to_saf_ratio': 已删除
                     'suitable_locations': tech_info['suitable_locations'],
                     'transport_mode': tech_info['transport_mode'],
                     'hydrogen_transport_required': tech_info['hydrogen_transport_required'],
@@ -1966,7 +1963,7 @@ class CoalHydrogenSAFOptimizer:
                     'complexity_factor': complexity_factors.get(tech_key, 1.0)
                 }
 
-        logger.info(f"定义了 {len(self.technologies)} 种SAF生产技术（绿氢+CO₂两步法）")
+        logger.info(f"定义了 {len(self.technologies)} 种SAF生产技术（煤制合成气+绿氢一步法）")
         logger.info(f"基础平准化成本: {base_lcop:.0f} 元/kg")
 
         # 输出碳消耗比参数信息
@@ -2407,13 +2404,27 @@ class CoalHydrogenSAFOptimizer:
     def build_model(self):
         """构建优化模型"""
         logger.info("构建Gurobi优化模型...")
-        
+
         self.model = gp.Model("NaturalGasSupplyChain")
         # 从配置文件加载求解器参数
         solver_params = self.config['solver_parameters']
-        self.model.setParam('TimeLimit', solver_params['TimeLimit'])
-        self.model.setParam('MIPGap', solver_params['MIPGap'])
-        self.model.setParam('Threads', solver_params['Threads'])
+
+        # 确保参数类型正确（YAML可能将科学计数法解析为字符串）
+        time_limit = solver_params['TimeLimit']
+        if isinstance(time_limit, str):
+            time_limit = float(time_limit)
+
+        mip_gap = solver_params['MIPGap']
+        if isinstance(mip_gap, str):
+            mip_gap = float(mip_gap)
+
+        threads = solver_params['Threads']
+        if isinstance(threads, str):
+            threads = int(threads)
+
+        self.model.setParam('TimeLimit', time_limit)
+        self.model.setParam('MIPGap', mip_gap)
+        self.model.setParam('Threads', threads)
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
@@ -2662,37 +2673,37 @@ class CoalHydrogenSAFOptimizer:
 
         # v3.0: 煤炭气化路线不需要CO₂运输变量（CO₂在甲醇厂本地产生）
 
-        # 12. 甲醇生产和库存决策变量（两步法第一步：H₂ + CO₂ → 甲醇）
-        logger.info("创建甲醇生产和库存变量")
+        # v3.1：一步法不需要甲醇变量（直接 H₂+CO₂→SAF）
+        logger.info("v3.1一步法：跳过甲醇变量创建（直接 H₂+CO₂→SAF）")
 
-        self.methanol_production_vars = {}  # 甲醇生产变量 (小时级, kg methanol/hour)
-        self.methanol_inventory_vars = {}   # 甲醇库存变量 (小时级, kg methanol)
+        self.methanol_production_vars = {}  # 保留空字典以避免代码报错
+        self.methanol_inventory_vars = {}   # 保留空字典以避免代码报错
 
-        # 在所有可以生产甲醇的位置创建变量（即MTJ工厂位置）
-        for tech, tech_locations in self.mtj_locations.items():
-            if 'green_h2_co2' not in tech:
-                continue
+        # 原两步法代码已禁用：
+        # # 在所有可以生产甲醇的位置创建变量（即MTJ工厂位置）
+        # for tech, tech_locations in self.mtj_locations.items():
+        #     if 'green_h2_co2' not in tech:
+        #         continue
+        #
+        #     if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
+        #         continue
+        #
+        #     for methanol_loc in tech_locations:
+        #         # 小时级甲醇生产量
+        #         for hour in range(self.total_hours):
+        #             var_name = f"methanol_prod_{methanol_loc}_{hour}"
+        #             self.methanol_production_vars[(methanol_loc, hour)] = self.model.addVar(
+        #                 lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+        #             )
+        #
+        #         # 甲醇库存（小时级）
+        #         for hour in range(self.total_hours + 1):  # +1 for final inventory
+        #             var_name = f"methanol_storage_{methanol_loc}_{hour}"
+        #             self.methanol_inventory_vars[(methanol_loc, hour)] = self.model.addVar(
+        #                 lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+        #             )
 
-            if not hasattr(tech_locations, '__iter__') or isinstance(tech_locations, str):
-                continue
-
-            for methanol_loc in tech_locations:
-                # 小时级甲醇生产量
-                for hour in range(self.total_hours):
-                    var_name = f"methanol_prod_{methanol_loc}_{hour}"
-                    self.methanol_production_vars[(methanol_loc, hour)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-
-                # 甲醇库存（小时级）
-                for hour in range(self.total_hours + 1):  # +1 for final inventory
-                    var_name = f"methanol_storage_{methanol_loc}_{hour}"
-                    self.methanol_inventory_vars[(methanol_loc, hour)] = self.model.addVar(
-                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
-                    )
-
-        logger.info(f"创建了 {len(self.methanol_production_vars)} 个甲醇生产变量")
-        logger.info(f"创建了 {len(self.methanol_inventory_vars)} 个甲醇库存变量")
+        logger.info(f"v3.1一步法：甲醇变量数 = 0（已禁用两步法）")
 
         # v3.0新增：煤炭采购决策变量（周级）
         logger.info("创建煤炭采购变量（v3.0煤炭气化路线）")
@@ -2780,14 +2791,15 @@ class CoalHydrogenSAFOptimizer:
         # v3.0: 煤炭气化路线不需要CO₂供应平衡约束（CO₂来自煤炭气化）
         # self._add_co2_supply_balance_constraints()
 
-        # 11. 甲醇生产约束（H₂+CO₂→甲醇，两步法第一步，小时级）
-        self._add_methanol_production_constraints()
+        # v3.1: 一步法不需要甲醇中间变量和相关约束（直接 H₂+CO₂→SAF）
+        # 11. 甲醇生产约束（已禁用，v3.1改为一步法）
+        # self._add_methanol_production_constraints()
 
-        # 12. SAF生产约束（甲醇→SAF，两步法第二步，小时级）
-        self._add_saf_production_from_methanol_constraints()
+        # 12. SAF生产约束（已禁用，v3.1改为一步法）
+        # self._add_saf_production_from_methanol_constraints()
 
-        # 13. 甲醇库存平衡约束
-        self._add_methanol_inventory_balance_constraints()
+        # 13. 甲醇库存平衡约束（已禁用，v3.1改为一步法）
+        # self._add_methanol_inventory_balance_constraints()
 
         # 14. CO₂库存平衡约束（时间尺度匹配：周级供应→小时级消耗）
         self._add_co2_inventory_balance_constraints()
@@ -3334,7 +3346,6 @@ class CoalHydrogenSAFOptimizer:
         # 投资成本聚合
         self.cost_aggregates['total_investment_cost'] = (
             self.cost_expressions['facility_investment_cost'] +
-            self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
@@ -4355,7 +4366,7 @@ class CoalHydrogenSAFOptimizer:
 
         2. 氢气消纳位置（lng_terminal/airport）：
            - 在0h（第1小时）时统一接收全部周级运输量
-           - 库存平衡：当前库存 = 上期库存 + 入库（仅0h） - 甲醇生产消耗
+           - v3.1一步法：库存平衡 = 上期库存 + 入库（仅0h） - SAF生产消耗（直接使用production_vars）
 
         3. 此修改允许氢气在生产地累积，避免强制每小时平均出库的约束
         """
@@ -4429,19 +4440,9 @@ class CoalHydrogenSAFOptimizer:
                         name=f"h2_inventory_nonnegative_{location}_{hour}"
                     )
 
-            # 【修复零产量BUG】为MTJ工厂位置添加氢气库存平衡
+            # 【v3.1一步法】为MTJ工厂位置添加氢气库存平衡（直接使用SAF产量计算H₂消耗）
             elif location_type in ['lng_terminal', 'airport']:
                 logger.info(f"[MTJ库存v4.0] {location}: 添加氢气库存平衡（0h统一入库）")
-
-                # 获取甲醇生产参数（从配置中读取）
-                # 查找使用 green_h2_co2 技术的配置
-                h2_consumption_ratio = 0
-                methanol_intermediate_ratio = 1.0
-                for tech_name, tech_info in self.technologies.items():
-                    if 'green_h2_co2' in tech_name:
-                        h2_consumption_ratio = tech_info.get('h2_consumption_ratio', 0)
-                        methanol_intermediate_ratio = tech_info.get('methanol_intermediate_ratio', 1.0)
-                        break
 
                 # 计算周级运输总入库量
                 weekly_h2_inflow = gp.quicksum(
@@ -4469,15 +4470,16 @@ class CoalHydrogenSAFOptimizer:
                     if hour == 0:
                         h2_inflow = weekly_h2_inflow
 
-                    # MTJ消耗：甲醇生产消耗的氢气
-                    # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
-                    h2_consumption = gp.LinExpr(0)
-                    if (location, hour) in self.methanol_production_vars:
-                        methanol_prod = self.methanol_production_vars[(location, hour)]
-                        if h2_consumption_ratio > 0 and methanol_intermediate_ratio > 0:
-                            h2_consumption = methanol_prod * (1.0 / methanol_intermediate_ratio) * h2_consumption_ratio
+                    # v3.1一步法：MTJ消耗的氢气（直接从SAF产量计算）
+                    # SAF_prod (kg SAF/hour) * (kg H₂ / kg SAF)
+                    h2_consumption = gp.quicksum(
+                        self.production_vars[(location, tech, hour)] *
+                        self.technologies[tech]['h2_consumption_ratio']
+                        for tech in self.technologies
+                        if (location, tech, hour) in self.production_vars
+                    )
 
-                    # 库存平衡方程：当前库存 = 上期库存 + 管道入库 - 甲醇生产消耗
+                    # v3.1一步法：库存平衡方程（当前库存 = 上期库存 + 管道入库 - SAF生产消耗）
                     self.model.addConstr(
                         current_h2_inventory == previous_h2_inventory + h2_inflow - h2_consumption,
                         name=f"h2_balance_mtj_{location}_{hour}"
@@ -5593,7 +5595,7 @@ class CoalHydrogenSAFOptimizer:
 
             total_h2_production = sum_var_dict(getattr(self, 'hydrogen_production_vars', {}))
             total_h2_pipeline = sum_var_dict(getattr(self, 'hydrogen_pipeline_transport_vars', {}))
-            total_methanol = sum_var_dict(getattr(self, 'methanol_production_vars', {}))
+            total_methanol = sum_var_dict(getattr(self, 'methanol_production_vars', {}))  # v3.1一步法: 应为0
             total_saf = sum_var_dict(getattr(self, 'production_vars', {}))
             total_coal_purchase = sum_var_dict(getattr(self, 'coal_purchase_vars', {}))  # v3.0: 煤炭采购
             total_shortage = sum_var_dict(getattr(self, 'shortage_vars', {}))
@@ -5601,7 +5603,7 @@ class CoalHydrogenSAFOptimizer:
             logger.info("[调试] 求解后关键变量汇总：")
             logger.info(f"    氢气总产量: {total_h2_production:,.2f} kg")
             logger.info(f"    氢气管道运输总量: {total_h2_pipeline:,.2f} kg")
-            logger.info(f"    甲醇总产量: {total_methanol:,.2f} kg")
+            logger.info(f"    甲醇总产量: {total_methanol:,.2f} kg (v3.1一步法: 应为0)")
             logger.info(f"    SAF 总产量: {total_saf:,.2f} kg")
             logger.info(f"    煤炭采购总量: {total_coal_purchase:,.2f} kg (v3.0)")  # v3.0: 替换CO₂运输
             logger.info(f"    缺货总量: {total_shortage:,.2f} kg")
@@ -5609,6 +5611,7 @@ class CoalHydrogenSAFOptimizer:
             h2_prod_by_location = aggregate_by_index(getattr(self, 'hydrogen_production_vars', {}), 0)
             log_top_entries("氢气产量（按氢源位置）", h2_prod_by_location, "kg")
 
+            # v3.1一步法: 甲醇产量应为0（无中间步骤）
             methanol_by_location = aggregate_by_index(getattr(self, 'methanol_production_vars', {}), 0)
             log_top_entries("甲醇产量（按位置）", methanol_by_location, "kg")
 
@@ -5810,6 +5813,39 @@ class CoalHydrogenSAFOptimizer:
                                     layer3_distance = route.layer3_distance
                                     if route.route_geometry:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                else:
+                                    # 路径不在缓存中,重新计算聚类路径
+                                    cluster_members = list(zip(cluster.member_locations, cluster.member_coords))
+                                    mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+                                    try:
+                                        route = self.hydrogen_pipeline_calculator.calculate_clustered_pipeline_route(
+                                            cluster.cluster_id,
+                                            cluster_members,
+                                            cluster.center_coord,
+                                            mtj_coords
+                                        )
+                                        self.clustered_routes[route_key] = route
+                                        layer1_distance = route.layer1_distances.get(h_loc, 0)
+                                        layer2_distance = route.layer2_distance
+                                        layer3_distance = route.layer3_distance
+                                        if route.route_geometry:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                        logger.info(f"重新计算聚类路径: {h_loc} (cluster_{cluster_id}) -> {mtj_loc}, Layer1={layer1_distance:.2f}km, Layer2={layer2_distance:.2f}km, Layer3={layer3_distance:.2f}km")
+                                    except Exception as e:
+                                        logger.warning(f"聚类路径计算失败: {h_loc} (cluster_{cluster_id}) -> {mtj_loc}, 使用直线距离, 错误: {str(e)}")
+                                        # 降级处理:使用直线距离计算Layer距离
+                                        h_coords = self._get_location_coordinates(h_loc)
+                                        layer1_distance = self._calculate_haversine_distance(
+                                            h_coords[0], h_coords[1],
+                                            cluster_center[0], cluster_center[1]
+                                        )
+                                        layer2_layer3_distance = self._calculate_haversine_distance(
+                                            cluster_center[0], cluster_center[1],
+                                            mtj_coords[0], mtj_coords[1]
+                                        )
+                                        layer2_distance = layer2_layer3_distance * 0.3
+                                        layer3_distance = layer2_layer3_distance * 0.7
+                                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
                                 break
 
                         if cluster_id is None:
@@ -6044,6 +6080,130 @@ class CoalHydrogenSAFOptimizer:
             'co2_pipeline': self.skipped_routes['co2_pipeline'],
             'total_count': total_skipped
         }
+
+        # 保存完整的决策变量到solution
+        logger.info("保存完整的决策变量到solution...")
+        solution['decision_variables'] = {}
+
+        # 1. SAF生产变量 (production_vars)
+        solution['decision_variables']['production_vars'] = {
+            f"{loc}_{tech}_{hour}": var.x
+            for (loc, tech, hour), var in self.production_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.production_vars)} 个 production_vars")
+
+        # 2. 设施建设变量 (facility_vars)
+        solution['decision_variables']['facility_vars'] = {
+            f"{loc}_{tech}": var.x
+            for (loc, tech), var in self.facility_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.facility_vars)} 个 facility_vars")
+
+        # 3. 设施容量变量 (facility_capacity_vars)
+        solution['decision_variables']['facility_capacity_vars'] = {
+            f"{loc}_{tech}": var.x
+            for (loc, tech), var in self.facility_capacity_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.facility_capacity_vars)} 个 facility_capacity_vars")
+
+        # 4. SAF运输变量 (transport_vars)
+        solution['decision_variables']['transport_vars'] = {
+            f"{loc}_{airport}_{week}": var.x
+            for (loc, airport, week), var in self.transport_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.transport_vars)} 个 transport_vars")
+
+        # 5. SAF库存变量 (storage_vars)
+        solution['decision_variables']['storage_vars'] = {
+            f"{loc}_{hour}": var.x
+            for (loc, hour), var in self.storage_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.storage_vars)} 个 storage_vars")
+
+        # 6. 氢气生产变量 (hydrogen_production_vars)
+        solution['decision_variables']['hydrogen_production_vars'] = {
+            f"{loc}_{hour}": var.x
+            for (loc, hour), var in self.hydrogen_production_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.hydrogen_production_vars)} 个 hydrogen_production_vars")
+
+        # 7. 电解槽容量变量 (electrolyzer_capacity_vars)
+        solution['decision_variables']['electrolyzer_capacity_vars'] = {
+            loc: var.x
+            for loc, var in self.electrolyzer_capacity_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.electrolyzer_capacity_vars)} 个 electrolyzer_capacity_vars")
+
+        # 8. 电解槽建设变量 (electrolyzer_facility_vars)
+        solution['decision_variables']['electrolyzer_facility_vars'] = {
+            loc: var.x
+            for loc, var in self.electrolyzer_facility_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.electrolyzer_facility_vars)} 个 electrolyzer_facility_vars")
+
+        # 9. 氢气库存变量 (hydrogen_storage_vars)
+        solution['decision_variables']['hydrogen_storage_vars'] = {
+            f"{loc}_{hour}": var.x
+            for (loc, hour), var in self.hydrogen_storage_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.hydrogen_storage_vars)} 个 hydrogen_storage_vars")
+
+        # 10. 氢气管道运输变量 (hydrogen_pipeline_transport_vars)
+        if hasattr(self, 'hydrogen_pipeline_transport_vars'):
+            solution['decision_variables']['hydrogen_pipeline_transport_vars'] = {
+                f"{h_loc}_{mtj_loc}": var.x
+                for (h_loc, mtj_loc), var in self.hydrogen_pipeline_transport_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.hydrogen_pipeline_transport_vars)} 个 hydrogen_pipeline_transport_vars")
+
+        # 11. 氢气管道建设变量 (hydrogen_pipeline_facility_vars)
+        if hasattr(self, 'hydrogen_pipeline_facility_vars'):
+            solution['decision_variables']['hydrogen_pipeline_facility_vars'] = {
+                f"{h_loc}_{mtj_loc}": var.x
+                for (h_loc, mtj_loc), var in self.hydrogen_pipeline_facility_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.hydrogen_pipeline_facility_vars)} 个 hydrogen_pipeline_facility_vars")
+
+        # 12. 煤炭采购变量 (coal_purchase_vars)
+        if hasattr(self, 'coal_purchase_vars'):
+            solution['decision_variables']['coal_purchase_vars'] = {
+                f"{loc}_{week}": var.x
+                for (loc, week), var in self.coal_purchase_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.coal_purchase_vars)} 个 coal_purchase_vars")
+
+        # 13. CO2库存变量 (co2_inventory_vars)
+        if hasattr(self, 'co2_inventory_vars'):
+            solution['decision_variables']['co2_inventory_vars'] = {
+                f"{loc}_{hour}": var.x
+                for (loc, hour), var in self.co2_inventory_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.co2_inventory_vars)} 个 co2_inventory_vars")
+
+        # 14. 缺货变量 (shortage_vars)
+        solution['decision_variables']['shortage_vars'] = {
+            f"{airport}_{week}": var.x
+            for (airport, week), var in self.shortage_vars.items()
+        }
+        logger.info(f"  已保存 {len(self.shortage_vars)} 个 shortage_vars")
+
+        # 15. 甲醇生产变量 (methanol_production_vars) - v3.1一步法应为空
+        if hasattr(self, 'methanol_production_vars'):
+            solution['decision_variables']['methanol_production_vars'] = {
+                f"{loc}_{hour}": var.x
+                for (loc, hour), var in self.methanol_production_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.methanol_production_vars)} 个 methanol_production_vars (v3.1: 应为0)")
+
+        # 16. 甲醇库存变量 (methanol_inventory_vars) - v3.1一步法应为空
+        if hasattr(self, 'methanol_inventory_vars'):
+            solution['decision_variables']['methanol_inventory_vars'] = {
+                f"{loc}_{hour}": var.x
+                for (loc, hour), var in self.methanol_inventory_vars.items()
+            }
+            logger.info(f"  已保存 {len(self.methanol_inventory_vars)} 个 methanol_inventory_vars (v3.1: 应为0)")
+
+        logger.info(f"决策变量保存完成，共 {len(solution['decision_variables'])} 类变量")
 
         return solution
 
@@ -6585,7 +6745,7 @@ class CoalHydrogenSAFOptimizer:
 
         # 投资成本类别
         investment_fields = ['facility_investment_cost', 'electrolyzer_investment_cost',
-                           'transport_equipment_cost', 'storage_equipment_cost',
+                           'storage_equipment_cost',
                            'h2_storage_investment', 'hydrogen_transport_investment',
                            'hydrogen_pipeline_investment']
 
@@ -7677,16 +7837,16 @@ class CoalHydrogenSAFOptimizer:
         logger.info(f"添加了 {nonneg_constraints} 个甲醇库存非负约束")
 
     def _add_co2_inventory_balance_constraints(self):
-        """添加CO₂库存平衡约束（v3.0煤炭气化路线：周级气化→小时级消耗）
+        """添加CO₂库存平衡约束（v3.1一步法：周级气化→小时级消耗）
 
         约束逻辑：
         - 当前库存 = 上期库存 + 本期供应 - 本期消耗
         - 供应：周级煤炭气化（coal_purchase × co2_per_kg_coal）[v3.0修改]
-        - 消耗：小时级消耗（用于甲醇生产）
+        - 消耗：小时级消耗（直接用于SAF生产，一步法）[v3.1修改]
         - 初始库存：0
         - 时间尺度匹配：周级煤炭气化产生CO₂，按小时均匀摊销，然后逐小时消耗
         """
-        logger.info("添加CO₂库存平衡约束（v3.0煤炭气化路线）...")
+        logger.info("添加CO₂库存平衡约束（v3.1煤炭气化路线，一步法）...")
 
         # 获取green_h2_co2_to_saf技术的化学计量比
         tech_key = 'green_h2_co2_to_saf'
@@ -7697,60 +7857,59 @@ class CoalHydrogenSAFOptimizer:
         tech_info = self.technologies[tech_key]
         co2_consumption_ratio = tech_info['co2_consumption_ratio']  # kg CO₂ / kg SAF
         carbon_consumption_ratio = tech_info.get('carbon_consumption_ratio', co2_consumption_ratio * 12.0 / 44.0)  # kg C / kg SAF
-        methanol_intermediate_ratio = tech_info['methanol_intermediate_ratio']
 
-        logger.info(f"[CO₂库存平衡] 碳消耗参数:")
+        logger.info(f"[CO₂库存平衡] 碳消耗参数 (一步法):")
         logger.info(f"  - 碳消耗比: {carbon_consumption_ratio:.3f} kg C/kg SAF")
         logger.info(f"  - CO₂消耗比: {co2_consumption_ratio:.3f} kg CO₂/kg SAF")
-        logger.info(f"  - 甲醇中间产物比: {methanol_intermediate_ratio:.3f} kg 甲醇/kg SAF")
 
-        # 获取所有甲醇生产位置
-        methanol_locations = []
+        # 获取所有SAF生产位置（一步法：直接生产SAF，无甲醇中间步骤）
+        saf_locations = []
         for tech, tech_locations in self.mtj_locations.items():
             if 'green_h2_co2' in tech:
-                methanol_locations.extend(tech_locations)
-        methanol_locations = list(set(methanol_locations))
+                saf_locations.extend(tech_locations)
+        saf_locations = list(set(saf_locations))
 
         constraint_count = 0
-        for methanol_loc in methanol_locations:
+        for saf_loc in saf_locations:
             # 初始库存约束（hour 0）
-            if (methanol_loc, 0) in self.co2_inventory_vars:
+            if (saf_loc, 0) in self.co2_inventory_vars:
                 self.model.addConstr(
-                    self.co2_inventory_vars[(methanol_loc, 0)] == 0,
-                    name=f"co2_init_inventory_{methanol_loc}"
+                    self.co2_inventory_vars[(saf_loc, 0)] == 0,
+                    name=f"co2_init_inventory_{saf_loc}"
                 )
                 constraint_count += 1
 
             # 库存平衡约束（hour 1 到 total_hours）
             for hour in range(1, self.total_hours + 1):
-                if (methanol_loc, hour) not in self.co2_inventory_vars:
+                if (saf_loc, hour) not in self.co2_inventory_vars:
                     continue
 
                 # 上期库存
-                prev_inventory = self.co2_inventory_vars[(methanol_loc, hour - 1)]
+                prev_inventory = self.co2_inventory_vars[(saf_loc, hour - 1)]
 
-                # v3.0：本期CO₂供应（kg CO₂/hour）：煤炭气化产生
+                # v3.1：本期CO₂供应（kg CO₂/hour）：煤炭气化产生
                 # 周级煤炭采购 × CO₂产率 / 每周小时数 = 小时级CO₂供应
                 week = (hour - 1) // self.hours_per_week
                 supply = gp.LinExpr(0)
                 if week < self.time_horizon_weeks:
-                    if (methanol_loc, week) in self.coal_purchase_vars:
-                        coal_purchase_weekly = self.coal_purchase_vars[(methanol_loc, week)]
+                    if (saf_loc, week) in self.coal_purchase_vars:
+                        coal_purchase_weekly = self.coal_purchase_vars[(saf_loc, week)]
                         co2_per_kg_coal = self.coal_supply.co2_per_kg_coal  # kg CO₂/kg coal
                         supply = coal_purchase_weekly * co2_per_kg_coal / float(self.hours_per_week)
 
-                # 本期消耗（用于甲醇生产，kg CO₂/hour）
+                # v3.1一步法：本期CO₂消耗（直接用于SAF生产，kg CO₂/hour）
+                # ✅ 修正公式：SAF产量 × CO₂消耗比
                 consumption = 0
-                if (methanol_loc, hour - 1) in self.methanol_production_vars:
-                    methanol_prod = self.methanol_production_vars[(methanol_loc, hour - 1)]
-                    # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg CO₂ / kg SAF)
-                    consumption = methanol_prod * (1.0 / methanol_intermediate_ratio) * co2_consumption_ratio
+                if (saf_loc, tech_key, hour - 1) in self.production_vars:
+                    saf_prod = self.production_vars[(saf_loc, tech_key, hour - 1)]  # kg SAF/hour
+                    # 一步法：直接计算 CO₂消耗 = SAF产量 × CO₂消耗比
+                    consumption = saf_prod * co2_consumption_ratio
 
                 # 库存平衡：当前库存 = 上期库存 + 供应 - 消耗
                 self.model.addConstr(
-                    self.co2_inventory_vars[(methanol_loc, hour)] ==
+                    self.co2_inventory_vars[(saf_loc, hour)] ==
                     prev_inventory + supply - consumption,
-                    name=f"co2_inventory_balance_{methanol_loc}_{hour}"
+                    name=f"co2_inventory_balance_{saf_loc}_{hour}"
                 )
                 constraint_count += 1
 
@@ -7758,12 +7917,12 @@ class CoalHydrogenSAFOptimizer:
 
         # CO₂库存非负约束，防止通过负库存透支供给
         nonneg_constraints = 0
-        for methanol_loc in methanol_locations:
+        for saf_loc in saf_locations:
             for hour in range(self.total_hours + 1):
-                if (methanol_loc, hour) in self.co2_inventory_vars:
+                if (saf_loc, hour) in self.co2_inventory_vars:
                     self.model.addConstr(
-                        self.co2_inventory_vars[(methanol_loc, hour)] >= 0,
-                        name=f"co2_inventory_nonnegative_{methanol_loc}_{hour}"
+                        self.co2_inventory_vars[(saf_loc, hour)] >= 0,
+                        name=f"co2_inventory_nonnegative_{saf_loc}_{hour}"
                     )
                     nonneg_constraints += 1
 

@@ -1,33 +1,33 @@
 # =============================================================================
-# CoalHydrogenSAFOptimizer 配置文件
-# Configuration File for Coal Hydrogen SAF Supply Chain Optimizer
+# GreenHydrogenSupplyChainOptimizer 配置文件
+# Configuration File for Green Hydrogen Supply Chain Optimizer
 # =============================================================================
 #
 # 文件说明 | File Description:
-# 本配置文件用于煤炭+绿氢SAF供应链优化器，支持煤炭气化CO₂+绿氢两步法制SAF的
+# 本配置文件用于绿氢供应链优化器，支持绿氢+CO₂制可持续航空燃料(SAF)的
 # 生产规划与供应链优化。采用混合整数线性规划(MILP)建模，使用Gurobi求解器。
 #
-# This configuration file is for the Coal Hydrogen SAF Supply Chain Optimizer,
-# supporting coal gasification CO₂ + green hydrogen to sustainable aviation fuel (SAF) production
+# This configuration file is for the Green Hydrogen Supply Chain Optimizer,
+# supporting green hydrogen + CO₂ to sustainable aviation fuel (SAF) production
 # planning and supply chain optimization using Mixed Integer Linear Programming
 # (MILP) with Gurobi solver.
 #
 # 主要功能 | Main Features:
-# - 煤炭气化CO₂+绿氢两步法制SAF技术路线优化
+# - 绿氢+CO₂制SAF技术路线优化
 # - 全生命周期碳排放计算
-# - 煤炭气化本地CO₂供应
+# - CO₂捕获源整合
 # - 地理聚类与分层运输策略
 # - GraphHopper实际路径规划
 # - 经济性边界约束 (LCOE阈值)
-# - 氢气管道路由优化（无需外部CO₂运输）
+# - 氢气和CO₂管道路由优化
 #
 # 配置结构 | Configuration Structure:
 # 19个主要参数类别，涵盖技术、经济、成本、路径等各方面
 # See metadata section for detailed category descriptions
 #
 # 版本信息 | Version Info:
-# Version: 3.0.0
-# Last Updated: 2025-10-27
+# Version: 2.0.0
+# Last Updated: 2025-10-13
 # =============================================================================
 
 # =============================================================================
@@ -68,12 +68,8 @@ basic_parameters:
                                            # 启用后使用管道路径进行精确的氢气运输距离计算
                                            # 依赖：基于聚类和管道路权的专用算法
 
-  use_super_graph_optimizer: true          # 是否使用超图优化器 | Enable super graph optimizer for pipeline routing
-                                           # true: 使用超图预计算所有最短路径，查询速度40,000倍提升
-                                           # false: 使用传统实时计算方法（每次查询40ms）
-
   # CO₂管道运输设置 - CO₂ Pipeline Configuration
-  use_co2_pipeline_distance: false         # v3.0煤炭气化路线CO₂本地产生，无需运输 | v3.0: CO₂ from local coal gasification, no transport needed
+  use_co2_pipeline_distance: true          # 是否使用CO₂管道距离计算 | Enable CO₂ pipeline distance calculation
                                            # 启用后使用管道路径进行精确的CO₂运输距离计算
                                            # 依赖：基于聚类和管道路权的专用算法
 
@@ -83,6 +79,26 @@ basic_parameters:
 
   cache_expiry_hours: 168                  # 缓存过期时间(小时) | Cache expiry time in hours
                                            # 168小时 = 7天，超过此时间的缓存将被视为过期
+
+# =============================================================================
+# 性能优化参数 (Performance Optimization Parameters)
+# 控制超级图预计算等高级优化功能，显著提升大规模距离计算性能
+# =============================================================================
+optimization:
+  # 超级图预计算设置 - Super Graph Pre-computation Configuration
+  use_super_graph_precompute: true         # 启用超级图O(1)查询优化 | Enable super graph O(1) query optimization
+                                           # true: 构建包含所有节点的超级图，预计算所有最短路径，查询O(1)
+                                           # false: 使用传统的按需计算方式
+                                           # 性能提升：902k查询从10小时减少到15分钟（40倍加速）
+
+  super_graph_k_connections: 10            # 业务节点连接管道节点数量 | Number of pipeline nodes to connect per business node
+                                           # 每个CO₂聚类中心/独立点/SAF工厂连接到k个最近的管道节点
+                                           # 建议值：5-20，值越大路径越优但初始化越慢
+                                           # 默认：10（平衡性能和路径质量）
+
+  super_graph_cache_to_disk: false         # 是否缓存超级图到磁盘 | Cache super graph to disk
+                                           # true: 保存预计算结果到磁盘，下次启动加载
+                                           # false: 每次运行重新构建（推荐，因为只需10秒）
 
 # =============================================================================
 # 容量限制参数 (Capacity Limits)
@@ -100,14 +116,18 @@ capacity_limits:
                                            # 设置为100万kg/h，基本不构成实际约束
 
   saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
-                                           # 设置为0，不限制最小规模，由优化器根据需求灵活决定
-                                           # 与DAC和Green Hydrogen项目保持一致
+                                           # 暂不设置最小规模约束，由优化器自由决策
+
+  saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
+                                           # 如果建设SAF设施，必须达到的最小年产量
+                                           # 100kg/年，避免建设后几乎不生产（产量接近0）
+                                           # 修正日期：2025-11-08 (新增最小规模约束)
 
   # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:
     default: 2000                          # 默认容量估算(kg/h) | Default capacity estimate
     industrial: 3000                       # 工业基地容量(kg/h) | Industrial base capacity
-    petrochemical_base: 5000             # 石化基地容量(kg/h) | Petrochemical base capacity
+    petrochemical_base: 5000               # 石化基地容量(kg/h) | Petrochemical base capacity
                                            # 说明：根据不同位置类型设定的SAF反应器生产容量估算值
 
   # 氢气生产容量 - Hydrogen Production Capacity
@@ -116,11 +136,6 @@ capacity_limits:
 
   electrolyzer_min_capacity_kg_per_hour: 100     # 电解槽最小经济规模(kg H₂/h) | Min economic electrolyzer scale
                                            # 最小经济规模约束，小于此规模不经济
-
-  # 氢气管道运输容量 - Hydrogen Pipeline Transport Capacity
-  hydrogen_pipeline_max_daily_capacity_kg: 500000  # 氢气管道日最大运输容量(kg H₂/天) | Max daily H2 pipeline capacity
-                                           # 单条管道每天的最大氢气运输能力
-                                           # 原默认值50000太小,会限制大规模电解槽的氢气输送
 
 # =============================================================================
 # CO₂捕获与供应参数 (CO₂ Capture and Supply Parameters)
@@ -233,25 +248,6 @@ co2_parameters:
                                            # 液态CO₂密度
 
 # =============================================================================
-
-# =============================================================================
-# 煤炭供应参数 (Coal Supply Parameters)
-# 定义煤炭气化路线的核心原料与工艺参数
-# =============================================================================
-coal_parameters:
-  coal_type: bituminous                    # 煤炭类型 | Coal type
-  carbon_content: 0.75                     # 碳含量(质量分数) | Carbon content (mass fraction)
-  co2_per_kg_coal: 2.44                    # 单位煤炭CO₂产量(kg/kg) | CO₂ yield per kg coal
-  coal_price_yuan_per_ton: 525             # 煤炭采购成本(元/吨) | Coal purchase cost (yuan/ton)
-                                           # 注意：代码中请换算为元/kg (525元/吨 = 0.525元/kg)
-  gasification_efficiency: 0.75            # 煤炭气化效率 | Coal gasification efficiency
-  gasification_energy_mj_per_kg: 8.0       # 气化能耗(MJ/kg) | Gasification energy demand (MJ/kg coal)
-  gasification_energy_kwh_per_kg: 2.22     # 气化能耗(kWh/kg) | Gasification energy demand (kWh/kg coal)
-                                           # 换算：8.0 MJ/kg ÷ 3.6 MJ/kWh = 2.22 kWh/kg
-  gasification_energy_cost_yuan_per_mj: 0.05  # 气化能耗成本(元/MJ) | Gasification energy cost (yuan/MJ)
-  coal_consumption_kg_per_kg_saf: 1.0      # 单位SAF煤炭消耗(kg/kg SAF) | Coal required per kg SAF
-  base_co2_yield_kg_per_kg_saf: 3.5        # 单位SAF生成CO₂需求(kg/kg SAF) | CO₂ required per kg SAF
-
 # 碳排放参数 (Carbon Emission Parameters)
 # 用于全生命周期碳排放计算和环境影响评估
 # =============================================================================
@@ -342,44 +338,6 @@ carbon_emission_parameters:
     green_h2_intensity: 1.1                # 绿氢碳强度(kgCO₂e/kg H₂) | Green H₂ CI (kgCO₂e/kg H₂)
                                            # 已包含电解能耗 55 kWh/kg × 0.02 kgCO₂e/kWh = 1.1
 
-    # ========================================================================
-    # 煤炭特有碳排放参数 - Coal-Specific Carbon Emission Parameters
-    # ========================================================================
-    coal_mining_emission: 0.04             # 煤炭开采碳排放(kgCO₂e/kg coal) | Coal mining emissions
-                                           # 包括开采、通风、排水等过程的碳排放
-                                           # 来源：IPCC Guidelines for National GHG Inventories
-
-    coal_transport_emission: 0.05          # 煤炭运输碳排放(kgCO₂e/kg coal) | Coal transport emissions
-                                           # 假设平均运输距离200km，柴油卡车运输
-                                           # 基于: 0.25 kgCO₂e/t·km × 200 km = 0.05 kgCO₂e/kg
-
-    coal_gasification_direct_emission: 0.15  # 煤炭气化过程直接排放(kgCO₂e/kg coal) | Coal gasification direct emissions
-                                           # 气化过程中的直接工艺排放
-                                           # 不包括CO₂产品本身
-
-    coal_gasification_energy_kwh_per_kg: 2.22  # 煤炭气化能耗(kWh/kg coal) | Coal gasification energy consumption
-                                           # 8 MJ/kg ÷ 3.6 MJ/kWh = 2.22 kWh/kg coal
-                                           # 气化炉加热、压缩等能耗
-
-    gasification_electricity_intensity: 0.6  # 气化用电碳强度(kgCO₂e/kWh) | Gasification electricity CI
-                                           # 使用电网电力，中国电网平均碳强度
-                                           # 来源：中国电网排放因子
-
-    co2_capture_energy_kwh_per_ton: 120    # CO₂捕获能耗(kWh/ton CO₂) | CO₂ capture energy consumption
-                                           # 后燃烧捕获技术能耗
-                                           # 来源：IEA CCS Report 2024
-
-    co2_capture_efficiency: 0.85           # CO₂捕获率 | CO₂ capture efficiency
-                                           # 实际捕获率85%，15%逸散到大气
-                                           # 来源：Global CCS Institute
-
-    coal_co2_yield_kg_per_kg: 2.44         # 单位煤炭CO₂产量(kg CO₂/kg coal) | CO₂ yield per kg coal
-                                           # 完全燃烧理论值（基于碳含量）
-                                           # C + O₂ → CO₂: 12 → 44, 碳含量75%: 0.75 × 44/12 = 2.44
-
-    # 注意：煤炭消耗参数(coal_consumption_kg_per_kg_saf)已在coal_parameters中定义
-    # 避免重复定义，统一使用coal_parameters.coal_consumption_kg_per_kg_saf
-
   # 储存和处理排放 - Storage and Handling Emissions
   storage_handling:
     h2_storage_energy: 2                   # 氢气储存能耗(kWh/kg/天) | H₂ storage energy (kWh/kg/day)
@@ -468,6 +426,49 @@ clustering_parameters:
                                            # 集中处理点的单位处理成本
                                            # 用于计算集中化收益
 
+# =============================================================================
+# CO2聚类参数 (CO2 Clustering Parameters)
+# 用于CO2捕获源的地理聚类，使用比H2更小的聚类半径
+# 因为煤电厂分布更密集，需要避免过度聚集
+# =============================================================================
+co2_clustering_parameters:
+  # 聚类功能开关 - CO2 Clustering Control
+  enable_clustering: true                  # 启用CO2聚类功能 | Enable CO2 clustering
+  enable_pipeline_optimization: true       # 启用管道优化 | Enable pipeline optimization
+  export_clustering_results: true          # 导出聚类结果 | Export clustering results
+  clustering_output_path: co2_clustering_results.json  # 聚类结果输出路径 | Output file path
+
+  # DBSCAN核心参数 - DBSCAN Core Parameters (Optimized for CO2 sources)
+  eps_distance_km: 30.0                    # CO2聚类半径30km（比H2的60km小一半）| CO2 clustering radius 30km
+                                           # 原因：煤电厂分布密集，避免形成超大聚类
+                                           # Reason: Coal power plants are densely distributed, avoid over-clustering
+                                           # 调参说明：
+                                           #   - 30km适合煤电厂密集区域
+                                           #   - 可避免单个聚类中心聚集过多源点
+                                           #   - 基于运输成本vs基础设施成本平衡
+
+  min_samples: 3                           # 最小样本数：3个煤电厂形成聚类 | Min samples: 3 coal plants per cluster
+                                           # 保持合理的成簇门槛，避免过小聚类
+
+  max_clusters: 200                        # 最大聚类数：200个 | Maximum number of clusters
+                                           # CO2源点更多（3445个），允许更多聚类中心
+                                           # 限制总数以控制集中点数量
+
+  # 噪声点处理 - Noise Point Handling
+  noise_plant_handling: direct_connection  # 噪声点处理策略 | Noise point handling strategy
+                                           # direct_connection: 孤立煤电厂直接连接到主网络
+
+  # 成本和权重参数 - Cost and Weight Parameters
+  pipeline_weight: 0.3                     # 管道成本权重 | Pipeline cost weight
+                                           # 用于平衡管道建设成本在总成本中的权重
+
+  shared_pipeline_discount_factor: 0.65    # 共享管道折扣系数 | Shared pipeline discount factor
+                                           # 多个煤电厂共享管道时的成本折扣
+
+  processing_cost_base: 10.0               # 处理成本基准(元/kg) | Processing cost base (yuan/kg)
+                                           # 集中处理点的单位处理成本
+
+# =============================================================================
 # 成本参数 (Cost Parameters)
 # 定义原材料价格、能源成本和运输费用
 # =============================================================================
@@ -522,13 +523,13 @@ cost_parameters:
 
     electrolysis_power_consumption: 55         # 制氢能耗(kWh/kg H₂) | Electrolysis power consumption (kWh/kg H₂)
                                            # 电解制氢单位能耗（包括系统损耗）
-                                           # 修正：从50改为55，统一能耗参数，更符合PEM电解槽实际值
+                                           # 统一修正：从50更新为55 kWh/kg H₂
 
   # 缺货惩罚 - Shortage Penalty
   shortage_penalty_yuan_per_kg: 2500       # 缺货惩罚成本(元/kg) | Shortage penalty (yuan/kg)
-                                           # 统一修正：从5000000改为2500，与其他项目保持一致
                                            # 未满足需求时的惩罚成本
                                            # 作用：确保优化器优先满足需求
+                                           # 设置较高值以强制满足关键需求
 
 # =============================================================================
 # 详细成本数据 (Detailed Cost Data)
@@ -599,8 +600,7 @@ green_hydrogen_supply:
 
   production_energy_kwh_per_kg: 55           # 制氢能耗(kWh/kg H₂) | H₂ production energy (kWh/kg H₂)
                                              # 电解制氢能耗（包括系统损耗）
-                                             # 修正：从50改为55，与其他位置统一
-                                             # 典型PEM/碱性电解槽能耗
+                                             # 典型PEM/碱性电解槽能耗，已统一修正为55
 
   electrolyzer_efficiency: 0.70              # 电解槽效率 | Electrolyzer efficiency (70%)
                                              # 电能到氢能的转换效率
@@ -674,7 +674,7 @@ data_paths:
       saf_transport_plan: saf_transport_plan_{timestamp}.csv
       optimization_summary: optimization_summary_{timestamp}.csv
       transport_summary: transport_summary_{timestamp}.csv
-    results_base_dir: products/supply_chain_optimization/coal_hydrogen_saf_optimization/results
+    results_base_dir: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results
 
 # =============================================================================
 # 依赖关系 (Dependencies)
@@ -833,10 +833,11 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 50  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
-                                           # 修正：从1000元/kg改为50元/kg
-                                           # 绿氢+煤炭CO₂制SAF合理成本区间：30-50元/kg
-                                           # 用于经济性边界约束，确保方案经济可行
+  levelized_cost_threshold_yuan_per_kg: 1000  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+                                           # 【修复】从10元/kg放宽至50元/kg
+                                           # 绿氢+CO₂制SAF成本较高，10元/kg过于严格导致无可行解
+                                           # 50元/kg更符合实际成本水平
+                                           # 用于经济性边界约束
 
   # 设备寿命参数 - Equipment Lifetime
   electrolyzer_lifetime: 15                # 电解槽寿命(年) | Electrolyzer lifetime (years)
@@ -892,12 +893,10 @@ equipment_raw_costs:
 
   # 储存设施成本 - Storage Facility Costs
   storage:
-    capex_raw: 2000                          # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
+    capex_raw: 2000                        # 储存设施资本支出(元/单位) | Storage CAPEX (yuan/unit)
                                            # 包括储罐、管道、泵等设备
-                                           # 统一修正：与DAC、Green、Natural Gas项目保持一致
 
-    opex_raw: 30                             # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
-                                           # 统一修正：与其他项目保持一致
+    opex_raw: 30                           # 储存设施年运营成本(元/年) | Storage annual OPEX (yuan/year)
 
 # =============================================================================
 # SAF设施平准化成本参数 (SAF Facility LCOE Parameters)
@@ -912,11 +911,10 @@ facility_lcoe_parameters:
                                            # 管理、人工、公用事业等固定费用
                                            # 1800万元/年
 
-  variable_capex_per_capacity: 160000      # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 240000      # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
                                            # 随产能规模变化的投资
-                                           # 16万元/(kg/h产能) - 煤制氢一步法工艺
+                                           # 24万元/(kg/h产能) - 工业捕集两步法工艺
                                            # 注意：这里的capacity单位是kg/h(小时产能)
-                                           # 修正日期：2025-11-16 (根据工艺CAPEX数据更新)
 
   variable_opex_per_kg: 0.8                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
                                            # 原材料、能源、催化剂等可变成本
@@ -978,39 +976,25 @@ geographic_data:
 # 配置文件元数据 (Configuration Metadata)
 # =============================================================================
 metadata:
-  version: 3.0.0                           # 配置文件版本 | Configuration version
+  version: 2.0.0                           # 配置文件版本 | Configuration version
   author: 系统自动生成                      # 作者 | Author
-  created_date: '2025-10-27'               # 创建日期 | Creation date
-  last_updated: '2025-10-27'               # 最后更新日期 | Last updated
+  created_date: '2025-10-13'               # 创建日期 | Creation date
+  last_updated: '2025-10-13'               # 最后更新日期 | Last updated
 
   description: |
-    CoalHydrogenSAFOptimizer综合参数配置文件
-    Coal Hydrogen SAF Supply Chain Optimizer Comprehensive Configuration File
+    GreenHydrogenSupplyChainOptimizer综合参数配置文件
+    Green Hydrogen Supply Chain Optimizer Comprehensive Configuration File
 
   notes: |
     配置文件说明:
-    - 此配置文件包含了CoalHydrogenSAFOptimizer类的所有参数配置
+    - 此配置文件包含了GreenHydrogenSupplyChainOptimizer类的所有参数配置
     - 修改此文件可以调整优化器的行为，无需修改源代码
     - 参数分为15个主要类别，涵盖了经济、技术、成本、数据路径等各个方面
     - v2.0.0更新:
-      * 从绿氢+外部CO₂捕获路线迁移到煤炭气化+绿氢路线
-      * 添加煤炭供应参数配置(coal_parameters)
-      * 移除CO₂外部捕获和运输配置（CO₂聚类、管道运输等）
-      * 更新技术路线为煤炭气化CO₂+绿氢→SAF
-    - v3.0.0更新（2025-10-28）:
-      * 修正甲醇转化比例: methanol_intermediate_ratio 从 3.125 改为 1.5625
-      * 统一电解制氢能耗: 所有位置统一为 55 kWh/kg H₂
-      * 修正SAF反应器最小经济规模: 从 0 改为 100 kg/h
-      * 修正储存设施成本: CAPEX从2000改为200000元, OPEX从30改为5000元/年
-      * 修正平准化成本阈值: 从 1000 改为 50 元/kg
-      * 优化求解器线程数: 从 128 改为 0 (自动检测)
-      * 删除煤炭消耗参数重复定义，统一使用 coal_parameters.coal_consumption_kg_per_kg_saf
-      * 添加煤炭气化能耗kWh单位，方便代码使用
-    - v3.1.0更新（2025-11-10）:
-      * ✅ 确认使用一步法: 煤制合成气+H₂→SAF（无甲醇中间变量）
-      * ✅ 修正SAF合成段能耗: energy_consumption_kwh_per_kg_saf 从7.6改为4.0 kWh/kg
-      * ✅ 删除两步法遗留参数（methanol_intermediate_ratio, methanol_to_saf_ratio）
-      * ⚠️ 待修复: 代码中仍实现两步法，需要移除甲醇相关变量和约束
+      * 从天然气路线迁移到绿氢路线
+      * 添加CO₂捕获源参数配置
+      * 移除天然气相关配置（LNG接收站、天然气管道等）
+      * 更新技术路线为绿氢+CO₂→SAF
 
     主要配置类别:
     1. basic_parameters: 基础系统参数（时间范围、路径规划）
@@ -1058,26 +1042,26 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 1e100                         # 求解时间限制(秒) | Time limit (seconds)
+  TimeLimit: 1.0e100                       # 求解时间限制(秒) | Time limit (seconds)
                                            # 1e100 = 无限制，让求解器运行至最优解或收敛
                                            # 如需设置限制，可修改为具体秒数：
                                            #   - 小规模问题: 600-1800秒
                                            #   - 中等规模: 3600-7200秒
                                            #   - 大规模问题: 7200-14400秒
 
-  MIPGap: 0.01                             # 混合整数规划求解精度 | MIP optimality gap
-                                           # 0.01 = 1%，允许解与最优解的相对差距
+  MIPGap: 0.05                             # 混合整数规划求解精度 | MIP optimality gap
+                                           # 0.05 = 5%，允许解与最优解的相对差距
                                            # 较小的MIPGap提高精度但增加求解时间
                                            # 调参建议：
                                            #   - 高精度: 0.001-0.005
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
+                                           # 修正日期：2025-11-13 (从1%放宽至5%，加快求解速度)
 
-  Threads: 128                               # 并行计算线程数 | Number of parallel threads
-                                           # 统一修正：从0改为128，与其他项目保持一致
-                                           # 128 = 使用最多128个线程进行并行计算
-                                           # 建议：根据服务器CPU核心数调整
-                                           # 注意：过多线程可能导致内存溢出和性能下降
+  Threads: 128                             # 并行计算线程数 | Number of parallel threads
+                                           # 使用128个线程进行并行计算
+                                           # 建议设置为CPU核心数或稍多
+                                           # 注意：过多线程可能导致内存溢出
 
 # =============================================================================
 # 技术路线参数 (Technology Parameters)
@@ -1091,23 +1075,19 @@ technologies:
     technology_type: GreenH2_CO2_FT       # 技术类型 | Technology type
     transport_mode: renewable_h2_pipeline  # 运输模式：可再生能源电解制氢+管道 | Transport mode
 
+    # 适用位置 - Suitable Locations
+    suitable_locations:                   # 可部署位置类型 | Deployable location types
+    - solar_plant                         # 太阳能发电站（修复：匹配代码实际类型）
+    - wind_farm                           # 风电场（修复：匹配代码实际类型）
+    - airport                             # 机场附近
+    - co2_capture                         # CO₂捕获点
+
     # ========================================================================
     # 🆕 工艺模式选择 - Process Mode Selection
     # ========================================================================
-    process_mode: one_step                # 工艺模式：one_step (一步法)
-                                          # H₂+CO₂→SAF (直接转化，无甲醇中间变量)
+    process_mode: one_step                # 工艺模式：one_step (一步法) | two_step (两步法，已废弃)
+                                          # one_step: H₂+CO₂→SAF (直接转化，无甲醇中间变量)
                                           # 注意：两步法已废弃，所有甲醇相关参数已删除
-
-    # 适用位置 - Suitable Locations
-    # 一步法可以在多种位置生产:
-    # 1. 可再生能源站: 如果就地生产SAF,H₂无需运输,节省运输成本
-    # 2. 机场/工业基地: 靠近需求点,减少SAF运输成本
-    # 优化器会通过约束自动决定是否在各位置建设SAF工厂
-    suitable_locations:                   # 可部署位置类型 | Deployable location types
-    - solar_plant                         # 太阳能发电站（可选:就地制氢+制SAF）
-    - wind_farm                           # 风电场（可选:就地制氢+制SAF）
-    - airport                             # 机场附近（靠近需求点）
-    - lng_terminal                        # LNG终端（工业基地）
 
     # 工艺参数 - Process Parameters
     efficiency: 0.60                      # 整体合成效率 | Overall synthesis efficiency
@@ -1116,17 +1096,21 @@ technologies:
     # ========================================================================
     # ✅ 一步法直接转化参数（当前启用）
     # ========================================================================
-    h2_consumption_ratio: 0.3             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
-                                          # 一步法：生产1kg SAF需要0.3kg氢气
-                                          # 直接从H₂和CO₂合成SAF，无甲醇中间步骤
-                                          # 修正日期：2025-11-08 (煤炭气化路线参数)
+    h2_consumption_ratio: 0.7             # 氢气消耗比(kg H₂/kg SAF) | H₂ consumption ratio
+                                          # 两步法：生产1kg SAF需要0.7kg氢气
+                                          # H₂+CO₂→甲醇→SAF（两步法工艺）
+                                          # 修正日期：2025-11-16 (两步法参数)
 
-    carbon_consumption_ratio: 1.0         # 碳消耗比(kg C/kg SAF) | Carbon consumption ratio
-                                          # 一步法：生产1kg SAF需要1.0kg碳(C)
-                                          # 注意：这里配置的是碳(C)不是CO₂，碳原子质量
-                                          # CO₂中碳含量：C/CO₂ = 12/44 ≈ 0.273
-                                          # 因此 1.0 kg C 对应约 3.67 kg CO₂
-                                          # 修正日期：2025-11-08
+    co2_consumption_ratio: 3.5            # CO₂消耗比(kg CO₂/kg SAF) | CO₂ consumption ratio
+                                          # 两步法：生产1kg SAF需要3.5kg CO₂
+                                          # H₂+CO₂→甲醇→SAF（两步法工艺）
+                                          # 修正日期：2025-11-16 (两步法参数)
+
+    # ========================================================================
+    # ❌ 两步法参数（已废弃）
+    # ========================================================================
+    # 注意：甲醇作为完全的中间产物，两步法工艺参数已全部删除
+    # 所有成本计算统一使用一步法参数
 
     co2_emission_factor: -2.5             # CO₂排放系数(kg CO₂/kg SAF) | CO₂ emission factor
                                           # 负值表示净减排（使用捕获的CO₂）
@@ -1142,10 +1126,10 @@ technologies:
     catalyst_cost_yuan_per_kg_saf: 0.12   # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
 
     # 能源消耗参数 - Energy Consumption Parameters
-    energy_consumption_kwh_per_kg_saf: 4.0  # 电力消耗(kWh/kg SAF) | Electricity consumption
-                                          # 煤制合成气+H₂→SAF 一步法合成段能耗
-                                          # 包括FT合成、压缩、泵送、分离等（不含原料制备）
-                                          # 修正日期：2025-11-10 (从7.6更新为4.0)
+    energy_consumption_kwh_per_kg_saf: 7.6  # 电力消耗(kWh/kg SAF) | Electricity consumption
+                                          # RWGS-FT e-kerosene合成段实际能耗
+                                          # 包括RWGS反应、FT合成、压缩、泵送、分离等
+                                          # 修正日期：2025-11-09
 
     heat_integration_efficiency: 0.70     # 热集成效率 | Heat integration efficiency
                                           # 反应热的回收利用效率
@@ -1241,40 +1225,3 @@ unified_costs:
     facility_investment_yuan_per_kg: 2000
     facility_operation_yuan_per_kg_year: 25
     saf_equipment_cost_yuan_per_kg: 12
-
-# =============================================================================
-# 超图优化器配置 (Super Graph Optimizer Configuration)
-# 用于管道路径预计算和快速查询
-# =============================================================================
-super_graph_config:
-  # 连接参数 - Connection Parameters
-  k_connections: 10                        # 每个业务节点连接k个最近管道节点 | Connect each node to k nearest pipeline nodes
-                                           # 默认10，平衡精度和计算效率
-                                           # 调参建议：稠密网络可降至5，稀疏网络可增至15
-
-  # 算法选择 - Algorithm Selection
-  algorithm: johnson                       # 全对最短路径算法 | All-pairs shortest path algorithm
-                                           # johnson: 适合稀疏图，复杂度O(V²logV + VE)
-                                           # floyd_warshall: 适合密集图，但大图很慢O(V³)
-                                           # 建议：节点数<500用floyd_warshall，>500用johnson
-
-  # 几何信息 - Geometry Information
-  include_route_geometry: false            # 是否包含路径几何坐标 | Include route geometry coordinates
-                                           # false: 仅计算距离，节省内存
-                                           # true: 保存完整路径坐标，用于可视化（占用更多内存）
-
-  # 缓存设置 - Cache Configuration
-  cache_to_disk: true                      # 是否缓存到磁盘 | Cache precomputed data to disk
-                                           # true: 第二次运行时快速加载，节省初始化时间
-                                           # false: 每次都重新计算
-
-  # 验证模式 - Validation Mode
-  validation_mode: false                   # 验证模式（对比新旧方法） | Validation mode (compare new vs old method)
-                                           # true: 同时运行新旧方法并对比结果，用于测试
-                                           # false: 仅使用超图方法，生产环境推荐
-                                           # 注意：validation_mode=true会显著降低性能
-
-  # 回退策略 - Fallback Strategy
-  fallback_on_failure: true                # 超图失败时是否回退到传统方法 | Fallback to traditional method on failure
-                                           # true: 如果超图查询失败，自动使用传统计算
-                                           # false: 超图失败时抛出异常

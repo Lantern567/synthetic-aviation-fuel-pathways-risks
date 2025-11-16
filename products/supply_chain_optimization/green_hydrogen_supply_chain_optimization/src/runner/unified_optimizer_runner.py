@@ -18,7 +18,7 @@ Unified SAF Supply Chain Optimizer Runner
     >>> results = optimizer.run()
     >>>
     >>> # 运行一步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.02)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.05)
     >>> results = optimizer.run()
 
 作者: Claude Code
@@ -67,8 +67,8 @@ class UnifiedSAFOptimizer:
 
     # 配置文件映射
     CONFIG_MAPPING = {
-        'two_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml',
-        'one_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config_one_step_direct_ft.yaml',
+        'two_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config_two_step.yaml',
+        'one_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml',
     }
 
     def __init__(
@@ -76,7 +76,7 @@ class UnifiedSAFOptimizer:
         process_type: str = 'two_step',
         threads: Optional[int] = None,
         time_limit: int = 3600,
-        mip_gap: float = 0.01,
+        mip_gap: float = 0.05,
         time_horizon_weeks: int = 1,
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
@@ -96,7 +96,7 @@ class UnifiedSAFOptimizer:
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
             time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
-            mip_gap: MIP相对最优间隙,默认0.01(1%)
+            mip_gap: MIP相对最优间隙,默认0.05(5%)
             time_horizon_weeks: 优化时间范围(周数),默认1周
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
@@ -290,11 +290,15 @@ class UnifiedSAFOptimizer:
             override_params = {}
             if self.parallel_workers is not None:
                 override_params['parallel_workers'] = self.parallel_workers
+            if self.time_horizon_weeks is not None:
+                override_params['time_horizon_weeks'] = self.time_horizon_weeks
+            if self.osm_pbf_path is not None:
+                override_params['osm_pbf_path'] = self.osm_pbf_path
 
             self.optimizer = GreenHydrogenSupplyChainOptimizer(
-                time_horizon_weeks=self.time_horizon_weeks,
-                osm_pbf_path=self.osm_pbf_path,
-                override_params=override_params if override_params else None,
+                config_path=str(self.config_path),
+                process_mode=self.process_type,
+                **override_params,
             )
             self._monitor_memory()
             self.logger.info("Optimizer initialized successfully")
@@ -490,7 +494,7 @@ class UnifiedSAFOptimizer:
 def run_two_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 3600,
-    mip_gap: float = 0.01,
+    mip_gap: float = 0.05,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -518,7 +522,7 @@ def run_two_step_optimization(
 def run_one_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 3600,
-    mip_gap: float = 0.01,
+    mip_gap: float = 0.05,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -549,17 +553,22 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run SAF Supply Chain Optimization')
     parser.add_argument(
+        '--process',
         '--process-type',
+        dest='process_type',
         choices=['two_step', 'one_step'],
         default='two_step',
         help='Process type to use'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')
-    parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance')
+    parser.add_argument('--mip-gap', type=float, default=0.05, help='MIP gap tolerance')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()
+
+    # 设置环境变量（用于模块级别的日志路径）
+    os.environ["GH_SUPPLY_CHAIN_PROCESS"] = args.process_type
 
     optimizer = UnifiedSAFOptimizer(
         process_type=args.process_type,

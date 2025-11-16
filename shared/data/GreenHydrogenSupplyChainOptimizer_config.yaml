@@ -911,10 +911,11 @@ facility_lcoe_parameters:
                                            # 管理、人工、公用事业等固定费用
                                            # 1800万元/年
 
-  variable_capex_per_capacity: 35000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 160000      # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
                                            # 随产能规模变化的投资
-                                           # 3.5万元/(kg/h产能)
+                                           # 16万元/(kg/h产能) - 工业捕集一步法工艺
                                            # 注意：这里的capacity单位是kg/h(小时产能)
+                                           # 修正日期：2025-11-16 (根据工艺CAPEX数据更新)
 
   variable_opex_per_kg: 0.8                # 单位产品运营成本(元/kg) | Variable OPEX per product (yuan/kg)
                                            # 原材料、能源、催化剂等可变成本
@@ -1042,20 +1043,21 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 3600                          # 求解时间限制(秒) | Time limit (seconds)
-                                           # 3600秒 = 1小时，超时后返回当前最优解
-                                           # 调参建议：
+  TimeLimit: 1.0e100                       # 求解时间限制(秒) | Time limit (seconds)
+                                           # 1e100 = 无限制，让求解器运行至最优解或收敛
+                                           # 如需设置限制，可修改为具体秒数：
                                            #   - 小规模问题: 600-1800秒
                                            #   - 中等规模: 3600-7200秒
                                            #   - 大规模问题: 7200-14400秒
 
-  MIPGap: 0.01                             # 混合整数规划求解精度 | MIP optimality gap
-                                           # 0.01 = 1%，允许解与最优解的相对差距
+  MIPGap: 0.05                             # 混合整数规划求解精度 | MIP optimality gap
+                                           # 0.05 = 5%，允许解与最优解的相对差距
                                            # 较小的MIPGap提高精度但增加求解时间
                                            # 调参建议：
                                            #   - 高精度: 0.001-0.005
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
+                                           # 修正日期：2025-11-13 (从1%放宽至5%，加快求解速度)
 
   Threads: 128                             # 并行计算线程数 | Number of parallel threads
                                            # 使用128个线程进行并行计算
@@ -1212,7 +1214,13 @@ unified_costs:
 
   raw_materials:
     renewable_electricity_base_price_yuan_per_kwh: 0.35
-    co2_capture_base_cost_yuan_per_ton: 280
+    co2_capture_base_cost_yuan_per_ton: 280  # 保留原有配置（向后兼容）
+
+  # 新增：CO2捕获成本配置段（修复配置路径不匹配问题）
+  co2_capture:
+    capture_cost_yuan_per_kg: 0.28  # 280元/吨 = 0.28元/kg
+    # 说明：此配置用于优化模型中的CO2捕获成本计算
+    # 与 raw_materials.co2_capture_base_cost_yuan_per_ton 保持一致（单位转换）
 
   storage:
     facility_investment_yuan_per_kg: 2000

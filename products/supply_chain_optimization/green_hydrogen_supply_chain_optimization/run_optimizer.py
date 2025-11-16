@@ -88,8 +88,8 @@ def main():
     parser.add_argument(
         '--mip-gap',
         type=float,
-        default=0.01,
-        help='MIP优化间隙 (默认: 0.01=1%%)'
+        default=0.05,
+        help='MIP优化间隙 (默认: 0.05=5%%)'
     )
 
     parser.add_argument(

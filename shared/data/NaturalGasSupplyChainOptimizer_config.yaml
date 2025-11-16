@@ -781,9 +781,9 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 3600                          # 求解时间限制(秒) | Time limit (seconds)
-                                           # 3600秒 = 1小时，超时后返回当前最优解
-                                           # 调参建议：
+  TimeLimit: 1e100                         # 求解时间限制(秒) | Time limit (seconds)
+                                           # 1e100 = 无限制，让求解器运行至最优解或收敛
+                                           # 如需设置限制，可修改为具体秒数：
                                            #   - 小规模问题: 600-1800秒
                                            #   - 中等规模: 3600-7200秒
                                            #   - 大规模问题: 7200-14400秒
@@ -874,7 +874,8 @@ technologies:
   # LNG接收站转换技术 - LNG Terminal Conversion
   lng_terminal_conversion:
     efficiency: 0.85
-    h2_consumption_ratio: 0.12
+    h2_consumption_ratio: 0.05             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
+                                           # 修正日期：2025-11-15 (从0.12统一更新为0.05，与airport_integrated_conversion保持一致)
     hydrogen_transport_required: true
     methanol_intermediate_ratio: 1.2
     catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)
@@ -886,7 +887,8 @@ technologies:
     transport_mode: lng_port_supply
   lng_to_hplant_conversion:
     efficiency: 0.85
-    h2_consumption_ratio: 0.12
+    h2_consumption_ratio: 0.05             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
+                                           # 修正日期：2025-11-15 (从0.12统一更新为0.05，与airport_integrated_conversion保持一致)
     hydrogen_transport_required: false
     methanol_intermediate_ratio: 1.2
     catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)
@@ -899,7 +901,8 @@ technologies:
     transport_mode: lng_transfer
   pipeline_direct_conversion:
     efficiency: 0.85
-    h2_consumption_ratio: 0.12
+    h2_consumption_ratio: 0.05             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
+                                           # 修正日期：2025-11-15 (从0.12统一更新为0.05，与airport_integrated_conversion保持一致)
     hydrogen_transport_required: false
     methanol_intermediate_ratio: 1.2
     catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost (修正日期：2025-11-09)

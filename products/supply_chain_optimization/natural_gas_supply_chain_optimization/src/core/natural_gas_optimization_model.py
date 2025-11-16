@@ -2030,9 +2030,9 @@ class NaturalGasSupplyChainOptimizer:
         self.model = gp.Model("NaturalGasSupplyChain")
         # 从配置文件加载求解器参数
         solver_params = self.config['solver_parameters']
-        self.model.setParam('TimeLimit', solver_params['TimeLimit'])
-        self.model.setParam('MIPGap', solver_params['MIPGap'])
-        self.model.setParam('Threads', solver_params['Threads'])
+        self.model.setParam('TimeLimit', float(solver_params['TimeLimit']))
+        self.model.setParam('MIPGap', float(solver_params['MIPGap']))
+        self.model.setParam('Threads', int(solver_params['Threads']))
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
@@ -2879,7 +2879,6 @@ class NaturalGasSupplyChainOptimizer:
         # 投资成本聚合
         self.cost_aggregates['total_investment_cost'] = (
             self.cost_expressions['facility_investment_cost'] +
-            self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
@@ -2923,8 +2922,8 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
         logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
 
-        # 创建需求满足比例表达式
-        self._create_demand_fulfillment_expression()
+        # 创建性能指标表达式
+        self._create_performance_expressions()
 
         # 创建碳排放表达式（如果启用）
         if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
@@ -3381,6 +3380,28 @@ class NaturalGasSupplyChainOptimizer:
             self.carbon_aggregates['total_emissions'] * operation_expansion_factor
         )
 
+        # =========================================================================
+        # 7. 碳强度计算组件 (Carbon Intensity Components)
+        # =========================================================================
+        # 碳强度涉及除法运算（总碳排放 / 总产量），Gurobi不支持非线性表达式
+        # 因此这里存储碳强度计算所需的常量参数，实际碳强度在求解后计算
+
+        # 存储碳强度计算所需的常量参数
+        self.carbon_params['saf_energy_content'] = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)  # MJ/kg
+        self.carbon_params['traditional_jet_ci'] = self.carbon_params.get('benchmarks', {}).get('traditional_jet_fuel', 89)  # g CO2eq/MJ
+        self.carbon_params['corsia_limit_ci'] = self.carbon_params.get('benchmarks', {}).get('corsia_limit', 30)  # g CO2eq/MJ
+
+        # 碳强度分子：总碳排放（已在上面定义）
+        # 碳强度分母：总产量（在performance_expressions中定义）
+        # 实际碳强度计算公式：
+        #   carbon_intensity_kg = total_emissions / production_total  [kg CO2eq/kg SAF]
+        #   carbon_intensity_mj = carbon_intensity_kg * 1000 / saf_energy_content  [g CO2eq/MJ]
+
+        logger.info("碳强度计算组件准备完成")
+        logger.info(f"  SAF能量含量: {self.carbon_params['saf_energy_content']} MJ/kg")
+        logger.info(f"  传统航油碳强度基准: {self.carbon_params['traditional_jet_ci']} g CO2eq/MJ")
+        logger.info(f"  CORSIA碳强度限值: {self.carbon_params['corsia_limit_ci']} g CO2eq/MJ")
+
         logger.info("碳排放表达式创建完成")
         logger.info(f"包含 {len(self.carbon_expressions)} 个细分项，{len(self.carbon_aggregates)} 个汇总项")
 
@@ -3400,61 +3421,80 @@ class NaturalGasSupplyChainOptimizer:
         logger.info("="*60)
         logger.info("时间尺度一致性验证:")
         logger.info("  原料获取: 按天计算(ng_transport_vars)")
-        logger.info("  设施建设: 年产能摊销到优化时段")
+        logger.info("  设施建设碳排放: 按使用寿命年化后，再按优化时段比例摊销")
+        logger.info("  设施产能: 决策变量(kg/h)，通过产能约束限制小时生产量")
         logger.info("  生产过程: 按小时计算(production_vars, hydrogen_production_vars)")
         logger.info("  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)")
-        logger.info("  运输配送: MTJ按周, NG按天, H2按总量")
+        logger.info("  运输配送: MTJ按周, NG按天, H2按周(第0h入库)")
         logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
         logger.info("="*60)
 
-    def _create_demand_fulfillment_expression(self):
-        """创建需求满足比例表达式: 1 - (缺货产量 / (缺货产量 + 总产量))"""
-        logger.info("创建需求满足比例表达式...")
+    def _create_performance_expressions(self):
+        """创建性能指标表达式：产量、缺货、需求满足比例等
 
-        # 初始化performance_expressions字典（如果不存在）
+        注意：需求满足比例涉及除法运算，Gurobi不支持非线性表达式，
+        因此存储分子和分母表达式，在求解后计算比例值。
+        """
+        logger.info("创建性能指标表达式...")
+
         if not hasattr(self, 'performance_expressions'):
             self.performance_expressions = {}
 
-        # 创建总生产量表达式（如果还不存在）
-        if not hasattr(self, 'production_total_expr'):
-            self.production_total_expr = gp.quicksum(
-                var for var in self.production_vars.values()
-            )
-            logger.info(f"[调试] 创建总生产量表达式，包含 {len(self.production_vars)} 个生产变量")
+        # 1. 总生产量表达式
+        self.performance_expressions['production_total'] = gp.quicksum(
+            var for var in self.production_vars.values()
+        )
 
-        # 计算缺货产量总和
+        # 2. 缺货总量表达式
         if hasattr(self, 'shortage_vars') and self.shortage_vars:
-            shortage_total_expr = gp.quicksum(self.shortage_vars.values())
-            logger.info(f"[调试] 创建缺货产量表达式，包含 {len(self.shortage_vars)} 个缺货变量")
+            self.performance_expressions['shortage_total'] = gp.quicksum(
+                self.shortage_vars.values()
+            )
         else:
-            shortage_total_expr = gp.LinExpr(0)
-            logger.info("[调试] 未找到缺货变量，缺货产量设为0")
-
-        # 计算总需求量（总产量 + 缺货产量）
-        total_demand_expr = self.production_total_expr + shortage_total_expr
-
-        # 计算需求满足比例：1 - (缺货产量 / (缺货产量 + 总产量))
-        # 当总需求为0时，需求满足比例定义为1.0（100%满足）
-        try:
-            # 由于Gurobi不支持直接的条件表达式，我们需要在求解后再计算具体数值
-            # 这里存储表达式组件供后续计算
-            self.performance_expressions['shortage_total'] = shortage_total_expr
-            self.performance_expressions['production_total'] = self.production_total_expr
-            self.performance_expressions['total_demand'] = total_demand_expr
-
-            logger.info("[调试] 需求满足比例表达式组件创建完成")
-            logger.info("[调试] - shortage_total: 缺货产量总和")
-            logger.info("[调试] - production_total: 总产量")
-            logger.info("[调试] - total_demand: 总需求量 = 总产量 + 缺货产量")
-
-        except Exception as e:
-            logger.error(f"创建需求满足比例表达式时出错: {e}")
-            # 设置默认值
             self.performance_expressions['shortage_total'] = gp.LinExpr(0)
-            self.performance_expressions['production_total'] = gp.LinExpr(0)
-            self.performance_expressions['total_demand'] = gp.LinExpr(0)
 
-        logger.info("需求满足比例表达式创建完成")
+        # 3. 总需求表达式（总产量 + 缺货产量）
+        self.performance_expressions['total_demand'] = (
+            self.performance_expressions['production_total'] +
+            self.performance_expressions['shortage_total']
+        )
+
+        # 4. 氢气总生产量
+        if hasattr(self, 'hydrogen_production_vars') and self.hydrogen_production_vars:
+            self.performance_expressions['hydrogen_total_production'] = gp.quicksum(
+                self.hydrogen_production_vars.values()
+            )
+        else:
+            self.performance_expressions['hydrogen_total_production'] = gp.LinExpr(0)
+
+        # 5. 甲醇总生产量（如适用于两步法）
+        if hasattr(self, 'methanol_production_vars') and self.methanol_production_vars:
+            self.performance_expressions['methanol_total_production'] = gp.quicksum(
+                self.methanol_production_vars.values()
+            )
+        else:
+            self.performance_expressions['methanol_total_production'] = gp.LinExpr(0)
+
+        # 6. SAF设施总数
+        if hasattr(self, 'facility_vars') and self.facility_vars:
+            self.performance_expressions['facilities_count'] = gp.quicksum(
+                self.facility_vars.values()
+            )
+        else:
+            self.performance_expressions['facilities_count'] = gp.LinExpr(0)
+
+        # 7. 电解槽设施总数
+        if hasattr(self, 'electrolyzer_facility_vars') and self.electrolyzer_facility_vars:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.quicksum(
+                self.electrolyzer_facility_vars.values()
+            )
+        else:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.LinExpr(0)
+
+        logger.info(f"性能指标表达式创建完成，共 {len(self.performance_expressions)} 个指标")
+        logger.info("[调试] 性能表达式详情:")
+        for name in self.performance_expressions:
+            logger.info(f"  - {name}")
 
     def _add_time_scale_matching_constraints(self):
         """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
@@ -4196,117 +4236,11 @@ class NaturalGasSupplyChainOptimizer:
                     name=f"hydrogen_source_outbound_limit_{h_loc}_weekly"
                 )
                 logger.debug(f"添加氢气源地总出库约束（周级）: {h_loc}")
-        
-        # 氢气供需平衡约束：对所有消耗氢气的技术添加约束，确保氢气供应满足需求
-        logger.info("添加氢气供需平衡约束...")
 
-        # 初始化日运输供应项字典
-        daily_transport_supply_terms = {}
-
-        # 遍历所有消耗氢气的技术（不论是否需要运输）
-        for tech in self.technologies:
-            # 只处理消耗氢气的技术
-            if self.technologies[tech]['h2_consumption_ratio'] <= 0:
-                continue
-
-            if tech not in self.mtj_locations:
-                logger.warning(f"技术 {tech} 不在 mtj_locations 中，跳过氢气需求约束")
-                continue
-
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                logger.error(f"技术 {tech} 的位置不可迭代: {locations} (类型: {type(locations)})")
-                continue
-
-            for mtj_loc in locations:
-                # 初始化该位置的字典结构
-                if mtj_loc not in daily_transport_supply_terms:
-                    daily_transport_supply_terms[mtj_loc] = {}
-                if tech not in daily_transport_supply_terms[mtj_loc]:
-                    daily_transport_supply_terms[mtj_loc][tech] = {}
-
-                total_days = self.total_hours // 24
-                for day in range(total_days):
-                    # 计算该MTJ工厂该天的氢气需求（基于生产量）
-                    day_start_hour = day * 24
-                    day_end_hour = min((day + 1) * 24, self.total_hours)
-
-                    hydrogen_demand_terms = []
-                    for hour in range(day_start_hour, day_end_hour):
-                        if (mtj_loc, tech, hour) in self.production_vars:
-                            h2_consumption = self.technologies[tech]['h2_consumption_ratio']
-                            hydrogen_demand_terms.append(
-                                self.production_vars[(mtj_loc, tech, hour)] * h2_consumption
-                            )
-
-                    if not hydrogen_demand_terms:
-                        continue  # 该天无氢气需求，跳过
-
-                    hydrogen_demand = gp.quicksum(hydrogen_demand_terms)
-
-                    # 根据技术类型确定氢气供应方式
-                    if self.technologies[tech]['hydrogen_transport_required']:
-                        # 需要运输的技术：氢气供应来自运输（累加所有天的需求）
-                        if day not in daily_transport_supply_terms[mtj_loc][tech]:
-                            daily_transport_supply_terms[mtj_loc][tech][day] = []
-
-                        # 罐车运输（周级变量需要分摊到每天）
-                        for h_loc in self.hydrogen_locations:
-                            if (h_loc, mtj_loc) in self.hydrogen_transport_vars:
-                                # 将周级运输量分摊到每天，除以总天数
-                                total_days = self.total_hours // 24
-                                daily_transport_share = self.hydrogen_transport_vars[(h_loc, mtj_loc)] / total_days
-                                daily_transport_supply_terms[mtj_loc][tech][day].append(daily_transport_share)
-
-                        # 管道运输（周级变量需要分摊到每天）
-                        if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                            for h_loc in self.hydrogen_locations:
-                                if (h_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                                    # 将周级管道运输量分摊到每天
-                                    total_days = self.total_hours // 24
-                                    daily_pipeline_share = self.hydrogen_pipeline_transport_vars[(h_loc, mtj_loc)] / total_days
-                                    daily_transport_supply_terms[mtj_loc][tech][day].append(daily_pipeline_share)
-
-                        # 氢气运输供应约束（每天的需求 <= 分摊的运输量）
-                        if daily_transport_supply_terms[mtj_loc][tech][day]:
-                            self.model.addConstr(
-                                gp.quicksum(daily_transport_supply_terms[mtj_loc][tech][day]) >= hydrogen_demand,
-                                name=f"hydrogen_transport_supply_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.debug(f"添加氢气运输供应约束: {len(daily_transport_supply_terms[mtj_loc][tech][day])} 个运输变量 -> {mtj_loc} {tech} day {day}")
-                        else:
-                            # 需要运输但无运输变量 - 强制约束导致不可行
-                            self.model.addConstr(
-                                0 >= hydrogen_demand,
-                                name=f"missing_hydrogen_transport_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.warning(f"强制添加氢气运输缺失约束: 位置 {mtj_loc} 技术 {tech} 第{day}天")
-
-                    else:
-                        # 不需要运输的技术：氢气供应来自就地生产
-                        # 该位置当天的氢气生产总量
-                        daily_h2_production_terms = []
-                        for hour in range(day_start_hour, day_end_hour):
-                            if (mtj_loc, hour) in self.hydrogen_production_vars:
-                                daily_h2_production_terms.append(self.hydrogen_production_vars[(mtj_loc, hour)])
-
-                        if daily_h2_production_terms:
-                            daily_h2_production = gp.quicksum(daily_h2_production_terms)
-                            # 就地制氢供应约束：当天氢气需求不能超过当天生产
-                            self.model.addConstr(
-                                hydrogen_demand <= daily_h2_production,
-                                name=f"hydrogen_local_supply_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.debug(f"添加就地制氢供应约束: {mtj_loc} {tech} day {day}")
-                        else:
-                            # 没有氢气生产能力但需要氢气 - 强制约束导致不可行
-                            self.model.addConstr(
-                                0 >= hydrogen_demand,
-                                name=f"missing_hydrogen_production_{mtj_loc}_{tech}_day_{day}"
-                            )
-                            logger.warning(f"强制添加氢气生产缺失约束: 位置 {mtj_loc} 技术 {tech} 第{day}天 需要氢气但无生产能力")
-
-        logger.info("氢气供需平衡约束添加完成")
+        # 注意：氢气供需平衡已通过 _add_hydrogen_balance_constraints() 中的库存机制处理
+        # 该机制在第0小时一次性入库周运输量，然后通过库存变量逐小时消耗
+        # 不需要额外的均摊约束
+        logger.info("氢气运输约束添加完成（供需平衡通过库存机制处理）")
     
     def _add_hydrogen_pipeline_transport_constraints(self):
         """添加氢能管道运输约束"""
@@ -5671,9 +5605,12 @@ class NaturalGasSupplyChainOptimizer:
             return {}
     
     def calculate_carbon_emissions(self, solution: Dict) -> Dict:
-        """计算碳排放结果（基于优化求解后的变量值）"""
+        """计算碳排放结果（基于优化求解后的变量值）
+
+        注意：所有碳排放表达式已在模型内部创建，此函数仅负责从表达式获取数值并计算衍生指标
+        """
         logger.info("="*80)
-        logger.info("计算碳排放结果...")
+        logger.info("从模型表达式获取碳排放结果...")
         logger.info("="*80)
 
         carbon_results = {}
@@ -5687,28 +5624,25 @@ class NaturalGasSupplyChainOptimizer:
         logger.info(f"[调试] 碳排放汇总项数量: {len(self.carbon_aggregates)}")
 
         try:
-            # 1. 计算各细分项碳排放（kg CO2eq）
+            # 1. 从表达式获取各细分项碳排放（kg CO2eq）
             carbon_results['detailed'] = {}
             for name, expr in self.carbon_expressions.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['detailed'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 2. 计算各阶段汇总碳排放
+            # 2. 从表达式获取各阶段汇总碳排放
             carbon_results['by_stage'] = {}
             for name, expr in self.carbon_aggregates.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['by_stage'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 3. 计算总生产量（kg SAF）
-            total_production = sum(
-                var.x for var in self.production_vars.values()
-                if hasattr(var, 'x')
-            )
+            # 3. 从性能表达式获取总生产量（kg SAF）
+            total_production = self.performance_expressions['production_total'].getValue()
             carbon_results['total_production_kg'] = total_production
 
-            # 4. 计算碳强度
+            # 4. 计算碳强度（基于模型内部已准备的参数）
             if total_production > 0:
                 total_emissions = carbon_results['by_stage'].get('total_emissions', 0)
 
@@ -5716,15 +5650,14 @@ class NaturalGasSupplyChainOptimizer:
                 carbon_intensity_mass = total_emissions / total_production
                 carbon_results['carbon_intensity_kg'] = carbon_intensity_mass
 
-                # 能量碳强度 (g CO2eq/MJ)
-                saf_energy_content = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)
+                # 能量碳强度 (g CO2eq/MJ) - 使用模型内部准备的参数
+                saf_energy_content = self.carbon_params.get('saf_energy_content', 43.15)
                 carbon_intensity_energy = carbon_intensity_mass * 1000 / saf_energy_content
                 carbon_results['carbon_intensity_mj'] = carbon_intensity_energy
 
-                # 与基准比较
-                benchmarks = self.carbon_params.get('benchmarks', {})
-                traditional_jet = benchmarks.get('traditional_jet_fuel', 89)
-                corsia_limit = benchmarks.get('corsia_limit', 30)
+                # 与基准比较 - 使用模型内部准备的参数
+                traditional_jet = self.carbon_params.get('traditional_jet_ci', 89)
+                corsia_limit = self.carbon_params.get('corsia_limit_ci', 30)
 
                 carbon_results['vs_traditional_jet'] = (carbon_intensity_energy / traditional_jet - 1) * 100
                 carbon_results['vs_corsia'] = (carbon_intensity_energy / corsia_limit - 1) * 100
@@ -5979,7 +5912,7 @@ class NaturalGasSupplyChainOptimizer:
 
         # 投资成本类别
         investment_fields = ['facility_investment_cost', 'electrolyzer_investment_cost',
-                           'transport_equipment_cost', 'storage_equipment_cost',
+                           'storage_equipment_cost',
                            'h2_storage_investment', 'hydrogen_transport_investment',
                            'ng_transport_investment', 'hydrogen_pipeline_investment']
 
@@ -7374,7 +7307,7 @@ class NaturalGasSupplyChainOptimizer:
         #         ng_demand <= max_flow_m3_per_hour,
         #         name=f"ng_supply_{location}_{hour}"
         #     )
-        logger.info(f"天然气供应约束已移除，{location}在{hour}小时无流量限制")
+        logger.debug(f"天然气供应约束已移除，{location}在{hour}小时无流量限制")
 
     def _add_ng_pipeline_daily_capacity_constraints(self):
         """添加天然气管段日最大购入量约束（使用预处理的容量数据）"""

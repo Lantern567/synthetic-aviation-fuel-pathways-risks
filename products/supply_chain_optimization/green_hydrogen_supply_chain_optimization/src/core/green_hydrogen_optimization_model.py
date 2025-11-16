@@ -390,35 +390,37 @@ def get_project_base_dir():
     return project_root
 
 
-# 在模块加载时挂载日志文件输出（仅作用于logging，不捕获print）
-try:
-    _base_dir = get_project_base_dir()
-    _process_tag = os.environ.get("GH_SUPPLY_CHAIN_PROCESS", "").strip()
-
-    _log_dir_parts = [
-        _base_dir,
-        "products",
-        "supply_chain_optimization",
-        "green_hydrogen_supply_chain_optimization",
-        "results",
-        "logs",
-    ]
-
-    if _process_tag:
-        _log_dir_parts.append(_process_tag)
-
-    _log_dir = os.path.join(*_log_dir_parts)
-
-    _filename_prefix = "green_h2_supply_chain"
-    if _process_tag:
-        _safe_tag = _process_tag.replace(os.sep, "_").replace(" ", "_")
-        _filename_prefix = f"{_filename_prefix}_{_safe_tag}"
-
-    mount_file_logging(_log_dir, filename_prefix=_filename_prefix)
-except Exception as e:
-    # 如果文件日志挂载失败，输出警告但不中断程序
-    print(f"警告：文件日志挂载失败: {e}")
-    print("将继续使用控制台日志")
+# ===== 模块级日志初始化已移至 __init__ 方法中 =====
+# 原因: 模块 import 时环境变量可能未设置，导致日志路径错误
+# 现在日志根据 process_mode 参数在实例化时动态设置
+# try:
+#     _base_dir = get_project_base_dir()
+#     _process_tag = os.environ.get("GH_SUPPLY_CHAIN_PROCESS", "").strip()
+#
+#     _log_dir_parts = [
+#         _base_dir,
+#         "products",
+#         "supply_chain_optimization",
+#         "green_hydrogen_supply_chain_optimization",
+#         "results",
+#         "logs",
+#     ]
+#
+#     if _process_tag:
+#         _log_dir_parts.append(_process_tag)
+#
+#     _log_dir = os.path.join(*_log_dir_parts)
+#
+#     _filename_prefix = "green_h2_supply_chain"
+#     if _process_tag:
+#         _safe_tag = _process_tag.replace(os.sep, "_").replace(" ", "_")
+#         _filename_prefix = f"{_filename_prefix}_{_safe_tag}"
+#
+#     mount_file_logging(_log_dir, filename_prefix=_filename_prefix)
+# except Exception as e:
+#     # 如果文件日志挂载失败，输出警告但不中断程序
+#     print(f"警告：文件日志挂载失败: {e}")
+#     print("将继续使用控制台日志")
 
 class GreenHydrogenSupplyChainOptimizer:
     """
@@ -562,39 +564,64 @@ class GreenHydrogenSupplyChainOptimizer:
                 return os.path.join(project_root, fallback_path) if not os.path.isabs(fallback_path) else fallback_path
             raise
     
+    def _get_results_dir(self) -> str:
+        """
+        根据工艺模式获取结果保存目录
+
+        Returns:
+            结果保存目录路径
+
+        Notes:
+            - one_step模式: results/one_step/
+            - two_step模式: results/two_step/
+            - 自动创建目录（如果不存在）
+        """
+        # 获取基础结果目录
+        base_dir = self._get_data_path('output_paths.results_base_dir',
+                                      'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results')
+
+        # 根据工艺模式创建子目录
+        results_dir = os.path.join(base_dir, self.process_mode)
+
+        # 确保目录存在
+        os.makedirs(results_dir, exist_ok=True)
+
+        logger.debug(f"结果保存目录: {results_dir}")
+        return results_dir
+
     def _get_output_path(self, file_type: str, timestamp: str = None) -> str:
         """
         获取结果输出文件的完整路径
-        
+
         Args:
             file_type: 文件类型（如'optimization_summary'）
             timestamp: 时间戳，如果为None则生成当前时间戳
-            
+
         Returns:
             完整的输出文件路径
         """
         if timestamp is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
+
         try:
-            # 获取结果基础目录
-            results_dir = self._get_data_path('output_paths.results_base_dir', 
-                                            'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results')
-            
+            # 获取工艺模式对应的结果目录
+            results_dir = self._get_results_dir()
+
             # 获取文件名模板
             file_templates = self.config.get('data_paths', {}).get('output_paths', {}).get('file_templates', {})
             template = file_templates.get(file_type, f"{file_type}_{timestamp}.csv")
-            
+
             # 格式化文件名
             filename = template.format(timestamp=timestamp)
-            
+
             return os.path.join(results_dir, filename)
         except Exception as e:
             logger.error(f"获取输出路径失败: {e}")
             # 使用默认路径
             project_root = get_project_base_dir()
-            results_dir = os.path.join(project_root, "products", "supply_chain_optimization", 
-                                     "green_hydrogen_supply_chain_optimization", "results")
+            results_dir = os.path.join(project_root, "products", "supply_chain_optimization",
+                                     "green_hydrogen_supply_chain_optimization", "results", self.process_mode)
+            os.makedirs(results_dir, exist_ok=True)
             return os.path.join(results_dir, f"{file_type}_{timestamp}.csv")
 
     def _load_config(self, config_path: str = None, override_params: dict = None) -> dict:
@@ -710,7 +737,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         logger.info("=" * 60)
 
-    def __init__(self, config_path: str = None, **override_params):
+    def __init__(self, config_path: str = None, process_mode: str = 'one_step', **override_params):
         """
         初始化绿氢+CO₂制SAF供应链优化器
 
@@ -719,7 +746,19 @@ class GreenHydrogenSupplyChainOptimizer:
 
         Args:
             config_path (str, optional): YAML配置文件路径。
-                默认: shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+                默认: 根据process_mode自动选择
+                    - one_step: shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml
+                    - two_step: shared/data/GreenHydrogenSupplyChainOptimizer_config_two_step.yaml
+
+            process_mode (str, optional): 工艺模式选择，默认'one_step'
+                - 'one_step': 一步法工艺 (H₂+CO₂→RWGS→FT合成→SAF)
+                  * H₂消耗: 0.45 kg/kg SAF
+                  * CO₂消耗: 3.2 kg/kg SAF
+                  * Variable CAPEX: 160,000 元/(kg/h)
+                - 'two_step': 两步法工艺 (H₂+CO₂→甲醇→MtO/MtJ→SAF)
+                  * H₂消耗: 0.7 kg/kg SAF
+                  * CO₂消耗: 3.5 kg/kg SAF
+                  * Variable CAPEX: 240,000 元/(kg/h)
 
             **override_params: 关键字参数覆盖配置文件参数。
                 常用覆盖参数:
@@ -733,6 +772,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
         Attributes (初始化后可用):
             config (dict): 完整配置字典
+            process_mode (str): 当前使用的工艺模式
             time_horizon_weeks (int): 优化时间范围(周)
             hours_per_week (int): 每周小时数(168)
             total_hours (int): 总小时数
@@ -741,16 +781,20 @@ class GreenHydrogenSupplyChainOptimizer:
             distance_calculator: 距离计算器
 
         示例:
-            # 使用默认配置
+            # 使用默认配置（一步法）
             optimizer = GreenHydrogenSupplyChainOptimizer()
+
+            # 使用两步法工艺
+            optimizer = GreenHydrogenSupplyChainOptimizer(process_mode='two_step')
 
             # 自定义时间范围和关闭GraphHopper
             optimizer = GreenHydrogenSupplyChainOptimizer(
+                process_mode='one_step',
                 time_horizon_weeks=4,
                 use_graphhopper_routing=False
             )
 
-            # 使用自定义配置文件
+            # 使用自定义配置文件（会覆盖process_mode的自动选择）
             optimizer = GreenHydrogenSupplyChainOptimizer(
                 config_path="/path/to/custom_config.yaml",
                 solver_time_limit=7200,
@@ -761,6 +805,7 @@ class GreenHydrogenSupplyChainOptimizer:
             FileNotFoundError: 配置文件不存在
             yaml.YAMLError: 配置文件格式错误
             KeyError: 配置文件缺少必需的参数
+            ValueError: process_mode不是'one_step'或'two_step'
 
         后续步骤:
             1. 调用load_data_from_excel()加载机场数据和可再生能源数据
@@ -768,9 +813,48 @@ class GreenHydrogenSupplyChainOptimizer:
             3. 模型自动构建完成后，调用optimize()求解
             4. 调用get_optimization_results()获取结果
         """
+        # 验证process_mode参数
+        if process_mode not in ['one_step', 'two_step']:
+            raise ValueError(f"Invalid process_mode: {process_mode}. Must be 'one_step' or 'two_step'")
+
+        # 存储工艺模式
+        self.process_mode = process_mode
+
+        # 立即挂载日志到对应的 process_mode 目录（在任何日志输出之前）
+        try:
+            import os  # 需要在此处导入，因为后面的代码中也有 import os
+            log_dir = os.path.join(
+                get_project_base_dir(),
+                "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/logs",
+                self.process_mode
+            )
+            filename_prefix = f"green_h2_supply_chain_{self.process_mode}"
+            from shared.utils.log_preserver import mount_file_logging
+            mount_file_logging(log_dir, filename_prefix=filename_prefix)
+            logger.info(f"📝 日志已挂载: {log_dir}/{filename_prefix}_{{date}}.log")
+        except Exception as e:
+            logger.warning(f"⚠️  日志挂载失败: {e}，将使用默认日志")
+
+        # 根据工艺模式自动选择配置文件（如果未指定config_path）
+        if config_path is None:
+            if process_mode == 'two_step':
+                config_path = 'shared/data/GreenHydrogenSupplyChainOptimizer_config_two_step.yaml'
+            else:
+                config_path = 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml'
+
         # 加载配置文件
         self.config = self._load_config(config_path, override_params)
-        
+
+        # 记录工艺模式和配置文件
+        logger.info("=" * 80)
+        logger.info(f"🔧 工艺模式: {process_mode.upper()}")
+        logger.info(f"📄 配置文件: {config_path}")
+        if process_mode == 'one_step':
+            logger.info(f"   H₂消耗: 0.45 kg/kg SAF | CO₂消耗: 3.2 kg/kg SAF | CAPEX: 160,000 元/(kg/h)")
+        else:
+            logger.info(f"   H₂消耗: 0.7 kg/kg SAF | CO₂消耗: 3.5 kg/kg SAF | CAPEX: 240,000 元/(kg/h)")
+        logger.info("=" * 80)
+
         # 从配置中获取基础参数
         basic_params = self.config['basic_parameters']
         self.time_horizon_weeks = basic_params['time_horizon_weeks']
@@ -2002,7 +2086,7 @@ class GreenHydrogenSupplyChainOptimizer:
                     'efficiency': tech_info['efficiency'],
                     'h2_consumption_ratio': tech_info['h2_consumption_ratio'],
                     'co2_consumption_ratio': tech_info.get('co2_consumption_ratio', 2.75),  # H₂+CO₂→甲醇的CO₂消耗比
-                    'methanol_intermediate_ratio': tech_info.get('methanol_intermediate_ratio', 3.125),  # H₂→甲醇的中间产物比
+                    'methanol_intermediate_ratio': tech_info.get('methanol_intermediate_ratio', 1.5625),  # H₂→甲醇的中间产物比（修正为3.125/2以匹配0.45的H2消耗比）
                     'methanol_to_saf_ratio': tech_info.get('methanol_to_saf_ratio', 0.64),  # 甲醇→SAF的转化率
                     'suitable_locations': tech_info['suitable_locations'],
                     'transport_mode': tech_info['transport_mode'],
@@ -2445,13 +2529,27 @@ class GreenHydrogenSupplyChainOptimizer:
     def build_model(self):
         """构建优化模型"""
         logger.info("构建Gurobi优化模型...")
-        
+
         self.model = gp.Model("NaturalGasSupplyChain")
         # 从配置文件加载求解器参数
         solver_params = self.config['solver_parameters']
-        self.model.setParam('TimeLimit', solver_params['TimeLimit'])
-        self.model.setParam('MIPGap', solver_params['MIPGap'])
-        self.model.setParam('Threads', solver_params['Threads'])
+
+        # 确保参数类型正确（YAML可能将科学计数法解析为字符串）
+        time_limit = solver_params['TimeLimit']
+        if isinstance(time_limit, str):
+            time_limit = float(time_limit)
+
+        mip_gap = solver_params['MIPGap']
+        if isinstance(mip_gap, str):
+            mip_gap = float(mip_gap)
+
+        threads = solver_params['Threads']
+        if isinstance(threads, str):
+            threads = int(threads)
+
+        self.model.setParam('TimeLimit', time_limit)
+        self.model.setParam('MIPGap', mip_gap)
+        self.model.setParam('Threads', threads)
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
@@ -3147,18 +3245,22 @@ class GreenHydrogenSupplyChainOptimizer:
             if location in self.electrolyzer_capacity_vars
         )
 
-        # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
+        # 7. 制氢运营成本（20年生命周期现值）- ❌ 已禁用
+        # 移除原因：制氢成本应该已包含在电力成本和设备运营成本中，避免重复计算
+        # 移除日期：2025-11-09
         # 兼容两种参数名：hydrogen_internal_cost_yuan_per_kg 和 h2_production_cost_yuan_per_kg
-        hydrogen_production_unit_cost = float(
-            self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg') or
-            self.config.get('unified_costs', {}).get('production', {}).get('h2_production_cost_yuan_per_kg', 0)
-        )
-        self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
-            self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
-            for location in self.locations
-            for hour in range(self.total_hours)
-            if (location, hour) in self.hydrogen_production_vars
-        )
+        # hydrogen_production_unit_cost = float(
+        #     self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg') or
+        #     self.config.get('unified_costs', {}).get('production', {}).get('h2_production_cost_yuan_per_kg', 0)
+        # )
+        # self.cost_expressions['hydrogen_production_cost'] = gp.quicksum(
+        #     self.hydrogen_production_vars[(location, hour)] * hydrogen_production_unit_cost * lifecycle_operation_factor
+        #     for location in self.locations
+        #     for hour in range(self.total_hours)
+        #     if (location, hour) in self.hydrogen_production_vars
+        # )
+        # 设置为0以保持代码兼容性
+        self.cost_expressions['hydrogen_production_cost'] = 0
 
         # 8. 电力成本（20年生命周期现值）
         # 8.1 电解制氢电力成本（基于实际氢气生产的电力消耗）
@@ -3445,9 +3547,23 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['hydrogen_pipeline_operation'] = gp.LinExpr(0)
 
         # 10. CO₂捕获成本（20年生命周期现值）
-        # 从配置文件读取CO₂捕获成本参数
+        # 从配置文件读取CO₂捕获成本参数（支持两种配置路径）
         co2_capture_cost_cfg = self.config.get('unified_costs', {}).get('co2_capture', {})
-        co2_capture_unit_cost = float(co2_capture_cost_cfg.get('capture_cost_yuan_per_kg', 0.3))  # 元/kg CO₂
+
+        # 优先读取新配置路径 unified_costs.co2_capture.capture_cost_yuan_per_kg
+        if co2_capture_cost_cfg and 'capture_cost_yuan_per_kg' in co2_capture_cost_cfg:
+            co2_capture_unit_cost = float(co2_capture_cost_cfg['capture_cost_yuan_per_kg'])
+            logger.info(f"CO2捕获单位成本（从unified_costs.co2_capture读取）: {co2_capture_unit_cost} 元/kg")
+        else:
+            # 降级：从旧配置路径读取并转换单位
+            co2_cost_per_ton = float(
+                self.config.get('unified_costs', {})
+                .get('raw_materials', {})
+                .get('co2_capture_base_cost_yuan_per_ton', 280)  # 默认280元/吨
+            )
+            co2_capture_unit_cost = co2_cost_per_ton / 1000  # 转换为元/kg
+            logger.info(f"CO2捕获单位成本（从unified_costs.raw_materials读取并转换）: {co2_capture_unit_cost} 元/kg (原始: {co2_cost_per_ton} 元/吨)")
+
 
         # 【修正】CO₂捕获成本 = Σ(SAF产量 × CO₂消耗比 × 捕获单价)
         # 原错误逻辑：基于运输量计算，导致本地生产时捕获成本为0
@@ -3807,7 +3923,6 @@ class GreenHydrogenSupplyChainOptimizer:
         # 投资成本聚合
         self.cost_aggregates['total_investment_cost'] = (
             self.cost_expressions['facility_investment_cost'] +
-            self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
             self.cost_expressions['electrolyzer_investment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
@@ -3822,7 +3937,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['production_cost'] +
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
-            self.cost_expressions['hydrogen_production_cost'] +
+            # self.cost_expressions['hydrogen_production_cost'] +  # ❌ 已禁用 (2025-11-09)
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：SAF合成催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -3856,8 +3971,8 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"电力成本参数: {self.costs['renewable_electricity_cost_yuan_per_mwh']} 元/MWh")
         logger.info(f"电解制氢耗电: {self.costs['electrolysis_power_consumption']} kWh/kg H2")
 
-        # 创建需求满足比例表达式
-        self._create_demand_fulfillment_expression()
+        # 创建性能指标表达式（产量、缺货、需求等）
+        self._create_performance_expressions()
 
         # 创建碳排放表达式（如果启用）
         if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
@@ -4270,8 +4385,28 @@ class GreenHydrogenSupplyChainOptimizer:
             self.carbon_aggregates['total_emissions'] * operation_expansion_factor
         )
 
+        # =========================================================================
+        # 7. 碳强度相关组件表达式
+        # =========================================================================
+        # 注意：由于Gurobi不支持除法表达式，这里仅存储组件表达式
+        # 实际的碳强度值需要在求解后通过getValue()获取分子分母再计算
+
+        # 存储碳强度计算所需的常量参数
+        self.carbon_params['saf_energy_content'] = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)  # MJ/kg
+        self.carbon_params['traditional_jet_ci'] = self.carbon_params.get('benchmarks', {}).get('traditional_jet_fuel', 89)  # g CO2eq/MJ
+        self.carbon_params['corsia_limit_ci'] = self.carbon_params.get('benchmarks', {}).get('corsia_limit', 30)  # g CO2eq/MJ
+
+        # 碳强度分子：总碳排放（已在上面定义）
+        # 碳强度分母：总产量（在performance_expressions中定义）
+        # 实际碳强度计算公式：
+        #   carbon_intensity_kg = total_emissions / production_total  [kg CO2eq/kg SAF]
+        #   carbon_intensity_mj = carbon_intensity_kg * 1000 / saf_energy_content  [g CO2eq/MJ]
+        #   vs_traditional_jet = (carbon_intensity_mj / traditional_jet_ci - 1) * 100  [%]
+        #   vs_corsia = (carbon_intensity_mj / corsia_limit_ci - 1) * 100  [%]
+
         logger.info("碳排放表达式创建完成")
         logger.info(f"包含 {len(self.carbon_expressions)} 个细分项，{len(self.carbon_aggregates)} 个汇总项")
+        logger.info("碳强度计算组件已准备，将在求解后计算具体数值")
 
         # 详细输出各表达式项
         logger.info("[调试] 碳排放表达式详情:")
@@ -4296,54 +4431,81 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
         logger.info("="*60)
 
-    def _create_demand_fulfillment_expression(self):
-        """创建需求满足比例表达式: 1 - (缺货产量 / (缺货产量 + 总产量))"""
-        logger.info("创建需求满足比例表达式...")
+    def _create_performance_expressions(self):
+        """创建性能指标表达式：产量、缺货、需求满足比例等
 
-        # 初始化performance_expressions字典（如果不存在）
+        注意：需求满足比例涉及除法运算，Gurobi不支持非线性表达式，
+        因此存储分子和分母表达式，在求解后计算比例值。
+        """
+        logger.info("创建性能指标表达式...")
+
+        # 初始化performance_expressions字典
         if not hasattr(self, 'performance_expressions'):
             self.performance_expressions = {}
 
-        # 创建总生产量表达式（如果还不存在）
-        if not hasattr(self, 'production_total_expr'):
-            self.production_total_expr = gp.quicksum(
-                var for var in self.production_vars.values()
-            )
-            logger.info(f"[调试] 创建总生产量表达式，包含 {len(self.production_vars)} 个生产变量")
+        # 1. 总生产量表达式
+        self.performance_expressions['production_total'] = gp.quicksum(
+            var for var in self.production_vars.values()
+        )
+        logger.info(f"[调试] 创建总生产量表达式，包含 {len(self.production_vars)} 个生产变量")
 
-        # 计算缺货产量总和
+        # 2. 缺货产量总和
         if hasattr(self, 'shortage_vars') and self.shortage_vars:
-            shortage_total_expr = gp.quicksum(self.shortage_vars.values())
+            self.performance_expressions['shortage_total'] = gp.quicksum(self.shortage_vars.values())
             logger.info(f"[调试] 创建缺货产量表达式，包含 {len(self.shortage_vars)} 个缺货变量")
         else:
-            shortage_total_expr = gp.LinExpr(0)
+            self.performance_expressions['shortage_total'] = gp.LinExpr(0)
             logger.info("[调试] 未找到缺货变量，缺货产量设为0")
 
-        # 计算总需求量（总产量 + 缺货产量）
-        total_demand_expr = self.production_total_expr + shortage_total_expr
+        # 3. 总需求量（总产量 + 缺货产量）
+        self.performance_expressions['total_demand'] = (
+            self.performance_expressions['production_total'] +
+            self.performance_expressions['shortage_total']
+        )
 
-        # 计算需求满足比例：1 - (缺货产量 / (缺货产量 + 总产量))
-        # 当总需求为0时，需求满足比例定义为1.0（100%满足）
-        try:
-            # 由于Gurobi不支持直接的条件表达式，我们需要在求解后再计算具体数值
-            # 这里存储表达式组件供后续计算
-            self.performance_expressions['shortage_total'] = shortage_total_expr
-            self.performance_expressions['production_total'] = self.production_total_expr
-            self.performance_expressions['total_demand'] = total_demand_expr
+        # 4. 氢气总产量
+        if hasattr(self, 'hydrogen_production_vars') and self.hydrogen_production_vars:
+            self.performance_expressions['hydrogen_total_production'] = gp.quicksum(
+                self.hydrogen_production_vars.values()
+            )
+            logger.info(f"[调试] 创建氢气总产量表达式，包含 {len(self.hydrogen_production_vars)} 个变量")
+        else:
+            self.performance_expressions['hydrogen_total_production'] = gp.LinExpr(0)
 
-            logger.info("[调试] 需求满足比例表达式组件创建完成")
-            logger.info("[调试] - shortage_total: 缺货产量总和")
-            logger.info("[调试] - production_total: 总产量")
-            logger.info("[调试] - total_demand: 总需求量 = 总产量 + 缺货产量")
+        # 5. 甲醇总产量（如果有）
+        if hasattr(self, 'methanol_production_vars') and self.methanol_production_vars:
+            self.performance_expressions['methanol_total_production'] = gp.quicksum(
+                self.methanol_production_vars.values()
+            )
+            logger.info(f"[调试] 创建甲醇总产量表达式，包含 {len(self.methanol_production_vars)} 个变量")
+        else:
+            self.performance_expressions['methanol_total_production'] = gp.LinExpr(0)
 
-        except Exception as e:
-            logger.error(f"创建需求满足比例表达式时出错: {e}")
-            # 设置默认值
-            self.performance_expressions['shortage_total'] = gp.LinExpr(0)
-            self.performance_expressions['production_total'] = gp.LinExpr(0)
-            self.performance_expressions['total_demand'] = gp.LinExpr(0)
+        # 6. 设施数量
+        if hasattr(self, 'facility_vars') and self.facility_vars:
+            self.performance_expressions['facilities_count'] = gp.quicksum(
+                self.facility_vars.values()
+            )
+        else:
+            self.performance_expressions['facilities_count'] = gp.LinExpr(0)
 
-        logger.info("需求满足比例表达式创建完成")
+        # 7. 氢气设施数量
+        if hasattr(self, 'electrolyzer_facility_vars') and self.electrolyzer_facility_vars:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.quicksum(
+                self.electrolyzer_facility_vars.values()
+            )
+        else:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.LinExpr(0)
+
+        logger.info("性能指标表达式创建完成")
+        logger.info(f"包含 {len(self.performance_expressions)} 个性能表达式")
+        logger.info("  - production_total: SAF总产量")
+        logger.info("  - shortage_total: 缺货总量")
+        logger.info("  - total_demand: 总需求量")
+        logger.info("  - hydrogen_total_production: 氢气总产量")
+        logger.info("  - methanol_total_production: 甲醇总产量")
+        logger.info("  - facilities_count: MTJ设施数量")
+        logger.info("  - hydrogen_facilities_count: 氢气设施数量")
 
     def _add_time_scale_matching_constraints(self):
         """【已禁用】累积平衡约束与逐小时库存平衡约束冗余
@@ -4833,13 +4995,14 @@ class GreenHydrogenSupplyChainOptimizer:
                         h2_inflow = h2_inflow_total
                         logger.debug(f"[调试][MTJ库存] {location}: 在第0h入库氢气")
 
-                    # MTJ消耗：甲醇生产消耗的氢气
-                    # methanol_prod (kg methanol/hour) * (kg SAF / kg methanol) * (kg H₂ / kg SAF)
+                    # MTJ消耗：SAF生产消耗的氢气（两步法：H₂+CO₂→甲醇→SAF）
+                    # 修正：直接用SAF产量计算H2消耗，而不是通过methanol_production_vars
                     h2_consumption = gp.LinExpr(0)
-                    if (location, hour) in self.methanol_production_vars:
-                        methanol_prod = self.methanol_production_vars[(location, hour)]
-                        if h2_consumption_ratio > 0 and methanol_intermediate_ratio > 0:
-                            h2_consumption = methanol_prod * (1.0 / methanol_intermediate_ratio) * h2_consumption_ratio
+                    # 查找该位置的SAF产量
+                    for tech_name in self.technologies.keys():
+                        if 'green_h2_co2' in tech_name and (location, tech_name, hour) in self.production_vars:
+                            saf_prod = self.production_vars[(location, tech_name, hour)]
+                            h2_consumption += saf_prod * h2_consumption_ratio
 
                     # 库存平衡方程：当前库存 = 上期库存 + 管道入库 - 甲醇生产消耗
                     self.model.addConstr(
@@ -5551,6 +5714,10 @@ class GreenHydrogenSupplyChainOptimizer:
         Raises:
             RuntimeError: 如果聚类结果未初始化
         """
+        # 如果起点和终点相同（在同一地点生产），运输距离为0
+        if h2_loc == mtj_loc:
+            return 0.0
+
         if not hasattr(self, 'clustering_results') or self.clustering_results is None:
             raise RuntimeError(
                 f"聚类结果未初始化，无法计算氢气管道距离。\n"
@@ -6681,9 +6848,12 @@ class GreenHydrogenSupplyChainOptimizer:
             return {}
     
     def calculate_carbon_emissions(self, solution: Dict) -> Dict:
-        """计算碳排放结果（基于优化求解后的变量值）"""
+        """计算碳排放结果（基于优化求解后的变量值）
+
+        注意：所有碳排放表达式已在模型内部创建，此函数仅负责从表达式获取数值并计算衍生指标
+        """
         logger.info("="*80)
-        logger.info("计算碳排放结果...")
+        logger.info("从模型表达式获取碳排放结果...")
         logger.info("="*80)
 
         carbon_results = {}
@@ -6697,44 +6867,41 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"[调试] 碳排放汇总项数量: {len(self.carbon_aggregates)}")
 
         try:
-            # 1. 计算各细分项碳排放（kg CO2eq）
+            # 1. 从表达式获取各细分项碳排放（kg CO2eq）
             carbon_results['detailed'] = {}
             for name, expr in self.carbon_expressions.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['detailed'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 2. 计算各阶段汇总碳排放
+            # 2. 从表达式获取各阶段汇总碳排放
             carbon_results['by_stage'] = {}
             for name, expr in self.carbon_aggregates.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['by_stage'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 3. 计算总生产量（kg SAF）
-            total_production = sum(
-                var.x for var in self.production_vars.values()
-                if hasattr(var, 'x')
-            )
+            # 3. 从性能表达式获取总生产量（kg SAF）
+            total_production = self.performance_expressions['production_total'].getValue()
             carbon_results['total_production_kg'] = total_production
 
-            # 4. 计算碳强度
+            # 4. 计算碳强度（基于模型内部已准备的参数）
             if total_production > 0:
+                # 获取总碳排放
                 total_emissions = carbon_results['by_stage'].get('total_emissions', 0)
 
                 # 质量碳强度 (kg CO2eq/kg SAF)
                 carbon_intensity_mass = total_emissions / total_production
                 carbon_results['carbon_intensity_kg'] = carbon_intensity_mass
 
-                # 能量碳强度 (g CO2eq/MJ)
-                saf_energy_content = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)
+                # 能量碳强度 (g CO2eq/MJ) - 使用模型内部准备的参数
+                saf_energy_content = self.carbon_params.get('saf_energy_content', 43.15)
                 carbon_intensity_energy = carbon_intensity_mass * 1000 / saf_energy_content
                 carbon_results['carbon_intensity_mj'] = carbon_intensity_energy
 
-                # 与基准比较
-                benchmarks = self.carbon_params.get('benchmarks', {})
-                traditional_jet = benchmarks.get('traditional_jet_fuel', 89)
-                corsia_limit = benchmarks.get('corsia_limit', 30)
+                # 与基准比较 - 使用模型内部准备的参数
+                traditional_jet = self.carbon_params.get('traditional_jet_ci', 89)
+                corsia_limit = self.carbon_params.get('corsia_limit_ci', 30)
 
                 carbon_results['vs_traditional_jet'] = (carbon_intensity_energy / traditional_jet - 1) * 100
                 carbon_results['vs_corsia'] = (carbon_intensity_energy / corsia_limit - 1) * 100
@@ -6751,7 +6918,8 @@ class GreenHydrogenSupplyChainOptimizer:
             if total_emissions > 0:
                 carbon_results['stage_contributions'] = {}
                 for stage in ['raw_material_emissions', 'facility_emissions',
-                             'production_emissions', 'storage_emissions', 'transport_emissions']:
+                             'production_emissions', 'storage_emissions', 'transport_emissions',
+                             'co2_utilization_credit']:  # 新增：包含CO₂固定负排放
                     if stage in carbon_results['by_stage']:
                         value = carbon_results['by_stage'][stage]
                         percentage = (value / total_emissions) * 100
@@ -6829,7 +6997,8 @@ class GreenHydrogenSupplyChainOptimizer:
                 'facility_emissions': '设施建设',
                 'production_emissions': '生产过程',
                 'storage_emissions': '储存处理',
-                'transport_emissions': '运输配送'
+                'transport_emissions': '运输配送',
+                'co2_utilization_credit': 'CO₂固定负排放'  # 新增：CO₂固定在SAF中的负排放
             }
 
             contributions = carbon_results.get('stage_contributions', {})
@@ -6850,11 +7019,13 @@ class GreenHydrogenSupplyChainOptimizer:
                 'saf_facility': 'SAF工厂建设',
                 'electrolyzer_facility': '电解槽建设',
                 'methanol_to_saf': '甲醇制SAF',
+                'saf_synthesis_energy': 'SAF合成工艺能耗',  # 新增：明确列出SAF合成能耗
                 'h2_production': '氢气生产',
                 'mtj_storage': 'MTJ储存',
                 'h2_storage': '氢气储存',
                 'h2_transport': '氢气运输',
-                'mtj_transport': 'MTJ运输'
+                'mtj_transport': 'MTJ运输',
+                'co2_utilization_credit': 'CO₂固定负排放'  # 新增：CO₂固定在SAF中的负排放
             }
 
             for key, name in detail_mapping.items():
@@ -6991,12 +7162,13 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 投资成本类别
         investment_fields = ['facility_investment_cost', 'electrolyzer_investment_cost',
-                           'transport_equipment_cost', 'storage_equipment_cost',
+                           'storage_equipment_cost',
                            'h2_storage_investment', 'hydrogen_transport_investment',
                            'hydrogen_pipeline_investment']
 
         # 运营成本类别（【禁用罐车运输】移除hydrogen_transport_operation）
-        operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
+        operation_fields = ['facility_operation_cost', 'production_cost',
+                          # 'hydrogen_production_cost',  # ❌ 已禁用 (2025-11-09) - 避免与电力成本重复计算
                           # 'hydrogen_transport_operation',  # 【禁用罐车运输】
                           'hydrogen_pipeline_operation',
                           'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',
@@ -8003,12 +8175,14 @@ class GreenHydrogenSupplyChainOptimizer:
                 )
 
                 # 周内CO₂消耗量（小时级消耗累加）
-                weekly_consumption = gp.quicksum(
-                    self.methanol_production_vars[(methanol_loc, h)] *
-                    (1.0 / methanol_intermediate_ratio) * co2_consumption_ratio
-                    for h in range(week_start_hour, min(week_end_hour, self.total_hours))
-                    if (methanol_loc, h) in self.methanol_production_vars
-                )
+                # 修正：直接用SAF产量计算CO2消耗
+                weekly_consumption = gp.LinExpr(0)
+                for h in range(week_start_hour, min(week_end_hour, self.total_hours)):
+                    # 查找该位置该小时的SAF产量
+                    for tech_name in self.technologies.keys():
+                        if 'green_h2_co2' in tech_name and (methanol_loc, tech_name, h) in self.production_vars:
+                            saf_prod = self.production_vars[(methanol_loc, tech_name, h)]
+                            weekly_consumption += saf_prod * co2_consumption_ratio
 
                 # CO₂供应平衡约束：周运输量 >= 周库存增量 + 周内消耗量
                 # 【修复】改为 >= 以解决"同一变量被多周等式约束"的不可行问题

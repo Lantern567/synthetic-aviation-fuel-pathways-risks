@@ -2102,7 +2102,6 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         # 投资成本聚合
         self.cost_aggregates['total_investment_cost'] = (
             self.cost_expressions['facility_investment_cost'] +
-            self.cost_expressions['transport_equipment_cost'] +
             self.cost_expressions['storage_equipment_cost'] +
             self.cost_expressions['h2_storage_investment'] +
             self.cost_expressions['ft_reactor_investment_cost'] +
@@ -2144,8 +2143,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info(f"FT反应器运营成本: {ft_reactor_opex_annual} 元/年")
         # FT生产成本详见上方催化剂成本和能源成本的logger输出（行1958-1959）
 
-        # 创建需求满足比例表达式
-        self._create_demand_fulfillment_expression()
+        # 创建性能指标表达式
+        self._create_performance_expressions()
 
         # 创建碳排放表达式（如果启用）
         if self.carbon_params.get('calculation_control', {}).get('enable_carbon_tracking', True):
@@ -2378,6 +2377,28 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             self.carbon_aggregates['total_emissions'] * operation_expansion_factor
         )
 
+        # =========================================================================
+        # 7. 碳强度计算组件 (Carbon Intensity Components)
+        # =========================================================================
+        # 碳强度涉及除法运算（总碳排放 / 总产量），Gurobi不支持非线性表达式
+        # 因此这里存储碳强度计算所需的常量参数，实际碳强度在求解后计算
+
+        # 存储碳强度计算所需的常量参数
+        self.carbon_params['saf_energy_content'] = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)  # MJ/kg
+        self.carbon_params['traditional_jet_ci'] = self.carbon_params.get('benchmarks', {}).get('traditional_jet_fuel', 89)  # g CO2eq/MJ
+        self.carbon_params['corsia_limit_ci'] = self.carbon_params.get('benchmarks', {}).get('corsia_limit', 30)  # g CO2eq/MJ
+
+        # 碳强度分子：总碳排放（已在上面定义）
+        # 碳强度分母：总产量（在performance_expressions中定义）
+        # 实际碳强度计算公式：
+        #   carbon_intensity_kg = total_emissions / production_total  [kg CO2eq/kg SAF]
+        #   carbon_intensity_mj = carbon_intensity_kg * 1000 / saf_energy_content  [g CO2eq/MJ]
+
+        logger.info("碳强度计算组件准备完成")
+        logger.info(f"  SAF能量含量: {self.carbon_params['saf_energy_content']} MJ/kg")
+        logger.info(f"  传统航油碳强度基准: {self.carbon_params['traditional_jet_ci']} g CO2eq/MJ")
+        logger.info(f"  CORSIA碳强度限值: {self.carbon_params['corsia_limit_ci']} g CO2eq/MJ")
+
         logger.info("碳排放表达式创建完成")
         logger.info(f"包含 {len(self.carbon_expressions)} 个细分项，{len(self.carbon_aggregates)} 个汇总项")
 
@@ -2397,61 +2418,75 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info("="*60)
         logger.info("时间尺度一致性验证:")
         logger.info("  原料获取: 按天计算(ng_transport_vars)")
-        logger.info("  设施建设: 年产能摊销到优化时段")
+        logger.info("  设施建设碳排放: 按使用寿命年化后，再按优化时段比例摊销")
+        logger.info("  设施产能: 决策变量(kg/h)，通过产能约束限制小时生产量")
         logger.info("  生产过程: 按小时计算(production_vars) - FT一步法")
         logger.info("  储存处理: 按小时计算(storage_vars) - FT一步法")
-        logger.info("  运输配送: MTJ按周, NG按天")
+        logger.info("  运输配送: SAF按周, NG按天")
         logger.info("  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)")
         logger.info("="*60)
 
-    def _create_demand_fulfillment_expression(self):
-        """创建需求满足比例表达式: 1 - (缺货产量 / (缺货产量 + 总产量))"""
-        logger.info("创建需求满足比例表达式...")
+    def _create_performance_expressions(self):
+        """创建性能指标表达式：产量、缺货、需求满足比例等
 
-        # 初始化performance_expressions字典（如果不存在）
+        注意：需求满足比例涉及除法运算，Gurobi不支持非线性表达式，
+        因此存储分子和分母表达式，在求解后计算比例值。
+        """
+        logger.info("创建性能指标表达式...")
+
         if not hasattr(self, 'performance_expressions'):
             self.performance_expressions = {}
 
-        # 创建总生产量表达式（如果还不存在）
-        if not hasattr(self, 'production_total_expr'):
-            self.production_total_expr = gp.quicksum(
-                var for var in self.production_vars.values()
-            )
-            logger.info(f"[调试] 创建总生产量表达式，包含 {len(self.production_vars)} 个生产变量")
+        # 1. 总生产量表达式
+        self.performance_expressions['production_total'] = gp.quicksum(
+            var for var in self.production_vars.values()
+        )
 
-        # 计算缺货产量总和
+        # 2. 缺货总量表达式
         if hasattr(self, 'shortage_vars') and self.shortage_vars:
-            shortage_total_expr = gp.quicksum(self.shortage_vars.values())
-            logger.info(f"[调试] 创建缺货产量表达式，包含 {len(self.shortage_vars)} 个缺货变量")
+            self.performance_expressions['shortage_total'] = gp.quicksum(
+                self.shortage_vars.values()
+            )
         else:
-            shortage_total_expr = gp.LinExpr(0)
-            logger.info("[调试] 未找到缺货变量，缺货产量设为0")
-
-        # 计算总需求量（总产量 + 缺货产量）
-        total_demand_expr = self.production_total_expr + shortage_total_expr
-
-        # 计算需求满足比例：1 - (缺货产量 / (缺货产量 + 总产量))
-        # 当总需求为0时，需求满足比例定义为1.0（100%满足）
-        try:
-            # 由于Gurobi不支持直接的条件表达式，我们需要在求解后再计算具体数值
-            # 这里存储表达式组件供后续计算
-            self.performance_expressions['shortage_total'] = shortage_total_expr
-            self.performance_expressions['production_total'] = self.production_total_expr
-            self.performance_expressions['total_demand'] = total_demand_expr
-
-            logger.info("[调试] 需求满足比例表达式组件创建完成")
-            logger.info("[调试] - shortage_total: 缺货产量总和")
-            logger.info("[调试] - production_total: 总产量")
-            logger.info("[调试] - total_demand: 总需求量 = 总产量 + 缺货产量")
-
-        except Exception as e:
-            logger.error(f"创建需求满足比例表达式时出错: {e}")
-            # 设置默认值
             self.performance_expressions['shortage_total'] = gp.LinExpr(0)
-            self.performance_expressions['production_total'] = gp.LinExpr(0)
-            self.performance_expressions['total_demand'] = gp.LinExpr(0)
 
-        logger.info("需求满足比例表达式创建完成")
+        # 3. 总需求表达式（总产量 + 缺货产量）
+        self.performance_expressions['total_demand'] = (
+            self.performance_expressions['production_total'] +
+            self.performance_expressions['shortage_total']
+        )
+
+        # 4. 氢气总生产量
+        if hasattr(self, 'hydrogen_production_vars') and self.hydrogen_production_vars:
+            self.performance_expressions['hydrogen_total_production'] = gp.quicksum(
+                self.hydrogen_production_vars.values()
+            )
+        else:
+            self.performance_expressions['hydrogen_total_production'] = gp.LinExpr(0)
+
+        # 5. 甲醇总生产量（一步法不适用，设为0）
+        self.performance_expressions['methanol_total_production'] = gp.LinExpr(0)
+
+        # 6. SAF设施总数
+        if hasattr(self, 'facility_vars') and self.facility_vars:
+            self.performance_expressions['facilities_count'] = gp.quicksum(
+                self.facility_vars.values()
+            )
+        else:
+            self.performance_expressions['facilities_count'] = gp.LinExpr(0)
+
+        # 7. 电解槽设施总数
+        if hasattr(self, 'electrolyzer_facility_vars') and self.electrolyzer_facility_vars:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.quicksum(
+                self.electrolyzer_facility_vars.values()
+            )
+        else:
+            self.performance_expressions['hydrogen_facilities_count'] = gp.LinExpr(0)
+
+        logger.info(f"性能指标表达式创建完成，共 {len(self.performance_expressions)} 个指标")
+        logger.info("[调试] 性能表达式详情:")
+        for name in self.performance_expressions:
+            logger.info(f"  - {name}")
 
     def _add_time_scale_matching_constraints(self):
         """添加改进的时间尺度匹配约束：允许累积生产和库存支持运输"""
@@ -3315,6 +3350,12 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
     
     def _extract_solution(self) -> Dict:
         """从优化结果中提取解决方案"""
+        logger.info("=== 开始提取解决方案 ===")
+        logger.info(f"优化状态: {self.model.status}")
+        logger.info(f"SAF运输变量字典大小: {len(self.saf_transport_vars)}")
+        logger.info(f"天然气运输变量字典大小: {len(self.ng_transport_vars)}")
+        logger.info(f"FT设施变量字典大小: {len(self.ft_facility_vars)}")
+
         solution = {}
         
         # 获取基本优化信息
@@ -3413,10 +3454,29 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                         'longitude': ft_candidate['lon']
                     }
 
-        # 提取SAF运输计划（从FT设施到机场）
+        # 【BUG修复】从facilities字典中提取FT设施信息，用于后续运输提取
+        # 因为ft_facilities可能为空，但facilities中包含了实际建设的FT设施
+        ft_facilities_actual = {}
+        for facility_key, facility_info in solution.get('facilities', {}).items():
+            if facility_info.get('technology') == 'ft_direct_conversion':
+                # 提取location_id（去掉"ft_"或其他前缀）
+                location_id = facility_info.get('location')
+                if location_id:
+                    ft_facilities_actual[location_id] = facility_info
+
+        logger.info(f"\n=== FT设施修复统计 ===")
+        logger.info(f"ft_facilities字典中的设施数: {len(solution.get('ft_facilities', {}))}")
+        logger.info(f"从facilities提取的FT设施数: {len(ft_facilities_actual)}")
+
+        # 【修复】提取SAF运输计划（从FT设施到机场）- 只提取已建设设施的运输
         solution['saf_transport'] = {}
+        saf_transport_count = 0
+        saf_transport_positive = 0
         for (ft_location_id, airport, week), var in self.saf_transport_vars.items():
-            if var.x > 0:
+            saf_transport_count += 1
+            # 【关键修复】只提取实际建设的FT设施的运输路线
+            if var.x > 0 and ft_location_id in ft_facilities_actual:
+                saf_transport_positive += 1
                 transport_key = f"{ft_location_id}_{airport}_{week}"
 
                 # 查找FT设施坐标
@@ -3441,13 +3501,24 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                         'to_latitude': airport_data['latitude'],
                         'to_longitude': airport_data['longitude'],
                         'transport_type': 'SAF',
-                        'transport_mode': 'truck'
+                        'transport_mode': 'truck',
+                        'route_coordinates': []  # 添加空的路径坐标字段
                     }
 
-        # 提取天然气运输计划（从NG源到FT设施）
+        logger.info(f"\n=== SAF运输提取统计 ===")
+        logger.info(f"SAF运输变量总数: {saf_transport_count}")
+        logger.info(f"SAF运输非零变量数: {saf_transport_positive}")
+        logger.info(f"提取的SAF运输记录数: {len(solution['saf_transport'])}")
+
+        # 【修复】提取天然气运输计划（从NG源到FT设施）- 只提取已建设设施的运输
         solution['ng_transport'] = {}
+        ng_transport_count = 0
+        ng_transport_positive = 0
         for (source_id, ft_location_id, day), var in self.ng_transport_vars.items():
-            if var.x > 0:
+            ng_transport_count += 1
+            # 【关键修复】只提取到实际建设的FT设施的运输路线
+            if var.x > 0 and ft_location_id in ft_facilities_actual:
+                ng_transport_positive += 1
                 # 每周汇总天然气运输（从天级聚合）
                 week = day // 7
                 transport_key = f"{source_id}_{ft_location_id}_week_{week}"
@@ -3484,8 +3555,85 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                             'to_latitude': ft_candidate['lat'],
                             'to_longitude': ft_candidate['lon'],
                             'transport_type': 'NG',
-                            'transport_mode': 'truck'
+                            'transport_mode': 'truck',
+                            'route_coordinates': []  # 添加空的路径坐标字段
                         }
+
+        logger.info(f"\n=== 天然气运输提取统计 ===")
+        logger.info(f"天然气运输变量总数: {ng_transport_count}")
+        logger.info(f"天然气运输非零变量数: {ng_transport_positive}")
+        logger.info(f"提取的天然气运输记录数: {len(solution['ng_transport'])}")
+
+        # 提取天然气管道直供信息（增强功能：为管道直供的FT设施创建可视化连线数据）
+        solution['ng_pipeline_direct'] = {}
+        ng_pipeline_direct_count = 0
+        ft_facilities_count = len(ft_facilities_actual)
+
+        logger.info(f"\n=== 天然气管道直供提取统计 ===")
+        logger.info(f"已建设的FT设施总数: {ft_facilities_count}")
+
+        # 【修复】遍历所有建设的FT设施（使用ft_facilities_actual替代空的ft_facilities）
+        for location_id, ft_info in ft_facilities_actual.items():
+            ng_pipeline_direct_count += 1
+            # 查找对应的候选位置信息
+            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == location_id), None)
+
+            if ft_candidate and ft_candidate['source_type'] in ['ng_pipeline', 'lng_terminal']:
+                source_id = ft_candidate['source_id']
+                source_type = ft_candidate['source_type']
+
+                logger.debug(f"  FT设施 {location_id}: source_type={source_type}, source_id={source_id}")
+
+                # 获取源坐标
+                source_coord = None
+                source_name = ""
+                if source_type == 'ng_pipeline' and source_id in self.ng_pipeline_sources:
+                    source_data = self.ng_pipeline_sources[source_id]
+                    source_coord = (source_data['lat'], source_data['lon'])
+                    source_name = f"NG管道_{source_id}"
+                elif source_type == 'lng_terminal' and source_id in self.lng_terminals:
+                    terminal_data = self.lng_terminals[source_id]
+                    source_coord = (terminal_data['lat'], terminal_data['lon'])
+                    source_name = f"LNG接收站_{source_id}"
+
+                if source_coord:
+                    # 计算距离
+                    distance_km = self._calculate_haversine_distance(
+                        source_coord[0], source_coord[1],
+                        ft_candidate['lat'], ft_candidate['lon']
+                    )
+
+                    # 估算日均天然气消耗量（基于设施产能）
+                    # SAF产能(kg/h) × 24h × NG消耗比(m³ NG/kg SAF)
+                    ng_consumption_ratio = self.config.get('production_parameters', {}).get('ng_consumption_ratio_m3_per_kg_saf', 2.3)
+                    daily_ng_consumption_m3 = ft_info.get('capacity_kg_saf_per_hour', 0) * 24 * ng_consumption_ratio
+
+                    pipeline_key = f"pipeline_direct_{source_id}_{location_id}"
+                    solution['ng_pipeline_direct'][pipeline_key] = {
+                        'from_source': source_name,
+                        'to_location': location_id,
+                        'source_type': source_type,
+                        'distance_km': distance_km,
+                        'from_latitude': source_coord[0],
+                        'from_longitude': source_coord[1],
+                        'to_latitude': ft_candidate['lat'],
+                        'to_longitude': ft_candidate['lon'],
+                        'transport_type': 'NG_Pipeline_Direct',
+                        'transport_mode': 'pipeline',
+                        'daily_ng_consumption_m3': daily_ng_consumption_m3,
+                        'capacity_kg_saf_per_hour': ft_info.get('capacity_kg_saf_per_hour', 0),
+                        'route_coordinates': []  # 添加空的路径坐标字段
+                    }
+                else:
+                    logger.warning(f"  FT设施 {location_id} 无法找到源坐标: source_type={source_type}, source_id={source_id}")
+            else:
+                if ft_candidate:
+                    logger.debug(f"  FT设施 {location_id} 不是管道直供类型: source_type={ft_candidate.get('source_type', 'N/A')}")
+                else:
+                    logger.warning(f"  FT设施 {location_id} 在候选位置中未找到")
+
+        logger.info(f"遍历的FT设施数: {ng_pipeline_direct_count}")
+        logger.info(f"提取的管道直供记录数: {len(solution['ng_pipeline_direct'])}")
 
         # 提取库存信息
         solution['inventory'] = {}
@@ -3720,9 +3868,12 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             return 1.0
 
     def calculate_carbon_emissions(self, solution: Dict) -> Dict:
-        """计算碳排放结果（基于优化求解后的变量值）"""
+        """计算碳排放结果（基于优化求解后的变量值）
+
+        注意：所有碳排放表达式已在模型内部创建，此函数仅负责从表达式获取数值并计算衍生指标
+        """
         logger.info("="*80)
-        logger.info("计算碳排放结果...")
+        logger.info("从模型表达式获取碳排放结果...")
         logger.info("="*80)
 
         carbon_results = {}
@@ -3736,28 +3887,25 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info(f"[调试] 碳排放汇总项数量: {len(self.carbon_aggregates)}")
 
         try:
-            # 1. 计算各细分项碳排放（kg CO2eq）
+            # 1. 从表达式获取各细分项碳排放（kg CO2eq）
             carbon_results['detailed'] = {}
             for name, expr in self.carbon_expressions.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['detailed'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 2. 计算各阶段汇总碳排放
+            # 2. 从表达式获取各阶段汇总碳排放
             carbon_results['by_stage'] = {}
             for name, expr in self.carbon_aggregates.items():
                 value = expr.getValue() if hasattr(expr, 'getValue') else 0
                 carbon_results['by_stage'][name] = value
                 logger.info(f"  {name}: {value:.2f} kg CO2eq")
 
-            # 3. 计算总生产量（kg SAF）
-            total_production = sum(
-                var.x for var in self.production_vars.values()
-                if hasattr(var, 'x')
-            )
+            # 3. 从性能表达式获取总生产量（kg SAF）
+            total_production = self.performance_expressions['production_total'].getValue()
             carbon_results['total_production_kg'] = total_production
 
-            # 4. 计算碳强度
+            # 4. 计算碳强度（基于模型内部已准备的参数）
             if total_production > 0:
                 total_emissions = carbon_results['by_stage'].get('total_emissions', 0)
 
@@ -3765,15 +3913,14 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 carbon_intensity_mass = total_emissions / total_production
                 carbon_results['carbon_intensity_kg'] = carbon_intensity_mass
 
-                # 能量碳强度 (g CO2eq/MJ)
-                saf_energy_content = self.carbon_params.get('benchmarks', {}).get('saf_energy_content', 43.15)
+                # 能量碳强度 (g CO2eq/MJ) - 使用模型内部准备的参数
+                saf_energy_content = self.carbon_params.get('saf_energy_content', 43.15)
                 carbon_intensity_energy = carbon_intensity_mass * 1000 / saf_energy_content
                 carbon_results['carbon_intensity_mj'] = carbon_intensity_energy
 
-                # 与基准比较
-                benchmarks = self.carbon_params.get('benchmarks', {})
-                traditional_jet = benchmarks.get('traditional_jet_fuel', 89)
-                corsia_limit = benchmarks.get('corsia_limit', 30)
+                # 与基准比较 - 使用模型内部准备的参数
+                traditional_jet = self.carbon_params.get('traditional_jet_ci', 89)
+                corsia_limit = self.carbon_params.get('corsia_limit_ci', 30)
 
                 carbon_results['vs_traditional_jet'] = (carbon_intensity_energy / traditional_jet - 1) * 100
                 carbon_results['vs_corsia'] = (carbon_intensity_energy / corsia_limit - 1) * 100
@@ -4021,7 +4168,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         # 投资成本类别
         investment_fields = ['facility_investment_cost',
-                           'transport_equipment_cost', 'storage_equipment_cost',
+                           'storage_equipment_cost',
                            'ng_transport_investment']
 
         # 运营成本类别
@@ -4252,36 +4399,36 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         # 保存运输路径汇总表
         all_transport_summary = []
-        
-        # 添加MTJ运输路径
-        for transport_id, info in solution.get("transport_plan", {}).items():
+
+        # 添加SAF运输路径（修复BUG：使用正确的键名'saf_transport'而非'transport_plan'）
+        for transport_id, info in solution.get("saf_transport", {}).items():
             # 序列化路径坐标为JSON字符串
             route_coords_str = json.dumps(info.get("route_coordinates", [])) if info.get("route_coordinates") else "[]"
-            
+
             all_transport_summary.append({
                 "路径ID": transport_id,
                 "起点": info.get("from_location", ""),
                 "终点": info.get("to_airport", ""),
-                "起点类型": "生产设施",
+                "起点类型": "FT设施",
                 "终点类型": "机场",
                 "距离(km)": info.get("distance_km", 0),
                 "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
                 "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
-                "路径坐标": route_coords_str,  # 新增：真实路径坐标
-                "货物类型": "MTJ",
+                "路径坐标": route_coords_str,  # 真实路径坐标
+                "货物类型": "SAF",
                 "运输方式": info.get("transport_mode", "truck"),
-                "周运输量(kg)": info.get("transport_kg", 0),
+                "周运输量(kg)": info.get("transport_kg_saf", 0),
                 "时间单位": "周"
             })
 
-        # 添加天然气运输路径
+        # 添加天然气罐车运输路径（从NG供应源到FT设施）
         for transport_id, info in solution.get("ng_transport", {}).items():
             all_transport_summary.append({
                 "路径ID": transport_id,
-                "起点": info.get("from_location", ""),
+                "起点": info.get("from_source", ""),
                 "终点": info.get("to_location", ""),
-                "起点类型": "天然气管道",
-                "终点类型": "MTJ工厂",
+                "起点类型": "天然气供应源",
+                "终点类型": "FT设施",
                 "距离(km)": info.get("distance_km", 0),
                 "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
                 "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
@@ -4290,7 +4437,34 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 "日运输量(m3)": info.get("transport_m3_ng", 0),
                 "时间单位": "天"
             })
-        
+
+        # 添加天然气管道直供路径（增强功能：为管道直供的FT设施添加可视化连线）
+        for transport_id, info in solution.get("ng_pipeline_direct", {}).items():
+            all_transport_summary.append({
+                "路径ID": transport_id,
+                "起点": info.get("from_source", ""),
+                "终点": info.get("to_location", ""),
+                "起点类型": "天然气管道端点",
+                "终点类型": "FT设施",
+                "距离(km)": info.get("distance_km", 0),
+                "起点坐标": f"({info.get('from_latitude', 0):.4f}, {info.get('from_longitude', 0):.4f})",
+                "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
+                "货物类型": "天然气",
+                "运输方式": "pipeline",
+                "日运输量(m3)": info.get("daily_ng_consumption_m3", 0),
+                "时间单位": "天"
+            })
+
+        # 调试日志：统计运输汇总数据来源
+        saf_count = len(solution.get("saf_transport", {}))
+        ng_count = len(solution.get("ng_transport", {}))
+        pipeline_count = len(solution.get("ng_pipeline_direct", {}))
+        logger.info(f"\n=== 运输汇总CSV生成统计 ===")
+        logger.info(f"SAF运输记录数: {saf_count}")
+        logger.info(f"天然气罐车运输记录数: {ng_count}")
+        logger.info(f"天然气管道直供记录数: {pipeline_count}")
+        logger.info(f"运输汇总总记录数: {len(all_transport_summary)}")
+
         if all_transport_summary:
             transport_summary_df = pd.DataFrame(all_transport_summary)
             transport_summary_path = os.path.join(output_dir, f"transport_summary_{timestamp}.csv")
@@ -4865,7 +5039,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         #         ng_demand <= max_flow_m3_per_hour,
         #         name=f"ng_supply_{location}_{hour}"
         #     )
-        logger.info(f"天然气供应约束已移除，{location}在{hour}小时无流量限制")
+        logger.debug(f"天然气供应约束已移除，{location}在{hour}小时无流量限制")
 
     def _add_ng_pipeline_daily_capacity_constraints(self):
         """添加天然气管段日最大购入量约束（使用预处理的容量数据）"""
@@ -5075,7 +5249,7 @@ if __name__ == '__main__':
 
         optimizer = NaturalGasSupplyChainOptimizerOneStep(
             config_path=config_path,
-            time_horizon_weeks=4,  # 使用4周时间窗口
+            time_horizon_weeks=1,  # 使用1周时间窗口，与两步法保持一致
             osm_pbf_path=osm_file_path
         )
 
