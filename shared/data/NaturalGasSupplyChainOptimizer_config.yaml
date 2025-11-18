@@ -112,10 +112,23 @@ capacity_limits:
   mtj_max_capacity_kg_per_hour: 100000     # MTJ设施最大产能(kg/h) | Max MTJ production capacity (kg/hour)
                                            # 单个MTJ航煤生产设施的最大产能
 
+  mtj_min_capacity_kg_per_hour: 0.01       # MTJ设施最小经济规模(kg/h) | Min economic scale (kg MTJ/hour)
+                                           # 设置为0.01 kg/h，确保建设的MTJ设施必须满足最小产能约束
+                                           # 与其他优化模块保持一致
+
   mtj_min_annual_production_kg: 100        # MTJ设施最小年产量(kg/年) | Min annual SAF production (kg/year)
                                            # 如果建设MTJ设施，必须达到的最小年产量
                                            # 100kg/年，避免建设后几乎不生产（产量接近0）
                                            # 修正日期：2025-11-08 (新增最小规模约束)
+
+  # FT反应器容量限制 - FT Reactor Capacity Limits (用于一步法)
+  ft_reactor_max_capacity_kg_per_hour: 1000000  # FT反应器最大产能(kg/h) | Max FT reactor capacity (kg SAF/hour)
+                                           # 单个FT反应器设施的最大SAF生产能力
+                                           # 设置为100万kg/h，基本不构成实际约束
+
+  ft_reactor_min_capacity_kg_per_hour: 0.01     # FT反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 设置为0.01 kg/h，确保建设的SAF设施必须满足最小产能约束
+                                           # 与其他优化模块保持一致
 
   # MTJ设施容量估算 - MTJ Facility Capacity Estimates by Location Type
   mtj_capacity_estimates:
@@ -845,17 +858,17 @@ technologies:
     efficiency: 0.85                       # 转换效率 | Conversion efficiency
                                            # 整体能量转换效率85%
 
-    ng_consumption_ratio: 1.8              # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg product)
-                                           # 生产1kg MTJ需要1.8m³天然气
-                                           # 修正日期：2025-11-07 (从0.8更新为1.8)
+    ng_consumption_ratio: 0.8              # 天然气消耗比(m³/kg产品) | NG consumption ratio (m³/kg product)
+                                           # 生产1kg MTJ需要0.8m³天然气
+                                           # 修正日期：2025-11-17 (从1.8更正为0.8，与其他E-CRM+TRM技术保持一致)
 
     h2_consumption_ratio: 0.05             # 氢气消耗比(kg/kg产品) | H₂ consumption ratio (kg/kg product)
                                            # 生产1kg MTJ需要0.05kg氢气
                                            # 修正日期：2025-11-07 (从0.12更新为0.05)
 
-    methanol_intermediate_ratio: 2.6       # 甲醇中间体比率 | Methanol intermediate ratio
-                                           # 生产1kg MTJ需要2.6kg甲醇中间体
-                                           # 修正日期：2025-11-07 (从1.2更新为2.6)
+    methanol_intermediate_ratio: 1.2       # 甲醇中间体比率 | Methanol intermediate ratio
+                                           # 生产1kg MTJ需要1.2kg甲醇中间体
+                                           # 修正日期：2025-11-17 (从2.6更正为1.2，与其他E-CRM+TRM技术保持一致)
 
     catalyst_cost_yuan_per_kg_saf: 0.10    # 催化剂成本(元/kg SAF) | Catalyst cost per kg SAF
                                            # MTJ两步法催化剂成本

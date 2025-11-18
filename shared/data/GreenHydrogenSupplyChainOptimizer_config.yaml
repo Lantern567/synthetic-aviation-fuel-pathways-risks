@@ -115,8 +115,9 @@ capacity_limits:
                                            # 单个SAF反应器设施的最大SAF生产能力
                                            # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
-                                           # 暂不设置最小规模约束，由优化器自由决策
+  saf_reactor_min_capacity_kg_per_hour: 0.01    # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 设置为0.01 kg/h，确保建设的SAF设施必须满足最小产能约束
+                                           # 与其他优化模块保持一致
 
   saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
                                            # 如果建设SAF设施，必须达到的最小年产量
@@ -1050,8 +1051,8 @@ solver_parameters:
                                            #   - 中等规模: 3600-7200秒
                                            #   - 大规模问题: 7200-14400秒
 
-  MIPGap: 0.05                             # 混合整数规划求解精度 | MIP optimality gap
-                                           # 0.05 = 5%，允许解与最优解的相对差距
+  MIPGap: 0.01                             # 混合整数规划求解精度 | MIP optimality gap
+                                           # 0.01 = 1%，允许解与最优解的相对差距
                                            # 较小的MIPGap提高精度但增加求解时间
                                            # 调参建议：
                                            #   - 高精度: 0.001-0.005

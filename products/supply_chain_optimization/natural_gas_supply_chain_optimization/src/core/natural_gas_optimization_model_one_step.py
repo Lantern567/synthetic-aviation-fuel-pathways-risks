@@ -152,12 +152,12 @@ try:
         "supply_chain_optimization",
         "natural_gas_supply_chain_optimization",
         "results",
-        "logs",
+        "logs_one_step",  # 一步法专用日志目录
     )
-    mount_file_logging(_log_dir, filename_prefix="ng_supply_chain")
+    mount_file_logging(_log_dir, filename_prefix="ng_supply_chain_one_step")  # 一步法专用前缀
 
-    # 额外添加固定名称的log.txt文件处理器
-    log_txt_path = os.path.join(_log_dir, "log.txt")
+    # 额外添加固定名称的log_one_step.txt文件处理器
+    log_txt_path = os.path.join(_log_dir, "log_one_step.txt")  # 一步法专用日志文件
     log_txt_handler = logging.FileHandler(log_txt_path, mode='a', encoding='utf-8')
     log_txt_handler.setLevel(logging.INFO)
     log_txt_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -167,7 +167,7 @@ try:
     root_logger = logging.getLogger()
     root_logger.addHandler(log_txt_handler)
 
-    logger.info(f"日志文件已配置: 按日期命名的日志 + 固定名称log.txt")
+    logger.info(f"日志文件已配置: 按日期命名的日志 + 固定名称log_one_step.txt (一步法专用)")
     logger.info(f"日志目录: {_log_dir}")
 
 except Exception as e:
@@ -198,8 +198,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         # 调用父类初始化，继承所有基础设施
         super().__init__(config_path, **override_params)
 
-        # FT一步法模型专用属性
-        self.ft_facility_candidates = []  # FT设施候选位置
+        # FT一步法模型：不再使用独立的ft_facility_candidates列表
+        # 所有位置统一存储在self.locations中，通过'is_ft_candidate'标记区分
 
         logger.info("FT一步法优化器初始化完成")
 
@@ -238,7 +238,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         if self.use_graphhopper_routing:
             self._calculate_average_distances()
 
-        logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
+        ft_candidate_count = sum(1 for loc in self.locations.values() if loc.get('is_ft_candidate'))
+        logger.info(f"数据加载完成: {ft_candidate_count}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
     
     def load_data_from_excel(self, airport_excel_path: str = None, renewable_data: pd.DataFrame = None):
         """
@@ -320,7 +321,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         if self.use_graphhopper_routing:
             self._calculate_average_distances()
 
-        logger.info(f"数据加载完成: {len(self.ft_facility_candidates)}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
+        ft_candidate_count = sum(1 for loc in self.locations.values() if loc.get('is_ft_candidate'))
+        logger.info(f"数据加载完成: {ft_candidate_count}个FT设施候选位置, {len(self.airports)}个机场, {len(self.ng_pipeline_sources)}条天然气管段, {len(self.lng_terminals)}个LNG接收站")
 
     def _add_airports_to_locations(self):
         """将机场位置添加到基础locations字典中，使其可以用于决策变量"""
@@ -1483,8 +1485,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         # 为所有FT设施候选位置创建氢气库存变量
         # 注：FT一步法虽然内部产氢，但增加库存变量可追踪氢气流动
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
+        for location_id in self._get_ft_candidate_ids():
             for hour in range(self.total_hours + 1):  # +1 for final inventory
                 var_name = f"h2_storage_{location_id}_{hour}"
                 self.hydrogen_storage_vars[(location_id, hour)] = self.model.addVar(
@@ -1503,9 +1504,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         logger.info(f"FT反应器容量配置: 最小={ft_min_capacity} kg/h, 最大={ft_max_capacity} kg/h")
 
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
-
+        for location_id in self._get_ft_candidate_ids():
             # FT设施建设决策 (二进制)
             facility_var_name = f"ft_facility_{location_id}"
             self.ft_facility_vars[location_id] = self.model.addVar(
@@ -1522,6 +1521,30 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info(f"创建了 {len(self.ft_facility_vars)} 个FT设施建设决策变量")
         logger.info(f"创建了 {len(self.ft_capacity_vars)} 个FT设施产能变量")
 
+        # 【关键修复】关联FT专用变量与通用变量系统
+        # 确保两套变量保持一致：FT专用变量用于成本计算，通用变量用于约束
+        logger.info("添加FT专用变量与通用变量的关联约束...")
+        ft_tech = 'ft_direct_conversion'  # FT一步法的技术类型
+        linked_count = 0
+        for location_id in self._get_ft_candidate_ids():
+            # 关联设施建设决策变量
+            if (location_id, ft_tech) in self.facility_vars:
+                self.model.addConstr(
+                    self.ft_facility_vars[location_id] == self.facility_vars[(location_id, ft_tech)],
+                    name=f"link_ft_facility_{location_id}"
+                )
+                linked_count += 1
+
+            # 关联设施产能变量
+            if (location_id, ft_tech) in self.facility_capacity_vars:
+                self.model.addConstr(
+                    self.ft_capacity_vars[location_id] == self.facility_capacity_vars[(location_id, ft_tech)],
+                    name=f"link_ft_capacity_{location_id}"
+                )
+
+        logger.info(f"已添加 {linked_count} 个FT设施变量关联约束")
+
+
         # 6. 天然气运输决策变量 (从NG供应源到FT设施，罐车运输，天级)
         self.ng_transport_vars = {}  # 天然气运输量 (m³/day)
 
@@ -1531,10 +1554,10 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         total_days = self.total_hours // 24
 
         # 为每个FT设施候选位置创建从其天然气供应源的运输变量
-        for candidate in self.ft_facility_candidates:
-            ft_location_id = candidate['location_id']
-            source_type = candidate['source_type']
-            source_id = candidate['source_id']
+        for ft_location_id in self._get_ft_candidate_ids():
+            ft_location_data = self.locations[ft_location_id]
+            source_type = ft_location_data['source_type']
+            source_id = ft_location_data['source_id']
 
             # 根据供应源类型确定运输需求
             # - ng_pipeline: 需要罐车运输变量（管道端点到FT设施）
@@ -1557,8 +1580,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info("创建SAF运输变量（从FT设施到机场）")
 
         valid_saf_routes = 0
-        for candidate in self.ft_facility_candidates:
-            ft_location_id = candidate['location_id']
+        for ft_location_id in self._get_ft_candidate_ids():
             for airport in self.airports:
                 for week in range(self.time_horizon_weeks):
                     var_name = f"saf_transport_{ft_location_id}_{airport}_{week}"
@@ -1841,16 +1863,16 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             if (location, tech, hour) in self.production_vars
         )
 
-        # 4. 运输运营成本现值
+        # 4. SAF运输运营成本现值（FT一步法：使用saf_transport_vars）
         self.cost_expressions['transport_operation_cost'] = gp.quicksum(
-            self.transport_vars[(location, airport, week)] *
+            self.saf_transport_vars[(ft_location_id, airport, week)] *
             self._calculate_mtj_transport_cost_by_distance(
-                self._calculate_distance(location, airport)
+                self._calculate_distance(ft_location_id, airport)
             ) * lifecycle_operation_factor  # 20年运营成本现值，基于运输理论公式
-            for location in self.locations
+            for ft_location_id in self._get_ft_candidate_ids()
             for airport in self.airports
             for week in range(self.time_horizon_weeks)
-            if (location, airport, week) in self.transport_vars
+            if (ft_location_id, airport, week) in self.saf_transport_vars
         )
 
         # 5. 储存设施投资成本 + 20年运营成本现值
@@ -1894,8 +1916,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         # 5.1. 氢气储存设施投资成本 + 20年运营成本现值
         # 创建辅助变量来捕获各FT设施的最大氢气库存量
         max_h2_storage_by_location = {}
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
+        for location_id in self._get_ft_candidate_ids():
             max_var = self.model.addVar(
                 lb=0, ub=GRB.INFINITY,
                 vtype=GRB.CONTINUOUS,
@@ -2012,23 +2033,23 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 terminal_data = self.lng_terminals[source_id]
                 source_coord = (terminal_data['lat'], terminal_data['lon'])
 
-            # 从FT候选位置中查找目标坐标
-            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+            # 从self.locations中查找FT候选位置的目标坐标
+            if ft_location_id in self.locations:
+                ft_location_data = self.locations[ft_location_id]
+                ft_coord = (ft_location_data['latitude'], ft_location_data['longitude'])
 
-            if source_coord and ft_candidate:
-                ft_coord = (ft_candidate['lat'], ft_candidate['lon'])
+                if source_coord:
+                    # 使用Haversine距离计算（简化版，实际应使用GraphHopper）
+                    distance_km = self._calculate_haversine_distance(
+                        source_coord[0], source_coord[1],
+                        ft_coord[0], ft_coord[1]
+                    )
 
-                # 使用Haversine距离计算（简化版，实际应使用GraphHopper）
-                distance_km = self._calculate_haversine_distance(
-                    source_coord[0], source_coord[1],
-                    ft_coord[0], ft_coord[1]
-                )
+                    # 使用基于距离的天然气运输成本公式
+                    ng_unit_cost = self._calculate_ng_transport_cost_by_distance(distance_km)
 
-                # 使用基于距离的天然气运输成本公式
-                ng_unit_cost = self._calculate_ng_transport_cost_by_distance(distance_km)
-
-                # 累加运输成本
-                ng_transport_operation_expr += transport_var * ng_unit_cost * lifecycle_operation_factor
+                    # 累加运输成本
+                    ng_transport_operation_expr += transport_var * ng_unit_cost * lifecycle_operation_factor
 
         self.cost_expressions['ng_transport_operation'] = ng_transport_operation_expr
 
@@ -2039,21 +2060,22 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         for (ft_location_id, airport, week), transport_var in self.saf_transport_vars.items():
             # 查找FT设施和机场坐标
-            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
-            airport_data = self.airports.get(airport)
+            if ft_location_id in self.locations:
+                ft_location_data = self.locations[ft_location_id]
+                airport_data = self.airports.get(airport)
 
-            if ft_candidate and airport_data:
-                # 计算距离
-                distance_km = self._calculate_haversine_distance(
-                    ft_candidate['lat'], ft_candidate['lon'],
-                    airport_data['latitude'], airport_data['longitude']
-                )
+                if airport_data:
+                    # 计算距离
+                    distance_km = self._calculate_haversine_distance(
+                        ft_location_data['latitude'], ft_location_data['longitude'],
+                        airport_data['latitude'], airport_data['longitude']
+                    )
 
-                # 使用MTJ运输成本公式（SAF运输类似）
-                saf_unit_cost = self._calculate_mtj_transport_cost_by_distance(distance_km)
+                    # 使用MTJ运输成本公式（SAF运输类似）
+                    saf_unit_cost = self._calculate_mtj_transport_cost_by_distance(distance_km)
 
-                # 累加运输成本
-                saf_transport_operation_expr += transport_var * saf_unit_cost * lifecycle_operation_factor
+                    # 累加运输成本
+                    saf_transport_operation_expr += transport_var * saf_unit_cost * lifecycle_operation_factor
 
         self.cost_expressions['saf_transport_operation'] = saf_transport_operation_expr
 
@@ -2689,41 +2711,41 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
     def _add_inventory_balance_constraints(self):
         """添加库存平衡约束
 
-        【与两步法对齐】
-        库存出库按小时平摊：
-        - 周运输量均匀分配到每小时
-        - 库存水平更平滑，避免周中累积、周末骤降
-        - 与两步法保持一致的时间粒度处理
+        【FT一步法】
+        - 针对FT设施的SAF库存
+        - 使用saf_transport_vars而不是transport_vars
+        - 库存出库按小时平摊，与两步法保持一致
         """
-        for location in self.locations:
+        # FT一步法：遍历FT设施位置
+        for ft_location_id in self._get_ft_candidate_ids():
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
-                current_inventory = self.storage_vars[(location, hour + 1)]
-                previous_inventory = self.storage_vars[(location, hour)]
+                current_inventory = self.storage_vars[(ft_location_id, hour + 1)]
+                previous_inventory = self.storage_vars[(ft_location_id, hour)]
 
-                # 当前小时总生产
+                # 当前小时FT设施的SAF生产
                 production = gp.quicksum(
-                    self.production_vars[(location, tech, hour)]
+                    self.production_vars[(ft_location_id, tech, hour)]
                     for tech in self.technologies
-                    if (location, tech, hour) in self.production_vars
+                    if (ft_location_id, tech, hour) in self.production_vars
                 )
 
-                # 出库量（用于运输的部分，按小时平摊）
+                # 出库量（用于SAF运输的部分，按小时平摊）
                 outflow = gp.quicksum(
-                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
+                    self.saf_transport_vars[(ft_location_id, airport, hour // self.hours_per_week)] / self.hours_per_week
                     for airport in self.airports
-                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
+                    if (ft_location_id, airport, hour // self.hours_per_week) in self.saf_transport_vars
                 )
 
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
-                    name=f"inventory_balance_{location}_{hour}"
+                    name=f"inventory_balance_{ft_location_id}_{hour}"
                 )
 
             # 初始库存为0
             self.model.addConstr(
-                self.storage_vars[(location, 0)] == 0,
-                name=f"initial_inventory_{location}"
+                self.storage_vars[(ft_location_id, 0)] == 0,
+                name=f"initial_inventory_{ft_location_id}"
             )
 
     def _add_hydrogen_inventory_balance_constraints(self):
@@ -2756,9 +2778,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         init_constraints = 0
 
         # 为每个FT设施候选位置添加氢气库存平衡约束
-        for candidate in self.ft_facility_candidates:
-            location_id = candidate['location_id']
-
+        for location_id in self._get_ft_candidate_ids():
             # 初始库存约束（hour 0 = 0）
             if (location_id, 0) in self.hydrogen_storage_vars:
                 self.model.addConstr(
@@ -2811,24 +2831,27 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info("=" * 60)
 
     def _add_airport_demand_constraints(self):
-        """添加机场周时间序列需求约束（软约束：允许缺货但有惩罚）"""
+        """添加机场周时间序列需求约束（软约束：允许缺货但有惩罚）
+
+        FT一步法：使用saf_transport_vars而不是transport_vars
+        """
         for airport in self.airports:
             weekly_demand_series = self.airports[airport]['weekly_demand_series']  # 52周序列
-            
+
             for week in range(self.time_horizon_weeks):
                 # 获取该周的实际需求
                 if week < len(weekly_demand_series):
                     weekly_demand = weekly_demand_series[week]
                 else:
                     weekly_demand = 0.0  # 超出范围的周需求为0
-                
-                # 该机场该周的总运输量
+
+                # FT一步法：该机场该周的SAF总运输量（从FT设施运输到机场）
                 total_supply = gp.quicksum(
-                    self.transport_vars[(location, airport, week)]
-                    for location in self.locations
-                    if (location, airport, week) in self.transport_vars
+                    self.saf_transport_vars[(ft_location_id, airport, week)]
+                    for ft_location_id in self._get_ft_candidate_ids()
+                    if (ft_location_id, airport, week) in self.saf_transport_vars
                 )
-                
+
                 # 软约束：供应量 + 缺货量 = 需求量
                 if weekly_demand > 0:
                     self.model.addConstr(
@@ -3376,83 +3399,102 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         
         # 提取设施决策
         solution['facilities'] = {}
-        for (location, tech), var in self.facility_vars.items():
-            if var.x > 0.5:  # 二进制变量大于0.5视为选中
-                facility_info = {
-                    'location': location,
-                    'technology': tech,
-                    'built': True,
-                    'max_annual_capacity_kg': self.facility_capacity_vars[(location, tech)].x * 8760,  # 转换为年产能
-                    'capacity_kg_per_hour': self.facility_capacity_vars[(location, tech)].x,
-                    'location_type': self.locations[location]['type'],
-                    'transport_mode': self.technologies[tech]['transport_mode']
-                }
-        
-                # 计算实际产量和利用率
-                actual_production = sum(
-                    self.production_vars[(location, tech, hour)].x
-                    for hour in range(self.total_hours)
-                    if (location, tech, hour) in self.production_vars
-                )
-                annual_production_facility = actual_production * (52.0 / self.time_horizon_weeks)
-                
-                facility_info['actual_annual_production_kg'] = annual_production_facility
-                if facility_info['max_annual_capacity_kg'] > 0:
-                    facility_info['utilization_rate'] = annual_production_facility / facility_info['max_annual_capacity_kg']
-                else:
-                    facility_info['utilization_rate'] = 0
-                
-                facility_key = f"{location}_{tech}"
-                solution['facilities'][facility_key] = facility_info
-        
-        # 提取FT反应器设施决策
+
+        # FT一步法：设施决策只从FT专用系统（self.ft_facility_vars）中提取
+        # 不使用通用的self.facility_vars，避免重复和混淆
+        # (通用的facility_vars在一步法中不应该被使用，因为一步法只有FT反应器)
+
+        logger.info(f"\n=== 开始提取FT设施决策 ===")
+        ft_candidate_count = sum(1 for loc in self.locations.values() if loc.get('is_ft_candidate'))
+        logger.info(f"FT设施候选数: {ft_candidate_count}")
+        logger.info(f"FT设施决策变量数: {len(self.ft_facility_vars)}")
+
+        # 提取FT反应器设施决策（这是一步法的唯一设施类型）
         solution['ft_facilities'] = {}
+        built_ft_count = 0
         for location_id, var in self.ft_facility_vars.items():
             if var.x > 0.5:  # 二进制变量大于0.5视为选中建设FT设施
+                built_ft_count += 1
                 ft_capacity = self.ft_capacity_vars[location_id].x
 
-                # 查找候选位置详细信息
-                ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == location_id), None)
+                logger.info(f"  已建设FT设施 #{built_ft_count}: location_id={location_id}, 产能={ft_capacity:.2f} kg/h")
 
-                if ft_candidate:
+                # 从self.locations中查找候选位置详细信息
+                if location_id in self.locations:
+                    ft_location_data = self.locations[location_id]
+
                     # TODO: 计算实际SAF产量和利用率（需要基于实际的生产变量）
                     # 暂时使用产能作为近似
                     max_annual_saf_capacity = ft_capacity * 8760  # kg SAF/年
 
                     ft_info = {
                         'location_id': location_id,
-                        'name': ft_candidate['name'],
+                        'name': ft_location_data.get('name', f'FT设施_{location_id}'),
                         'built': True,
                         'capacity_kg_saf_per_hour': ft_capacity,
                         'max_annual_saf_capacity_kg': max_annual_saf_capacity,
-                        'source_type': ft_candidate['source_type'],
-                        'source_id': ft_candidate['source_id'],
-                        'latitude': ft_candidate['lat'],
-                        'longitude': ft_candidate['lon'],
-                        'ng_supply_capacity_m3_per_hour': ft_candidate.get('ng_supply_capacity_m3_per_hour', 0),
-                        'ng_price_yuan_per_m3': ft_candidate.get('ng_price_yuan_per_m3', 0),
+                        'source_type': ft_location_data.get('source_type'),
+                        'source_id': ft_location_data.get('source_id'),
+                        'latitude': ft_location_data['latitude'],
+                        'longitude': ft_location_data['longitude'],
+                        'ng_supply_capacity_m3_per_hour': ft_location_data.get('ng_supply_capacity_m3_per_hour', 0),
+                        'ng_price_yuan_per_m3': ft_location_data.get('ng_price_yuan_per_m3', 0),
                         'technology': 'ft_direct_conversion'
                     }
 
                     # 如果有机场附近信息
-                    if 'near_airport' in ft_candidate:
-                        ft_info['near_airport'] = ft_candidate['near_airport']
-                        ft_info['distance_to_airport_km'] = ft_candidate['distance_to_airport_km']
+                    if 'near_airport' in ft_location_data:
+                        ft_info['near_airport'] = ft_location_data['near_airport']
+                        ft_info['distance_to_airport_km'] = ft_location_data['distance_to_airport_km']
 
                     solution['ft_facilities'][location_id] = ft_info
 
-                    # 同时添加到主设施列表中
+                    # 计算实际SAF产量（从SAF运输变量累计）
+                    actual_saf_production_week = sum(
+                        self.saf_transport_vars[(location_id, airport, week)].x
+                        for airport in self.airports
+                        for week in range(self.time_horizon_weeks)
+                        if (location_id, airport, week) in self.saf_transport_vars
+                    )
+                    # 转换为年产量
+                    actual_annual_saf_production = actual_saf_production_week * (52.0 / self.time_horizon_weeks)
+
+                    # 计算产能利用率
+                    if max_annual_saf_capacity > 0:
+                        utilization_rate = actual_annual_saf_production / max_annual_saf_capacity
+                    else:
+                        utilization_rate = 0
+
+                    # 同时添加到主设施列表中（用于facilities_decisions.csv输出）
                     solution['facilities'][f"ft_{location_id}"] = {
                         'location': location_id,
+                        'name': ft_location_data.get('name', f'FT设施_{location_id}'),
                         'technology': 'ft_direct_conversion',
                         'built': True,
                         'capacity_kg_per_hour': ft_capacity,  # SAF产能 kg/h
                         'max_annual_capacity_kg': max_annual_saf_capacity,
-                        'location_type': ft_candidate['source_type'],
+                        'actual_annual_production_kg': actual_annual_saf_production,
+                        'utilization_rate': utilization_rate,
+                        'location_type': ft_location_data.get('source_type'),
                         'transport_mode': 'ng_pipeline_direct',
-                        'latitude': ft_candidate['lat'],
-                        'longitude': ft_candidate['lon']
+                        'latitude': ft_location_data['latitude'],
+                        'longitude': ft_location_data['longitude'],
+                        'source_id': ft_location_data.get('source_id'),
+                        'ng_supply_capacity_m3_per_hour': ft_location_data.get('ng_supply_capacity_m3_per_hour', 0),
+                        'ng_price_yuan_per_m3': ft_location_data.get('ng_price_yuan_per_m3', 0)
                     }
+
+                    # 如果有机场附近信息，也添加到facilities中
+                    if 'near_airport' in ft_location_data:
+                        solution['facilities'][f"ft_{location_id}"]['near_airport'] = ft_location_data['near_airport']
+                        solution['facilities'][f"ft_{location_id}"]['distance_to_airport_km'] = ft_location_data['distance_to_airport_km']
+
+        logger.info(f"=== FT设施提取完成 ===")
+        logger.info(f"已建设FT设施数: {built_ft_count}")
+        logger.info(f"solution['facilities']中的设施数: {len(solution['facilities'])}")
+        logger.info(f"solution['ft_facilities']中的设施数: {len(solution['ft_facilities'])}")
+        if built_ft_count > 0:
+            logger.info(f"设施ID列表: {list(solution['facilities'].keys())}")
 
         # 【BUG修复】从facilities字典中提取FT设施信息，用于后续运输提取
         # 因为ft_facilities可能为空，但facilities中包含了实际建设的FT设施
@@ -3479,14 +3521,14 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 saf_transport_positive += 1
                 transport_key = f"{ft_location_id}_{airport}_{week}"
 
-                # 查找FT设施坐标
-                ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
+                # 从self.locations查找FT设施坐标
                 airport_data = self.airports.get(airport)
 
-                if ft_candidate and airport_data:
+                if ft_location_id in self.locations and airport_data:
+                    ft_location_data = self.locations[ft_location_id]
                     # 计算距离
                     distance_km = self._calculate_haversine_distance(
-                        ft_candidate['lat'], ft_candidate['lon'],
+                        ft_location_data['latitude'], ft_location_data['longitude'],
                         airport_data['latitude'], airport_data['longitude']
                     )
 
@@ -3496,8 +3538,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                         'week': week,
                         'transport_kg_saf': var.x,
                         'distance_km': distance_km,
-                        'from_latitude': ft_candidate['lat'],
-                        'from_longitude': ft_candidate['lon'],
+                        'from_latitude': ft_location_data['latitude'],
+                        'from_longitude': ft_location_data['longitude'],
                         'to_latitude': airport_data['latitude'],
                         'to_longitude': airport_data['longitude'],
                         'transport_type': 'SAF',
@@ -3536,12 +3578,11 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                         terminal_data = self.lng_terminals[source_id]
                         source_coord = (terminal_data['lat'], terminal_data['lon'])
 
-                    ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == ft_location_id), None)
-
-                    if source_coord and ft_candidate:
+                    if source_coord and ft_location_id in self.locations:
+                        ft_location_data = self.locations[ft_location_id]
                         distance_km = self._calculate_haversine_distance(
                             source_coord[0], source_coord[1],
-                            ft_candidate['lat'], ft_candidate['lon']
+                            ft_location_data['latitude'], ft_location_data['longitude']
                         )
 
                         solution['ng_transport'][transport_key] = {
@@ -3552,8 +3593,8 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                             'distance_km': distance_km,
                             'from_latitude': source_coord[0],
                             'from_longitude': source_coord[1],
-                            'to_latitude': ft_candidate['lat'],
-                            'to_longitude': ft_candidate['lon'],
+                            'to_latitude': ft_location_data['latitude'],
+                            'to_longitude': ft_location_data['longitude'],
                             'transport_type': 'NG',
                             'transport_mode': 'truck',
                             'route_coordinates': []  # 添加空的路径坐标字段
@@ -3575,62 +3616,62 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         # 【修复】遍历所有建设的FT设施（使用ft_facilities_actual替代空的ft_facilities）
         for location_id, ft_info in ft_facilities_actual.items():
             ng_pipeline_direct_count += 1
-            # 查找对应的候选位置信息
-            ft_candidate = next((c for c in self.ft_facility_candidates if c['location_id'] == location_id), None)
+            # 从self.locations查找对应的候选位置信息
+            if location_id in self.locations:
+                ft_location_data = self.locations[location_id]
 
-            if ft_candidate and ft_candidate['source_type'] in ['ng_pipeline', 'lng_terminal']:
-                source_id = ft_candidate['source_id']
-                source_type = ft_candidate['source_type']
+                if ft_location_data.get('source_type') in ['ng_pipeline', 'lng_terminal']:
+                    source_id = ft_location_data['source_id']
+                    source_type = ft_location_data['source_type']
 
-                logger.debug(f"  FT设施 {location_id}: source_type={source_type}, source_id={source_id}")
+                    logger.debug(f"  FT设施 {location_id}: source_type={source_type}, source_id={source_id}")
 
-                # 获取源坐标
-                source_coord = None
-                source_name = ""
-                if source_type == 'ng_pipeline' and source_id in self.ng_pipeline_sources:
-                    source_data = self.ng_pipeline_sources[source_id]
-                    source_coord = (source_data['lat'], source_data['lon'])
-                    source_name = f"NG管道_{source_id}"
-                elif source_type == 'lng_terminal' and source_id in self.lng_terminals:
-                    terminal_data = self.lng_terminals[source_id]
-                    source_coord = (terminal_data['lat'], terminal_data['lon'])
-                    source_name = f"LNG接收站_{source_id}"
+                    # 获取源坐标
+                    source_coord = None
+                    source_name = ""
+                    if source_type == 'ng_pipeline' and source_id in self.ng_pipeline_sources:
+                        source_data = self.ng_pipeline_sources[source_id]
+                        source_coord = (source_data['lat'], source_data['lon'])
+                        source_name = f"NG管道_{source_id}"
+                    elif source_type == 'lng_terminal' and source_id in self.lng_terminals:
+                        terminal_data = self.lng_terminals[source_id]
+                        source_coord = (terminal_data['lat'], terminal_data['lon'])
+                        source_name = f"LNG接收站_{source_id}"
 
-                if source_coord:
-                    # 计算距离
-                    distance_km = self._calculate_haversine_distance(
-                        source_coord[0], source_coord[1],
-                        ft_candidate['lat'], ft_candidate['lon']
-                    )
+                    if source_coord:
+                        # 计算距离
+                        distance_km = self._calculate_haversine_distance(
+                            source_coord[0], source_coord[1],
+                            ft_location_data['latitude'], ft_location_data['longitude']
+                        )
 
-                    # 估算日均天然气消耗量（基于设施产能）
-                    # SAF产能(kg/h) × 24h × NG消耗比(m³ NG/kg SAF)
-                    ng_consumption_ratio = self.config.get('production_parameters', {}).get('ng_consumption_ratio_m3_per_kg_saf', 2.3)
-                    daily_ng_consumption_m3 = ft_info.get('capacity_kg_saf_per_hour', 0) * 24 * ng_consumption_ratio
+                        # 估算日均天然气消耗量（基于设施产能）
+                        # SAF产能(kg/h) × 24h × NG消耗比(m³ NG/kg SAF)
+                        ng_consumption_ratio = self.config.get('production_parameters', {}).get('ng_consumption_ratio_m3_per_kg_saf', 2.3)
+                        daily_ng_consumption_m3 = ft_info.get('capacity_kg_saf_per_hour', 0) * 24 * ng_consumption_ratio
 
-                    pipeline_key = f"pipeline_direct_{source_id}_{location_id}"
-                    solution['ng_pipeline_direct'][pipeline_key] = {
-                        'from_source': source_name,
-                        'to_location': location_id,
-                        'source_type': source_type,
-                        'distance_km': distance_km,
-                        'from_latitude': source_coord[0],
-                        'from_longitude': source_coord[1],
-                        'to_latitude': ft_candidate['lat'],
-                        'to_longitude': ft_candidate['lon'],
-                        'transport_type': 'NG_Pipeline_Direct',
-                        'transport_mode': 'pipeline',
-                        'daily_ng_consumption_m3': daily_ng_consumption_m3,
-                        'capacity_kg_saf_per_hour': ft_info.get('capacity_kg_saf_per_hour', 0),
-                        'route_coordinates': []  # 添加空的路径坐标字段
-                    }
+                        pipeline_key = f"pipeline_direct_{source_id}_{location_id}"
+                        solution['ng_pipeline_direct'][pipeline_key] = {
+                            'from_source': source_name,
+                            'to_location': location_id,
+                            'source_type': source_type,
+                            'distance_km': distance_km,
+                            'from_latitude': source_coord[0],
+                            'from_longitude': source_coord[1],
+                            'to_latitude': ft_location_data['latitude'],
+                            'to_longitude': ft_location_data['longitude'],
+                            'transport_type': 'NG_Pipeline_Direct',
+                            'transport_mode': 'pipeline',
+                            'daily_ng_consumption_m3': daily_ng_consumption_m3,
+                            'capacity_kg_saf_per_hour': ft_info.get('capacity_kg_saf_per_hour', 0),
+                            'route_coordinates': []  # 添加空的路径坐标字段
+                        }
+                    else:
+                        logger.warning(f"  FT设施 {location_id} 无法找到源坐标: source_type={source_type}, source_id={source_id}")
                 else:
-                    logger.warning(f"  FT设施 {location_id} 无法找到源坐标: source_type={source_type}, source_id={source_id}")
+                    logger.debug(f"  FT设施 {location_id} 不是管道直供类型: source_type={ft_location_data.get('source_type', 'N/A')}")
             else:
-                if ft_candidate:
-                    logger.debug(f"  FT设施 {location_id} 不是管道直供类型: source_type={ft_candidate.get('source_type', 'N/A')}")
-                else:
-                    logger.warning(f"  FT设施 {location_id} 在候选位置中未找到")
+                logger.warning(f"  FT设施 {location_id} 在候选位置中未找到")
 
         logger.info(f"遍历的FT设施数: {ng_pipeline_direct_count}")
         logger.info(f"提取的管道直供记录数: {len(solution['ng_pipeline_direct'])}")
@@ -4634,17 +4675,21 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         """
         生成FT设施候选位置（基于天然气供应可达性筛选）
 
+        【重构说明】
+        - 不再使用self.ft_facility_candidates列表
+        - 统一存储在self.locations字典中，通过'is_ft_candidate': True标记
+        - 所有FT候选位置的location_id格式为 'ft_candidate_{id}'
+
         候选位置来源：
         1. 天然气管道端点（有足够产能）
         2. LNG接收站
         3. 机场附近50km范围内的天然气节点
 
         Returns:
-            None (结果存储在self.ft_facility_candidates)
+            None (结果存储在self.locations中)
         """
         logger.info("生成FT设施候选位置...")
 
-        self.ft_facility_candidates = []
         candidate_id = 1
 
         # 1. 筛选天然气管道端点作为FT设施候选位置
@@ -4655,38 +4700,45 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
             if capacity < 1000:  # 最小容量阈值：1000 m³/h
                 continue
 
-            candidate = {
-                'location_id': f'ft_candidate_{candidate_id}',
+            location_id = f'ft_candidate_{candidate_id}'
+
+            # 统一存储在self.locations中
+            self.locations[location_id] = {
+                'type': 'ng_pipeline',  # 使用实际源类型，匹配技术配置的suitable_locations
+                'is_ft_candidate': True,  # 关键标记：用于识别FT候选位置
                 'name': f'FT设施候选点{candidate_id}',
+                'latitude': pipeline_data['lat'],
+                'longitude': pipeline_data['lon'],
                 'source_type': 'ng_pipeline',
                 'source_id': pipeline_id,
-                'lat': pipeline_data['lat'],
-                'lon': pipeline_data['lon'],
                 'ng_supply_capacity_m3_per_hour': capacity,
-                'ng_price_yuan_per_m3': pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2),
-                'suitable_for_ft': True
+                'ng_price_yuan_per_m3': pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2)
             }
-            self.ft_facility_candidates.append(candidate)
+
             candidate_id += 1
 
-        logger.info(f"从天然气管道筛选了{len(self.ft_facility_candidates)}个候选位置")
+        pipeline_count = candidate_id - 1
+        logger.info(f"从天然气管道筛选了{pipeline_count}个候选位置")
 
         # 2. 添加LNG接收站作为候选位置
         logger.info("添加LNG接收站作为候选位置...")
         lng_count = 0
         for terminal_id, terminal_data in self.lng_terminals.items():
-            candidate = {
-                'location_id': f'ft_candidate_{candidate_id}',
+            location_id = f'ft_candidate_{candidate_id}'
+
+            # 统一存储在self.locations中
+            self.locations[location_id] = {
+                'type': 'lng_terminal',  # 使用实际源类型，匹配技术配置的suitable_locations
+                'is_ft_candidate': True,  # 关键标记：用于识别FT候选位置
                 'name': f'FT设施候选点{candidate_id}(LNG接收站)',
+                'latitude': terminal_data['lat'],
+                'longitude': terminal_data['lon'],
                 'source_type': 'lng_terminal',
                 'source_id': terminal_id,
-                'lat': terminal_data['lat'],
-                'lon': terminal_data['lon'],
                 'ng_supply_capacity_m3_per_hour': terminal_data.get('effective_daily_capacity_m3_per_day', 100000) / 24,
-                'ng_price_yuan_per_m3': terminal_data.get('cost_yuan_per_mcm', 200) / 10000,
-                'suitable_for_ft': True
+                'ng_price_yuan_per_m3': terminal_data.get('cost_yuan_per_mcm', 200) / 10000
             }
-            self.ft_facility_candidates.append(candidate)
+
             candidate_id += 1
             lng_count += 1
 
@@ -4713,62 +4765,146 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 if distance_km <= 50:  # 50km范围内
                     # 检查是否已经添加过这个位置（避免重复）
                     is_duplicate = any(
-                        c['source_id'] == pipeline_id
-                        for c in self.ft_facility_candidates
-                        if c['source_type'] == 'ng_pipeline'
+                        loc_data.get('source_id') == pipeline_id
+                        for loc_id, loc_data in self.locations.items()
+                        if loc_data.get('is_ft_candidate') and loc_data.get('source_type') == 'ng_pipeline'
                     )
 
                     if not is_duplicate:
-                        candidate = {
-                            'location_id': f'ft_candidate_{candidate_id}',
+                        location_id = f'ft_candidate_{candidate_id}'
+
+                        # 统一存储在self.locations中
+                        self.locations[location_id] = {
+                            'type': 'ng_pipeline',  # 使用实际源类型（机场附近是管道端点）
+                            'is_ft_candidate': True,  # 关键标记：用于识别FT候选位置
                             'name': f'FT设施候选点{candidate_id}(机场附近)',
+                            'latitude': pipeline_lat,
+                            'longitude': pipeline_lon,
                             'source_type': 'ng_pipeline',
                             'source_id': pipeline_id,
-                            'lat': pipeline_lat,
-                            'lon': pipeline_lon,
                             'ng_supply_capacity_m3_per_hour': pipeline_data.get('max_flow_m3_per_hour', 5000),
                             'ng_price_yuan_per_m3': pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2),
-                            'suitable_for_ft': True,
                             'near_airport': airport_id,
                             'distance_to_airport_km': distance_km
                         }
-                        self.ft_facility_candidates.append(candidate)
+
                         candidate_id += 1
                         airport_nearby_count += 1
 
         logger.info(f"在机场附近添加了{airport_nearby_count}个候选位置")
 
+        # 4. 【新增】将机场本身作为FT候选位置（假设可从最近管道输送天然气）
+        logger.info("将机场本身作为FT候选位置...")
+        airport_as_candidate_count = 0
+        for airport_id, airport_data in self.airports.items():
+            airport_lat = airport_data['latitude']
+            airport_lon = airport_data['longitude']
+
+            # 查找最近的天然气管道端点
+            nearest_pipeline_id = None
+            nearest_distance = float('inf')
+            nearest_pipeline_data = None
+
+            for pipeline_id, pipeline_data in self.ng_pipeline_sources.items():
+                pipeline_lat = pipeline_data['lat']
+                pipeline_lon = pipeline_data['lon']
+
+                distance_km = self._calculate_haversine_distance(
+                    airport_lat, airport_lon,
+                    pipeline_lat, pipeline_lon
+                )
+
+                if distance_km < nearest_distance:
+                    nearest_distance = distance_km
+                    nearest_pipeline_id = pipeline_id
+                    nearest_pipeline_data = pipeline_data
+
+            # 如果找到最近管道且距离在合理范围内（100km）
+            if nearest_pipeline_id and nearest_distance <= 100:
+                location_id = f'ft_candidate_{candidate_id}'
+
+                # 天然气管道运输成本（假设每km每m³成本）
+                ng_pipeline_transport_cost_per_km = 0.01  # 元/m³/km
+
+                # 统一存储在self.locations中
+                self.locations[location_id] = {
+                    'type': 'airport',  # 使用机场类型
+                    'is_ft_candidate': True,  # 关键标记：用于识别FT候选位置
+                    'name': f'FT设施候选点{candidate_id}(机场{airport_id})',
+                    'latitude': airport_lat,
+                    'longitude': airport_lon,
+                    'source_type': 'airport_with_ng_supply',  # 新的源类型
+                    'source_id': airport_id,
+                    'ng_supply_capacity_m3_per_hour': nearest_pipeline_data.get('max_flow_m3_per_hour', 5000),
+                    # 天然气价格与管道端点相同（假设管道延伸到机场，无额外运输成本）
+                    'ng_price_yuan_per_m3': nearest_pipeline_data.get('natural_gas_price_yuan_per_10k_m3', 4.2),
+                    'nearest_pipeline_id': nearest_pipeline_id,
+                    'ng_transport_distance_km': nearest_distance,
+                    'at_airport': airport_id,
+                    'distance_to_airport_km': 0  # 就在机场，SAF运输距离为0
+                }
+
+                candidate_id += 1
+                airport_as_candidate_count += 1
+                logger.info(f"  机场 {airport_id}: 最近管道距离 {nearest_distance:.2f} km")
+
+        logger.info(f"将{airport_as_candidate_count}个机场添加为FT候选位置")
+
         # 去重处理（基于位置坐标）
-        deduplicated_candidates = self._deduplicate_ft_candidates(self.ft_facility_candidates)
-        self.ft_facility_candidates = deduplicated_candidates
+        self._deduplicate_ft_candidates_in_locations()
 
-        logger.info(f"去重后，共生成{len(self.ft_facility_candidates)}个FT设施候选位置")
+        # 统计FT候选位置总数
+        ft_candidate_count = sum(1 for loc in self.locations.values() if loc.get('is_ft_candidate'))
+        logger.info(f"去重后，共生成{ft_candidate_count}个FT设施候选位置")
 
-    def _deduplicate_ft_candidates(self, candidates: List[Dict]) -> List[Dict]:
+    def _deduplicate_ft_candidates_in_locations(self):
         """
-        去除重复的候选位置（基于地理坐标）
+        去除self.locations中重复的FT候选位置（基于地理坐标）
 
-        Args:
-            candidates: 候选位置列表
-
-        Returns:
-            List[Dict]: 去重后的候选位置列表
+        【重构说明】
+        - 直接在self.locations字典中进行去重
+        - 保留第一个出现的位置，删除后续重复的位置
         """
-        if not candidates:
-            return []
-
-        unique_candidates = []
         seen_coords = set()
+        locations_to_remove = []
 
-        for candidate in candidates:
+        for location_id, location_data in self.locations.items():
+            # 只处理FT候选位置
+            if not location_data.get('is_ft_candidate'):
+                continue
+
             # 使用坐标的元组作为唯一标识（保留2位小数）
-            coord_key = (round(candidate['lat'], 2), round(candidate['lon'], 2))
+            coord_key = (
+                round(location_data['latitude'], 2),
+                round(location_data['longitude'], 2)
+            )
 
-            if coord_key not in seen_coords:
-                unique_candidates.append(candidate)
+            if coord_key in seen_coords:
+                locations_to_remove.append(location_id)
+            else:
                 seen_coords.add(coord_key)
 
-        return unique_candidates
+        # 删除重复的位置
+        for location_id in locations_to_remove:
+            del self.locations[location_id]
+
+        if locations_to_remove:
+            logger.info(f"去重：删除了{len(locations_to_remove)}个重复的FT候选位置")
+
+    def _get_ft_candidate_ids(self):
+        """
+        获取所有FT候选位置的location_id列表
+
+        【辅助方法】用于替代之前的self.ft_facility_candidates列表
+
+        Returns:
+            List[str]: FT候选位置的location_id列表
+        """
+        return [
+            location_id
+            for location_id, location_data in self.locations.items()
+            if location_data.get('is_ft_candidate')
+        ]
 
     def _calculate_haversine_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
         """

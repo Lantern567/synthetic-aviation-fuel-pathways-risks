@@ -15,7 +15,7 @@ basic_parameters:
 capacity_limits:
   big_m_constant: 10000
   saf_reactor_max_capacity_kg_per_hour: 1000000
-  saf_reactor_min_capacity_kg_per_hour: 0
+  saf_reactor_min_capacity_kg_per_hour: 0.01
   saf_min_annual_production_kg: 100      # SAF设施最小年产量(kg/年) | Min annual SAF production (kg/year)
                                          # 如果建设SAF设施，必须达到的最小年产量
                                          # 100kg/年，避免建设后几乎不生产（产量接近0）

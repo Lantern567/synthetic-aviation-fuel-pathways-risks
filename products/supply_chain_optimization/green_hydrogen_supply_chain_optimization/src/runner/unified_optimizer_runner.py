@@ -18,7 +18,7 @@ Unified SAF Supply Chain Optimizer Runner
     >>> results = optimizer.run()
     >>>
     >>> # 运行一步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.05)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.01)
     >>> results = optimizer.run()
 
 作者: Claude Code
@@ -76,7 +76,7 @@ class UnifiedSAFOptimizer:
         process_type: str = 'two_step',
         threads: Optional[int] = None,
         time_limit: int = 3600,
-        mip_gap: float = 0.05,
+        mip_gap: float = 0.01,
         time_horizon_weeks: int = 1,
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
@@ -96,7 +96,7 @@ class UnifiedSAFOptimizer:
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
             time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
-            mip_gap: MIP相对最优间隙,默认0.05(5%)
+            mip_gap: MIP相对最优间隙,默认0.01(1%)
             time_horizon_weeks: 优化时间范围(周数),默认1周
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
@@ -494,7 +494,7 @@ class UnifiedSAFOptimizer:
 def run_two_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 3600,
-    mip_gap: float = 0.05,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -522,7 +522,7 @@ def run_two_step_optimization(
 def run_one_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 3600,
-    mip_gap: float = 0.05,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -562,7 +562,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')
-    parser.add_argument('--mip-gap', type=float, default=0.05, help='MIP gap tolerance')
+    parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()

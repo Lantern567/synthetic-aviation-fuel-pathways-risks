@@ -7052,8 +7052,8 @@ class CoalHydrogenSAFOptimizer:
                 "路径坐标": route_coords_str,
                 "货物类型": "氢气",
                 "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(kg)": info.get("transport_kg_h2", 0),
-                "时间单位": "天"
+                "周运输量(kg)": info.get("transport_kg_h2", 0),
+                "时间单位": "周"
             })
 
         # 添加CO2运输路径（类似氢气运输）

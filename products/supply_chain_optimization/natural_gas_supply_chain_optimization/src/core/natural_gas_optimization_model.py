@@ -12,6 +12,7 @@ import numpy as np
 import logging
 from typing import Dict, List, Tuple, Optional
 import os
+import sys  # 在文件开头导入sys，避免后续使用时未定义
 import json
 import re
 import traceback
@@ -2039,7 +2040,16 @@ class NaturalGasSupplyChainOptimizer:
     def build_model(self):
         """构建优化模型"""
         logger.info("构建Gurobi优化模型...")
-        
+
+        # 配置Gurobi license（使用本地license文件）
+        # 修正日期：2025-11-16
+        license_path = "/home/ljt/gurobi.lic"
+        if os.path.exists(license_path):
+            os.environ['GRB_LICENSE_FILE'] = license_path
+            logger.info(f"使用本地Gurobi license: {license_path}")
+        else:
+            logger.warning(f"License文件不存在: {license_path}，使用默认配置")
+
         self.model = gp.Model("NaturalGasSupplyChain")
         # 从配置文件加载求解器参数
         solver_params = self.config['solver_parameters']
@@ -2180,6 +2190,28 @@ class NaturalGasSupplyChainOptimizer:
                         lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
                     )
                 logger.debug(f"为MTJ工厂 {location} 创建氢气库存变量")
+
+        # 7.5 MTJ混合电力变量（仅在可再生能源站点）
+        # 用于区分MTJ生产使用的可再生电和市电，实现精确成本和碳排放计算
+        # 修正日期：2025-11-16
+        self.mtj_renewable_electricity_vars = {}  # MTJ使用的可再生电量 (MWh)
+        self.mtj_grid_electricity_vars = {}  # MTJ使用的市电量 (MWh)
+
+        for location in self.locations:
+            if self.locations[location]['type'] in ['solar_plant', 'wind_farm']:
+                for hour in range(self.total_hours):
+                    # MTJ使用的可再生电量
+                    var_name = f"mtj_renewable_elec_{location}_{hour}"
+                    self.mtj_renewable_electricity_vars[(location, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+                    # MTJ使用的市电量
+                    var_name = f"mtj_grid_elec_{location}_{hour}"
+                    self.mtj_grid_electricity_vars[(location, hour)] = self.model.addVar(
+                        lb=0, ub=GRB.INFINITY, vtype=GRB.CONTINUOUS, name=var_name
+                    )
+
+        logger.info(f"创建MTJ混合电力变量: {len(self.mtj_renewable_electricity_vars)} 可再生电变量 + {len(self.mtj_grid_electricity_vars)} 市电变量")
 
         # 8. 创建氢气运输变量 (仅为需要氢气运输的模式，无距离限制)
         # ========================================================================
@@ -2723,16 +2755,32 @@ class NaturalGasSupplyChainOptimizer:
         )
         grid_electricity_price_yuan_per_kwh = self.config.get('cost_parameters', {}).get('renewable_energy', {}).get('grid_electricity_price_yuan_per_kwh', 0.6)
 
-        mtj_synthesis_power_cost = gp.quicksum(
+        # 可再生站点MTJ成本（区分可再生电和市电）
+        # 修正日期：2025-11-16 - 使用混合电力变量精确计算
+        renewable_mtj_power_cost = gp.quicksum(
+            self.mtj_renewable_electricity_vars[(location, hour)] * 1000 *  # MWh → kWh
+            renewable_electricity_price_yuan_per_kwh +
+            self.mtj_grid_electricity_vars[(location, hour)] * 1000 *  # MWh → kWh
+            grid_electricity_price_yuan_per_kwh
+            for location in self.locations
+            for hour in range(self.total_hours)
+            if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+            and (location, hour) in self.mtj_renewable_electricity_vars
+        )
+
+        # 市电站点MTJ成本（仅市电）
+        grid_mtj_power_cost = gp.quicksum(
             self.production_vars[(location, tech, hour)] *
-            mtj_synthesis_energy_kwh_per_kg *  # kWh/kg
-            (renewable_electricity_price_yuan_per_kwh if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
-             else grid_electricity_price_yuan_per_kwh)
+            mtj_synthesis_energy_kwh_per_kg *
+            grid_electricity_price_yuan_per_kwh
             for location in self.locations
             for tech in self.technologies
             for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        ) * operation_expansion_factor * present_value_factor
+            if self.locations[location]['type'] not in ['solar_plant', 'wind_farm']
+            and (location, tech, hour) in self.production_vars
+        )
+
+        mtj_synthesis_power_cost = (renewable_mtj_power_cost + grid_mtj_power_cost) * operation_expansion_factor * present_value_factor
 
         # 总电力成本 = H2电解成本 + MTJ合成成本
         self.cost_expressions['electricity_cost'] = h2_electrolysis_power_cost + mtj_synthesis_power_cost
@@ -3165,17 +3213,32 @@ class NaturalGasSupplyChainOptimizer:
         # 修正日期：2025-11-09
         grid_electricity_intensity = self.config.get('carbon_intensity', {}).get('grid_electricity_intensity', 0.6)
 
-        self.carbon_expressions['methanol_to_saf'] = gp.quicksum(
+        # 可再生站点MTJ碳排放（区分可再生电和市电）
+        # 修正日期：2025-11-16 - 使用混合电力变量精确计算碳排放
+        renewable_mtj_emission = gp.quicksum(
+            self.mtj_renewable_electricity_vars[(location, hour)] * 1000 *  # MWh → kWh
+            self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed) +
+            self.mtj_grid_electricity_vars[(location, hour)] * 1000 *  # MWh → kWh
+            grid_electricity_intensity
+            for location in self.locations
+            for hour in range(self.total_hours)
+            if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+            and (location, hour) in self.mtj_renewable_electricity_vars
+        )
+
+        # 市电站点MTJ碳排放（仅市电）
+        grid_mtj_emission = gp.quicksum(
             self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
             mtj_energy / 1000 *
-            (self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)  # 可再生站点：动态碳强度
-             if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
-             else grid_electricity_intensity)  # 其他站点：市电碳强度
+            grid_electricity_intensity
             for location in self.locations
             for tech in self.technologies
             for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
+            if self.locations[location]['type'] not in ['solar_plant', 'wind_farm']
+            and (location, tech, hour) in self.production_vars
         )
+
+        self.carbon_expressions['methanol_to_saf'] = renewable_mtj_emission + grid_mtj_emission
 
         logger.info(f"MTJ工艺能耗: {mtj_energy} kWh/t, 市电碳强度: {grid_electricity_intensity} kgCO₂e/kWh")
         logger.info(f"✨ MTJ碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）")
@@ -3913,27 +3976,36 @@ class NaturalGasSupplyChainOptimizer:
                         self.costs['electrolysis_power_consumption'] / 1000  # kWh -> MWh
                     )
 
-                    # MTJ工艺耗电（仅当MTJ工厂建在可再生能源站点时计入）
-                    # 修正日期：2025-11-09
+                    # MTJ工艺总需求电量（基于生产量计算）
+                    # 修正日期：2025-11-16 - 改为混合电力建模
                     mtj_energy_kwh_per_t = float(
                         self.config.get('carbon_intensity', {}).get('production_process', {}).get('mtj_process_energy', 4500)
                     )
-                    mtj_electricity_consumption_mwh = gp.quicksum(
+                    mtj_total_demand_mwh = gp.quicksum(
                         self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
                         mtj_energy_kwh_per_t / 1000 / 1000  # kWh/t -> MWh/kg
                         for tech in self.technologies
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 总电力消耗 = 制氢耗电 + MTJ工艺耗电（仅可再生站点）
-                    total_electricity_consumption_mwh = h2_electricity_consumption_mwh + mtj_electricity_consumption_mwh
-
-                    # 电力平衡：总耗电不能超过可再生能源发电量
-                    if available_energy_mwh > 0:
+                    # 约束1：MTJ电力平衡（可再生电 + 市电 = 总需求）
+                    # 允许MTJ使用混合电力来源
+                    if (location, hour) in self.mtj_renewable_electricity_vars:
                         self.model.addConstr(
-                            total_electricity_consumption_mwh <= available_energy_mwh,
-                            name=f"electricity_balance_{location}_{hour}"
+                            self.mtj_renewable_electricity_vars[(location, hour)] +
+                            self.mtj_grid_electricity_vars[(location, hour)] == mtj_total_demand_mwh,
+                            name=f"mtj_electricity_balance_{location}_{hour}"
                         )
+
+                    # 约束2：可再生电力总约束（制氢 + MTJ可再生电 ≤ 总发电量）
+                    # 这确保了制氢优先，MTJ可以用剩余可再生电
+                    if available_energy_mwh > 0 and (location, hour) in self.mtj_renewable_electricity_vars:
+                        self.model.addConstr(
+                            h2_electricity_consumption_mwh +
+                            self.mtj_renewable_electricity_vars[(location, hour)] <= available_energy_mwh,
+                            name=f"renewable_electricity_limit_{location}_{hour}"
+                        )
+                        logger.debug(f"✨ {location} hour={hour}: 可再生电优先制氢约束已添加，剩余电力可用于MTJ")
                         
     def _add_hydrogen_balance_constraints(self):
         """添加氢气平衡约束（流水线模式：hour=167发货 + hour=0接收）
@@ -6320,8 +6392,8 @@ class NaturalGasSupplyChainOptimizer:
                 "路径坐标": route_coords_str,
                 "货物类型": "氢气",
                 "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(kg)": info.get("transport_kg_h2", 0),
-                "时间单位": "天"
+                "周运输量(kg)": info.get("transport_kg_h2", 0),
+                "时间单位": "周"
             })
         
         # 添加天然气运输路径
@@ -6337,8 +6409,8 @@ class NaturalGasSupplyChainOptimizer:
                 "终点坐标": f"({info.get('to_latitude', 0):.4f}, {info.get('to_longitude', 0):.4f})",
                 "货物类型": "天然气",
                 "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(m3)": info.get("transport_m3_ng", 0),
-                "时间单位": "天"
+                "周运输量(m3)": info.get("transport_m3_ng", 0),
+                "时间单位": "周"
             })
         
         if all_transport_summary:

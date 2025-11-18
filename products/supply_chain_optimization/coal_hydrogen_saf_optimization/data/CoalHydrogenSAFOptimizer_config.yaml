@@ -99,9 +99,9 @@ capacity_limits:
                                            # 单个SAF反应器设施的最大SAF生产能力
                                            # 设置为100万kg/h，基本不构成实际约束
 
-  saf_reactor_min_capacity_kg_per_hour: 0       # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
-                                           # 设置为0，不限制最小规模，由优化器根据需求灵活决定
-                                           # 与DAC和Green Hydrogen项目保持一致
+  saf_reactor_min_capacity_kg_per_hour: 0.01    # SAF反应器最小经济规模(kg/h) | Min economic scale (kg SAF/hour)
+                                           # 设置为0.01 kg/h，确保建设的SAF设施必须满足最小产能约束
+                                           # 与其他优化模块保持一致
 
   # SAF反应器容量估算 - SAF Reactor Capacity Estimates by Location Type
   saf_capacity_estimates:

@@ -354,7 +354,7 @@ data_paths:
       optimization_summary: optimization_summary_{timestamp}.csv
       renewable_energy_plants: renewable_energy_plants_{timestamp}.csv
       transport_summary: transport_summary_{timestamp}.csv
-    results_base_dir: products/supply_chain_optimization/natural_gas_supply_chain_optimization/results
+    results_base_dir: products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step
 dependencies:
   cache_and_temp:
     graphhopper_route_cache_dir: shared/data/cache/graphhopper_routes

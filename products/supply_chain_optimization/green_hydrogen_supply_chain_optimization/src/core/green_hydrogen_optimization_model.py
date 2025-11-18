@@ -4526,6 +4526,7 @@ class GreenHydrogenSupplyChainOptimizer:
     
     def _add_production_capacity_constraints(self):
         """添加生产能力约束：基于产能决策变量"""
+        logger.info("添加生产能力约束（包括最小产能和最小年产量约束）...")
         for location in self.locations:
             for tech in self.technologies:
                 for hour in range(self.total_hours):
@@ -4560,11 +4561,50 @@ class GreenHydrogenSupplyChainOptimizer:
                 )
                 logger.debug(f"添加最小容量约束: {location} {tech}, 最小规模={min_economic_scale} kg/h")
 
+                # 【修复】添加最小年产量约束（防止建了设施但几乎不生产）
+                # 如果建设设施(facility_vars=1)，则年产量必须≥最小年产量
+                # 配置参数: saf_min_annual_production_kg (默认100 kg/年)
+                min_annual_production_kg = self.config.get('capacity_limits', {}).get(
+                    'saf_min_annual_production_kg', 100
+                )
+
+                # 计算时间窗口内的总产量
+                total_production_in_window = gp.quicksum(
+                    self.production_vars[(location, tech, hour)]
+                    for hour in range(self.total_hours)
+                    if (location, tech, hour) in self.production_vars
+                )
+
+                # 年化总产量 = 时间窗口产量 × (52周 / 时间窗口周数)
+                annualization_factor = 52.0 / self.time_horizon_weeks
+
+                # 如果建设设施，年化产量必须≥最小年产量
+                # total_production_in_window × (52/weeks) >= min_annual × facility_vars
+                # 等价于: total_production_in_window >= min_annual × (weeks/52) × facility_vars
+                min_production_in_window = min_annual_production_kg * (self.time_horizon_weeks / 52.0)
+
+                self.model.addConstr(
+                    total_production_in_window >=
+                    min_production_in_window * self.facility_vars[(location, tech)],
+                    name=f"min_annual_production_{location}_{tech}"
+                )
+                logger.debug(
+                    f"添加最小年产量约束: {location} {tech}, "
+                    f"最小年产量={min_annual_production_kg} kg/年, "
+                    f"时间窗口最小产量={min_production_in_window:.2f} kg/{self.time_horizon_weeks}周"
+                )
+
                 # 移除基于平均发电量的硬性产能上限约束
                 # 改为依赖动态的时段级约束：
                 # 1. 氢气生产受每时段发电量限制 (在_add_renewable_power_constraints中)
                 # 2. MTJ生产受氢气库存限制 (在_add_material_supply_constraints中)
                 # 这样允许设施产能更灵活，只要满足实际运行时的供需平衡即可
+
+        logger.info(
+            f"生产能力约束添加完成: "
+            f"{len(self.locations)}个位置 × {len(self.technologies)}个技术, "
+            f"包括最小产能约束和最小年产量约束"
+        )
     
     def _add_material_supply_constraints(self):
         """添加严格的小时级原料供应约束（氢气和天然气供应约束）"""
@@ -7470,8 +7510,8 @@ class GreenHydrogenSupplyChainOptimizer:
                 "路径坐标": route_coords_str,
                 "货物类型": "氢气",
                 "运输方式": info.get("transport_mode", "truck"),
-                "日运输量(kg)": info.get("transport_kg_h2", 0),
-                "时间单位": "天"
+                "周运输量(kg)": info.get("transport_kg_h2", 0),
+                "时间单位": "周"
             })
 
         # 添加CO2运输路径（类似氢气运输）
