@@ -69,6 +69,8 @@ class UnifiedSAFOptimizer:
     CONFIG_MAPPING = {
         'two_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config_two_step.yaml',
         'one_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml',
+        'byproduct_two_step': 'shared/data/ByproductHydrogenSupplyChainOptimizer_config_two_step.yaml',
+        'byproduct_one_step': 'shared/data/ByproductHydrogenSupplyChainOptimizer_config.yaml',
     }
 
     def __init__(
@@ -114,10 +116,11 @@ class UnifiedSAFOptimizer:
         self._setup_logging(log_level)
 
         # 验证参数
-        if process_type not in ['two_step', 'one_step', 'custom']:
+        valid_process_types = ['two_step', 'one_step', 'byproduct_two_step', 'byproduct_one_step', 'custom']
+        if process_type not in valid_process_types:
             raise ValueError(
                 f"Invalid process_type: {process_type}. "
-                f"Must be 'two_step', 'one_step', or 'custom'."
+                f"Must be one of {valid_process_types}."
             )
 
         if process_type == 'custom' and config_path is None:
@@ -128,13 +131,14 @@ class UnifiedSAFOptimizer:
         self.osm_pbf_path = osm_pbf_path
         self.airport_excel_path = airport_excel_path
 
-        if results_dir is None:
-            resolved_results_dir = project_root / 'results' / self.process_type
-        else:
+        # 不在runner中创建results目录，让优化器根据配置文件自己创建
+        # 这样可以避免创建多余的文件夹
+        if results_dir is not None:
             resolved_results_dir = Path(results_dir)
-
-        resolved_results_dir.mkdir(parents=True, exist_ok=True)
-        self.results_dir = resolved_results_dir
+            resolved_results_dir.mkdir(parents=True, exist_ok=True)
+            self.results_dir = resolved_results_dir
+        else:
+            self.results_dir = None  # 使用配置文件中的路径
 
         # 确定配置文件路径
         if process_type == 'custom':
@@ -295,9 +299,12 @@ class UnifiedSAFOptimizer:
             if self.osm_pbf_path is not None:
                 override_params['osm_pbf_path'] = self.osm_pbf_path
 
+            # 确定实际的process_mode (去掉byproduct_前缀)
+            actual_process_mode = self.process_type.replace('byproduct_', '')
+
             self.optimizer = GreenHydrogenSupplyChainOptimizer(
                 config_path=str(self.config_path),
-                process_mode=self.process_type,
+                process_mode=actual_process_mode,
                 **override_params,
             )
             self._monitor_memory()
@@ -366,13 +373,15 @@ class UnifiedSAFOptimizer:
             # 保存结果
             if solution is not None:
                 self.logger.info("\nSaving results...")
+                # 如果用户指定了results_dir，使用指定的；否则让optimizer使用配置文件中的路径
                 if self.results_dir:
-                    results_path = Path(self.results_dir)
+                    results_path = str(self.results_dir)
                 else:
-                    results_path = project_root / 'results'
+                    results_path = None  # optimizer会使用配置文件中的results_base_dir
 
-                self.optimizer.save_results(solution, str(results_path))
-                self.logger.info(f"Results saved to: {results_path}")
+                self.optimizer.save_results(solution, results_path)
+                actual_results_dir = self.optimizer._get_results_dir()
+                self.logger.info(f"Results saved to: {actual_results_dir}")
 
             # 结束计时
             self.end_time = time.time()
@@ -556,9 +565,9 @@ if __name__ == '__main__':
         '--process',
         '--process-type',
         dest='process_type',
-        choices=['two_step', 'one_step'],
+        choices=['two_step', 'one_step', 'byproduct_two_step', 'byproduct_one_step'],
         default='two_step',
-        help='Process type to use'
+        help='Process type to use (two_step: 绿氢两步法, one_step: 绿氢一步法, byproduct_two_step: 副产氢两步法, byproduct_one_step: 副产氢一步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')
