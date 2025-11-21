@@ -95,7 +95,12 @@ class CO2EmissionCalculator:
         self.saf_energy_content = self.benchmarks.get('saf_energy_content', 43.15)  # MJ/kg
         self.corsia_limit = self.benchmarks.get('corsia_limit', 30)  # gCO₂e/MJ
 
-        logger.info("CO2EmissionCalculator initialized successfully")
+        # CO₂来源类型配置
+        # 可选值: 'dac' (直接空气捕获), 'industrial_capture' (工业捕获), 'self_emission' (自身排放)
+        tech_params = config.get('technologies', {}).get('green_h2_co2_to_saf', {})
+        self.co2_source_type = tech_params.get('co2_source_type', 'self_emission')  # 煤制氢默认为'self_emission'
+
+        logger.info(f"CO2EmissionCalculator initialized successfully (CO₂来源类型: {self.co2_source_type})")
 
     def calculate_lifecycle_emissions(
         self,
@@ -453,19 +458,35 @@ class CO2EmissionCalculator:
         """
         计算CO₂利用负排放（碳固定）
 
+        根据CO₂来源类型确定是否计入负排放：
+        - 'dac': 直接空气捕获（DAC） → 100%计入负排放（真正的碳汇）
+        - 'industrial_capture': 外部工业捕获 → 50%计入负排放（避免了排放）
+        - 'self_emission': 自身排放循环利用 → 0%计入负排放（不算碳汇）
+
         Args:
             co2_kg: CO₂利用量 (kg)
 
         Returns:
-            负排放量 (kgCO₂e，负值)
+            负排放量 (kgCO₂e，负值或0)
         """
-        # CO₂被固定在SAF产品中，属于碳利用
-        # 根据CORSIA标准，这部分可以计入负排放
-        utilization_credit_factor = -1.0  # 100%计入负排放
+        # 根据CO₂来源类型设置负排放系数
+        if self.co2_source_type == 'dac':
+            utilization_credit_factor = -1.0  # 100%计入负排放
+            source_desc = "DAC直接空气捕获（真正碳汇）"
+        elif self.co2_source_type == 'industrial_capture':
+            utilization_credit_factor = -0.5  # 50%计入负排放
+            source_desc = "工业捕获（避免排放）"
+        elif self.co2_source_type == 'self_emission':
+            utilization_credit_factor = 0.0   # 不计入负排放
+            source_desc = "自身排放循环利用（不算碳汇）"
+        else:
+            utilization_credit_factor = 0.0
+            source_desc = f"未知来源类型({self.co2_source_type})"
+            logger.warning(f"未知的CO₂来源类型: {self.co2_source_type}，不计入负排放")
 
         credit = co2_kg * utilization_credit_factor
 
-        logger.debug(f"CO₂利用负排放: {credit:.2f} kgCO₂e")
+        logger.debug(f"CO₂利用负排放: {credit:.2f} kgCO₂e (来源: {source_desc}, 系数: {utilization_credit_factor})")
 
         return credit
 

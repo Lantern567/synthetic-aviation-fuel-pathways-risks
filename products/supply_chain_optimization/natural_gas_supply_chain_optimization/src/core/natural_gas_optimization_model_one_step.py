@@ -5,13 +5,19 @@
 集成OSM真实路网数据进行距离计算和路径规划
 """
 
+# ============================================================================
+# CRITICAL: 必须在导入gurobipy之前设置Gurobi许可证路径
+# ============================================================================
+import os
+# 强制使用正确的许可证文件路径（无论环境变量如何设置）
+os.environ['GRB_LICENSE_FILE'] = '/home/ljt/gurobi.lic'
+
 import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
 import numpy as np
 import logging
 from typing import Dict, List, Tuple, Optional
-import os
 import json
 import re
 import traceback
@@ -1997,7 +2003,7 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         self.cost_expressions['ft_energy_cost'] = gp.quicksum(
             self.production_vars[(location, tech, hour)] *
             energy_consumption_kwh_per_kg *
-            (renewable_electricity_price_yuan_per_kwh if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+            (renewable_electricity_price_yuan_per_kwh if self.locations[location]['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
              else grid_electricity_price_yuan_per_kwh)
             for location in self.locations
             for tech in self.technologies
@@ -4652,11 +4658,15 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
     def _get_location_main_parameter(self, location_info: dict) -> str:
         """根据位置类型获取主要参数描述"""
         location_type = location_info['type']
-        
+
         if location_type in ['solar_plant', 'wind_farm']:
             capacity = location_info.get('capacity_mw', 0)
             avg_gen = np.mean(location_info['hourly_generation']) if location_info['hourly_generation'] else 0
             return f"装机{capacity}MW, 平均发电{avg_gen:.1f}MW"
+        elif location_type in ['byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
+            avg_gen = np.mean(location_info['hourly_generation']) if location_info['hourly_generation'] else 0
+            type_name = "钢铁副产氢" if location_type == 'byproduct_hydrogen_steel' else "炼油副产氢"
+            return f"{type_name}, 平均产能{avg_gen:.1f}kg/h"
         elif location_type == 'lng_terminal':
             capacity = location_info.get('lng_capacity', 0)
             return f"处理能力{capacity}万立方米/年"

@@ -51,7 +51,7 @@ from src.core.coal_hydrogen_optimization_model import CoalHydrogenSAFOptimizer
 
 class UnifiedSAFOptimizer:
     """
-    统一SAF供应链优化器
+    统一SAF供应链优化器（煤炭制氢版本）
 
     提供简洁的API来运行两步法和一步法工艺路线的供应链优化。
 
@@ -61,7 +61,7 @@ class UnifiedSAFOptimizer:
         time_limit (int): 求解时间限制(秒)
         mip_gap (float): MIP求解精度
         config_path (Path): 配置文件路径
-        optimizer (GreenHydrogenSupplyChainOptimizer): 底层优化器实例
+        optimizer (CoalHydrogenSAFOptimizer): 底层优化器实例（煤炭制氢版本）
         logger (logging.Logger): 日志记录器
     """
 
@@ -69,6 +69,7 @@ class UnifiedSAFOptimizer:
     CONFIG_MAPPING = {
         'two_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml',
         'one_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config_one_step_direct_ft.yaml',
+        'byproduct_two_step': 'shared/data/CoalByproductHydrogenSAFOptimizer_config.yaml',
     }
 
     def __init__(
@@ -114,10 +115,11 @@ class UnifiedSAFOptimizer:
         self._setup_logging(log_level)
 
         # 验证参数
-        if process_type not in ['two_step', 'one_step', 'custom']:
+        valid_process_types = ['two_step', 'one_step', 'byproduct_two_step', 'custom']
+        if process_type not in valid_process_types:
             raise ValueError(
                 f"Invalid process_type: {process_type}. "
-                f"Must be 'two_step', 'one_step', or 'custom'."
+                f"Must be one of {valid_process_types}."
             )
 
         if process_type == 'custom' and config_path is None:
@@ -284,10 +286,15 @@ class UnifiedSAFOptimizer:
             if self.parallel_workers is not None:
                 override_params['parallel_workers'] = self.parallel_workers
 
-            self.optimizer = GreenHydrogenSupplyChainOptimizer(
+            # 确定实际的process_mode (去掉byproduct_前缀)
+            actual_process_mode = self.process_type.replace('byproduct_', '')
+
+            self.optimizer = CoalHydrogenSAFOptimizer(
+                config_path=str(self.config_path),
+                process_mode=actual_process_mode,
                 time_horizon_weeks=self.time_horizon_weeks,
                 osm_pbf_path=self.osm_pbf_path,
-                override_params=override_params if override_params else None,
+                **override_params,
             )
             self._monitor_memory()
             self.logger.info("Optimizer initialized successfully")
@@ -358,7 +365,21 @@ class UnifiedSAFOptimizer:
                 if self.results_dir:
                     results_path = Path(self.results_dir)
                 else:
-                    results_path = project_root / 'results'
+                    # 从optimizer的配置中读取results_base_dir
+                    try:
+                        results_base_dir = self.optimizer.config.get('data_paths', {}).get('output_paths', {}).get('results_base_dir', None)
+                        if results_base_dir:
+                            results_path = Path(results_base_dir)
+                            self.logger.info(f"使用配置文件中的results_base_dir: {results_path}")
+                        else:
+                            results_path = project_root / 'results'
+                            self.logger.warning("配置文件中未找到results_base_dir，使用默认路径")
+                    except Exception as e:
+                        self.logger.warning(f"读取results_base_dir失败: {e}，使用默认路径")
+                        results_path = project_root / 'results'
+
+                # 确保目录存在
+                results_path.mkdir(parents=True, exist_ok=True)
 
                 self.optimizer.save_results(solution, str(results_path))
                 self.logger.info(f"Results saved to: {results_path}")
@@ -543,9 +564,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run SAF Supply Chain Optimization')
     parser.add_argument(
         '--process-type',
-        choices=['two_step', 'one_step'],
+        choices=['two_step', 'one_step', 'byproduct_two_step'],
         default='two_step',
-        help='Process type to use'
+        help='Process type to use (two_step: 绿氢两步法, one_step: 绿氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')

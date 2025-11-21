@@ -6008,23 +6008,47 @@ class GreenHydrogenSupplyChainOptimizer:
         # 获取两个位置的坐标
         loc1_lat, loc1_lon = get_location_coords(location1)
         loc2_lat, loc2_lon = get_location_coords(location2)
-        
+
+        # 计算两点之间的haversine直线距离，用于极近距离检测
+        def haversine_distance(lat1, lon1, lat2, lon2):
+            """计算两点之间的haversine距离（公里）"""
+            R = 6371  # 地球半径（公里）
+            dlat = radians(lat2 - lat1)
+            dlon = radians(lon2 - lon1)
+            a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+            c = 2 * atan2(sqrt(a), sqrt(1 - a))
+            return R * c
+
+        straight_distance_km = haversine_distance(loc1_lat, loc1_lon, loc2_lat, loc2_lon)
+
+        # 如果两点距离极近（小于1km），视为同一位置，直接返回最小距离
+        # 这避免了GraphHopper在极近距离下可能失败的问题
+        if straight_distance_km < 1.0:
+            logger.info(f"[距离计算] 极近距离检测: {location1} -> {location2}, "
+                       f"直线距离={straight_distance_km:.6f}km (< 1km), "
+                       f"视为同点，返回最小距离5km")
+            self.distance_cache[cache_key] = 5.0
+            self.distance_cache[reverse_cache_key] = 5.0
+            return 5.0
+
         # 使用GraphHopper路径规划计算真实距离
         result = self.routing_engine.calculate_route_distance(
             loc1_lat, loc1_lon, loc2_lat, loc2_lon, vehicle="truck", include_route_geometry=False
         )
         distance_km = result.get('distance_km', 0)
-        
-        # 如果路径规划失败，直接抛出异常
+
+        # 如果路径规划失败，使用直线距离作为降级方案
         if not result.get('route_found', False):
-            raise Exception(f"距离计算失败: {location1} -> {location2}, "
-                          f"GraphHopper返回结果: route_found={result.get('route_found')}, "
-                          f"错误信息: {result.get('error', '未知错误')}")
-        
+            logger.warning(f"[距离计算] GraphHopper路径查找失败，使用直线距离作为降级: "
+                         f"{location1} -> {location2}, "
+                         f"直线距离={straight_distance_km:.2f}km, "
+                         f"错误信息: {result.get('error', '未知错误')}")
+            distance_km = max(straight_distance_km, 5.0)
+
         # 缓存结果（双向）
         self.distance_cache[cache_key] = distance_km
         self.distance_cache[reverse_cache_key] = distance_km
-        
+
         return max(distance_km, 5)  # 最小距离5km（避免除零）
 
     def _get_hydrogen_transport_distance_with_clustering(self, h2_loc: str, mtj_loc: str) -> float:
@@ -6097,6 +6121,26 @@ class GreenHydrogenSupplyChainOptimizer:
         for noise_loc, noise_coord in self.clustering_results.noise_points:
             if h2_loc == noise_loc:
                 mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+
+                # 计算两点之间的haversine直线距离，用于极近距离检测
+                def haversine_distance(lat1, lon1, lat2, lon2):
+                    """计算两点之间的haversine距离（公里）"""
+                    R = 6371  # 地球半径（公里）
+                    dlat = radians(lat2 - lat1)
+                    dlon = radians(lon2 - lon1)
+                    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+                    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+                    return R * c
+
+                straight_distance_km = haversine_distance(noise_coord[0], noise_coord[1], mtj_coords[0], mtj_coords[1])
+
+                # 如果两点距离极近（小于1km），视为同一位置，直接返回最小距离
+                if straight_distance_km < 1.0:
+                    logger.info(f"[氢气管道距离-噪声点] 极近距离检测: {h2_loc} -> {mtj_loc}, "
+                               f"直线距离={straight_distance_km:.6f}km (< 1km), "
+                               f"视为同点，返回最小距离5km")
+                    return 5.0
+
                 try:
                     route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
                         noise_coord[0], noise_coord[1],
