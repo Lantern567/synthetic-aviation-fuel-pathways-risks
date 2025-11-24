@@ -1647,8 +1647,21 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
 
         # 3. 生成时间序列数据（168小时，恒定产能）
+        # 添加500km地理范围筛选 - 2025-11-23
         time_series_data = []
+        filtered_count = 0
+        included_count = 0
+
         for _, row in df.iterrows():
+            plant_lat = row['latitude']
+            plant_lon = row['longitude']
+
+            # 500km范围检查：以北京为中心
+            if not is_within_beijing_range(plant_lat, plant_lon, 500):
+                filtered_count += 1
+                continue
+
+            included_count += 1
             for hour in range(self.total_hours):
                 time_series_data.append({
                     'plant_name': f"{plant_name_prefix}{row[name_column]}",
@@ -1661,6 +1674,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 })
 
         time_series_df = pd.DataFrame(time_series_data)
+        logger.info(f"    500km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
         logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
 
         return time_series_df
@@ -1968,8 +1982,10 @@ class GreenHydrogenSupplyChainOptimizer:
             }
 
             if len(hydrogen_location_dict) > 0:
+                # 使用 source_type='auto' 自动检测氢源类型
                 self.clustering_results = self.hydrogen_clustering_optimizer.cluster_hydrogen_plants(
-                    hydrogen_location_dict
+                    hydrogen_location_dict,
+                    source_type='auto'
                 )
 
                 # 🚀 性能优化：移除预计算循环，改为延迟计算
@@ -4545,6 +4561,34 @@ class GreenHydrogenSupplyChainOptimizer:
             if (location, airport, week) in self.transport_vars
         )
 
+        # =========================================================================
+        # 5.5.1 CO₂管道运输碳排放 (CO₂ Pipeline Transport Emissions)
+        # =========================================================================
+        # CO₂管道运输碳强度：从配置文件读取 (默认 0.01 kgCO2eq/kg/100km = 0.0001 kgCO2eq/kg/km)
+        co2_pipeline_intensity = transportation.get('co2_pipeline_intensity', 0.01) / 100  # 转换为 kgCO2eq/kg/km
+
+        # 获取CO₂运输距离缓存
+        co2_distance_cache = getattr(self, 'co2_distance_cache', {})
+
+        # CO₂管道运输碳排放计算
+        if hasattr(self, 'co2_pipeline_transport_vars') and self.co2_pipeline_transport_vars:
+            self.carbon_expressions['co2_pipeline_transport'] = gp.quicksum(
+                self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
+                co2_distance_cache.get((co2_source_id, methanol_loc), {}).get('total_distance_km', 50.0) *  # 从字典提取总距离，默认50km
+                co2_pipeline_intensity  # kg × km × kgCO2eq/kg/km
+                for co2_source_id in (getattr(self, 'co2_capture_sources', {}).keys() if hasattr(self, 'co2_capture_sources') else [])
+                for methanol_loc in self.locations
+                if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
+            )
+            logger.info(f"CO₂管道运输碳强度: {co2_pipeline_intensity * 100:.4f} kgCO2eq/kg/100km")
+            logger.info(f"[调试] CO₂管道运输变量数量: {len(self.co2_pipeline_transport_vars)}")
+        else:
+            self.carbon_expressions['co2_pipeline_transport'] = gp.LinExpr(0)
+            logger.info("未启用CO₂管道运输或无运输变量，CO₂运输碳排放设为0")
+
+        # CO₂总运输碳排放
+        self.carbon_expressions['co2_transport'] = self.carbon_expressions['co2_pipeline_transport']
+
         # 验证运输碳强度参数合理性
         transport_params = [
             # (h2_truck, 0.05, 0.50, "氢气罐车运输碳强度"),  # 【禁用罐车运输】
@@ -4580,25 +4624,38 @@ class GreenHydrogenSupplyChainOptimizer:
         # =========================================================================
         # 5.6 CO₂利用负排放 (CO₂ Utilization Credit - Negative Emissions)
         # =========================================================================
-        # 绿氢路线：外部捕获的CO₂通过E-CRM技术固定在甲醇中，最终固定在SAF产品中
-        # 根据CORSIA标准，碳固定可计入负排放
+        # 从配置文件读取CO₂源类型和碳汇控制参数
+        co2_source_config = self.carbon_params.get('co2_source_configuration', {})
+        enable_co2_credit = co2_source_config.get('enable_co2_utilization_credit', False)
+        scenario_type = co2_source_config.get('scenario_type', 'unknown')
+        credit_factor = co2_source_config.get('utilization_credit_factor', 0.0)
 
-        saf_carbon_content = 0.85  # SAF产品碳含量 (kg C/kg SAF)
-        co2_to_c_ratio = 44.0 / 12.0  # CO₂/C摩尔质量比
-        utilization_credit_factor = -1.0  # 负排放系数 (CORSIA标准)
+        logger.info(f"CO₂源配置: scenario_type={scenario_type}, enable_credit={enable_co2_credit}")
 
-        self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
-            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
+        if enable_co2_credit:
+            # 绿氢路线：外部捕获的CO₂（工业捕获/DAC）通过E-CRM技术固定在甲醇中，最终固定在SAF产品中
+            # 根据CORSIA标准，碳固定可计入负排放（仅限industrial_capture和dac场景）
+            saf_carbon_content = 0.85  # SAF产品碳含量 (kg C/kg SAF)
+            co2_to_c_ratio = 44.0 / 12.0  # CO₂/C摩尔质量比
+            utilization_credit_factor = credit_factor if credit_factor != 0 else -1.0  # 负排放系数 (CORSIA标准)
 
-        logger.info(f"✨ CO₂利用负排放表达式已创建")
-        logger.info(f"   计算公式: SAF产量 × {saf_carbon_content} × {co2_to_c_ratio:.2f} × {utilization_credit_factor}")
-        logger.info(f"   每kg SAF固定碳排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO₂e")
+            self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
+                self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+                saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
+                for location in self.locations
+                for tech in self.technologies
+                for hour in range(self.total_hours)
+                if (location, tech, hour) in self.production_vars
+            )
+
+            logger.info(f"✨ CO₂利用负排放表达式已创建 (场景: {scenario_type})")
+            logger.info(f"   计算公式: SAF产量 × {saf_carbon_content} × {co2_to_c_ratio:.2f} × {utilization_credit_factor}")
+            logger.info(f"   每kg SAF固定碳排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO₂e")
+        else:
+            # 化石燃料原料场景（天然气重整/煤气化）：副产CO₂循环利用不属于碳移除，不计入负排放
+            self.carbon_expressions['co2_utilization_credit'] = gp.LinExpr(0)
+            logger.info(f"⚠️ CO₂利用负排放已禁用 (场景: {scenario_type})")
+            logger.info(f"   原因: {co2_source_config.get('description', '副产CO₂循环利用不属于碳移除')}")
 
         # =========================================================================
         # 6. 汇总碳排放 (Carbon Emission Aggregation)
@@ -4626,7 +4683,8 @@ class GreenHydrogenSupplyChainOptimizer:
 
         self.carbon_aggregates['transport_emissions'] = (
             self.carbon_expressions['h2_transport'] +
-            self.carbon_expressions['mtj_transport']
+            self.carbon_expressions['mtj_transport'] +
+            self.carbon_expressions['co2_transport']  # ✨ 新增：CO₂管道运输碳排放
         )
 
         # CO₂利用负排放 (单独分类，不计入其他类别)

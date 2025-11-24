@@ -66,10 +66,11 @@ class UnifiedSAFOptimizer:
     """
 
     # 配置文件映射
+    # 煤制氢模块支持两种氢气源：绿氢（可再生能源电解）和副产氢（工业副产）
     CONFIG_MAPPING = {
-        'two_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml',
-        'one_step': 'shared/data/GreenHydrogenSupplyChainOptimizer_config_one_step_direct_ft.yaml',
-        'byproduct_two_step': 'shared/data/CoalByproductHydrogenSAFOptimizer_config.yaml',
+        'two_step': 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml',  # 煤气化CO₂+绿氢两步法
+        'one_step': 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml',   # 煤气化CO₂+绿氢一步法
+        'byproduct_two_step': 'shared/data/CoalByproductHydrogenSAFOptimizer_config.yaml',  # 煤气化CO₂+副产氢两步法
     }
 
     def __init__(
@@ -134,14 +135,21 @@ class UnifiedSAFOptimizer:
         # 确定配置文件路径
         if process_type == 'custom':
             self.config_path = Path(config_path)
+            self.logger.info(f"[CONFIG] Using custom configuration file: {config_path}")
         else:
             # 配置文件在项目根目录的shared/data/下
-            self.config_path = repo_root / self.CONFIG_MAPPING[process_type]
+            relative_config_path = self.CONFIG_MAPPING[process_type]
+            self.config_path = repo_root / relative_config_path
+            self.logger.info(f"[CONFIG] Process type: {process_type}")
+            self.logger.info(f"[CONFIG] Relative config path: {relative_config_path}")
+            self.logger.info(f"[CONFIG] Repo root: {repo_root}")
+            self.logger.info(f"[CONFIG] Full config path: {self.config_path}")
 
         if not self.config_path.exists():
+            self.logger.error(f"[CONFIG] Configuration file NOT FOUND: {self.config_path}")
             raise FileNotFoundError(f"Configuration file not found: {self.config_path}")
 
-        self.logger.info(f"Using configuration file: {self.config_path}")
+        self.logger.info(f"[CONFIG] Configuration file exists and will be loaded: {self.config_path}")
 
         # CPU线程数设置
         self.threads = self._determine_threads(threads)

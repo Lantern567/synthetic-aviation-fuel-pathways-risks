@@ -1,44 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-天然气供应链优化模型 - 主程序入口
-便捷的运行脚本，无需进入src目录即可执行优化模型
+天然气供应链优化模型 - 副产氢两步法运行脚本
+运行副产氢场景下的两步法优化（NG→甲醇→SAF）
 """
 
 import os
 import sys
 from pathlib import Path
 
-# 添加src目录到Python路径
+# 添加项目根目录到Python路径
 current_dir = Path(__file__).parent
+project_root = current_dir.parent.parent.parent  # 向上3级到项目根目录
+sys.path.insert(0, str(project_root))
+
+# 添加src目录到Python路径
 src_dir = current_dir / "src"
 sys.path.insert(0, str(src_dir))
 
 # 导入核心优化模型
-from core.natural_gas_optimization_model import NaturalGasSupplyChainOptimizer, get_project_base_dir
+from core.natural_gas_optimization_model import NaturalGasSupplyChainOptimizer
 
 def main():
-    """主函数 - 运行优化模型"""
+    """主函数 - 运行副产氢两步法优化"""
     try:
         print("="*80)
-        print("天然气供应链优化模型")
+        print("天然气供应链优化模型 - 副产氢两步法（NG→甲醇→SAF）")
         print("="*80)
         print("开始执行优化...")
 
-        # 1. 初始化优化器 (使用1周时间范围以减少内存使用)
-        # 设置正确的OSM文件路径
-        base_dir = get_project_base_dir()
-        osm_file_path = os.path.join(
-            base_dir, "products", "supply_chain_optimization",
-            "natural_gas_supply_chain_optimization", "data", "china-latest.osm.pbf"
+        # 配置文件路径：使用副产氢两步法配置
+        config_path = os.path.join(
+            project_root,
+            "shared",
+            "data",
+            "NaturalGasByproductHydrogenOptimizer_config.yaml"
         )
 
-        print(f"\n正在初始化优化器...")
+        print(f"\n配置文件: {config_path}")
+
+        # 检查配置文件是否存在
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"配置文件不存在: {config_path}")
+
+        # OSM文件路径
+        osm_file_path = os.path.join(
+            project_root,
+            "products",
+            "supply_chain_optimization",
+            "natural_gas_supply_chain_optimization",
+            "data",
+            "china-latest.osm.pbf"
+        )
+
         print(f"OSM文件路径: {osm_file_path}")
 
+        # 1. 初始化优化器（指定配置文件和日志子目录）
+        print(f"\n正在初始化优化器（副产氢两步法）...")
         optimizer = NaturalGasSupplyChainOptimizer(
-            time_horizon_weeks=1,
-            log_subdir='default',  # 使用默认日志目录
+            config_path=config_path,
+            log_subdir='byproduct_hydrogen/two_step',  # 指定日志和结果子目录
             osm_pbf_path=osm_file_path
         )
 
@@ -89,15 +110,10 @@ def main():
             facilities_count = len(solution.get('facilities', {}))
             print(f"  - 建设设施数量: {facilities_count}")
 
-            # 保存结果到results目录
-            results_dir = os.path.join(
-                base_dir, "products", "supply_chain_optimization",
-                "natural_gas_supply_chain_optimization", "results"
-            )
-            os.makedirs(results_dir, exist_ok=True)
-            optimizer.save_results(solution, results_dir)
+            # 保存结果（会自动使用配置的byproduct_hydrogen/two_step子目录）
+            optimizer.save_results(solution, None)
 
-            print(f"\n结果已保存到目录: {results_dir}")
+            print(f"\n结果已保存到目录（根据log_subdir自动设置）")
             print("="*80)
 
             return 0  # 成功

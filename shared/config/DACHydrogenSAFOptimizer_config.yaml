@@ -73,6 +73,17 @@ carbon_emission_parameters:
     mtj_truck_intensity: 0.12
     h2_pipeline_intensity: 0.02
     co2_pipeline_intensity: 0.01
+
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'dac'                          # DAC直接空气捕获场景 | DAC direct air capture scenario
+    enable_co2_utilization_credit: true           # 启用CO₂利用负排放 | Enable CO₂ utilization carbon credit
+    utilization_credit_factor: -1.0               # CORSIA标准：100%计入负排放 | CORSIA standard: 100% carbon credit
+    description: |
+      CO₂来源：DAC直接空气捕获 (Direct Air Capture from atmosphere)
+      碳汇计算：从大气中移除的CO₂固定在SAF产品中，计为真正的碳移除和负排放
+      Carbon sink calculation: CO₂ removed from atmosphere and fixed in SAF products counts as carbon removal
+
   raw_materials:
     dac_energy_intensity: 0.02
     dac_equipment_embodied: 0.05

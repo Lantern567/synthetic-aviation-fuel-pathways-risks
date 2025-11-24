@@ -1,6 +1,6 @@
 """
-十四场景对比可视化脚本
-Fourteen Scenarios Comparison Visualization Script
+十三场景对比可视化脚本
+Thirteen Scenarios Comparison Visualization Script
 
 功能 | Features:
 1. 成本构成对比 (Cost breakdown comparison)
@@ -24,13 +24,16 @@ Fourteen Scenarios Comparison Visualization Script
 9. 副产氢+DAC两步法 (Byproduct H2 + DAC Two-Step)
 10. 副产氢+DAC一步法 (Byproduct H2 + DAC One-Step)
 11. 副产氢+天然气两步法 (Byproduct H2 + NG Two-Step)
-12. 副产氢+天然气一步法 (Byproduct H2 + NG One-Step)
-13. 副产氢+工业CO₂两步法 (Byproduct H2 Two-Step)
-14. 副产氢+工业CO₂一步法 (Byproduct H2 One-Step)
+12. 副产氢+工业CO₂两步法 (Byproduct H2 Two-Step)
+13. 副产氢+工业CO₂一步法 (Byproduct H2 One-Step)
+
+注意 | Note:
+- 天然气一步法不包含副产氢场景，因为一步法不需要绿氢，无法进行副产氢化
+- Natural Gas One-Step does not have a byproduct hydrogen scenario because it doesn't require green hydrogen
 
 作者 | Author: Claude Code
 创建时间 | Created: 2025-11-19
-最后更新 | Last Updated: 2025-11-19
+最后更新 | Last Updated: 2025-11-23
 """
 
 import json
@@ -59,8 +62,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class FourteenScenariosComparisonVisualizer:
-    """十四场景对比可视化器"""
+class ThirteenScenariosComparisonVisualizer:
+    """十三场景对比可视化器"""
 
     def __init__(self, output_dir: str = None):
         """
@@ -78,7 +81,7 @@ class FourteenScenariosComparisonVisualizer:
 
         # 创建带时间戳的子目录
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.session_dir = self.output_dir / f"comparison_14scenarios_{timestamp}"
+        self.session_dir = self.output_dir / f"comparison_13scenarios_{timestamp}"
         self.session_dir.mkdir(parents=True, exist_ok=True)
 
         logger.info(f"输出目录: {self.session_dir}")
@@ -132,7 +135,8 @@ class FourteenScenariosComparisonVisualizer:
                 'carbon_pattern': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json')
             },
 
-            # ========== 副产氢场景 (7个) ==========
+            # ========== 副产氢场景 (6个) ==========
+            # 注意：天然气一步法不包含副产氢场景（一步法不需要绿氢，无法副产氢化）
             'Byproduct H2 + Coal': {
                 'name_cn': '副产氢+煤',
                 'color': '#FF6B6B',  # 亮红色
@@ -154,14 +158,8 @@ class FourteenScenariosComparisonVisualizer:
             'Byproduct H2 + NG Two-Step': {
                 'name_cn': '副产氢+天然气两步',
                 'color': '#26DE81',  # 亮绿色
-                'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/complete_solution_*.json'),
-                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/carbon_emissions_detailed_*.json')
-            },
-            'Byproduct H2 + NG One-Step': {
-                'name_cn': '副产氢+天然气一步',
-                'color': '#FED330',  # 亮黄色
-                'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/ft_one_step/complete_solution_*.json'),
-                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/ft_one_step/carbon_emissions_detailed_*.json')
+                'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json'),
+                'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 Two-Step': {
                 'name_cn': '副产氢两步法',
@@ -181,7 +179,7 @@ class FourteenScenariosComparisonVisualizer:
         self.data = {}
 
     def load_data(self):
-        """加载十四个场景的数据"""
+        """加载十三个场景的数据"""
         logger.info("=" * 80)
         logger.info("加载模块数据")
         logger.info("=" * 80)
@@ -258,9 +256,9 @@ class FourteenScenariosComparisonVisualizer:
             'Storage Operation': ('储存运营', ['storage_operation_cost', 'h2_storage_operation'])
         }
 
-        # 创建图形（两个子图）- 增加宽度以容纳14个场景
-        fig, axes = plt.subplots(1, 2, figsize=(28, 8))
-        fig.suptitle('十四场景成本对比 | Fourteen Scenarios Cost Comparison', fontsize=18, fontweight='bold')
+        # 创建图形（两个子图）- 调整宽度适配13个场景
+        fig, axes = plt.subplots(1, 2, figsize=(26, 8))
+        fig.suptitle('十三场景成本对比 | Thirteen Scenarios Cost Comparison', fontsize=18, fontweight='bold')
 
         # === 子图1: 总成本和投资/运营成本对比 ===
         ax1 = axes[0]
@@ -353,8 +351,8 @@ class FourteenScenariosComparisonVisualizer:
         """可视化需求满足程度"""
         logger.info("\n生成需求满足程度对比图...")
 
-        # 创建图形 - 增加宽度
-        fig, ax = plt.subplots(figsize=(16, 8))
+        # 创建图形 - 调整宽度适配13个场景
+        fig, ax = plt.subplots(figsize=(15, 8))
         fig.suptitle('需求满足程度对比 | Demand Fulfillment Comparison', fontsize=18, fontweight='bold')
 
         modules_list = list(self.data.keys())
@@ -407,8 +405,8 @@ class FourteenScenariosComparisonVisualizer:
         """可视化碳排放三指标"""
         logger.info("\n生成碳排放三指标对比图...")
 
-        # 创建图形（三个子图）- 增加宽度
-        fig, axes = plt.subplots(1, 3, figsize=(30, 8))
+        # 创建图形（三个子图）- 调整宽度适配13个场景
+        fig, axes = plt.subplots(1, 3, figsize=(28, 8))
         fig.suptitle('碳排放三指标对比 | Carbon Emissions Three Indicators Comparison',
                     fontsize=18, fontweight='bold')
 
@@ -504,8 +502,8 @@ class FourteenScenariosComparisonVisualizer:
         """可视化生命周期平准化成本 (LCOE)"""
         logger.info("\n生成生命周期平准化成本对比图...")
 
-        # 创建图形 - 增加宽度
-        fig, ax = plt.subplots(figsize=(18, 8))
+        # 创建图形 - 调整宽度适配13个场景
+        fig, ax = plt.subplots(figsize=(17, 8))
         fig.suptitle('生命周期平准化成本对比 | Levelized Cost of Energy (LCOE) Comparison',
                     fontsize=18, fontweight='bold')
 
@@ -631,13 +629,13 @@ class FourteenScenariosComparisonVisualizer:
 def main():
     """主函数"""
     logger.info("=" * 80)
-    logger.info("十四场景对比可视化脚本")
-    logger.info("Fourteen Scenarios Comparison Visualization Script")
+    logger.info("十三场景对比可视化脚本")
+    logger.info("Thirteen Scenarios Comparison Visualization Script")
     logger.info("=" * 80)
 
     try:
         # 创建可视化器
-        visualizer = FourteenScenariosComparisonVisualizer()
+        visualizer = ThirteenScenariosComparisonVisualizer()
 
         # 加载数据
         visualizer.load_data()

@@ -1538,8 +1538,21 @@ class CoalHydrogenSAFOptimizer:
         logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
 
         # 3. 生成时间序列数据（168小时，恒定产能）
+        # 添加500km地理范围筛选 - 2025-11-23
         time_series_data = []
+        filtered_count = 0
+        included_count = 0
+
         for _, row in df.iterrows():
+            plant_lat = row['latitude']
+            plant_lon = row['longitude']
+
+            # 500km范围检查：以北京为中心
+            if not is_within_beijing_range(plant_lat, plant_lon, 500):
+                filtered_count += 1
+                continue
+
+            included_count += 1
             for hour in range(self.total_hours):
                 time_series_data.append({
                     'plant_name': f"{plant_name_prefix}{row[name_column]}",
@@ -1552,6 +1565,7 @@ class CoalHydrogenSAFOptimizer:
                 })
 
         time_series_df = pd.DataFrame(time_series_data)
+        logger.info(f"    500km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
         logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
 
         return time_series_df
@@ -1859,8 +1873,10 @@ class CoalHydrogenSAFOptimizer:
             }
 
             if len(hydrogen_location_dict) > 0:
+                # 使用 source_type='auto' 自动检测氢源类型
                 self.clustering_results = self.hydrogen_clustering_optimizer.cluster_hydrogen_plants(
-                    hydrogen_location_dict
+                    hydrogen_location_dict,
+                    source_type='auto'
                 )
 
                 # 🚀 性能优化：移除预计算循环，改为延迟计算
@@ -3984,24 +4000,37 @@ class CoalHydrogenSAFOptimizer:
         # =========================================================================
         # 5.6 CO₂利用负排放 (CO₂ Utilization Credit - Negative Emissions)
         # =========================================================================
-        # 根据CORSIA标准，固定在SAF中的碳应计为负排放
-        # SAF碳含量约85% (质量分数)，CO₂/C摩尔质量比 = 44/12 = 3.67
-        # 负排放 = SAF产量 × 0.85 × 3.67 × (-1.0)
-        saf_carbon_content = 0.85  # SAF中碳的质量分数
-        co2_to_c_ratio = 44.0 / 12.0  # CO₂与碳的摩尔质量比
-        utilization_credit_factor = -1.0  # 负排放系数
+        # 从配置文件读取CO₂源类型和碳汇控制参数
+        co2_source_config = self.carbon_params.get('co2_source_configuration', {})
+        enable_co2_credit = co2_source_config.get('enable_co2_utilization_credit', False)
+        scenario_type = co2_source_config.get('scenario_type', 'unknown')
+        credit_factor = co2_source_config.get('utilization_credit_factor', 0.0)
 
-        self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
-            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
+        logger.info(f"CO₂源配置: scenario_type={scenario_type}, enable_credit={enable_co2_credit}")
 
-        logger.info(f"✨ CO₂利用负排放表达式已创建")
-        logger.info(f"   SAF碳含量: {saf_carbon_content}, CO₂/C比: {co2_to_c_ratio:.2f}, 单位SAF负排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO2eq/kg SAF")
+        if enable_co2_credit:
+            # 仅当配置允许时计算CO₂利用负排放（仅限工业捕获/DAC场景）
+            # 根据CORSIA标准，固定在SAF中的碳应计为负排放
+            saf_carbon_content = 0.85  # SAF中碳的质量分数
+            co2_to_c_ratio = 44.0 / 12.0  # CO₂与碳的摩尔质量比
+            utilization_credit_factor = credit_factor if credit_factor != 0 else -1.0  # 负排放系数
+
+            self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
+                self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+                saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
+                for location in self.locations
+                for tech in self.technologies
+                for hour in range(self.total_hours)
+                if (location, tech, hour) in self.production_vars
+            )
+
+            logger.info(f"✨ CO₂利用负排放表达式已创建 (场景: {scenario_type})")
+            logger.info(f"   SAF碳含量: {saf_carbon_content}, CO₂/C比: {co2_to_c_ratio:.2f}, 单位SAF负排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO2eq/kg SAF")
+        else:
+            # 化石燃料原料场景（煤气化）：副产CO₂循环利用不属于碳移除，不计入负排放
+            self.carbon_expressions['co2_utilization_credit'] = gp.LinExpr(0)
+            logger.info(f"⚠️ CO₂利用负排放已禁用 (场景: {scenario_type})")
+            logger.info(f"   原因: {co2_source_config.get('description', '副产CO₂循环利用不属于碳移除')}")
 
         # =========================================================================
         # 6. 汇总碳排放 (Carbon Emission Aggregation)

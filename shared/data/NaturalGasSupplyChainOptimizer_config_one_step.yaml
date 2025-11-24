@@ -206,6 +206,25 @@ carbon_emission_parameters:
     ng_truck_intensity: 0.1                # 天然气罐车碳强度(kgCO₂e/m³/100km) | NG truck CI
 
     saf_truck_intensity: 0.12              # SAF罐车碳强度(kgCO₂e/kg/100km) | SAF truck CI
+
+    h2_pipeline_intensity: 0.02             # 氢气管道碳强度(kgCO₂e/kg/100km) | H₂ pipeline CI
+
+    h2_truck_intensity: 0.15                # 氢气罐车碳强度(kgCO₂e/kg/100km) | H₂ truck CI
+
+    co2_pipeline_intensity: 0.01            # CO₂管道碳强度(kgCO₂e/kg/100km) | CO₂ pipeline CI
+
+    co2_truck_intensity: 0.08               # CO₂罐车碳强度(kgCO₂e/kg/100km) | CO₂ truck CI
+
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'fossil_feedstock'             # 化石燃料原料场景（天然气重整副产CO₂）| Fossil feedstock scenario
+    enable_co2_utilization_credit: false          # 不计算CO₂利用负排放 | Disable CO₂ utilization carbon credit
+    utilization_credit_factor: 0.0                # 副产CO₂循环利用不算碳汇 | Byproduct CO₂ recycling is not carbon sink
+    description: |
+      CO₂来源：天然气重整副产CO₂（化石燃料碳转化）
+      碳汇计算：副产CO₂循环利用不属于碳移除，不计入负排放
+      Carbon sink: Byproduct CO₂ from natural gas reforming is not carbon removal
+
 # =============================================================================
 # 聚类参数 (Clustering Parameters)
 # 用于可再生能源发电厂的地理聚类和运输路径优化

@@ -365,6 +365,16 @@ carbon_emission_parameters:
 
     co2_pipeline_intensity: 0.01           # CO₂管道碳强度(kgCO₂e/kg/100km) | CO₂ pipeline CI
 
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'industrial_capture'           # 工业点源捕获场景 | Industrial point source capture scenario
+    enable_co2_utilization_credit: true           # 启用CO₂利用负排放 | Enable CO₂ utilization carbon credit
+    utilization_credit_factor: -1.0               # CORSIA标准：100%计入负排放 | CORSIA standard: 100% carbon credit
+    description: |
+      CO₂来源：工业点源捕获（coal_power, lng_power, oil_refinery）
+      碳汇计算：从工业排放中捕获的CO₂固定在SAF产品中，避免大气排放，计为负排放
+      Carbon sink calculation: CO₂ captured from industrial emissions and fixed in SAF products counts as carbon credit
+
 # =============================================================================
 # 聚类参数 (Clustering Parameters)
 # 用于可再生能源发电厂的地理聚类和运输路径优化

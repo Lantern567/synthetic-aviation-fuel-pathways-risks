@@ -70,6 +70,17 @@ carbon_emission_parameters:
     mtj_truck_intensity: 0.12
     h2_pipeline_intensity: 0.02
     co2_pipeline_intensity: 0.01
+
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'dac'                          # DAC直接空气捕获场景 | DAC direct air capture scenario
+    enable_co2_utilization_credit: true           # 启用CO₂利用负排放 | Enable CO₂ utilization carbon credit
+    utilization_credit_factor: -1.0               # CORSIA标准：100%计入负排放 | CORSIA standard: 100% carbon credit
+    description: |
+      CO₂来源：DAC直接空气捕获 (Direct Air Capture from atmosphere)
+      碳汇计算：从大气中移除的CO₂固定在SAF产品中，计为真正的碳移除和负排放
+      Carbon sink calculation: CO₂ removed from atmosphere and fixed in SAF products counts as carbon removal
+
   raw_materials:
     dac_energy_intensity: 0.02
     dac_equipment_embodied: 0.05
@@ -80,7 +91,7 @@ clustering_parameters:
   enable_clustering_visualization: false
   export_clustering_results: true
   clustering_output_path: clustering_results.json
-  eps_distance_km: 60.0
+  eps_distance_km: 20.0
   min_samples: 2
   max_clusters: 50
   noise_plant_handling: direct_connection
@@ -168,6 +179,9 @@ green_hydrogen_supply:
   production_cost_yuan_per_kg: 25
   production_energy_kwh_per_kg: 2.5
   electrolyzer_efficiency: 0.95
+  # 上游生命周期分配碳排放（kgCO₂/kg H₂）
+  steel_upstream_carbon_intensity: 22      # 钢铁/焦化副产氢（焦炉煤气 → 氢）
+  refinery_upstream_carbon_intensity: 0.484  # 炼油/催化重整副产氢
   transport:
     pipeline_cost_yuan_per_kg_per_100km: 0.5
     truck_cost_yuan_per_kg_per_100km: 2.0
@@ -180,6 +194,11 @@ data_paths:
   aviation_data:
     airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
+    # 副产氢原始数据路径（直接读取，不使用convert后的数据）
+    steel_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/steel_daily_byproduct_h2_20251027_202950.csv
+    refinery_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/refinery_daily_byproduct_h2_20251027_202950.csv
+    steel_available_rate: 0.30  # 钢铁副产氢可外供比例（30%）
+    refinery_available_rate: 0.15  # 炼油副产氢可外供比例（15%）
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
   base_data_dir: products
@@ -205,8 +224,11 @@ data_paths:
       renewable_energy_plants: renewable_energy_plants_{timestamp}.csv
       co2_transport_plan: co2_transport_plan_{timestamp}.csv
       saf_transport_plan: saf_transport_plan_{timestamp}.csv
+      mtj_transport_plan: mtj_transport_plan_{timestamp}.csv
       optimization_summary: optimization_summary_{timestamp}.csv
       transport_summary: transport_summary_{timestamp}.csv
+      carbon_emissions: carbon_emissions_{timestamp}.csv
+      carbon_emissions_detailed: carbon_emissions_detailed_{timestamp}.json
     results_base_dir: products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen
 dependencies:
   cache_and_temp:
@@ -459,6 +481,8 @@ technologies:
     - solar_plant
     - wind_farm
     - airport
+    - byproduct_hydrogen_steel
+    - byproduct_hydrogen_refinery
     efficiency: 0.6
     h2_consumption_ratio: 0.45
     co2_consumption_ratio: 3.2
@@ -612,6 +636,8 @@ dac_parameters:
     - solar_plant
     - wind_farm
     - airport
+    - byproduct_hydrogen_steel
+    - byproduct_hydrogen_refinery
     facility_construction_cost_yuan: 50000000
     can_colocate_with_saf: true
     max_capacity_kg_per_hour: 100000

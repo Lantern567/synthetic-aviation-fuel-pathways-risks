@@ -1,10 +1,10 @@
 """
 Unified SAF Supply Chain Optimizer Runner
 
-统一的SAF供应链优化运行接口,支持两步法和一步法工艺路线。
+统一的SAF供应链优化运行接口,支持两步法、一步法和副产氢工艺路线。
 
 主要功能:
-1. 自动选择配置文件(两步法/一步法)
+1. 自动选择配置文件(两步法/一步法/副产氢一步法/副产氢两步法)
 2. 灵活设置Gurobi求解器参数(Threads, MIPGap, TimeLimit)
 3. 自动检测可用CPU核心数
 4. 标准化的运行流程
@@ -20,10 +20,18 @@ Unified SAF Supply Chain Optimizer Runner
     >>> # 运行一步法优化
     >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.02)
     >>> results = optimizer.run()
+    >>>
+    >>> # 运行副产氢一步法优化
+    >>> optimizer = UnifiedSAFOptimizer(process_type='byproduct_one_step', threads=64)
+    >>> results = optimizer.run()
+    >>>
+    >>> # 运行副产氢两步法优化
+    >>> optimizer = UnifiedSAFOptimizer(process_type='byproduct_two_step', threads=64)
+    >>> results = optimizer.run()
 
 作者: Claude Code
 创建日期: 2025-01-25
-版本: 1.0.0
+版本: 1.2.0
 """
 
 import os
@@ -54,10 +62,10 @@ class UnifiedSAFOptimizer:
     """
     统一SAF供应链优化器
 
-    提供简洁的API来运行两步法和一步法工艺路线的供应链优化。
+    提供简洁的API来运行两步法、一步法、副产氢一步法和副产氢两步法工艺路线的供应链优化。
 
     Attributes:
-        process_type (str): 工艺类型,'two_step'或'one_step'
+        process_type (str): 工艺类型,'two_step'、'one_step'、'byproduct_one_step'或'byproduct_two_step'
         threads (int): CPU线程数
         time_limit (int): 求解时间限制(秒)
         mip_gap (float): MIP求解精度
@@ -69,16 +77,27 @@ class UnifiedSAFOptimizer:
     # ===== v4.0变更: 使用DAC版本配置文件 =====
     # v4.0.1: 配置文件移至shared/config目录
     # v4.1: 支持一步法和两步法不同配置文件
+    # v4.2: 支持副产氢一步法和两步法配置
     CONFIG_MAPPING = {
         'two_step': 'shared/config/DACHydrogenSAFOptimizer_config_two_step.yaml',
         'one_step': 'shared/config/DACHydrogenSAFOptimizer_config.yaml',
+        'byproduct_one_step': 'shared/data/DACByproductHydrogenSAFOptimizer_config_one_step.yaml',
+        'byproduct_two_step': 'shared/data/DACByproductHydrogenSAFOptimizer_config_two_step.yaml',
+    }
+
+    # 结果输出目录映射（副产氢类型分一步法和两步法）
+    RESULTS_DIR_MAPPING = {
+        'two_step': 'two_step',
+        'one_step': 'one_step',
+        'byproduct_one_step': 'byproduct_hydrogen/one_step',
+        'byproduct_two_step': 'byproduct_hydrogen/two_step',
     }
 
     def __init__(
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: int = 3600,
+        time_limit: int = 86400,  # 24小时 (从3600秒改为86400秒)
         mip_gap: float = 0.05,
         time_horizon_weeks: int = 1,
         parallel_workers: Optional[int] = None,
@@ -96,9 +115,11 @@ class UnifiedSAFOptimizer:
             process_type: 工艺类型
                 - 'two_step': 两步法 (H₂+CO₂→甲醇→SAF)
                 - 'one_step': 一步法 (H₂+CO₂→RWGS→FT→SAF)
+                - 'byproduct_one_step': 副产氢一步法 (副产氢+CO₂→RWGS→FT→SAF)
+                - 'byproduct_two_step': 副产氢两步法 (副产氢+CO₂→甲醇→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
+            time_limit: Gurobi求解时间限制(秒),默认86400(24小时)
             mip_gap: MIP相对最优间隙,默认0.05(5%)
             time_horizon_weeks: 优化时间范围(周数),默认1周
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
@@ -117,10 +138,11 @@ class UnifiedSAFOptimizer:
         self._setup_logging(log_level)
 
         # 验证参数
-        if process_type not in ['two_step', 'one_step', 'custom']:
+        valid_process_types = ['two_step', 'one_step', 'byproduct_one_step', 'byproduct_two_step', 'custom']
+        if process_type not in valid_process_types:
             raise ValueError(
                 f"Invalid process_type: {process_type}. "
-                f"Must be 'two_step', 'one_step', or 'custom'."
+                f"Must be one of {valid_process_types}."
             )
 
         if process_type == 'custom' and config_path is None:
@@ -132,7 +154,9 @@ class UnifiedSAFOptimizer:
         self.airport_excel_path = airport_excel_path
 
         if results_dir is None:
-            resolved_results_dir = project_root / 'results' / self.process_type
+            # 使用映射表确定输出目录（副产氢类型统一输出到byproduct_hydrogen）
+            results_subdir = self.RESULTS_DIR_MAPPING.get(self.process_type, self.process_type)
+            resolved_results_dir = project_root / 'results' / results_subdir
         else:
             resolved_results_dir = Path(results_dir)
 
@@ -291,6 +315,7 @@ class UnifiedSAFOptimizer:
 
             # ===== v4.0变更: 实例化DAC版本优化器 =====
             # ===== v4.1修复: 传递process_mode参数 =====
+            # ===== v4.2修复: 映射副产氢类型到底层工艺类型 =====
             override_params = {}
             if self.parallel_workers is not None:
                 override_params['parallel_workers'] = self.parallel_workers
@@ -299,9 +324,24 @@ class UnifiedSAFOptimizer:
             if self.osm_pbf_path is not None:
                 override_params['osm_pbf_path'] = self.osm_pbf_path
 
+            # 映射 process_type 到 process_mode
+            # 副产氢类型使用相同的底层工艺，只是配置文件不同（氢源不同）
+            process_mode_mapping = {
+                'two_step': 'two_step',
+                'one_step': 'one_step',
+                'byproduct_one_step': 'one_step',      # 副产氢一步法 -> 底层一步法
+                'byproduct_two_step': 'two_step',      # 副产氢两步法 -> 底层两步法
+                'custom': self.process_type,           # 自定义类型保持不变
+            }
+            process_mode = process_mode_mapping.get(self.process_type, self.process_type)
+
+            # 获取日志/结果子目录（与results_dir保持一致）
+            log_subdir = self.RESULTS_DIR_MAPPING.get(self.process_type, self.process_type)
+
             self.optimizer = DACHydrogenSAFOptimizer(
                 config_path=str(self.config_path),
-                process_mode=self.process_type,
+                process_mode=process_mode,
+                log_subdir=log_subdir,
                 **override_params,
             )
             self._monitor_memory()
@@ -497,7 +537,7 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 3600,
+    time_limit: int = 86400,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -525,7 +565,7 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 3600,
+    time_limit: int = 86400,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -551,6 +591,62 @@ def run_one_step_optimization(
     return optimizer.run()
 
 
+def run_byproduct_one_step_optimization(
+    threads: Optional[int] = None,
+    time_limit: int = 86400,
+    mip_gap: float = 0.01,
+    **kwargs
+) -> Dict[str, Any]:
+    """
+    快捷函数: 运行副产氢一步法优化
+
+    Args:
+        threads: CPU线程数
+        time_limit: 求解时间限制(秒)
+        mip_gap: MIP Gap
+        **kwargs: 其他传递给UnifiedSAFOptimizer的参数
+
+    Returns:
+        Dict[str, Any]: 优化结果
+    """
+    optimizer = UnifiedSAFOptimizer(
+        process_type='byproduct_one_step',
+        threads=threads,
+        time_limit=time_limit,
+        mip_gap=mip_gap,
+        **kwargs
+    )
+    return optimizer.run()
+
+
+def run_byproduct_two_step_optimization(
+    threads: Optional[int] = None,
+    time_limit: int = 86400,
+    mip_gap: float = 0.01,
+    **kwargs
+) -> Dict[str, Any]:
+    """
+    快捷函数: 运行副产氢两步法优化
+
+    Args:
+        threads: CPU线程数
+        time_limit: 求解时间限制(秒)
+        mip_gap: MIP Gap
+        **kwargs: 其他传递给UnifiedSAFOptimizer的参数
+
+    Returns:
+        Dict[str, Any]: 优化结果
+    """
+    optimizer = UnifiedSAFOptimizer(
+        process_type='byproduct_two_step',
+        threads=threads,
+        time_limit=time_limit,
+        mip_gap=mip_gap,
+        **kwargs
+    )
+    return optimizer.run()
+
+
 if __name__ == '__main__':
     # 命令行运行示例
     import argparse
@@ -560,12 +656,12 @@ if __name__ == '__main__':
         '--process',
         '--process-type',
         dest='process_type',
-        choices=['two_step', 'one_step'],
+        choices=['two_step', 'one_step', 'byproduct_one_step', 'byproduct_two_step'],
         default='two_step',
-        help='Process type to use'
+        help='Process type to use (two_step: DAC两步法, one_step: DAC一步法, byproduct_one_step: 副产氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds')
+    parser.add_argument('--time-limit', type=int, default=86400, help='Time limit in seconds (default: 86400 = 24 hours)')
     parser.add_argument('--mip-gap', type=float, default=0.05, help='MIP gap tolerance')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 

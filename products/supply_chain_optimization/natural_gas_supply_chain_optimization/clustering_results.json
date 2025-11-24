@@ -15,9 +15,12 @@
     "shared_pipeline_discount_factor": 0.65,
     "processing_cost_base": 10.0
   },
+  "primary_cluster_type": "mixed",
   "clusters": [
     {
       "cluster_id": 0,
+      "cluster_name": "mixed_cluster_0",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Keshiketeng Banner Shangtoudi wind farm",
         "Inner Mongolia Keshiketeng Banner Shangwopu wind farm",
@@ -54,6 +57,8 @@
     },
     {
       "cluster_id": 1,
+      "cluster_name": "mixed_cluster_1",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Xilinhaote Huitengliang (Guotai) wind farm",
         "Inner Mongolia Xilinhaote Huitengliang (Longyuan) wind farm",
@@ -95,6 +100,8 @@
     },
     {
       "cluster_id": 2,
+      "cluster_name": "mixed_cluster_2",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Hangjin Banner Power Export (State Development Investment) wind farm",
         "Inner Mongolia Wulatezhong Banner (China Resources) wind farm",
@@ -126,6 +133,8 @@
     },
     {
       "cluster_id": 3,
+      "cluster_name": "mixed_cluster_3",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Qingshuihe Jiucaizhuang Windpower Heating Project",
         "Inner Mongolia Qingshuihe Wind/Water energy complex",
@@ -182,6 +191,8 @@
     },
     {
       "cluster_id": 4,
+      "cluster_name": "mixed_cluster_4",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Huade Niiujiacun wind farm",
         "Hebei Huadian Kangbao Muchang wind farm",
@@ -228,6 +239,8 @@
     },
     {
       "cluster_id": 5,
+      "cluster_name": "mixed_cluster_5",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Zhenglan Banner Kunyu distributed wind farm",
         "Inner Mongolia Zhenglan Banner Power Export (Huadian) wind farm"
@@ -254,6 +267,8 @@
     },
     {
       "cluster_id": 6,
+      "cluster_name": "mixed_cluster_6",
+      "cluster_type": "mixed",
       "member_locations": [
         "Liaoning Chaoyang Jianping Yangshuling wind farm",
         "Liaoning Chaoyang Jianping Yingzi wind farm"
@@ -280,6 +295,8 @@
     },
     {
       "cluster_id": 7,
+      "cluster_name": "mixed_cluster_7",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Hengshui Gucheng (Power Investment) wind farm",
         "Shandong Province Dezhou Dingzhuang solar farm"
@@ -306,6 +323,8 @@
     },
     {
       "cluster_id": 8,
+      "cluster_name": "mixed_cluster_8",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Hengshui Raoyang (SPIC) wind farm",
         "Hebei Hengshui Raoyang wind farm"
@@ -332,6 +351,8 @@
     },
     {
       "cluster_id": 9,
+      "cluster_name": "mixed_cluster_9",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Huai'an (CECEP) wind farm",
         "Hebei Huai'an Eco-Governance Integrated Energy Demonstration Project wind farm",
@@ -373,6 +394,8 @@
     },
     {
       "cluster_id": 10,
+      "cluster_name": "mixed_cluster_10",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Jize (Yunda) wind farm",
         "Hebei Julu (Dongneng) wind farm",
@@ -424,6 +447,8 @@
     },
     {
       "cluster_id": 11,
+      "cluster_name": "mixed_cluster_11",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Chicheng Dushikou West wind farm",
         "Hebei Chicheng Mayinggushan wind farm",
@@ -475,6 +500,8 @@
     },
     {
       "cluster_id": 12,
+      "cluster_name": "mixed_cluster_12",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Chengde Sangou SPIC solar farm",
         "Hebei Province Chengde SPIC New Energy solar farm"
@@ -501,6 +528,8 @@
     },
     {
       "cluster_id": 13,
+      "cluster_name": "mixed_cluster_13",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Laiyuan Yingli solar farm",
         "Hebei Yuxian Shou'ao solar farm"
@@ -527,6 +556,8 @@
     },
     {
       "cluster_id": 14,
+      "cluster_name": "mixed_cluster_14",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Lingshou (Huantai Energy) solar farm",
         "Hebei Province Quyang (Three Gorges) solar farm",
@@ -558,6 +589,8 @@
     },
     {
       "cluster_id": 15,
+      "cluster_name": "mixed_cluster_15",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Province Haixing \"Front Runner\" solar farm",
         "Shandong Wudi Aikang solar farm",
@@ -589,6 +622,8 @@
     },
     {
       "cluster_id": 16,
+      "cluster_name": "mixed_cluster_16",
+      "cluster_type": "mixed",
       "member_locations": [
         "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
         "Hebei Changan Automobile solar project"
@@ -615,6 +650,8 @@
     },
     {
       "cluster_id": 17,
+      "cluster_name": "mixed_cluster_17",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Wulanchabu \"Grid-Friendly Green Power Station\" solar power plant",
         "Inner Mongolia Wulanchabu Siziwang Banner Grid-Connected solar farm"
@@ -641,6 +678,8 @@
     },
     {
       "cluster_id": 18,
+      "cluster_name": "mixed_cluster_18",
+      "cluster_type": "mixed",
       "member_locations": [
         "Inner Mongolia Wulanchabu Chayouzhong Banner Yuanhua solar farm",
         "Inner Mongolia Qahar Right Front Banner Tuguiwula Guodian solar farm",
@@ -672,6 +711,8 @@
     },
     {
       "cluster_id": 19,
+      "cluster_name": "mixed_cluster_19",
+      "cluster_type": "mixed",
       "member_locations": [
         "Shandong Province Laiwu Yangjiayu CNNC solar farm",
         "Shandong Province Mengyin Three Gorges solar farm",
@@ -703,6 +744,8 @@
     },
     {
       "cluster_id": 20,
+      "cluster_name": "mixed_cluster_20",
+      "cluster_type": "mixed",
       "member_locations": [
         "Shanxi Lucheng Shengyang solar farm",
         "Shanxi Qinxian (Huaneng) solar farm",
@@ -734,6 +777,8 @@
     },
     {
       "cluster_id": 21,
+      "cluster_name": "mixed_cluster_21",
+      "cluster_type": "mixed",
       "member_locations": [
         "Shanxi Pingding Yuhuangding SPIC solar farm",
         "Shanxi Province Yuxian Niucunzhen solar farm"
@@ -760,6 +805,8 @@
     },
     {
       "cluster_id": 22,
+      "cluster_name": "mixed_cluster_22",
+      "cluster_type": "mixed",
       "member_locations": [
         "Shandong Dongying Kenli (China Resources) solar farm",
         "Shandong Lililun solar project"
@@ -786,6 +833,8 @@
     },
     {
       "cluster_id": 23,
+      "cluster_name": "mixed_cluster_23",
+      "cluster_type": "mixed",
       "member_locations": [
         "Shandong Feicheng Coal Mining Subsidence Area (Huadian) solar farm",
         "Shandong Feicheng Shihengzhen solar farm"

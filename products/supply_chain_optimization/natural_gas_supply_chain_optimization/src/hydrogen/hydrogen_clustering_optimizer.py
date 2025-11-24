@@ -26,6 +26,14 @@ class HydrogenCluster:
     geo_center: Tuple[float, float]
     pipeline_optimized_center: Optional[Tuple[float, float]]
     total_capacity_kg_per_hour: float
+    # 新增字段：聚类类型和名称
+    cluster_type: str = 'mixed'  # 'renewable', 'byproduct_steel', 'byproduct_refinery', 'mixed'
+    cluster_name: str = ''  # 格式: {type}_cluster_{id}
+
+    def __post_init__(self):
+        """初始化后自动生成 cluster_name（如果未设置）"""
+        if not self.cluster_name:
+            self.cluster_name = f"{self.cluster_type}_cluster_{self.cluster_id}"
 
 @dataclass
 class ClusteringResult:
@@ -59,8 +67,70 @@ class HydrogenClusteringOptimizer:
         c = 2 * atan2(sqrt(a), sqrt(1-a))
         return 6371 * c
 
+    def _determine_cluster_type(self, member_locations: List[str], source_type: str) -> str:
+        """
+        判断聚类类型
+
+        Args:
+            member_locations: 聚类成员位置名称列表
+            source_type: 指定的源类型（'auto'时自动判断）
+
+        Returns:
+            聚类类型字符串
+        """
+        # 如果明确指定了类型（非auto），直接返回
+        if source_type != 'auto':
+            return source_type
+
+        # 自动判断：根据成员名称前缀统计类型
+        steel_count = 0
+        refinery_count = 0
+        renewable_count = 0
+
+        for loc in member_locations:
+            loc_lower = loc.lower()
+            if loc.startswith('steel_') or 'byproduct_hydrogen_steel' in loc_lower:
+                steel_count += 1
+            elif loc.startswith('refinery_') or 'byproduct_hydrogen_refinery' in loc_lower:
+                refinery_count += 1
+            elif loc.startswith('solar_') or loc.startswith('wind_') or 'renewable' in loc_lower:
+                renewable_count += 1
+
+        total = len(member_locations)
+
+        # 判断主导类型
+        if renewable_count > 0 and (steel_count + refinery_count) == 0:
+            return 'renewable'
+        elif steel_count > 0 and refinery_count == 0 and renewable_count == 0:
+            return 'byproduct_steel'
+        elif refinery_count > 0 and steel_count == 0 and renewable_count == 0:
+            return 'byproduct_refinery'
+        elif (steel_count + refinery_count) > 0 and renewable_count == 0:
+            # 纯副产氢混合（钢铁+炼油）
+            return 'byproduct_mixed'
+        else:
+            # 混合类型（包含可再生能源和副产氢）
+            return 'mixed'
+
     def cluster_hydrogen_plants(self, hydrogen_locations: Dict,
-                                destination_coords: Optional[Tuple[float, float]] = None) -> ClusteringResult:
+                                destination_coords: Optional[Tuple[float, float]] = None,
+                                source_type: str = 'auto') -> ClusteringResult:
+        """
+        对氢气生产厂进行聚类
+
+        Args:
+            hydrogen_locations: 氢气生产位置字典
+            destination_coords: 目的地坐标（用于优化聚类中心）
+            source_type: 数据源类型
+                - 'auto': 自动根据位置名称判断类型
+                - 'renewable': 可再生能源（太阳能/风电）
+                - 'byproduct_steel': 钢铁副产氢
+                - 'byproduct_refinery': 炼油副产氢
+                - 'byproduct_mixed': 混合副产氢（钢铁+炼油）
+
+        Returns:
+            ClusteringResult: 聚类结果
+        """
         if not self.clustering_params.get('enable_clustering', False):
             logger.info("聚类功能未启用，跳过聚类")
             noise_points = [(loc, (coords['latitude'], coords['longitude']))
@@ -126,6 +196,9 @@ class HydrogenClusteringOptimizer:
                 for loc in cluster_members
             )
 
+            # 判断聚类类型
+            cluster_type = self._determine_cluster_type(cluster_members, source_type)
+
             cluster = HydrogenCluster(
                 cluster_id=int(label),
                 member_locations=cluster_members,
@@ -133,7 +206,9 @@ class HydrogenClusteringOptimizer:
                 center_coord=optimized_center,
                 geo_center=geo_center,
                 pipeline_optimized_center=optimized_center if self.enable_pipeline_opt else None,
-                total_capacity_kg_per_hour=total_capacity
+                total_capacity_kg_per_hour=total_capacity,
+                cluster_type=cluster_type,
+                cluster_name=f"{cluster_type}_cluster_{int(label)}"
             )
             clusters.append(cluster)
 
@@ -235,23 +310,53 @@ class HydrogenClusteringOptimizer:
     def _export_results(self, result: ClusteringResult):
         output_path = self.clustering_params.get('clustering_output_path', 'clustering_results.json')
 
+        # 检测聚类的主要类型（用于文件命名）
+        primary_type = 'mixed'
+        if result.clusters:
+            # 获取第一个聚类的类型作为主要类型
+            first_cluster_type = result.clusters[0].cluster_type
+            # 统计各类型数量
+            type_counts = {}
+            for c in result.clusters:
+                type_counts[c.cluster_type] = type_counts.get(c.cluster_type, 0) + 1
+            # 选择数量最多的类型
+            if type_counts:
+                primary_type = max(type_counts, key=type_counts.get)
+
+        # 根据聚类类型修改输出文件名
+        # 例如: clustering_results.json -> renewable_clustering_results.json
+        #       clustering_results.json -> byproduct_clustering_results.json
+        output_file = Path(output_path)
+        if primary_type != 'mixed':
+            # 在文件名前添加类型前缀
+            stem = output_file.stem  # clustering_results
+            suffix = output_file.suffix  # .json
+            # 简化类型名称
+            type_prefix = primary_type.replace('_mixed', '').replace('byproduct_', 'byproduct_')
+            if primary_type.startswith('byproduct'):
+                type_prefix = 'byproduct'
+            new_filename = f"{type_prefix}_{stem}{suffix}"
+            output_file = output_file.parent / new_filename
+
         # 如果是相对路径，则保存到green_hydrogen_supply_chain_optimization目录
         # 确保可视化代码能找到文件
-        output_file = Path(output_path)
         if not output_file.is_absolute():
             # 获取当前文件所在目录（src/hydrogen/）
             current_dir = Path(__file__).parent
             # 向上两级到green_hydrogen_supply_chain_optimization目录
             project_root = current_dir.parent.parent
-            output_file = project_root / output_path
+            output_file = project_root / output_file
 
         export_data = {
             'total_clusters': result.total_clusters,
             'total_noise_points': result.total_noise_points,
             'clustering_params': result.clustering_params,
+            'primary_cluster_type': primary_type,  # 新增：主要聚类类型
             'clusters': [
                 {
                     'cluster_id': c.cluster_id,
+                    'cluster_name': c.cluster_name,
+                    'cluster_type': c.cluster_type,
                     'member_locations': c.member_locations,
                     'member_coords': c.member_coords,
                     'center_coord': c.center_coord,

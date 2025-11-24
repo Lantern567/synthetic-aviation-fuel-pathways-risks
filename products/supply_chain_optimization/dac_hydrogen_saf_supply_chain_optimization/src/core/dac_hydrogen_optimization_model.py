@@ -762,7 +762,7 @@ class DACHydrogenSAFOptimizer:
 
         logger.info("=" * 60)
 
-    def __init__(self, config_path: str = None, process_mode: str = 'one_step', **override_params):
+    def __init__(self, config_path: str = None, process_mode: str = 'one_step', log_subdir: str = None, **override_params):
         """
         初始化DAC+绿氢制SAF供应链优化器
 
@@ -784,6 +784,11 @@ class DACHydrogenSAFOptimizer:
                   * H₂消耗: 0.7 kg/kg SAF
                   * CO₂消耗: 3.5 kg/kg SAF
                   * Variable CAPEX: 240,000 元/(kg/h)
+
+            log_subdir (str, optional): 日志和结果输出的子目录名称。
+                默认: 使用process_mode的值
+                用途: 支持副产氢等场景使用统一的输出目录
+                    - 例如: 'byproduct_hydrogen' 用于副产氢场景
 
             **override_params: 关键字参数覆盖配置文件参数。
                 常用覆盖参数:
@@ -845,15 +850,19 @@ class DACHydrogenSAFOptimizer:
         # 存储工艺模式
         self.process_mode = process_mode
 
-        # 立即挂载日志到对应的 process_mode 目录（在任何日志输出之前）
+        # 存储日志子目录（用于副产氢等场景的日志分类）
+        self.log_subdir = log_subdir if log_subdir else process_mode
+
+        # 立即挂载日志到对应的目录（在任何日志输出之前）
         try:
             import os  # 需要在此处导入，因为后面的代码中也有 import os
             log_dir = os.path.join(
                 get_project_base_dir(),
                 "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/logs",
-                self.process_mode
+                self.log_subdir
             )
-            filename_prefix = f"dac_h2_supply_chain_{self.process_mode}"
+            # 将路径分隔符替换为下划线，避免文件名包含斜杠
+            filename_prefix = f"dac_h2_supply_chain_{self.log_subdir.replace('/', '_')}"
             from shared.utils.log_preserver import mount_file_logging
             mount_file_logging(log_dir, filename_prefix=filename_prefix)
             logger.info(f"📝 日志已挂载: {log_dir}/{filename_prefix}_{{date}}.log")
@@ -1150,32 +1159,46 @@ class DACHydrogenSAFOptimizer:
         return renewable_data, airport_data
 
     def _process_renewable_data(self, renewable_data: pd.DataFrame):
-        """处理可再生能源数据（包含太阳能和风能，支持缓存）"""
+        """处理可再生能源数据（包含太阳能和风能，支持缓存）或副产氢数据"""
         try:
-            # 导入缓存管理器
-            try:
-                from ..cache.data_cache_manager import cache_manager
-            except ImportError:
-                from cache.data_cache_manager import cache_manager
-            
-            # 为可再生能源数据创建临时文件路径用于缓存检查
-            # （因为renewable_data是内存中的DataFrame，我们使用数据摘要作为标识）
-            renewable_cache_key = f"renewable_{len(renewable_data)}_{renewable_data['plant_name'].nunique()}"
-            temp_renewable_file = f"temp_renewable_{renewable_cache_key}.csv"
-            
-            # 检查是否有缓存
-            if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
-                logger.info("使用缓存的可再生能源数据（500km过滤）")
-                cached_df = cache_manager.load_filtered_data('renewable_plants')
-                if cached_df is not None:
-                    filtered_renewable_data = cached_df
-                    logger.info(f"从缓存加载可再生能源数据: {len(filtered_renewable_data)} 条记录")
-                else:
-                    logger.warning("缓存加载失败，执行完整处理")
-                    filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
+            # 检查数据类型：副产氢 vs 可再生能源
+            # 副产氢数据的type列为 'byproduct_hydrogen_steel' 或 'byproduct_hydrogen_refinery'
+            is_byproduct_h2 = False
+            if 'type' in renewable_data.columns and len(renewable_data) > 0:
+                first_type = renewable_data['type'].iloc[0]
+                if 'byproduct_hydrogen' in str(first_type):
+                    is_byproduct_h2 = True
+                    logger.info("检测到副产氢数据，跳过可再生能源缓存逻辑")
+
+            # 如果是副产氢数据，直接处理，不使用缓存
+            if is_byproduct_h2:
+                filtered_renewable_data = renewable_data
             else:
-                logger.info("缓存无效或不存在，执行完整处理和过滤")
-                filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
+                # 原有的缓存逻辑
+                # 导入缓存管理器
+                try:
+                    from ..cache.data_cache_manager import cache_manager
+                except ImportError:
+                    from cache.data_cache_manager import cache_manager
+
+                # 为可再生能源数据创建临时文件路径用于缓存检查
+                # （因为renewable_data是内存中的DataFrame，我们使用数据摘要作为标识）
+                renewable_cache_key = f"renewable_{len(renewable_data)}_{renewable_data['plant_name'].nunique()}"
+                temp_renewable_file = f"temp_renewable_{renewable_cache_key}.csv"
+
+                # 检查是否有缓存
+                if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
+                    logger.info("使用缓存的可再生能源数据（500km过滤）")
+                    cached_df = cache_manager.load_filtered_data('renewable_plants')
+                    if cached_df is not None:
+                        filtered_renewable_data = cached_df
+                        logger.info(f"从缓存加载可再生能源数据: {len(filtered_renewable_data)} 条记录")
+                    else:
+                        logger.warning("缓存加载失败，执行完整处理")
+                        filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
+                else:
+                    logger.info("缓存无效或不存在，执行完整处理和过滤")
+                    filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
             
             # 按地点聚合小时级发电数据 - 使用并行处理
             plant_names = filtered_renewable_data['plant_name'].unique()
@@ -1197,12 +1220,16 @@ class DACHydrogenSAFOptimizer:
                         self.locations[plant_name] = location_dict
 
             logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站")
-            
+
             # 统计电站类型
             solar_count = sum(1 for loc in self.locations.values() if loc['type'] == 'solar_plant')
             wind_count = sum(1 for loc in self.locations.values() if loc['type'] == 'wind_farm')
+            steel_count = sum(1 for loc in self.locations.values() if loc['type'] == 'byproduct_hydrogen_steel')
+            refinery_count = sum(1 for loc in self.locations.values() if loc['type'] == 'byproduct_hydrogen_refinery')
             logger.info(f"  太阳能发电站: {solar_count} 个")
             logger.info(f"  风电场: {wind_count} 个")
+            logger.info(f"  钢铁副产氢: {steel_count} 个")
+            logger.info(f"  炼油副产氢: {refinery_count} 个")
             
             # 将机场位置添加到基础locations中
             self._add_airports_to_locations()
@@ -1492,13 +1519,37 @@ class DACHydrogenSAFOptimizer:
     
     def _load_real_renewable_data(self) -> pd.DataFrame:
         """
-        加载真实的可再生能源数据
-        
+        加载真实的可再生能源数据或副产氢数据
+
         Returns:
-            可再生能源数据DataFrame
+            可再生能源数据DataFrame或副产氢数据DataFrame
         """
-        logger.info("加载真实的可再生能源数据...")
-        
+        logger.info("=" * 80)
+        logger.info("加载真实的可再生能源数据/副产氢数据...")
+        logger.info("=" * 80)
+
+        # 首先检查是否配置了副产氢数据路径
+        try:
+            logger.info("[副产氢检测] 尝试读取副产氢配置...")
+            steel_h2_path = self._get_data_path('aviation_data.steel_h2_data_path')
+            refinery_h2_path = self._get_data_path('aviation_data.refinery_h2_data_path')
+
+            logger.info(f"[副产氢检测] 钢铁副产氢路径: {steel_h2_path}")
+            logger.info(f"[副产氢检测] 炼油副产氢路径: {refinery_h2_path}")
+
+            if steel_h2_path and refinery_h2_path:
+                logger.info("✅ 检测到副产氢配置，开始加载副产氢数据")
+                return self._load_byproduct_h2_data()
+            else:
+                logger.warning("⚠️  副产氢路径配置为空，回退到可再生能源数据")
+        except (KeyError, AttributeError) as e:
+            logger.warning(f"❌ 副产氢配置检测失败: {type(e).__name__}: {e}")
+            logger.info("回退到加载可再生能源数据")
+        except Exception as e:
+            logger.error(f"❌ 副产氢配置检测时发生未预期的错误: {type(e).__name__}: {e}")
+            logger.info("回退到加载可再生能源数据")
+
+        # 原有的可再生能源数据加载逻辑
         # 从配置文件获取数据目录路径
         try:
             wind_data_dir = self._get_data_path('aviation_data.wind_data_dir')
@@ -1660,7 +1711,171 @@ class DACHydrogenSAFOptimizer:
             solar_data = pd.DataFrame()
         
         return solar_data
-    
+
+    def _load_byproduct_h2_data(self) -> pd.DataFrame:
+        """
+        直接加载副产氢原始数据（跳过convert脚本）
+
+        Returns:
+            副产氢数据DataFrame（格式与可再生能源数据一致）
+        """
+        logger.info("="*80)
+        logger.info("🔧 加载副产氢原始数据（直接计算，无需convert）")
+        logger.info("="*80)
+
+        # 获取配置参数
+        try:
+            base_dir = get_project_base_dir()
+            steel_h2_rel_path = self._get_data_path('aviation_data.steel_h2_data_path')
+            refinery_h2_rel_path = self._get_data_path('aviation_data.refinery_h2_data_path')
+
+            steel_h2_path = os.path.join(base_dir, steel_h2_rel_path)
+            refinery_h2_path = os.path.join(base_dir, refinery_h2_rel_path)
+
+            steel_available_rate = self.config['data_paths']['aviation_data']['steel_available_rate']
+            refinery_available_rate = self.config['data_paths']['aviation_data']['refinery_available_rate']
+
+            logger.info(f"[配置] 项目根目录: {base_dir}")
+            logger.info(f"[配置] 钢铁副产氢相对路径: {steel_h2_rel_path}")
+            logger.info(f"[配置] 炼油副产氢相对路径: {refinery_h2_rel_path}")
+            logger.info(f"[配置] 钢铁副产氢绝对路径: {steel_h2_path}")
+            logger.info(f"[配置] 炼油副产氢绝对路径: {refinery_h2_path}")
+            logger.info(f"[配置] 钢铁可外供比例: {steel_available_rate*100:.0f}%")
+            logger.info(f"[配置] 炼油可外供比例: {refinery_available_rate*100:.0f}%")
+
+            # 检查文件是否存在
+            if not os.path.exists(steel_h2_path):
+                logger.error(f"❌ 钢铁副产氢数据文件不存在: {steel_h2_path}")
+                raise FileNotFoundError(f"钢铁副产氢数据文件不存在: {steel_h2_path}")
+            if not os.path.exists(refinery_h2_path):
+                logger.error(f"❌ 炼油副产氢数据文件不存在: {refinery_h2_path}")
+                raise FileNotFoundError(f"炼油副产氢数据文件不存在: {refinery_h2_path}")
+
+            logger.info("✓ 所有副产氢数据文件路径验证通过")
+
+        except Exception as e:
+            logger.error(f"❌ 副产氢配置读取失败: {type(e).__name__}: {e}")
+            raise
+
+        # 加载钢铁副产氢数据
+        try:
+            logger.info(f"\n[加载] 读取钢铁副产氢数据: {steel_h2_path}")
+            steel_df = pd.read_csv(steel_h2_path, encoding='utf-8-sig')
+            logger.info(f"✅ 钢铁副产氢加载成功: {len(steel_df)} 个设施")
+            logger.info(f"   总日产能: {steel_df['h2_daily_tonnes'].sum():.2f} 吨/天")
+        except Exception as e:
+            logger.error(f"❌ 钢铁副产氢数据加载失败: {type(e).__name__}: {e}")
+            raise
+
+        # 加载炼油副产氢数据
+        try:
+            logger.info(f"\n[加载] 读取炼油副产氢数据: {refinery_h2_path}")
+            refinery_df = pd.read_csv(refinery_h2_path, encoding='utf-8-sig')
+            logger.info(f"✅ 炼油副产氢加载成功: {len(refinery_df)} 个设施")
+            logger.info(f"   总日产能: {refinery_df['h2_daily_tonnes'].sum():.2f} 吨/天")
+        except Exception as e:
+            logger.error(f"❌ 炼油副产氢数据加载失败: {type(e).__name__}: {e}")
+            raise
+
+        # 处理钢铁副产氢数据
+        steel_time_series = self._process_byproduct_h2_source(
+            df=steel_df,
+            available_rate=steel_available_rate,
+            plant_type='steel',
+            plant_name_prefix='steel_',
+            name_column='plant_name'
+        )
+
+        # 处理炼油副产氢数据
+        refinery_time_series = self._process_byproduct_h2_source(
+            df=refinery_df,
+            available_rate=refinery_available_rate,
+            plant_type='refinery',
+            plant_name_prefix='refinery_',
+            name_column='refinery_name'
+        )
+
+        # 合并数据
+        byproduct_h2_data = pd.concat([steel_time_series, refinery_time_series], ignore_index=True)
+        byproduct_h2_data = byproduct_h2_data.sort_values(['plant_name', 'hour']).reset_index(drop=True)
+
+        # 输出统计信息
+        logger.info("\n" + "="*80)
+        logger.info("副产氢数据加载完成！")
+        logger.info("="*80)
+        logger.info(f"总记录数: {len(byproduct_h2_data):,}")
+        logger.info(f"设施数量: {byproduct_h2_data['plant_name'].nunique()}")
+        logger.info(f"  - 钢铁厂: {len(steel_df)}")
+        logger.info(f"  - 炼油厂: {len(refinery_df)}")
+        logger.info(f"总小时产能: {byproduct_h2_data.groupby('plant_name')['power_output_mw'].first().sum():.2f} kg H2/hour")
+        logger.info("="*80)
+
+        return byproduct_h2_data
+
+    def _process_byproduct_h2_source(
+        self,
+        df: pd.DataFrame,
+        available_rate: float,
+        plant_type: str,
+        plant_name_prefix: str,
+        name_column: str
+    ) -> pd.DataFrame:
+        """
+        处理单一来源的副产氢数据
+
+        Args:
+            df: 副产氢原始数据
+            available_rate: 可外供比例
+            plant_type: 工厂类型（'steel' or 'refinery'）
+            plant_name_prefix: 工厂名称前缀
+            name_column: 工厂名称列名
+
+        Returns:
+            时间序列格式的DataFrame
+        """
+        # 1. 计算可外供的日产能（吨/天）
+        df['available_daily_tonnes'] = df['h2_daily_tonnes'] * available_rate
+
+        # 2. 转换为小时产能上限（kg/小时）
+        df['hourly_capacity_kg'] = (df['available_daily_tonnes'] * 1000) / 24
+
+        logger.info(f"  {plant_type.capitalize()} 可外供产能:")
+        logger.info(f"    总可外供日产能: {df['available_daily_tonnes'].sum():.2f} 吨/天")
+        logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
+
+        # 3. 生成时间序列数据（168小时，恒定产能）
+        # 添加500km地理范围筛选 - 2025-11-23
+        time_series_data = []
+        filtered_count = 0
+        included_count = 0
+
+        for _, row in df.iterrows():
+            plant_lat = row['latitude']
+            plant_lon = row['longitude']
+
+            # 500km范围检查：以北京为中心
+            if not is_within_beijing_range(plant_lat, plant_lon, 500):
+                filtered_count += 1
+                continue
+
+            included_count += 1
+            for hour in range(self.total_hours):
+                time_series_data.append({
+                    'plant_name': f"{plant_name_prefix}{row[name_column]}",
+                    'type': f'byproduct_hydrogen_{plant_type}',
+                    'latitude': row['latitude'],
+                    'longitude': row['longitude'],
+                    'capacity_mw': row['hourly_capacity_kg'],  # 暂存产能，字段名沿用
+                    'power_output_mw': row['hourly_capacity_kg'],  # 存储氢气产量(kg/h)
+                    'hour': hour
+                })
+
+        time_series_df = pd.DataFrame(time_series_data)
+        logger.info(f"    500km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
+        logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
+
+        return time_series_df
+
     def _interpolate_wind_to_hourly(self, wind_df: pd.DataFrame) -> pd.DataFrame:
         """
         将风电3小时数据插值到每小时
@@ -1771,7 +1986,7 @@ class DACHydrogenSAFOptimizer:
         # 氢气生产位置（可再生能源发电站）
         self.hydrogen_locations = [
             loc for loc, info in self.locations.items() 
-            if info['type'] in ['solar_plant', 'wind_farm']
+            if info['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
         ]
         
         # 机场位置（统一从locations获取）
@@ -1836,13 +2051,12 @@ class DACHydrogenSAFOptimizer:
             }
 
             if len(hydrogen_location_dict) > 0:
+                # 使用 source_type='auto' 自动检测氢源类型
                 self.clustering_results = self.hydrogen_clustering_optimizer.cluster_hydrogen_plants(
-                    hydrogen_location_dict
+                    hydrogen_location_dict,
+                    source_type='auto'
                 )
 
-                # 🚀 性能优化：移除预计算循环，改为延迟计算
-                # 路径将在_get_hydrogen_transport_distance_with_clustering()中按需计算和缓存
-                # 这避免了计算大量从未使用的路径，显著减少数据加载时间
                 logger.info(f"氢气聚类完成: {self.clustering_results.total_clusters}个聚类, "
                           f"{self.clustering_results.total_noise_points}个独立点")
                 logger.info("管道路径将按需计算（延迟计算模式）")
@@ -2076,7 +2290,51 @@ class DACHydrogenSAFOptimizer:
         
         # 如果找不到位置，抛出错误而不是返回默认坐标
         raise ValueError(f"位置 {location} 不存在或缺少坐标信息")
-    
+
+    def _get_electrolyzer_capex(self, location: str) -> float:
+        """
+        根据location的plant_type返回对应的电解槽/副产氢设备CAPEX
+
+        Args:
+            location: 位置名称
+
+        Returns:
+            CAPEX (元/(kg H₂/hour))
+        """
+        plant_type = self.locations[location]['type']
+
+        if plant_type == 'byproduct_hydrogen_refinery':
+            # 炼油副产氢: 224,000元/(kg H₂/hour), 比钢铁低20%
+            return 224000
+        elif plant_type == 'byproduct_hydrogen_steel':
+            # 钢铁副产氢: 280,000元/(kg H₂/hour)
+            return 280000
+        else:
+            # 绿氢电解槽: 从配置文件读取
+            return self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
+
+    def _get_electrolyzer_opex(self, location: str) -> float:
+        """
+        根据location的plant_type返回对应的电解槽/副产氢设备OPEX
+
+        Args:
+            location: 位置名称
+
+        Returns:
+            OPEX (元/年)
+        """
+        plant_type = self.locations[location]['type']
+
+        if plant_type == 'byproduct_hydrogen_refinery':
+            # 炼油副产氢: 110,000元/年, 比钢铁低15%
+            return 110000
+        elif plant_type == 'byproduct_hydrogen_steel':
+            # 钢铁副产氢: 130,000元/年
+            return 130000
+        else:
+            # 绿氢电解槽: 从配置文件读取
+            return self.config['equipment_raw_costs']['electrolyzer']['opex_raw']
+
     def _define_technologies(self):
         """定义MTJ航煤生产技术（使用统一的基础平准化成本，加上模式特定的复杂度调整）"""
         # 获取基础平准化产品成本 (元/kg)
@@ -2773,7 +3031,7 @@ class DACHydrogenSAFOptimizer:
             hourly_generation = self.locations[location].get('hourly_generation', [])
 
             # 如果是可再生能源站点，必须有发电数据
-            if location_type in ['solar_plant', 'wind_farm']:
+            if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                 if not hourly_generation or len(hourly_generation) == 0:
                     logger.warning(
                         f"位置 {location} (type={location_type}) 无可再生能源数据，跳过DAC能耗约束"
@@ -2803,7 +3061,7 @@ class DACHydrogenSAFOptimizer:
                 grid_purchase_kwh = self.dac_grid_electricity_vars[(location, hour)]
 
                 # 根据位置类型设置能耗约束
-                if location_type in ['solar_plant', 'wind_farm']:
+                if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                     # 可再生能源站点：需要计算制氢后剩余的能源
                     # 注意：hourly_generation 单位是 MWh，需要转换为 kWh
                     if hour >= len(hourly_generation):
@@ -3077,7 +3335,7 @@ class DACHydrogenSAFOptimizer:
         for location in self.locations:
             location_type = self.locations[location]['type']
             # 只在可再生能源地点创建制氢变量
-            if location_type in ['solar_plant', 'wind_farm']:
+            if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                 # 电解槽设施建设决策 (二进制)
                 var_name = f"electrolyzer_facility_{location}"
                 self.electrolyzer_facility_vars[location] = self.model.addVar(
@@ -3661,12 +3919,12 @@ class DACHydrogenSAFOptimizer:
             lifecycle_operation_factor
         )
 
-        # 6. 电解槽投资成本（一次性投资）
-        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H₂/hour) [单位产能投资]")
+        # 6. 电解槽投资成本（一次性投资）- 支持副产氢动态CAPEX
+        logger.info("计算电解槽/副产氢设备投资成本...")
         self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
             self.electrolyzer_capacity_vars[location] *
-            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
+            self._get_electrolyzer_capex(location) *  # 根据plant_type动态选择CAPEX
+            self.economic_params['electrolyzer_capacity_factor']
             for location in self.locations
             if location in self.electrolyzer_capacity_vars
         )
@@ -3710,7 +3968,7 @@ class DACHydrogenSAFOptimizer:
         saf_synthesis_power_cost = gp.quicksum(
             self.production_vars[(location, tech, hour)] *
             saf_synthesis_energy_kwh_per_kg *  # kWh/kg
-            (renewable_electricity_price if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+            (renewable_electricity_price if self.locations[location]['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
              else grid_electricity_price)
             for location in self.locations
             for tech in self.technologies
@@ -4228,7 +4486,7 @@ class DACHydrogenSAFOptimizer:
             self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
             saf_synthesis_energy_kwh_per_kg *  # SAF合成能耗
             (self.dynamic_carbon_intensity.get((location, hour), renewable_elec_fixed)  # 可再生站点：动态碳强度
-             if self.locations[location]['type'] in ['solar_plant', 'wind_farm']
+             if self.locations[location]['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
              else grid_electricity_intensity)  # 其他站点：市电碳强度
             for location in self.locations
             for tech in self.technologies
@@ -4433,25 +4691,38 @@ class DACHydrogenSAFOptimizer:
         # =========================================================================
         # 5.6 CO₂利用负排放 (CO₂ Utilization Credit - Negative Emissions)
         # =========================================================================
-        # DAC路线：直接从空气中捕获的CO₂通过E-CRM技术固定在甲醇中，最终固定在SAF产品中
-        # 根据CORSIA标准，碳固定可计入负排放
+        # 从配置文件读取CO₂源类型和碳汇控制参数
+        co2_source_config = self.carbon_params.get('co2_source_configuration', {})
+        enable_co2_credit = co2_source_config.get('enable_co2_utilization_credit', True)  # DAC默认启用
+        scenario_type = co2_source_config.get('scenario_type', 'dac')
+        credit_factor = co2_source_config.get('utilization_credit_factor', -1.0)
 
-        saf_carbon_content = 0.85  # SAF产品碳含量 (kg C/kg SAF)
-        co2_to_c_ratio = 44.0 / 12.0  # CO₂/C摩尔质量比
-        utilization_credit_factor = -1.0  # 负排放系数 (CORSIA标准)
+        logger.info(f"CO₂源配置: scenario_type={scenario_type}, enable_credit={enable_co2_credit}")
 
-        self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
-            self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
-            saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
-            for location in self.locations
-            for tech in self.technologies
-            for hour in range(self.total_hours)
-            if (location, tech, hour) in self.production_vars
-        )
+        if enable_co2_credit:
+            # DAC路线：直接从空气中捕获的CO₂通过E-CRM技术固定在甲醇中，最终固定在SAF产品中
+            # 根据CORSIA标准，碳固定可计入负排放（DAC和工业捕获场景适用）
+            saf_carbon_content = 0.85  # SAF产品碳含量 (kg C/kg SAF)
+            co2_to_c_ratio = 44.0 / 12.0  # CO₂/C摩尔质量比
+            utilization_credit_factor = credit_factor if credit_factor != 0 else -1.0  # 负排放系数 (CORSIA标准)
 
-        logger.info(f"✨ CO₂利用负排放表达式已创建")
-        logger.info(f"   计算公式: SAF产量 × {saf_carbon_content} × {co2_to_c_ratio:.2f} × {utilization_credit_factor}")
-        logger.info(f"   每kg SAF固定碳排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO₂e")
+            self.carbon_expressions['co2_utilization_credit'] = gp.quicksum(
+                self.production_vars.get((location, tech, hour), gp.LinExpr(0)) *
+                saf_carbon_content * co2_to_c_ratio * utilization_credit_factor
+                for location in self.locations
+                for tech in self.technologies
+                for hour in range(self.total_hours)
+                if (location, tech, hour) in self.production_vars
+            )
+
+            logger.info(f"✨ CO₂利用负排放表达式已创建 (场景: {scenario_type})")
+            logger.info(f"   计算公式: SAF产量 × {saf_carbon_content} × {co2_to_c_ratio:.2f} × {utilization_credit_factor}")
+            logger.info(f"   每kg SAF固定碳排放: {saf_carbon_content * co2_to_c_ratio * utilization_credit_factor:.2f} kg CO₂e")
+        else:
+            # 如果配置禁用碳汇（不应该在DAC场景发生，但作为安全保护）
+            self.carbon_expressions['co2_utilization_credit'] = gp.LinExpr(0)
+            logger.info(f"⚠️ CO₂利用负排放已禁用 (场景: {scenario_type})")
+            logger.info(f"   原因: {co2_source_config.get('description', '配置禁用')}")
 
         # =========================================================================
         # 6. 汇总碳排放 (Carbon Emission Aggregation)
@@ -4739,7 +5010,7 @@ class DACHydrogenSAFOptimizer:
                 )
 
                 if h2_demand.size() > 0:
-                    if location_type not in ['solar_plant', 'wind_farm']:
+                    if location_type not in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                         # 其他位置（机场、LNG终端）：氢气需求必须通过运输满足
                         # 这里先输出调试信息，实际供给由运输/库存约束处理
                         logger.debug(f"位置 {location} 在第{hour}小时有氢气需求，需要运输供应")
@@ -4747,6 +5018,9 @@ class DACHydrogenSAFOptimizer:
                 if location_type in ['solar_plant', 'wind_farm']:
                     # 2. 可再生能源电力供应约束（基于时段和天气）
                     self._add_renewable_power_constraints(location, hour)
+                elif location_type in ['byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
+                    # 3. 副产氢供应约束（直接限制氢气产量）
+                    self._add_byproduct_hydrogen_supply_constraints(location, hour)
         
         # 移除设备维护停机时间约束 - 这是导致20%利用率的主因
         # self._add_maintenance_downtime_constraints()  # 注释掉
@@ -4755,7 +5029,30 @@ class DACHydrogenSAFOptimizer:
         self._add_hydrogen_transport_capacity_constraints()
         
         logger.info("严格的小时级原料供应约束添加完成（已移除维护停机约束）")
-    
+
+    def _add_byproduct_hydrogen_supply_constraints(self, location: str, hour: int):
+        """
+        添加副产氢供应约束（每小时产量不能超过可外供量）
+
+        Args:
+            location: 位置名称
+            hour: 小时索引
+        """
+        location_info = self.locations[location]
+        hourly_generation = location_info.get('hourly_generation', [])
+
+        # 副产氢每小时可用量（kg/h）
+        available_h2_kg = 0.0
+        if hour < len(hourly_generation):
+            available_h2_kg = hourly_generation[hour]  # kg/h
+
+        # 约束：该小时的氢气生产不能超过可用供应量
+        if available_h2_kg > 0 and (location, hour) in self.hydrogen_production_vars:
+            self.model.addConstr(
+                self.hydrogen_production_vars[(location, hour)] <= available_h2_kg,
+                name=f"byproduct_h2_supply_{location}_{hour}"
+            )
+
     def _add_renewable_power_constraints(self, location: str, hour: int):
         """添加可再生能源电力供应约束"""
         location_info = self.locations[location]
@@ -4944,7 +5241,7 @@ class DACHydrogenSAFOptimizer:
         for location in self.locations:
             location_type = self.locations[location]['type']
             
-            if location_type in ['solar_plant', 'wind_farm']:
+            if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                 # 1. 电解槽容量约束
                 # 从配置读取电解槽最大容量
                 max_electrolyzer_capacity = self.config.get('capacity_limits', {}).get('electrolyzer_max_capacity_kg_per_hour', 2000)
@@ -5015,7 +5312,7 @@ class DACHydrogenSAFOptimizer:
         for location in self.locations:
             location_type = self.locations[location]['type']
             
-            if location_type in ['solar_plant', 'wind_farm']:
+            if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                 # 氢气库存平衡（周级运输模式：在hour=167统一出库）
                 for hour in range(self.total_hours):
                     # 当前氢气库存 = 上期库存 + 制氢生产 - 本地SAF消耗 - 运输出库
@@ -7215,12 +7512,12 @@ class DACHydrogenSAFOptimizer:
 
             # 保存到CSV
             df = pd.DataFrame(report_data)
-            csv_path = os.path.join(output_dir, f"carbon_emissions_{timestamp}.csv")
+            csv_path = self._get_output_path('carbon_emissions', timestamp)
             df.to_csv(csv_path, index=False, encoding='utf-8-sig')
             logger.info(f"碳排放报告已保存到: {csv_path}")
 
             # 同时保存详细的JSON格式数据
-            json_path = os.path.join(output_dir, f"carbon_emissions_detailed_{timestamp}.json")
+            json_path = self._get_output_path('carbon_emissions_detailed', timestamp)
             with open(json_path, 'w', encoding='utf-8') as f:
                 json.dump(carbon_results, f, ensure_ascii=False, indent=2)
             logger.info(f"碳排放详细数据已保存到: {json_path}")
@@ -7509,7 +7806,7 @@ class DACHydrogenSAFOptimizer:
         
         if transport_data:
             transport_df = pd.DataFrame(transport_data)
-            transport_path = os.path.join(output_dir, f"mtj_transport_plan_{timestamp}.csv")
+            transport_path = self._get_output_path('mtj_transport_plan', timestamp)
             transport_df.to_csv(transport_path, index=False, encoding='utf-8-sig')
             print(f"MTJ运输计划保存到: {transport_path}")
 
@@ -7533,7 +7830,7 @@ class DACHydrogenSAFOptimizer:
         
         if h2_transport_data:
             h2_transport_df = pd.DataFrame(h2_transport_data)
-            h2_transport_path = os.path.join(output_dir, f"hydrogen_transport_plan_{timestamp}.csv")
+            h2_transport_path = self._get_output_path('hydrogen_transport_plan', timestamp)
             h2_transport_df.to_csv(h2_transport_path, index=False, encoding='utf-8-sig')
             print(f"氢气运输计划保存到: {h2_transport_path}")
 
@@ -7551,7 +7848,7 @@ class DACHydrogenSAFOptimizer:
         
         if inventory_data:
             inventory_df = pd.DataFrame(inventory_data)
-            inventory_path = os.path.join(output_dir, f"inventory_levels_{timestamp}.csv")
+            inventory_path = self._get_output_path('inventory_levels', timestamp)
             inventory_df.to_csv(inventory_path, index=False, encoding='utf-8-sig')
             print(f"库存水平保存到: {inventory_path}")
 
@@ -7669,7 +7966,7 @@ class DACHydrogenSAFOptimizer:
 
         if all_transport_summary:
             transport_summary_df = pd.DataFrame(all_transport_summary)
-            transport_summary_path = os.path.join(output_dir, f"transport_summary_{timestamp}.csv")
+            transport_summary_path = self._get_output_path('transport_summary', timestamp)
             transport_summary_df.to_csv(transport_summary_path, index=False, encoding='utf-8-sig')
             print(f"运输路径汇总保存到: {transport_summary_path}")
             
@@ -7678,7 +7975,7 @@ class DACHydrogenSAFOptimizer:
             logger.info("成本分析数据已包含在优化总结中，无需独立的成本分析报告")
         
         # 保存完整的解决方案到JSON文件
-        solution_path = os.path.join(output_dir, f"complete_solution_{timestamp}.json")
+        solution_path = self._get_output_path('complete_solution', timestamp)
         with open(solution_path, 'w', encoding='utf-8') as f:
             # 使用自定义编码器处理numpy类型
             import json
@@ -7693,13 +7990,13 @@ class DACHydrogenSAFOptimizer:
         # 1. 保存可再生能源发电站信息
         renewable_data = []
         for location, info in self.locations.items():
-            if info['type'] in ['solar_plant', 'wind_farm']:
+            if info['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
                 avg_generation = np.mean(info['hourly_generation']) if info['hourly_generation'] else 0
                 max_generation = np.max(info['hourly_generation']) if info['hourly_generation'] else 0
                 min_generation = np.min(info['hourly_generation']) if info['hourly_generation'] else 0
                 renewable_data.append({
                     "位置ID": location,
-                    "发电站类型": "太阳能发电站" if info['type'] == 'solar_plant' else "风电场",
+                    "发电站类型": "太阳能发电站" if info['type'] == 'solar_plant' else ("风电场" if info['type'] == 'wind_farm' else ("钢铁副产氢" if info['type'] == 'byproduct_hydrogen_steel' else "炼油副产氢")),
                     "纬度": info['latitude'],
                     "经度": info['longitude'],
                     "装机容量(MW)": info.get('capacity_mw', 0),
@@ -7712,7 +8009,7 @@ class DACHydrogenSAFOptimizer:
 
         if renewable_data:
             renewable_df = pd.DataFrame(renewable_data)
-            renewable_path = os.path.join(output_dir, f"renewable_energy_plants_{timestamp}.csv")
+            renewable_path = self._get_output_path('renewable_energy_plants', timestamp)
             renewable_df.to_csv(renewable_path, index=False, encoding='utf-8-sig')
             print(f"可再生能源发电站信息保存到: {renewable_path}")
 
@@ -7737,7 +8034,7 @@ class DACHydrogenSAFOptimizer:
         
         if airport_data:
             airport_df = pd.DataFrame(airport_data)
-            airport_path = os.path.join(output_dir, f"airports_{timestamp}.csv")
+            airport_path = self._get_output_path('airports', timestamp)
             airport_df.to_csv(airport_path, index=False, encoding='utf-8-sig')
             print(f"机场信息保存到: {airport_path}")
         
@@ -7768,7 +8065,7 @@ class DACHydrogenSAFOptimizer:
         
         if infrastructure_summary:
             infrastructure_df = pd.DataFrame(infrastructure_summary)
-            infrastructure_path = os.path.join(output_dir, f"infrastructure_summary_{timestamp}.csv")
+            infrastructure_path = self._get_output_path('infrastructure_summary', timestamp)
             infrastructure_df.to_csv(infrastructure_path, index=False, encoding='utf-8-sig')
             print(f"基础设施汇总保存到: {infrastructure_path}")
         
@@ -7788,7 +8085,7 @@ class DACHydrogenSAFOptimizer:
         
         if selection_stats:
             stats_df = pd.DataFrame(selection_stats)
-            stats_path = os.path.join(output_dir, f"infrastructure_selection_stats_{timestamp}.csv")
+            stats_path = self._get_output_path('infrastructure_selection_stats', timestamp)
             stats_df.to_csv(stats_path, index=False, encoding='utf-8-sig')
             print(f"选点统计信息保存到: {stats_path}")
     
@@ -7796,7 +8093,7 @@ class DACHydrogenSAFOptimizer:
         """根据位置类型获取主要参数描述"""
         location_type = location_info['type']
 
-        if location_type in ['solar_plant', 'wind_farm']:
+        if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
             capacity = location_info.get('capacity_mw', 0)
             avg_gen = np.mean(location_info['hourly_generation']) if location_info['hourly_generation'] else 0
             return f"装机{capacity}MW, 平均发电{avg_gen:.1f}MW"
@@ -7924,7 +8221,7 @@ class DACHydrogenSAFOptimizer:
         }
         
         location_info = self.locations[location]
-        if location_info['type'] in ['solar_plant', 'wind_farm']:
+        if location_info['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
             electricity_supply['source_type'] = location_info['type']
             electricity_supply['renewable_capacity_mw'] = location_info.get('capacity_mw', 0)
             
@@ -8071,7 +8368,7 @@ class DACHydrogenSAFOptimizer:
 
         # 计算氢气运输平均距离（可再生能源站到MTJ工厂）
         renewable_locations = [loc for loc, info in self.locations.items()
-                             if info['type'] in ['solar_plant', 'wind_farm']]
+                             if info['type'] in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']]
         mtj_locations = [loc for loc, info in self.locations.items()
                         if info['type'] in ['industrial_park', 'port']]
 

@@ -81,7 +81,9 @@ class DACHydrogenTransportRouteVisualizer:
             'wind': '^',        # 风电场 - 上三角
             'dac': 'D',         # DAC设施 - 菱形
             'airport': 'o',     # 机场 - 圆形
-            'mtj': 's'          # MTJ工厂 - 方形
+            'mtj': 's',         # MTJ工厂 - 方形
+            'byproduct_hydrogen_steel': 'P',     # 钢铁副产氢 - 加号
+            'byproduct_hydrogen_refinery': 'X',  # 炼油副产氢 - X形
         }
 
         # 设施类型颜色
@@ -90,7 +92,9 @@ class DACHydrogenTransportRouteVisualizer:
             'wind': '#87CEEB',     # 天蓝色
             'dac': '#9370DB',      # 紫色
             'airport': '#FF6347',  # 番茄红
-            'mtj': '#32CD32'       # 绿色
+            'mtj': '#32CD32',      # 绿色
+            'byproduct_hydrogen_steel': '#8B4513',    # 深褐色
+            'byproduct_hydrogen_refinery': '#FF8C00', # 深橙色
         }
 
         # 运输类型颜色

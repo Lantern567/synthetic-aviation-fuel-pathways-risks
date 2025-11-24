@@ -127,13 +127,24 @@ carbon_emission_parameters:
     mtj_truck_intensity: 0.12
     h2_pipeline_intensity: 0.02
     co2_pipeline_intensity: 0.01
+
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'industrial_capture'           # 工业点源捕获场景（副产氢+工业捕获CO₂）| Industrial capture scenario
+    enable_co2_utilization_credit: true           # 启用CO₂利用负排放 | Enable CO₂ utilization carbon credit
+    utilization_credit_factor: -1.0               # CORSIA标准：100%计入负排放 | CORSIA standard: 100% carbon credit
+    description: |
+      CO₂来源：工业点源捕获（coal_power, lng_power, oil_refinery）
+      碳汇计算：从工业排放中捕获的CO₂固定在SAF产品中，避免大气排放，计为负排放
+      Carbon sink calculation: CO₂ captured from industrial emissions and fixed in SAF products counts as carbon credit
+
 clustering_parameters:
   enable_clustering: true
   enable_pipeline_optimization: true
   enable_clustering_visualization: false
   export_clustering_results: true
   clustering_output_path: clustering_results.json
-  eps_distance_km: 60.0
+  eps_distance_km: 20.0
   min_samples: 2
   max_clusters: 50
   noise_plant_handling: direct_connection
@@ -233,6 +244,11 @@ data_paths:
   aviation_data:
     airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
+    # 副产氢原始数据路径（直接读取，不使用convert后的数据）
+    steel_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/steel_daily_byproduct_h2_20251027_202950.csv
+    refinery_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/refinery_daily_byproduct_h2_20251027_202950.csv
+    steel_available_rate: 0.30  # 钢铁副产氢可外供比例（30%）
+    refinery_available_rate: 0.15  # 炼油副产氢可外供比例（15%）
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
   base_data_dir: products
@@ -514,6 +530,8 @@ technologies:
     - wind_farm
     - airport
     - co2_capture
+    - byproduct_hydrogen_steel
+    - byproduct_hydrogen_refinery
     process_mode: one_step
     efficiency: 0.6
     h2_consumption_ratio: 0.7

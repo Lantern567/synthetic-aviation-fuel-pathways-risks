@@ -60,7 +60,20 @@ class HydrogenClusteringOptimizer:
         return 6371 * c
 
     def cluster_hydrogen_plants(self, hydrogen_locations: Dict,
-                                destination_coords: Optional[Tuple[float, float]] = None) -> ClusteringResult:
+                                destination_coords: Optional[Tuple[float, float]] = None,
+                                source_type: str = 'auto') -> ClusteringResult:
+        """
+        对氢气生产厂进行地理聚类
+
+        Args:
+            hydrogen_locations: 氢气生产位置字典 {location_id: {latitude, longitude, capacity_kg_per_hour}}
+            destination_coords: 目标位置坐标 (lat, lon)，用于优化聚类中心
+            source_type: 氢源类型 ('auto': 自动检测, 'renewable': 可再生能源, 'byproduct': 副产氢)
+                        注意：当前版本通过位置名称自动检测副产氢，此参数暂时保留用于向后兼容
+
+        Returns:
+            ClusteringResult: 聚类结果
+        """
         if not self.clustering_params.get('enable_clustering', False):
             logger.info("聚类功能未启用，跳过聚类")
             noise_points = [(loc, (coords['latitude'], coords['longitude']))
@@ -235,15 +248,39 @@ class HydrogenClusteringOptimizer:
     def _export_results(self, result: ClusteringResult):
         output_path = self.clustering_params.get('clustering_output_path', 'clustering_results.json')
 
+        # 检测是否为副产品氢数据（根据成员位置名称判断）
+        is_byproduct = False
+        if result.clusters:
+            # 检查第一个聚类的成员位置
+            for cluster in result.clusters:
+                for loc in cluster.member_locations:
+                    loc_lower = loc.lower()
+                    # 如果包含副产品氢标识（steel_、refinery_、byproduct）
+                    if (loc.startswith('steel_') or loc.startswith('refinery_') or
+                        'byproduct' in loc_lower):
+                        is_byproduct = True
+                        break
+                if is_byproduct:
+                    break
+
+        # 根据数据类型修改输出文件名
+        output_file = Path(output_path)
+        if is_byproduct:
+            # 副产品氢：添加byproduct_前缀
+            # clustering_results.json -> byproduct_clustering_results.json
+            stem = output_file.stem  # clustering_results
+            suffix = output_file.suffix  # .json
+            new_filename = f"byproduct_{stem}{suffix}"
+            output_file = output_file.parent / new_filename
+
         # 如果是相对路径，则保存到dac_hydrogen_saf_supply_chain_optimization目录
         # 确保可视化代码能找到文件
-        output_file = Path(output_path)
         if not output_file.is_absolute():
             # 获取当前文件所在目录（src/hydrogen/）
             current_dir = Path(__file__).parent
             # 向上两级到dac_hydrogen_saf_supply_chain_optimization目录
             project_root = current_dir.parent.parent
-            output_file = project_root / output_path
+            output_file = project_root / output_file
 
         export_data = {
             'total_clusters': result.total_clusters,

@@ -58,13 +58,28 @@ carbon_emission_parameters:
   transportation:
     ng_truck_intensity: 0.1
     saf_truck_intensity: 0.12
+    h2_pipeline_intensity: 0.02
+    h2_truck_intensity: 0.15
+    co2_pipeline_intensity: 0.01
+    co2_truck_intensity: 0.08
+
+  # ========== CO₂源配置和碳汇控制 (CO₂ Source Configuration and Carbon Sink Control) ==========
+  co2_source_configuration:
+    scenario_type: 'fossil_feedstock'             # 化石燃料原料场景（天然气重整副产CO₂）| Fossil feedstock scenario
+    enable_co2_utilization_credit: false          # 不计算CO₂利用负排放 | Disable CO₂ utilization carbon credit
+    utilization_credit_factor: 0.0                # 副产CO₂循环利用不算碳汇 | Byproduct CO₂ recycling is not carbon sink
+    description: |
+      CO₂来源：天然气重整副产CO₂（化石燃料碳转化）
+      碳汇计算：副产CO₂循环利用不属于碳移除，不计入负排放
+      Carbon sink: Byproduct CO₂ from natural gas reforming is not carbon removal
+
 clustering_parameters:
   enable_clustering: true
   enable_pipeline_optimization: true
   enable_clustering_visualization: false
   export_clustering_results: true
   clustering_output_path: clustering_results.json
-  eps_distance_km: 60.0
+  eps_distance_km: 20.0
   min_samples: 2
   max_clusters: 50
   noise_plant_handling: direct_connection
@@ -92,6 +107,11 @@ data_paths:
   aviation_data:
     airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/flights_beijing_tianjing/all_airports_weekly_parameters_20250726_142747.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
+    # 副产氢原始数据路径（直接读取，不使用convert后的数据）
+    steel_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/steel_daily_byproduct_h2_20251027_202950.csv
+    refinery_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/refinery_daily_byproduct_h2_20251027_202950.csv
+    steel_available_rate: 0.30  # 钢铁副产氢可外供比例（30%）
+    refinery_available_rate: 0.15  # 炼油副产氢可外供比例（15%）
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/byproduct_h2_generation
   base_data_dir: products
