@@ -1,6 +1,6 @@
 {
-  "total_clusters": 24,
-  "total_noise_points": 13,
+  "total_clusters": 1,
+  "total_noise_points": 0,
   "clustering_params": {
     "enable_clustering": true,
     "enable_pipeline_optimization": true,
@@ -19,428 +19,1236 @@
     {
       "cluster_id": 0,
       "member_locations": [
-        "Inner Mongolia Keshiketeng Banner Shangtoudi wind farm",
-        "Inner Mongolia Keshiketeng Banner Shangwopu wind farm",
-        "Inner Mongolia Songshan Caijiagou wind farm",
-        "Inner Mongolia Songshan Dayuying wind farm"
-      ],
-      "member_coords": [
-        [
-          42.8247,
-          117.9725
-        ],
-        [
-          42.6692,
-          117.8746
-        ],
-        [
-          42.4168,
-          118.0117
-        ],
-        [
-          42.6111,
-          118.1589
-        ]
-      ],
-      "center_coord": [
-        42.6304954527216,
-        118.00448838352034
-      ],
-      "geo_center": [
-        42.6304954527216,
-        118.00448838352034
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 1,
-      "member_locations": [
-        "Inner Mongolia Xilinhaote Huitengliang (Guotai) wind farm",
-        "Inner Mongolia Xilinhaote Huitengliang (Longyuan) wind farm",
-        "Inner Mongolia Xilinhaote Huitengliang Concession Project (Longyuan) wind farm",
-        "Inner Mongolia Xilinhot energy base wind farm",
-        "Inner Mongolia Chifeng Hexigten Banner (Datang) solar farm"
-      ],
-      "member_coords": [
-        [
-          43.4961,
-          116.225
-        ],
-        [
-          43.406,
-          116.3914
-        ],
-        [
-          43.4503,
-          116.1664
-        ],
-        [
-          43.9334,
-          116.0861
-        ],
-        [
-          43.2315,
-          116.6675
-        ]
-      ],
-      "center_coord": [
-        43.50364471440305,
-        116.30792001980143
-      ],
-      "geo_center": [
-        43.50364471440305,
-        116.30792001980143
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 2,
-      "member_locations": [
-        "Inner Mongolia Hangjin Banner Power Export (State Development Investment) wind farm",
-        "Inner Mongolia Wulatezhong Banner (China Resources) wind farm",
-        "Inner Mongolia Kubuqi Desert (China Guangdong Nuclear) solar power plant"
-      ],
-      "member_coords": [
-        [
-          43.2443,
-          114.3252
-        ],
-        [
-          43.2443,
-          114.3252
-        ],
-        [
-          43.2443,
-          114.3252
-        ]
-      ],
-      "center_coord": [
-        43.2443,
-        114.32520000000001
-      ],
-      "geo_center": [
-        43.2443,
-        114.32520000000001
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 3,
-      "member_locations": [
-        "Inner Mongolia Qingshuihe Jiucaizhuang Windpower Heating Project",
-        "Inner Mongolia Qingshuihe Wind/Water energy complex",
-        "Inner Mongolia Togtoh Thermal Power Phase 2 Qingshuihe wind farm",
-        "Inner Mongolia Hohhot Tuoketuo County solar farm",
-        "Shanxi Province Shuozhou Youyu solar farm",
-        "Shanxi Province Xinrong District Datang solar farm",
-        "Shanxi Datong Xinrong (SPIC) solar farm",
-        "Shanxi Youyu Niuxinbao Tongmei solar farm"
-      ],
-      "member_coords": [
-        [
-          39.8722,
-          110.9853
-        ],
-        [
-          40.0775,
-          111.3901
-        ],
-        [
-          39.9505,
-          112.0298
-        ],
-        [
-          40.3751,
-          111.3563
-        ],
-        [
-          40.0101,
-          112.594
-        ],
-        [
-          40.1763,
-          113.1635
-        ],
-        [
-          40.1813,
-          113.0459
-        ],
-        [
-          40.0523,
-          112.536
-        ]
-      ],
-      "center_coord": [
-        40.089466608486276,
-        112.13730029510776
-      ],
-      "geo_center": [
-        40.089466608486276,
-        112.13730029510776
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 4,
-      "member_locations": [
-        "Inner Mongolia Huade Niiujiacun wind farm",
-        "Hebei Huadian Kangbao Muchang wind farm",
-        "Hebei Zhangbei Hongji Qicheqiao solar farm",
-        "Hebei Zhangbei Mantouying (Huaqiang Zhaoyang) solar farm",
-        "Hebei Zhangjiakou Wind/Solar/Hydrogen Demonstration project",
-        "Inner Mongolia Wulanchabu Shangdu County solar farm"
-      ],
-      "member_coords": [
-        [
-          41.8208,
-          113.9711
-        ],
-        [
-          42.0556,
-          114.8036
-        ],
-        [
-          41.3679,
-          114.5848
-        ],
-        [
-          41.2629,
-          114.6577
-        ],
-        [
-          41.683,
-          114.551
-        ],
-        [
-          41.5141,
-          113.9443
-        ]
-      ],
-      "center_coord": [
-        41.617870442585215,
-        114.41872507804057
-      ],
-      "geo_center": [
-        41.617870442585215,
-        114.41872507804057
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 5,
-      "member_locations": [
-        "Inner Mongolia Zhenglan Banner Kunyu distributed wind farm",
-        "Inner Mongolia Zhenglan Banner Power Export (Huadian) wind farm"
-      ],
-      "member_coords": [
-        [
-          42.1919,
-          115.9435
-        ],
-        [
-          42.2396,
-          115.9993
-        ]
-      ],
-      "center_coord": [
-        42.21575338042582,
-        115.97138946353547
-      ],
-      "geo_center": [
-        42.21575338042582,
-        115.97138946353547
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 6,
-      "member_locations": [
-        "Liaoning Chaoyang Jianping Yangshuling wind farm",
-        "Liaoning Chaoyang Jianping Yingzi wind farm"
-      ],
-      "member_coords": [
-        [
-          41.8158,
-          119.7353
-        ],
-        [
-          42.1253,
-          119.6624
-        ]
-      ],
-      "center_coord": [
-        41.97055576470524,
-        119.698938551347
-      ],
-      "geo_center": [
-        41.97055576470524,
-        119.698938551347
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 7,
-      "member_locations": [
-        "Hebei Hengshui Gucheng (Power Investment) wind farm",
-        "Shandong Province Dezhou Dingzhuang solar farm"
-      ],
-      "member_coords": [
-        [
-          37.1586,
-          115.8737
-        ],
-        [
-          37.3295,
-          116.4641
-        ]
-      ],
-      "center_coord": [
-        37.24441638501926,
-        116.1685652901099
-      ],
-      "geo_center": [
-        37.24441638501926,
-        116.1685652901099
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 8,
-      "member_locations": [
-        "Hebei Hengshui Raoyang (SPIC) wind farm",
-        "Hebei Hengshui Raoyang wind farm"
-      ],
-      "member_coords": [
-        [
-          38.131,
-          115.5976
-        ],
-        [
-          38.1337,
-          115.6912
-        ]
-      ],
-      "center_coord": [
-        38.13235928343278,
-        115.64439913436752
-      ],
-      "geo_center": [
-        38.13235928343278,
-        115.64439913436752
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 9,
-      "member_locations": [
-        "Hebei Huai'an (CECEP) wind farm",
-        "Hebei Huai'an Eco-Governance Integrated Energy Demonstration Project wind farm",
-        "Hebei Huai'an Wind-solar-storage integration wind farm",
+        "Asia Clean Energy Unilever Tianjin Industrial Park solar project",
+        "Baida Freight Forwarding Ninghe solar project",
+        "Baigou Commercial I solar project",
+        "Baigou Commercial II solar project",
+        "Baigou Commercial III solar project",
+        "Baigou Commercial IV solar project",
+        "Baigou Commercial V solar project",
+        "Baigou Commercial VI solar project",
+        "Baocang Steel Pipe Factory solar project",
+        "Baoding Fuhai Technology solar project",
+        "Baoding Glass House Leisure Service solar project",
+        "Baoding Haoneng New Energy Development solar project",
+        "Baoding North New Energy solar project",
+        "Baoding Sifang Sanyi Electric solar project",
+        "Baoding Susheng New Energy Technology solar project",
+        "Baoding Tiansui New Energy Technology solar project",
+        "Baoding Zhuori Photovoltaic Energy solar project",
+        "Beijing CGN Haifeng Agricultural Greenhouse solar project",
+        "Beijing Foton Cummins Engine ISF factory solar project",
+        "Beijing Foton Cummins Engine solar project",
+        "Beijing Fuyang New Energy Technology I solar project",
+        "Beijing Fuyang New Energy Technology II solar project",
+        "Beijing Guangdong Jianlibao Beverage solar project",
+        "Beijing Hainachuan Auto Benz supporting industrial park user-side solar project",
+        "Beijing Hanlong New Energy Technology Development solar project",
+        "Beijing Hengan Green Valley Environmental Protection Technology solar project",
+        "Beijing Huadian solar project",
+        "Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project",
+        "Beijing Jineng New Energy Technology solar project",
+        "Beijing Jingfang Smart Energy Technology solar project",
+        "Beijing Jingxi Heavy Industry solar project",
+        "Beijing Jiulang Photovoltaic Technology solar project",
+        "Beijing Lanjing Shengnuoer Energy Technology solar project",
+        "Beijing Lvdong Future New Energy Development I solar project",
+        "Beijing Lvdong Future New Energy Development II solar project",
+        "Beijing Miyun Xitiangezhuang Huadian solar farm",
+        "Beijing Pushun New Energy solar project",
+        "Beijing Qinghe Reclaimed Water Plant solar project",
+        "Beijing Qingying Photovoltaic Technology solar project",
+        "Beijing Ruilian Xieyuan New Energy Technology solar project",
+        "Beijing Runneng Energy Services solar project",
+        "Beijing Shunyi Holdings I solar project",
+        "Beijing Shunyi Holdings II solar project",
+        "Beijing Tiantuo New Energy I solar project",
+        "Beijing Tiantuo New Energy II solar project",
+        "Beijing Yadongda Zhenxing Energy Technology Development solar project",
+        "Beijing Yanqing Longqingxia solar farm",
+        "Beijing Yaorui Energy Technology solar project",
+        "Beijing Yueyang Changsheng New Energy Technology solar project",
+        "Beijing Zhongguanbao New Energy Investment solar project",
+        "Beijing Zhonghui Baoping solar project",
+        "Beijing solar project",
+        "Bell Taibo New Energy Technology Fengjin Transmission Factory solar project",
+        "Bertebo New Energy Technology Toyoda Gosei Factory solar project",
+        "CPI Tianjin Wuqing I solar project",
+        "CPI Tianjin Wuqing II solar project",
+        "Chicheng Hekou photovoltaic agricultural greenhouse solar project",
+        "Chicheng poverty alleviation solar project",
+        "Chicheng solar project",
+        "Chichenghekou photovoltaic agricultural greenhouse solar project",
+        "China Electronics Technology Group Research Institute solar project",
+        "China New Energy solar project",
+        "China Power Jinqiao China Power Tianjin Jinqiao solar project",
+        "China Power Jinqiao China Power Tianjin Lizun Factory solar project",
+        "China Power Jinqiao China Power Tianjin Yongchang Factory solar project",
+        "China Qingneng Oasis Technology solar project",
+        "Dacheng County I solar project",
+        "Dacheng County II solar project",
+        "Datang Tianjin Panshan Power Plant solar project",
+        "Dingxing County Xinyang New Energy Technology solar project",
+        "Fangshan agricultural greenhouse solar project",
+        "Fengning Autonomous County Jinning Solar Power solar project",
+        "Ganhegou Village solar project",
+        "Golden Green Energy New Energy solar project",
+        "Haiganwei solar project",
+        "Hebei Changan Automobile solar project",
+        "Hebei Chaoyi Door Industry solar project",
+        "Hebei Chicheng Longguanzhen Guangshuo solar farm",
+        "Hebei Chicheng Quegou Jinkai Xinneng solar farm",
+        "Hebei Dukai New Energy Technology solar project",
+        "Hebei Fengning (Three Gorges) unsubsidized Photovoltaic solar farm",
+        "Hebei Fengrun Zuojiawu (Datang) solar far",
+        "Hebei Huai Tumuzhen CECEP solar farm",
+        "Hebei Huanghua Lvqiaozhen solar farm",
+        "Hebei Jianrong Photovoltaic Technology solar project",
+        "Hebei Laishui Longmenzhen solar farm",
+        "Hebei Laiyuan Shou'ao (Jiansheng) solar farm",
+        "Hebei Laiyuan Yanmeidong Lijiazhuang solar farm",
+        "Hebei Luanping Pingfangxiang Jingrun solar farm",
+        "Hebei Olympic Photovoltaic Corridor Project solar farm",
         "Hebei Province Xuanhua Zhongdiantou solar farm",
-        "Shanxi Tianzhen solar farm"
+        "Hebei Province Yutian Haitai solar farm",
+        "Hebei Rhine New Energy Technology solar project",
+        "Hebei Rongcheng- Wuhai Expressway Distributed solar farm",
+        "Hebei Ronghe Laser Equipment Technology solar project",
+        "Hebei Rube Pharmaceutical Technology solar project",
+        "Hebei SDIC Northern Silicon Valley solar project",
+        "Hebei Tangshan Fengrun Zuojiawu solar farm",
+        "Hebei Tangshan Huilian solar farm",
+        "Hebei Tangshan Lutai Development Zone Distributed solar farm",
+        "Hebei Tianen New Energy Technology Development solar project",
+        "Hebei Tuowei Investment solar project",
+        "Hebei Wen'an Xiaowucun Yongxin solar farm",
+        "Hebei Xinding Photovoltaic Technology supply solar project",
+        "Hebei Xuanhua Shenjing SPIC solar farm",
+        "Hebei Xuanhua Zhengli solar farm",
+        "Hebei Yi Peishan SPIC solar farm",
+        "Hebei Yingkun New Energy Development solar project",
+        "Hebei Yixian CGN solar farm",
+        "Hebei Yixian Peishan SPIC solar farm",
+        "Hebei Yixian Yiyuan solar farm",
+        "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
+        "Hebei Yuanxi New Energy Technology solar project",
+        "Hebei Yutian Lijiatuancheng solar farm",
+        "Hebei Yutian Shilingkou solar farm",
+        "Hebei Yutian Tangzitou (Hengtai) solar farm",
+        "Hebei Yuxian Baishuxiang solar farm",
+        "Hebei Yuxian Nankangzhuang Tengyuan solar farm",
+        "Hebei Zhangjiakou Huailai Jimingyi solar farm",
+        "Hebei Zhangjiakou Huailai Yitai solar farm",
+        "Hebei Zhangjiakou Xiahuayuan District solar farm",
+        "Heibei Fengning Dongrun Jieyuan solar farm",
+        "Huanyu Sunshine Yixianyuan Factory solar project",
+        "Huitong Times Square solar project",
+        "JJ Solar photovoltaic solar project",
+        "Jihua New Energy solar project",
+        "Jinghong New Energy Tianjin Jinnan Economic Development Zone Dehua Petroleum Equipment solar project",
+        "Jingneng Shengfa Qiantang Feiyue solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project",
+        "Jiuxianqiao solar project",
+        "Langfang Fuyang New Energy Technology solar project",
+        "Louis Dreyfus Food Technology solar project",
+        "Nankou solar project",
+        "North China City solar project",
+        "Nowell solar project",
+        "Qinghe Reclaimed Water Plant solar project",
+        "SPIC Tianjin Creative Street solar project",
+        "Shumei Industrial solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse I solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse II solar project",
+        "Tengsheng Ocean Coastal Factory solar project",
+        "Tengyang Green Island solar project",
+        "Tianjin Aiyaolian Northeast Beiyao Valley solar project",
+        "Tianjin Binhai Centralized solar farm",
+        "Tianjin Binhai New District Zhonghe Agriculture solar farm",
+        "Tianjin Boya Quanxin Technology solar project",
+        "Tianjin Comtec Crust Photovoltaic Technology solar project",
+        "Tianjin Eleven Zhongji Xingyuan New Energy Technology solar project",
+        "Tianjin Gegu Rongcheng Distributed solar project",
+        "Tianjin Haijing Salt-Light Complementary (Huadian) solar project",
+        "Tianjin Haijing Salt-Light Complementary (Huaneng) solar project",
+        "Tianjin Haijing Salt-Light Complementary (Longyuan) solar project",
+        "Tianjin Hengguang Hongde Automotive Glass solar project",
+        "Tianjin Hongxu New Energy Technology JTEKT Factory solar project",
+        "Tianjin Huayuan Times solar project",
+        "Tianjin I solar project",
+        "Tianjin II solar project",
+        "Tianjin Jinghai Houyangzhuang Yulong solar farm",
+        "Tianjin Jinghai Saiert Rooftop solar farm",
+        "Tianjin Jingwuzhen Changsheng solar farm",
+        "Tianjin Jingwuzhen Yudian solar farm",
+        "Tianjin Junli Building Binhai solar project",
+        "Tianjin Lexiang Photovoltaic Energy solar project",
+        "Tianjin Lianqi New Energy Tianjin Bingang Electroplating Enterprise solar project",
+        "Tianjin Longye New Energy Jianda Rubber power solar project",
+        "Tianjin Longye New Energy Jianda Rubber solar project",
+        "Tianjin Ninghe District Dayuehe Yongneng solar farm",
+        "Tianjin Ninghe District Ningxin solar farm",
+        "Tianjin Ninghe District Panzhuang Xinli solar farm",
+        "Tianjin Ninghe Fengtai (Weiyu) solar farm",
+        "Tianjin Ninghe Panzhuang solar project",
+        "Tianjin Qinghao Wuqing District solar project",
+        "Tianjin Qinglian Energy solar project",
+        "Tianjin Serui Equipment solar project",
+        "Tianjin Tuanbo Mengjiafangzi Mingrui solar farm",
+        "Tianjin Tuanbo Mengjiafangzi Yuhe solar farm",
+        "Tianjin Tuanbo Mengjiafangzi Yuhong solar farm",
+        "Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm",
+        "Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm",
+        "Tianjin Xingtai Sheng New Energy Technology Development solar project",
+        "Tianjin Xinxian Xinlong Industrial solar project",
+        "Tianjin Xizi solar project",
+        "Tianjin Xuguang solar project",
+        "Tianjin Yadongda Zhenye Energy Technology Development solar project",
+        "Tianjin Zhongtian Eneng Jinghai Liangtou Town Fishing and Light solar project",
+        "Tianjin Zhongtian Xinde Jinghai Zhongwang Town Fishing and Light solar project",
+        "Volkswagen Automatic Transmission solar project",
+        "Watts solar project",
+        "Weijiazhuangcun D solar project",
+        "Xiaohongmen Reclaimed Water Plant I solar project",
+        "Xiaohongmen Reclaimed Water Plant II solar project",
+        "Xinchengrui Cable solar project",
+        "Xingqian Chengshi New Energy Technology Tianjin CSR Wind Energy Equipment Technology solar project",
+        "Xingtai Baohuangtai Electromechanical solar project",
+        "Xingtaisheng Dongpeng Boda solar project",
+        "Xintian Hebei Electric Power Sales I solar project",
+        "Xintian Hebei Electric Power Sales II solar project",
+        "Xinyi Glass Wuqing solar project",
+        "Xiqing District fishing and photovoltaic complementary solar project",
+        "Yongqing Environmental Protection solar project",
+        "Yutian County Chuangneng New Energy solar project",
+        "Yutian County Yuneng New Energy Technology solar project",
+        "Zhuolu Provincial Grain Reserve solar project",
+        "Beijing Changping Qinghuiling wind/solar demonstration project",
+        "Beijing Lumingshan Guanting wind farm",
+        "Beijing Yanqing Lumingshang Guanting wind farm",
+        "Hebei Chicheng Wind hydrogen storage multi-energy complementary wind farm",
+        "Hebei Chicheng Dananshan wind farm",
+        "Hebei Chicheng Motianling wind farm",
+        "Hebei Chicheng Wind and Storage Integration Demonstration Project wind farm",
+        "Hebei Chicheng wind and storage complex",
+        "Hebei Chongli Changchengling wind farm",
+        "Hebei Chongli Honghualiang wind farm",
+        "Hebei Chongli Hydrogen Project wind farm",
+        "Hebei Chongli Qingsanying wind farm",
+        "Hebei Chongli Xiqiaoliang wind farm",
+        "Hebei Dacheng (Guangheng) wind farm",
+        "Hebei Dacheng (Guohua) wind farm",
+        "Hebei Dacheng (Jinfeng Huirun) storage and wind farm",
+        "Hebei Dacheng (Longyuan) wind farm",
+        "Hebei Dacheng (Shenneng) wind farm",
+        "Hebei Dacheng Ziyahe wind farm",
+        "Hebei Fengning Dahexi wind farm",
+        "Hebei Fengning Datan wind farm",
+        "Hebei Fengning Senjitu wind farm",
+        "Hebei Fucheng (Huarun) wind farm",
+        "Hebei Fucheng (State Power Investment) wind farm",
+        "Hebei Gaoyang (CSSC) 150 MW wind farm",
+        "Hebei Gaoyang (Chuanmai) wind farm",
+        "Hebei Guantao Huiheng wind farm",
+        "Hebei Kangbao (Three Gorges) Unsubsidized Demonstration wind farm",
+        "Hebei Guyuan Shandianhe wind farm",
+        "Hebei Guyuan Taipinggou wind farm",
+        "Hebei Guyuan Wind Farm - Hydrogen Plant",
+        "Hebei Guyuan Xihutong wind farm",
+        "Hebei Huailai (Jingneng) wind farm",
+        "Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm",
+        "Hebei Huailai (Shengshi New Energy) wind farm",
+        "Hebei Huailai (Shengyao) wind-solar hybrid wind farm",
+        "Hebei Huailai (Taihui) wind farm",
+        "Hebei Huailai (Zhuofeng) wind farm",
+        "Hebei Huailai Qinghuiling wind farm",
+        "Hebei Huailai wind farm",
+        "Hebei Huanghua Derun wind farm",
+        "Hebei Huanghua Jiucheng wind farm",
+        "Hebei Julu Tenghuang wind farm",
+        "Hebei Kangbao (Jingneng) wind farm",
+        "Hebei Kangbao Laozhanggai wind farm",
+        "Hebei Kangbao Shipeng wind farm",
+        "Hebei Kangbao Yanyoufang wind farm",
+        "Hebei Laiyuan Dongtuanbao wind farm",
+        "Hebei Kangbao Zhongyi wind farm",
+        "Hebei Langfang Dacheng Longyuan wind farm",
+        "Hebei Langfang Dacheng wind farm",
+        "Hebei Linxi Wanhui wind farm",
+        "Hebei Linxi Yunhe wind farm",
+        "Hebei Nangong (China Aerospace) wind farm",
+        "Hebei Qingxian (Dongfang Power) wind farm",
+        "Hebei Qinhuangdao Changli wind farm",
+        "Hebei Qinhuangdao Funing wind farm",
+        "Hebei Qinhuangdao Qinglong wind farm",
+        "Hebei Qiuxian Shengshuihu wind farm",
+        "Hebei Shangyi Chensuoliang wind farm",
+        "Hebei Shangyi Dadongshan wind farm",
+        "Hebei Shangyi Dasuji wind farm",
+        "Hebei Shangyi Dongshan wind farm",
+        "Hebei Shangyi Qilinshan wind farm",
+        "Hebei Shangyi Quanshuntang wind farm",
+        "Hebei Shangyi Shiren wind farm",
+        "Hebei Shangyi Yanjialiang wind farm",
+        "Hebei Tangshan Nanbao wind farm",
+        "Hebei Weichang Dahuanqi wind farm",
+        "Hebei Weichang Dongtaizi wind farm",
+        "Hebei Weichang Gaojiashan wind farm",
+        "Hebei Weichang Shenxiandong wind farm",
+        "Hebei Weichang Shirenliang wind farm",
+        "Hebei Wen'an wind farm",
+        "Hebei Wuqiang Longzhihe wind farm",
+        "Hebei Xiahuayuan Yuanbaoshan wind farm",
+        "Hebei Xuanhua (Taiyuan) wind farm",
+        "Hebei Xuanhua Complementary wind farm",
+        "Hebei Xuanhua Guocun (Datang) wind farm",
+        "Hebei Xuanhua Wind/Hydrogen/Storage energy complex",
+        "Hebei Xuanhuai wind farm",
+        "Hebei Xushui wind farm",
+        "Hebei Yixian (Huaneng Baoding) wind farm",
+        "Hebei Yuxian \"Source/Grid/Load/Storage\" wind farm",
+        "Hebei Yuxian Chashan wind farm",
+        "Hebei Yuxian Dongdianziliang wind farm",
+        "Hebei Yuxian Dongxinghe wind farm",
+        "Hebei Yuxian Jiugongkou wind farm",
+        "Hebei Yuxian Laoyemiaoliang wind farm",
+        "Hebei Yuxian Lihuajian wind farm",
+        "Hebei Yuxian Qingyazi wind farm",
+        "Hebei Yuxian Xiling (Huadian) wind farm",
+        "Hebei Yuxian Yongshengzhuang wind farm",
+        "Hebei Yuxian Zhenjiawan wind farm",
+        "Hebei Zaoqiang Huihuang wind farm",
+        "Hebei Zhangbei (Bode Shenlong) wind farm",
+        "Hebei Zhangbei (Huarun China Resources) wind farm",
+        "Hebei Zhangbei State Wind, Solar, And Storage Demonstration Project Mengjialiang wind farm",
+        "Hebei Zhangbei Youlougou Yuanshanzi wind farm",
+        "Hebei Zhangbei Yudaiwan wind farm",
+        "Hebei Zhangbei Yuzhouying wind farm",
+        "Hebei Zhangbei Zhanhai wind farm",
+        "Hebei Zhangjiakou Ximalin wind farm",
+        "Hebei Zhuolu (Huaneng) wind farm",
+        "Hebei Zhuolu (Ruineng) wind farm",
+        "Hebei Zhuolu (Suntien) wind farm",
+        "Hebei Zhangbei Windpower Research And Measurement wind farm",
+        "Shaanxi Longxian Hebeizhen wind farm",
+        "Tianjin Ninglong (China Guangdong Nuclear) wind farm",
+        "Tianjin Baigutun Distributed wind farm",
+        "Tianjin Baodi Bamencheng (Huarun China Resources) wind farm",
+        "Tianjin Baodi Bamencheng (State Development Investment) wind farm",
+        "Tianjin Baodi Datangzhuangzhen (TIANRUN) wind farm",
+        "Tianjin Baodi Distributed wind farm",
+        "Tianjin Baodi Jiuyuan Industrial Park Energy Complex wind farm",
+        "Tianjin Baodi Wangbuzhuang wind farm",
+        "Tianjin Beichen Shuangkouzhen wind farm",
+        "Tianjin Beichen Xiditou 20 MW wind farm",
+        "Tianjin Beichen Xiditou 30 MW wind farm",
+        "Tianjin Binhai Hangu Sajintuo wind farm",
+        "Tianjin Binhai New Area Yangjiapo wind farm",
+        "Tianjin Hangu Salt Field wind farm",
+        "Tianjin Jinghai (Jingsheng) wind farm",
+        "Tianjin Jinghai Chenguantun wind farm",
+        "Tianjin Jinghai Chenguantunzhen (Shangdian) wind farm",
+        "Tianjin Jinghai Chenguantunzhen (Tianrun) wind farm",
+        "Tianjin Jinghai Dabeijianguzhen (Yisheng) wind farm",
+        "Tianjin Jinghai Distributed wind farm",
+        "Tianjin Jinghai Liangtouzhen (Shuangyang) wind farm",
+        "Tianjin Jinghai Qilihaizhen (Yisheng) wind farm",
+        "Tianjin Jinghai Tangguantun (China Energy Construction) wind farm",
+        "Tianjin Jinghai Wangkouzhen wind farm",
+        "Tianjin Jinghai Yanzhuangzhen wind farm",
+        "Tianjin Jinghai Zhongwangzhen wind farm",
+        "Tianjin Jizhou (China Power Construction) wind farm",
+        "Tianjin Jizhou Baijian (Huadian) wind farm",
+        "Tianjin Jizhou Bangjunzhen wind farm",
+        "Tianjin Jizhou Dong'eryingzhen wind farm",
+        "Tianjin Jizhou Dongshigu (Huadian) wind farm",
+        "Tianjin Jizhou Houjiaying (Huadian) wind farm",
+        "Tianjin Jizhou Sangzi (Huadian) wind farm",
+        "Tianjin Jizhou Xiacangzhen (Runchuang) wind farm",
+        "Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Xilonghuyuzhen wind farm",
+        "Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm",
+        "Tianjin Lianzhuangzhen wind farm",
+        "Tianjin Nangang (China Hydropower Construction Group) wind farm",
+        "Tianjin Ningfeng (China Guangdong Nuclear) wind farm",
+        "Tianjin Ninghe (State Development Investment) wind farm",
+        "Tianjin Ninghe Banqiao (Jingneng) wind farm",
+        "Tianjin Ninghe Banqiaozhen wind farm",
+        "Tianjin Ninghe Dongjituo (Fengshang) wind farm",
+        "Tianjin Ninghe Dongjituo (Jingneng) wind farm",
+        "Tianjin Ninghe Dongjituo (State Power Investment) wind farm",
+        "Tianjin Ninghe Fengtai wind farm",
+        "Tianjin Ninghe Fengtaizhen (Yingli) wind farm",
+        "Tianjin Ninghe Fengtaizhen Nanmaizhu wind farm",
+        "Tianjin Ninghe Dongjituo Distributed wind farm",
+        "Tianjin Ninghe Guzhen (State Power Investment Corporation) wind farm",
+        "Tianjin Ninghe Lianzhuangzhen (Qingrun) wind farm",
+        "Tianjin Ninghe Lianzhuangzhen (Yingli) wind farm",
+        "Tianjin Ninghe Miaozhen wind farm",
+        "Tianjin Ninghe Miaozhuang wind farm",
+        "Tianjin Ninghe Miaozhuangzhen (China Nuclear) wind farm",
+        "Tianjin Ninghe Ninghezhen (Yingli) wind farm",
+        "Tianjin Ninghe Ninghezhen Distributed wind farm",
+        "Tianjin Ninghe Qixin Distributed wind farm",
+        "Tianjin Ninghe Yuelong (State Power Investment) wind farm",
+        "Tianjin Tonghai Xinzhuang Distributed wind farm",
+        "Tianjin Wuqing Baigutunzhen (TBEA) wind farm",
+        "Tianjin Wuqing Chagugang Distributed wind farm",
+        "Tianjin Wuqing Chagugang wind farm",
+        "Tianjin Wuqing Chengguan (Sinohydro) wind farm",
+        "Tianjin Wuqing Chenzuizhen Distributed wind farm",
+        "Tianjin Wuqing Chenzuizhen wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm",
+        "Tianjin Wuqing Dabaizhuang (Huadian) wind farm",
+        "Tianjin Wuqing Dawangguzhuang (Huadian) wind farm",
+        "Tianjin Wuqing Gaocun (Huadian) wind farm",
+        "Tianjin Wuqing Hebeitun wind farm",
+        "Tianjin Wuqing Shangmataizhen wind farm",
+        "Tianjin Wuqing Shige (Sinohydro) wind farm",
+        "Tianjin Wuqing Sicundian wind farm",
+        "Tianjin Xiaowangzhuang (Huaneng) Distributed wind farm",
+        "Tianjin Xiaowangzhuang wind farm",
+        "Tianjin Zhitong Binhai Yangjiabo wind farm"
       ],
       "member_coords": [
         [
-          40.6796,
-          114.7113
+          39.1175,
+          117.1913
         ],
         [
-          40.6833,
-          114.3833
+          39.3289,
+          117.8206
         ],
         [
-          40.429,
-          114.3731
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          39.0857,
+          117.3076
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          38.858,
+          115.4907
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          40.444,
+          116.746
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          40.1488,
+          116.6539
+        ],
+        [
+          40.1488,
+          116.6539
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          40.5275,
+          116.0122
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          40.9501,
+          115.9323
+        ],
+        [
+          40.9501,
+          115.9323
+        ],
+        [
+          40.9501,
+          115.9323
+        ],
+        [
+          40.9501,
+          115.9323
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          38.6995,
+          116.6371
+        ],
+        [
+          38.6995,
+          116.6371
+        ],
+        [
+          40.0439,
+          117.4008
+        ],
+        [
+          39.2129,
+          115.7492
+        ],
+        [
+          39.7456,
+          116.1371
+        ],
+        [
+          41.2195,
+          116.6341
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          40.7601,
+          115.6339
+        ],
+        [
+          40.858,
+          115.6157
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          41.2195,
+          116.6341
+        ],
+        [
+          39.9522,
+          118.1575
+        ],
+        [
+          40.3753,
+          115.5967
+        ],
+        [
+          38.9036,
+          117.1607
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.5936,
+          115.2352
+        ],
+        [
+          39.3979,
+          115.7125
+        ],
+        [
+          39.5105,
+          114.8714
+        ],
+        [
+          40.8861,
+          117.2717
+        ],
+        [
+          40.3083,
+          115.5845
         ],
         [
           40.4233,
           114.8151
         ],
         [
-          40.5301,
-          114.211
-        ]
-      ],
-      "center_coord": [
-        40.54928182025729,
-        114.49878060690263
-      ],
-      "geo_center": [
-        40.54928182025729,
-        114.49878060690263
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 10,
-      "member_locations": [
-        "Hebei Jize (Yunda) wind farm",
-        "Hebei Julu (Dongneng) wind farm",
-        "Hebei Julu (Rongqingtou) wind farm",
-        "Hebei Xingtai Huangsi SPIC solar farm",
-        "Hebei Province Xingtai Huangsi solar farm",
-        "Hebei Province Xintai Julu Eco-agriculture solar farm",
-        "Inner Mongolia Lincheng Jing'ao solar farm"
-      ],
-      "member_coords": [
-        [
-          36.9202,
-          114.8769
+          39.965,
+          117.625
         ],
         [
-          37.3434,
-          115.1331
+          39.0,
+          116.0
         ],
         [
-          37.2141,
-          115.1017
+          39.0922,
+          116.5566
         ],
         [
-          37.0617,
-          114.4997
+          39.0,
+          116.0
         ],
         [
-          37.1958,
-          114.3783
+          39.0,
+          116.0
         ],
         [
-          37.2883,
-          115.1577
+          39.0,
+          116.0
         ],
         [
-          37.4553,
-          114.3276
-        ]
-      ],
-      "center_coord": [
-        37.211751969558286,
-        114.78216974734191
-      ],
-      "geo_center": [
-        37.211751969558286,
-        114.78216974734191
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 11,
-      "member_locations": [
-        "Hebei Chicheng Dushikou West wind farm",
-        "Hebei Chicheng Mayinggushan wind farm",
-        "Hebei Chicheng Motianling wind farm",
-        "Hebei Chicheng Wind and Storage Integration Demonstration Project wind farm",
-        "Hebei Chicheng Wind hydrogen storage multi-energy complementary wind farm",
-        "Hebei Chicheng wind and storage complex",
-        "Hebei Chongli Changchengling wind farm"
-      ],
-      "member_coords": [
-        [
-          41.3101,
-          115.6267
+          39.9524,
+          118.1571
         ],
         [
-          41.325,
-          115.688
+          39.6407,
+          117.914
+        ],
+        [
+          39.358,
+          117.735
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          38.8619,
+          116.2873
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          40.424,
+          114.815
+        ],
+        [
+          40.599,
+          115.0916
+        ],
+        [
+          39.229,
+          115.4433
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.2103,
+          114.9978
+        ],
+        [
+          39.244,
+          115.332
+        ],
+        [
+          39.31,
+          115.271
+        ],
+        [
+          39.3255,
+          116.4941
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.9485,
+          117.6806
+        ],
+        [
+          39.9485,
+          117.6806
+        ],
+        [
+          39.9489,
+          117.6806
+        ],
+        [
+          39.9234,
+          114.8265
+        ],
+        [
+          39.9189,
+          114.8313
+        ],
+        [
+          40.4549,
+          115.3145
+        ],
+        [
+          40.3083,
+          115.5845
+        ],
+        [
+          40.5007,
+          115.2813
+        ],
+        [
+          41.2149,
+          116.6455
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.9378,
+          116.9445
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          40.217,
+          116.171
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.8439,
+          117.4532
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.0149,
+          117.6888
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.0128,
+          117.7033
+        ],
+        [
+          38.7513,
+          117.1611
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.9927,
+          117.4909
+        ],
+        [
+          39.0195,
+          117.6757
+        ],
+        [
+          39.0923,
+          117.1926
+        ],
+        [
+          38.963,
+          117.639
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.9834,
+          116.9972
+        ],
+        [
+          38.9309,
+          116.9226
+        ],
+        [
+          39.0442,
+          117.1148
+        ],
+        [
+          39.0442,
+          117.1148
+        ],
+        [
+          39.0149,
+          117.6888
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.4991,
+          117.6708
+        ],
+        [
+          39.3462,
+          117.4757
+        ],
+        [
+          39.3462,
+          117.4757
+        ],
+        [
+          39.5478,
+          117.7585
+        ],
+        [
+          39.3289,
+          117.8206
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.8502,
+          117.1255
+        ],
+        [
+          38.8502,
+          117.1274
+        ],
+        [
+          38.8999,
+          117.1605
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          38.9378,
+          116.9445
+        ],
+        [
+          38.9378,
+          116.9445
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.0149,
+          117.6888
+        ],
+        [
+          39.311,
+          117.941
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.1175,
+          117.1913
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.0,
+          116.0
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.3208,
+          116.4902
+        ],
+        [
+          39.9004,
+          117.7323
+        ],
+        [
+          39.9004,
+          117.7323
+        ],
+        [
+          40.091,
+          115.2399
+        ],
+        [
+          40.227,
+          115.897
+        ],
+        [
+          40.3006,
+          115.7599
+        ],
+        [
+          40.335,
+          115.6556
+        ],
+        [
+          40.9109,
+          115.8302
+        ],
+        [
+          40.9333,
+          115.5625
         ],
         [
           40.933,
@@ -451,457 +1259,744 @@
           115.9115
         ],
         [
-          40.9109,
-          115.8302
-        ],
-        [
           40.9216,
           115.8279
         ],
         [
           40.989,
           115.4793
+        ],
+        [
+          40.5742,
+          115.2801
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          41.1897,
+          115.3292
+        ],
+        [
+          40.8689,
+          115.3994
+        ],
+        [
+          38.6855,
+          116.7095
+        ],
+        [
+          38.8017,
+          116.6796
+        ],
+        [
+          38.6942,
+          116.6405
+        ],
+        [
+          38.6253,
+          116.6238
+        ],
+        [
+          38.6867,
+          116.499
+        ],
+        [
+          38.8028,
+          116.6732
+        ],
+        [
+          41.6183,
+          116.2606
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          41.7654,
+          116.3697
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          38.6463,
+          115.9496
+        ],
+        [
+          38.7239,
+          115.8067
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          41.7162,
+          115.9115
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.1758,
+          115.5195
+        ],
+        [
+          40.4172,
+          115.5179
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.3991,
+          115.5985
+        ],
+        [
+          40.4133,
+          115.752
+        ],
+        [
+          40.302,
+          115.8214
+        ],
+        [
+          40.3983,
+          115.5914
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          41.5112,
+          114.4709
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          39.6222,
+          114.955
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          38.7054,
+          116.6538
+        ],
+        [
+          39.8501,
+          117.0489
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          38.6523,
+          116.9393
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          41.4547,
+          114.1158
+        ],
+        [
+          41.2865,
+          114.2816
+        ],
+        [
+          41.1376,
+          113.9203
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.9889,
+          114.3474
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          40.6943,
+          117.1851
+        ],
+        [
+          38.8987,
+          116.6879
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          40.5325,
+          115.3206
+        ],
+        [
+          40.4045,
+          114.8315
+        ],
+        [
+          40.4652,
+          114.9606
+        ],
+        [
+          40.4041,
+          114.832
+        ],
+        [
+          40.728,
+          115.414
+        ],
+        [
+          40.4037,
+          114.8365
+        ],
+        [
+          39.0772,
+          115.3663
+        ],
+        [
+          39.427,
+          115.1713
+        ],
+        [
+          39.806,
+          114.719
+        ],
+        [
+          39.7717,
+          114.8339
+        ],
+        [
+          39.7325,
+          114.7628
+        ],
+        [
+          39.7342,
+          114.9111
+        ],
+        [
+          39.8294,
+          114.8724
+        ],
+        [
+          39.831,
+          114.9301
+        ],
+        [
+          39.6647,
+          114.9147
+        ],
+        [
+          39.6796,
+          114.8229
+        ],
+        [
+          39.639,
+          114.7454
+        ],
+        [
+          39.7964,
+          114.7547
+        ],
+        [
+          39.6417,
+          114.7297
+        ],
+        [
+          39.0001,
+          116.0001
+        ],
+        [
+          41.0049,
+          114.7794
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          40.1603,
+          115.0915
+        ],
+        [
+          40.3787,
+          115.2219
+        ],
+        [
+          40.2122,
+          115.3378
+        ],
+        [
+          40.8814,
+          116.0921
+        ],
+        [
+          39.8195,
+          115.9377
+        ],
+        [
+          39.3333,
+          117.3583
+        ],
+        [
+          39.552,
+          116.9077
+        ],
+        [
+          39.5848,
+          117.612
+        ],
+        [
+          39.5848,
+          117.612
+        ],
+        [
+          39.4053,
+          117.4389
+        ],
+        [
+          39.7595,
+          117.3306
+        ],
+        [
+          39.4078,
+          117.4426
+        ],
+        [
+          39.6857,
+          117.4404
+        ],
+        [
+          39.2298,
+          117.0303
+        ],
+        [
+          39.2552,
+          117.3549
+        ],
+        [
+          39.2552,
+          117.3549
+        ],
+        [
+          39.2489,
+          117.8043
+        ],
+        [
+          39.3093,
+          117.9443
+        ],
+        [
+          39.2598,
+          117.805
+        ],
+        [
+          38.9498,
+          116.979
+        ],
+        [
+          38.8215,
+          116.9139
+        ],
+        [
+          38.8193,
+          116.9075
+        ],
+        [
+          38.8193,
+          116.9075
+        ],
+        [
+          39.3421,
+          117.7393
+        ],
+        [
+          38.9453,
+          116.9697
+        ],
+        [
+          38.9353,
+          116.8513
+        ],
+        [
+          39.3107,
+          117.6679
+        ],
+        [
+          38.7078,
+          116.9073
+        ],
+        [
+          38.9337,
+          116.7585
+        ],
+        [
+          38.8166,
+          116.8196
+        ],
+        [
+          38.6679,
+          117.0985
+        ],
+        [
+          39.9573,
+          117.4929
+        ],
+        [
+          39.9967,
+          117.2216
+        ],
+        [
+          39.9897,
+          117.2937
+        ],
+        [
+          39.9586,
+          117.2868
+        ],
+        [
+          39.8864,
+          117.3245
+        ],
+        [
+          39.8542,
+          117.2487
+        ],
+        [
+          39.9089,
+          117.166
+        ],
+        [
+          39.7897,
+          117.4201
+        ],
+        [
+          39.863,
+          117.3996
+        ],
+        [
+          40.0021,
+          117.7218
+        ],
+        [
+          39.8697,
+          117.4194
+        ],
+        [
+          39.9092,
+          117.2476
+        ],
+        [
+          39.4188,
+          117.6967
+        ],
+        [
+          39.0165,
+          117.697
+        ],
+        [
+          39.3333,
+          117.3583
+        ],
+        [
+          39.4887,
+          117.6677
+        ],
+        [
+          39.4869,
+          117.802
+        ],
+        [
+          39.4875,
+          117.8085
+        ],
+        [
+          39.4215,
+          117.5534
+        ],
+        [
+          39.4704,
+          117.5845
+        ],
+        [
+          39.4209,
+          117.5581
+        ],
+        [
+          39.549,
+          117.7537
+        ],
+        [
+          39.5046,
+          117.7548
+        ],
+        [
+          39.4785,
+          117.743
+        ],
+        [
+          39.4569,
+          117.6461
+        ],
+        [
+          39.5399,
+          117.8304
+        ],
+        [
+          39.4047,
+          117.7621
+        ],
+        [
+          39.4055,
+          117.7649
+        ],
+        [
+          39.4283,
+          117.8068
+        ],
+        [
+          39.3444,
+          117.8283
+        ],
+        [
+          39.4281,
+          117.8141
+        ],
+        [
+          39.4614,
+          117.7563
+        ],
+        [
+          39.4639,
+          117.7618
+        ],
+        [
+          39.3464,
+          117.4759
+        ],
+        [
+          39.5713,
+          117.8599
+        ],
+        [
+          39.258,
+          117.829
+        ],
+        [
+          39.5495,
+          116.9021
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.5304,
+          116.8682
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.4496,
+          117.3831
+        ],
+        [
+          39.5716,
+          116.8166
+        ],
+        [
+          39.6372,
+          116.8775
+        ],
+        [
+          39.5834,
+          117.1355
+        ],
+        [
+          39.4218,
+          117.1956
+        ],
+        [
+          39.774,
+          118.0101
+        ],
+        [
+          39.4796,
+          116.9527
+        ],
+        [
+          38.752,
+          117.1631
+        ],
+        [
+          38.7502,
+          117.1583
+        ],
+        [
+          39.2991,
+          117.9069
         ]
       ],
       "center_coord": [
-        41.052193081705084,
-        115.70389411554592
+        39.646995164922984,
+        116.52358699317327
       ],
       "geo_center": [
-        41.052193081705084,
-        115.70389411554592
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 12,
-      "member_locations": [
-        "Hebei Chengde Sangou SPIC solar farm",
-        "Hebei Province Chengde SPIC New Energy solar farm"
-      ],
-      "member_coords": [
-        [
-          41.0247,
-          118.2401
-        ],
-        [
-          41.0606,
-          118.1675
-        ]
-      ],
-      "center_coord": [
-        41.04265569473844,
-        118.20380990066627
-      ],
-      "geo_center": [
-        41.04265569473844,
-        118.20380990066627
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 13,
-      "member_locations": [
-        "Hebei Laiyuan Yingli solar farm",
-        "Hebei Yuxian Shou'ao solar farm"
-      ],
-      "member_coords": [
-        [
-          39.407,
-          114.711
-        ],
-        [
-          39.8428,
-          114.5892
-        ]
-      ],
-      "center_coord": [
-        39.62491589857151,
-        114.6502917726622
-      ],
-      "geo_center": [
-        39.62491589857151,
-        114.6502917726622
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 14,
-      "member_locations": [
-        "Hebei Lingshou (Huantai Energy) solar farm",
-        "Hebei Province Quyang (Three Gorges) solar farm",
-        "Hebei Province Quyang Xiaomu Zhongdiantou solar farm"
-      ],
-      "member_coords": [
-        [
-          38.3068,
-          114.3777
-        ],
-        [
-          38.6889,
-          114.5095
-        ],
-        [
-          38.6889,
-          114.6475
-        ]
-      ],
-      "center_coord": [
-        38.56158520014717,
-        114.5113297656278
-      ],
-      "geo_center": [
-        38.56158520014717,
-        114.5113297656278
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 15,
-      "member_locations": [
-        "Hebei Province Haixing \"Front Runner\" solar farm",
-        "Shandong Wudi Aikang solar farm",
-        "Tianjin Taipingzhen Zhongdian Shengfa solar farm"
-      ],
-      "member_coords": [
-        [
-          38.1478,
-          117.541
-        ],
-        [
-          37.8609,
-          117.8163
-        ],
-        [
-          38.6181,
-          117.3363
-        ]
-      ],
-      "center_coord": [
-        38.209096943260406,
-        117.56535602769694
-      ],
-      "geo_center": [
-        38.209096943260406,
-        117.56535602769694
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 16,
-      "member_locations": [
-        "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
-        "Hebei Changan Automobile solar project"
-      ],
-      "member_coords": [
-        [
-          39.3255,
-          116.4941
-        ],
-        [
-          39.0,
-          116.0
-        ]
-      ],
-      "center_coord": [
-        39.16301080026403,
-        116.24647841983328
-      ],
-      "geo_center": [
-        39.16301080026403,
-        116.24647841983328
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 17,
-      "member_locations": [
-        "Inner Mongolia Wulanchabu \"Grid-Friendly Green Power Station\" solar power plant",
-        "Inner Mongolia Wulanchabu Siziwang Banner Grid-Connected solar farm"
-      ],
-      "member_coords": [
-        [
-          41.867,
-          111.267
-        ],
-        [
-          41.7217,
-          111.7557
-        ]
-      ],
-      "center_coord": [
-        41.79460889186179,
-        111.51162696803486
-      ],
-      "geo_center": [
-        41.79460889186179,
-        111.51162696803486
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 18,
-      "member_locations": [
-        "Inner Mongolia Wulanchabu Chayouzhong Banner Yuanhua solar farm",
-        "Inner Mongolia Qahar Right Front Banner Tuguiwula Guodian solar farm",
-        "Inner Mongolia Chayouhouqi Hongmu Datang solar farm"
-      ],
-      "member_coords": [
-        [
-          41.3656,
-          112.6406
-        ],
-        [
-          40.7915,
-          113.208
-        ],
-        [
-          41.2679,
-          113.0511
-        ]
-      ],
-      "center_coord": [
-        41.14191452485918,
-        112.96731273190628
-      ],
-      "geo_center": [
-        41.14191452485918,
-        112.96731273190628
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 19,
-      "member_locations": [
-        "Shandong Province Laiwu Yangjiayu CNNC solar farm",
-        "Shandong Province Mengyin Three Gorges solar farm",
-        "Shandong China Energy Conservation and Environmental Protection Group Xintai solar farm"
-      ],
-      "member_coords": [
-        [
-          36.126,
-          117.6415
-        ],
-        [
-          35.8416,
-          118.1542
-        ],
-        [
-          35.9305,
-          117.6187
-        ]
-      ],
-      "center_coord": [
-        35.96628707510654,
-        117.80506531607872
-      ],
-      "geo_center": [
-        35.96628707510654,
-        117.80506531607872
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 20,
-      "member_locations": [
-        "Shanxi Lucheng Shengyang solar farm",
-        "Shanxi Qinxian (Huaneng) solar farm",
-        "Shanxi Yushe Huaneng solar farm"
-      ],
-      "member_coords": [
-        [
-          36.3796,
-          113.066
-        ],
-        [
-          36.7535,
-          112.7004
-        ],
-        [
-          36.9285,
-          112.9394
-        ]
-      ],
-      "center_coord": [
-        36.687296418663685,
-        112.90217001652641
-      ],
-      "geo_center": [
-        36.687296418663685,
-        112.90217001652641
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 21,
-      "member_locations": [
-        "Shanxi Pingding Yuhuangding SPIC solar farm",
-        "Shanxi Province Yuxian Niucunzhen solar farm"
-      ],
-      "member_coords": [
-        [
-          37.7367,
-          113.6562
-        ],
-        [
-          38.093,
-          113.5222
-        ]
-      ],
-      "center_coord": [
-        37.91486899086752,
-        113.58936226265008
-      ],
-      "geo_center": [
-        37.91486899086752,
-        113.58936226265008
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 22,
-      "member_locations": [
-        "Shandong Dongying Kenli (China Resources) solar farm",
-        "Shandong Lililun solar project"
-      ],
-      "member_coords": [
-        [
-          37.5895,
-          118.5497
-        ],
-        [
-          37.4335,
-          118.6689
-        ]
-      ],
-      "center_coord": [
-        37.511514972695224,
-        118.60936228444594
-      ],
-      "geo_center": [
-        37.511514972695224,
-        118.60936228444594
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 23,
-      "member_locations": [
-        "Shandong Feicheng Coal Mining Subsidence Area (Huadian) solar farm",
-        "Shandong Feicheng Shihengzhen solar farm"
-      ],
-      "member_coords": [
-        [
-          36.1863,
-          116.7709
-        ],
-        [
-          36.2062,
-          116.5242
-        ]
-      ],
-      "center_coord": [
-        36.19631327875249,
-        116.64756567566847
-      ],
-      "geo_center": [
-        36.19631327875249,
-        116.64756567566847
+        39.646995164922984,
+        116.52358699317327
       ],
       "total_capacity_kg_per_hour": 0
     }
   ],
-  "noise_points": [
-    {
-      "location": "Inner Mongolia Keshiketeng Banner Shuangshan And Kulongshan Distributed wind farm",
-      "coords": [
-        44.1303,
-        117.4942
-      ]
-    },
-    {
-      "location": "Henan Heshan Shengbu solar farm",
-      "coords": [
-        35.9739,
-        114.1528
-      ]
-    },
-    {
-      "location": "Hebei Shexian Jingdian Guoyuan solar farm",
-      "coords": [
-        36.6295,
-        113.687
-      ]
-    },
-    {
-      "location": "Inner Mongolia Hohhot Wuchuan County solar farm",
-      "coords": [
-        41.1927,
-        111.2992
-      ]
-    },
-    {
-      "location": "Inner Mongolia Tongliao Tianbao solar farm",
-      "coords": [
-        42.8663,
-        120.6582
-      ]
-    },
-    {
-      "location": "Liaoning Yi Jiayu solar farm",
-      "coords": [
-        41.7008,
-        121.1919
-      ]
-    },
-    {
-      "location": "Shandong Qixia Guanlizhen (Jingneng) solar farm",
-      "coords": [
-        37.2049,
-        120.7054
-      ]
-    },
-    {
-      "location": "Shanxi Shuozhou Shentou solar farm",
-      "coords": [
-        39.3904,
-        112.5774
-      ]
-    },
-    {
-      "location": "Shandong Zhangqiu Huazhang solar farm",
-      "coords": [
-        36.7633,
-        117.5618
-      ]
-    },
-    {
-      "location": "Shandong Zhucheng Zhongji Henghui solar farm",
-      "coords": [
-        36.0259,
-        119.1908
-      ]
-    },
-    {
-      "location": "Shanxi Hunyuan (Longi) Unsubsidized solar power plant",
-      "coords": [
-        39.6211,
-        113.5939
-      ]
-    },
-    {
-      "location": "Shandong Jining Huaqin Rubber Industry Group solar farm",
-      "coords": [
-        35.554,
-        116.7856
-      ]
-    },
-    {
-      "location": "Longxing Huludao Shenjiatun solar project",
-      "coords": [
-        40.8738,
-        120.624
-      ]
-    }
-  ]
+  "noise_points": []
 }

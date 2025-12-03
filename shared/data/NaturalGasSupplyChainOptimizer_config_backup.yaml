@@ -758,7 +758,7 @@ solver_parameters:
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
 
-  Threads: 128                             # 并行计算线程数 | Number of parallel threads
+  Threads: 192                             # 并行计算线程数 | Number of parallel threads
                                            # 使用128个线程进行并行计算
                                            # 建议设置为CPU核心数或稍多
                                            # 注意：过多线程可能导致内存溢出

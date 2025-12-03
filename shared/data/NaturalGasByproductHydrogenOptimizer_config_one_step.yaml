@@ -1,5 +1,5 @@
 basic_parameters:
-  time_horizon_weeks: 1
+  time_horizon_weeks: 52
   hours_per_week: 168
   use_graphhopper_routing: true
   graphhopper_host: localhost
@@ -428,7 +428,7 @@ operational_parameters:
 solver_parameters:
   TimeLimit: 3600
   MIPGap: 0.01
-  Threads: 128
+  Threads: 192
 supply_capacity:
   lng_terminal_capacity:
     default_capacity_mcm_per_year: 300

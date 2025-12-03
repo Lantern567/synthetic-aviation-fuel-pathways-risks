@@ -105,3 +105,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 报错修改原则
 当我把报错段落发给你的时候，如果错误不明确，请你首先在原代码中增加打印调试日志信息，然后要将这些信息保存到日志log文件夹中。
+
+## 永远使用中文回复我
+
+## 地图的可视化必须使用frykit库

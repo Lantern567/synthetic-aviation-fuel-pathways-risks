@@ -629,12 +629,9 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 # 数据预处理
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
                 
-                # 筛选2024年数据
+                # 筛选2024年数据（完整一年）
                 df = df[df['timestamp'].dt.year == 2024]
-                
-                # 筛选前2周数据
-                df = df[df['timestamp'] < '2024-01-15']
-                
+
                 # 从3小时发电量插值到每小时发电量
                 df_hourly = self._interpolate_wind_to_hourly(df)
                 
@@ -665,66 +662,75 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         logger.info("正在加载光伏数据...")
         
         solar_data_list = []
-        
-        # 读取第一个月的所有批次文件
+
+        # 读取全部12个月的所有批次文件
         all_files = os.listdir(solar_data_dir)
-        month01_files = [f for f in all_files if f.startswith('solar_generation_month01_batch_') and f.endswith('.csv')]
-        month01_files.sort()  # 按批次顺序排序
-        
-        logger.info(f"找到 {len(month01_files)} 个第一个月的批次文件")
-        
-        for file_name in month01_files:
+
+        # 收集所有月份的文件
+        all_month_files = []
+        for month in range(1, 13):  # 1到12月
+            month_key = f'month{month:02d}'
+            month_files = [f for f in all_files
+                          if f.startswith(f'solar_generation_{month_key}_batch_')
+                          and f.endswith('.csv')]
+            all_month_files.extend(month_files)
+
+        all_month_files.sort()  # 按文件名顺序排序
+
+        logger.info(f"找到 {len(all_month_files)} 个批次文件，覆盖全年12个月")
+
+        for file_name in all_month_files:
             file_path = os.path.join(solar_data_dir, file_name)
             try:
                 df = pd.read_csv(file_path)
-                
+
                 # 数据预处理
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
-                
-                # 检查数据的年份（应该是2020年1月）
+
+                # 检查数据的年份（应该是2020年）
                 available_years = df['timestamp'].dt.year.unique()
-                logger.info(f"文件 {file_name} 包含年份: {sorted(available_years)}")
-                
-                # 使用2020年1月的数据（第一个月的完整数据）
+                logger.debug(f"文件 {file_name} 包含年份: {sorted(available_years)}")
+
+                # 使用2020年完整一年的数据
                 base_year = min(available_years)
                 start_date = f"{base_year}-01-01"
-                end_date = f"{base_year}-02-01"  # 整个1月
-                
-                df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] < end_date)].copy()
-                
+                end_date = f"{base_year}-12-31 23:59:59"  # 完整一年
+
+                df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)].copy()
+
                 if len(df_filtered) == 0:
                     logger.warning(f"文件 {file_name} 在时间范围 {start_date} 到 {end_date} 内没有数据")
                     continue
-                
+
                 # 重命名列以统一格式
                 df_processed = df_filtered.copy()
                 df_processed['plant_name'] = df_filtered['plant_name']
                 df_processed['type'] = 'solar_plant'
                 df_processed['generation_mwh'] = df_filtered['generation_1h_mwh']  # 每小时发电量(MWh)
                 df_processed['power_output_mw'] = df_filtered['generation_1h_mwh']  # 功率等于发电量/1小时 = MWh/h = MW
-                
+
                 # 创建hour列（从2020年1月1日开始计算）
                 start_time = pd.to_datetime(f"{base_year}-01-01")
                 df_processed['hour'] = (df_processed['timestamp'] - start_time).dt.total_seconds() // 3600
                 df_processed['hour'] = df_processed['hour'].astype(int)
-                
-                # 只保留前336小时（2周），如果数据超过这个范围
+
+                # 只保留前total_hours（8760小时=52周）的数据
                 df_processed = df_processed[df_processed['hour'] < self.total_hours]
-                
-                logger.info(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
+
+                logger.debug(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
                 solar_data_list.append(df_processed)
-                
+
             except Exception as e:
                 logger.warning(f"读取光伏文件 {file_name} 失败: {e}")
-        
+
         if solar_data_list:
             solar_data = pd.concat(solar_data_list, ignore_index=True)
-            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(month01_files)} 个批次文件")
-            
+            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(all_month_files)} 个批次文件")
+
             # 统计光伏电站数量
             unique_plants = solar_data['plant_name'].nunique()
             logger.info(f"包含 {unique_plants} 个不同的光伏电站")
-            
+
         else:
             logger.warning("没有成功读取任何光伏数据")
             solar_data = pd.DataFrame()
@@ -2695,13 +2701,14 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 # 每周安排4小时维护时间（设备不能生产）
                 maintenance_hours = []
                 for week in range(self.time_horizon_weeks):
-                    # 每周的维护时间：周日凌晨1-4点
-                    week_start_hour = week * 168
+                    # 每周的维护时间：每周开始后的第1-4小时
+                    # （如果week从周一0点开始，则为周一凌晨1-4点）
+                    week_start_hour = week * self.hours_per_week
                     maintenance_hours.extend([
-                        week_start_hour + 1,  # 周日凌晨1点
-                        week_start_hour + 2,  # 周日凌晨2点
-                        week_start_hour + 3,  # 周日凌晨3点
-                        week_start_hour + 4   # 周日凌晨4点
+                        week_start_hour + 1,  # 第1小时
+                        week_start_hour + 2,  # 第2小时
+                        week_start_hour + 3,  # 第3小时
+                        week_start_hour + 4   # 第4小时
                     ])
                 
                 # 在维护时间内，生产为0

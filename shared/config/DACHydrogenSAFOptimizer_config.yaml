@@ -462,7 +462,7 @@ operational_parameters:
 solver_parameters:
   TimeLimit: 1.0e100                       # 求解时间限制(秒) - 1e100表示无限制
   MIPGap: 0.01
-  Threads: 128
+  Threads: 192
 technologies:
   green_h2_co2_to_saf:
     name: 绿氢+CO₂费托合成制SAF

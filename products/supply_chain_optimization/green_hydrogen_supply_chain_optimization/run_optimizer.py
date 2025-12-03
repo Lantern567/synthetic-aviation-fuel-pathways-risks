@@ -80,16 +80,16 @@ def main():
 
     parser.add_argument(
         '--time-limit',
-        type=int,
-        default=3600,
-        help='Gurobi求解时间限制(秒) (默认: 3600秒=1小时)'
+        type=float,
+        default=1.0e100,
+        help='Gurobi求解时间限制(秒) (默认: 1.0e100=接近无限制，与配置文件一致)'
     )
 
     parser.add_argument(
         '--mip-gap',
         type=float,
-        default=0.05,
-        help='MIP优化间隙 (默认: 0.05=5%%)'
+        default=0.01,
+        help='MIP优化间隙 (默认: 0.01=1%%)'
     )
 
     parser.add_argument(

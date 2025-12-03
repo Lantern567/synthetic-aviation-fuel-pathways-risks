@@ -1,5 +1,5 @@
 basic_parameters:
-  time_horizon_weeks: 1
+  time_horizon_weeks: 52
   hours_per_week: 168
   use_graphhopper_routing: true
   graphhopper_host: localhost
@@ -530,7 +530,7 @@ operational_parameters:
 solver_parameters:
   TimeLimit: 1e100
   MIPGap: 0.01
-  Threads: 128
+  Threads: 192
 technologies:
   green_h2_co2_to_saf:
     name: 绿氢+CO₂费托合成制SAF

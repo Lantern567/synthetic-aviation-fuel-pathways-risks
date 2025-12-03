@@ -35,7 +35,7 @@
 # =============================================================================
 basic_parameters:
   # 时间范围参数 - Time Horizon Parameters
-  time_horizon_weeks: 1                    # 优化时间范围(周数) | Optimization time horizon in weeks
+  time_horizon_weeks: 52                   # 优化时间范围(周数) | Optimization time horizon in weeks
                                            # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
                                            # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
 
@@ -824,7 +824,7 @@ solver_parameters:
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
 
-  Threads: 128                             # 并行计算线程数 | Number of parallel threads
+  Threads: 192                             # 并行计算线程数 | Number of parallel threads
                                            # 使用128个线程进行并行计算
                                            # 建议设置为CPU核心数或稍多
                                            # 注意：过多线程可能导致内存溢出

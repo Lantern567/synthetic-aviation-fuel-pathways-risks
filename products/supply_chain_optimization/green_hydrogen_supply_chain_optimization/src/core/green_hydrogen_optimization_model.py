@@ -19,6 +19,8 @@ import pandas as pd
 import numpy as np
 import logging
 import time
+import gc  # 用于显式垃圾回收，释放大数据对象内存
+import psutil  # 用于监控内存使用情况
 from typing import Dict, List, Tuple, Optional
 import json
 import re
@@ -235,6 +237,9 @@ def is_within_beijing_range(lat: float, lon: float, max_distance_km: float = 500
 def _process_plant_data_worker(args):
     """并行处理单个电站数据的worker函数
 
+    将预处理数据（DataFrame格式）转换成优化模型需要的字典格式，
+    并截断到配置的total_hours（预处理数据是8784小时，配置可能是8736小时）
+
     Args:
         args: (plant_name, plant_data, total_hours) 元组
 
@@ -243,24 +248,34 @@ def _process_plant_data_worker(args):
     """
     plant_name, plant_data, total_hours = args
 
-    # 取前total_hours小时数据
-    if len(plant_data) >= total_hours:
-        hourly_data = plant_data.head(total_hours)
-
-        # 确定电站类型
-        plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
-
-        location_dict = {
-            'type': plant_type,
-            'latitude': hourly_data.iloc[0].get('latitude', 30.0),
-            'longitude': hourly_data.iloc[0].get('longitude', 104.0),
-            'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-            'hourly_generation': hourly_data['power_output_mw'].tolist(),
-        }
-
-        return (plant_name, location_dict)
-    else:
+    if len(plant_data) == 0:
         return None
+
+    # 排序确保小时顺序正确
+    plant_data = plant_data.sort_values('hour')
+
+    # 截断到total_hours（预处理数据是8784小时，配置可能是8736小时）
+    if len(plant_data) > total_hours:
+        plant_data = plant_data.head(total_hours)
+
+    # 提取静态属性（使用第一行数据）
+    first_row = plant_data.iloc[0]
+
+    # 类型映射：预处理数据中是solar_farm，但代码中使用solar_plant
+    plant_type = first_row['type']
+    if plant_type == 'solar_farm':
+        plant_type = 'solar_plant'
+
+    # 构建location字典
+    location_dict = {
+        'type': plant_type,
+        'latitude': first_row['latitude'],
+        'longitude': first_row['longitude'],
+        'capacity_mw': first_row['capacity_mw'],
+        'hourly_generation': plant_data['power_output_mw'].tolist(),
+    }
+
+    return (plant_name, location_dict)
 
 
 def _filter_renewable_plant_worker(args):
@@ -300,7 +315,7 @@ def _process_airport_data_worker(args):
     # 排序确保周数据顺序正确
     airport_df = airport_df.sort_values('week_number')
 
-    # 提取52周的燃油需求序列
+    # 提取所有周的燃油需求序列
     weekly_series = airport_df['weekly_total_fuel_kg_total'].tolist()
 
     # 获取机场地理位置（使用第一行数据）
@@ -737,6 +752,21 @@ class GreenHydrogenSupplyChainOptimizer:
 
         logger.info("=" * 60)
 
+    def _log_memory_usage(self, stage_name: str):
+        """
+        记录当前内存使用情况
+
+        Args:
+            stage_name: 记录阶段名称（如"加载solar_data后"）
+        """
+        try:
+            process = psutil.Process(os.getpid())
+            mem_info = process.memory_info()
+            mem_mb = mem_info.rss / 1024 / 1024
+            logger.info(f"[内存监控] {stage_name}: {mem_mb:.2f} MB")
+        except Exception as e:
+            logger.warning(f"内存监控失败: {e}")
+
     def __init__(self, config_path: str = None, process_mode: str = 'one_step', **override_params):
         """
         初始化绿氢+CO₂制SAF供应链优化器
@@ -900,6 +930,9 @@ class GreenHydrogenSupplyChainOptimizer:
         self.facility_vars = {}    # 设施建设变量
         self.transport_vars = {}   # 运输变量
         self.storage_vars = {}     # 库存变量
+
+        # 路径缓存（避免重复计算路径规划）
+        self.route_cache = {}
         
         # 初始化GraphHopper路径规划引擎
         self.use_graphhopper_routing = basic_params['use_graphhopper_routing']
@@ -1068,7 +1101,12 @@ class GreenHydrogenSupplyChainOptimizer:
         
         # 处理机场数据
         airport_data = self._process_excel_airport_data(excel_data)
-        
+
+        # 立即释放Excel数据，避免内存占用
+        del excel_data
+        gc.collect()
+        self._log_memory_usage("释放excel_data后")
+
         # 如果没有提供可再生能源数据，必须加载真实数据
         if renewable_data is None:
             renewable_data = self._load_real_renewable_data()
@@ -1115,8 +1153,12 @@ class GreenHydrogenSupplyChainOptimizer:
             if is_byproduct_h2:
                 filtered_renewable_data = renewable_data
                 logger.info(f"副产氢数据无需过滤: {len(filtered_renewable_data)} 条记录")
+            # 如果数据已经预筛选过500km，直接使用
+            elif hasattr(self, 'is_renewable_data_prefiltered_500km') and self.is_renewable_data_prefiltered_500km:
+                filtered_renewable_data = renewable_data
+                logger.info(f"✓ 数据已预筛选500km，直接使用: {len(filtered_renewable_data):,} 条记录")
             else:
-                # 可再生能源数据，使用缓存机制
+                # 可再生能源数据需要筛选，使用缓存机制
                 # 导入缓存管理器
                 try:
                     from ..cache.data_cache_manager import cache_manager
@@ -1141,18 +1183,31 @@ class GreenHydrogenSupplyChainOptimizer:
                 else:
                     logger.info("缓存无效或不存在，执行完整处理和过滤")
                     filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
-            
-            # 按地点聚合小时级发电数据 - 使用并行处理
-            plant_names = filtered_renewable_data['plant_name'].unique()
-            logger.info(f"使用{self.parallel_workers}个并行workers处理{len(plant_names)}个电站的小时级数据")
 
-            # 准备并行处理的参数
+                # 立即释放原始renewable_data，避免内存占用
+                del renewable_data
+                gc.collect()
+                self._log_memory_usage("释放renewable_data后")
+
+            # 按地点聚合小时级发电数据 - 使用并行处理
+            logger.info(f"按电站名称分组数据...")
+            grouped = filtered_renewable_data.groupby('plant_name', sort=False)
+            plant_count = len(grouped)
+            logger.info(f"使用{self.parallel_workers}个并行workers处理{plant_count}个电站的小时级数据")
+
+            # 准备并行处理的参数（使用groupby迭代器，避免重复筛选）
+            logger.info("准备并行处理参数...")
             plant_data_list = [
-                (plant_name, filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name], self.total_hours)
-                for plant_name in plant_names
+                (plant_name, plant_data, self.total_hours)
+                for plant_name, plant_data in grouped
             ]
 
+            # 释放grouped以节省内存
+            del grouped
+            gc.collect()
+
             # 使用线程池并行处理电站数据
+            logger.info("开始并行处理电站数据...")
             with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
                 results = list(executor.map(_process_plant_data_worker, plant_data_list))
 
@@ -1175,7 +1230,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 logger.info(f"处理了 {len(self.locations)} 个可再生能源发电站")
                 logger.info(f"  太阳能发电站: {solar_count} 个")
                 logger.info(f"  风电场: {wind_count} 个")
-            
+
             # 将机场位置添加到基础locations中
             self._add_airports_to_locations()
 
@@ -1209,6 +1264,11 @@ class GreenHydrogenSupplyChainOptimizer:
         # 合并过滤后的数据
         if filtered_plants:
             filtered_df = pd.concat(filtered_plants, ignore_index=True)
+
+            # 立即释放filtered_plants列表，避免内存占用
+            del filtered_plants
+            gc.collect()
+            self._log_memory_usage("释放filtered_plants后")
         else:
             filtered_df = pd.DataFrame()
 
@@ -1336,26 +1396,26 @@ class GreenHydrogenSupplyChainOptimizer:
         airport_list = []
         
         for airport_name in excel_data['departure_airport_name'].unique():
-            airport_subset = excel_data[excel_data['departure_airport_name'] == airport_name].copy()
-            
+            airport_subset = excel_data[excel_data['departure_airport_name'] == airport_name]
+
             # 按周数排序
             airport_subset = airport_subset.sort_values('week_number')
             
             # 提取周甲醇需求序列（使用总甲醇消耗_kg列）
             weekly_fuel_series = airport_subset['weekly_total_fuel_kg_total'].tolist()
-            
-            # 确保有52周的数据，如果不足则用平均值填充
-            if len(weekly_fuel_series) < 52:
+
+            # 确保有足够周数的数据，如果不足则用平均值填充
+            if len(weekly_fuel_series) < self.time_horizon_weeks:
                 # 计算现有数据的平均值
                 if not weekly_fuel_series:
                     logger.error(f"机场 {airport_name} 没有有效的燃油需求数据")
                     raise ValueError(f"机场 {airport_name} 缺少燃油需求数据")
                 avg_demand = np.mean(weekly_fuel_series)
-                # 填充到52周
-                weekly_fuel_series.extend([avg_demand] * (52 - len(weekly_fuel_series)))
-            elif len(weekly_fuel_series) > 52:
-                # 如果超过52周，只取前52周
-                weekly_fuel_series = weekly_fuel_series[:52]
+                # 填充到time_horizon_weeks周
+                weekly_fuel_series.extend([avg_demand] * (self.time_horizon_weeks - len(weekly_fuel_series)))
+            elif len(weekly_fuel_series) > self.time_horizon_weeks:
+                # 如果超过time_horizon_weeks周，只取前time_horizon_weeks周
+                weekly_fuel_series = weekly_fuel_series[:self.time_horizon_weeks]
             
             # 计算统计指标
             avg_weekly_fuel = np.mean(weekly_fuel_series)
@@ -1403,8 +1463,8 @@ class GreenHydrogenSupplyChainOptimizer:
         if '机场' in csv_data.columns:
             # 按机场分组处理
             for airport_name in csv_data['机场'].unique():
-                airport_subset = csv_data[csv_data['机场'] == airport_name].copy()
-                
+                airport_subset = csv_data[csv_data['机场'] == airport_name]
+
                 # 获取机场坐标
                 airport_coords = self._get_airport_coordinates(airport_name)
                 
@@ -1412,17 +1472,17 @@ class GreenHydrogenSupplyChainOptimizer:
                 if '周数' in airport_subset.columns and '总甲醇消耗_kg' in airport_subset.columns:
                     airport_subset = airport_subset.sort_values('周数')
                     weekly_fuel_series = airport_subset['总甲醇消耗_kg'].tolist()
-                    
-                    # 确保有52周的数据
-                    if len(weekly_fuel_series) < 52:
+
+                    # 确保有足够周数的数据
+                    if len(weekly_fuel_series) < self.time_horizon_weeks:
                         if not weekly_fuel_series:
                             logger.error(f"机场 {airport_name} 没有有效的燃油需求数据")
                         raise ValueError(f"机场 {airport_name} 缺少燃油需求数据")
                         avg_demand = np.mean(weekly_fuel_series)
-                        weekly_fuel_series.extend([avg_demand] * (52 - len(weekly_fuel_series)))
+                        weekly_fuel_series.extend([avg_demand] * (self.time_horizon_weeks - len(weekly_fuel_series)))
 
-                    elif len(weekly_fuel_series) > 52:
-                        weekly_fuel_series = weekly_fuel_series[:52]
+                    elif len(weekly_fuel_series) > self.time_horizon_weeks:
+                        weekly_fuel_series = weekly_fuel_series[:self.time_horizon_weeks]
                     
                         avg_weekly_fuel = np.mean(weekly_fuel_series)
                         max_weekly_fuel = np.max(weekly_fuel_series)
@@ -1489,8 +1549,201 @@ class GreenHydrogenSupplyChainOptimizer:
         # 如果机场不在预定义列表中，抛出错误
         logger.error(f"未知的机场名称: {airport_name}，请检查数据")
         raise ValueError(f"未支持的机场: {airport_name}")
-    
-    
+
+
+    def _load_preprocessed_renewable_data(self) -> Tuple[pd.DataFrame, bool]:
+        """
+        加载预处理后的可再生能源数据
+
+        此方法直接加载预处理脚本生成的数据文件（CSV或Parquet格式），
+        跳过原始数据的加载和处理步骤，显著提升性能。
+        优先加载已筛选500km范围的数据，如果不存在则加载完整数据。
+
+        Returns:
+            Tuple[pd.DataFrame, bool]: (预处理后的可再生能源数据DataFrame, 是否已预筛选500km)
+
+        Raises:
+            FileNotFoundError: 如果未找到预处理数据文件
+        """
+        logger.info("="*80)
+        logger.info("正在加载预处理后的可再生能源数据...")
+        logger.info("="*80)
+
+        # 获取预处理数据目录
+        try:
+            preprocessed_dir = self._get_data_path('aviation_data.preprocessed_data_dir')
+            logger.info(f"预处理数据目录: {preprocessed_dir}")
+        except Exception as e:
+            error_msg = (
+                f"无法从配置文件获取预处理数据路径: {e}\n"
+                f"请先运行预处理脚本生成数据：\n"
+                f"  cd products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts\n"
+                f"  python preprocess_all_renewable_data.py --all"
+            )
+            logger.error(error_msg)
+            raise FileNotFoundError(error_msg)
+
+        # 优先级1：加载150km筛选后的CSV格式（最优 - 减少计算范围）
+        solar_150km_csv = os.path.join(preprocessed_dir, 'solar_hourly_150km.csv')
+        wind_150km_csv = os.path.join(preprocessed_dir, 'wind_hourly_150km.csv')
+
+        # 优先级2：加载500km筛选后的Parquet格式
+        solar_500km_parquet = os.path.join(preprocessed_dir, 'solar_hourly_500km.parquet')
+        wind_500km_parquet = os.path.join(preprocessed_dir, 'wind_hourly_500km.parquet')
+
+        # 优先级3：加载500km筛选后的CSV格式
+        solar_500km_csv = os.path.join(preprocessed_dir, 'solar_hourly_500km.csv')
+        wind_500km_csv = os.path.join(preprocessed_dir, 'wind_hourly_500km.csv')
+
+        # 优先级4：加载完整预处理数据的Parquet格式（需要后续筛选）
+        solar_parquet = os.path.join(preprocessed_dir, 'solar_hourly_complete.parquet')
+        wind_parquet = os.path.join(preprocessed_dir, 'wind_hourly_complete.parquet')
+
+        # 优先级5：加载完整预处理数据的CSV格式（最慢，需要后续筛选）
+        solar_csv = os.path.join(preprocessed_dir, 'solar_hourly_complete.csv')
+        wind_csv = os.path.join(preprocessed_dir, 'wind_hourly_complete.csv')
+
+        # 尝试按优先级加载数据
+        data_loaded = False
+        is_prefiltered_500km = False  # 标记数据是否已经预筛选过（150km或500km）
+
+        # 优先级1：尝试加载150km筛选后的CSV格式（最优）
+        if os.path.exists(solar_150km_csv) and os.path.exists(wind_150km_csv):
+            logger.info("✓ 检测到150km筛选后的CSV格式数据（最优选项 - 减少计算范围）")
+            try:
+                logger.info(f"加载太阳能数据: {solar_150km_csv}")
+                solar_data = pd.read_csv(solar_150km_csv)
+                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
+
+                logger.info(f"加载风电数据: {wind_150km_csv}")
+                wind_data = pd.read_csv(wind_150km_csv)
+                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+
+                data_loaded = True
+                is_prefiltered_500km = True  # 150km也认为已预筛选，无需再次筛选
+                logger.info("✓ 数据已预筛选（150km范围），无需再次筛选")
+            except Exception as e:
+                logger.warning(f"150km CSV格式加载失败: {e}，尝试其他格式")
+
+        # 优先级2：尝试加载500km筛选后的Parquet格式
+        if not data_loaded and os.path.exists(solar_500km_parquet) and os.path.exists(wind_500km_parquet):
+            logger.info("✓ 检测到500km筛选后的Parquet格式数据")
+            try:
+                logger.info(f"加载太阳能数据: {solar_500km_parquet}")
+                solar_data = pd.read_parquet(solar_500km_parquet)
+                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
+
+                logger.info(f"加载风电数据: {wind_500km_parquet}")
+                wind_data = pd.read_parquet(wind_500km_parquet)
+                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+
+                data_loaded = True
+                is_prefiltered_500km = True
+                logger.info("✓ 数据已预筛选（500km范围），无需再次筛选")
+            except Exception as e:
+                logger.warning(f"500km Parquet格式加载失败: {e}，尝试其他格式")
+
+        # 优先级3：尝试加载500km筛选后的CSV格式
+        if not data_loaded and os.path.exists(solar_500km_csv) and os.path.exists(wind_500km_csv):
+            logger.info("✓ 检测到500km筛选后的CSV格式数据")
+            try:
+                logger.info(f"加载太阳能数据: {solar_500km_csv}")
+                solar_data = pd.read_csv(solar_500km_csv)
+                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
+
+                logger.info(f"加载风电数据: {wind_500km_csv}")
+                wind_data = pd.read_csv(wind_500km_csv)
+                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+
+                data_loaded = True
+                is_prefiltered_500km = True
+                logger.info("✓ 数据已预筛选（500km范围），无需再次筛选")
+            except Exception as e:
+                logger.warning(f"500km CSV格式加载失败: {e}，尝试加载完整数据")
+
+        # 优先级4：尝试加载完整数据的Parquet格式
+        if not data_loaded and os.path.exists(solar_parquet) and os.path.exists(wind_parquet):
+            logger.info("检测到完整预处理数据的Parquet格式")
+            logger.warning("⚠ 建议运行筛选脚本以提升性能：")
+            logger.warning("  cd products/aviation_fuel_analysis/resource_flight_data_process")
+            logger.warning("  python src/filter_500km_renewable_data.py --all")
+            try:
+                logger.info(f"加载太阳能数据: {solar_parquet}")
+                solar_data = pd.read_parquet(solar_parquet)
+                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
+
+                logger.info(f"加载风电数据: {wind_parquet}")
+                wind_data = pd.read_parquet(wind_parquet)
+                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+
+                data_loaded = True
+            except Exception as e:
+                logger.warning(f"完整Parquet格式加载失败: {e}，尝试CSV格式")
+
+        # 优先级4：回退到完整数据的CSV格式
+        if not data_loaded:
+            if not os.path.exists(solar_csv) or not os.path.exists(wind_csv):
+                error_msg = (
+                    f"未找到任何预处理数据文件！\n"
+                    f"预期位置: {preprocessed_dir}\n"
+                    f"请先运行预处理脚本：\n"
+                    f"  cd products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts\n"
+                    f"  python preprocess_all_renewable_data.py --all\n"
+                    f"\n"
+                    f"可选：运行500km筛选脚本以提升性能：\n"
+                    f"  cd products/aviation_fuel_analysis/resource_flight_data_process\n"
+                    f"  python src/filter_500km_renewable_data.py --all\n"
+                    f"\n"
+                    f"缺失文件:\n"
+                    f"  太阳能(500km): {'✗' if not os.path.exists(solar_500km_csv) else '✓'} {solar_500km_csv}\n"
+                    f"  风电(500km): {'✗' if not os.path.exists(wind_500km_csv) else '✓'} {wind_500km_csv}\n"
+                    f"  太阳能(完整): {'✗' if not os.path.exists(solar_csv) else '✓'} {solar_csv}\n"
+                    f"  风电(完整): {'✗' if not os.path.exists(wind_csv) else '✓'} {wind_csv}"
+                )
+                logger.error(error_msg)
+                raise FileNotFoundError(error_msg)
+
+            logger.info("使用完整预处理数据的CSV格式")
+            logger.warning("⚠ 建议运行筛选脚本以提升性能：")
+            logger.warning("  cd products/aviation_fuel_analysis/resource_flight_data_process")
+            logger.warning("  python src/filter_500km_renewable_data.py --all")
+
+            logger.info(f"加载太阳能数据: {solar_csv}")
+            solar_data = pd.read_csv(solar_csv)
+            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
+
+            logger.info(f"加载风电数据: {wind_csv}")
+            wind_data = pd.read_csv(wind_csv)
+            logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+
+        # 合并数据
+        renewable_data = pd.concat([solar_data, wind_data], ignore_index=True)
+        logger.info(f"合并后总计: {len(renewable_data):,} 条记录")
+
+        # 截断到total_hours（如果需要）
+        if 'hour' in renewable_data.columns:
+            before_count = len(renewable_data)
+            renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
+            after_count = len(renewable_data)
+            if before_count > after_count:
+                logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
+
+        # 释放源数据内存
+        del solar_data, wind_data
+        gc.collect()
+        logger.info("已释放solar_data和wind_data，触发垃圾回收")
+
+        # 统计信息
+        solar_count = len(renewable_data[renewable_data['type'] == 'solar_farm'])
+        wind_count = len(renewable_data[renewable_data['type'] == 'wind_farm'])
+        logger.info(f"数据统计:")
+        logger.info(f"  太阳能: {solar_count:,} 条记录")
+        logger.info(f"  风电: {wind_count:,} 条记录")
+        logger.info("="*80)
+
+        return renewable_data, is_prefiltered_500km
+
+
     def _load_real_renewable_data(self) -> pd.DataFrame:
         """
         加载真实的可再生能源数据或副产氢数据
@@ -1512,38 +1765,11 @@ class GreenHydrogenSupplyChainOptimizer:
         except Exception as e:
             logger.debug(f"未找到副产氢数据配置: {e}，将加载可再生能源数据")
 
-        # 从配置文件获取数据目录路径
-        try:
-            wind_data_dir = self._get_data_path('aviation_data.wind_data_dir')
-            solar_data_dir = self._get_data_path('aviation_data.solar_data_dir')
-            logger.info(f"从配置文件获取数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
-        except Exception as e:
-            logger.error(f"从配置文件获取数据目录失败: {e}")
-            # 使用默认相对路径
-            base_dir = get_project_base_dir()
-            wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
-            solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
-            logger.info(f"使用默认数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
+        # 加载预处理后的可再生能源数据
+        renewable_data, is_prefiltered = self._load_preprocessed_renewable_data()
 
-        # 检查数据目录是否存在
-        if not os.path.exists(wind_data_dir):
-            logger.error(f"风电数据目录不存在: {wind_data_dir}")
-            raise FileNotFoundError(f"无法找到风电数据目录: {wind_data_dir}")
-
-        if not os.path.exists(solar_data_dir):
-            logger.error(f"光伏数据目录不存在: {solar_data_dir}")
-            raise FileNotFoundError(f"无法找到光伏数据目录: {solar_data_dir}")
-
-        # 读取风电数据
-        wind_data = self._load_wind_data(wind_data_dir)
-
-        # 读取光伏数据
-        solar_data = self._load_solar_data(solar_data_dir)
-
-        # 合并数据
-        renewable_data = pd.concat([wind_data, solar_data], ignore_index=True)
-
-        logger.info(f"成功加载了 {len(renewable_data)} 条可再生能源数据记录")
+        # 存储预筛选标记，供后续处理使用
+        self.is_renewable_data_prefiltered_500km = is_prefiltered
 
         return renewable_data
 
@@ -1598,9 +1824,23 @@ class GreenHydrogenSupplyChainOptimizer:
             name_column='refinery_name'
         )
 
+        # 保存统计信息以便后续使用
+        steel_count = len(steel_df)
+        refinery_count = len(refinery_df)
+
+        # 立即释放原始数据，避免内存累积
+        del steel_df, refinery_df
+        gc.collect()
+        self._log_memory_usage("释放steel_df和refinery_df后")
+
         # 合并数据
-        byproduct_h2_data = pd.concat([steel_time_series, refinery_time_series], ignore_index=True)
+        byproduct_h2_data = pd.concat([steel_time_series, refinery_time_series], ignore_index=True, copy=False)
         byproduct_h2_data = byproduct_h2_data.sort_values(['plant_name', 'hour']).reset_index(drop=True)
+
+        # 释放时间序列中间数据
+        del steel_time_series, refinery_time_series
+        gc.collect()
+        self._log_memory_usage("释放副产氢时间序列数据后")
 
         # 输出统计信息
         logger.info("\n" + "="*80)
@@ -1608,8 +1848,8 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("="*80)
         logger.info(f"总记录数: {len(byproduct_h2_data):,}")
         logger.info(f"设施数量: {byproduct_h2_data['plant_name'].nunique()}")
-        logger.info(f"  - 钢铁厂: {len(steel_df)}")
-        logger.info(f"  - 炼油厂: {len(refinery_df)}")
+        logger.info(f"  - 钢铁厂: {steel_count}")
+        logger.info(f"  - 炼油厂: {refinery_count}")
         logger.info(f"总小时产能: {byproduct_h2_data.groupby('plant_name')['power_output_mw'].first().sum():.2f} kg H2/hour")
         logger.info("="*80)
 
@@ -1652,9 +1892,9 @@ class GreenHydrogenSupplyChainOptimizer:
         filtered_count = 0
         included_count = 0
 
-        for _, row in df.iterrows():
-            plant_lat = row['latitude']
-            plant_lon = row['longitude']
+        for row in df.itertuples():
+            plant_lat = row.latitude
+            plant_lon = row.longitude
 
             # 500km范围检查：以北京为中心
             if not is_within_beijing_range(plant_lat, plant_lon, 500):
@@ -1662,14 +1902,16 @@ class GreenHydrogenSupplyChainOptimizer:
                 continue
 
             included_count += 1
+            # 获取name_column对应的值
+            plant_name_value = getattr(row, name_column)
             for hour in range(self.total_hours):
                 time_series_data.append({
-                    'plant_name': f"{plant_name_prefix}{row[name_column]}",
+                    'plant_name': f"{plant_name_prefix}{plant_name_value}",
                     'type': f'byproduct_hydrogen_{plant_type}',
-                    'latitude': row['latitude'],
-                    'longitude': row['longitude'],
-                    'capacity_mw': row['hourly_capacity_kg'],  # 暂存产能，字段名沿用
-                    'power_output_mw': row['hourly_capacity_kg'],  # 存储氢气产量(kg/h)
+                    'latitude': row.latitude,
+                    'longitude': row.longitude,
+                    'capacity_mw': row.hourly_capacity_kg,  # 暂存产能，字段名沿用
+                    'power_output_mw': row.hourly_capacity_kg,  # 存储氢气产量(kg/h)
                     'hour': hour
                 })
 
@@ -1691,12 +1933,13 @@ class GreenHydrogenSupplyChainOptimizer:
             风电数据DataFrame
         """
         logger.info("正在加载风电数据...")
-        
+
         wind_data_list = []
-        
-        # 读取前几个风电数据文件（避免内存过载）
-        wind_files = [f for f in os.listdir(wind_data_dir) if f.endswith('.csv')][:10]  # 只读取前10个文件
-        
+
+        # 【修复】读取所有风电数据文件（移除[:10]限制）
+        wind_files = [f for f in os.listdir(wind_data_dir) if f.endswith('.csv')]
+        logger.info(f"找到 {len(wind_files)} 个风电数据文件")
+
         for file_name in wind_files:
             file_path = os.path.join(wind_data_dir, file_name)
             try:
@@ -1705,27 +1948,42 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 数据预处理
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
 
-                # 筛选2024年数据
-                df = df[df['timestamp'].dt.year == 2024]
+                # 【新增】将UTC时间转换为北京时间（UTC+8）
+                df['timestamp'] = df['timestamp'] + pd.Timedelta(hours=8)
+                logger.debug(f"文件 {file_name} 已将风电时间从UTC转换为北京时间（UTC+8）")
 
-                # 筛选前2周数据
-                df = df[df['timestamp'] < '2024-01-15']
+                # 筛选2024年数据（完整一年）
+                df = df[df['timestamp'].dt.year == 2024]
 
                 # 从3小时发电量插值到每小时发电量
                 df_hourly = self._interpolate_wind_to_hourly(df)
 
                 wind_data_list.append(df_hourly)
 
+                # 立即释放中间变量，避免内存累积
+                del df, df_hourly
+
             except Exception as e:
                 logger.warning(f"读取风电文件 {file_name} 失败: {e}")
-        
+
         if wind_data_list:
-            wind_data = pd.concat(wind_data_list, ignore_index=True)
+            wind_data = pd.concat(wind_data_list, ignore_index=True, copy=False)
             logger.info(f"成功加载 {len(wind_data)} 条风电数据")
+
+            # 【修复】在合并后统一截断到total_hours
+            if 'hour' in wind_data.columns:
+                before_count = len(wind_data)
+                wind_data = wind_data[wind_data['hour'] < self.total_hours]
+                after_count = len(wind_data)
+                logger.info(f"截断到前{self.total_hours}小时: {before_count} → {after_count} 条记录")
+
+            # 释放列表，触发垃圾回收
+            del wind_data_list
+            gc.collect()
         else:
             logger.warning("没有成功读取任何风电数据")
             wind_data = pd.DataFrame()
-        
+
         return wind_data
     
     def _load_solar_data(self, solar_data_dir: str) -> pd.DataFrame:
@@ -1741,108 +1999,131 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("正在加载光伏数据...")
         
         solar_data_list = []
-        
-        # 读取第一个月的所有批次文件
+
+        # 读取全部12个月的所有批次文件
         all_files = os.listdir(solar_data_dir)
-        month01_files = [f for f in all_files if f.startswith('solar_generation_month01_batch_') and f.endswith('.csv')]
-        month01_files.sort()  # 按批次顺序排序
-        
-        logger.info(f"找到 {len(month01_files)} 个第一个月的批次文件")
-        
-        for file_name in month01_files:
+
+        # 收集所有月份的文件
+        all_month_files = []
+        for month in range(1, 13):  # 1到12月
+            month_key = f'month{month:02d}'
+            month_files = [f for f in all_files
+                          if f.startswith(f'solar_generation_{month_key}_batch_')
+                          and f.endswith('.csv')]
+            all_month_files.extend(month_files)
+
+        all_month_files.sort()  # 按文件名顺序排序
+
+        logger.info(f"找到 {len(all_month_files)} 个批次文件，覆盖全年12个月")
+
+        for file_name in all_month_files:
             file_path = os.path.join(solar_data_dir, file_name)
             try:
                 df = pd.read_csv(file_path)
-                
+
                 # 数据预处理
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
-                
-                # 检查数据的年份（应该是2020年1月）
+
+                # 检查数据的年份（应该是2020年）
                 available_years = df['timestamp'].dt.year.unique()
-                logger.info(f"文件 {file_name} 包含年份: {sorted(available_years)}")
-                
-                # 使用2020年1月的数据（第一个月的完整数据）
+                logger.debug(f"文件 {file_name} 包含年份: {sorted(available_years)}")
+
+                # 使用2020年完整一年的数据
                 base_year = min(available_years)
                 start_date = f"{base_year}-01-01"
-                end_date = f"{base_year}-02-01"  # 整个1月
-                
-                df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] < end_date)].copy()
-                
-                if len(df_filtered) == 0:
+                end_date = f"{base_year}-12-31 23:59:59"  # 完整一年
+
+                # 直接筛选并copy一次（避免双重copy内存浪费）
+                df_processed = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)].copy()
+
+                if len(df_processed) == 0:
                     logger.warning(f"文件 {file_name} 在时间范围 {start_date} 到 {end_date} 内没有数据")
+                    del df  # 释放原始df
                     continue
-                
-                # 重命名列以统一格式
-                df_processed = df_filtered.copy()
-                df_processed['plant_name'] = df_filtered['plant_name']
+
+                # 重命名列以统一格式（直接在df_processed上操作）
+                df_processed['plant_name'] = df_processed['plant_name']
                 df_processed['type'] = 'solar_plant'
-                df_processed['generation_mwh'] = df_filtered['generation_1h_mwh']  # 每小时发电量(MWh)
-                df_processed['power_output_mw'] = df_filtered['generation_1h_mwh']  # 功率等于发电量/1小时 = MWh/h = MW
-                
+                df_processed['generation_mwh'] = df_processed['generation_1h_mwh']  # 每小时发电量(MWh)
+                df_processed['power_output_mw'] = df_processed['generation_1h_mwh']  # 功率等于发电量/1小时 = MWh/h = MW
+
+                # 【修复】不在这里截断！先收集所有数据，合并后再统一处理
                 # 创建hour列（从2020年1月1日开始计算）
                 start_time = pd.to_datetime(f"{base_year}-01-01")
+
+                # 【新增】将UTC时间转换为北京时间（UTC+8）
+                df_processed['timestamp'] = df_processed['timestamp'] + pd.Timedelta(hours=8)
+                logger.debug(f"文件 {file_name} 已将时间从UTC转换为北京时间（UTC+8）")
+
                 df_processed['hour'] = (df_processed['timestamp'] - start_time).dt.total_seconds() // 3600
                 df_processed['hour'] = df_processed['hour'].astype(int)
-                
-                # 只保留前336小时（2周），如果数据超过这个范围
-                df_processed = df_processed[df_processed['hour'] < self.total_hours]
-                
-                logger.info(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
+
+                # 释放原始df
+                del df
+
+                logger.debug(f"文件 {file_name} 处理后得到 {len(df_processed)} 条记录")
                 solar_data_list.append(df_processed)
-                
+
             except Exception as e:
                 logger.warning(f"读取光伏文件 {file_name} 失败: {e}")
-        
+
         if solar_data_list:
-            solar_data = pd.concat(solar_data_list, ignore_index=True)
-            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(month01_files)} 个批次文件")
-            
+            solar_data = pd.concat(solar_data_list, ignore_index=True, copy=False)
+            logger.info(f"成功加载 {len(solar_data)} 条光伏数据，来自 {len(all_month_files)} 个批次文件")
+
             # 统计光伏电站数量
             unique_plants = solar_data['plant_name'].nunique()
             logger.info(f"包含 {unique_plants} 个不同的光伏电站")
-            
+
+            # 【修复】在合并后统一截断到total_hours
+            if 'hour' in solar_data.columns:
+                before_count = len(solar_data)
+                solar_data = solar_data[solar_data['hour'] < self.total_hours]
+                after_count = len(solar_data)
+                logger.info(f"截断到前{self.total_hours}小时: {before_count} → {after_count} 条记录")
+
         else:
             logger.warning("没有成功读取任何光伏数据")
             solar_data = pd.DataFrame()
-        
+
         return solar_data
     
     def _interpolate_wind_to_hourly(self, wind_df: pd.DataFrame) -> pd.DataFrame:
         """
         将风电3小时数据插值到每小时
         使用最近邻插值：直接使用3小时的发电量作为每小时的发电量
-        
+
         Args:
             wind_df: 3小时风电数据
-            
+
         Returns:
             每小时风电数据
         """
         hourly_data = []
-        
-        for _, row in wind_df.iterrows():
-            timestamp = row['timestamp']
-            generation_3h = row['generation_3h_mwh']
-            
+
+        for row in wind_df.itertuples():
+            timestamp = row.timestamp
+            generation_3h = row.generation_3h_mwh
+
             # 核心修改：直接使用3小时的发电量作为每小时的发电量
             # 而不是除以3进行平均分配
             hourly_generation = generation_3h  # 直接使用最近的发电量数据
-            
+
             for i in range(3):
                 hour_timestamp = timestamp + pd.Timedelta(hours=i)
                 hour_from_start = (hour_timestamp - wind_df['timestamp'].min()).total_seconds() // 3600
-                
-                if hour_from_start < self.total_hours:
-                    hourly_data.append({
-                        'plant_name': row['farm_name'],
-                        'type': 'wind_farm',
-                        'latitude': row['latitude'],
-                        'longitude': row['longitude'],
-                        'capacity_mw': row['capacity_mw'],
-                        'power_output_mw': hourly_generation,  # 每小时发电量（使用最近的3小时数据）
-                        'hour': int(hour_from_start)
-                    })
-        
+
+                # 【修复】不在这里截断，收集所有数据
+                hourly_data.append({
+                    'plant_name': row.farm_name,
+                    'type': 'wind_farm',
+                    'latitude': row.latitude,
+                    'longitude': row.longitude,
+                    'capacity_mw': row.capacity_mw,
+                    'power_output_mw': hourly_generation,  # 每小时发电量（使用最近的3小时数据）
+                    'hour': int(hour_from_start)
+                })
+
         return pd.DataFrame(hourly_data)
     
     
@@ -1884,24 +2165,24 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.info("使用传统方法处理airport_data参数")
 
             # 如果Excel文件读取失败，使用传统方法处理airport_data参数（向后兼容）
-            for _, airport in airport_data.iterrows():
-                airport_name = airport['airport_name']
+            for airport in airport_data.itertuples():
+                airport_name = airport.airport_name
 
-                if 'weekly_fuel_series' in airport and isinstance(airport['weekly_fuel_series'], list):
-                    weekly_series = airport['weekly_fuel_series']
+                if hasattr(airport, 'weekly_fuel_series') and isinstance(airport.weekly_fuel_series, list):
+                    weekly_series = airport.weekly_fuel_series
                     logger.info(f"使用真实数据：机场 {airport_name} 包含 {len(weekly_series)} 周的真实需求数据")
                 else:
                     logger.error(f"机场 {airport_name} 缺少必要的燃油需求时间序列数据")
                     raise ValueError(f"机场 {airport_name} 数据不完整，缺少weekly_fuel_series字段")
 
                 self.airports[airport_name] = {
-                    'latitude': airport['latitude'],
-                    'longitude': airport['longitude'],
+                    'latitude': airport.latitude,
+                    'longitude': airport.longitude,
                     'weekly_demand_series': weekly_series,
-                    'avg_weekly_demand_kg': airport.get('avg_weekly_fuel_kg', sum(weekly_series) / len(weekly_series)),
-                    'max_weekly_demand_kg': airport.get('max_weekly_fuel_kg', max(weekly_series)),
-                    'total_annual_demand_kg': airport.get('total_fuel_kg', sum(weekly_series)),
-                    'flight_count': airport.get('flight_count', 100)
+                    'avg_weekly_demand_kg': getattr(airport, 'avg_weekly_fuel_kg', sum(weekly_series) / len(weekly_series)),
+                    'max_weekly_demand_kg': getattr(airport, 'max_weekly_fuel_kg', max(weekly_series)),
+                    'total_annual_demand_kg': getattr(airport, 'total_fuel_kg', sum(weekly_series)),
+                    'flight_count': getattr(airport, 'flight_count', 100)
                 }
 
         logger.info(f"处理了 {len(self.airports)} 个机场，每个机场包含52周时间序列数据")
@@ -3863,18 +4144,8 @@ class GreenHydrogenSupplyChainOptimizer:
                     distance_result = self.super_graph_optimizer.get_distance(co2_id, mtj_loc)
 
                     if distance_result:
-                        # 转换超级图结果为期望的格式
-                        cache_entry = {
-                            'total_distance_km': distance_result['total_distance_km'],
-                            'layer1_distance_km': distance_result['layer1_distance_km'],
-                            'layer2_distance_km': 0,  # Layer 2已包含在layer23中
-                            'layer3_distance_km': distance_result['layer23_distance_km'],
-                            'cluster_id': distance_result['cluster_id'],
-                            'cluster_center_coords': None,  # 超级图不返回坐标详情
-                            'pipeline_access_coords': None,
-                            'is_noise': distance_result['is_noise'],
-                            'route_coordinates': []  # 超级图不返回路径详情
-                        }
+                        # 只返回总距离（float）
+                        cache_entry = distance_result['total_distance_km']
                         return (pair, cache_entry, True)  # 成功
                     else:
                         return (pair, None, False)  # 失败
@@ -4005,31 +4276,13 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 为缺失的路径创建简单的距离字典（直线距离，无聚类）
                 distance = self._calculate_location_distance(key[0], key[1])
 
-                # 获取起点和终点坐标用于路径可视化
-                co2_source = self.co2_capture_sources.get(key[0])
-                if co2_source and key[1] in self.locations:
-                    co2_coords = (co2_source['latitude'], co2_source['longitude'])
-                    mtj_coords = (self.locations[key[1]]['latitude'], self.locations[key[1]]['longitude'])
-                    route_coords = [co2_coords, mtj_coords]
-                else:
-                    route_coords = []  # 如果坐标获取失败，保持为空
-
-                self.co2_distance_cache[key] = {
-                    'total_distance_km': distance,
-                    'layer1_distance_km': 0,
-                    'layer2_distance_km': 0,
-                    'layer3_distance_km': distance,
-                    'cluster_id': None,
-                    'cluster_center_coords': None,
-                    'pipeline_access_coords': None,
-                    'is_noise': False,
-                    'route_coordinates': route_coords  # 修复：添加实际坐标
-                }
+                # 直接储存距离值
+                self.co2_distance_cache[key] = distance
 
         self.cost_expressions['co2_pipeline_transport_cost'] = gp.quicksum(
             self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
             co2_pipeline_unit_cost *
-            self.co2_distance_cache[(co2_source_id, methanol_loc)]['total_distance_km'] * lifecycle_operation_factor  # 从字典提取总距离
+            self.co2_distance_cache[(co2_source_id, methanol_loc)] * lifecycle_operation_factor  # 直接使用距离值（float）
             for co2_source_id in self.co2_capture_sources
             for methanol_loc in sum(self.mtj_locations.values(), [])
             if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
@@ -4574,7 +4827,7 @@ class GreenHydrogenSupplyChainOptimizer:
         if hasattr(self, 'co2_pipeline_transport_vars') and self.co2_pipeline_transport_vars:
             self.carbon_expressions['co2_pipeline_transport'] = gp.quicksum(
                 self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
-                co2_distance_cache.get((co2_source_id, methanol_loc), {}).get('total_distance_km', 50.0) *  # 从字典提取总距离，默认50km
+                co2_distance_cache.get((co2_source_id, methanol_loc), 50.0) *  # 直接使用距离值（float），默认50km
                 co2_pipeline_intensity  # kg × km × kgCO2eq/kg/km
                 for co2_source_id in (getattr(self, 'co2_capture_sources', {}).keys() if hasattr(self, 'co2_capture_sources') else [])
                 for methanol_loc in self.locations
@@ -5028,13 +5281,14 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 每周安排4小时维护时间（设备不能生产）
                 maintenance_hours = []
                 for week in range(self.time_horizon_weeks):
-                    # 每周的维护时间：周日凌晨1-4点
-                    week_start_hour = week * 168
+                    # 每周的维护时间：每周开始后的第1-4小时
+                    # （如果week从周一0点开始，则为周一凌晨1-4点）
+                    week_start_hour = week * self.hours_per_week
                     maintenance_hours.extend([
-                        week_start_hour + 1,  # 周日凌晨1点
-                        week_start_hour + 2,  # 周日凌晨2点
-                        week_start_hour + 3,  # 周日凌晨3点
-                        week_start_hour + 4   # 周日凌晨4点
+                        week_start_hour + 1,  # 第1小时
+                        week_start_hour + 2,  # 第2小时
+                        week_start_hour + 3,  # 第3小时
+                        week_start_hour + 4   # 第4小时
                     ])
                 
                 # 在维护时间内，生产为0
@@ -5317,17 +5571,17 @@ class GreenHydrogenSupplyChainOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气管道入库（只在0h时入库）- 新增
+                    # 氢气管道入库（每周第一个小时入库）- 新增
                     h2_transport_inflow = gp.LinExpr(0)
-                    if hour == 0:  # 只在每周第一个小时入库
+                    if hour % self.hours_per_week == 0:  # 每周第一个小时入库（索引0）
                         h2_transport_inflow = pipeline_transport_inflow_total
-                        logger.debug(f"[调试][氢源库存] {location}: 在第0h入库氢气")
+                        logger.debug(f"[调试][氢源库存] {location}: 在每周第0h入库氢气")
 
-                    # 氢气管道出库（只在167h时出库）
+                    # 氢气管道出库（只在每周最后一小时出库）
                     h2_transport_outflow = gp.LinExpr(0)
-                    if hour == 167:  # 只在每周最后一小时出库
+                    if hour % self.hours_per_week == 167:  # 每周最后一小时出库（第168小时，索引167）
                         h2_transport_outflow = pipeline_transport_outflow_total
-                        logger.debug(f"[调试][氢源库存] {location}: 在第167h出库氢气")
+                        logger.debug(f"[调试][氢源库存] {location}: 在每周第167h出库氢气")
 
                     # 氢气库存平衡方程（新增管道入库项）
                     self.model.addConstr(
@@ -5374,11 +5628,11 @@ class GreenHydrogenSupplyChainOptimizer:
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
                     previous_h2_inventory = self.hydrogen_storage_vars[(location, hour)]
 
-                    # MTJ位置：氢气入库（只在0h时入库）
+                    # MTJ位置：氢气入库（每周第一个小时入库）
                     h2_inflow = gp.LinExpr(0)
-                    if hour == 0:  # 只在每周第一个小时入库
+                    if hour % self.hours_per_week == 0:  # 每周第一个小时入库（索引0）
                         h2_inflow = h2_inflow_total
-                        logger.debug(f"[调试][MTJ库存] {location}: 在第0h入库氢气")
+                        logger.debug(f"[调试][MTJ库存] {location}: 在每周第0h入库氢气")
 
                     # MTJ消耗：SAF生产消耗的氢气（两步法：H₂+CO₂→甲醇→SAF）
                     # 修正：直接用SAF产量计算H2消耗，而不是通过methanol_production_vars
@@ -6024,11 +6278,8 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.error(f"终点坐标: ({air_lat}, {air_lon})")
             logger.error(f"完整GraphHopper结果: {result}")
             raise Exception(error_msg)
-        
+
         # 缓存路径结果
-        if not hasattr(self, 'route_cache'):
-            self.route_cache = {}
-        
         self.route_cache[route_cache_key] = {
             'distance_km': distance_km,
             'route_coordinates': route_coordinates
@@ -6236,7 +6487,7 @@ class GreenHydrogenSupplyChainOptimizer:
             f"请检查聚类配置或位置数据的一致性。"
         )
 
-    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> dict:
+    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> float:
         """
         使用CO2聚类和管道路权算法计算CO₂管道运输距离（三层结构）
 
@@ -6250,17 +6501,7 @@ class GreenHydrogenSupplyChainOptimizer:
             mtj_loc: 甲醇生产位置
 
         Returns:
-            dict: {
-                'total_distance_km': float,
-                'layer1_distance_km': float,  # CO2源 -> 聚类中心
-                'layer2_distance_km': float,  # 聚类中心 -> 管道接入点
-                'layer3_distance_km': float,  # 管道网络 -> 目的地
-                'cluster_id': int or None,    # 聚类ID（-1表示独立点）
-                'cluster_center_coords': tuple or None,
-                'pipeline_access_coords': tuple or None,
-                'is_noise': bool,
-                'route_coordinates': list  # 完整路径坐标
-            }
+            float: 总运输距离（公里）
 
         Raises:
             RuntimeError: 如果CO2聚类结果未初始化
@@ -6312,17 +6553,7 @@ class GreenHydrogenSupplyChainOptimizer:
                     co2_coords[0], co2_coords[1],
                     mtj_coords[0], mtj_coords[1]
                 )
-                return {
-                    'total_distance_km': max(route.total_distance_km, 5),
-                    'layer1_distance_km': 0,
-                    'layer2_distance_km': 0,
-                    'layer3_distance_km': max(route.total_distance_km, 5),
-                    'cluster_id': -1,
-                    'cluster_center_coords': None,
-                    'pipeline_access_coords': route.access_point_coords if hasattr(route, 'access_point_coords') else None,
-                    'is_noise': True,
-                    'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, mtj_coords]
-                }
+                return max(route.total_distance_km, 5)
             except PipelineRouteNotFoundError as e:
                 # 管道路径未找到，使用直线距离
                 logger.warning(f"CO2独立点管道路径未找到，使用直线距离: {co2_source_id} -> {mtj_loc}")
@@ -6330,17 +6561,7 @@ class GreenHydrogenSupplyChainOptimizer:
                     co2_coords[0], co2_coords[1],
                     mtj_coords[0], mtj_coords[1]
                 )
-                return {
-                    'total_distance_km': max(distance, 5),
-                    'layer1_distance_km': 0,
-                    'layer2_distance_km': 0,
-                    'layer3_distance_km': max(distance, 5),
-                    'cluster_id': -1,
-                    'cluster_center_coords': None,
-                    'pipeline_access_coords': None,
-                    'is_noise': True,
-                    'route_coordinates': [co2_coords, mtj_coords]  # 修复：使用直线路径坐标
-                }
+                return max(distance, 5)
         else:
             # 聚类成员：使用三层运输结构
             # Layer 1: CO2源 -> 聚类中心（直线距离）
@@ -6356,31 +6577,8 @@ class GreenHydrogenSupplyChainOptimizer:
                     mtj_coords[0], mtj_coords[1]
                 )
 
-                # Layer 2: 聚类中心 -> 管道接入点
-                # Layer 3: 管道网络 -> 目的地
-                # 这里简化处理：将管道距离拆分为Layer2和Layer3
-                pipeline_access_coords = route.pipeline_access_point if hasattr(route, 'pipeline_access_point') else cluster_center_coords
-
-                # 计算Layer2和Layer3距离
-                if hasattr(route, 'access_distance_km') and hasattr(route, 'pipeline_distance_km'):
-                    layer2_distance = route.access_distance_km
-                    layer3_distance = route.pipeline_distance_km
-                else:
-                    # 如果路径对象没有细分距离，按50-50拆分
-                    layer2_distance = route.total_distance_km * 0.3
-                    layer3_distance = route.total_distance_km * 0.7
-
-                return {
-                    'total_distance_km': max(layer1_distance + route.total_distance_km, 5),
-                    'layer1_distance_km': layer1_distance,
-                    'layer2_distance_km': layer2_distance,
-                    'layer3_distance_km': layer3_distance,
-                    'cluster_id': cluster_id,
-                    'cluster_center_coords': cluster_center_coords,
-                    'pipeline_access_coords': pipeline_access_coords,
-                    'is_noise': False,
-                    'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, cluster_center_coords, mtj_coords]
-                }
+                # 返回三层总距离
+                return max(layer1_distance + route.total_distance_km, 5)
             except PipelineRouteNotFoundError as e:
                 # 管道路径未找到，使用直线距离
                 logger.warning(f"CO2聚类路径管道未找到，使用直线距离: cluster_{cluster_id} -> {mtj_loc}")
@@ -6388,27 +6586,14 @@ class GreenHydrogenSupplyChainOptimizer:
                     cluster_center_coords[0], cluster_center_coords[1],
                     mtj_coords[0], mtj_coords[1]
                 )
-                return {
-                    'total_distance_km': max(layer1_distance + layer2_layer3_distance, 5),
-                    'layer1_distance_km': layer1_distance,
-                    'layer2_distance_km': layer2_layer3_distance * 0.3,
-                    'layer3_distance_km': layer2_layer3_distance * 0.7,
-                    'cluster_id': cluster_id,
-                    'cluster_center_coords': cluster_center_coords,
-                    'pipeline_access_coords': None,
-                    'is_noise': False,
-                    'route_coordinates': [co2_coords, cluster_center_coords, mtj_coords]  # 修复：三层路径坐标
-                }
+                return max(layer1_distance + layer2_layer3_distance, 5)
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
         # 创建缓存键
         route_cache_key = f"route_{location1}_{location2}"
         reverse_route_cache_key = f"route_{location2}_{location1}"
-        
-        if not hasattr(self, 'route_cache'):
-            self.route_cache = {}
-        
+
         if route_cache_key in self.route_cache:
             cached_result = self.route_cache[route_cache_key]
             return cached_result['distance_km'], cached_result['route_coordinates']
@@ -6820,27 +7005,12 @@ class GreenHydrogenSupplyChainOptimizer:
                     co2_coords = (co2_source.get('latitude', 0), co2_source.get('longitude', 0))
                     mtj_coords = self._get_location_coordinates(mtj_loc)
 
-                    # 从缓存获取距离和聚类信息
-                    distance_info = self.co2_distance_cache.get((co2_source_id, mtj_loc), {})
-                    if isinstance(distance_info, dict):
-                        distance_km = distance_info.get('total_distance_km', 0)
-                        layer1_distance = distance_info.get('layer1_distance_km', 0)
-                        layer2_distance = distance_info.get('layer2_distance_km', 0)
-                        layer3_distance = distance_info.get('layer3_distance_km', 0)
-                        cluster_id = distance_info.get('cluster_id')
-                        cluster_center = distance_info.get('cluster_center_coords')
-                        route_coordinates = distance_info.get('route_coordinates', [])
-                        is_noise = distance_info.get('is_noise', False)
-                    else:
-                        # 兼容旧的float格式
-                        distance_km = float(distance_info) if distance_info else 0
-                        layer1_distance = 0
-                        layer2_distance = 0
-                        layer3_distance = distance_km
-                        cluster_id = None
-                        cluster_center = None
-                        route_coordinates = []
-                        is_noise = False
+                    # 从缓存获取距离（现在是float格式）
+                    distance_km = self.co2_distance_cache.get((co2_source_id, mtj_loc), 0)
+
+                    # 简化处理：只提供总距离，不提供层级细分和聚类信息
+                    # 这是内存优化的结果，详细信息已不在缓存中
+                    route_coordinates = [co2_coords, mtj_coords]  # 简单的起终点连线
 
                     solution['co2_transport'][transport_key] = {
                         'from_location': co2_source_id,
@@ -6854,12 +7024,12 @@ class GreenHydrogenSupplyChainOptimizer:
                         'route_coordinates': route_coordinates,
                         'transport_type': 'CO2',
                         'transport_mode': 'pipeline',
-                        'cluster_id': cluster_id,
-                        'cluster_center': cluster_center,
-                        'layer1_distance_km': layer1_distance,
-                        'layer2_distance_km': layer2_distance,
-                        'layer3_distance_km': layer3_distance,
-                        'is_noise': is_noise
+                        'cluster_id': None,  # 不再提供聚类信息（内存优化）
+                        'cluster_center': None,  # 不再提供聚类信息（内存优化）
+                        'layer1_distance_km': 0,  # 不再提供层级细分（内存优化）
+                        'layer2_distance_km': 0,  # 不再提供层级细分（内存优化）
+                        'layer3_distance_km': distance_km,  # 将总距离归于layer3
+                        'is_noise': False  # 不再提供噪声点标记（内存优化）
                     }
 
         # 输出CO2运输统计信息
@@ -8194,27 +8364,27 @@ class GreenHydrogenSupplyChainOptimizer:
             self.co2_capture_sources = {}
 
             # 处理每个CO₂捕获源
-            for idx, row in co2_df.iterrows():
-                source_id = f"co2_source_{idx+1}"
+            for idx, row in enumerate(co2_df.itertuples(), start=1):
+                source_id = f"co2_source_{idx}"
 
-                lat = float(row.get('latitude', 0))
-                lon = float(row.get('longitude', 0))
+                lat = float(getattr(row, 'latitude', 0))
+                lon = float(getattr(row, 'longitude', 0))
 
                 if lat == 0 or lon == 0:
                     logger.warning(f"CO₂捕获源 {source_id} 坐标无效，跳过")
                     continue
 
                 self.co2_capture_sources[source_id] = {
-                    'facility_id': row.get('facility_id', source_id),
-                    'facility_name': row.get('facility_name', f'CO₂捕获源{idx+1}'),
-                    'facility_type': row.get('facility_type', 'unknown'),
+                    'facility_id': getattr(row, 'facility_id', source_id),
+                    'facility_name': getattr(row, 'facility_name', f'CO₂捕获源{idx}'),
+                    'facility_type': getattr(row, 'facility_type', 'unknown'),
                     'latitude': lat,
                     'longitude': lon,
-                    'province': row.get('province', 'Unknown'),
-                    'co2_capture_capacity_ton_per_week': float(row.get('co2_capture_capacity_ton_per_week', 0)),
-                    'capture_cost_yuan_per_ton': float(row.get('capture_cost_yuan_per_ton', 280)),
-                    'capture_efficiency': float(row.get('capture_efficiency', 0.85)),
-                    'emission_factor_kg_per_mwh': float(row.get('emission_factor_kg_per_mwh', 800))
+                    'province': getattr(row, 'province', 'Unknown'),
+                    'co2_capture_capacity_ton_per_week': float(getattr(row, 'co2_capture_capacity_ton_per_week', 0)),
+                    'capture_cost_yuan_per_ton': float(getattr(row, 'capture_cost_yuan_per_ton', 280)),
+                    'capture_efficiency': float(getattr(row, 'capture_efficiency', 0.85)),
+                    'emission_factor_kg_per_mwh': float(getattr(row, 'emission_factor_kg_per_mwh', 800))
                 }
 
             logger.info(f"成功加载 {len(self.co2_capture_sources)} 个CO₂捕获源")
@@ -8244,6 +8414,11 @@ class GreenHydrogenSupplyChainOptimizer:
                 logger.info(f"CO₂捕获源类型分布: {facility_types}")
             else:
                 logger.warning("未加载到任何CO₂捕获源数据")
+
+            # 立即释放CO₂数据，避免内存占用
+            del co2_df
+            gc.collect()
+            self._log_memory_usage("释放co2_df后")
 
         except ImportError as e:
             logger.error(f"导入CO₂计算器模块失败: {e}")
@@ -8990,13 +9165,13 @@ class GreenHydrogenSupplyChainOptimizer:
                 # 上期库存
                 prev_inventory = self.co2_inventory_vars[(methanol_loc, hour - 1)]
 
-                # 本期供应（只在0h时入库）
+                # 本期供应（每周第一个小时入库）
                 supply = gp.LinExpr(0)
-                if hour == 1:  # hour 1 = 第0小时的下一个状态，表示第0h时入库
+                if hour % self.hours_per_week == 1:  # 每周第一个小时（hour=1对应第0h的下一状态，表示第0h入库）
                     # CO₂供应总量（包括从其他源运输来的 + 本地捕获的）
                     # co2_supply_total已经包含了co2_pipeline_transport_vars[(methanol_loc, methanol_loc)]（如果存在）
                     supply = co2_supply_total
-                    logger.debug(f"[调试][CO2库存] {methanol_loc}: 在第0h入库CO₂（总供应量，含本地捕获和管道运输）")
+                    logger.debug(f"[调试][CO2库存] {methanol_loc}: 在每周第0h入库CO₂（总供应量，含本地捕获和管道运输）")
 
                 # 本期消耗（用于甲醇生产，kg CO₂/hour）
                 consumption = 0
@@ -9034,14 +9209,14 @@ if __name__ == '__main__':
     try:
         logger.info("开始执行天然气供应链优化模型...")
         
-        # 1. 初始化优化器 (使用1周时间范围以减少内存使用)
+        # 1. 初始化优化器 (使用52周全年时间范围)
         # 设置正确的OSM文件路径
         base_dir = get_project_base_dir()
         osm_file_path = os.path.join(base_dir, "products", "supply_chain_optimization",
                                    "green_hydrogen_supply_chain_optimization", "data", "china-latest.osm.pbf")
 
         optimizer = GreenHydrogenSupplyChainOptimizer(
-            time_horizon_weeks=1,
+            time_horizon_weeks=52,
             osm_pbf_path=osm_file_path
         )
         
