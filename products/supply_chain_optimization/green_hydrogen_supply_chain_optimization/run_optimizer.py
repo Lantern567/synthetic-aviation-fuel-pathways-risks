@@ -67,8 +67,8 @@ def main():
     parser.add_argument(
         '--threads',
         type=int,
-        default=None,
-        help='Gurobi求解器线程数 (默认: CPU核心数-2)'
+        default=192,
+        help='Gurobi求解器线程数 (默认: 192)'
     )
 
     parser.add_argument(
@@ -118,7 +118,7 @@ def main():
     print(f"SAF供应链优化 - {args.process.upper()}")
     print("=" * 80)
     print(f"工艺路线: {args.process}")
-    print(f"Gurobi线程数: {args.threads if args.threads else '自动检测'}")
+    print(f"Gurobi线程数: {args.threads}")
     print(f"并行Workers: {args.parallel_workers if args.parallel_workers else '自动检测'}")
     print(f"时间限制: {args.time_limit}秒 ({args.time_limit/60:.1f}分钟)")
     print(f"MIP Gap: {args.mip_gap:.2%}")

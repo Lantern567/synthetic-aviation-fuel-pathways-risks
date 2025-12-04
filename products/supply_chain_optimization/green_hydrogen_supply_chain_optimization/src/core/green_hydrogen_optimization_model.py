@@ -820,7 +820,7 @@ class GreenHydrogenSupplyChainOptimizer:
             # 自定义时间范围和关闭GraphHopper
             optimizer = GreenHydrogenSupplyChainOptimizer(
                 process_mode='one_step',
-                time_horizon_weeks=4,
+                time_horizon_weeks=12,  # 使用12周典型数据
                 use_graphhopper_routing=False
             )
 
@@ -1153,10 +1153,10 @@ class GreenHydrogenSupplyChainOptimizer:
             if is_byproduct_h2:
                 filtered_renewable_data = renewable_data
                 logger.info(f"副产氢数据无需过滤: {len(filtered_renewable_data)} 条记录")
-            # 如果数据已经预筛选过500km，直接使用
-            elif hasattr(self, 'is_renewable_data_prefiltered_500km') and self.is_renewable_data_prefiltered_500km:
+            # 如果数据已经预筛选过，直接使用
+            elif hasattr(self, 'is_renewable_data_prefiltered') and self.is_renewable_data_prefiltered:
                 filtered_renewable_data = renewable_data
-                logger.info(f"✓ 数据已预筛选500km，直接使用: {len(filtered_renewable_data):,} 条记录")
+                logger.info(f"✓ 数据已预筛选（100km），直接使用: {len(filtered_renewable_data):,} 条记录")
             else:
                 # 可再生能源数据需要筛选，使用缓存机制
                 # 导入缓存管理器
@@ -1172,7 +1172,7 @@ class GreenHydrogenSupplyChainOptimizer:
 
                 # 检查是否有缓存
                 if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
-                    logger.info("使用缓存的可再生能源数据（500km过滤）")
+                    logger.info("使用缓存的可再生能源数据（距离过滤）")
                     cached_df = cache_manager.load_filtered_data('renewable_plants')
                     if cached_df is not None:
                         filtered_renewable_data = cached_df
@@ -1240,15 +1240,20 @@ class GreenHydrogenSupplyChainOptimizer:
             self._process_renewable_data_fallback(renewable_data)
     
     def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str) -> pd.DataFrame:
-        """过滤可再生能源数据（500km范围内）- 使用并行处理"""
+        """
+        过滤可再生能源数据（距离范围内）- 使用并行处理
+
+        注意：此方法为fallback逻辑，当使用预筛选数据时不会被调用。
+        当前配置使用100km预筛选数据，此方法仅作为备用。
+        """
         logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录")
 
         plant_names = renewable_data['plant_name'].unique()
         logger.info(f"使用{self.parallel_workers}个并行workers处理{len(plant_names)}个电站")
 
-        # 准备并行处理的参数
+        # 准备并行处理的参数（使用100km作为筛选距离）
         plant_data_list = [
-            (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], 500)
+            (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], 100)
             for plant_name in plant_names
         ]
 
@@ -1272,7 +1277,7 @@ class GreenHydrogenSupplyChainOptimizer:
         else:
             filtered_df = pd.DataFrame()
 
-        logger.info(f"500km范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
+        logger.info(f"筛选范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
 
         # 保存到缓存
         if len(filtered_df) > 0:
@@ -1292,13 +1297,13 @@ class GreenHydrogenSupplyChainOptimizer:
             if len(plant_data) >= self.total_hours:
                 hourly_data = plant_data.head(self.total_hours)
                 
-                # 检查坐标是否在北京500公里范围内
+                # 检查坐标是否在北京100公里范围内
                 plant_lat = hourly_data.iloc[0].get('latitude', 30.0)
                 plant_lon = hourly_data.iloc[0].get('longitude', 104.0)
-                
-                if not is_within_beijing_range(plant_lat, plant_lon, 500):
+
+                if not is_within_beijing_range(plant_lat, plant_lon, 100):
                     distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
+                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出100km范围，跳过")
                     continue
                 
                 # 确定电站类型
@@ -1555,12 +1560,12 @@ class GreenHydrogenSupplyChainOptimizer:
         """
         加载预处理后的可再生能源数据
 
-        此方法直接加载预处理脚本生成的数据文件（CSV或Parquet格式），
+        此方法直接加载预处理脚本生成的数据文件（CSV格式），
         跳过原始数据的加载和处理步骤，显著提升性能。
-        优先加载已筛选500km范围的数据，如果不存在则加载完整数据。
+        直接加载已筛选100km范围的12周典型数据。
 
         Returns:
-            Tuple[pd.DataFrame, bool]: (预处理后的可再生能源数据DataFrame, 是否已预筛选500km)
+            Tuple[pd.DataFrame, bool]: (预处理后的可再生能源数据DataFrame, 是否已预筛选)
 
         Raises:
             FileNotFoundError: 如果未找到预处理数据文件
@@ -1583,138 +1588,22 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.error(error_msg)
             raise FileNotFoundError(error_msg)
 
-        # 优先级1：加载150km筛选后的CSV格式（最优 - 减少计算范围）
-        solar_150km_csv = os.path.join(preprocessed_dir, 'solar_hourly_150km.csv')
-        wind_150km_csv = os.path.join(preprocessed_dir, 'wind_hourly_150km.csv')
+        # 直接加载100km筛选后的CSV格式数据
+        solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
+        wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
 
-        # 优先级2：加载500km筛选后的Parquet格式
-        solar_500km_parquet = os.path.join(preprocessed_dir, 'solar_hourly_500km.parquet')
-        wind_500km_parquet = os.path.join(preprocessed_dir, 'wind_hourly_500km.parquet')
+        logger.info("✓ 加载100km筛选后的CSV格式数据")
+        logger.info(f"加载太阳能数据: {solar_100km_csv}")
+        solar_data = pd.read_csv(solar_100km_csv)
+        logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
 
-        # 优先级3：加载500km筛选后的CSV格式
-        solar_500km_csv = os.path.join(preprocessed_dir, 'solar_hourly_500km.csv')
-        wind_500km_csv = os.path.join(preprocessed_dir, 'wind_hourly_500km.csv')
+        logger.info(f"加载风电数据: {wind_100km_csv}")
+        wind_data = pd.read_csv(wind_100km_csv)
+        logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
 
-        # 优先级4：加载完整预处理数据的Parquet格式（需要后续筛选）
-        solar_parquet = os.path.join(preprocessed_dir, 'solar_hourly_complete.parquet')
-        wind_parquet = os.path.join(preprocessed_dir, 'wind_hourly_complete.parquet')
-
-        # 优先级5：加载完整预处理数据的CSV格式（最慢，需要后续筛选）
-        solar_csv = os.path.join(preprocessed_dir, 'solar_hourly_complete.csv')
-        wind_csv = os.path.join(preprocessed_dir, 'wind_hourly_complete.csv')
-
-        # 尝试按优先级加载数据
-        data_loaded = False
-        is_prefiltered_500km = False  # 标记数据是否已经预筛选过（150km或500km）
-
-        # 优先级1：尝试加载150km筛选后的CSV格式（最优）
-        if os.path.exists(solar_150km_csv) and os.path.exists(wind_150km_csv):
-            logger.info("✓ 检测到150km筛选后的CSV格式数据（最优选项 - 减少计算范围）")
-            try:
-                logger.info(f"加载太阳能数据: {solar_150km_csv}")
-                solar_data = pd.read_csv(solar_150km_csv)
-                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
-
-                logger.info(f"加载风电数据: {wind_150km_csv}")
-                wind_data = pd.read_csv(wind_150km_csv)
-                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
-
-                data_loaded = True
-                is_prefiltered_500km = True  # 150km也认为已预筛选，无需再次筛选
-                logger.info("✓ 数据已预筛选（150km范围），无需再次筛选")
-            except Exception as e:
-                logger.warning(f"150km CSV格式加载失败: {e}，尝试其他格式")
-
-        # 优先级2：尝试加载500km筛选后的Parquet格式
-        if not data_loaded and os.path.exists(solar_500km_parquet) and os.path.exists(wind_500km_parquet):
-            logger.info("✓ 检测到500km筛选后的Parquet格式数据")
-            try:
-                logger.info(f"加载太阳能数据: {solar_500km_parquet}")
-                solar_data = pd.read_parquet(solar_500km_parquet)
-                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
-
-                logger.info(f"加载风电数据: {wind_500km_parquet}")
-                wind_data = pd.read_parquet(wind_500km_parquet)
-                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
-
-                data_loaded = True
-                is_prefiltered_500km = True
-                logger.info("✓ 数据已预筛选（500km范围），无需再次筛选")
-            except Exception as e:
-                logger.warning(f"500km Parquet格式加载失败: {e}，尝试其他格式")
-
-        # 优先级3：尝试加载500km筛选后的CSV格式
-        if not data_loaded and os.path.exists(solar_500km_csv) and os.path.exists(wind_500km_csv):
-            logger.info("✓ 检测到500km筛选后的CSV格式数据")
-            try:
-                logger.info(f"加载太阳能数据: {solar_500km_csv}")
-                solar_data = pd.read_csv(solar_500km_csv)
-                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
-
-                logger.info(f"加载风电数据: {wind_500km_csv}")
-                wind_data = pd.read_csv(wind_500km_csv)
-                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
-
-                data_loaded = True
-                is_prefiltered_500km = True
-                logger.info("✓ 数据已预筛选（500km范围），无需再次筛选")
-            except Exception as e:
-                logger.warning(f"500km CSV格式加载失败: {e}，尝试加载完整数据")
-
-        # 优先级4：尝试加载完整数据的Parquet格式
-        if not data_loaded and os.path.exists(solar_parquet) and os.path.exists(wind_parquet):
-            logger.info("检测到完整预处理数据的Parquet格式")
-            logger.warning("⚠ 建议运行筛选脚本以提升性能：")
-            logger.warning("  cd products/aviation_fuel_analysis/resource_flight_data_process")
-            logger.warning("  python src/filter_500km_renewable_data.py --all")
-            try:
-                logger.info(f"加载太阳能数据: {solar_parquet}")
-                solar_data = pd.read_parquet(solar_parquet)
-                logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
-
-                logger.info(f"加载风电数据: {wind_parquet}")
-                wind_data = pd.read_parquet(wind_parquet)
-                logger.info(f"  风电数据: {len(wind_data):,} 条记录")
-
-                data_loaded = True
-            except Exception as e:
-                logger.warning(f"完整Parquet格式加载失败: {e}，尝试CSV格式")
-
-        # 优先级4：回退到完整数据的CSV格式
-        if not data_loaded:
-            if not os.path.exists(solar_csv) or not os.path.exists(wind_csv):
-                error_msg = (
-                    f"未找到任何预处理数据文件！\n"
-                    f"预期位置: {preprocessed_dir}\n"
-                    f"请先运行预处理脚本：\n"
-                    f"  cd products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts\n"
-                    f"  python preprocess_all_renewable_data.py --all\n"
-                    f"\n"
-                    f"可选：运行500km筛选脚本以提升性能：\n"
-                    f"  cd products/aviation_fuel_analysis/resource_flight_data_process\n"
-                    f"  python src/filter_500km_renewable_data.py --all\n"
-                    f"\n"
-                    f"缺失文件:\n"
-                    f"  太阳能(500km): {'✗' if not os.path.exists(solar_500km_csv) else '✓'} {solar_500km_csv}\n"
-                    f"  风电(500km): {'✗' if not os.path.exists(wind_500km_csv) else '✓'} {wind_500km_csv}\n"
-                    f"  太阳能(完整): {'✗' if not os.path.exists(solar_csv) else '✓'} {solar_csv}\n"
-                    f"  风电(完整): {'✗' if not os.path.exists(wind_csv) else '✓'} {wind_csv}"
-                )
-                logger.error(error_msg)
-                raise FileNotFoundError(error_msg)
-
-            logger.info("使用完整预处理数据的CSV格式")
-            logger.warning("⚠ 建议运行筛选脚本以提升性能：")
-            logger.warning("  cd products/aviation_fuel_analysis/resource_flight_data_process")
-            logger.warning("  python src/filter_500km_renewable_data.py --all")
-
-            logger.info(f"加载太阳能数据: {solar_csv}")
-            solar_data = pd.read_csv(solar_csv)
-            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录")
-
-            logger.info(f"加载风电数据: {wind_csv}")
-            wind_data = pd.read_csv(wind_csv)
-            logger.info(f"  风电数据: {len(wind_data):,} 条记录")
+        data_loaded = True
+        is_prefiltered = True  # 100km已预筛选，无需再次筛选
+        logger.info("✓ 数据已预筛选（100km范围），无需再次筛选")
 
         # 合并数据
         renewable_data = pd.concat([solar_data, wind_data], ignore_index=True)
@@ -1741,7 +1630,7 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"  风电: {wind_count:,} 条记录")
         logger.info("="*80)
 
-        return renewable_data, is_prefiltered_500km
+        return renewable_data, is_prefiltered
 
 
     def _load_real_renewable_data(self) -> pd.DataFrame:
@@ -1769,7 +1658,7 @@ class GreenHydrogenSupplyChainOptimizer:
         renewable_data, is_prefiltered = self._load_preprocessed_renewable_data()
 
         # 存储预筛选标记，供后续处理使用
-        self.is_renewable_data_prefiltered_500km = is_prefiltered
+        self.is_renewable_data_prefiltered = is_prefiltered
 
         return renewable_data
 
@@ -1887,7 +1776,7 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
 
         # 3. 生成时间序列数据（168小时，恒定产能）
-        # 添加500km地理范围筛选 - 2025-11-23
+        # 添加100km地理范围筛选 - 2025-11-23（更新为100km - 2025-12-03）
         time_series_data = []
         filtered_count = 0
         included_count = 0
@@ -1896,8 +1785,8 @@ class GreenHydrogenSupplyChainOptimizer:
             plant_lat = row.latitude
             plant_lon = row.longitude
 
-            # 500km范围检查：以北京为中心
-            if not is_within_beijing_range(plant_lat, plant_lon, 500):
+            # 100km范围检查：以北京为中心
+            if not is_within_beijing_range(plant_lat, plant_lon, 100):
                 filtered_count += 1
                 continue
 
@@ -1916,7 +1805,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 })
 
         time_series_df = pd.DataFrame(time_series_data)
-        logger.info(f"    500km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
+        logger.info(f"    100km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
         logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
 
         return time_series_df
@@ -8350,15 +8239,15 @@ class GreenHydrogenSupplyChainOptimizer:
             co2_df = enrich_province_info(co2_df, logger=logger)
             co2_df['province'] = co2_df['province'].fillna('Unknown')
 
-            # 过滤北京500km范围内的CO₂捕获源
+            # 过滤北京100km范围内的CO₂捕获源
             co2_df = co2_df[co2_df.apply(
                 lambda row: is_within_beijing_range(
                     float(row.get('latitude', 0)),
                     float(row.get('longitude', 0)),
-                    500
+                    100
                 ), axis=1
             )]
-            logger.info(f"过滤后保留500km范围内的CO₂捕获源: {len(co2_df)} 条记录")
+            logger.info(f"过滤后保留100km范围内的CO₂捕获源: {len(co2_df)} 条记录")
 
             # 初始化CO₂捕获源字典
             self.co2_capture_sources = {}

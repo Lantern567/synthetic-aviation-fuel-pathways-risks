@@ -36,9 +36,10 @@
 # =============================================================================
 basic_parameters:
   # 时间范围参数 - Time Horizon Parameters
-  time_horizon_weeks: 52                   # 优化时间范围(周数) | Optimization time horizon in weeks
+  time_horizon_weeks: 12                   # 优化时间范围(周数) | Optimization time horizon in weeks
                                            # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
                                            # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
+                                           # 当前使用12周完整数据
 
   hours_per_week: 168                      # 每周小时数 (7天 × 24小时) | Hours per week (7 days × 24 hours)
                                            # 用途：时间颗粒度设置，定义小时级决策变量的数量
@@ -400,13 +401,14 @@ clustering_parameters:
   clustering_output_path: clustering_results.json  # 聚类结果输出路径 | Clustering output file path
 
   # DBSCAN核心参数 - DBSCAN Core Parameters
-  eps_distance_km: 60.0                    # DBSCAN距离阈值(km) | DBSCAN epsilon distance (km)
+  eps_distance_km: 15.0                    # DBSCAN距离阈值(km) | DBSCAN epsilon distance (km)
                                            # 定义"邻近"发电厂的最大距离
                                            # 调参建议：
                                            #   - 30-50km: 适合大多数实际场景
                                            #   - <30km: 密集分布区域（城市周边）
                                            #   - >60km: 稀疏分布区域（西部地区）
                                            # 经济考虑：基于运输成本vs基础设施成本平衡点
+                                           # 当前设置15km，更精细的聚类策略
 
   min_samples: 2                           # 形成聚类的最小样本数 | Minimum samples for cluster
                                            # 至少需要几个发电厂才能形成一个聚类
@@ -449,11 +451,11 @@ co2_clustering_parameters:
   clustering_output_path: co2_clustering_results.json  # 聚类结果输出路径 | Output file path
 
   # DBSCAN核心参数 - DBSCAN Core Parameters (Optimized for CO2 sources)
-  eps_distance_km: 30.0                    # CO2聚类半径30km（比H2的60km小一半）| CO2 clustering radius 30km
+  eps_distance_km: 15.0                    # CO2聚类半径15km（更精细的聚类策略）| CO2 clustering radius 15km
                                            # 原因：煤电厂分布密集，避免形成超大聚类
                                            # Reason: Coal power plants are densely distributed, avoid over-clustering
                                            # 调参说明：
-                                           #   - 30km适合煤电厂密集区域
+                                           #   - 15km适合煤电厂密集区域，更精细的聚类
                                            #   - 可避免单个聚类中心聚集过多源点
                                            #   - 基于运输成本vs基础设施成本平衡
 
@@ -647,14 +649,14 @@ green_hydrogen_supply:
 # =============================================================================
 data_paths:
   aviation_data:
-    # 4个典型周需求数据 - 4 Typical Weeks Demand Data
-    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx
+    # 12个典型周需求数据 - 12 Typical Weeks Demand Data
+    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/solar_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/3hourly_generation
     # 预处理数据目录（新增） - Preprocessed Data Directory
-    # 4个典型周可再生能源数据 - 4 Typical Weeks Renewable Energy Data
-    preprocessed_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data
+    # 12个典型周可再生能源数据 - 12 Typical Weeks Renewable Energy Data
+    preprocessed_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data
 
   base_data_dir: products
 
