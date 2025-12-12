@@ -19,6 +19,8 @@ from gurobipy import GRB
 import pandas as pd
 import numpy as np
 import logging
+import gc  # 用于显式垃圾回收，释放大数据对象内存
+import psutil  # 用于监控内存使用情况
 import time
 from typing import Dict, List, Tuple, Optional
 import json
@@ -278,6 +280,10 @@ def _process_plant_data_worker(args):
 
         # 确定电站类型
         plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
+
+        # 🔧 类型名称标准化修正：确保与配置文件中的suitable_locations一致
+        if plant_type == 'solar_farm':
+            plant_type = 'solar_plant'
 
         location_dict = {
             'type': plant_type,
@@ -578,7 +584,22 @@ class CoalHydrogenSAFOptimizer:
                 project_root = get_project_base_dir()
                 return os.path.join(project_root, fallback_path) if not os.path.isabs(fallback_path) else fallback_path
             raise
-    
+
+    def _log_memory_usage(self, stage_name: str):
+        """
+        记录当前内存使用情况
+
+        Args:
+            stage_name: 记录阶段名称（如"加载solar_data后"）
+        """
+        try:
+            process = psutil.Process(os.getpid())
+            mem_info = process.memory_info()
+            mem_mb = mem_info.rss / 1024 / 1024
+            logger.info(f"[内存监控] {stage_name}: {mem_mb:.2f} MB")
+        except Exception as e:
+            logger.warning(f"内存监控失败: {e}")
+
     def _get_output_path(self, file_type: str, timestamp: str = None) -> str:
         """
         获取结果输出文件的完整路径
@@ -1005,7 +1026,12 @@ class CoalHydrogenSAFOptimizer:
         
         # 处理机场数据
         airport_data = self._process_excel_airport_data(excel_data)
-        
+
+        # 立即释放Excel数据，避免内存占用
+        del excel_data
+        gc.collect()
+        self._log_memory_usage("释放excel_data后")
+
         # 如果没有提供可再生能源数据，必须加载真实数据
         if renewable_data is None:
             renewable_data = self._load_real_renewable_data()
@@ -1044,10 +1070,43 @@ class CoalHydrogenSAFOptimizer:
                     is_byproduct_h2 = True
                     logger.info("检测到副产氢数据，跳过可再生能源缓存逻辑")
 
-            # 如果是副产氢数据，直接处理，不使用缓存
+            # 如果是副产氢数据，执行300km距离过滤，不使用缓存
             if is_byproduct_h2:
-                filtered_renewable_data = renewable_data
-                logger.info(f"副产氢数据无需过滤: {len(filtered_renewable_data)} 条记录")
+                logger.info("检测到副产氢数据，开始执行300km范围过滤")
+
+                # 过滤300km范围内的副产氢设施
+                plant_names = renewable_data['plant_name'].unique()
+                logger.info(f"使用{self.parallel_workers}个并行workers过滤{len(plant_names)}个副产氢设施")
+
+                # 准备并行处理的参数（使用300km作为筛选距离）
+                plant_data_list = [
+                    (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], 300)
+                    for plant_name in plant_names
+                ]
+
+                # 使用线程池并行过滤
+                filtered_plants = []
+                with ThreadPoolExecutor(max_workers=self.parallel_workers) as executor:
+                    results = list(executor.map(_filter_renewable_plant_worker, plant_data_list))
+
+                    for result in results:
+                        if result is not None:
+                            filtered_plants.append(result)
+
+                # 合并过滤后的数据
+                if filtered_plants:
+                    filtered_renewable_data = pd.concat(filtered_plants, ignore_index=True)
+                    del filtered_plants
+                    gc.collect()
+                else:
+                    filtered_renewable_data = pd.DataFrame()
+
+                logger.info(f"300km范围内的副产氢设施: {len(filtered_renewable_data)} 条记录，{filtered_renewable_data['plant_name'].nunique() if len(filtered_renewable_data) > 0 else 0} 个设施")
+
+                # 立即释放原始renewable_data
+                del renewable_data
+                gc.collect()
+                self._log_memory_usage("释放副产氢原始数据后")
             else:
                 # 可再生能源数据，使用缓存机制
                 # 导入缓存管理器
@@ -1062,18 +1121,44 @@ class CoalHydrogenSAFOptimizer:
                 temp_renewable_file = f"temp_renewable_{renewable_cache_key}.csv"
 
                 # 检查是否有缓存
+                use_cache = False
                 if cache_manager.is_cache_valid('renewable_plants', temp_renewable_file):
-                    logger.info("使用缓存的可再生能源数据（500km过滤）")
+                    logger.info("发现缓存文件，检查数据完整性...")
                     cached_df = cache_manager.load_filtered_data('renewable_plants')
                     if cached_df is not None:
-                        filtered_renewable_data = cached_df
-                        logger.info(f"从缓存加载可再生能源数据: {len(filtered_renewable_data)} 条记录")
+                        # 检查缓存数据的完整性：每个电站应该有足够的小时数
+                        if len(cached_df) > 0 and 'plant_name' in cached_df.columns:
+                            cached_hours_per_plant = cached_df.groupby('plant_name').size()
+                            min_hours = cached_hours_per_plant.min()
+                            max_hours = cached_hours_per_plant.max()
+
+                            logger.info(f"缓存数据: {len(cached_df)} 条记录, "
+                                      f"{cached_df['plant_name'].nunique()} 个电站, "
+                                      f"每站小时数范围: {min_hours}-{max_hours}")
+
+                            # 检查缓存数据是否包含足够的小时数（应该是2016小时）
+                            if min_hours >= self.total_hours:
+                                filtered_renewable_data = cached_df
+                                logger.info(f"✓ 缓存数据完整，使用缓存: {len(filtered_renewable_data)} 条记录")
+                                use_cache = True
+                            else:
+                                logger.warning(f"✗ 缓存数据不完整 (最少{min_hours}小时 < 要求{self.total_hours}小时)，"
+                                             f"将使用新加载的12周数据")
+                        else:
+                            logger.warning("缓存数据格式错误，执行完整处理")
                     else:
                         logger.warning("缓存加载失败，执行完整处理")
-                        filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
                 else:
                     logger.info("缓存无效或不存在，执行完整处理和过滤")
+
+                # 如果不使用缓存，则执行完整处理
+                if not use_cache:
                     filtered_renewable_data = self._filter_renewable_data(renewable_data, cache_manager, temp_renewable_file)
+
+                # 立即释放原始renewable_data，避免内存占用
+                del renewable_data
+                gc.collect()
+                self._log_memory_usage("释放renewable_data后")
 
             # 按地点聚合小时级发电数据 - 使用并行处理
             plant_names = filtered_renewable_data['plant_name'].unique()
@@ -1117,16 +1202,23 @@ class CoalHydrogenSAFOptimizer:
             # 降级到原有处理方法
             self._process_renewable_data_fallback(renewable_data)
     
-    def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str) -> pd.DataFrame:
-        """过滤可再生能源数据（500km范围内）- 使用并行处理"""
-        logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录")
+    def _filter_renewable_data(self, renewable_data: pd.DataFrame, cache_manager, temp_file: str, max_distance_km: int = 100) -> pd.DataFrame:
+        """过滤可再生能源数据（指定km范围内）- 使用并行处理
+
+        Args:
+            renewable_data: 原始数据
+            cache_manager: 缓存管理器
+            temp_file: 临时文件名
+            max_distance_km: 最大距离（km），默认100km
+        """
+        logger.info(f"过滤可再生能源数据: {len(renewable_data)} 条原始记录，距离范围: {max_distance_km}km")
 
         plant_names = renewable_data['plant_name'].unique()
         logger.info(f"使用{self.parallel_workers}个并行workers处理{len(plant_names)}个电站")
 
-        # 准备并行处理的参数
+        # 准备并行处理的参数（使用指定距离作为筛选距离）
         plant_data_list = [
-            (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], 500)
+            (plant_name, renewable_data[renewable_data['plant_name'] == plant_name], max_distance_km)
             for plant_name in plant_names
         ]
 
@@ -1142,10 +1234,15 @@ class CoalHydrogenSAFOptimizer:
         # 合并过滤后的数据
         if filtered_plants:
             filtered_df = pd.concat(filtered_plants, ignore_index=True)
+
+            # 立即释放filtered_plants列表，避免内存占用
+            del filtered_plants
+            gc.collect()
+            self._log_memory_usage("释放filtered_plants后")
         else:
             filtered_df = pd.DataFrame()
 
-        logger.info(f"500km范围内的可再生能源数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
+        logger.info(f"{max_distance_km}km范围内的数据: {len(filtered_df)} 条记录，{filtered_df['plant_name'].nunique() if len(filtered_df) > 0 else 0} 个电站")
 
         # 保存到缓存
         if len(filtered_df) > 0:
@@ -1165,13 +1262,13 @@ class CoalHydrogenSAFOptimizer:
             if len(plant_data) >= self.total_hours:
                 hourly_data = plant_data.head(self.total_hours)
                 
-                # 检查坐标是否在北京500公里范围内
+                # 检查坐标是否在北京300公里范围内（与副产氢场景保持一致）
                 plant_lat = hourly_data.iloc[0].get('latitude', 30.0)
                 plant_lon = hourly_data.iloc[0].get('longitude', 104.0)
-                
-                if not is_within_beijing_range(plant_lat, plant_lon, 500):
+
+                if not is_within_beijing_range(plant_lat, plant_lon, 300):
                     distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出500km范围，跳过")
+                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出300km范围，跳过")
                     continue
                 
                 # 确定电站类型
@@ -1392,6 +1489,86 @@ class CoalHydrogenSAFOptimizer:
         raise ValueError(f"未支持的机场: {airport_name}")
     
     
+
+    def _load_preprocessed_renewable_data(self) -> Tuple[pd.DataFrame, bool]:
+        """
+        加载预处理后的可再生能源数据
+
+        此方法直接加载预处理脚本生成的数据文件（CSV格式），
+        跳过原始数据的加载和处理步骤，显著提升性能。
+        直接加载已筛选100km范围的12周典型数据。
+
+        Returns:
+            Tuple[pd.DataFrame, bool]: (预处理后的可再生能源数据DataFrame, 是否已预筛选)
+
+        Raises:
+            FileNotFoundError: 如果未找到预处理数据文件
+        """
+        logger.info("="*80)
+        logger.info("正在加载预处理后的可再生能源数据...")
+        logger.info("="*80)
+
+        # 获取预处理数据目录
+        try:
+            preprocessed_dir = self._get_data_path('aviation_data.preprocessed_data_dir')
+            logger.info(f"预处理数据目录: {preprocessed_dir}")
+        except Exception as e:
+            error_msg = (
+                f"无法从配置文件获取预处理数据路径: {e}\n"
+                f"请先运行预处理脚本生成数据：\n"
+                f"  cd products/supply_chain_optimization/coal_hydrogen_saf_optimization/scripts\n"
+                f"  python preprocess_all_renewable_data.py --all"
+            )
+            logger.error(error_msg)
+            raise FileNotFoundError(error_msg)
+
+        # 直接加载100km筛选后的CSV格式数据
+        solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
+        wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
+
+        logger.info("✓ 加载100km筛选后的CSV格式数据")
+        logger.info(f"加载太阳能数据: {solar_100km_csv}")
+        solar_data = pd.read_csv(solar_100km_csv)
+        # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+        if 'type' in solar_data.columns:
+            solar_data['type'] = 'solar_plant'
+        logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
+
+        logger.info(f"加载风电数据: {wind_100km_csv}")
+        wind_data = pd.read_csv(wind_100km_csv)
+        logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+
+        data_loaded = True
+        is_prefiltered = True  # 100km已预筛选，无需再次筛选
+        logger.info("✓ 数据已预筛选（100km范围），无需再次筛选")
+
+        # 合并数据
+        renewable_data = pd.concat([solar_data, wind_data], ignore_index=True)
+        logger.info(f"合并后总计: {len(renewable_data):,} 条记录")
+
+        # 截断到total_hours（如果需要）
+        if 'hour' in renewable_data.columns:
+            before_count = len(renewable_data)
+            renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
+            after_count = len(renewable_data)
+            if before_count > after_count:
+                logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
+
+        # 释放源数据内存
+        del solar_data, wind_data
+        gc.collect()
+        self._log_memory_usage("释放solar_data和wind_data后")
+
+        # 统计信息
+        solar_count = len(renewable_data[renewable_data['type'] == 'solar_plant'])
+        wind_count = len(renewable_data[renewable_data['type'] == 'wind_farm'])
+        logger.info(f"数据统计:")
+        logger.info(f"  太阳能: {solar_count:,} 条记录")
+        logger.info(f"  风电: {wind_count:,} 条记录")
+        logger.info("="*80)
+
+        return renewable_data, is_prefiltered
+
     def _load_real_renewable_data(self) -> pd.DataFrame:
         """
         加载真实的可再生能源数据或副产氢数据
@@ -1413,38 +1590,11 @@ class CoalHydrogenSAFOptimizer:
         except Exception as e:
             logger.debug(f"未找到副产氢数据配置: {e}，将加载可再生能源数据")
 
-        # 从配置文件获取数据目录路径
-        try:
-            wind_data_dir = self._get_data_path('aviation_data.wind_data_dir')
-            solar_data_dir = self._get_data_path('aviation_data.solar_data_dir')
-            logger.info(f"从配置文件获取数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
-        except Exception as e:
-            logger.error(f"从配置文件获取数据目录失败: {e}")
-            # 使用默认相对路径
-            base_dir = get_project_base_dir()
-            wind_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "3hourly_generation")
-            solar_data_dir = os.path.join(base_dir, "products", "aviation_fuel_analysis", "resource_flight_data_process", "results", "solar_generation")
-            logger.info(f"使用默认数据目录 - 风电: {wind_data_dir}, 光伏: {solar_data_dir}")
-        
-        # 检查数据目录是否存在
-        if not os.path.exists(wind_data_dir):
-            logger.error(f"风电数据目录不存在: {wind_data_dir}")
-            raise FileNotFoundError(f"无法找到风电数据目录: {wind_data_dir}")
-        
-        if not os.path.exists(solar_data_dir):
-            logger.error(f"光伏数据目录不存在: {solar_data_dir}")
-            raise FileNotFoundError(f"无法找到光伏数据目录: {solar_data_dir}")
-        
-        # 读取风电数据
-        wind_data = self._load_wind_data(wind_data_dir)
-        
-        # 读取光伏数据
-        solar_data = self._load_solar_data(solar_data_dir)
-        
-        # 合并数据
-        renewable_data = pd.concat([wind_data, solar_data], ignore_index=True)
-        
-        logger.info(f"成功加载了 {len(renewable_data)} 条可再生能源数据记录")
+        # 加载预处理后的可再生能源数据
+        renewable_data, is_prefiltered = self._load_preprocessed_renewable_data()
+
+        # 存储预筛选标记，供后续处理使用
+        self.is_renewable_data_prefiltered = is_prefiltered
 
         return renewable_data
 
@@ -1499,19 +1649,34 @@ class CoalHydrogenSAFOptimizer:
             name_column='refinery_name'
         )
 
+        # 保存统计信息以便后续使用
+        steel_count = len(steel_df)
+        refinery_count = len(refinery_df)
+
+        # 立即释放原始数据，避免内存累积
+        del steel_df, refinery_df
+        gc.collect()
+        self._log_memory_usage("释放steel_df和refinery_df后")
+
         # 合并数据
-        byproduct_h2_data = pd.concat([steel_time_series, refinery_time_series], ignore_index=True)
+        byproduct_h2_data = pd.concat([steel_time_series, refinery_time_series], ignore_index=True, copy=False)
         byproduct_h2_data = byproduct_h2_data.sort_values(['plant_name', 'hour']).reset_index(drop=True)
 
-        # 输出统计信息
+        # 释放时间序列中间数据
+        del steel_time_series, refinery_time_series
+        gc.collect()
+        self._log_memory_usage("释放副产氢时间序列数据后")
+
+        # 输出统计信息（过滤前）
         logger.info("\n" + "="*80)
-        logger.info("副产氢数据加载完成！")
+        logger.info("副产氢数据加载完成（过滤前统计）！")
         logger.info("="*80)
         logger.info(f"总记录数: {len(byproduct_h2_data):,}")
         logger.info(f"设施数量: {byproduct_h2_data['plant_name'].nunique()}")
-        logger.info(f"  - 钢铁厂: {len(steel_df)}")
-        logger.info(f"  - 炼油厂: {len(refinery_df)}")
+        logger.info(f"  - 钢铁厂: {steel_count}")
+        logger.info(f"  - 炼油厂: {refinery_count}")
         logger.info(f"总小时产能: {byproduct_h2_data.groupby('plant_name')['power_output_mw'].first().sum():.2f} kg H2/hour")
+        logger.info("注意：以上统计为原始数据，300km地理范围过滤将在后续处理中执行")
         logger.info("="*80)
 
         return byproduct_h2_data
@@ -1548,21 +1713,9 @@ class CoalHydrogenSAFOptimizer:
         logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
 
         # 3. 生成时间序列数据（168小时，恒定产能）
-        # 添加500km地理范围筛选 - 2025-11-23
         time_series_data = []
-        filtered_count = 0
-        included_count = 0
 
         for _, row in df.iterrows():
-            plant_lat = row['latitude']
-            plant_lon = row['longitude']
-
-            # 500km范围检查：以北京为中心
-            if not is_within_beijing_range(plant_lat, plant_lon, 500):
-                filtered_count += 1
-                continue
-
-            included_count += 1
             for hour in range(self.total_hours):
                 time_series_data.append({
                     'plant_name': f"{plant_name_prefix}{row[name_column]}",
@@ -1575,8 +1728,7 @@ class CoalHydrogenSAFOptimizer:
                 })
 
         time_series_df = pd.DataFrame(time_series_data)
-        logger.info(f"    500km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
-        logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
+        logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条（地理范围过滤将在后续统一处理）")
 
         return time_series_df
 
@@ -2350,13 +2502,21 @@ class CoalHydrogenSAFOptimizer:
         """
         基于优化结果计算全生命周期实际产量
         这个方法在求解后调用，使用实际的production_vars值
-        
+
         Returns:
             dict: 包含各设施全生命周期产量的字典
         """
         project_lifespan = self.economic_params['project_lifespan']
+        discount_rate = self.economic_params.get('discount_rate', 0.08)
+
+        # 计算现值系数（用于考虑折现的生命周期产量计算）
+        if discount_rate == 0:
+            present_value_factor = project_lifespan
+        else:
+            present_value_factor = (1 - (1 + discount_rate)**(-project_lifespan)) / discount_rate
+
         lifecycle_production = {}
-        
+
         # 累计优化期间的实际产量
         for key in self.production_vars:
             location, tech, hour = key
@@ -2640,23 +2800,20 @@ class CoalHydrogenSAFOptimizer:
         logger.info("构建Gurobi优化模型...")
 
         self.model = gp.Model("NaturalGasSupplyChain")
-        # 从配置文件加载求解器参数
-        solver_params = self.config['solver_parameters']
+        # 从配置文件加载求解器参数（TimeLimit忽略不再设置）
+        solver_params = self.config.get('solver_parameters', {})
 
-        # 确保参数类型正确（YAML可能将科学计数法解析为字符串）
-        time_limit = solver_params['TimeLimit']
-        if isinstance(time_limit, str):
-            time_limit = float(time_limit)
-
-        mip_gap = solver_params['MIPGap']
+        mip_gap = solver_params.get('MIPGap', 0.01)
         if isinstance(mip_gap, str):
             mip_gap = float(mip_gap)
 
-        threads = solver_params['Threads']
+        threads = solver_params.get('Threads', 4)
         if isinstance(threads, str):
             threads = int(threads)
 
-        self.model.setParam('TimeLimit', time_limit)
+        if 'TimeLimit' in solver_params:
+            logger.info("TimeLimit found in config but will be ignored (no solver time limit applied)")
+
         self.model.setParam('MIPGap', mip_gap)
         self.model.setParam('Threads', threads)
 

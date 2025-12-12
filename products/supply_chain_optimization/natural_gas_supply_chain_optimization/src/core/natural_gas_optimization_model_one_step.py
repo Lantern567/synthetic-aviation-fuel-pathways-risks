@@ -16,6 +16,8 @@ import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
 import numpy as np
+import gc  # 用于显式垃圾回收，释放大数据对象内存
+import psutil  # 用于监控内存使用情况
 import logging
 from typing import Dict, List, Tuple, Optional
 import json
@@ -209,6 +211,21 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
 
         logger.info("FT一步法优化器初始化完成")
 
+    def _log_memory_usage(self, stage_name: str):
+        """
+        记录当前内存使用情况
+
+        Args:
+            stage_name: 记录阶段名称（如"加载excel_data后"）
+        """
+        try:
+            process = psutil.Process(os.getpid())
+            mem_info = process.memory_info()
+            mem_mb = mem_info.rss / 1024 / 1024
+            logger.info(f"[内存监控] {stage_name}: {mem_mb:.2f} MB")
+        except Exception as e:
+            logger.warning(f"内存监控失败: {e}")
+
     def load_data(self, airport_data: pd.DataFrame):
         """
         加载数据（FT一步法模型，不需要可再生能源数据）
@@ -298,6 +315,11 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         
         # 处理机场数据
         airport_data = self._process_excel_airport_data(excel_data)
+
+        # 立即释放Excel数据，避免内存占用
+        del excel_data
+        gc.collect()
+        self._log_memory_usage("释放excel_data后")
 
         # FT一步法模型不需要可再生能源数据，直接处理机场和天然气数据
 
@@ -820,7 +842,12 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
                 }
                 
                 logger.info(f"处理机场 {airport_name}: {len(weekly_series)} 周真实数据，年需求 {total_annual_demand:,.0f} kg")
-                
+
+            # 立即释放Excel数据，避免内存占用
+            del excel_df
+            gc.collect()
+            self._log_memory_usage("释放excel_df后")
+
         except Exception as e:
             logger.error(f"读取Excel文件失败: {e}")
             logger.info("使用传统方法处理airport_data参数")
@@ -5402,7 +5429,7 @@ if __name__ == '__main__':
 
         optimizer = NaturalGasSupplyChainOptimizerOneStep(
             config_path=config_path,
-            time_horizon_weeks=1,  # 使用1周时间窗口，与两步法保持一致
+            time_horizon_weeks=12,  # 使用12周时间窗口，与绿氢配置保持一致
             osm_pbf_path=osm_file_path
         )
 

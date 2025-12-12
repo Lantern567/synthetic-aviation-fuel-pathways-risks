@@ -1297,13 +1297,13 @@ class GreenHydrogenSupplyChainOptimizer:
             if len(plant_data) >= self.total_hours:
                 hourly_data = plant_data.head(self.total_hours)
                 
-                # 检查坐标是否在北京100公里范围内
+                # 检查坐标是否在北京300公里范围内（与DAC、煤制氢、天然气模型保持一致）
                 plant_lat = hourly_data.iloc[0].get('latitude', 30.0)
                 plant_lon = hourly_data.iloc[0].get('longitude', 104.0)
 
-                if not is_within_beijing_range(plant_lat, plant_lon, 100):
+                if not is_within_beijing_range(plant_lat, plant_lon, 300):
                     distance = calculate_distance_km(plant_lat, plant_lon, 39.9042, 116.4074)
-                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出100km范围，跳过")
+                    logger.info(f"可再生能源电站 {plant_name} 距离北京 {distance:.1f}km，超出300km范围，跳过")
                     continue
                 
                 # 确定电站类型
@@ -1595,6 +1595,9 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("✓ 加载100km筛选后的CSV格式数据")
         logger.info(f"加载太阳能数据: {solar_100km_csv}")
         solar_data = pd.read_csv(solar_100km_csv)
+        # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+        if 'type' in solar_data.columns:
+            solar_data['type'] = 'solar_plant'
         logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
 
         logger.info(f"加载风电数据: {wind_100km_csv}")
@@ -1623,7 +1626,7 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("已释放solar_data和wind_data，触发垃圾回收")
 
         # 统计信息
-        solar_count = len(renewable_data[renewable_data['type'] == 'solar_farm'])
+        solar_count = len(renewable_data[renewable_data['type'] == 'solar_plant'])
         wind_count = len(renewable_data[renewable_data['type'] == 'wind_farm'])
         logger.info(f"数据统计:")
         logger.info(f"  太阳能: {solar_count:,} 条记录")
@@ -1776,7 +1779,7 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info(f"    总小时产能: {df['hourly_capacity_kg'].sum():.2f} kg/小时")
 
         # 3. 生成时间序列数据（168小时，恒定产能）
-        # 添加100km地理范围筛选 - 2025-11-23（更新为100km - 2025-12-03）
+        # 添加300km地理范围筛选 - 2025-12-07（统一为300km与其他模型保持一致）
         time_series_data = []
         filtered_count = 0
         included_count = 0
@@ -1785,8 +1788,8 @@ class GreenHydrogenSupplyChainOptimizer:
             plant_lat = row.latitude
             plant_lon = row.longitude
 
-            # 100km范围检查：以北京为中心
-            if not is_within_beijing_range(plant_lat, plant_lon, 100):
+            # 300km范围检查：以北京为中心（与DAC、煤制氢、天然气模型保持一致）
+            if not is_within_beijing_range(plant_lat, plant_lon, 300):
                 filtered_count += 1
                 continue
 
@@ -1805,7 +1808,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 })
 
         time_series_df = pd.DataFrame(time_series_data)
-        logger.info(f"    100km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
+        logger.info(f"    300km范围内设施: {included_count} 个, 过滤掉: {filtered_count} 个")
         logger.info(f"    生成时间序列记录: {len(time_series_df):,} 条")
 
         return time_series_df

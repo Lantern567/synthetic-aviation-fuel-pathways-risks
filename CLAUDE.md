@@ -109,3 +109,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 永远使用中文回复我
 
 ## 地图的可视化必须使用frykit库
+
+## 可视化时，英文的文字，字体为新罗马体，中文文字，字体为宋体

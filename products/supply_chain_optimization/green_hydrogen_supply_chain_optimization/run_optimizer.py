@@ -95,8 +95,8 @@ def main():
     parser.add_argument(
         '--weeks',
         type=int,
-        default=1,
-        help='优化时间范围(周) (默认: 1周)'
+        default=12,
+        help='优化时间范围(周) (默认: 12周)'
     )
 
     parser.add_argument(

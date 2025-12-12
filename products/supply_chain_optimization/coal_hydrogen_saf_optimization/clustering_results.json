@@ -1,13 +1,13 @@
 {
-  "total_clusters": 24,
-  "total_noise_points": 13,
+  "total_clusters": 6,
+  "total_noise_points": 10,
   "clustering_params": {
     "enable_clustering": true,
     "enable_pipeline_optimization": true,
     "enable_clustering_visualization": false,
     "export_clustering_results": true,
     "clustering_output_path": "clustering_results.json",
-    "eps_distance_km": 60.0,
+    "eps_distance_km": 15.0,
     "min_samples": 2,
     "max_clusters": 50,
     "noise_plant_handling": "direct_connection",
@@ -19,579 +19,573 @@
     {
       "cluster_id": 0,
       "member_locations": [
-        "Inner Mongolia Keshiketeng Banner Shangtoudi wind farm",
-        "Inner Mongolia Keshiketeng Banner Shangwopu wind farm",
-        "Inner Mongolia Songshan Caijiagou wind farm",
-        "Inner Mongolia Songshan Dayuying wind farm"
+        "Beijing CGN Haifeng Agricultural Greenhouse solar project",
+        "Beijing Foton Cummins Engine ISF factory solar project",
+        "Beijing Foton Cummins Engine solar project",
+        "Beijing Fuyang New Energy Technology I solar project",
+        "Beijing Fuyang New Energy Technology II solar project",
+        "Beijing Guangdong Jianlibao Beverage solar project",
+        "Beijing Hainachuan Auto Benz supporting industrial park user-side solar project",
+        "Beijing Hanlong New Energy Technology Development solar project",
+        "Beijing Hengan Green Valley Environmental Protection Technology solar project",
+        "Beijing Huadian solar project",
+        "Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project",
+        "Beijing Jineng New Energy Technology solar project",
+        "Beijing Jingfang Smart Energy Technology solar project",
+        "Beijing Jingxi Heavy Industry solar project",
+        "Beijing Jiulang Photovoltaic Technology solar project",
+        "Beijing Lanjing Shengnuoer Energy Technology solar project",
+        "Beijing Lvdong Future New Energy Development I solar project",
+        "Beijing Lvdong Future New Energy Development II solar project",
+        "Beijing Pushun New Energy solar project",
+        "Beijing Qinghe Reclaimed Water Plant solar project",
+        "Beijing Qingying Photovoltaic Technology solar project",
+        "Beijing Ruilian Xieyuan New Energy Technology solar project",
+        "Beijing Runneng Energy Services solar project",
+        "Beijing Tiantuo New Energy I solar project",
+        "Beijing Tiantuo New Energy II solar project",
+        "Beijing Yadongda Zhenxing Energy Technology Development solar project",
+        "Beijing Yaorui Energy Technology solar project",
+        "Beijing Yueyang Changsheng New Energy Technology solar project",
+        "Beijing Zhongguanbao New Energy Investment solar project",
+        "Beijing Zhonghui Baoping solar project",
+        "Beijing solar project",
+        "China Qingneng Oasis Technology solar project",
+        "Huitong Times Square solar project",
+        "Jiuxianqiao solar project",
+        "Qinghe Reclaimed Water Plant solar project",
+        "Xiaohongmen Reclaimed Water Plant I solar project",
+        "Xiaohongmen Reclaimed Water Plant II solar project"
       ],
       "member_coords": [
         [
-          42.8247,
-          117.9725
+          39.9057,
+          116.3913
         ],
         [
-          42.6692,
-          117.8746
+          39.9057,
+          116.3913
         ],
         [
-          42.4168,
-          118.0117
+          39.9057,
+          116.3913
         ],
         [
-          42.6111,
-          118.1589
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
         ]
       ],
       "center_coord": [
-        42.6304954527216,
-        118.00448838352034
+        39.905699999999996,
+        116.39130000000004
       ],
       "geo_center": [
-        42.6304954527216,
-        118.00448838352034
+        39.905699999999996,
+        116.39130000000004
       ],
       "total_capacity_kg_per_hour": 0
     },
     {
       "cluster_id": 1,
       "member_locations": [
-        "Inner Mongolia Xilinhaote Huitengliang (Guotai) wind farm",
-        "Inner Mongolia Xilinhaote Huitengliang (Longyuan) wind farm",
-        "Inner Mongolia Xilinhaote Huitengliang Concession Project (Longyuan) wind farm",
-        "Inner Mongolia Xilinhot energy base wind farm",
-        "Inner Mongolia Chifeng Hexigten Banner (Datang) solar farm"
+        "Beijing Shunyi Holdings I solar project",
+        "Beijing Shunyi Holdings II solar project"
       ],
       "member_coords": [
         [
-          43.4961,
-          116.225
+          40.1488,
+          116.6539
         ],
         [
-          43.406,
-          116.3914
-        ],
-        [
-          43.4503,
-          116.1664
-        ],
-        [
-          43.9334,
-          116.0861
-        ],
-        [
-          43.2315,
-          116.6675
+          40.1488,
+          116.6539
         ]
       ],
       "center_coord": [
-        43.50364471440305,
-        116.30792001980143
+        40.1488,
+        116.6539
       ],
       "geo_center": [
-        43.50364471440305,
-        116.30792001980143
+        40.1488,
+        116.6539
       ],
       "total_capacity_kg_per_hour": 0
     },
     {
       "cluster_id": 2,
       "member_locations": [
-        "Inner Mongolia Hangjin Banner Power Export (State Development Investment) wind farm",
-        "Inner Mongolia Wulatezhong Banner (China Resources) wind farm",
-        "Inner Mongolia Kubuqi Desert (China Guangdong Nuclear) solar power plant"
+        "CPI Tianjin Wuqing I solar project",
+        "CPI Tianjin Wuqing II solar project",
+        "China New Energy solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project",
+        "Langfang Fuyang New Energy Technology solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse I solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse II solar project",
+        "Tianjin Qinghao Wuqing District solar project",
+        "Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm",
+        "Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm",
+        "Xinyi Glass Wuqing solar project",
+        "Xiqing District fishing and photovoltaic complementary solar project",
+        "Tianjin Baigutun Distributed wind farm",
+        "Tianjin Beichen Shuangkouzhen wind farm",
+        "Tianjin Wuqing Baigutunzhen (TBEA) wind farm",
+        "Tianjin Wuqing Chagugang Distributed wind farm",
+        "Tianjin Wuqing Chagugang wind farm",
+        "Tianjin Wuqing Chengguan (Sinohydro) wind farm",
+        "Tianjin Wuqing Chenzuizhen Distributed wind farm",
+        "Tianjin Wuqing Chenzuizhen wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm",
+        "Tianjin Wuqing Dawangguzhuang (Huadian) wind farm",
+        "Tianjin Wuqing Gaocun (Huadian) wind farm",
+        "Tianjin Wuqing Hebeitun wind farm",
+        "Tianjin Wuqing Shangmataizhen wind farm",
+        "Tianjin Wuqing Sicundian wind farm"
       ],
       "member_coords": [
         [
-          43.2443,
-          114.3252
+          39.3783,
+          117.0358
         ],
         [
-          43.2443,
-          114.3252
+          39.3783,
+          117.0358
         ],
         [
-          43.2443,
-          114.3252
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.552,
+          116.9077
+        ],
+        [
+          39.2298,
+          117.0303
+        ],
+        [
+          39.5495,
+          116.9021
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.5304,
+          116.8682
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5716,
+          116.8166
+        ],
+        [
+          39.6372,
+          116.8775
+        ],
+        [
+          39.5834,
+          117.1355
+        ],
+        [
+          39.4218,
+          117.1956
+        ],
+        [
+          39.4796,
+          116.9527
         ]
       ],
       "center_coord": [
-        43.2443,
-        114.32520000000001
+        39.399589082093115,
+        117.00331375229707
       ],
       "geo_center": [
-        43.2443,
-        114.32520000000001
+        39.399589082093115,
+        117.00331375229707
       ],
       "total_capacity_kg_per_hour": 0
     },
     {
       "cluster_id": 3,
       "member_locations": [
-        "Inner Mongolia Qingshuihe Jiucaizhuang Windpower Heating Project",
-        "Inner Mongolia Qingshuihe Wind/Water energy complex",
-        "Inner Mongolia Togtoh Thermal Power Phase 2 Qingshuihe wind farm",
-        "Inner Mongolia Hohhot Tuoketuo County solar farm",
-        "Shanxi Province Shuozhou Youyu solar farm",
-        "Shanxi Province Xinrong District Datang solar farm",
-        "Shanxi Datong Xinrong (SPIC) solar farm",
-        "Shanxi Youyu Niuxinbao Tongmei solar farm"
+        "Datang Tianjin Panshan Power Plant solar project",
+        "Hebei Langfang Dacheng wind farm",
+        "Tianjin Baodi Distributed wind farm",
+        "Tianjin Baodi Wangbuzhuang wind farm",
+        "Tianjin Jizhou (China Power Construction) wind farm",
+        "Tianjin Jizhou Baijian (Huadian) wind farm",
+        "Tianjin Jizhou Bangjunzhen wind farm",
+        "Tianjin Jizhou Dong'eryingzhen wind farm",
+        "Tianjin Jizhou Dongshigu (Huadian) wind farm",
+        "Tianjin Jizhou Houjiaying (Huadian) wind farm",
+        "Tianjin Jizhou Sangzi (Huadian) wind farm",
+        "Tianjin Jizhou Xiacangzhen (Runchuang) wind farm",
+        "Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm"
       ],
       "member_coords": [
         [
-          39.8722,
-          110.9853
+          40.0439,
+          117.4008
         ],
         [
-          40.0775,
-          111.3901
+          39.8501,
+          117.0489
         ],
         [
-          39.9505,
-          112.0298
+          39.7595,
+          117.3306
         ],
         [
-          40.3751,
-          111.3563
+          39.6857,
+          117.4404
         ],
         [
-          40.0101,
-          112.594
+          39.9573,
+          117.4929
         ],
         [
-          40.1763,
-          113.1635
+          39.9967,
+          117.2216
         ],
         [
-          40.1813,
-          113.0459
+          39.9897,
+          117.2937
         ],
         [
-          40.0523,
-          112.536
+          39.9586,
+          117.2868
+        ],
+        [
+          39.8864,
+          117.3245
+        ],
+        [
+          39.8542,
+          117.2487
+        ],
+        [
+          39.9089,
+          117.166
+        ],
+        [
+          39.7897,
+          117.4201
+        ],
+        [
+          39.863,
+          117.3996
+        ],
+        [
+          39.8697,
+          117.4194
+        ],
+        [
+          39.9092,
+          117.2476
         ]
       ],
       "center_coord": [
-        40.089466608486276,
-        112.13730029510776
+        39.88822948995563,
+        117.3161285856741
       ],
       "geo_center": [
-        40.089466608486276,
-        112.13730029510776
+        39.88822948995563,
+        117.3161285856741
       ],
       "total_capacity_kg_per_hour": 0
     },
     {
       "cluster_id": 4,
       "member_locations": [
-        "Inner Mongolia Huade Niiujiacun wind farm",
-        "Hebei Huadian Kangbao Muchang wind farm",
-        "Hebei Zhangbei Hongji Qicheqiao solar farm",
-        "Hebei Zhangbei Mantouying (Huaqiang Zhaoyang) solar farm",
-        "Hebei Zhangjiakou Wind/Solar/Hydrogen Demonstration project",
-        "Inner Mongolia Wulanchabu Shangdu County solar farm"
+        "Hebei Huai Tumuzhen CECEP solar farm",
+        "Hebei Olympic Photovoltaic Corridor Project solar farm",
+        "Hebei Zhangjiakou Huailai Yitai solar farm",
+        "Beijing Changping Qinghuiling wind/solar demonstration project",
+        "Beijing Lumingshan Guanting wind farm",
+        "Beijing Yanqing Lumingshang Guanting wind farm",
+        "Hebei Huailai (Jingneng) wind farm",
+        "Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm",
+        "Hebei Huailai (Shengshi New Energy) wind farm",
+        "Hebei Huailai (Shengyao) wind-solar hybrid wind farm",
+        "Hebei Huailai (Taihui) wind farm",
+        "Hebei Huailai (Zhuofeng) wind farm",
+        "Hebei Huailai Qinghuiling wind farm",
+        "Hebei Huailai wind farm"
       ],
       "member_coords": [
         [
-          41.8208,
-          113.9711
+          40.3753,
+          115.5967
         ],
         [
-          42.0556,
-          114.8036
+          40.3083,
+          115.5845
         ],
         [
-          41.3679,
-          114.5848
+          40.3083,
+          115.5845
         ],
         [
-          41.2629,
-          114.6577
+          40.227,
+          115.897
         ],
         [
-          41.683,
-          114.551
+          40.3006,
+          115.7599
         ],
         [
-          41.5141,
-          113.9443
+          40.3222,
+          115.6249
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.1758,
+          115.5195
+        ],
+        [
+          40.4172,
+          115.5179
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.3991,
+          115.5985
+        ],
+        [
+          40.4133,
+          115.752
+        ],
+        [
+          40.302,
+          115.8214
+        ],
+        [
+          40.3838,
+          115.639
         ]
       ],
       "center_coord": [
-        41.617870442585215,
-        114.41872507804057
+        40.32202093114889,
+        115.64156947307603
       ],
       "geo_center": [
-        41.617870442585215,
-        114.41872507804057
+        40.32202093114889,
+        115.64156947307603
       ],
       "total_capacity_kg_per_hour": 0
     },
     {
       "cluster_id": 5,
       "member_locations": [
-        "Inner Mongolia Zhenglan Banner Kunyu distributed wind farm",
-        "Inner Mongolia Zhenglan Banner Power Export (Huadian) wind farm"
-      ],
-      "member_coords": [
-        [
-          42.1919,
-          115.9435
-        ],
-        [
-          42.2396,
-          115.9993
-        ]
-      ],
-      "center_coord": [
-        42.21575338042582,
-        115.97138946353547
-      ],
-      "geo_center": [
-        42.21575338042582,
-        115.97138946353547
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 6,
-      "member_locations": [
-        "Liaoning Chaoyang Jianping Yangshuling wind farm",
-        "Liaoning Chaoyang Jianping Yingzi wind farm"
-      ],
-      "member_coords": [
-        [
-          41.8158,
-          119.7353
-        ],
-        [
-          42.1253,
-          119.6624
-        ]
-      ],
-      "center_coord": [
-        41.97055576470524,
-        119.698938551347
-      ],
-      "geo_center": [
-        41.97055576470524,
-        119.698938551347
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 7,
-      "member_locations": [
-        "Hebei Hengshui Gucheng (Power Investment) wind farm",
-        "Shandong Province Dezhou Dingzhuang solar farm"
-      ],
-      "member_coords": [
-        [
-          37.1586,
-          115.8737
-        ],
-        [
-          37.3295,
-          116.4641
-        ]
-      ],
-      "center_coord": [
-        37.24441638501926,
-        116.1685652901099
-      ],
-      "geo_center": [
-        37.24441638501926,
-        116.1685652901099
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 8,
-      "member_locations": [
-        "Hebei Hengshui Raoyang (SPIC) wind farm",
-        "Hebei Hengshui Raoyang wind farm"
-      ],
-      "member_coords": [
-        [
-          38.131,
-          115.5976
-        ],
-        [
-          38.1337,
-          115.6912
-        ]
-      ],
-      "center_coord": [
-        38.13235928343278,
-        115.64439913436752
-      ],
-      "geo_center": [
-        38.13235928343278,
-        115.64439913436752
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 9,
-      "member_locations": [
-        "Hebei Huai'an (CECEP) wind farm",
-        "Hebei Huai'an Eco-Governance Integrated Energy Demonstration Project wind farm",
-        "Hebei Huai'an Wind-solar-storage integration wind farm",
-        "Hebei Province Xuanhua Zhongdiantou solar farm",
-        "Shanxi Tianzhen solar farm"
-      ],
-      "member_coords": [
-        [
-          40.6796,
-          114.7113
-        ],
-        [
-          40.6833,
-          114.3833
-        ],
-        [
-          40.429,
-          114.3731
-        ],
-        [
-          40.4233,
-          114.8151
-        ],
-        [
-          40.5301,
-          114.211
-        ]
-      ],
-      "center_coord": [
-        40.54928182025729,
-        114.49878060690263
-      ],
-      "geo_center": [
-        40.54928182025729,
-        114.49878060690263
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 10,
-      "member_locations": [
-        "Hebei Jize (Yunda) wind farm",
-        "Hebei Julu (Dongneng) wind farm",
-        "Hebei Julu (Rongqingtou) wind farm",
-        "Hebei Xingtai Huangsi SPIC solar farm",
-        "Hebei Province Xingtai Huangsi solar farm",
-        "Hebei Province Xintai Julu Eco-agriculture solar farm",
-        "Inner Mongolia Lincheng Jing'ao solar farm"
-      ],
-      "member_coords": [
-        [
-          36.9202,
-          114.8769
-        ],
-        [
-          37.3434,
-          115.1331
-        ],
-        [
-          37.2141,
-          115.1017
-        ],
-        [
-          37.0617,
-          114.4997
-        ],
-        [
-          37.1958,
-          114.3783
-        ],
-        [
-          37.2883,
-          115.1577
-        ],
-        [
-          37.4553,
-          114.3276
-        ]
-      ],
-      "center_coord": [
-        37.211751969558286,
-        114.78216974734191
-      ],
-      "geo_center": [
-        37.211751969558286,
-        114.78216974734191
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 11,
-      "member_locations": [
-        "Hebei Chicheng Dushikou West wind farm",
-        "Hebei Chicheng Mayinggushan wind farm",
-        "Hebei Chicheng Motianling wind farm",
-        "Hebei Chicheng Wind and Storage Integration Demonstration Project wind farm",
-        "Hebei Chicheng Wind hydrogen storage multi-energy complementary wind farm",
-        "Hebei Chicheng wind and storage complex",
-        "Hebei Chongli Changchengling wind farm"
-      ],
-      "member_coords": [
-        [
-          41.3101,
-          115.6267
-        ],
-        [
-          41.325,
-          115.688
-        ],
-        [
-          40.933,
-          115.563
-        ],
-        [
-          40.9751,
-          115.9115
-        ],
-        [
-          40.9109,
-          115.8302
-        ],
-        [
-          40.9216,
-          115.8279
-        ],
-        [
-          40.989,
-          115.4793
-        ]
-      ],
-      "center_coord": [
-        41.052193081705084,
-        115.70389411554592
-      ],
-      "geo_center": [
-        41.052193081705084,
-        115.70389411554592
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 12,
-      "member_locations": [
-        "Hebei Chengde Sangou SPIC solar farm",
-        "Hebei Province Chengde SPIC New Energy solar farm"
-      ],
-      "member_coords": [
-        [
-          41.0247,
-          118.2401
-        ],
-        [
-          41.0606,
-          118.1675
-        ]
-      ],
-      "center_coord": [
-        41.04265569473844,
-        118.20380990066627
-      ],
-      "geo_center": [
-        41.04265569473844,
-        118.20380990066627
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 13,
-      "member_locations": [
-        "Hebei Laiyuan Yingli solar farm",
-        "Hebei Yuxian Shou'ao solar farm"
-      ],
-      "member_coords": [
-        [
-          39.407,
-          114.711
-        ],
-        [
-          39.8428,
-          114.5892
-        ]
-      ],
-      "center_coord": [
-        39.62491589857151,
-        114.6502917726622
-      ],
-      "geo_center": [
-        39.62491589857151,
-        114.6502917726622
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 14,
-      "member_locations": [
-        "Hebei Lingshou (Huantai Energy) solar farm",
-        "Hebei Province Quyang (Three Gorges) solar farm",
-        "Hebei Province Quyang Xiaomu Zhongdiantou solar farm"
-      ],
-      "member_coords": [
-        [
-          38.3068,
-          114.3777
-        ],
-        [
-          38.6889,
-          114.5095
-        ],
-        [
-          38.6889,
-          114.6475
-        ]
-      ],
-      "center_coord": [
-        38.56158520014717,
-        114.5113297656278
-      ],
-      "geo_center": [
-        38.56158520014717,
-        114.5113297656278
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 15,
-      "member_locations": [
-        "Hebei Province Haixing \"Front Runner\" solar farm",
-        "Shandong Wudi Aikang solar farm",
-        "Tianjin Taipingzhen Zhongdian Shengfa solar farm"
-      ],
-      "member_coords": [
-        [
-          38.1478,
-          117.541
-        ],
-        [
-          37.8609,
-          117.8163
-        ],
-        [
-          38.6181,
-          117.3363
-        ]
-      ],
-      "center_coord": [
-        38.209096943260406,
-        117.56535602769694
-      ],
-      "geo_center": [
-        38.209096943260406,
-        117.56535602769694
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 16,
-      "member_locations": [
         "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
-        "Hebei Changan Automobile solar project"
+        "Yongqing Environmental Protection solar project"
       ],
       "member_coords": [
         [
@@ -599,308 +593,90 @@
           116.4941
         ],
         [
-          39.0,
-          116.0
+          39.3208,
+          116.4902
         ]
       ],
       "center_coord": [
-        39.16301080026403,
-        116.24647841983328
+        39.32315001626686,
+        116.49214993448338
       ],
       "geo_center": [
-        39.16301080026403,
-        116.24647841983328
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 17,
-      "member_locations": [
-        "Inner Mongolia Wulanchabu \"Grid-Friendly Green Power Station\" solar power plant",
-        "Inner Mongolia Wulanchabu Siziwang Banner Grid-Connected solar farm"
-      ],
-      "member_coords": [
-        [
-          41.867,
-          111.267
-        ],
-        [
-          41.7217,
-          111.7557
-        ]
-      ],
-      "center_coord": [
-        41.79460889186179,
-        111.51162696803486
-      ],
-      "geo_center": [
-        41.79460889186179,
-        111.51162696803486
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 18,
-      "member_locations": [
-        "Inner Mongolia Wulanchabu Chayouzhong Banner Yuanhua solar farm",
-        "Inner Mongolia Qahar Right Front Banner Tuguiwula Guodian solar farm",
-        "Inner Mongolia Chayouhouqi Hongmu Datang solar farm"
-      ],
-      "member_coords": [
-        [
-          41.3656,
-          112.6406
-        ],
-        [
-          40.7915,
-          113.208
-        ],
-        [
-          41.2679,
-          113.0511
-        ]
-      ],
-      "center_coord": [
-        41.14191452485918,
-        112.96731273190628
-      ],
-      "geo_center": [
-        41.14191452485918,
-        112.96731273190628
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 19,
-      "member_locations": [
-        "Shandong Province Laiwu Yangjiayu CNNC solar farm",
-        "Shandong Province Mengyin Three Gorges solar farm",
-        "Shandong China Energy Conservation and Environmental Protection Group Xintai solar farm"
-      ],
-      "member_coords": [
-        [
-          36.126,
-          117.6415
-        ],
-        [
-          35.8416,
-          118.1542
-        ],
-        [
-          35.9305,
-          117.6187
-        ]
-      ],
-      "center_coord": [
-        35.96628707510654,
-        117.80506531607872
-      ],
-      "geo_center": [
-        35.96628707510654,
-        117.80506531607872
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 20,
-      "member_locations": [
-        "Shanxi Lucheng Shengyang solar farm",
-        "Shanxi Qinxian (Huaneng) solar farm",
-        "Shanxi Yushe Huaneng solar farm"
-      ],
-      "member_coords": [
-        [
-          36.3796,
-          113.066
-        ],
-        [
-          36.7535,
-          112.7004
-        ],
-        [
-          36.9285,
-          112.9394
-        ]
-      ],
-      "center_coord": [
-        36.687296418663685,
-        112.90217001652641
-      ],
-      "geo_center": [
-        36.687296418663685,
-        112.90217001652641
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 21,
-      "member_locations": [
-        "Shanxi Pingding Yuhuangding SPIC solar farm",
-        "Shanxi Province Yuxian Niucunzhen solar farm"
-      ],
-      "member_coords": [
-        [
-          37.7367,
-          113.6562
-        ],
-        [
-          38.093,
-          113.5222
-        ]
-      ],
-      "center_coord": [
-        37.91486899086752,
-        113.58936226265008
-      ],
-      "geo_center": [
-        37.91486899086752,
-        113.58936226265008
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 22,
-      "member_locations": [
-        "Shandong Dongying Kenli (China Resources) solar farm",
-        "Shandong Lililun solar project"
-      ],
-      "member_coords": [
-        [
-          37.5895,
-          118.5497
-        ],
-        [
-          37.4335,
-          118.6689
-        ]
-      ],
-      "center_coord": [
-        37.511514972695224,
-        118.60936228444594
-      ],
-      "geo_center": [
-        37.511514972695224,
-        118.60936228444594
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 23,
-      "member_locations": [
-        "Shandong Feicheng Coal Mining Subsidence Area (Huadian) solar farm",
-        "Shandong Feicheng Shihengzhen solar farm"
-      ],
-      "member_coords": [
-        [
-          36.1863,
-          116.7709
-        ],
-        [
-          36.2062,
-          116.5242
-        ]
-      ],
-      "center_coord": [
-        36.19631327875249,
-        116.64756567566847
-      ],
-      "geo_center": [
-        36.19631327875249,
-        116.64756567566847
+        39.32315001626686,
+        116.49214993448338
       ],
       "total_capacity_kg_per_hour": 0
     }
   ],
   "noise_points": [
     {
-      "location": "Inner Mongolia Keshiketeng Banner Shuangshan And Kulongshan Distributed wind farm",
+      "location": "Beijing Miyun Xitiangezhuang Huadian solar farm",
       "coords": [
-        44.1303,
-        117.4942
+        40.444,
+        116.746
       ]
     },
     {
-      "location": "Henan Heshan Shengbu solar farm",
+      "location": "Beijing Yanqing Longqingxia solar farm",
       "coords": [
-        35.9739,
-        114.1528
+        40.5275,
+        116.0122
       ]
     },
     {
-      "location": "Hebei Shexian Jingdian Guoyuan solar farm",
+      "location": "Dingxing County Xinyang New Energy Technology solar project",
       "coords": [
-        36.6295,
-        113.687
+        39.2129,
+        115.7492
       ]
     },
     {
-      "location": "Inner Mongolia Hohhot Wuchuan County solar farm",
+      "location": "Fangshan agricultural greenhouse solar project",
       "coords": [
-        41.1927,
-        111.2992
+        39.7456,
+        116.1371
       ]
     },
     {
-      "location": "Inner Mongolia Tongliao Tianbao solar farm",
+      "location": "Hebei Laiyuan Shou'ao (Jiansheng) solar farm",
       "coords": [
-        42.8663,
-        120.6582
+        39.3979,
+        115.7125
       ]
     },
     {
-      "location": "Liaoning Yi Jiayu solar farm",
+      "location": "Hebei Rongcheng- Wuhai Expressway Distributed solar farm",
       "coords": [
-        41.7008,
-        121.1919
+        39.0922,
+        116.5566
       ]
     },
     {
-      "location": "Shandong Qixia Guanlizhen (Jingneng) solar farm",
+      "location": "Nankou solar project",
       "coords": [
-        37.2049,
-        120.7054
+        40.217,
+        116.171
       ]
     },
     {
-      "location": "Shanxi Shuozhou Shentou solar farm",
+      "location": "Hebei Zhuolu (Suntien) wind farm",
       "coords": [
-        39.3904,
-        112.5774
+        40.2122,
+        115.3378
       ]
     },
     {
-      "location": "Shandong Zhangqiu Huazhang solar farm",
+      "location": "Shaanxi Longxian Hebeizhen wind farm",
       "coords": [
-        36.7633,
-        117.5618
+        39.8195,
+        115.9377
       ]
     },
     {
-      "location": "Shandong Zhucheng Zhongji Henghui solar farm",
+      "location": "Tianjin Wuqing Dabaizhuang (Huadian) wind farm",
       "coords": [
-        36.0259,
-        119.1908
-      ]
-    },
-    {
-      "location": "Shanxi Hunyuan (Longi) Unsubsidized solar power plant",
-      "coords": [
-        39.6211,
-        113.5939
-      ]
-    },
-    {
-      "location": "Shandong Jining Huaqin Rubber Industry Group solar farm",
-      "coords": [
-        35.554,
-        116.7856
-      ]
-    },
-    {
-      "location": "Longxing Huludao Shenjiatun solar project",
-      "coords": [
-        40.8738,
-        120.624
+        39.4496,
+        117.3831
       ]
     }
   ]

@@ -26,7 +26,7 @@ class CoalSAFOptimizerRunner:
     def __init__(
         self,
         config_path: Optional[Path] = None,
-        time_horizon_weeks: int = 1,
+        time_horizon_weeks: int = 12,
         threads: Optional[int] = None,
         time_limit: int = 3600,
         mip_gap: float = 0.01,
@@ -103,7 +103,13 @@ class CoalSAFOptimizerRunner:
             else self._build_default_demand_profile()
         )
 
-        optimizer = CoalHydrogenSAFOptimizer(self.config)
+        # 通过override_params传递time_horizon_weeks参数，确保使用命令行指定的值
+        self.logger.info(f"使用命令行指定的时间范围: {self.time_horizon_weeks}周")
+
+        optimizer = CoalHydrogenSAFOptimizer(
+            config_path=str(self.config_path),
+            time_horizon_weeks=self.time_horizon_weeks
+        )
         optimizer.build_model(profile)
 
         for param, value in self._solver_parameters().items():

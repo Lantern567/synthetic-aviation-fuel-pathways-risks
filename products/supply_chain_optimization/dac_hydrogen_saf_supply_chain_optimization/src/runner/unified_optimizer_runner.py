@@ -18,7 +18,7 @@ Unified SAF Supply Chain Optimizer Runner
     >>> results = optimizer.run()
     >>>
     >>> # 运行一步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.02)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.03)
     >>> results = optimizer.run()
     >>>
     >>> # 运行副产氢一步法优化
@@ -49,6 +49,9 @@ from datetime import datetime
 # parents[5] 是项目根目录 green_methanol_for_port_transportation-main/
 project_root = Path(__file__).resolve().parents[2]  # dac_hydrogen_saf_supply_chain_optimization/
 repo_root = Path(__file__).resolve().parents[5]     # green_methanol_for_port_transportation-main/
+
+# 默认使用12个典型周的需求数据路径
+DEFAULT_TWELVE_WEEK_DEMAND = repo_root / "products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx"
 
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -97,12 +100,12 @@ class UnifiedSAFOptimizer:
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: int = 86400,  # 24小时 (从3600秒改为86400秒)
-        mip_gap: float = 0.05,
-        time_horizon_weeks: int = 1,
+        time_limit: int = 129600,  # 36小时
+        mip_gap: float = 0.03,  # 从0.01改为0.03，降低求解精度但加快速度
+        time_horizon_weeks: Optional[int] = None,
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
-        airport_excel_path: Optional[str] = None,
+        airport_excel_path: Optional[Union[str, Path]] = None,
         results_dir: Optional[str] = None,
         config_path: Optional[str] = None,
         solver_params: Optional[Dict[str, Any]] = None,
@@ -119,12 +122,12 @@ class UnifiedSAFOptimizer:
                 - 'byproduct_two_step': 副产氢两步法 (副产氢+CO₂→甲醇→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认86400(24小时)
-            mip_gap: MIP相对最优间隙,默认0.05(5%)
-            time_horizon_weeks: 优化时间范围(周数),默认1周
+            time_limit: Gurobi求解时间限制(秒),默认129600(36小时)
+            mip_gap: MIP相对最优间隙,默认0.03(3%)
+            time_horizon_weeks: 优化时间范围(周数),默认None使用配置值(12个典型周)
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
-            airport_excel_path: 机场数据Excel路径,None时使用默认
+            airport_excel_path: 机场数据Excel路径,默认指向12个典型周的需求文件
             results_dir: 结果保存目录,None时使用默认
             config_path: 自定义配置文件路径(仅当process_type='custom'时使用)
             solver_params: 完整的求解器参数字典,会覆盖默认参数
@@ -151,7 +154,7 @@ class UnifiedSAFOptimizer:
         self.process_type = process_type
         self.time_horizon_weeks = time_horizon_weeks
         self.osm_pbf_path = osm_pbf_path
-        self.airport_excel_path = airport_excel_path
+        self.airport_excel_path = Path(airport_excel_path) if airport_excel_path else DEFAULT_TWELVE_WEEK_DEMAND
 
         if results_dir is None:
             # 使用映射表确定输出目录（副产氢类型统一输出到byproduct_hydrogen）
@@ -344,13 +347,15 @@ class UnifiedSAFOptimizer:
                 log_subdir=log_subdir,
                 **override_params,
             )
+            if self.time_horizon_weeks is None:
+                self.time_horizon_weeks = getattr(self.optimizer, 'time_horizon_weeks', None)
             self._monitor_memory()
             self.logger.info("Optimizer initialized successfully")
 
             # Step 2: 加载数据
             self.logger.info("\n[Step 2/4] Loading data...")
             self.optimizer.load_data_from_excel(
-                airport_excel_path=self.airport_excel_path
+                airport_excel_path=str(self.airport_excel_path) if self.airport_excel_path else None
             )
             self._monitor_memory()
             self.logger.info("Data loaded successfully")
@@ -537,8 +542,8 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 86400,
-    mip_gap: float = 0.01,
+    time_limit: int = 129600,
+    mip_gap: float = 0.03,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -565,8 +570,8 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 86400,
-    mip_gap: float = 0.01,
+    time_limit: int = 129600,
+    mip_gap: float = 0.03,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -593,8 +598,8 @@ def run_one_step_optimization(
 
 def run_byproduct_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 86400,
-    mip_gap: float = 0.01,
+    time_limit: int = 129600,
+    mip_gap: float = 0.03,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -621,8 +626,8 @@ def run_byproduct_one_step_optimization(
 
 def run_byproduct_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 86400,
-    mip_gap: float = 0.01,
+    time_limit: int = 129600,
+    mip_gap: float = 0.03,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -661,8 +666,8 @@ if __name__ == '__main__':
         help='Process type to use (two_step: DAC两步法, one_step: DAC一步法, byproduct_one_step: 副产氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=int, default=86400, help='Time limit in seconds (default: 86400 = 24 hours)')
-    parser.add_argument('--mip-gap', type=float, default=0.05, help='MIP gap tolerance')
+    parser.add_argument('--time-limit', type=int, default=129600, help='Time limit in seconds (default: 129600 = 36 hours)')
+    parser.add_argument('--mip-gap', type=float, default=0.03, help='MIP gap tolerance (default: 0.03 = 3%)')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()

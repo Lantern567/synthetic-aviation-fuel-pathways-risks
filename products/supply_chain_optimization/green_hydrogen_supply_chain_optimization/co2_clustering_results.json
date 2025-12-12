@@ -1,12 +1,12 @@
 {
-  "total_clusters": 3,
-  "total_noise_points": 0,
+  "total_clusters": 4,
+  "total_noise_points": 8,
   "clustering_params": {
     "enable_clustering": true,
     "enable_pipeline_optimization": true,
     "export_clustering_results": true,
     "clustering_output_path": "co2_clustering_results.json",
-    "eps_distance_km": 30.0,
+    "eps_distance_km": 15.0,
     "min_samples": 3,
     "max_clusters": 200,
     "noise_plant_handling": "direct_connection",
@@ -17,63 +17,6 @@
   "clusters": [
     {
       "cluster_id": 0,
-      "member_locations": [
-        "co2_source_1",
-        "co2_source_2",
-        "co2_source_11",
-        "co2_source_12",
-        "co2_source_13",
-        "co2_source_14",
-        "co2_source_24",
-        "co2_source_25"
-      ],
-      "member_coords": [
-        [
-          39.4787099,
-          116.7688474
-        ],
-        [
-          39.4787099,
-          116.7688474
-        ],
-        [
-          39.1512174,
-          117.0382573
-        ],
-        [
-          39.1512174,
-          117.0382573
-        ],
-        [
-          39.1512174,
-          117.0382573
-        ],
-        [
-          39.1512174,
-          117.0382573
-        ],
-        [
-          39.300551,
-          117.190744
-        ],
-        [
-          39.434524,
-          116.984489
-        ]
-      ],
-      "center_coord": [
-        39.1512174,
-        117.0382573
-      ],
-      "geo_center": [
-        39.28724901608084,
-        116.98343961627296
-      ],
-      "total_capacity_ton_per_week": 366629.76,
-      "member_count": 8
-    },
-    {
-      "cluster_id": 1,
       "member_locations": [
         "co2_source_3",
         "co2_source_4",
@@ -110,27 +53,19 @@
       "member_count": 4
     },
     {
-      "cluster_id": 2,
+      "cluster_id": 1,
       "member_locations": [
         "co2_source_7",
         "co2_source_8",
         "co2_source_9",
         "co2_source_10",
-        "co2_source_15",
-        "co2_source_16",
         "co2_source_17",
         "co2_source_18",
-        "co2_source_19",
-        "co2_source_20",
-        "co2_source_21",
         "co2_source_22",
         "co2_source_23",
-        "co2_source_26",
         "co2_source_27",
-        "co2_source_28",
         "co2_source_29",
-        "co2_source_30",
-        "co2_source_31"
+        "co2_source_30"
       ],
       "member_coords": [
         [
@@ -150,32 +85,12 @@
           116.8487413
         ],
         [
-          39.563323,
-          115.999182
-        ],
-        [
-          39.563323,
-          115.999182
-        ],
-        [
           39.907844,
           116.694372
         ],
         [
           40.101857,
           116.468205
-        ],
-        [
-          40.085791,
-          116.194356
-        ],
-        [
-          39.942123,
-          116.125862
-        ],
-        [
-          39.832915,
-          116.35129
         ],
         [
           39.951717,
@@ -186,16 +101,8 @@
           116.438267
         ],
         [
-          39.889359,
-          116.27264
-        ],
-        [
           39.97149,
           116.495479
-        ],
-        [
-          39.939899,
-          116.129712
         ],
         [
           39.946923,
@@ -204,23 +111,150 @@
         [
           39.885741,
           116.53263
-        ],
-        [
-          39.72377,
-          116.0835
         ]
       ],
       "center_coord": [
-        39.90012719214695,
-        116.44239555592034
+        39.9527554,
+        116.8487413
       ],
       "geo_center": [
-        39.90012719214695,
-        116.44239555592034
+        39.959651035202356,
+        116.65965416962038
       ],
-      "total_capacity_ton_per_week": 867229.47864,
-      "member_count": 19
+      "total_capacity_ton_per_week": 423106.44264,
+      "member_count": 11
+    },
+    {
+      "cluster_id": 2,
+      "member_locations": [
+        "co2_source_11",
+        "co2_source_12",
+        "co2_source_13",
+        "co2_source_14"
+      ],
+      "member_coords": [
+        [
+          39.1512174,
+          117.0382573
+        ],
+        [
+          39.1512174,
+          117.0382573
+        ],
+        [
+          39.1512174,
+          117.0382573
+        ],
+        [
+          39.1512174,
+          117.0382573
+        ]
+      ],
+      "center_coord": [
+        39.1512174,
+        117.0382573
+      ],
+      "geo_center": [
+        39.1512174,
+        117.0382573
+      ],
+      "total_capacity_ton_per_week": 227908.8,
+      "member_count": 4
+    },
+    {
+      "cluster_id": 3,
+      "member_locations": [
+        "co2_source_20",
+        "co2_source_21",
+        "co2_source_26",
+        "co2_source_28"
+      ],
+      "member_coords": [
+        [
+          39.942123,
+          116.125862
+        ],
+        [
+          39.832915,
+          116.35129
+        ],
+        [
+          39.889359,
+          116.27264
+        ],
+        [
+          39.939899,
+          116.129712
+        ]
+      ],
+      "center_coord": [
+        39.901113757337804,
+        116.21993776321919
+      ],
+      "geo_center": [
+        39.901113757337804,
+        116.21993776321919
+      ],
+      "total_capacity_ton_per_week": 232329.384,
+      "member_count": 4
     }
   ],
-  "noise_points": []
+  "noise_points": [
+    {
+      "location": "co2_source_1",
+      "coords": [
+        39.4787099,
+        116.7688474
+      ]
+    },
+    {
+      "location": "co2_source_2",
+      "coords": [
+        39.4787099,
+        116.7688474
+      ]
+    },
+    {
+      "location": "co2_source_15",
+      "coords": [
+        39.563323,
+        115.999182
+      ]
+    },
+    {
+      "location": "co2_source_16",
+      "coords": [
+        39.563323,
+        115.999182
+      ]
+    },
+    {
+      "location": "co2_source_19",
+      "coords": [
+        40.085791,
+        116.194356
+      ]
+    },
+    {
+      "location": "co2_source_24",
+      "coords": [
+        39.300551,
+        117.190744
+      ]
+    },
+    {
+      "location": "co2_source_25",
+      "coords": [
+        39.434524,
+        116.984489
+      ]
+    },
+    {
+      "location": "co2_source_31",
+      "coords": [
+        39.72377,
+        116.0835
+      ]
+    }
+  ]
 }

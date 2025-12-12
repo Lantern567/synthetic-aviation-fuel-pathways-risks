@@ -38,7 +38,7 @@ def main() -> None:
     parser.add_argument('--parallel-workers', type=int, default=None, help='数据处理/距离计算并行workers (默认: 自动检测)')
     parser.add_argument('--time-limit', type=int, default=3600, help='求解时间限制(秒) (默认: 3600)')
     parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP Gap (默认: 0.01=1%)')
-    parser.add_argument('--weeks', type=int, default=1, help='优化时间范围(周) (默认: 1)')
+    parser.add_argument('--weeks', type=int, default=12, help='优化时间范围(周) (默认: 12)')
     parser.add_argument('--log-level', type=str, default='INFO', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'], help='日志级别 (默认: INFO)')
     parser.add_argument('--results-dir', type=str, default=None, help='结果输出目录 (默认: 项目results目录)')
 
