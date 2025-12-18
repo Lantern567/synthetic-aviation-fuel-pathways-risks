@@ -1,6 +1,7 @@
 basic_parameters:
   time_horizon_weeks: 12  # 使用12周典型数据
-  hours_per_week: 168
+  periods_per_week: 56    # 每周决策期间数 (7天 × 8个3小时期间)
+  hours_per_period: 3     # 每个决策期间的小时数
   use_graphhopper_routing: true
   graphhopper_host: localhost
   graphhopper_port: 8989

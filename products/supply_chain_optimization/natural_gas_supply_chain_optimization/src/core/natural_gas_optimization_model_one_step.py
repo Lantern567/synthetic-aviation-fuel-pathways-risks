@@ -1436,6 +1436,10 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         self.model.setParam('MIPGap', solver_params['MIPGap'])
         self.model.setParam('Threads', solver_params['Threads'])
 
+        # 内存限制参数（防止OOM）
+        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
+        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
         self._create_variables()

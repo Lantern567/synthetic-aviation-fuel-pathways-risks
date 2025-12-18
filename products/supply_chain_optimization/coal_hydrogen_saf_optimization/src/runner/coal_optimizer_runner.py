@@ -35,7 +35,7 @@ class CoalSAFOptimizerRunner:
     ) -> None:
         self.config_path = Path(config_path) if config_path else DEFAULT_CONFIG_PATH
         self.time_horizon_weeks = max(1, int(time_horizon_weeks))
-        self.threads = threads
+        self.threads = threads if threads is not None else 192  # 默认192线程避免内存溢出
         self.time_limit = time_limit
         self.mip_gap = mip_gap
         self.results_dir = Path(results_dir) if results_dir else PROJECT_ROOT / "results"
@@ -80,7 +80,12 @@ class CoalSAFOptimizerRunner:
         return profile
 
     def _solver_parameters(self) -> Dict[str, Any]:
-        params = {"TimeLimit": self.time_limit, "MIPGap": self.mip_gap}
+        params = {
+            "TimeLimit": self.time_limit,
+            "MIPGap": self.mip_gap,
+            "NodefileStart": 100,  # 内存使用超过100GB时，将节点数据写入磁盘
+            "NodefileDir": "/tmp/gurobi_nodes",  # 节点文件存储目录
+        }
         if self.threads is not None:
             params["Threads"] = self.threads
         return params

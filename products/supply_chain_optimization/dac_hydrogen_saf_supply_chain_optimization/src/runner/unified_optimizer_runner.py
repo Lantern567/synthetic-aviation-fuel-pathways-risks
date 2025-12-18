@@ -18,7 +18,7 @@ Unified SAF Supply Chain Optimizer Runner
     >>> results = optimizer.run()
     >>>
     >>> # 运行一步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.03)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=64, mip_gap=0.01)
     >>> results = optimizer.run()
     >>>
     >>> # 运行副产氢一步法优化
@@ -101,7 +101,7 @@ class UnifiedSAFOptimizer:
         process_type: str = 'two_step',
         threads: Optional[int] = None,
         time_limit: int = 129600,  # 36小时
-        mip_gap: float = 0.03,  # 从0.01改为0.03，降低求解精度但加快速度
+        mip_gap: float = 0.01,  # MIP求解精度1%
         time_horizon_weeks: Optional[int] = None,
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
@@ -123,7 +123,7 @@ class UnifiedSAFOptimizer:
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
             time_limit: Gurobi求解时间限制(秒),默认129600(36小时)
-            mip_gap: MIP相对最优间隙,默认0.03(3%)
+            mip_gap: MIP相对最优间隙,默认0.01(1%)
             time_horizon_weeks: 优化时间范围(周数),默认None使用配置值(12个典型周)
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
@@ -190,6 +190,8 @@ class UnifiedSAFOptimizer:
                 'Threads': self.threads,
                 'TimeLimit': self.time_limit,
                 'MIPGap': self.mip_gap,
+                'NodefileStart': 100,  # 内存使用超过100GB时，将节点数据写入磁盘
+                'NodefileDir': '/tmp/gurobi_nodes',  # 节点文件存储目录
             }
         else:
             # 用户提供完整参数字典
@@ -198,6 +200,8 @@ class UnifiedSAFOptimizer:
             self.solver_params.setdefault('Threads', self.threads)
             self.solver_params.setdefault('TimeLimit', self.time_limit)
             self.solver_params.setdefault('MIPGap', self.mip_gap)
+            self.solver_params.setdefault('NodefileStart', 100)
+            self.solver_params.setdefault('NodefileDir', '/tmp/gurobi_nodes')
 
         # 性能监控
         self.start_time = None
@@ -243,19 +247,14 @@ class UnifiedSAFOptimizer:
             self.logger.info(f"Using user-specified threads: {threads}")
             return threads
 
-        # 自动检测
+        # 默认使用192线程以避免内存溢出
+        default_threads = 192
         available_cpus = os.cpu_count()
-        if available_cpus is None:
-            self.logger.warning("Could not detect CPU count, defaulting to 4 threads")
-            return 4
-
-        # 推荐策略:保留2核给操作系统,但至少使用1核，最多128核
-        recommended = min(max(1, available_cpus - 2), 128)
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
-        self.logger.info(f"Recommended threads: {recommended} (leaving 2 cores for system, max 128)")
+        self.logger.info(f"Using default threads: {default_threads} (to avoid memory overflow)")
 
-        return recommended
+        return default_threads
 
     def _get_system_info(self) -> Dict[str, Any]:
         """获取系统信息"""
@@ -543,7 +542,7 @@ class UnifiedSAFOptimizer:
 def run_two_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 129600,
-    mip_gap: float = 0.03,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -571,7 +570,7 @@ def run_two_step_optimization(
 def run_one_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 129600,
-    mip_gap: float = 0.03,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -599,7 +598,7 @@ def run_one_step_optimization(
 def run_byproduct_one_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 129600,
-    mip_gap: float = 0.03,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -627,7 +626,7 @@ def run_byproduct_one_step_optimization(
 def run_byproduct_two_step_optimization(
     threads: Optional[int] = None,
     time_limit: int = 129600,
-    mip_gap: float = 0.03,
+    mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
     """
@@ -667,7 +666,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
     parser.add_argument('--time-limit', type=int, default=129600, help='Time limit in seconds (default: 129600 = 36 hours)')
-    parser.add_argument('--mip-gap', type=float, default=0.03, help='MIP gap tolerance (default: 0.03 = 3%)')
+    parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance (default: 0.01 = 1%)')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
     args = parser.parse_args()

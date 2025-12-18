@@ -894,8 +894,18 @@ class GreenHydrogenSupplyChainOptimizer:
         # 从配置中获取基础参数
         basic_params = self.config['basic_parameters']
         self.time_horizon_weeks = basic_params['time_horizon_weeks']
-        self.hours_per_week = basic_params['hours_per_week']
-        self.total_hours = self.time_horizon_weeks * self.hours_per_week
+
+        # 时间粒度配置（3小时粒度）
+        self.periods_per_week = basic_params.get('periods_per_week', 56)  # 每周56个3小时期间
+        self.hours_per_period = basic_params.get('hours_per_period', 3)   # 每期间3小时
+        self.total_periods = self.time_horizon_weeks * self.periods_per_week
+
+        # 真实的每周小时数（用于天数计算等场景，始终为168）
+        self.real_hours_per_week = self.periods_per_week * self.hours_per_period  # 56 × 3 = 168
+
+        # 兼容性别名（保持向后兼容，逐步废弃）
+        self.hours_per_week = self.periods_per_week  # 废弃，保留兼容
+        self.total_hours = self.total_periods        # 废弃，保留兼容
         
         # 模型组件
         self.model = None
@@ -1342,7 +1352,7 @@ class GreenHydrogenSupplyChainOptimizer:
                     'latitude': airport_info['latitude'],
                     'longitude': airport_info['longitude'],
                     'capacity_mw': 0,  # 机场本身不发电
-                    'hourly_generation': [0] * self.total_hours,  # 无发电
+                    'hourly_generation': [0] * self.total_periods,  # 无发电
                     'original_airport_name': airport_name,  # 保留原始机场名称
                     'fuel_demand_weekly': airport_info.get('weekly_fuel_series', [])
                 }
@@ -1371,7 +1381,7 @@ class GreenHydrogenSupplyChainOptimizer:
                 'latitude': latitude,
                 'longitude': longitude,
                 'capacity_mw': 0,
-                'hourly_generation': [0] * self.total_hours,
+                'hourly_generation': [0] * self.total_periods,
                 'facility_name': source_info.get('facility_name', source_id),
                 'facility_type': source_info.get('facility_type', 'co2_capture'),
                 'province': source_info.get('province', 'Unknown'),
@@ -1588,21 +1598,48 @@ class GreenHydrogenSupplyChainOptimizer:
             logger.error(error_msg)
             raise FileNotFoundError(error_msg)
 
-        # 直接加载100km筛选后的CSV格式数据
-        solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
-        wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
+        # 直接加载3小时粒度的预处理数据（优先）或100km筛选后的小时数据
+        # 3小时粒度文件优先
+        solar_3hourly_csv = os.path.join(preprocessed_dir, 'typical_12weeks_solar_3hourly.csv')
+        wind_3hourly_csv = os.path.join(preprocessed_dir, 'typical_12weeks_wind_3hourly.csv')
 
-        logger.info("✓ 加载100km筛选后的CSV格式数据")
-        logger.info(f"加载太阳能数据: {solar_100km_csv}")
-        solar_data = pd.read_csv(solar_100km_csv)
-        # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
-        if 'type' in solar_data.columns:
-            solar_data['type'] = 'solar_plant'
-        logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
+        # 检查是否存在3小时粒度数据
+        if os.path.exists(solar_3hourly_csv) and os.path.exists(wind_3hourly_csv):
+            logger.info("✓ 加载3小时粒度预处理数据")
+            logger.info(f"加载太阳能数据: {solar_3hourly_csv}")
+            solar_data = pd.read_csv(solar_3hourly_csv)
+            # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+            if 'type' in solar_data.columns:
+                solar_data['type'] = 'solar_plant'
+            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
 
-        logger.info(f"加载风电数据: {wind_100km_csv}")
-        wind_data = pd.read_csv(wind_100km_csv)
-        logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+            logger.info(f"加载风电数据: {wind_3hourly_csv}")
+            wind_data = pd.read_csv(wind_3hourly_csv)
+            logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+
+            # 标记数据为3小时粒度
+            self._renewable_data_time_granularity = '3h'
+            logger.info(f"  数据时间粒度: 3小时/期间 ({self.hours_per_period}小时)")
+        else:
+            # 回退到100km筛选后的CSV格式数据（1小时粒度）
+            solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
+            wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
+
+            logger.info("✓ 加载100km筛选后的CSV格式数据（1小时粒度）")
+            logger.info(f"加载太阳能数据: {solar_100km_csv}")
+            solar_data = pd.read_csv(solar_100km_csv)
+            # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+            if 'type' in solar_data.columns:
+                solar_data['type'] = 'solar_plant'
+            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
+
+            logger.info(f"加载风电数据: {wind_100km_csv}")
+            wind_data = pd.read_csv(wind_100km_csv)
+            logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+
+            # 标记数据为1小时粒度
+            self._renewable_data_time_granularity = '1h'
+            logger.info("  数据时间粒度: 1小时")
 
         data_loaded = True
         is_prefiltered = True  # 100km已预筛选，无需再次筛选
@@ -1612,13 +1649,23 @@ class GreenHydrogenSupplyChainOptimizer:
         renewable_data = pd.concat([solar_data, wind_data], ignore_index=True)
         logger.info(f"合并后总计: {len(renewable_data):,} 条记录")
 
-        # 截断到total_hours（如果需要）
-        if 'hour' in renewable_data.columns:
-            before_count = len(renewable_data)
-            renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
-            after_count = len(renewable_data)
-            if before_count > after_count:
-                logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
+        # 截断到total_periods/total_hours（根据数据时间粒度）
+        if hasattr(self, '_renewable_data_time_granularity') and self._renewable_data_time_granularity == '3h':
+            # 3小时粒度数据：使用period_index
+            if 'period_index' in renewable_data.columns:
+                before_count = len(renewable_data)
+                renewable_data = renewable_data[renewable_data['period_index'] < self.total_periods]
+                after_count = len(renewable_data)
+                if before_count > after_count:
+                    logger.info(f"截断到前{self.total_periods}期间: {before_count:,} → {after_count:,} 条记录")
+        else:
+            # 1小时粒度数据：使用hour
+            if 'hour' in renewable_data.columns:
+                before_count = len(renewable_data)
+                renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
+                after_count = len(renewable_data)
+                if before_count > after_count:
+                    logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
 
         # 释放源数据内存
         del solar_data, wind_data
@@ -2943,6 +2990,10 @@ class GreenHydrogenSupplyChainOptimizer:
         self.model.setParam('MIPGap', mip_gap)
         self.model.setParam('Threads', threads)
 
+        # 内存限制参数（防止OOM）
+        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
+        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
         self._create_variables()
@@ -3131,7 +3182,7 @@ class GreenHydrogenSupplyChainOptimizer:
         logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
         
         self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量 (kg H2/week)
-        self.hydrogen_pipeline_facility_vars = {}   # 氢能管道建设决策变量 (二进制)
+        # self.hydrogen_pipeline_facility_vars = {}   # 【禁用管道建设决策】氢能管道建设决策变量 (二进制)
         
         valid_pipeline_routes = 0  # 计数有效管道路线
         total_days = self.total_hours // 24
@@ -3150,11 +3201,13 @@ class GreenHydrogenSupplyChainOptimizer:
                     continue
                 
                 for mtj_loc in locations:
-                    # 管道建设决策变量 (每条路线一个二进制变量)
+                    # 【禁用管道建设决策】管道建设决策变量 (每条路线一个二进制变量)
+                    """
                     pipeline_facility_name = f"h2_pipeline_facility_{h2_loc}_{mtj_loc}"
                     self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] = self.model.addVar(
                         vtype=GRB.BINARY, name=pipeline_facility_name
                     )
+                    """
                     
                     # 管道运输量变量 (天级)
                     valid_pipeline_routes += 1
@@ -3165,7 +3218,7 @@ class GreenHydrogenSupplyChainOptimizer:
                     )
         
         logger.info(f"创建了 {valid_pipeline_routes} 条氢能管道运输路线")
-        logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")
+        # logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")  # 【禁用管道建设决策】
         
         logger.info(f"创建了 {len(self.production_vars)} 个生产变量")
         logger.info(f"创建了 {len(self.facility_vars)} 个设施变量")
@@ -5235,11 +5288,14 @@ class GreenHydrogenSupplyChainOptimizer:
         """添加库存平衡约束
 
         修改：
-        - SAF出库只在每周167h（最后一小时）进行
+        - SAF出库只在每周最后一个期间进行
         - 不再按小时平摊周级运输量
         """
         logger.info("添加SAF库存平衡约束...")
-        logger.info("【新机制】SAF出库仅在每周167h进行")
+
+        # 每周最后一个期间的索引（用于统一出库）
+        last_period_in_week = self.periods_per_week - 1  # 3小时粒度时为55，1小时粒度时为167
+        logger.info(f"【新机制】SAF出库仅在每周最后一个期间(索引{last_period_in_week})进行")
 
         for location in self.locations:
             for hour in range(self.total_hours):
@@ -5247,23 +5303,24 @@ class GreenHydrogenSupplyChainOptimizer:
                 current_inventory = self.storage_vars[(location, hour + 1)]
                 previous_inventory = self.storage_vars[(location, hour)]
 
-                # 当前小时总生产
+                # 当前期间总生产
                 production = gp.quicksum(
                     self.production_vars[(location, tech, hour)]
                     for tech in self.technologies
                     if (location, tech, hour) in self.production_vars
                 )
 
-                # 出库量（只在167h时出库）
+                # 出库量（只在每周最后一个期间出库）
                 week = hour // self.hours_per_week
+                hour_in_week = hour % self.hours_per_week
                 outflow = gp.LinExpr(0)
-                if hour % self.hours_per_week == 167:  # 只在每周最后一小时出库
+                if hour_in_week == last_period_in_week:  # 只在每周最后一个期间出库
                     outflow = gp.quicksum(
                         self.transport_vars[(location, airport, week)]
                         for airport in self.airports
                         if (location, airport, week) in self.transport_vars
                     )
-                    logger.debug(f"[调试][SAF库存] {location}: 在第{hour}h (week {week}) 出库SAF")
+                    logger.debug(f"[调试][SAF库存] {location}: 在第{hour}期间 (week {week}) 出库SAF")
 
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
@@ -5361,10 +5418,12 @@ class GreenHydrogenSupplyChainOptimizer:
                         name=f"h2_production_capacity_{location}_{hour}"
                     )
                     
-                    # 3. 可再生能源电力平衡约束
+                    # 3. 可再生能源电力平衡约束（支持3小时时间粒度）
+                    # 可用电力 (MWh) = 功率(MW) × 时间(小时)
                     available_energy_mwh = 0.0
                     if hour < len(hourly_generation):
-                        available_energy_mwh = hourly_generation[hour]  # MWh 每小时发电量
+                        power_mw = hourly_generation[hour]  # 平均功率 MW
+                        available_energy_mwh = power_mw * self.hours_per_period  # 该期间可用电力 MWh
 
                     # 制氢耗电：55 kWh/kg H2
                     h2_electricity_consumption_mwh = (
@@ -5397,11 +5456,14 @@ class GreenHydrogenSupplyChainOptimizer:
         """添加氢气平衡约束
 
         修改：
-        - 氢气出库只在每周167h（最后一小时）进行
+        - 氢气出库只在每周最后一个期间进行
         - 不再按小时平摊周级运输量
         """
         logger.info("添加氢气平衡约束...")
-        logger.info("【新机制】氢气出库仅在每周167h进行")
+
+        # 每周最后一个期间的索引（用于统一出库）
+        last_period_in_week = self.periods_per_week - 1  # 3小时粒度时为55，1小时粒度时为167
+        logger.info(f"【新机制】氢气出库仅在每周最后一个期间(索引{last_period_in_week})进行")
 
         for location in self.locations:
             location_type = self.locations[location]['type']
@@ -5463,17 +5525,17 @@ class GreenHydrogenSupplyChainOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气管道入库（每周第一个小时入库）- 新增
+                    # 氢气管道入库（每周第一个期间入库）- 新增
                     h2_transport_inflow = gp.LinExpr(0)
-                    if hour % self.hours_per_week == 0:  # 每周第一个小时入库（索引0）
+                    if hour % self.hours_per_week == 0:  # 每周第一个期间入库（索引0）
                         h2_transport_inflow = pipeline_transport_inflow_total
-                        logger.debug(f"[调试][氢源库存] {location}: 在每周第0h入库氢气")
+                        logger.debug(f"[调试][氢源库存] {location}: 在每周第0期间入库氢气")
 
-                    # 氢气管道出库（只在每周最后一小时出库）
+                    # 氢气管道出库（只在每周最后一个期间出库）
                     h2_transport_outflow = gp.LinExpr(0)
-                    if hour % self.hours_per_week == 167:  # 每周最后一小时出库（第168小时，索引167）
+                    if hour % self.hours_per_week == last_period_in_week:  # 每周最后一个期间出库
                         h2_transport_outflow = pipeline_transport_outflow_total
-                        logger.debug(f"[调试][氢源库存] {location}: 在每周第167h出库氢气")
+                        logger.debug(f"[调试][氢源库存] {location}: 在每周第{last_period_in_week}期间出库氢气")
 
                     # 氢气库存平衡方程（新增管道入库项）
                     self.model.addConstr(
@@ -5794,22 +5856,20 @@ class GreenHydrogenSupplyChainOptimizer:
 
         logger.info(f"[修复] 检测到 {len(self.hydrogen_pipeline_transport_vars)} 个管道运输变量（周级，索引为二元组）")
 
-        # 1. 管道建设决策约束：只有建设了管道才能进行运输
+        # 1. 管道容量约束：【禁用管道建设决策】管道默认可用，直接使用容量上限约束
         # 修复：管道运输变量是周级的，索引为 (h2_loc, mtj_loc)，不是 (h2_loc, mtj_loc, day)
         pipeline_capacity_constrs = 0
-        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_facility_vars:
-            if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                # 管道周运输量 <= 管道建设决策 * 大M（管道周最大容量）
-                max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
-                days_per_week = max(1.0, self.hours_per_week / 24.0)
-                max_weekly_pipeline_capacity = max_daily_pipeline_capacity * days_per_week
+        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
+            # 【禁用管道建设决策】管道默认可用，直接使用容量上限
+            max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
+            days_per_week = max(1.0, self.real_hours_per_week / 24.0)  # 使用real_hours_per_week计算天数
+            max_weekly_pipeline_capacity = max_daily_pipeline_capacity * days_per_week
 
-                self.model.addConstr(
-                    self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <=
-                    self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] * max_weekly_pipeline_capacity,
-                    name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_week"
-                )
-                pipeline_capacity_constrs += 1
+            self.model.addConstr(
+                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= max_weekly_pipeline_capacity,
+                name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_week"
+            )
+            pipeline_capacity_constrs += 1
 
         logger.info(f"[修复] 添加了 {pipeline_capacity_constrs} 个管道容量约束（周级）")
 
@@ -5829,22 +5889,22 @@ class GreenHydrogenSupplyChainOptimizer:
 
             for h2_loc in self.hydrogen_locations:
                 for mtj_loc in locations:
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_facility_vars:
+                    # 【禁用管道建设决策】改为检查管道运输变量
+                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_transport_vars:
                         continue
 
-                    if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                        # 管道周运输量 <= 该源地整周氢气生产量
-                        weeks = max(1, self.time_horizon_weeks)
-                        weekly_h2_production = gp.quicksum(
-                            self.hydrogen_production_vars[(h2_loc, hour)]
-                            for hour in range(self.total_hours)
-                            if (h2_loc, hour) in self.hydrogen_production_vars
-                        ) / float(weeks)
-                        self.model.addConstr(
-                            self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
-                            name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
-                        )
-                        pipeline_production_constrs += 1
+                    # 管道周运输量 <= 该源地整周氢气生产量
+                    weeks = max(1, self.time_horizon_weeks)
+                    weekly_h2_production = gp.quicksum(
+                        self.hydrogen_production_vars[(h2_loc, hour)]
+                        for hour in range(self.total_hours)
+                        if (h2_loc, hour) in self.hydrogen_production_vars
+                    ) / float(weeks)
+                    self.model.addConstr(
+                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
+                        name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
+                    )
+                    pipeline_production_constrs += 1
 
         logger.info(f"[修复] 添加了 {pipeline_production_constrs} 个管道生产限制约束（周级）")
         
@@ -6529,42 +6589,36 @@ class GreenHydrogenSupplyChainOptimizer:
     def solve(self) -> Dict:
         """求解优化模型"""
         logger.info("开始求解优化模型...")
-        
+
         if self.model is None:
             raise ValueError("模型尚未构建，请先调用build_model()")
-        
+
         # 求解
         self.model.optimize()
-        
+
+        # 定义状态码含义映射
+        status_names = {
+            1: "LOADED", 2: "OPTIMAL", 3: "INFEASIBLE", 4: "INF_OR_UNBD",
+            5: "UNBOUNDED", 6: "CUTOFF", 7: "ITERATION_LIMIT", 8: "NODE_LIMIT",
+            9: "TIME_LIMIT", 10: "SOLUTION_LIMIT", 11: "INTERRUPTED", 12: "NUMERIC",
+            13: "SUBOPTIMAL", 14: "INPROGRESS", 15: "USER_OBJ_LIMIT",
+            16: "WORK_LIMIT", 17: "MEM_LIMIT"
+        }
+        status_name = status_names.get(self.model.status, f"UNKNOWN({self.model.status})")
+
+        # 检查是否有可行解（无论状态如何，只要SolCount > 0就有解）
+        has_solution = self.model.SolCount > 0
+
+        logger.info(f"求解状态: {status_name} (代码: {self.model.status})")
+        logger.info(f"找到的解数量: {self.model.SolCount}")
+
         # 检查求解状态
         if self.model.status == GRB.OPTIMAL:
             logger.info("找到最优解")
-
-            # 【已删除IIS诊断代码】之前的IIS代码会破坏模型状态，导致无法提取ObjVal
-            # 简单检查产量但不执行IIS（IIS只对INFEASIBLE模型有效）
-            try:
-                if hasattr(self, 'performance_expressions') and 'production_total' in self.performance_expressions:
-                    production_total_value = self.performance_expressions['production_total'].getValue()
-                    logger.info(f"[产量检查] 总产量: {production_total_value:,.2f} kg")
-
-                    if production_total_value < 0.01:
-                        logger.warning("="*80)
-                        logger.warning("⚠️  检测到零产量问题！")
-                        logger.warning("可能原因:")
-                        logger.warning("  1. MTJ位置的氢气库存平衡缺失（已修复）")
-                        logger.warning("  2. 运输成本过高（检查距离计算是否返回1e9）")
-                        logger.warning("  3. shortage成本设置过低")
-                        logger.warning("="*80)
-                else:
-                    logger.warning("[产量检查] 未找到production_total表达式")
-            except Exception as e:
-                logger.error(f"[IIS诊断] 零产量检测失败: {e}")
-
+            self._check_production_after_solve()
             self._log_variable_summary_post_solve()
             return self._extract_solution()
-        elif self.model.status == GRB.TIME_LIMIT:
-            logger.warning("达到时间限制，返回当前最优解")
-            return self._extract_solution()
+
         elif self.model.status == GRB.INFEASIBLE:
             logger.error("模型不可行")
             # 计算IIS（不可行不可约子系统）来找出冲突约束
@@ -6574,28 +6628,71 @@ class GreenHydrogenSupplyChainOptimizer:
             self.model.setParam('TimeLimit', 500)  # 限制IIS计算时间为500秒
             logger.info("IIS计算时间限制设置为500秒")
             self.model.computeIIS()
-            
+
             # 输出IIS信息
             iis_file = "infeasible_model.ilp"
             self.model.write(iis_file)
             logger.info(f"不可行模型已保存为: {iis_file}")
-            
+
             # 统计冲突约束
             iis_constrs = []
             for constr in self.model.getConstrs():
                 if constr.IISConstr:
                     iis_constrs.append(constr.ConstrName)
-            
+
             logger.error(f"发现 {len(iis_constrs)} 个冲突约束:")
             for i, constr_name in enumerate(iis_constrs[:10]):  # 只打印前10个
                 logger.error(f"  {i+1}. {constr_name}")
             if len(iis_constrs) > 10:
                 logger.error(f"  ... 还有 {len(iis_constrs)-10} 个约束")
-            
+
             return {"status": "infeasible", "status_code": self.model.status, "iis_constraints": iis_constrs}
+
+        elif self.model.status == GRB.TIME_LIMIT and has_solution:
+            # 只处理TIME_LIMIT，MEM_LIMIT的解质量较差暂不处理
+            logger.warning(f"求解因 {status_name} 提前终止，但找到了可行解")
+
+            # 输出MIP Gap信息（如果可用）
+            try:
+                mip_gap = self.model.MIPGap
+                logger.info(f"当前MIP Gap: {mip_gap*100:.4f}%")
+                if mip_gap < 0.05:  # Gap < 5%
+                    logger.info("MIP Gap较小，解的质量很好")
+                elif mip_gap < 0.10:  # Gap < 10%
+                    logger.warning("MIP Gap中等，解的质量可接受")
+                else:
+                    logger.warning("MIP Gap较大，解可能还有优化空间")
+            except:
+                pass
+
+            self._check_production_after_solve()
+            self._log_variable_summary_post_solve()
+            return self._extract_solution()
+
         else:
-            logger.error(f"求解失败，状态: {self.model.status}")
-            return {"status": "failed", "status_code": self.model.status}
+            # 没有可行解
+            logger.error(f"求解失败，状态: {status_name}，未找到可行解")
+            return {"status": "failed", "status_code": self.model.status, "status_name": status_name}
+
+    def _check_production_after_solve(self):
+        """求解后检查产量是否正常"""
+        try:
+            if hasattr(self, 'performance_expressions') and 'production_total' in self.performance_expressions:
+                production_total_value = self.performance_expressions['production_total'].getValue()
+                logger.info(f"[产量检查] 总产量: {production_total_value:,.2f} kg")
+
+                if production_total_value < 0.01:
+                    logger.warning("="*80)
+                    logger.warning("⚠️  检测到零产量问题！")
+                    logger.warning("可能原因:")
+                    logger.warning("  1. MTJ位置的氢气库存平衡缺失（已修复）")
+                    logger.warning("  2. 运输成本过高（检查距离计算是否返回1e9）")
+                    logger.warning("  3. shortage成本设置过低")
+                    logger.warning("="*80)
+            else:
+                logger.warning("[产量检查] 未找到production_total表达式")
+        except Exception as e:
+            logger.error(f"[产量检查] 检测失败: {e}")
     
     def _log_variable_summary_post_solve(self) -> None:
         """求解后输出关键变量的汇总信息，辅助诊断产量为0问题"""

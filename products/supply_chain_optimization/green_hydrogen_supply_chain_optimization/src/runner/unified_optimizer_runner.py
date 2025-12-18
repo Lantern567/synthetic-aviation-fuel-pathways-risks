@@ -164,6 +164,8 @@ class UnifiedSAFOptimizer:
                 'Threads': self.threads,
                 'TimeLimit': self.time_limit,
                 'MIPGap': self.mip_gap,
+                'NodefileStart': 100,  # 内存使用超过100GB时，将节点数据写入磁盘
+                'NodefileDir': '/tmp/gurobi_nodes',  # 节点文件存储目录
             }
         else:
             # 用户提供完整参数字典
@@ -172,6 +174,8 @@ class UnifiedSAFOptimizer:
             self.solver_params.setdefault('Threads', self.threads)
             self.solver_params.setdefault('TimeLimit', self.time_limit)
             self.solver_params.setdefault('MIPGap', self.mip_gap)
+            self.solver_params.setdefault('NodefileStart', 100)
+            self.solver_params.setdefault('NodefileDir', '/tmp/gurobi_nodes')
 
         # 性能监控
         self.start_time = None
@@ -217,19 +221,14 @@ class UnifiedSAFOptimizer:
             self.logger.info(f"Using user-specified threads: {threads}")
             return threads
 
-        # 自动检测
+        # 默认使用192线程以避免内存溢出
+        default_threads = 192
         available_cpus = os.cpu_count()
-        if available_cpus is None:
-            self.logger.warning("Could not detect CPU count, defaulting to 4 threads")
-            return 4
-
-        # 推荐策略:保留2核给操作系统,但至少使用1核
-        recommended = max(1, available_cpus - 2)
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
-        self.logger.info(f"Recommended threads: {recommended} (leaving 2 cores for system)")
+        self.logger.info(f"Using default threads: {default_threads} (to avoid memory overflow)")
 
-        return recommended
+        return default_threads
 
     def _get_system_info(self) -> Dict[str, Any]:
         """获取系统信息"""

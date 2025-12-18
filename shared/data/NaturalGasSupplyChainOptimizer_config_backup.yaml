@@ -39,9 +39,12 @@ basic_parameters:
                                            # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
                                            # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
 
-  hours_per_week: 168                      # 每周小时数 (7天 × 24小时) | Hours per week (7 days × 24 hours)
-                                           # 用途：时间颗粒度设置，定义小时级决策变量的数量
-                                           # 注意：通常不需要修改，除非要改变时间单位
+  periods_per_week: 56                     # 每周决策期间数 (7天 × 8个3小时期间) | Decision periods per week
+                                           # 用途：时间颗粒度设置，定义决策变量的时间分辨率
+                                           # 计算：24小时/天 ÷ 3小时/期间 × 7天 = 56期间/周
+
+  hours_per_period: 3                      # 每个决策期间的小时数 | Hours per decision period
+                                           # 3小时粒度可减少67%的决策变量，加速求解
 
   # GraphHopper路径规划设置 - GraphHopper Routing Configuration
   use_graphhopper_routing: true            # 是否使用GraphHopper路径规划 | Enable GraphHopper routing service

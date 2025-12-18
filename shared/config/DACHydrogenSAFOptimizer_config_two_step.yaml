@@ -1,7 +1,8 @@
 basic_parameters:
   time_horizon_weeks: 12                       # 优化时间范围(周数) | Optimization time horizon in weeks
                                            # 使用12个典型周的数据进行优化
-  hours_per_week: 168
+  periods_per_week: 56                     # 每周决策期间数 (7天 × 8个3小时期间) | Decision periods per week
+  hours_per_period: 3                      # 每个决策期间的小时数 | Hours per decision period
   use_graphhopper_routing: true
   graphhopper_host: localhost
   graphhopper_port: 8989

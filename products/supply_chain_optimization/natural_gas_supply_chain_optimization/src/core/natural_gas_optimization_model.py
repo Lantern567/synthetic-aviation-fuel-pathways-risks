@@ -490,8 +490,18 @@ class NaturalGasSupplyChainOptimizer:
         # 从配置中获取基础参数
         basic_params = self.config['basic_parameters']
         self.time_horizon_weeks = basic_params['time_horizon_weeks']
-        self.hours_per_week = basic_params['hours_per_week']
-        self.total_hours = self.time_horizon_weeks * self.hours_per_week
+
+        # 时间粒度配置（3小时粒度）
+        self.periods_per_week = basic_params.get('periods_per_week', 56)  # 每周56个3小时期间
+        self.hours_per_period = basic_params.get('hours_per_period', 3)   # 每期间3小时
+        self.total_periods = self.time_horizon_weeks * self.periods_per_week
+
+        # 真实的每周小时数（用于天数计算等场景，始终为168）
+        self.real_hours_per_week = self.periods_per_week * self.hours_per_period  # 56 × 3 = 168
+
+        # 兼容性别名（保持向后兼容，逐步废弃）
+        self.hours_per_week = self.periods_per_week  # 废弃，保留兼容
+        self.total_hours = self.total_periods        # 废弃，保留兼容
         
         # 模型组件
         self.model = None
@@ -757,17 +767,18 @@ class NaturalGasSupplyChainOptimizer:
                 gc.collect()
                 self._log_memory_usage("释放renewable_data后")
 
-            # 按地点聚合小时级发电数据
+            # 按地点聚合时间级发电数据（支持1小时或3小时粒度）
             plant_names = filtered_renewable_data['plant_name'].unique()
             for plant_name in plant_names:
                 plant_data = filtered_renewable_data[filtered_renewable_data['plant_name'] == plant_name]
 
-                # 取前total_hours小时数据
-                if len(plant_data) >= self.total_hours:
-                    hourly_data = plant_data.head(self.total_hours)
+                # 取前total_periods/total_hours数据（根据时间粒度）
+                required_count = self.total_periods  # 统一使用total_periods
+                if len(plant_data) >= required_count:
+                    period_data = plant_data.head(required_count)
 
                     # 确定电站类型
-                    plant_type = hourly_data.iloc[0]['type'] if 'type' in hourly_data.columns else 'solar_plant'
+                    plant_type = period_data.iloc[0]['type'] if 'type' in period_data.columns else 'solar_plant'
 
                     # 🔧 类型名称标准化修正：确保与配置文件中的suitable_locations一致
                     if plant_type == 'solar_farm':
@@ -775,10 +786,12 @@ class NaturalGasSupplyChainOptimizer:
 
                     self.locations[plant_name] = {
                         'type': plant_type,  # 'solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery'
-                        'latitude': hourly_data.iloc[0].get('latitude', 30.0),
-                        'longitude': hourly_data.iloc[0].get('longitude', 104.0),
-                        'capacity_mw': hourly_data.iloc[0]['capacity_mw'] if 'capacity_mw' in hourly_data.columns else hourly_data.iloc[0]['power_output_mw'],
-                        'hourly_generation': hourly_data['power_output_mw'].tolist(),  # 每小时发电量 MWh (等价于平均功率 MW) / 对副产氢为氢气产量kg/h
+                        'latitude': period_data.iloc[0].get('latitude', 30.0),
+                        'longitude': period_data.iloc[0].get('longitude', 104.0),
+                        'capacity_mw': period_data.iloc[0]['capacity_mw'] if 'capacity_mw' in period_data.columns else period_data.iloc[0]['power_output_mw'],
+                        # 发电数据：对于3小时粒度是每期间的平均功率MW（可发MWh = MW × hours_per_period）
+                        # 对于1小时粒度是每小时的功率MW（可发MWh = MW × 1）
+                        'hourly_generation': period_data['power_output_mw'].tolist(),  # 每期间可发电量(取决于时间粒度)
                     }
 
             # 统计电站/设施类型
@@ -916,7 +929,7 @@ class NaturalGasSupplyChainOptimizer:
                     'latitude': airport_info['latitude'],
                     'longitude': airport_info['longitude'],
                     'capacity_mw': 0,  # 机场本身不发电
-                    'hourly_generation': [0] * self.total_hours,  # 无发电
+                    'hourly_generation': [0] * self.total_periods,  # 无发电
                     'original_airport_name': airport_name,  # 保留原始机场名称
                     'fuel_demand_weekly': airport_info.get('weekly_fuel_series', [])
                 }
@@ -954,7 +967,7 @@ class NaturalGasSupplyChainOptimizer:
                     'latitude': lat,
                     'longitude': lon,
                     'capacity_mw': 0,  # LNG接收站本身不发电
-                    'hourly_generation': [0] * self.total_hours,  # 无发电
+                    'hourly_generation': [0] * self.total_periods,  # 无发电
                     'original_terminal_id': terminal_id,  # 保留原始接收站ID
                     'lng_capacity': terminal_info.get('capacity_mcm_per_year', self.avg_lng_capacity_mcm_per_year) if not pd.isna(terminal_info.get('capacity_mcm_per_year', self.avg_lng_capacity_mcm_per_year)) else self.avg_lng_capacity_mcm_per_year  # LNG处理能力
                 }
@@ -992,7 +1005,7 @@ class NaturalGasSupplyChainOptimizer:
                     'latitude': lat,
                     'longitude': lon,
                     'capacity_mw': 0,  # 天然气管道本身不发电
-                    'hourly_generation': [0] * self.total_hours,  # 无发电
+                    'hourly_generation': [0] * self.total_periods,  # 无发电
                     'pipeline_id': pipeline_id,  # 保留原始管道ID
                     'pipeline_name': pipeline_info.get('name', ''),  # 管道名称
                     'operator': pipeline_info.get('operator', ''),  # 运营商
@@ -1209,21 +1222,48 @@ class NaturalGasSupplyChainOptimizer:
             logger.error(error_msg)
             raise FileNotFoundError(error_msg)
 
-        # 直接加载100km筛选后的CSV格式数据
-        solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
-        wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
+        # 直接加载3小时粒度的预处理数据（优先）或100km筛选后的小时数据
+        # 3小时粒度文件优先
+        solar_3hourly_csv = os.path.join(preprocessed_dir, 'typical_12weeks_solar_3hourly.csv')
+        wind_3hourly_csv = os.path.join(preprocessed_dir, 'typical_12weeks_wind_3hourly.csv')
 
-        logger.info("✓ 加载100km筛选后的CSV格式数据")
-        logger.info(f"加载太阳能数据: {solar_100km_csv}")
-        solar_data = pd.read_csv(solar_100km_csv)
-        # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
-        if 'type' in solar_data.columns:
-            solar_data['type'] = 'solar_plant'
-        logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
+        # 检查是否存在3小时粒度数据
+        if os.path.exists(solar_3hourly_csv) and os.path.exists(wind_3hourly_csv):
+            logger.info("✓ 加载3小时粒度预处理数据")
+            logger.info(f"加载太阳能数据: {solar_3hourly_csv}")
+            solar_data = pd.read_csv(solar_3hourly_csv)
+            # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+            if 'type' in solar_data.columns:
+                solar_data['type'] = 'solar_plant'
+            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
 
-        logger.info(f"加载风电数据: {wind_100km_csv}")
-        wind_data = pd.read_csv(wind_100km_csv)
-        logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+            logger.info(f"加载风电数据: {wind_3hourly_csv}")
+            wind_data = pd.read_csv(wind_3hourly_csv)
+            logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+
+            # 标记数据为3小时粒度
+            self._renewable_data_time_granularity = '3h'
+            logger.info(f"  数据时间粒度: 3小时/期间 ({self.hours_per_period}小时)")
+        else:
+            # 回退到100km筛选后的CSV格式数据（1小时粒度）
+            solar_100km_csv = os.path.join(preprocessed_dir, 'solar_hourly_100km.csv')
+            wind_100km_csv = os.path.join(preprocessed_dir, 'wind_hourly_100km.csv')
+
+            logger.info("✓ 加载100km筛选后的CSV格式数据（1小时粒度）")
+            logger.info(f"加载太阳能数据: {solar_100km_csv}")
+            solar_data = pd.read_csv(solar_100km_csv)
+            # 修正类型名称: solar_farm -> solar_plant (与配置文件中的suitable_locations匹配)
+            if 'type' in solar_data.columns:
+                solar_data['type'] = 'solar_plant'
+            logger.info(f"  太阳能数据: {len(solar_data):,} 条记录, {solar_data['plant_id'].nunique()} 个电站")
+
+            logger.info(f"加载风电数据: {wind_100km_csv}")
+            wind_data = pd.read_csv(wind_100km_csv)
+            logger.info(f"  风电数据: {len(wind_data):,} 条记录, {wind_data['plant_id'].nunique()} 个电站")
+
+            # 标记数据为1小时粒度
+            self._renewable_data_time_granularity = '1h'
+            logger.info("  数据时间粒度: 1小时")
 
         data_loaded = True
         is_prefiltered = True  # 100km已预筛选，无需再次筛选
@@ -1233,13 +1273,23 @@ class NaturalGasSupplyChainOptimizer:
         renewable_data = pd.concat([solar_data, wind_data], ignore_index=True)
         logger.info(f"合并后总计: {len(renewable_data):,} 条记录")
 
-        # 截断到total_hours（如果需要）
-        if 'hour' in renewable_data.columns:
-            before_count = len(renewable_data)
-            renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
-            after_count = len(renewable_data)
-            if before_count > after_count:
-                logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
+        # 截断到total_periods/total_hours（根据数据时间粒度）
+        if hasattr(self, '_renewable_data_time_granularity') and self._renewable_data_time_granularity == '3h':
+            # 3小时粒度数据：使用period_index
+            if 'period_index' in renewable_data.columns:
+                before_count = len(renewable_data)
+                renewable_data = renewable_data[renewable_data['period_index'] < self.total_periods]
+                after_count = len(renewable_data)
+                if before_count > after_count:
+                    logger.info(f"截断到前{self.total_periods}期间: {before_count:,} → {after_count:,} 条记录")
+        else:
+            # 1小时粒度数据：使用hour
+            if 'hour' in renewable_data.columns:
+                before_count = len(renewable_data)
+                renewable_data = renewable_data[renewable_data['hour'] < self.total_hours]
+                after_count = len(renewable_data)
+                if before_count > after_count:
+                    logger.info(f"截断到前{self.total_hours}小时: {before_count:,} → {after_count:,} 条记录")
 
         # 释放源数据内存
         del solar_data, wind_data
@@ -1761,7 +1811,7 @@ class NaturalGasSupplyChainOptimizer:
                 'latitude': lat,
                 'longitude': lon,
                 'capacity_mw': 0,  # 管道本身不发电
-                'hourly_generation': [0] * self.total_hours,  # 无发电
+                'hourly_generation': [0] * self.total_periods,  # 无发电
                 'pipeline_id': pipeline_id,
                 'pipeline_name': pipeline_data.get('name', f'管道{i+1}'),
                 'operator': pipeline_data.get('operator', '未知'),
@@ -2472,6 +2522,10 @@ class NaturalGasSupplyChainOptimizer:
         self.model.setParam('MIPGap', float(solver_params['MIPGap']))
         self.model.setParam('Threads', int(solver_params['Threads']))
 
+        # 内存限制参数（防止OOM）
+        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
+        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
         self._create_variables()
@@ -2705,7 +2759,7 @@ class NaturalGasSupplyChainOptimizer:
         logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
         
         self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量 (kg H2/week)
-        self.hydrogen_pipeline_facility_vars = {}   # 氢能管道建设决策变量 (二进制)
+        # self.hydrogen_pipeline_facility_vars = {}   # 【禁用管道建设决策】氢能管道建设决策变量 (二进制)
         
         valid_pipeline_routes = 0  # 计数有效管道路线
         total_days = self.total_hours // 24
@@ -2727,11 +2781,13 @@ class NaturalGasSupplyChainOptimizer:
                     continue
                 
                 for mtj_loc in locations:
-                    # 管道建设决策变量 (每条路线一个二进制变量)
+                    # 【禁用管道建设决策】管道建设决策变量 (每条路线一个二进制变量)
+                    """
                     pipeline_facility_name = f"h2_pipeline_facility_{h2_loc}_{mtj_loc}"
                     self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] = self.model.addVar(
                         vtype=GRB.BINARY, name=pipeline_facility_name
                     )
+                    """
                     
                     # 管道运输量变量 (天级)
                     valid_pipeline_routes += 1
@@ -2742,7 +2798,7 @@ class NaturalGasSupplyChainOptimizer:
                     )
         
         logger.info(f"创建了 {valid_pipeline_routes} 条氢能管道运输路线")
-        logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")
+        # logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")  # 【禁用管道建设决策】
         
         logger.info(f"创建了 {len(self.production_vars)} 个生产变量")
         logger.info(f"创建了 {len(self.facility_vars)} 个设施变量")
@@ -4147,12 +4203,15 @@ class NaturalGasSupplyChainOptimizer:
         logger.info("严格的小时级原料供应约束添加完成（已移除维护停机约束）")
     
     def _add_renewable_power_constraints(self, location: str, hour: int):
-        """添加可再生能源电力供应约束"""
+        """添加可再生能源电力供应约束（支持3小时时间粒度）"""
         location_info = self.locations[location]
-        
-        # 该时段可用电力 (MWh)
+
+        # 该时段可用电力 (MWh) = 功率(MW) × 时间(小时)
+        # 对于3小时粒度：MWh = MW × hours_per_period
+        # 对于1小时粒度：MWh = MW × 1
         if 'hourly_generation' in location_info and hour < len(location_info['hourly_generation']):
-            available_power_mwh = location_info['hourly_generation'][hour]
+            power_mw = location_info['hourly_generation'][hour]  # 平均功率 MW
+            available_power_mwh = power_mw * self.hours_per_period  # 该期间可用电力 MWh
         else:
             available_power_mwh = 0.0
         
@@ -4496,20 +4555,22 @@ class NaturalGasSupplyChainOptimizer:
                             logger.debug(f"✨ {location} hour={hour}: 可再生电优先制氢约束已添加，剩余电力可用于MTJ")
                         
     def _add_hydrogen_balance_constraints(self):
-        """添加氢气平衡约束（流水线模式：hour=167发货 + hour=0接收）
+        """添加氢气平衡约束（流水线模式：最后期间发货 + 第0期间接收）
 
         核心逻辑：
-        1. 生产点：hour=167扣减整周运输量 → "本周生产完成后发货给下周"
-        2. 消纳点：hour=0入库整周运输量 → "下周初收到上周的货"
+        1. 生产点：最后期间扣减整周运输量 → "本周生产完成后发货给下周"
+        2. 消纳点：第0期间入库整周运输量 → "下周初收到上周的货"
         3. 生产点初始库存 >= 周运输量（代表上周累积的库存）
         4. 消纳点初始库存 = 0（本周初尚未收货）
 
         优势：
-        - 符合"生产要在运输前168小时"的跨周运输逻辑
+        - 符合"生产要在运输前"的跨周运输逻辑
         - 生产点在week末发货，消纳点在下week初接收
         - 库存缓冲机制保持灵活性
         """
-        logger.info("添加氢气平衡约束（流水线模式：hour=167发货 + hour=0接收）...")
+        # 每周最后一个期间的索引（用于统一出库）
+        last_period_in_week = self.periods_per_week - 1  # 3小时粒度时为55，1小时粒度时为167
+        logger.info(f"添加氢气平衡约束（流水线模式：第{last_period_in_week}期间发货 + 第0期间接收）...")
 
         for location in self.locations:
             location_type = self.locations[location]['type']
@@ -4530,9 +4591,9 @@ class NaturalGasSupplyChainOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（在hour=167统一扣减周运输量）
+                    # 氢气运输出库（在每周最后一个期间统一扣减周运输量）
                     h2_transport_outflow = 0
-                    if hour == self.total_hours - 1:  # 在hour=167扣减本周累积的运输量
+                    if hour % self.periods_per_week == last_period_in_week:  # 每周最后一个期间扣减运输量
                         # 【已禁用】罐车运输出库 - 修正日期：2025-11-16
                         # weekly_outbound_transport = gp.quicksum(
                         #     self.hydrogen_transport_vars[(location, dest_loc)]
@@ -4552,7 +4613,7 @@ class NaturalGasSupplyChainOptimizer:
 
                         h2_transport_outflow = weekly_outbound_transport
 
-                        logger.debug(f"[氢源库存] {location}: 在hour=167扣减周运输量（本周累积的库存，发往下周）")
+                        logger.debug(f"[氢源库存] {location}: 在第{hour}期间(week末)扣减周运输量")
 
                     # 氢气库存平衡方程
                     self.model.addConstr(
@@ -4659,7 +4720,7 @@ class NaturalGasSupplyChainOptimizer:
                         name=f"h2_inventory_nonnegative_mtj_{location}_{hour}"
                     )
 
-        logger.info("氢气平衡约束添加完成（流水线模式：生产点hour=167发货，消纳点hour=0接收）")
+        logger.info("氢气平衡约束添加完成（流水线模式：生产点周末发货，消纳点周初接收）")
 
     def _add_daily_hydrogen_mtj_constraints(self):
         """添加氢气每日产量限制下一日MTJ每日产量约束"""
@@ -4836,54 +4897,58 @@ class NaturalGasSupplyChainOptimizer:
         if not hasattr(self, 'hydrogen_pipeline_transport_vars') or not self.hydrogen_pipeline_transport_vars:
             logger.info("无氢能管道运输变量，跳过管道运输约束")
             return
-        
-        # 1. 管道建设决策约束：只有建设了管道才能进行运输
-        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_facility_vars:
-            total_days = self.total_hours // 24
-            for day in range(total_days):
-                if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
-                    # 管道运输量 <= 管道建设决策 * 大M（管道日最大容量）
-                    max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
-                    self.model.addConstr(
-                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= 
-                        self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] * max_daily_pipeline_capacity,
-                        name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_day_{day}"
-                    )
+
+        # 1. 【禁用管道建设决策】管道容量约束：管道默认可用，直接使用容量上限
+        pipeline_capacity_constrs = 0
+        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
+            # 管道周运输量 <= 管道周最大容量
+            max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
+            days_per_week = 7
+            max_weekly_pipeline_capacity = max_daily_pipeline_capacity * days_per_week
+            self.model.addConstr(
+                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= max_weekly_pipeline_capacity,
+                name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_week"
+            )
+            pipeline_capacity_constrs += 1
+
+        logger.info(f"添加了 {pipeline_capacity_constrs} 个管道容量约束")
         
         # 2. 管道运输量约束：不超过氢气源地的生产能力
+        pipeline_production_constrs = 0
         for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
             if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
                 continue
-                
+
             if tech not in self.mtj_locations:
                 continue
-                
+
             locations = self.mtj_locations[tech]
             if not hasattr(locations, '__iter__') or isinstance(locations, str):
                 continue
-                
+
             for h2_loc in self.hydrogen_locations:
                 for mtj_loc in locations:
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_facility_vars:
+                    # 【禁用管道建设决策】改为检查管道运输变量
+                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_transport_vars:
                         continue
-                        
-                    total_days = self.total_hours // 24
-                    for day in range(total_days):
-                        if (h2_loc, mtj_loc, day) in self.hydrogen_pipeline_transport_vars:
-                            # 管道运输量 <= 该天氢气生产量
-                            day_start_hour = day * 24
-                            day_end_hour = min((day + 1) * 24, self.total_hours)
-                            daily_h2_production = gp.quicksum(
-                                self.hydrogen_production_vars[(h2_loc, hour)]
-                                for hour in range(day_start_hour, day_end_hour)
-                                if (h2_loc, hour) in self.hydrogen_production_vars
-                            )
-                            self.model.addConstr(
-                                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc, day)] <= daily_h2_production,
-                                name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_day_{day}"
-                            )
-        
-        # 3. 氢气运输方式排他性约束：同一路线只能选择罐车或管道运输之一
+
+                    # 管道周运输量 <= 整周氢气生产量
+                    weeks = max(1, self.time_horizon_weeks)
+                    weekly_h2_production = gp.quicksum(
+                        self.hydrogen_production_vars[(h2_loc, hour)]
+                        for hour in range(self.total_hours)
+                        if (h2_loc, hour) in self.hydrogen_production_vars
+                    ) / float(weeks)
+                    self.model.addConstr(
+                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
+                        name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
+                    )
+                    pipeline_production_constrs += 1
+
+        logger.info(f"添加了 {pipeline_production_constrs} 个管道生产限制约束")
+
+        # 3. 【禁用管道建设决策】注释掉氢气运输方式排他性约束
+        """
         for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
             if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
                 continue
@@ -4919,7 +4984,8 @@ class NaturalGasSupplyChainOptimizer:
                             max_pipeline_weekly_capacity * self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)],
                             name=f"h2_pipeline_exclusive_{h2_loc}_{mtj_loc}_weekly"
                         )
-        
+        """
+
         # 注意：氢气需求满足约束已在 _add_hydrogen_transport_constraints() 中统一处理
         logger.info("氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）")
     
@@ -5598,47 +5664,82 @@ class NaturalGasSupplyChainOptimizer:
     def solve(self) -> Dict:
         """求解优化模型"""
         logger.info("开始求解优化模型...")
-        
+
         if self.model is None:
             raise ValueError("模型尚未构建，请先调用build_model()")
-        
+
         # 求解
         self.model.optimize()
-        
+
+        # 定义状态码含义映射
+        status_names = {
+            1: "LOADED", 2: "OPTIMAL", 3: "INFEASIBLE", 4: "INF_OR_UNBD",
+            5: "UNBOUNDED", 6: "CUTOFF", 7: "ITERATION_LIMIT", 8: "NODE_LIMIT",
+            9: "TIME_LIMIT", 10: "SOLUTION_LIMIT", 11: "INTERRUPTED", 12: "NUMERIC",
+            13: "SUBOPTIMAL", 14: "INPROGRESS", 15: "USER_OBJ_LIMIT",
+            16: "WORK_LIMIT", 17: "MEM_LIMIT"
+        }
+        status_name = status_names.get(self.model.status, f"UNKNOWN({self.model.status})")
+
+        # 检查是否有可行解（无论状态如何，只要SolCount > 0就有解）
+        has_solution = self.model.SolCount > 0
+
+        logger.info(f"求解状态: {status_name} (代码: {self.model.status})")
+        logger.info(f"找到的解数量: {self.model.SolCount}")
+
         # 检查求解状态
         if self.model.status == GRB.OPTIMAL:
             logger.info("找到最优解")
             return self._extract_solution()
-        elif self.model.status == GRB.TIME_LIMIT:
-            logger.warning("达到时间限制，返回当前最优解")
-            return self._extract_solution()
+
         elif self.model.status == GRB.INFEASIBLE:
             logger.error("模型不可行")
             # 计算IIS（不可行不可约子系统）来找出冲突约束
             logger.info("正在计算不可行不可约子系统(IIS)...")
             self.model.computeIIS()
-            
+
             # 输出IIS信息
             iis_file = "infeasible_model.ilp"
             self.model.write(iis_file)
             logger.info(f"不可行模型已保存为: {iis_file}")
-            
+
             # 统计冲突约束
             iis_constrs = []
             for constr in self.model.getConstrs():
                 if constr.IISConstr:
                     iis_constrs.append(constr.ConstrName)
-            
+
             logger.error(f"发现 {len(iis_constrs)} 个冲突约束:")
             for i, constr_name in enumerate(iis_constrs[:10]):  # 只打印前10个
                 logger.error(f"  {i+1}. {constr_name}")
             if len(iis_constrs) > 10:
                 logger.error(f"  ... 还有 {len(iis_constrs)-10} 个约束")
-            
+
             return {"status": "infeasible", "status_code": self.model.status, "iis_constraints": iis_constrs}
+
+        elif self.model.status == GRB.TIME_LIMIT and has_solution:
+            # 只处理TIME_LIMIT，MEM_LIMIT的解质量较差暂不处理
+            logger.warning(f"求解因 {status_name} 提前终止，但找到了可行解")
+
+            # 输出MIP Gap信息（如果可用）
+            try:
+                mip_gap = self.model.MIPGap
+                logger.info(f"当前MIP Gap: {mip_gap*100:.4f}%")
+                if mip_gap < 0.05:  # Gap < 5%
+                    logger.info("MIP Gap较小，解的质量很好")
+                elif mip_gap < 0.10:  # Gap < 10%
+                    logger.warning("MIP Gap中等，解的质量可接受")
+                else:
+                    logger.warning("MIP Gap较大，解可能还有优化空间")
+            except:
+                pass
+
+            return self._extract_solution()
+
         else:
-            logger.error(f"求解失败，状态: {self.model.status}")
-            return {"status": "failed", "status_code": self.model.status}
+            # 没有可行解
+            logger.error(f"求解失败，状态: {status_name}，未找到可行解")
+            return {"status": "failed", "status_code": self.model.status, "status_name": status_name}
     
     def _extract_solution(self) -> Dict:
         """从优化结果中提取解决方案"""

@@ -827,7 +827,7 @@ class DACHydrogenSAFOptimizer:
                 - time_horizon_weeks (int): 优化时间范围(周), 默认1
                 - use_graphhopper_routing (bool): 是否使用GraphHopper路径规划, 默认True
                 - solver_time_limit (float): Gurobi求解时间限制(秒), 默认3600
-                - solver_mip_gap (float): MIP最优性间隙, 默认0.03 (3%)
+                - solver_mip_gap (float): MIP最优性间隙, 默认0.01 (1%)
                 - osm_pbf_path (str): OSM地图数据文件路径
                 - graphhopper_host (str): GraphHopper服务器地址
                 - graphhopper_port (int): GraphHopper服务器端口
@@ -860,7 +860,7 @@ class DACHydrogenSAFOptimizer:
             optimizer = DACHydrogenOptimizer(
                 config_path="/path/to/custom_config.yaml",
                 solver_time_limit=7200,
-                solver_mip_gap=0.03
+                solver_mip_gap=0.01
             )
 
         Raises:
@@ -924,8 +924,18 @@ class DACHydrogenSAFOptimizer:
         # 从配置中获取基础参数
         basic_params = self.config['basic_parameters']
         self.time_horizon_weeks = basic_params['time_horizon_weeks']
-        self.hours_per_week = basic_params['hours_per_week']
-        self.total_hours = self.time_horizon_weeks * self.hours_per_week
+
+        # 时间粒度配置（3小时粒度）
+        self.periods_per_week = basic_params.get('periods_per_week', 56)  # 每周56个3小时期间
+        self.hours_per_period = basic_params.get('hours_per_period', 3)   # 每期间3小时
+        self.total_periods = self.time_horizon_weeks * self.periods_per_week
+
+        # 真实的每周小时数（用于天数计算等场景，始终为168）
+        self.real_hours_per_week = self.periods_per_week * self.hours_per_period  # 56 × 3 = 168
+
+        # 兼容性别名（保持向后兼容，逐步废弃）
+        self.hours_per_week = self.periods_per_week  # 废弃，保留兼容
+        self.total_hours = self.total_periods        # 废弃，保留兼容
         
         # 模型组件
         self.model = None
@@ -1379,7 +1389,7 @@ class DACHydrogenSAFOptimizer:
                     'latitude': airport_info['latitude'],
                     'longitude': airport_info['longitude'],
                     'capacity_mw': 0,  # 机场本身不发电
-                    'hourly_generation': [0] * self.total_hours,  # 无发电
+                    'hourly_generation': [0] * self.total_periods,  # 无发电
                     'original_airport_name': airport_name,  # 保留原始机场名称
                     'fuel_demand_weekly': airport_info.get('weekly_fuel_series', [])
                 }
@@ -3024,9 +3034,15 @@ class DACHydrogenSAFOptimizer:
         logger.info("=" * 60)
 
     def _define_co2_transport_variables(self):
-        """定义CO₂管道运输决策变量（小时级，v4.1新增）"""
+        """定义CO₂管道运输决策变量（周级，v4.2优化）
+
+        v4.2变更：从小时级改为周级，与氢能管道运输变量保持一致
+        - 变量索引：(dac_loc, saf_loc) 代表整周的运输量
+        - 变量含义：周运输量 (kg CO₂/week)
+        - 时间匹配：周初统一入库，周末统一出库
+        """
         logger.info("=" * 60)
-        logger.info("定义CO₂管道运输变量 (v4.1)")
+        logger.info("定义CO₂管道运输变量 (v4.2 周级)")
         logger.info("=" * 60)
 
         # 获取DAC位置
@@ -3047,24 +3063,26 @@ class DACHydrogenSAFOptimizer:
             self.co2_pipeline_flow_vars = {}
             return
 
-        # 创建CO₂管道运输变量: (DAC位置, SAF位置, 小时)
+        # 创建CO₂管道运输变量: (DAC位置, SAF位置) - 周级变量
         self.co2_pipeline_flow_vars = {}
+        valid_routes = 0
         for dac_loc in dac_locations:
             for saf_loc in saf_locations:
                 # 跳过同位置（共址部署情况通过本地捕获处理）
                 if dac_loc == saf_loc:
                     continue
 
-                for hour in range(self.total_hours):
-                    var_name = f"co2_pipe_{dac_loc}_{saf_loc}_h{hour}"
-                    self.co2_pipeline_flow_vars[(dac_loc, saf_loc, hour)] = self.model.addVar(
-                        lb=0,
-                        ub=GRB.INFINITY,
-                        vtype=GRB.CONTINUOUS,
-                        name=var_name
-                    )
+                var_name = f"co2_pipe_{dac_loc}_{saf_loc}_week"
+                self.co2_pipeline_flow_vars[(dac_loc, saf_loc)] = self.model.addVar(
+                    lb=0,
+                    ub=GRB.INFINITY,
+                    vtype=GRB.CONTINUOUS,
+                    name=var_name
+                )
+                valid_routes += 1
 
-        logger.info(f"创建了 {len(self.co2_pipeline_flow_vars)} 个CO₂管道运输变量")
+        logger.info(f"创建了 {len(self.co2_pipeline_flow_vars)} 个CO₂管道运输变量（周级）")
+        logger.info(f"v4.2优化：变量数从 {len(dac_locations)}×{len(saf_locations)}×{self.total_hours} 减少到 {valid_routes}")
         logger.info("=" * 60)
 
     def _define_co2_inventory_variables(self):
@@ -3363,6 +3381,10 @@ class DACHydrogenSAFOptimizer:
         self.model.setParam('MIPGap', mip_gap)
         self.model.setParam('Threads', threads)
 
+        # 内存限制参数（防止OOM）
+        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
+        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
         self._create_variables()
@@ -3551,7 +3573,7 @@ class DACHydrogenSAFOptimizer:
         logger.info("创建氢能管道运输变量，作为罐车运输的替代选择")
         
         self.hydrogen_pipeline_transport_vars = {}  # 氢能管道运输变量 (kg H2/week)
-        self.hydrogen_pipeline_facility_vars = {}   # 氢能管道建设决策变量 (二进制)
+        # self.hydrogen_pipeline_facility_vars = {}   # 【禁用管道建设决策】氢能管道建设决策变量 (二进制)
         
         valid_pipeline_routes = 0  # 计数有效管道路线
         total_days = self.total_hours // 24
@@ -3570,11 +3592,13 @@ class DACHydrogenSAFOptimizer:
                     continue
                 
                 for mtj_loc in locations:
-                    # 管道建设决策变量 (每条路线一个二进制变量)
+                    # 【禁用管道建设决策】管道建设决策变量 (每条路线一个二进制变量)
+                    """
                     pipeline_facility_name = f"h2_pipeline_facility_{h2_loc}_{mtj_loc}"
                     self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] = self.model.addVar(
                         vtype=GRB.BINARY, name=pipeline_facility_name
                     )
+                    """
                     
                     # 管道运输量变量 (天级)
                     valid_pipeline_routes += 1
@@ -3585,7 +3609,7 @@ class DACHydrogenSAFOptimizer:
                     )
         
         logger.info(f"创建了 {valid_pipeline_routes} 条氢能管道运输路线")
-        logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")
+        # logger.info(f"创建了 {len(self.hydrogen_pipeline_facility_vars)} 个氢能管道建设决策变量")  # 【禁用管道建设决策】
         
         logger.info(f"创建了 {len(self.production_vars)} 个生产变量")
         logger.info(f"创建了 {len(self.facility_vars)} 个设施变量")
@@ -4710,8 +4734,9 @@ class DACHydrogenSAFOptimizer:
             # 确保距离缓存完备
             self._ensure_co2_pipeline_distance_cache()
 
+            # v4.2变更：CO₂管道运输变量已改为周级 (dac_loc, saf_loc)
             distance_lookup = {}
-            for (dac_loc, saf_loc, _) in self.co2_pipeline_flow_vars.keys():
+            for (dac_loc, saf_loc) in self.co2_pipeline_flow_vars.keys():
                 if (dac_loc, saf_loc) not in distance_lookup:
                     info = self.co2_pipeline_distance_cache.get((dac_loc, saf_loc))
                     if info is None:
@@ -4722,7 +4747,7 @@ class DACHydrogenSAFOptimizer:
             self.carbon_expressions['co2_pipeline_transport'] = gp.quicksum(
                 var *
                 (distance_lookup[(dac_loc, saf_loc)] / 100.0) * co2_pipeline
-                for (dac_loc, saf_loc, hour), var in self.co2_pipeline_flow_vars.items()
+                for (dac_loc, saf_loc), var in self.co2_pipeline_flow_vars.items()
             )
         else:
             self.carbon_expressions['co2_pipeline_transport'] = gp.LinExpr(0)
@@ -5175,12 +5200,15 @@ class DACHydrogenSAFOptimizer:
             )
 
     def _add_renewable_power_constraints(self, location: str, hour: int):
-        """添加可再生能源电力供应约束"""
+        """添加可再生能源电力供应约束（支持3小时时间粒度）"""
         location_info = self.locations[location]
-        
-        # 该时段可用电力 (MWh)
+
+        # 该时段可用电力 (MWh) = 功率(MW) × 时间(小时)
+        # 对于3小时粒度：MWh = MW × hours_per_period
+        # 对于1小时粒度：MWh = MW × 1
         if 'hourly_generation' in location_info and hour < len(location_info['hourly_generation']):
-            available_power_mwh = location_info['hourly_generation'][hour]
+            power_mw = location_info['hourly_generation'][hour]  # 平均功率 MW
+            available_power_mwh = power_mw * self.hours_per_period  # 该期间可用电力 MWh
         else:
             available_power_mwh = 0.0
         
@@ -5265,9 +5293,13 @@ class DACHydrogenSAFOptimizer:
         【修改说明 v5.0】
         SAF库存改为周积累模式：
         - 生产地累积库存，不再每小时平摊出库
-        - 在每周的第167小时（最后一小时）统一出库运输到机场
-        - 库存平衡：仅在167h时出库，其他时间只生产累积
+        - 在每周的最后一个期间统一出库运输到机场
+        - 库存平衡：仅在周末出库，其他时间只生产累积
         """
+        # 每周最后一个期间的索引（用于统一出库）
+        last_period_in_week = self.periods_per_week - 1  # 3小时粒度时为55，1小时粒度时为167
+        logger.info(f"添加SAF库存平衡约束（每周第{last_period_in_week}期间统一出库）...")
+
         for location in self.locations:
             # 计算该location所有周的运输总量
             weekly_transports = {}
@@ -5283,18 +5315,18 @@ class DACHydrogenSAFOptimizer:
                 current_inventory = self.storage_vars[(location, hour + 1)]
                 previous_inventory = self.storage_vars[(location, hour)]
 
-                # 当前小时总生产
+                # 当前期间总生产
                 production = gp.quicksum(
                     self.production_vars[(location, tech, hour)]
                     for tech in self.technologies
                     if (location, tech, hour) in self.production_vars
                 )
 
-                # 出库量：仅在每周的第167小时（最后一小时）统一出库
+                # 出库量：仅在每周的最后一个期间统一出库
                 current_week = hour // self.hours_per_week
                 hour_in_week = hour % self.hours_per_week
 
-                if hour_in_week == 167:  # 每周最后一小时统一出库
+                if hour_in_week == last_period_in_week:  # 每周最后一个期间统一出库
                     outflow = weekly_transports.get(current_week, gp.LinExpr(0))
                 else:
                     outflow = gp.LinExpr(0)
@@ -5395,10 +5427,12 @@ class DACHydrogenSAFOptimizer:
                         name=f"h2_production_capacity_{location}_{hour}"
                     )
                     
-                    # 3. 可再生能源电力平衡约束
+                    # 3. 可再生能源电力平衡约束（支持3小时时间粒度）
+                    # 可用电力 (MWh) = 功率(MW) × 时间(小时)
                     available_energy_mwh = 0.0
                     if hour < len(hourly_generation):
-                        available_energy_mwh = hourly_generation[hour]  # MWh 每小时发电量
+                        power_mw = hourly_generation[hour]  # 平均功率 MW
+                        available_energy_mwh = power_mw * self.hours_per_period  # 该期间可用电力 MWh
 
                     # 制氢耗电：55 kWh/kg H2
                     h2_electricity_consumption_mwh = (
@@ -5429,13 +5463,15 @@ class DACHydrogenSAFOptimizer:
                         
     def _add_hydrogen_balance_constraints(self):
         """添加氢气平衡约束"""
-        logger.info("添加氢气平衡约束...")
-        
+        # 每周最后一个期间的索引（用于统一出库）
+        last_period_in_week = self.periods_per_week - 1  # 3小时粒度时为55，1小时粒度时为167
+        logger.info(f"添加氢气平衡约束（每周第{last_period_in_week}期间统一出库）...")
+
         for location in self.locations:
             location_type = self.locations[location]['type']
-            
+
             if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
-                # 氢气库存平衡（周级运输模式：在hour=167统一出库）
+                # 氢气库存平衡（周级运输模式：在每周最后一个期间统一出库）
                 for hour in range(self.total_hours):
                     # 当前氢气库存 = 上期库存 + 制氢生产 - 本地SAF消耗 - 运输出库
                     current_h2_inventory = self.hydrogen_storage_vars[(location, hour + 1)]
@@ -5450,9 +5486,9 @@ class DACHydrogenSAFOptimizer:
                         if (location, tech, hour) in self.production_vars
                     )
 
-                    # 氢气运输出库（在hour=167统一扣减整周运输量）
+                    # 氢气运输出库（在每周最后一个期间统一扣减整周运输量）
                     h2_transport_outflow = 0
-                    if hour == self.total_hours - 1:  # hour=167
+                    if hour % self.periods_per_week == last_period_in_week:  # 每周最后一个期间
                         if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
                             # 整周的氢气运输出库量（周级变量）
                             weekly_outbound_transport = gp.quicksum(
@@ -5468,7 +5504,7 @@ class DACHydrogenSAFOptimizer:
                             ]
                             if connected_destinations:
                                 logger.debug(
-                                    f"[周级运输] {location}: hour=167运出整周氢气，"
+                                    f"[周级运输] {location}: 第{hour}期间运出整周氢气，"
                                     f"连接目的地数量 {len(connected_destinations)}"
                                 )
 
@@ -5743,22 +5779,20 @@ class DACHydrogenSAFOptimizer:
 
         logger.info(f"[修复] 检测到 {len(self.hydrogen_pipeline_transport_vars)} 个管道运输变量（周级，索引为二元组）")
 
-        # 1. 管道建设决策约束：只有建设了管道才能进行运输
+        # 1. 管道容量约束：【禁用管道建设决策】管道默认可用，直接使用容量上限约束
         # 修复：管道运输变量是周级的，索引为 (h2_loc, mtj_loc)，不是 (h2_loc, mtj_loc, day)
         pipeline_capacity_constrs = 0
-        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_facility_vars:
-            if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                # 管道周运输量 <= 管道建设决策 * 大M（管道周最大容量）
-                max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
-                days_per_week = max(1.0, self.hours_per_week / 24.0)
-                max_weekly_pipeline_capacity = max_daily_pipeline_capacity * days_per_week
+        for (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
+            # 【禁用管道建设决策】管道默认可用，直接使用容量上限
+            max_daily_pipeline_capacity = self.config.get('capacity_limits', {}).get('hydrogen_pipeline_max_daily_capacity_kg', 50000)
+            days_per_week = max(1.0, self.real_hours_per_week / 24.0)  # 使用real_hours_per_week计算天数
+            max_weekly_pipeline_capacity = max_daily_pipeline_capacity * days_per_week
 
-                self.model.addConstr(
-                    self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <=
-                    self.hydrogen_pipeline_facility_vars[(h2_loc, mtj_loc)] * max_weekly_pipeline_capacity,
-                    name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_week"
-                )
-                pipeline_capacity_constrs += 1
+            self.model.addConstr(
+                self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= max_weekly_pipeline_capacity,
+                name=f"h2_pipeline_capacity_{h2_loc}_{mtj_loc}_week"
+            )
+            pipeline_capacity_constrs += 1
 
         logger.info(f"[修复] 添加了 {pipeline_capacity_constrs} 个管道容量约束（周级）")
 
@@ -5778,22 +5812,22 @@ class DACHydrogenSAFOptimizer:
 
             for h2_loc in self.hydrogen_locations:
                 for mtj_loc in locations:
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_facility_vars:
+                    # 【禁用管道建设决策】改为检查管道运输变量
+                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_transport_vars:
                         continue
 
-                    if (h2_loc, mtj_loc) in self.hydrogen_pipeline_transport_vars:
-                        # 管道周运输量 <= 该源地整周氢气生产量
-                        weeks = max(1, self.time_horizon_weeks)
-                        weekly_h2_production = gp.quicksum(
-                            self.hydrogen_production_vars[(h2_loc, hour)]
-                            for hour in range(self.total_hours)
-                            if (h2_loc, hour) in self.hydrogen_production_vars
-                        ) / float(weeks)
-                        self.model.addConstr(
-                            self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
-                            name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
-                        )
-                        pipeline_production_constrs += 1
+                    # 管道周运输量 <= 该源地整周氢气生产量
+                    weeks = max(1, self.time_horizon_weeks)
+                    weekly_h2_production = gp.quicksum(
+                        self.hydrogen_production_vars[(h2_loc, hour)]
+                        for hour in range(self.total_hours)
+                        if (h2_loc, hour) in self.hydrogen_production_vars
+                    ) / float(weeks)
+                    self.model.addConstr(
+                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
+                        name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
+                    )
+                    pipeline_production_constrs += 1
 
         logger.info(f"[修复] 添加了 {pipeline_production_constrs} 个管道生产限制约束（周级）")
         
@@ -6560,69 +6594,106 @@ class DACHydrogenSAFOptimizer:
     def solve(self) -> Dict:
         """求解优化模型"""
         logger.info("开始求解优化模型...")
-        
+
         if self.model is None:
             raise ValueError("模型尚未构建，请先调用build_model()")
-        
+
         # 求解
         self.model.optimize()
-        
+
+        # 定义状态码含义映射
+        status_names = {
+            1: "LOADED", 2: "OPTIMAL", 3: "INFEASIBLE", 4: "INF_OR_UNBD",
+            5: "UNBOUNDED", 6: "CUTOFF", 7: "ITERATION_LIMIT", 8: "NODE_LIMIT",
+            9: "TIME_LIMIT", 10: "SOLUTION_LIMIT", 11: "INTERRUPTED", 12: "NUMERIC",
+            13: "SUBOPTIMAL", 14: "INPROGRESS", 15: "USER_OBJ_LIMIT",
+            16: "WORK_LIMIT", 17: "MEM_LIMIT"
+        }
+        status_name = status_names.get(self.model.status, f"UNKNOWN({self.model.status})")
+
+        # 检查是否有可行解（无论状态如何，只要SolCount > 0就有解）
+        has_solution = self.model.SolCount > 0
+
+        logger.info(f"求解状态: {status_name} (代码: {self.model.status})")
+        logger.info(f"找到的解数量: {self.model.SolCount}")
+
         # 检查求解状态
         if self.model.status == GRB.OPTIMAL:
             logger.info("找到最优解")
-
-            # 【已删除IIS诊断代码】之前的IIS代码会破坏模型状态，导致无法提取ObjVal
-            # 简单检查产量但不执行IIS（IIS只对INFEASIBLE模型有效）
-            try:
-                if hasattr(self, 'performance_expressions') and 'production_total' in self.performance_expressions:
-                    production_total_value = self.performance_expressions['production_total'].getValue()
-                    logger.info(f"[产量检查] 总产量: {production_total_value:,.2f} kg")
-
-                    if production_total_value < 0.01:
-                        logger.warning("="*80)
-                        logger.warning("⚠️  检测到零产量问题！")
-                        logger.warning("可能原因:")
-                        logger.warning("  1. MTJ位置的氢气库存平衡缺失（已修复）")
-                        logger.warning("  2. 运输成本过高（检查距离计算是否返回1e9）")
-                        logger.warning("  3. shortage成本设置过低")
-                        logger.warning("="*80)
-                else:
-                    logger.warning("[产量检查] 未找到production_total表达式")
-            except Exception as e:
-                logger.error(f"[IIS诊断] 零产量检测失败: {e}")
-
+            self._check_production_after_solve()
             self._log_variable_summary_post_solve()
             return self._extract_solution()
-        elif self.model.status == GRB.TIME_LIMIT:
-            logger.warning("达到时间限制，返回当前最优解")
-            return self._extract_solution()
+
         elif self.model.status == GRB.INFEASIBLE:
             logger.error("模型不可行")
             # 计算IIS（不可行不可约子系统）来找出冲突约束
             logger.info("正在计算不可行不可约子系统(IIS)...")
             self.model.computeIIS()
-            
+
             # 输出IIS信息
             iis_file = "infeasible_model.ilp"
             self.model.write(iis_file)
             logger.info(f"不可行模型已保存为: {iis_file}")
-            
+
             # 统计冲突约束
             iis_constrs = []
             for constr in self.model.getConstrs():
                 if constr.IISConstr:
                     iis_constrs.append(constr.ConstrName)
-            
+
             logger.error(f"发现 {len(iis_constrs)} 个冲突约束:")
             for i, constr_name in enumerate(iis_constrs[:10]):  # 只打印前10个
                 logger.error(f"  {i+1}. {constr_name}")
             if len(iis_constrs) > 10:
                 logger.error(f"  ... 还有 {len(iis_constrs)-10} 个约束")
-            
+
             return {"status": "infeasible", "status_code": self.model.status, "iis_constraints": iis_constrs}
+
+        elif self.model.status == GRB.TIME_LIMIT and has_solution:
+            # 只处理TIME_LIMIT，MEM_LIMIT的解质量较差暂不处理
+            logger.warning(f"求解因 {status_name} 提前终止，但找到了可行解")
+
+            # 输出MIP Gap信息（如果可用）
+            try:
+                mip_gap = self.model.MIPGap
+                logger.info(f"当前MIP Gap: {mip_gap*100:.4f}%")
+                if mip_gap < 0.05:  # Gap < 5%
+                    logger.info("MIP Gap较小，解的质量很好")
+                elif mip_gap < 0.10:  # Gap < 10%
+                    logger.warning("MIP Gap中等，解的质量可接受")
+                else:
+                    logger.warning("MIP Gap较大，解可能还有优化空间")
+            except:
+                pass
+
+            self._check_production_after_solve()
+            self._log_variable_summary_post_solve()
+            return self._extract_solution()
+
         else:
-            logger.error(f"求解失败，状态: {self.model.status}")
-            return {"status": "failed", "status_code": self.model.status}
+            # 没有可行解
+            logger.error(f"求解失败，状态: {status_name}，未找到可行解")
+            return {"status": "failed", "status_code": self.model.status, "status_name": status_name}
+
+    def _check_production_after_solve(self):
+        """求解后检查产量是否正常"""
+        try:
+            if hasattr(self, 'performance_expressions') and 'production_total' in self.performance_expressions:
+                production_total_value = self.performance_expressions['production_total'].getValue()
+                logger.info(f"[产量检查] 总产量: {production_total_value:,.2f} kg")
+
+                if production_total_value < 0.01:
+                    logger.warning("="*80)
+                    logger.warning("⚠️  检测到零产量问题！")
+                    logger.warning("可能原因:")
+                    logger.warning("  1. MTJ位置的氢气库存平衡缺失（已修复）")
+                    logger.warning("  2. 运输成本过高（检查距离计算是否返回1e9）")
+                    logger.warning("  3. shortage成本设置过低")
+                    logger.warning("="*80)
+            else:
+                logger.warning("[产量检查] 未找到production_total表达式")
+        except Exception as e:
+            logger.error(f"[产量检查] 检测失败: {e}")
     
     def _log_variable_summary_post_solve(self) -> None:
         """求解后输出关键变量的汇总信息，辅助诊断产量为0问题"""
@@ -6908,29 +6979,19 @@ class DACHydrogenSAFOptimizer:
             print(f"总氢气运输量: {total_h2_transport:.2f} kg/week")
         print("=======================\n")
 
-        # ===== v4.1：提取CO₂管道运输方案 =====
+        # ===== v4.1：提取CO₂管道运输方案（v4.2变更：周级变量） =====
         solution['co2_transport'] = {}
         if hasattr(self, 'co2_pipeline_flow_vars') and self.co2_pipeline_flow_vars:
-            co2_transport_summary = {}
-            for (dac_loc, saf_loc, hour), var in self.co2_pipeline_flow_vars.items():
+            # 确保距离缓存存在
+            self._ensure_co2_pipeline_distance_cache()
+
+            # v4.2变更：CO₂管道运输变量已改为周级 (dac_loc, saf_loc)
+            for (dac_loc, saf_loc), var in self.co2_pipeline_flow_vars.items():
                 flow_value = var.x if hasattr(var, 'x') else 0.0
                 if flow_value <= 1e-6 or dac_loc == saf_loc:
                     continue
 
-                key = (dac_loc, saf_loc)
-                summary = co2_transport_summary.setdefault(key, {
-                    'from_location': dac_loc,
-                    'to_location': saf_loc,
-                    'transport_kg_co2': 0.0,
-                    'active_hours': 0
-                })
-                summary['transport_kg_co2'] += flow_value  # 每小时变量代表当小时运输量
-                summary['active_hours'] += 1
-
-            # 确保距离缓存存在
-            self._ensure_co2_pipeline_distance_cache()
-
-            for (dac_loc, saf_loc), info in co2_transport_summary.items():
+                # 获取距离信息
                 cache_key = (dac_loc, saf_loc)
                 distance_info = self.co2_pipeline_distance_cache.get(cache_key)
                 if distance_info is None:
@@ -6942,14 +7003,13 @@ class DACHydrogenSAFOptimizer:
                 to_lat = self.locations.get(saf_loc, {}).get('latitude', 0.0)
                 to_lon = self.locations.get(saf_loc, {}).get('longitude', 0.0)
 
-                total_weekly = info['transport_kg_co2']
+                # 周级变量直接就是周运输量
+                total_weekly = flow_value
                 solution_key = f"{dac_loc}_{saf_loc}"
                 solution['co2_transport'][solution_key] = {
                     'from_location': dac_loc,
                     'to_location': saf_loc,
                     'transport_kg_co2_per_week': total_weekly,
-                    'avg_hourly_transport_kg': total_weekly / info['active_hours'] if info['active_hours'] else 0,
-                    'active_hours': info['active_hours'],
                     'total_distance_km': distance_info.get('total_distance_km', distance_info.get('distance_km', 0)),
                     'layer1_distance_km': distance_info.get('layer1_distance_km', 0),
                     'layer2_distance_km': distance_info.get('layer2_distance_km', 0),
@@ -8785,17 +8845,18 @@ class DACHydrogenSAFOptimizer:
 
     def _add_co2_inventory_balance_constraints(self):
         """
-        添加CO₂库存平衡约束（v4.1：支持独立DAC+管道运输）
+        添加CO₂库存平衡约束（v4.2：周级管道运输，周初统一入库）
 
         约束逻辑：
-        CO₂库存[t] = CO₂库存[t-1] + Σ(运入) - 甲醇生产消耗[t]
+        CO₂库存[t] = CO₂库存[t-1] + 运入 - 消耗[t]
 
-        其中：
-        - 运入 = Σ(DAC位置→本SAF工厂的管道流量) + 本地DAC捕获量（如果共址）
-        - 消耗 = 甲醇生产所需的CO₂量
+        v4.2变更：
+        - 管道运输从小时级改为周级
+        - 周初（每周第一个期间）统一入库整周的管道运输量
+        - 本地DAC捕获仍为小时级
         """
         logger.info("=" * 60)
-        logger.info("添加CO₂库存平衡约束 (v4.1)")
+        logger.info("添加CO₂库存平衡约束 (v4.2 周级管道运输)")
         logger.info("=" * 60)
 
         tech_key = 'green_h2_co2_to_saf'
@@ -8840,15 +8901,20 @@ class DACHydrogenSAFOptimizer:
                 # CO₂运入量
                 co2_inflow = gp.LinExpr(0)
 
-                # 方式1: 管道运输运入（从其他DAC位置）
-                if hasattr(self, 'dac_facility_vars'):
-                    for dac_loc in self.dac_facility_vars.keys():
-                        if dac_loc == saf_loc:
-                            continue  # 共址情况单独处理
-                        if (dac_loc, saf_loc, hour) in self.co2_pipeline_flow_vars:
-                            co2_inflow += self.co2_pipeline_flow_vars[(dac_loc, saf_loc, hour)]
+                # 方式1: 管道运输运入（周级变量，周初统一入库）
+                # v4.2变更：只在每周第一个期间入库整周的运输量
+                if hour % self.periods_per_week == 0:  # 每周第一个期间入库
+                    if hasattr(self, 'dac_facility_vars') and hasattr(self, 'co2_pipeline_flow_vars'):
+                        # 整周的CO₂运输入库量（周级变量）
+                        weekly_inbound_transport = gp.quicksum(
+                            self.co2_pipeline_flow_vars[(dac_loc, saf_loc)]
+                            for dac_loc in self.dac_facility_vars.keys()
+                            if (dac_loc, saf_loc) in self.co2_pipeline_flow_vars
+                            and dac_loc != saf_loc  # 排除共址情况
+                        )
+                        co2_inflow += weekly_inbound_transport
 
-                # 方式2: 本地DAC捕获（如果DAC与SAF共址）
+                # 方式2: 本地DAC捕获（如果DAC与SAF共址，仍为小时级）
                 if (saf_loc, hour) in self.dac_co2_supply:
                     co2_inflow += self.dac_co2_supply[(saf_loc, hour)]
 
@@ -8868,7 +8934,7 @@ class DACHydrogenSAFOptimizer:
                 )
                 constraint_count += 1
 
-        # CO₂库存非负约束，避免通过负库存“借用”CO₂
+        # CO₂库存非负约束，避免通过负库存"借用"CO₂
         nonneg_constraints = 0
         for saf_loc in saf_locations:
             for hour in range(self.total_hours + 1):
@@ -8884,11 +8950,16 @@ class DACHydrogenSAFOptimizer:
         if nonneg_constraints > 0:
             logger.info(f"添加了 {nonneg_constraints} 个CO₂库存非负约束")
         logger.info(f"添加了 {constraint_count} 个CO₂库存平衡约束")
+        logger.info(f"v4.2变更：管道运输在每周第一个期间（period 0）统一入库")
         logger.info("=" * 60)
 
     def _add_co2_pipeline_flow_constraints(self):
-        """限制CO₂管道流量不超过对应DAC捕获量，避免无源供应"""
-        logger.info("添加CO₂管道流量约束（绑定DAC捕获量）...")
+        """限制CO₂管道流量不超过对应DAC捕获量（v4.2 周级约束）
+
+        v4.2变更：从小时级改为周级约束
+        - 约束：每个DAC位置的周运输量 <= 周捕获量
+        """
+        logger.info("添加CO₂管道流量约束（v4.2 周级，绑定DAC捕获量）...")
 
         if not hasattr(self, 'co2_pipeline_flow_vars') or not self.co2_pipeline_flow_vars:
             logger.info("未定义CO₂管道运输变量，跳过约束添加")
@@ -8902,31 +8973,33 @@ class DACHydrogenSAFOptimizer:
         dac_locations = set(loc for (loc, _) in self.dac_co2_supply.keys())
 
         for dac_loc in dac_locations:
-            for hour in range(self.total_hours):
-                outgoing_vars = [
-                    self.co2_pipeline_flow_vars[(dac_loc, saf_loc, hour)]
-                    for saf_loc in self.locations.keys()
-                    if (dac_loc, saf_loc, hour) in self.co2_pipeline_flow_vars
-                ]
+            # 计算该DAC位置整周的捕获量
+            weekly_capture = gp.quicksum(
+                self.dac_co2_supply[(dac_loc, hour)]
+                for hour in range(self.total_hours)
+                if (dac_loc, hour) in self.dac_co2_supply
+            )
 
-                if not outgoing_vars:
-                    continue
+            # 计算该DAC位置整周的运输量（所有目的地之和）
+            outgoing_vars = [
+                self.co2_pipeline_flow_vars[(dac_loc, saf_loc)]
+                for saf_loc in self.locations.keys()
+                if (dac_loc, saf_loc) in self.co2_pipeline_flow_vars
+            ]
 
-                supply_key = (dac_loc, hour)
-                if supply_key not in self.dac_co2_supply:
-                    logger.warning(
-                        f"未找到 {dac_loc} 在第 {hour} 小时的DAC捕获变量，跳过对应CO₂流量约束"
-                    )
-                    continue
+            if not outgoing_vars:
+                continue
 
-                total_outflow = gp.quicksum(outgoing_vars)
-                self.model.addConstr(
-                    total_outflow <= self.dac_co2_supply[supply_key],
-                    name=f"co2_pipeline_outflow_capacity_{dac_loc}_{hour}"
-                )
-                constraints_added += 1
+            total_weekly_outflow = gp.quicksum(outgoing_vars)
 
-        logger.info(f"添加了 {constraints_added} 个CO₂管道流量约束")
+            # 约束：周运输量 <= 周捕获量
+            self.model.addConstr(
+                total_weekly_outflow <= weekly_capture,
+                name=f"co2_pipeline_outflow_capacity_{dac_loc}_week"
+            )
+            constraints_added += 1
+
+        logger.info(f"添加了 {constraints_added} 个CO₂管道流量约束（周级）")
 
     def _ensure_co2_pipeline_distance_cache(self):
         """确保CO2管道距离已经缓存，便于成本与结果分析"""
@@ -8936,9 +9009,10 @@ class DACHydrogenSAFOptimizer:
         if not hasattr(self, 'co2_pipeline_distance_cache'):
             self.co2_pipeline_distance_cache = {}
 
+        # v4.2变更：CO₂管道运输变量已改为周级 (dac_loc, saf_loc)
         route_pairs = {
             (dac_loc, saf_loc)
-            for (dac_loc, saf_loc, _) in self.co2_pipeline_flow_vars.keys()
+            for (dac_loc, saf_loc) in self.co2_pipeline_flow_vars.keys()
             if dac_loc != saf_loc
         }
 
@@ -8983,8 +9057,8 @@ class DACHydrogenSAFOptimizer:
                 logger.info(f"CO2管道距离缓存进度: {index}/{len(missing_pairs)} 条")
 
     def _add_co2_pipeline_transport_cost(self, lifecycle_operation_factor: float):
-        """根据距离与流量计算CO₂管道运输成本"""
-        logger.info("计算CO2管道运输成本...")
+        """根据距离与流量计算CO₂管道运输成本（v4.2 周级变量）"""
+        logger.info("计算CO2管道运输成本（v4.2 周级）...")
 
         if not hasattr(self, 'cost_expressions'):
             self.cost_expressions = {}
@@ -8996,10 +9070,10 @@ class DACHydrogenSAFOptimizer:
         # 确保距离缓存完备
         self._ensure_co2_pipeline_distance_cache()
 
-        # 计算成本表达式
+        # 计算成本表达式（周级变量）
         transport_terms = []
         used_pairs = set()
-        for (dac_loc, saf_loc, hour), flow_var in self.co2_pipeline_flow_vars.items():
+        for (dac_loc, saf_loc), flow_var in self.co2_pipeline_flow_vars.items():
             if dac_loc == saf_loc:
                 continue
 
@@ -9016,6 +9090,7 @@ class DACHydrogenSAFOptimizer:
                 logger.debug(f"CO2管道单位成本为0或负数 ({dac_loc}->{saf_loc}, distance={distance_km}km)，跳过")
                 continue
 
+            # 周级运输量 × 单位成本
             transport_terms.append(flow_var * unit_cost)
             used_pairs.add(cache_key)
 
