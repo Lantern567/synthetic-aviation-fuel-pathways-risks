@@ -12,6 +12,13 @@ DAC直接空气捕获+绿氢制SAF供应链优化模型 (v4.0)
 集成OSM真实路网数据进行距离计算和路径规划
 """
 
+# ============================================================================
+# CRITICAL: 必须在导入gurobipy之前设置Gurobi许可证路径
+# ============================================================================
+import os
+# 强制使用正确的许可证文件路径（无论环境变量如何设置）
+os.environ['GRB_LICENSE_FILE'] = '/home/ljt/gurobi.lic'
+
 import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
@@ -21,7 +28,6 @@ import gc  # 用于显式垃圾回收，释放大数据对象内存
 import psutil  # 用于监控内存使用情况
 import time
 from typing import Dict, List, Tuple, Optional
-import os
 import json
 import re
 import traceback

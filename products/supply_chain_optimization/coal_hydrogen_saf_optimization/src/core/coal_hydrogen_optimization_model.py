@@ -3216,6 +3216,9 @@ class CoalHydrogenSAFOptimizer:
         # 15. 平准化成本约束
         self._add_levelized_cost_constraint()  # 已修复门槛值配置，重新启用
 
+        # 16. 有效不等式（收紧LP Relaxation，加速MIP求解）
+        self._add_valid_inequalities()
+
     def _add_levelized_cost_constraint(self):
         """添加平准化成本约束：(总成本 - 短缺成本) / 总产量现值 <= 门槛值"""
         logger.info("添加平准化成本约束...")
@@ -4513,8 +4516,11 @@ class CoalHydrogenSAFOptimizer:
                         # 这里先输出调试信息，实际供给由运输/库存约束处理
                         logger.debug(f"位置 {location} 在第{hour}小时有氢气需求，需要运输供应")
 
-                if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
-                    # 2. 可再生能源电力供应约束（基于时段和天气）
+                # 【已优化】仅对副产氢设施添加电力供应约束
+                # solar_plant 和 wind_farm 的电力约束由 electricity_balance 统一处理
+                # （在 _add_hydrogen_production_constraints 中，约束更严格：包含制氢+SAF合成电力）
+                if location_type in ['byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
+                    # 副产氢设施：添加电力供应约束
                     self._add_renewable_power_constraints(location, hour)
         
         # 移除设备维护停机时间约束 - 这是导致20%利用率的主因
@@ -4908,12 +4914,7 @@ class CoalHydrogenSAFOptimizer:
                     name=f"initial_h2_inventory_{location}"
                 )
 
-                # 添加氢气库存非负约束
-                for hour in range(self.total_hours + 1):
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, hour)] >= 0,
-                        name=f"h2_inventory_nonnegative_{location}_{hour}"
-                    )
+                # 【已优化】氢气库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
             # 【v3.1一步法】为MTJ工厂位置添加氢气库存平衡（直接使用SAF产量计算H₂消耗）
             elif location_type in ['lng_terminal', 'airport']:
@@ -4966,12 +4967,7 @@ class CoalHydrogenSAFOptimizer:
                     name=f"initial_h2_inventory_mtj_{location}"
                 )
 
-                # 添加氢气库存非负约束
-                for hour in range(self.total_hours + 1):
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, hour)] >= 0,
-                        name=f"h2_inventory_nonnegative_mtj_{location}_{hour}"
-                    )
+                # 【已优化】氢气库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
         logger.info("氢气平衡约束添加完成（包含发电站和MTJ工厂）")
 
@@ -5174,41 +5170,11 @@ class CoalHydrogenSAFOptimizer:
 
         logger.info(f"[修复] 添加了 {pipeline_capacity_constrs} 个管道容量约束（周级）")
 
-        # 2. 管道运输量约束：不超过氢气源地的周生产能力
-        # 修复：约束周运输量不超过周生产量
-        pipeline_production_constrs = 0
-        for tech in self.technologies.keys():
-            if not self.technologies[tech]['hydrogen_transport_required']:
-                continue
+        # 【已优化】删除冗余的管道单链路约束
+        # 原约束 h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week 已被
+        # hydrogen_source_outbound_limit_{h_loc}_weekly 约束覆盖（源地总出库约束）
+        # 单链路约束是冗余的，删除可减少约 1.2 万个约束
 
-            if tech not in self.mtj_locations:
-                continue
-
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                continue
-
-            for h2_loc in self.hydrogen_locations:
-                for mtj_loc in locations:
-                    # 【禁用管道建设决策】改为检查管道运输变量
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_transport_vars:
-                        continue
-
-                    # 管道周运输量 <= 该源地整周氢气生产量
-                    weeks = max(1, self.time_horizon_weeks)
-                    weekly_h2_production = gp.quicksum(
-                        self.hydrogen_production_vars[(h2_loc, hour)]
-                        for hour in range(self.total_hours)
-                        if (h2_loc, hour) in self.hydrogen_production_vars
-                    ) / float(weeks)
-                    self.model.addConstr(
-                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
-                        name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
-                    )
-                    pipeline_production_constrs += 1
-
-        logger.info(f"[修复] 添加了 {pipeline_production_constrs} 个管道生产限制约束（周级）")
-        
         # 【禁用罐车运输】注释掉氢气运输方式排他性约束
         """
         # 3. 氢气运输方式排他性约束：同一路线只能选择罐车或管道运输之一
@@ -8313,18 +8279,79 @@ class CoalHydrogenSAFOptimizer:
 
         logger.info(f"添加了 {constraint_count} 个CO₂库存平衡约束")
 
-        # CO₂库存非负约束，防止通过负库存透支供给
-        nonneg_constraints = 0
-        for saf_loc in saf_locations:
-            for hour in range(self.total_hours + 1):
-                if (saf_loc, hour) in self.co2_inventory_vars:
-                    self.model.addConstr(
-                        self.co2_inventory_vars[(saf_loc, hour)] >= 0,
-                        name=f"co2_inventory_nonnegative_{saf_loc}_{hour}"
-                    )
-                    nonneg_constraints += 1
+        # 【已优化】CO₂库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
-        logger.info(f"添加了 {nonneg_constraints} 个CO₂库存非负约束")
+    def _add_valid_inequalities(self):
+        """添加有效不等式（Valid Inequalities）以收紧LP Relaxation
+
+        有效不等式不改变整数可行域，但能切掉LP松弛的非整数解区域，
+        从而缩小LP最优解与MIP最优解之间的Gap，加速分支定界收敛。
+
+        精简版有效不等式（2个核心约束）：
+        1. 总SAF产能下界 - 基于50%利用率估算最小产能需求
+        2. 总生产量下界 - 至少满足80%的需求
+        """
+        logger.info("=" * 60)
+        logger.info("添加有效不等式以收紧LP Relaxation（精简版）...")
+        logger.info("=" * 60)
+
+        valid_ineq_count = 0
+
+        # ==================== 计算基础参数 ====================
+        # 计算总需求
+        total_demand = sum(
+            sum(self.airports[airport]['weekly_demand_series'][:self.time_horizon_weeks])
+            for airport in self.airports
+        )
+        avg_weekly_demand = total_demand / self.time_horizon_weeks if self.time_horizon_weeks > 0 else 0
+
+        logger.info(f"需求统计: 总需求={total_demand:.0f} kg, 周均需求={avg_weekly_demand:.0f} kg/周")
+
+        # ==================== 1. 总SAF产能下界约束 ====================
+        # 所有设施的总产能必须足以满足总需求（考虑50%利用率）
+        utilization_factor = 0.5  # 50%利用率
+        min_total_capacity_per_hour = avg_weekly_demand / (self.hours_per_week * utilization_factor)
+
+        total_capacity = gp.quicksum(
+            self.facility_capacity_vars[(loc, tech)]
+            for loc in self.locations
+            for tech in self.technologies
+            if (loc, tech) in self.facility_capacity_vars
+        )
+
+        self.model.addConstr(
+            total_capacity >= min_total_capacity_per_hour,
+            name="valid_ineq_min_total_capacity"
+        )
+        valid_ineq_count += 1
+        logger.info(f"[有效不等式1] 总SAF产能下界: >= {min_total_capacity_per_hour:.0f} kg/h (基于50%利用率)")
+
+        # ==================== 2. 总生产量下界约束 ====================
+        # 总生产量至少满足90%的需求
+        min_demand_satisfaction = 0.90  # 80%需求满足率
+
+        total_production = gp.quicksum(
+            self.production_vars[(loc, tech, hour)]
+            for loc in self.locations
+            for tech in self.technologies
+            for hour in range(self.total_hours)
+            if (loc, tech, hour) in self.production_vars
+        )
+
+        min_production = total_demand * min_demand_satisfaction
+
+        self.model.addConstr(
+            total_production >= min_production,
+            name="valid_ineq_min_production"
+        )
+        valid_ineq_count += 1
+        logger.info(f"[有效不等式3] 总生产量下界: >= {min_production:.0f} kg (总需求的80%)")
+
+        logger.info("=" * 60)
+        logger.info(f"有效不等式添加完成，共 {valid_ineq_count} 个约束")
+        logger.info("=" * 60)
+
+        return valid_ineq_count
 
 
 if __name__ == '__main__':

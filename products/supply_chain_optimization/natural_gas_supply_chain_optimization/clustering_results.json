@@ -1,6 +1,6 @@
 {
-  "total_clusters": 0,
-  "total_noise_points": 1,
+  "total_clusters": 6,
+  "total_noise_points": 10,
   "clustering_params": {
     "enable_clustering": true,
     "enable_pipeline_optimization": true,
@@ -16,13 +16,680 @@
     "processing_cost_base": 10.0
   },
   "primary_cluster_type": "mixed",
-  "clusters": [],
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "cluster_name": "mixed_cluster_0",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "Beijing CGN Haifeng Agricultural Greenhouse solar project",
+        "Beijing Foton Cummins Engine ISF factory solar project",
+        "Beijing Foton Cummins Engine solar project",
+        "Beijing Fuyang New Energy Technology I solar project",
+        "Beijing Fuyang New Energy Technology II solar project",
+        "Beijing Guangdong Jianlibao Beverage solar project",
+        "Beijing Hainachuan Auto Benz supporting industrial park user-side solar project",
+        "Beijing Hanlong New Energy Technology Development solar project",
+        "Beijing Hengan Green Valley Environmental Protection Technology solar project",
+        "Beijing Huadian solar project",
+        "Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project",
+        "Beijing Jineng New Energy Technology solar project",
+        "Beijing Jingfang Smart Energy Technology solar project",
+        "Beijing Jingxi Heavy Industry solar project",
+        "Beijing Jiulang Photovoltaic Technology solar project",
+        "Beijing Lanjing Shengnuoer Energy Technology solar project",
+        "Beijing Lvdong Future New Energy Development I solar project",
+        "Beijing Lvdong Future New Energy Development II solar project",
+        "Beijing Pushun New Energy solar project",
+        "Beijing Qinghe Reclaimed Water Plant solar project",
+        "Beijing Qingying Photovoltaic Technology solar project",
+        "Beijing Ruilian Xieyuan New Energy Technology solar project",
+        "Beijing Runneng Energy Services solar project",
+        "Beijing Tiantuo New Energy I solar project",
+        "Beijing Tiantuo New Energy II solar project",
+        "Beijing Yadongda Zhenxing Energy Technology Development solar project",
+        "Beijing Yaorui Energy Technology solar project",
+        "Beijing Yueyang Changsheng New Energy Technology solar project",
+        "Beijing Zhongguanbao New Energy Investment solar project",
+        "Beijing Zhonghui Baoping solar project",
+        "Beijing solar project",
+        "China Qingneng Oasis Technology solar project",
+        "Huitong Times Square solar project",
+        "Jiuxianqiao solar project",
+        "Qinghe Reclaimed Water Plant solar project",
+        "Xiaohongmen Reclaimed Water Plant I solar project",
+        "Xiaohongmen Reclaimed Water Plant II solar project"
+      ],
+      "member_coords": [
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ],
+        [
+          39.9057,
+          116.3913
+        ]
+      ],
+      "center_coord": [
+        39.905699999999996,
+        116.39130000000004
+      ],
+      "geo_center": [
+        39.905699999999996,
+        116.39130000000004
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 1,
+      "cluster_name": "mixed_cluster_1",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "Beijing Shunyi Holdings I solar project",
+        "Beijing Shunyi Holdings II solar project"
+      ],
+      "member_coords": [
+        [
+          40.1488,
+          116.6539
+        ],
+        [
+          40.1488,
+          116.6539
+        ]
+      ],
+      "center_coord": [
+        40.1488,
+        116.6539
+      ],
+      "geo_center": [
+        40.1488,
+        116.6539
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 2,
+      "cluster_name": "mixed_cluster_2",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "CPI Tianjin Wuqing I solar project",
+        "CPI Tianjin Wuqing II solar project",
+        "China New Energy solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project",
+        "Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project",
+        "Langfang Fuyang New Energy Technology solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse I solar project",
+        "State Power Investment Supply and Cooperative Cotton Warehouse II solar project",
+        "Tianjin Qinghao Wuqing District solar project",
+        "Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm",
+        "Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm",
+        "Xinyi Glass Wuqing solar project",
+        "Xiqing District fishing and photovoltaic complementary solar project",
+        "Tianjin Baigutun Distributed wind farm",
+        "Tianjin Beichen Shuangkouzhen wind farm",
+        "Tianjin Wuqing Baigutunzhen (TBEA) wind farm",
+        "Tianjin Wuqing Chagugang Distributed wind farm",
+        "Tianjin Wuqing Chagugang wind farm",
+        "Tianjin Wuqing Chengguan (Sinohydro) wind farm",
+        "Tianjin Wuqing Chenzuizhen Distributed wind farm",
+        "Tianjin Wuqing Chenzuizhen wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm",
+        "Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm",
+        "Tianjin Wuqing Dawangguzhuang (Huadian) wind farm",
+        "Tianjin Wuqing Gaocun (Huadian) wind farm",
+        "Tianjin Wuqing Hebeitun wind farm",
+        "Tianjin Wuqing Shangmataizhen wind farm",
+        "Tianjin Wuqing Sicundian wind farm"
+      ],
+      "member_coords": [
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.5302,
+          116.6926
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.5355,
+          117.1976
+        ],
+        [
+          39.3783,
+          117.0358
+        ],
+        [
+          39.1403,
+          117.003
+        ],
+        [
+          39.552,
+          116.9077
+        ],
+        [
+          39.2298,
+          117.0303
+        ],
+        [
+          39.5495,
+          116.9021
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.258,
+          116.949
+        ],
+        [
+          39.5304,
+          116.8682
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.2868,
+          116.9956
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5316,
+          117.1939
+        ],
+        [
+          39.5716,
+          116.8166
+        ],
+        [
+          39.6372,
+          116.8775
+        ],
+        [
+          39.5834,
+          117.1355
+        ],
+        [
+          39.4218,
+          117.1956
+        ],
+        [
+          39.4796,
+          116.9527
+        ]
+      ],
+      "center_coord": [
+        39.399589082093115,
+        117.00331375229707
+      ],
+      "geo_center": [
+        39.399589082093115,
+        117.00331375229707
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 3,
+      "cluster_name": "mixed_cluster_3",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "Datang Tianjin Panshan Power Plant solar project",
+        "Hebei Langfang Dacheng wind farm",
+        "Tianjin Baodi Distributed wind farm",
+        "Tianjin Baodi Wangbuzhuang wind farm",
+        "Tianjin Jizhou (China Power Construction) wind farm",
+        "Tianjin Jizhou Baijian (Huadian) wind farm",
+        "Tianjin Jizhou Bangjunzhen wind farm",
+        "Tianjin Jizhou Dong'eryingzhen wind farm",
+        "Tianjin Jizhou Dongshigu (Huadian) wind farm",
+        "Tianjin Jizhou Houjiaying (Huadian) wind farm",
+        "Tianjin Jizhou Sangzi (Huadian) wind farm",
+        "Tianjin Jizhou Xiacangzhen (Runchuang) wind farm",
+        "Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm",
+        "Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm"
+      ],
+      "member_coords": [
+        [
+          40.0439,
+          117.4008
+        ],
+        [
+          39.8501,
+          117.0489
+        ],
+        [
+          39.7595,
+          117.3306
+        ],
+        [
+          39.6857,
+          117.4404
+        ],
+        [
+          39.9573,
+          117.4929
+        ],
+        [
+          39.9967,
+          117.2216
+        ],
+        [
+          39.9897,
+          117.2937
+        ],
+        [
+          39.9586,
+          117.2868
+        ],
+        [
+          39.8864,
+          117.3245
+        ],
+        [
+          39.8542,
+          117.2487
+        ],
+        [
+          39.9089,
+          117.166
+        ],
+        [
+          39.7897,
+          117.4201
+        ],
+        [
+          39.863,
+          117.3996
+        ],
+        [
+          39.8697,
+          117.4194
+        ],
+        [
+          39.9092,
+          117.2476
+        ]
+      ],
+      "center_coord": [
+        39.88822948995563,
+        117.3161285856741
+      ],
+      "geo_center": [
+        39.88822948995563,
+        117.3161285856741
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 4,
+      "cluster_name": "mixed_cluster_4",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "Hebei Huai Tumuzhen CECEP solar farm",
+        "Hebei Olympic Photovoltaic Corridor Project solar farm",
+        "Hebei Zhangjiakou Huailai Yitai solar farm",
+        "Beijing Changping Qinghuiling wind/solar demonstration project",
+        "Beijing Lumingshan Guanting wind farm",
+        "Beijing Yanqing Lumingshang Guanting wind farm",
+        "Hebei Huailai (Jingneng) wind farm",
+        "Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm",
+        "Hebei Huailai (Shengshi New Energy) wind farm",
+        "Hebei Huailai (Shengyao) wind-solar hybrid wind farm",
+        "Hebei Huailai (Taihui) wind farm",
+        "Hebei Huailai (Zhuofeng) wind farm",
+        "Hebei Huailai Qinghuiling wind farm",
+        "Hebei Huailai wind farm"
+      ],
+      "member_coords": [
+        [
+          40.3753,
+          115.5967
+        ],
+        [
+          40.3083,
+          115.5845
+        ],
+        [
+          40.3083,
+          115.5845
+        ],
+        [
+          40.227,
+          115.897
+        ],
+        [
+          40.3006,
+          115.7599
+        ],
+        [
+          40.3222,
+          115.6249
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.1758,
+          115.5195
+        ],
+        [
+          40.4172,
+          115.5179
+        ],
+        [
+          40.2873,
+          115.543
+        ],
+        [
+          40.3991,
+          115.5985
+        ],
+        [
+          40.4133,
+          115.752
+        ],
+        [
+          40.302,
+          115.8214
+        ],
+        [
+          40.3838,
+          115.639
+        ]
+      ],
+      "center_coord": [
+        40.32202093114889,
+        115.64156947307603
+      ],
+      "geo_center": [
+        40.32202093114889,
+        115.64156947307603
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 5,
+      "cluster_name": "mixed_cluster_5",
+      "cluster_type": "mixed",
+      "member_locations": [
+        "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
+        "Yongqing Environmental Protection solar project"
+      ],
+      "member_coords": [
+        [
+          39.3255,
+          116.4941
+        ],
+        [
+          39.3208,
+          116.4902
+        ]
+      ],
+      "center_coord": [
+        39.32315001626686,
+        116.49214993448338
+      ],
+      "geo_center": [
+        39.32315001626686,
+        116.49214993448338
+      ],
+      "total_capacity_kg_per_hour": 0
+    }
+  ],
   "noise_points": [
     {
-      "location": "refinery_Sinopec Beijing Refinery",
+      "location": "Beijing Miyun Xitiangezhuang Huadian solar farm",
       "coords": [
-        39.72377,
-        116.083453
+        40.444,
+        116.746
+      ]
+    },
+    {
+      "location": "Beijing Yanqing Longqingxia solar farm",
+      "coords": [
+        40.5275,
+        116.0122
+      ]
+    },
+    {
+      "location": "Dingxing County Xinyang New Energy Technology solar project",
+      "coords": [
+        39.2129,
+        115.7492
+      ]
+    },
+    {
+      "location": "Fangshan agricultural greenhouse solar project",
+      "coords": [
+        39.7456,
+        116.1371
+      ]
+    },
+    {
+      "location": "Hebei Laiyuan Shou'ao (Jiansheng) solar farm",
+      "coords": [
+        39.3979,
+        115.7125
+      ]
+    },
+    {
+      "location": "Hebei Rongcheng- Wuhai Expressway Distributed solar farm",
+      "coords": [
+        39.0922,
+        116.5566
+      ]
+    },
+    {
+      "location": "Nankou solar project",
+      "coords": [
+        40.217,
+        116.171
+      ]
+    },
+    {
+      "location": "Hebei Zhuolu (Suntien) wind farm",
+      "coords": [
+        40.2122,
+        115.3378
+      ]
+    },
+    {
+      "location": "Shaanxi Longxian Hebeizhen wind farm",
+      "coords": [
+        39.8195,
+        115.9377
+      ]
+    },
+    {
+      "location": "Tianjin Wuqing Dabaizhuang (Huadian) wind farm",
+      "coords": [
+        39.4496,
+        117.3831
       ]
     }
   ]
