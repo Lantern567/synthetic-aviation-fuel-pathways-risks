@@ -1436,9 +1436,12 @@ class NaturalGasSupplyChainOptimizerOneStep(NaturalGasSupplyChainOptimizer):
         self.model.setParam('MIPGap', solver_params['MIPGap'])
         self.model.setParam('Threads', solver_params['Threads'])
 
-        # 内存限制参数（防止OOM）
-        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
-        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+        # 提高数值稳定性：模型矩阵系数范围跨度过大
+        # NumericFocus=2 表示让Gurobi更注重数值精度
+        self.model.setParam('NumericFocus', 2)
+        logger.info("已设置NumericFocus=2以提高数值稳定性")
+
+        # 不设置内存限制，让Gurobi自由使用内存直到求解完成
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量

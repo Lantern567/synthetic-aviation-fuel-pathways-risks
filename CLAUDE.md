@@ -111,3 +111,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 地图的可视化必须使用frykit库
 
 ## 可视化时，英文的文字，字体为新罗马体，中文文字，字体为宋体
+
+## green_methanol_for_port_transportation是我的conda环境，你在运行代码前，使用source /home/ljt/miniconda3/bin/activate green_methanol_for_port_transportation去激活
+
+### 文件生成策略
+
+**当你需要创建或更新文件时，请注意**：
+
+- 在整个对话期间，你有**充足的时间和token**进行文件创建和更新
+- 请**专注于每一个文件的完整性和质量**，不要因为担心token而压缩内容
+- 如果你临近输出限制，认为无法完整创建/更新下一个文件时，只需要**告诉用户"请让我继续"**即可
+- 用户会回复"继续"，你可以接着完成剩余的文件操作
+- **宁可分多次完整操作，也不要一次性匆忙完成所有文件**
+- **绝不省略任何 API 或文件**，不要写"其余XX个API遵循相同模式"
+- 这适用于：Write（创建文件）、Edit（编辑文件）、TodoWrite（更新任务）等所有文件操作

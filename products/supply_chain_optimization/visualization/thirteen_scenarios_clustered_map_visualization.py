@@ -128,7 +128,7 @@ class ThirteenScenariosClusteredMapVisualizer:
                 'name_cn': '煤制氢',
                 'color': '#E74C3C',
                 'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/clustering_results.json'),
-                'co2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/co2_clustering_results.json'),
+                'co2_clustering_file': None,  # v3.0煤炭气化路线不需要CO2运输
                 'ng_clustering_file': None,
                 'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/transport_summary_*.csv'),
                 'complete_solution_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/complete_solution_*.json')
@@ -195,7 +195,7 @@ class ThirteenScenariosClusteredMapVisualizer:
                 'name_cn': '副产氢+煤',
                 'color': '#FF6B6B',
                 'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/byproduct_clustering_results.json'),
-                'co2_clustering_file': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/co2_clustering_results.json'),
+                'co2_clustering_file': None,  # v3.0煤炭气化路线不需要CO2运输
                 'ng_clustering_file': None,
                 'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/transport_summary_*.csv'),
                 'complete_solution_pattern': str(project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/complete_solution_*.json')
@@ -230,7 +230,7 @@ class ThirteenScenariosClusteredMapVisualizer:
             'Byproduct H2 Two-Step': {
                 'name_cn': '副产氢两步法',
                 'color': '#A29BFE',
-                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/clustering_results.json'),
+                'h2_clustering_file': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/byproduct_clustering_results.json'),  # 修复：使用副产氢专用聚类文件
                 'co2_clustering_file': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/co2_clustering_results.json'),
                 'ng_clustering_file': None,
                 'transport_summary_pattern': str(project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/transport_summary_*.csv'),
@@ -762,12 +762,23 @@ class ThirteenScenariosClusteredMapVisualizer:
             if not cluster_info or pd.isna(cluster_info):
                 continue
 
-            # 提取聚类ID
+            # 【修复】优先从聚类信息字符串中提取嵌入的聚类中心坐标
+            # 因为JSON文件可能与transport_summary不同步
             try:
+                import re
                 cluster_id = int(cluster_info.split('聚类')[1].split('_')[0])
-                if cluster_id not in all_cluster_centers:
+
+                # 尝试从聚类信息中提取中心坐标 "聚类0_(中心:37.2003,118.4270)"
+                center_match = re.search(r'中心:([\d.]+),([\d.]+)', str(cluster_info))
+                if center_match:
+                    # 使用嵌入的坐标（更准确，与实际优化结果一致）
+                    center_lat = float(center_match.group(1))
+                    center_lon = float(center_match.group(2))
+                elif cluster_id in all_cluster_centers:
+                    # 回退：使用JSON文件中的坐标
+                    center_lat, center_lon = all_cluster_centers[cluster_id]
+                else:
                     continue
-                center_lat, center_lon = all_cluster_centers[cluster_id]
 
                 # 【关键修改】只有运输量>0时才标记聚类中心为已使用
                 used_cluster_centers[cluster_id] = (center_lat, center_lon)
@@ -1256,12 +1267,23 @@ class ThirteenScenariosClusteredMapVisualizer:
             if not cluster_info or pd.isna(cluster_info):
                 continue
 
-            # 提取聚类ID
+            # 【修复】优先从聚类信息字符串中提取嵌入的聚类中心坐标
+            # 因为JSON文件可能与transport_summary不同步
             try:
+                import re
                 cluster_id = int(cluster_info.split('聚类')[1].split('_')[0])
-                if cluster_id not in all_cluster_centers:
+
+                # 尝试从聚类信息中提取中心坐标 "聚类0_(中心:37.2003,118.4270)"
+                center_match = re.search(r'中心:([\d.]+),([\d.]+)', str(cluster_info))
+                if center_match:
+                    # 使用嵌入的坐标（更准确，与实际优化结果一致）
+                    center_lat = float(center_match.group(1))
+                    center_lon = float(center_match.group(2))
+                elif cluster_id in all_cluster_centers:
+                    # 回退：使用JSON文件中的坐标
+                    center_lat, center_lon = all_cluster_centers[cluster_id]
+                else:
                     continue
-                center_lat, center_lon = all_cluster_centers[cluster_id]
 
                 # 【关键修改】只有运输量>0时才标记聚类中心为已使用
                 used_cluster_centers[cluster_id] = (center_lat, center_lon)

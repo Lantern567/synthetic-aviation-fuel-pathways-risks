@@ -26,15 +26,15 @@ class CoalSAFOptimizerRunner:
     def __init__(
         self,
         config_path: Optional[Path] = None,
-        time_horizon_weeks: int = 12,
+        time_horizon_weeks: Optional[int] = None,  # None时从配置文件读取
         threads: Optional[int] = None,
-        time_limit: int = 3600,
+        time_limit: int = 10800,  # 3小时
         mip_gap: float = 0.01,
         results_dir: Optional[Path] = None,
         log_level: str = "INFO",
     ) -> None:
         self.config_path = Path(config_path) if config_path else DEFAULT_CONFIG_PATH
-        self.time_horizon_weeks = max(1, int(time_horizon_weeks))
+        self._time_horizon_weeks_override = time_horizon_weeks  # 保存用户覆盖值(可能为None)
         self.threads = threads if threads is not None else 192  # 默认192线程避免内存溢出
         self.time_limit = time_limit
         self.mip_gap = mip_gap
@@ -59,6 +59,14 @@ class CoalSAFOptimizerRunner:
             self.config: Dict[str, Any] = yaml.safe_load(stream)
 
         self.logger.info("Coal SAF optimizer configured with %s", self.config_path)
+
+    @property
+    def time_horizon_weeks(self) -> int:
+        """获取时间范围(周)：优先使用覆盖值，否则从配置读取"""
+        if self._time_horizon_weeks_override is not None:
+            return max(1, int(self._time_horizon_weeks_override))
+        basic = self.config.get("basic_parameters", {})
+        return max(1, int(basic.get("time_horizon_weeks", 4)))
 
     def _build_default_demand_profile(self) -> List[float]:
         basic = self.config.get("basic_parameters", {})
@@ -108,12 +116,17 @@ class CoalSAFOptimizerRunner:
             else self._build_default_demand_profile()
         )
 
-        # 通过override_params传递time_horizon_weeks参数，确保使用命令行指定的值
-        self.logger.info(f"使用命令行指定的时间范围: {self.time_horizon_weeks}周")
+        # 只有显式指定time_horizon_weeks时才覆盖配置文件
+        override_params = {}
+        if self._time_horizon_weeks_override is not None:
+            override_params['time_horizon_weeks'] = self.time_horizon_weeks
+            self.logger.info(f"使用命令行指定的时间范围: {self.time_horizon_weeks}周")
+        else:
+            self.logger.info(f"使用配置文件的时间范围: {self.time_horizon_weeks}周")
 
         optimizer = CoalHydrogenSAFOptimizer(
             config_path=str(self.config_path),
-            time_horizon_weeks=self.time_horizon_weeks
+            **override_params
         )
         optimizer.build_model(profile)
 

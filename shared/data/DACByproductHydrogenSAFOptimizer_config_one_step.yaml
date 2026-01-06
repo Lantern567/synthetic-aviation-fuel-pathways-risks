@@ -1,5 +1,5 @@
 basic_parameters:
-  time_horizon_weeks: 12  # 使用12周典型数据
+  time_horizon_weeks: 4  # 使用4周典型数据
   periods_per_week: 56    # 每周决策期间数 (7天 × 8个3小时期间)
   hours_per_period: 3     # 每个决策期间的小时数
   use_graphhopper_routing: true
@@ -381,7 +381,7 @@ economic_parameters:
     transport_capacity_factor: 0.75
 equipment_raw_costs:
   electrolyzer:
-    capex_raw: 280000
+    capex_raw: 360000
     opex_raw: 130000
   saf_reactor:
     capex_raw: 6000000
@@ -392,7 +392,7 @@ equipment_raw_costs:
 facility_lcoe_parameters:
   fixed_capex: 60000000
   fixed_opex_annual: 18000000
-  variable_capex_per_capacity: 160000
+  variable_capex_per_capacity: 53550
   variable_opex_per_kg: 0.8
   catalyst_cost_yuan_per_kg_saf: 0.1
   energy_cost_yuan_per_kwh: 0.5
@@ -470,9 +470,9 @@ operational_parameters:
     co2_transport_distance_km: 80
   operational_efficiency: 0.9
 solver_parameters:
-  TimeLimit: 1.0e100
-  MIPGap: 0.03
-  Threads: 192
+  TimeLimit: 10800
+  MIPGap: 0.01
+  Threads: 100
 technologies:
   green_h2_co2_to_saf:
     name: 绿氢+CO₂费托合成制SAF

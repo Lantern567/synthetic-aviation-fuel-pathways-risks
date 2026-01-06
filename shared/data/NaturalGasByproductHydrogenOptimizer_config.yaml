@@ -1,5 +1,5 @@
 basic_parameters:
-  time_horizon_weeks: 12  # 使用12周典型数据
+  time_horizon_weeks: 4  # 使用4周典型数据
   periods_per_week: 56    # 每周决策期间数 (7天 × 8个3小时期间)
   hours_per_period: 3     # 每个决策期间的小时数
   use_graphhopper_routing: true
@@ -344,7 +344,7 @@ dependencies:
 economic_parameters:
   project_lifespan: 20
   discount_rate: 0.08
-  levelized_cost_threshold_yuan_per_kg: 7
+  levelized_cost_threshold_yuan_per_kg: 20
   electrolyzer_lifetime: 20
   mtj_plant_lifetime: 20
   pipeline_lifetime: 30
@@ -358,7 +358,7 @@ economic_parameters:
     transport_capacity_factor: 0.75
 equipment_raw_costs:
   electrolyzer:
-    capex_raw: 280000
+    capex_raw: 360000
     opex_raw: 130000
   storage:
     capex_raw: 2000
@@ -366,7 +366,7 @@ equipment_raw_costs:
 facility_lcoe_parameters:
   fixed_capex: 20000000
   fixed_opex_annual: 10000000
-  variable_capex_per_capacity: 20000
+  variable_capex_per_capacity: 53550
   variable_opex_per_kg: 0.3
 geographic_data:
   airport_coordinates:
@@ -489,9 +489,9 @@ operational_parameters:
     ng_transport_distance_km: 80
   operational_efficiency: 0.9
 solver_parameters:
-  TimeLimit: 3600
+  TimeLimit: 10800
   MIPGap: 0.01
-  Threads: 192
+  Threads: 100
 supply_capacity:
   lng_terminal_capacity:
     default_capacity_mcm_per_year: 300

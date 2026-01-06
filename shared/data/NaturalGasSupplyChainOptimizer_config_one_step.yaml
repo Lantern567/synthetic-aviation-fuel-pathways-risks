@@ -35,10 +35,10 @@
 # =============================================================================
 basic_parameters:
   # 时间范围参数 - Time Horizon Parameters
-  time_horizon_weeks: 12                   # 优化时间范围(周数) | Optimization time horizon in weeks
+  time_horizon_weeks: 4                    # 优化时间范围(周数) | Optimization time horizon in weeks
                                            # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
                                            # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
-                                           # 当前使用12周典型数据
+                                           # 当前使用4周典型数据
 
   periods_per_week: 56                     # 每周决策期间数 (7天 × 8个3小时期间) | Decision periods per week
                                            # 用途：时间颗粒度设置，定义决策变量的时间分辨率
@@ -534,7 +534,7 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 7  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+  levelized_cost_threshold_yuan_per_kg: 20  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
                                            # 用于经济性边界约束
                                            # 超过此值的方案可能不经济
 
@@ -606,7 +606,7 @@ facility_lcoe_parameters:
                                            # 1000万元/年
                                            # 【对齐】与两步法保持一致
 
-  variable_capex_per_capacity: 20000       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 53550       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
                                            # 随产能规模变化的投资
                                            # 2万元/(kg/h产能)
                                            # 注意：这里的capacity单位是kg/h(小时产能)
@@ -722,7 +722,7 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 3600                          # 求解时间限制(秒) | Time limit (seconds)
+  TimeLimit: 10800                          # 求解时间限制(秒) | Time limit (seconds)
                                            # 3600秒 = 1小时，超时后返回当前最优解
                                            # 调参建议：
                                            #   - 小规模问题: 600-1800秒
@@ -737,8 +737,8 @@ solver_parameters:
                                            #   - 平衡: 0.01-0.02
                                            #   - 快速: 0.05-0.1
 
-  Threads: 192                             # 并行计算线程数 | Number of parallel threads
-                                           # 使用128个线程进行并行计算
+  Threads: 100                             # 并行计算线程数 | Number of parallel threads
+                                           # 使用100个线程进行并行计算
                                            # 建议设置为CPU核心数或稍多
                                            # 注意：过多线程可能导致内存溢出
 

@@ -36,10 +36,10 @@
 # =============================================================================
 basic_parameters:
   # 时间范围参数 - Time Horizon Parameters
-  time_horizon_weeks: 12                   # 优化时间范围(周数) | Optimization time horizon in weeks
+  time_horizon_weeks: 4                    # 优化时间范围(周数) | Optimization time horizon in weeks
                                            # 用途：定义优化问题的时间跨度，影响决策变量数量和计算复杂度
                                            # 调参建议：调试阶段使用1周，生产环境根据决策需求选择4周或更长
-                                           # 当前使用12周完整数据
+                                           # 当前使用4周典型数据（与Coal项目统一）
 
   periods_per_week: 56                     # 每周决策期间数 (7天 × 8个3小时期间) | Decision periods per week
                                            # 用途：时间颗粒度设置，定义决策变量的时间分辨率
@@ -656,13 +656,13 @@ green_hydrogen_supply:
 data_paths:
   aviation_data:
     # 12周完整需求数据 - 12 Weeks Complete Demand Data
-    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx
+    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
     solar_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/solar_generation
     wind_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/3hourly_generation
     # 预处理数据目录（新增） - Preprocessed Data Directory
     # 12周完整可再生能源数据 - 12 Weeks Complete Renewable Energy Data
-    preprocessed_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data
+    preprocessed_data_dir: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data
 
   base_data_dir: products
 
@@ -710,7 +710,7 @@ dependencies:
 
   data_inputs:
     # 12周完整需求数据 - 12 Weeks Complete Demand Data
-    airports_excel: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx
+    airports_excel: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx
     airports_excel_backup: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
     co2_capture_sources: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
     osm_pbf_default: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
@@ -900,8 +900,9 @@ economic_parameters:
 equipment_raw_costs:
   # 电解槽成本 - Electrolyzer Costs
   electrolyzer:
-    capex_raw: 800000                      # 电解槽单位产能投资(元/(kg H₂/hour)) | Electrolyzer unit capacity CAPEX (yuan/(kg H₂/hour))
-                                           # 每kg/h产能需要80万元投资，包含设备采购、安装和调试
+    capex_raw: 360000                      # 电解槽单位产能投资(元/(kg H₂/hour)) | Electrolyzer unit capacity CAPEX (yuan/(kg H₂/hour))
+                                           # 每kg/h产能需要36万元投资，包含设备采购、安装和调试
+                                           # 统一修正：从800000改为360000（与Coal项目一致）
 
     opex_raw: 200000                       # 电解槽年运营成本(元/年) | Electrolyzer annual OPEX (yuan/year)
                                            # 包括维护、备件、人工等固定运营费用
@@ -934,7 +935,8 @@ facility_lcoe_parameters:
                                            # 管理、人工、公用事业等固定费用
                                            # 1800万元/年
 
-  variable_capex_per_capacity: 160000      # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+  variable_capex_per_capacity: 53550       # 单位产能资本支出(元/(kg/h)) | Variable CAPEX per capacity (yuan/(kg/h))
+                                           # 统一修正：从160000改为53550（与Coal项目一致）
                                            # 随产能规模变化的投资
                                            # 16万元/(kg/h产能) - 工业捕集一步法工艺
                                            # 注意：这里的capacity单位是kg/h(小时产能)
@@ -1066,7 +1068,7 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 1.0e100                       # 求解时间限制(秒) | Time limit (seconds)
+  TimeLimit: 10800                       # 求解时间限制(秒) | Time limit (seconds)
                                            # 1e100 = 无限制，让求解器运行至最优解或收敛
                                            # 如需设置限制，可修改为具体秒数：
                                            #   - 小规模问题: 600-1800秒
@@ -1082,7 +1084,8 @@ solver_parameters:
                                            #   - 快速: 0.05-0.1
                                            # 修正日期：2025-11-13 (从1%放宽至5%，加快求解速度)
 
-  Threads: 192                             # 并行计算线程数 | Number of parallel threads
+  Threads: 100                             # 并行计算线程数 | Number of parallel threads
+                                           # 统一修正：从192改为100，避免内存溢出
                                            # 使用192个线程进行并行计算
                                            # 建议设置为CPU核心数或稍多
                                            # 注意：过多线程可能导致内存溢出

@@ -2522,9 +2522,12 @@ class NaturalGasSupplyChainOptimizer:
         self.model.setParam('MIPGap', float(solver_params['MIPGap']))
         self.model.setParam('Threads', int(solver_params['Threads']))
 
-        # 内存限制参数（防止OOM）
-        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
-        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+        # 提高数值稳定性：模型矩阵系数范围跨度过大
+        # NumericFocus=2 表示让Gurobi更注重数值精度
+        self.model.setParam('NumericFocus', 2)
+        logger.info("已设置NumericFocus=2以提高数值稳定性")
+
+        # 不设置内存限制，让Gurobi自由使用内存直到求解完成
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
@@ -4653,12 +4656,7 @@ class NaturalGasSupplyChainOptimizer:
                         name=f"initial_h2_inventory_nonneg_{location}"
                     )
 
-                # 添加氢气库存非负约束
-                for hour in range(self.total_hours + 1):
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, hour)] >= 0,
-                        name=f"h2_inventory_nonnegative_{location}_{hour}"
-                    )
+                # 【已优化】氢气库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
             # 为MTJ工厂（airport, lng_terminal）添加氢气入库约束
             elif location_type in ['airport', 'lng_terminal']:
@@ -4713,12 +4711,7 @@ class NaturalGasSupplyChainOptimizer:
                     name=f"initial_h2_inventory_mtj_{location}"
                 )
 
-                # 添加氢气库存非负约束
-                for hour in range(self.total_hours + 1):
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, hour)] >= 0,
-                        name=f"h2_inventory_nonnegative_mtj_{location}_{hour}"
-                    )
+                # 【已优化】氢气库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
         logger.info("氢气平衡约束添加完成（流水线模式：生产点周末发货，消纳点周初接收）")
 
@@ -4913,39 +4906,11 @@ class NaturalGasSupplyChainOptimizer:
 
         logger.info(f"添加了 {pipeline_capacity_constrs} 个管道容量约束")
         
-        # 2. 管道运输量约束：不超过氢气源地的生产能力
-        pipeline_production_constrs = 0
-        for tech in ['airport_integrated_conversion', 'lng_terminal_conversion', 'integrated_supply_conversion']:
-            if tech not in self.technologies or not self.technologies[tech]['hydrogen_transport_required']:
-                continue
-
-            if tech not in self.mtj_locations:
-                continue
-
-            locations = self.mtj_locations[tech]
-            if not hasattr(locations, '__iter__') or isinstance(locations, str):
-                continue
-
-            for h2_loc in self.hydrogen_locations:
-                for mtj_loc in locations:
-                    # 【禁用管道建设决策】改为检查管道运输变量
-                    if (h2_loc, mtj_loc) not in self.hydrogen_pipeline_transport_vars:
-                        continue
-
-                    # 管道周运输量 <= 整周氢气生产量
-                    weeks = max(1, self.time_horizon_weeks)
-                    weekly_h2_production = gp.quicksum(
-                        self.hydrogen_production_vars[(h2_loc, hour)]
-                        for hour in range(self.total_hours)
-                        if (h2_loc, hour) in self.hydrogen_production_vars
-                    ) / float(weeks)
-                    self.model.addConstr(
-                        self.hydrogen_pipeline_transport_vars[(h2_loc, mtj_loc)] <= weekly_h2_production,
-                        name=f"h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week"
-                    )
-                    pipeline_production_constrs += 1
-
-        logger.info(f"添加了 {pipeline_production_constrs} 个管道生产限制约束")
+        # 【已优化】原约束 h2_pipeline_production_limit_{h2_loc}_{mtj_loc}_week
+        # 已被源地总出库约束 hydrogen_source_outbound_limit_{h_loc}_weekly 覆盖，
+        # 因此删除此冗余约束（每条管道的单独生产限制约束）
+        # 参考：约束冗余分析报告.md - 2.4 管道单链路约束冗余
+        logger.info("【已优化】管道生产限制约束已被源地总出库约束覆盖，已删除冗余约束")
 
         # 3. 【禁用管道建设决策】注释掉氢气运输方式排他性约束
         """

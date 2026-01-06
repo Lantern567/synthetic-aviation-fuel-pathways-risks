@@ -570,7 +570,7 @@ economic_parameters:
                                            # 8%年贴现率，用于净现值(NPV)计算
                                            # 反映资金时间价值和投资风险
 
-  levelized_cost_threshold_yuan_per_kg: 7  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
+  levelized_cost_threshold_yuan_per_kg: 20  # 平准化成本阈值(元/kg) | LCOE threshold (yuan/kg)
                                            # 用于经济性边界约束
                                            # 超过此值的方案可能不经济
 
@@ -748,7 +748,7 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 3600                          # 求解时间限制(秒) | Time limit (seconds)
+  TimeLimit: 10800                          # 求解时间限制(秒) | Time limit (seconds)
                                            # 3600秒 = 1小时，超时后返回当前最优解
                                            # 调参建议：
                                            #   - 小规模问题: 600-1800秒

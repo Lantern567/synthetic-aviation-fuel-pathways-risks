@@ -100,7 +100,7 @@ class UnifiedSAFOptimizer:
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: int = 129600,  # 36小时
+        time_limit: int = 10800,  # 3小时
         mip_gap: float = 0.01,  # MIP求解精度1%
         time_horizon_weeks: Optional[int] = None,
         parallel_workers: Optional[int] = None,
@@ -122,7 +122,7 @@ class UnifiedSAFOptimizer:
                 - 'byproduct_two_step': 副产氢两步法 (副产氢+CO₂→甲醇→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认129600(36小时)
+            time_limit: Gurobi求解时间限制(秒),默认10800(3小时)
             mip_gap: MIP相对最优间隙,默认0.01(1%)
             time_horizon_weeks: 优化时间范围(周数),默认None使用配置值(12个典型周)
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
@@ -247,8 +247,8 @@ class UnifiedSAFOptimizer:
             self.logger.info(f"Using user-specified threads: {threads}")
             return threads
 
-        # 默认使用192线程以避免内存溢出
-        default_threads = 192
+        # 默认使用100线程以避免内存溢出
+        default_threads = 100
         available_cpus = os.cpu_count()
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
@@ -541,7 +541,7 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 129600,
+    time_limit: int = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -569,7 +569,7 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 129600,
+    time_limit: int = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -597,7 +597,7 @@ def run_one_step_optimization(
 
 def run_byproduct_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 129600,
+    time_limit: int = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -625,7 +625,7 @@ def run_byproduct_one_step_optimization(
 
 def run_byproduct_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 129600,
+    time_limit: int = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -665,7 +665,7 @@ if __name__ == '__main__':
         help='Process type to use (two_step: DAC两步法, one_step: DAC一步法, byproduct_one_step: 副产氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=int, default=129600, help='Time limit in seconds (default: 129600 = 36 hours)')
+    parser.add_argument('--time-limit', type=int, default=10800, help='Time limit in seconds (default: 10800 = 3 hours)')
     parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance (default: 0.01 = 1%)')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 

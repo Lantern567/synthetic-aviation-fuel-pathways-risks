@@ -14,11 +14,11 @@ Unified SAF Supply Chain Optimizer Runner
     >>> from src.runner import UnifiedSAFOptimizer
     >>>
     >>> # 运行两步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='two_step', threads=192)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='two_step', threads=100)
     >>> results = optimizer.run()
     >>>
     >>> # 运行一步法优化
-    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=192, mip_gap=0.01)
+    >>> optimizer = UnifiedSAFOptimizer(process_type='one_step', threads=100, mip_gap=0.01)
     >>> results = optimizer.run()
 
 作者: Claude Code
@@ -77,7 +77,7 @@ class UnifiedSAFOptimizer:
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: float = 1.0e100,
+        time_limit: float = 10800,  # 3小时
         mip_gap: float = 0.01,
         time_horizon_weeks: Optional[int] = None,
         parallel_workers: Optional[int] = None,
@@ -97,7 +97,7 @@ class UnifiedSAFOptimizer:
                 - 'one_step': 一步法 (H₂+CO₂→RWGS→FT→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认1.0e100(接近无限制，与配置文件一致)
+            time_limit: Gurobi求解时间限制(秒),默认10800(3小时)
             mip_gap: MIP相对最优间隙,默认0.01(1%)
             time_horizon_weeks: 优化时间范围(周数),None时使用配置文件中的值
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
@@ -221,8 +221,8 @@ class UnifiedSAFOptimizer:
             self.logger.info(f"Using user-specified threads: {threads}")
             return threads
 
-        # 默认使用192线程以避免内存溢出
-        default_threads = 192
+        # 默认使用100线程以避免内存溢出
+        default_threads = 100
         available_cpus = os.cpu_count()
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
@@ -501,7 +501,7 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: float = 1.0e100,
+    time_limit: float = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -510,7 +510,7 @@ def run_two_step_optimization(
 
     Args:
         threads: CPU线程数
-        time_limit: 求解时间限制(秒)，默认1.0e100(接近无限制)
+        time_limit: 求解时间限制(秒)，默认10800(3小时)
         mip_gap: MIP Gap
         **kwargs: 其他传递给UnifiedSAFOptimizer的参数
 
@@ -529,7 +529,7 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: float = 1.0e100,
+    time_limit: float = 10800,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -569,7 +569,7 @@ if __name__ == '__main__':
         help='Process type to use (two_step: 绿氢两步法, one_step: 绿氢一步法, byproduct_two_step: 副产氢两步法, byproduct_one_step: 副产氢一步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=float, default=1.0e100, help='Time limit in seconds (default: 1.0e100=unlimited)')
+    parser.add_argument('--time-limit', type=float, default=10800, help='Time limit in seconds (default: 10800 = 3 hours)')
     parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance')
     parser.add_argument('--weeks', '--time-horizon-weeks', dest='time_horizon_weeks', type=int, default=None,
                         help='Time horizon in weeks (default: use config file value)')

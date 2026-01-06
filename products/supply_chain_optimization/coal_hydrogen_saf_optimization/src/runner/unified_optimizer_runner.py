@@ -79,7 +79,7 @@ class UnifiedSAFOptimizer:
         threads: Optional[int] = None,
         time_limit: Optional[int] = None,
         mip_gap: float = 0.01,
-        time_horizon_weeks: int = 12,
+        time_horizon_weeks: Optional[int] = None,  # None时从配置文件读取
         parallel_workers: Optional[int] = None,
         osm_pbf_path: Optional[str] = None,
         airport_excel_path: Optional[str] = None,
@@ -223,8 +223,8 @@ class UnifiedSAFOptimizer:
             self.logger.info(f"Using user-specified threads: {threads}")
             return threads
 
-        # 默认使用192线程以避免内存溢出
-        default_threads = 192
+        # 默认使用100线程以避免内存溢出
+        default_threads = 100
         available_cpus = os.cpu_count()
 
         self.logger.info(f"Auto-detected {available_cpus} CPU cores")
@@ -295,6 +295,9 @@ class UnifiedSAFOptimizer:
             override_params = {}
             if self.parallel_workers is not None:
                 override_params['parallel_workers'] = self.parallel_workers
+            # 只有当显式指定time_horizon_weeks时才覆盖配置文件值
+            if self.time_horizon_weeks is not None:
+                override_params['time_horizon_weeks'] = self.time_horizon_weeks
 
             # 确定实际的process_mode (去掉byproduct_前缀)
             actual_process_mode = self.process_type.replace('byproduct_', '')
@@ -302,7 +305,6 @@ class UnifiedSAFOptimizer:
             self.optimizer = CoalHydrogenSAFOptimizer(
                 config_path=str(self.config_path),
                 process_mode=actual_process_mode,
-                time_horizon_weeks=self.time_horizon_weeks,
                 osm_pbf_path=self.osm_pbf_path,
                 **override_params,
             )

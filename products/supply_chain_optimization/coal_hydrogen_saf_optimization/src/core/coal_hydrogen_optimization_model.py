@@ -2823,15 +2823,21 @@ class CoalHydrogenSAFOptimizer:
         if isinstance(threads, str):
             threads = int(threads)
 
-        if 'TimeLimit' in solver_params:
-            logger.info("TimeLimit found in config but will be ignored (no solver time limit applied)")
+        time_limit = solver_params.get('TimeLimit', 10800)
+        if isinstance(time_limit, str):
+            time_limit = float(time_limit)
 
+        self.model.setParam('TimeLimit', time_limit)
         self.model.setParam('MIPGap', mip_gap)
         self.model.setParam('Threads', threads)
+        logger.info(f"已设置TimeLimit={time_limit}秒")
 
-        # 内存限制参数（防止OOM）
-        self.model.setParam('SoftMemLimit', 80)  # 软限制80GB，接近时尝试节省内存继续求解
-        self.model.setParam('MemLimit', 100)     # 硬限制100GB，超过则停止并返回当前最佳解
+        # 提高数值稳定性：模型矩阵系数范围[8e-03, 2e+08]跨度过大
+        # NumericFocus=2 表示让Gurobi更注重数值精度（0=自动,1=中等,2=最高,3=更激进但更慢）
+        self.model.setParam('NumericFocus', 2)
+        logger.info("已设置NumericFocus=2以提高数值稳定性")
+
+        # 不设置内存限制，让Gurobi自由使用内存直到求解完成
 
         # MTJ工厂位置映射已在数据加载时构建，这里无需重复调用
         # 创建决策变量
@@ -4437,18 +4443,22 @@ class CoalHydrogenSAFOptimizer:
                     )
     
     def _add_production_capacity_constraints(self):
-        """添加生产能力约束：基于产能决策变量"""
+        """添加生产能力约束：基于产能决策变量
+
+        注意：total_hours 实际上是期间数（periods），不是物理小时数
+        例如：4周 × 56期间/周 = 224期间，每期间3小时
+        """
         for location in self.locations:
             for tech in self.technologies:
-                for hour in range(self.total_hours):
-                    if (location, tech, hour) in self.production_vars:
-                        # 生产量不能超过设施产能
+                for period in range(self.total_hours):
+                    if (location, tech, period) in self.production_vars:
+                        # 生产量不能超过设施产能（每期间3小时）
                         self.model.addConstr(
-                            self.production_vars[(location, tech, hour)] <= 
+                            self.production_vars[(location, tech, period)] <=
                             self.facility_capacity_vars[(location, tech)],
-                            name=f"capacity_{location}_{tech}_{hour}"
+                            name=f"capacity_{location}_{tech}_{period}"
                         )
-                
+
                 # 产能只能在建设了设施的地方存在（大M约束）
                 # 使用MTJ设施的最大容量上限作为大M值
                 mtj_max_capacity = self.config.get('capacity_limits', {}).get('mtj_max_capacity_kg_per_hour', 100000)
@@ -6000,9 +6010,10 @@ class CoalHydrogenSAFOptimizer:
 
             return {"status": "infeasible", "status_code": self.model.status, "iis_constraints": iis_constrs}
 
-        elif self.model.status == GRB.TIME_LIMIT and has_solution:
-            # 只处理TIME_LIMIT，MEM_LIMIT的解质量较差暂不处理
-            logger.warning(f"求解因 {status_name} 提前终止，但找到了可行解")
+        elif self.model.status in [GRB.TIME_LIMIT, 16, 17] and has_solution:
+            # 处理资源限制状态(TIME_LIMIT=9, WORK_LIMIT=16, MEM_LIMIT=17)
+            # 只要找到可行解就提取结果，Gap 2.99%的解质量是很好的
+            logger.warning(f"求解因 {status_name} 提前终止，但找到了 {self.model.SolCount} 个可行解")
 
             # 输出MIP Gap信息（如果可用）
             try:
@@ -8187,18 +8198,11 @@ class CoalHydrogenSAFOptimizer:
 
         logger.info(f"添加了 {constraint_count} 个甲醇库存平衡约束")
 
-        # 甲醇库存非负约束，防止通过负库存透支供给
-        nonneg_constraints = 0
-        for methanol_loc in methanol_locations:
-            for hour in range(self.total_hours + 1):
-                if (methanol_loc, hour) in self.methanol_inventory_vars:
-                    self.model.addConstr(
-                        self.methanol_inventory_vars[(methanol_loc, hour)] >= 0,
-                        name=f"methanol_inventory_nonnegative_{methanol_loc}_{hour}"
-                    )
-                    nonneg_constraints += 1
-
-        logger.info(f"添加了 {nonneg_constraints} 个甲醇库存非负约束")
+        # 【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现，无需单独约束
+        # 原约束 methanol_inventory_nonnegative_{methanol_loc}_{hour} 已删除
+        # 注：v3.1一步法模式下，甲醇变量为空字典，此约束本就不会添加
+        # 参考：约束冗余分析报告.md - 2.1 非负约束冗余
+        logger.info("【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现")
 
     def _add_co2_inventory_balance_constraints(self):
         """添加CO₂库存平衡约束（v3.1一步法：周级气化→小时级消耗）

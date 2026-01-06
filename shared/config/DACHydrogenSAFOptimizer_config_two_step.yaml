@@ -225,7 +225,7 @@ data_paths:
       saf_transport_plan: saf_transport_plan_{timestamp}.csv
       optimization_summary: optimization_summary_{timestamp}.csv
       transport_summary: transport_summary_{timestamp}.csv
-    results_base_dir: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results
+    results_base_dir: products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results
 dependencies:
   cache_and_temp:
     graphhopper_route_cache_dir: shared/data/cache/graphhopper_routes

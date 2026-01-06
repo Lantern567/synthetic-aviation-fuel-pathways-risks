@@ -1,6 +1,6 @@
 {
-  "total_clusters": 6,
-  "total_noise_points": 10,
+  "total_clusters": 4,
+  "total_noise_points": 14,
   "clustering_params": {
     "enable_clustering": true,
     "enable_pipeline_optimization": true,
@@ -8,8 +8,8 @@
     "export_clustering_results": true,
     "clustering_output_path": "clustering_results.json",
     "eps_distance_km": 15.0,
-    "min_samples": 2,
-    "max_clusters": 50,
+    "min_samples": 3,
+    "max_clusters": 200,
     "noise_plant_handling": "direct_connection",
     "pipeline_weight": 0.3,
     "shared_pipeline_discount_factor": 0.65,
@@ -220,32 +220,6 @@
     {
       "cluster_id": 1,
       "member_locations": [
-        "Beijing Shunyi Holdings I solar project",
-        "Beijing Shunyi Holdings II solar project"
-      ],
-      "member_coords": [
-        [
-          40.1488,
-          116.6539
-        ],
-        [
-          40.1488,
-          116.6539
-        ]
-      ],
-      "center_coord": [
-        40.1488,
-        116.6539
-      ],
-      "geo_center": [
-        40.1488,
-        116.6539
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 2,
-      "member_locations": [
         "CPI Tianjin Wuqing I solar project",
         "CPI Tianjin Wuqing II solar project",
         "China New Energy solar project",
@@ -405,7 +379,7 @@
       "total_capacity_kg_per_hour": 0
     },
     {
-      "cluster_id": 3,
+      "cluster_id": 2,
       "member_locations": [
         "Datang Tianjin Panshan Power Plant solar project",
         "Hebei Langfang Dacheng wind farm",
@@ -496,7 +470,7 @@
       "total_capacity_kg_per_hour": 0
     },
     {
-      "cluster_id": 4,
+      "cluster_id": 3,
       "member_locations": [
         "Hebei Huai Tumuzhen CECEP solar farm",
         "Hebei Olympic Photovoltaic Corridor Project solar farm",
@@ -567,43 +541,17 @@
           115.8214
         ],
         [
-          40.3983,
-          115.5914
+          40.3838,
+          115.639
         ]
       ],
       "center_coord": [
-        40.32305736810774,
-        115.63817329916891
+        40.32202093114889,
+        115.64156947307603
       ],
       "geo_center": [
-        40.32305736810774,
-        115.63817329916891
-      ],
-      "total_capacity_kg_per_hour": 0
-    },
-    {
-      "cluster_id": 5,
-      "member_locations": [
-        "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
-        "Yongqing Environmental Protection solar project"
-      ],
-      "member_coords": [
-        [
-          39.3255,
-          116.4941
-        ],
-        [
-          39.3208,
-          116.4902
-        ]
-      ],
-      "center_coord": [
-        39.32315001626686,
-        116.49214993448338
-      ],
-      "geo_center": [
-        39.32315001626686,
-        116.49214993448338
+        40.32202093114889,
+        115.64156947307603
       ],
       "total_capacity_kg_per_hour": 0
     }
@@ -614,6 +562,20 @@
       "coords": [
         40.444,
         116.746
+      ]
+    },
+    {
+      "location": "Beijing Shunyi Holdings I solar project",
+      "coords": [
+        40.1488,
+        116.6539
+      ]
+    },
+    {
+      "location": "Beijing Shunyi Holdings II solar project",
+      "coords": [
+        40.1488,
+        116.6539
       ]
     },
     {
@@ -652,10 +614,24 @@
       ]
     },
     {
+      "location": "Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm",
+      "coords": [
+        39.3255,
+        116.4941
+      ]
+    },
+    {
       "location": "Nankou solar project",
       "coords": [
         40.217,
         116.171
+      ]
+    },
+    {
+      "location": "Yongqing Environmental Protection solar project",
+      "coords": [
+        39.3208,
+        116.4902
       ]
     },
     {
