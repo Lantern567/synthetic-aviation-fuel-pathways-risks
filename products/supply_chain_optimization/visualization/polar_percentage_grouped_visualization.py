@@ -119,63 +119,63 @@ class GroupedPolarPercentageVisualizer:
             ])),
         ])
 
-        # 12个成本分类配置
+        # 12个成本分类配置 - 使用柔和的Pastel色系 (参考图风格)
         self.cost_categories = OD([
             ('Facility Inv.', {
                 'keys': ['facility_investment_cost'],
-                'color': '#1f77b4'
+                'color': '#8DD3C7'  # Teal
             }),
             ('Storage Equip.', {
                 'keys': ['storage_equipment_cost', 'h2_storage_investment'],
-                'color': '#2ca02c'
+                'color': '#FFFFB3'  # Light Yellow
             }),
             ('Electrolyzer', {
                 'keys': ['electrolyzer_investment_cost'],
-                'color': '#9467bd'
+                'color': '#BEBADA'  # Pastel Purple
             }),
             ('DAC Equip.', {
                 'keys': ['dac_facility_investment'],
-                'color': '#17becf'
+                'color': '#FB8072'  # Salmon
             }),
             ('Raw Material', {
                 'keys': ['coal_purchase_cost', 'coal_gasification_cost', 'natural_gas_cost', 'dac_capture_cost'],
-                'color': '#ff7f0e'
+                'color': '#80B1D3'  # Pastel Blue
             }),
             ('CO2 Capture', {
                 'keys': ['co2_capture_cost'],
-                'color': '#bcbd22'
+                'color': '#FDB462'  # Pastel Orange
             }),
             ('Production', {
                 'keys': ['production_cost', 'facility_operation_cost'],
-                'color': '#e377c2'
+                'color': '#B3DE69'  # Pastel Green
             }),
             ('FT Production', {
                 'keys': ['ft_production_cost'],
-                'color': '#7f7f7f'
+                'color': '#FCCDE5'  # Pastel Pink
             }),
             ('Catalyst', {
                 'keys': ['catalyst_cost'],
-                'color': '#8c564b'
+                'color': '#D9D9D9'  # Light Grey
             }),
             ('Electricity', {
                 'keys': ['electricity_cost'],
-                'color': '#d62728'
+                'color': '#BC80BD'  # Pastel Violet
             }),
             ('Transport', {
                 'keys': ['transport_operation_cost', 'ng_transport_operation', 'hydrogen_pipeline_operation', 'co2_pipeline_transport_cost'],
-                'color': '#aec7e8'
+                'color': '#CCEBC5'  # Pale Green
             }),
             ('Storage Op.', {
                 'keys': ['storage_operation_cost', 'h2_storage_operation'],
-                'color': '#98df8a'
+                'color': '#FFED6F'  # Soft Yellow
             }),
         ])
 
-        # 分组颜色
+        # 分组颜色 - 参考图外圈颜色
         self.group_colors = {
-            'Grey': '#808080',
-            'Blue': '#4169E1',
-            'Green': '#228B22'
+            'Grey': '#9E9E9E',   # Grey
+            'Blue': '#5C9BD5',   # Soft Blue
+            'Green': '#70AD47'   # Soft Green
         }
 
         self.data = {}
@@ -263,9 +263,21 @@ class GroupedPolarPercentageVisualizer:
             return
 
         # 创建图形
-        fig, ax = plt.subplots(figsize=(14, 14), subplot_kw=dict(projection='polar'))
+        fig, ax = plt.subplots(figsize=(16, 16), subplot_kw=dict(projection='polar'))
         fig.patch.set_facecolor('white')
         ax.set_facecolor('white')
+
+        # === 几何参数 ===
+        INNER_RADIUS = 35           # 内圈半径（形成中间的空洞）
+        BAR_LIMIT = 100             # 柱状图数据最大值
+        RING_GAP = 5                # 柱子和外圈的间隙
+        RING_WIDTH = 8              # 外圈宽度
+        LABEL_GAP = 12              # 外圈和标签的间隙
+        
+        # 径向位置计算
+        outer_ring_start = INNER_RADIUS + BAR_LIMIT + RING_GAP
+        outer_ring_end = outer_ring_start + RING_WIDTH
+        label_radius = outer_ring_end + LABEL_GAP
 
         # 计算角度 - 按组分配，组间留间隙
         gap_angle = np.pi / 12  # 组间间隙 (15度)
@@ -279,16 +291,52 @@ class GroupedPolarPercentageVisualizer:
         angles = []
         group_boundaries = []  # 记录组边界角度
         current_angle = np.pi / 2  # 从顶部开始
-
+        
+        # 记录每组的起始和结束角度（用于画外圈）
+        group_angular_ranges = {}
+        
         current_group = None
+        group_start_angle = current_angle
+        
+        temp_angles = [] # 临时存储当前组的角度
+
         for i, (label, group) in enumerate(zip(labels, groups)):
+            # 检测新组
             if current_group is not None and group != current_group:
+                # 记录上一组的范围
+                group_end_angle = current_angle + angle_per_scenario/2 # 修正为最后一个柱子的右边缘
+                group_start_actual = group_start_angle + angle_per_scenario/2 # 第一个柱子的左边缘
+                
+                # 简单的范围计算：覆盖该组所有柱子
+                # max角度(左) 到 min角度(右) (注意方向是逆时针还是顺时针，这里current_angle在减小)
+                # start_angle是较大的值，end_angle是较小的值
+                
+                # 记录上一组范围
+                # 此时 temp_angles 包含上一组的所有中心角度
+                max_ang = max(temp_angles) + angle_per_scenario/2
+                min_ang = min(temp_angles) - angle_per_scenario/2
+                group_angular_ranges[current_group] = (min_ang, max_ang)
+                temp_angles = []
+
                 group_boundaries.append(current_angle + angle_per_scenario / 2)
                 current_angle -= gap_angle  # 添加组间间隙
+                group_start_angle = current_angle # 更新由于gap产生的新起点
 
+            if current_group != group:
+                current_group = group
+                # 开始新组，重新记录第一根柱子导致的起始边缘?
+                # 实际上上面已经处理了gap，这里只是重置状态
+            
             angles.append(current_angle)
+            temp_angles.append(current_angle)
+            
             current_angle -= angle_per_scenario
-            current_group = group
+
+        # 处理最后一组
+        if temp_angles:
+             max_ang = max(temp_angles) + angle_per_scenario/2
+             min_ang = min(temp_angles) - angle_per_scenario/2
+             group_angular_ranges[current_group] = (min_ang, max_ang)
 
         # 添加最后一个边界（回到起点）
         group_boundaries.append(current_angle + angle_per_scenario / 2)
@@ -296,10 +344,10 @@ class GroupedPolarPercentageVisualizer:
         angles = np.array(angles)
 
         # 柱子宽度
-        width = angle_per_scenario * 0.9
+        width = angle_per_scenario * 0.95 # 稍微加宽一点
 
-        # 绘制堆叠柱状图
-        bottom = np.zeros(n_scenarios)
+        # === 绘制堆叠柱状图 ===
+        bottom = np.zeros(n_scenarios) + INNER_RADIUS # 每个柱子从INNER_RADIUS开始
 
         for cat_name, cat_config in self.cost_categories.items():
             values = np.array(cost_data[cat_name])
@@ -311,145 +359,154 @@ class GroupedPolarPercentageVisualizer:
                 label=cat_name,
                 color=cat_config['color'],
                 edgecolor='white',
-                linewidth=0.5,
-                alpha=0.95
+                linewidth=0.3,
+                alpha=0.9
             )
             bottom += values
 
-        # 设置径向范围
-        ax.set_ylim(0, 120)
-
-        # 隐藏默认的径向刻度标签
-        ax.set_yticks([25, 50, 75, 100])
-        ax.set_yticklabels([])
-
-        # 设置网格线 - 灰色同心圆
-        ax.yaxis.grid(True, linestyle='-', alpha=0.5, color='#cccccc', linewidth=0.8)
-        ax.xaxis.grid(False)
-
-        # 隐藏默认角度刻度
-        ax.set_xticks([])
-
-        # 只在顶部显示刻度数字（垂直排列）
-        tick_angle = np.pi / 2  # 顶部位置
-        for tick_val in [25, 50, 75, 100]:
-            ax.text(
-                tick_angle, tick_val, str(tick_val),
-                ha='center', va='bottom',
-                fontsize=8, color='#666666'
+        # === 绘制外圈 (Group Ring) ===
+        for group_name, (min_ang, max_ang) in group_angular_ranges.items():
+            # 计算中心和跨度
+            center = (min_ang + max_ang) / 2
+            span = max_ang - min_ang
+            
+            # 使用bar绘制弧形段
+            ax.bar(
+                x=center,
+                height=RING_WIDTH,
+                bottom=outer_ring_start,
+                width=span,
+                color=self.group_colors.get(group_name, '#999999'),
+                alpha=0.8,
+                edgecolor='none'
             )
 
-        # 添加轴标签（垂直书写）- "Species threatened (%)" 改为 "Cost breakdown (%)"
+        # === 设置径向范围和样式 ===
+        # 范围包含：内孔 + 数据(100) + 间隙 + 外圈 + 标签留白
+        ax.set_ylim(0, label_radius + 15)
+
+        # 设置网格线 - 虚线
+        # 只显示数据区域的网格 (20, 40, 60, 80, 100)
+        # 实际位置 = value + INNER_RADIUS
+        grid_values = [20, 40, 60, 80, 100]
+        actual_grid_pos = [v + INNER_RADIUS for v in grid_values]
+        
+        ax.set_yticks(actual_grid_pos)
+        ax.set_yticklabels([]) # 不使用默认标签
+        
+        # 手动画虚线网格
+        ax.yaxis.grid(True, linestyle='--', alpha=0.5, color='#aaaaaa', linewidth=0.8, dashes=(4, 4))
+        ax.xaxis.grid(False) # 不要径向的线
+        
+        # 隐藏默认角度刻度
+        ax.set_xticks([])
+        ax.spines['polar'].set_visible(False) # 隐藏最外圈的大圆
+
+        # === 添加垂直轴刻度标签 ===
+        # 在顶部开口处或第一个间隙处显示
+        # 找最大的gap位置显示刻度
+        tick_angle = np.pi / 2 # 默认顶部
+        
+        for val, radius in zip(grid_values, actual_grid_pos):
+            ax.text(
+                tick_angle, radius, f"{val}",
+                ha='center', va='center',
+                fontsize=11, color='#666666',
+                fontweight='bold',
+                bbox=dict(facecolor='white', edgecolor='none', alpha=0.7, pad=0.5)
+            )
+
+        # 添加Y轴标题 "Species threatened (%)" -> "Cost Breakdown (%)"
         ax.text(
-            tick_angle + 0.08, 55, 'Cost\nbreakdown\n(%)',
-            ha='left', va='center',
-            fontsize=9, color='#666666',
-            linespacing=0.9
+            tick_angle, INNER_RADIUS + 50, 'Cost\nBreakdown\n(%)',
+            ha='center', va='center',
+            fontsize=12, color='#333333',
+            fontweight='bold',
+            rotation=0,
+            rotation_mode='anchor',
+            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8)
         )
 
-        # 添加场景标签 - 沿径向方向旋转
-        label_radius = 108
+        # === 添加场景标签 (最外层) ===
         for angle, label in zip(angles, labels):
             # 计算旋转角度（使标签沿径向方向）
             rotation_deg = np.degrees(angle) - 90
 
             # 调整旋转角度，使文字始终可读
-            if -90 < rotation_deg < 90:
+            if -90 <= rotation_deg <= 90:
                 rotation = rotation_deg
                 ha = 'left'
+                adjusted_radius = label_radius
             else:
                 rotation = rotation_deg + 180
                 ha = 'right'
+                adjusted_radius = label_radius + 2 # 稍微调整一下右边的距离
 
             ax.text(
-                angle, label_radius, label,
+                angle, adjusted_radius, label,
                 ha=ha, va='center',
-                fontsize=9,
+                fontsize=12,
                 fontweight='normal',
-                fontstyle='italic',
                 color='#333333',
                 rotation=rotation,
                 rotation_mode='anchor'
             )
 
-        # 计算分组标签位置（在组的中心，靠近内侧）
-        group_label_radius = 18  # 靠近中心
-        group_info = {}
-
-        current_group = None
-        group_start_idx = 0
-        for i, group in enumerate(groups):
-            if group != current_group:
-                if current_group is not None:
-                    # 计算上一组的中心角度
-                    group_end_idx = i - 1
-                    center_angle = (angles[group_start_idx] + angles[group_end_idx]) / 2
-                    group_info[current_group] = {
-                        'center': center_angle,
-                        'start': angles[group_start_idx],
-                        'end': angles[group_end_idx]
-                    }
-                group_start_idx = i
-                current_group = group
-
-        # 处理最后一组
-        if current_group is not None:
-            center_angle = (angles[group_start_idx] + angles[-1]) / 2
-            group_info[current_group] = {
-                'center': center_angle,
-                'start': angles[group_start_idx],
-                'end': angles[-1]
-            }
-
-        # 绘制分组标签 - 沿弧线方向书写
-        for group_name, info in group_info.items():
-            center_angle = info['center']
-            # 计算旋转角度（使标签沿弧线方向）
+        # === 添加中心分组标签 ===
+        group_label_radius = INNER_RADIUS * 0.6  # 在内孔中间
+        
+        for group_name, (min_ang, max_ang) in group_angular_ranges.items():
+            center_angle = (min_ang + max_ang) / 2
+            
+            # 计算旋转
             rotation_deg = np.degrees(center_angle) - 90
-
-            if -90 < rotation_deg < 90:
+            if -90 <= rotation_deg <= 90:
                 rotation = rotation_deg
             else:
                 rotation = rotation_deg + 180
-
+            
             ax.text(
                 center_angle, group_label_radius, group_name,
                 ha='center', va='center',
-                fontsize=11, fontweight='bold',
-                color='#333333',
+                fontsize=14, fontweight='bold',
+                color=self.group_colors.get(group_name, '#333333'),
                 rotation=rotation,
                 rotation_mode='anchor'
             )
 
-        # 绘制分组分隔弧线
-        for boundary_angle in group_boundaries:
-            # 绘制从中心到外侧的灰色分隔线
-            ax.plot(
-                [boundary_angle, boundary_angle],
-                [0, 105],
-                color='#aaaaaa',
-                linewidth=1,
-                linestyle='-',
-                alpha=0.6
-            )
-
-        # 设置方向
-        ax.set_theta_offset(0)
-        ax.set_theta_direction(-1)
-
-        # 添加图例 - 右上角
-        legend = ax.legend(
-            loc='upper right',
-            bbox_to_anchor=(1.32, 1.02),
-            fontsize=9,
+        # === 图例 ===
+        # 图例1：Cost Components (右侧)
+        handles, _ = ax.get_legend_handles_labels()
+        # 只取前12个（对应12个category）
+        cost_handles = handles[:len(self.cost_categories)]
+        cost_labels = list(self.cost_categories.keys())
+        
+        legend1 = ax.legend(
+            cost_handles, cost_labels,
+            loc='center left',
+            bbox_to_anchor=(1.15, 0.5), # 放在右边
+            fontsize=12,
             title='Cost Components',
-            title_fontsize=10,
-            frameon=True,
-            fancybox=False,
-            edgecolor='#666666',
-            framealpha=1.0
+            title_fontsize=13,
+            frameon=False,
+            labelspacing=0.8
         )
-        legend.get_title().set_fontweight('bold')
+        legend1.get_title().set_fontweight('bold')
+        ax.add_artist(legend1) # 添加回图表，因为后续调用legend会覆盖
+        
+        # 图例2：Groups (ClassName) - 创建自定义handles
+        group_handles = [mpatches.Patch(color=c, label=l) for l, c in self.group_colors.items()]
+        
+        legend2 = ax.legend(
+            handles=group_handles,
+            loc='upper right',
+            bbox_to_anchor=(1.15, 0.85),
+            fontsize=12,
+            title='Scenario Groups',
+            title_fontsize=13,
+            frameon=False
+        )
+        legend2.get_title().set_fontweight('bold')
 
         plt.tight_layout()
 

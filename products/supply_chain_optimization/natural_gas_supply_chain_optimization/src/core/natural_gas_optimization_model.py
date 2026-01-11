@@ -6363,6 +6363,8 @@ class NaturalGasSupplyChainOptimizer:
                 corsia_limit = self.carbon_params.get('corsia_limit_ci', 30)
 
                 carbon_results['vs_traditional_jet'] = (carbon_intensity_energy / traditional_jet - 1) * 100
+                carbon_results['traditional_jet_ci_gco2e_per_mj'] = traditional_jet
+                carbon_results['abs_diff_vs_traditional_jet_gco2e_per_mj'] = carbon_intensity_energy - traditional_jet
                 carbon_results['vs_corsia'] = (carbon_intensity_energy / corsia_limit - 1) * 100
 
                 logger.info(f"碳强度: {carbon_intensity_mass:.3f} kg CO2eq/kg SAF")
