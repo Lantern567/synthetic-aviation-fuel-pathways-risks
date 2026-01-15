@@ -6,7 +6,7 @@ Quadrant Chart Visualization for SAF Scenarios
 - X轴：碳强度差值（方案 - 传统航煤，g CO2eq/MJ），以0为分界点（负值表示减排）
 - Y轴：LCOE成本（元/kg），以18元/kg（SAF市场售价）为分界点
 - 四象限背景色区分不同区域
-- 点大小表示产量，颜色表示场景类型
+- 点颜色表示场景类型
 
 作者：Claude Code
 创建时间：2026-01-05
@@ -25,7 +25,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.font_manager import FontProperties
 from matplotlib.ticker import MultipleLocator
-from adjustText import adjust_text
+try:
+    from adjustText import adjust_text
+except ImportError:
+    adjust_text = None
 
 # 配置日志
 logging.basicConfig(
@@ -74,14 +77,14 @@ class QuadrantChartVisualizer:
             'Coal Hydrogen': {
                 'name_en': 'CTL',
                 'category': 'Grey',
-                'color': '#9E9E9E',  # Grey
+                'color': '#616161',  # Deeper Grey
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + Coal': {
                 'name_en': 'CTL-BH',
                 'category': 'Grey',
-                'color': '#BDBDBD',  # Light Grey
+                'color': '#9E9E9E',  # Grey
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/carbon_emissions_detailed_*.json')
             },
@@ -89,28 +92,28 @@ class QuadrantChartVisualizer:
             'DAC Two-Step': {
                 'name_en': 'DAC-GH-MTJ',
                 'category': 'Green',
-                'color': '#70AD47',  # Soft Green
+                'color': '#2E7D32',  # Deeper Green
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json')
             },
             'DAC One-Step': {
                 'name_en': 'DAC-GH-FT',
                 'category': 'Green',
-                'color': '#8FCF69',  # Lighter Green
+                'color': '#43A047',  # Green
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json')
             },
             'Green H2 Two-Step': {
                 'name_en': 'CCU-GH-MTJ',
                 'category': 'Green',
-                'color': '#A9DF8E',  # Pale Green
+                'color': '#66BB6A',  # Medium Green
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/carbon_emissions_detailed_*.json')
             },
             'Green H2 One-Step': {
                 'name_en': 'CCU-GH-FT',
                 'category': 'Green',
-                'color': '#C5E8B7',  # Very Pale Green
+                'color': '#81C784',  # Light Green
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json')
             },
@@ -118,49 +121,49 @@ class QuadrantChartVisualizer:
             'Natural Gas Two-Step': {
                 'name_en': 'GTL-GH-MTJ',
                 'category': 'Blue',
-                'color': '#5C9BD5',  # Soft Blue
+                'color': '#1565C0',  # Deeper Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
             },
             'Natural Gas One-Step': {
                 'name_en': 'GTL-GH-FT',
                 'category': 'Blue',
-                'color': '#7BAFE0',  # Lighter Blue
+                'color': '#1E88E5',  # Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + DAC Two-Step': {
                 'name_en': 'DAC-BH-MTJ',
                 'category': 'Blue',
-                'color': '#92C4EB',  # Pale Blue 1
+                'color': '#42A5F5',  # Medium Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + DAC One-Step': {
                 'name_en': 'DAC-BH-FT',
                 'category': 'Blue',
-                'color': '#A6D2F2',  # Pale Blue 2
+                'color': '#64B5F6',  # Light Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + NG Two-Step': {
                 'name_en': 'GTL-BH-MTJ',
                 'category': 'Blue',
-                'color': '#B9DEF7',  # Pale Blue 3
+                'color': '#90CAF9',  # Pale Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 Two-Step': {
                 'name_en': 'CCU-BH-MTJ',
                 'category': 'Blue',
-                'color': '#CCEBFC',  # Pale Blue 4
+                'color': '#BBDEFB',  # Very Pale Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 One-Step': {
                 'name_en': 'CCU-BH-FT',
                 'category': 'Blue',
-                'color': '#E0F4FF',  # Very Pale Blue
+                'color': '#E3F2FD',  # Very Light Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
             }
@@ -168,9 +171,9 @@ class QuadrantChartVisualizer:
 
         # 类别颜色映射（三色系）
         self.category_colors = {
-            'Grey': '#9E9E9E',
-            'Blue': '#5C9BD5',
-            'Green': '#70AD47'
+            'Grey': '#616161',
+            'Blue': '#1565C0',
+            'Green': '#2E7D32'
         }
 
         # 数据存储
@@ -229,7 +232,7 @@ class QuadrantChartVisualizer:
                     'color': config['color'],
                     'lcoe': lcoe,
                     'carbon_diff': carbon_diff,
-                    'production': production
+                    'production': production,
                 }
 
                 logger.info(f"  LCOE: {lcoe:.2f} 元/kg")
@@ -275,22 +278,23 @@ class QuadrantChartVisualizer:
         y_max = max(y_values) + y_margin
 
         # ========== 绘制四象限背景色 (更淡雅的颜色) ==========
-        # 左下：淡绿色（低碳+低成本）
+        # ========== 绘制四象限背景色 (更淡雅的颜色) ==========
+        # 左下：浅绿（低排+低成本 -> 理想区域）
         ax.fill_between([x_min, self.carbon_threshold], y_min, self.cost_threshold,
-                        color='#E8F5E9', alpha=0.5, label='_nolegend_')
-        # 左上：白色（低碳+高成本）
+                color='#F1F8E9', alpha=0.6, zorder=0)
+        # 左上：白色（低排+高成本 -> 技术可行但贵）
         ax.fill_between([x_min, self.carbon_threshold], self.cost_threshold, y_max,
-                        color='#FCFCFC', alpha=1.0, label='_nolegend_')
-        # 右下：淡灰色（高碳+低成本）
+            color='#FFFFFF', alpha=1.0, zorder=0)
+        # 右下：浅橙（高排+低成本 -> 经济但不够环保）
         ax.fill_between([self.carbon_threshold, x_max], y_min, self.cost_threshold,
-                        color='#F5F5F5', alpha=0.5, label='_nolegend_')
-        # 右上：淡粉色（高碳+高成本）
+                color='#FFF3E0', alpha=0.6, zorder=0)
+        # 右上：浅红（高排+高成本 -> 需避免）
         ax.fill_between([self.carbon_threshold, x_max], self.cost_threshold, y_max,
-                        color='#FFF3E0', alpha=0.5, label='_nolegend_') # 改为橙色系更柔和
+                color='#FFEBEE', alpha=0.6, zorder=0)
 
         # ========== 绘制分界线（灰色虚线） ==========
-        ax.axvline(x=self.carbon_threshold, color='#999999', linestyle='--', linewidth=1.5)
-        ax.axhline(y=self.cost_threshold, color='#999999', linestyle='--', linewidth=1.5)
+        ax.axvline(x=self.carbon_threshold, color='#999999', linestyle='--', linewidth=1.5, zorder=1)
+        ax.axhline(y=self.cost_threshold, color='#999999', linestyle='--', linewidth=1.5, zorder=1)
 
         # ========== 象限标注（大字体） ==========
         # 顶部标注（图外）
@@ -298,9 +302,7 @@ class QuadrantChartVisualizer:
                 'Lower emission', fontsize=14, ha='center', va='bottom', fontweight='bold', color='#555555')
         ax.text(self.carbon_threshold + (x_max - self.carbon_threshold) / 2, y_max + 0.5,
                 'Higher emission', fontsize=14, ha='center', va='bottom', fontweight='bold', color='#555555')
-        # 右侧标注（图外）- 使用figure坐标或axis坐标
-        # 使用axis坐标 transform=ax.get_yaxis_transform()
-        # 这里还是用data坐标比较好控制相对位置，但x要取x_max外面
+        # 右侧标注（图外）
         text_x_pos = x_max + 2
         ax.text(text_x_pos, self.cost_threshold + (y_max - self.cost_threshold)/2, 'Higher\ncost', 
                 fontsize=14, ha='left', va='center', fontweight='bold', color='#555555')
@@ -313,19 +315,23 @@ class QuadrantChartVisualizer:
         scatter_x = []
         scatter_y = []
 
+        # 固定点大小（不再使用MAC映射）
+        fixed_size = 420
+
         for module_name, data in self.data.items():
             x = data['carbon_diff']
             y = data['lcoe']
             scatter_x.append(x)
             scatter_y.append(y)
-            # 产量映射到点大小
-            size = max(150, min(600, data['production'] * 8)) # 稍微调大点
+
+            size = fixed_size
+            
             # 颜色
             fill_color = data['color']
             
-            # 绘点
+            # 绘点 - 去除边缘黑色
             ax.scatter(x, y, s=size, c=fill_color, alpha=0.9,
-                      edgecolors='white', linewidths=1.5, zorder=5)
+                      edgecolors='none', zorder=5)
 
             # 添加标签文本对象
             text = ax.text(x, y, data['name_en'], fontsize=12, color='#333333', fontweight='normal', zorder=10)
@@ -338,27 +344,32 @@ class QuadrantChartVisualizer:
                       fontsize=16, labelpad=15, fontweight='bold')
 
         # ========== 设置轴范围和网格 ==========
-        ax.set_xlim(x_min, x_max - 5) # 稍微收一点右边留给文字
+        ax.set_xlim(x_min, x_max - 5) 
         ax.set_ylim(y_min, y_max)
 
         # 设置网格
-        # 刻度减少约3/4：步长扩大4倍
         ax.xaxis.set_major_locator(MultipleLocator(200))
         ax.yaxis.set_major_locator(MultipleLocator(20))
         ax.grid(True, linestyle='--', alpha=0.5, color='#aaaaaa', dashes=(4, 4))
 
         # ========== 使用adjustText自动调整标签位置 ==========
-        adjust_text(texts,
-                   x=scatter_x,
-                   y=scatter_y,
-                   ax=ax,
-                   arrowprops=dict(arrowstyle='-', color='#666666', lw=0.8),
-                   force_text=(0.5, 1.0),
-                   force_static=(1.0, 1.5),
-                   force_pull=(0.1, 0.1),
-                   expand=(1.2, 1.4),
-                   ensure_inside_axes=True,
-                   iter_lim=1000)
+        if adjust_text:
+            try:
+                adjust_text(texts,
+                           x=scatter_x,
+                           y=scatter_y,
+                           ax=ax,
+                           arrowprops=dict(arrowstyle='-', color='#666666', lw=0.8),
+                           force_text=(0.5, 1.0),
+                           force_static=(1.0, 1.5),
+                           force_pull=(0.1, 0.1),
+                           expand=(1.2, 1.4),
+                           ensure_inside_axes=True,
+                           iter_lim=1000)
+            except Exception as e:
+                logger.warning(f"adjust_text running failed: {e}")
+        else:
+             logger.warning("adjustText module not found, skipping label adjustment.")
 
         # ========== 设置刻度字体 ==========
         ax.tick_params(axis='both', which='major', labelsize=16)
@@ -370,7 +381,7 @@ class QuadrantChartVisualizer:
             spine.set_color('#666666')
 
         # ========== 创建图例 ==========
-        # Pathway图例（右上角，三列）
+        # 1. Scenarios Legend
         from matplotlib.lines import Line2D
         
         # 顺序
@@ -380,7 +391,7 @@ class QuadrantChartVisualizer:
             'Green': ['DAC-GH-MTJ', 'DAC-GH-FT', 'CCU-GH-MTJ', 'CCU-GH-FT']
         }
 
-        all_handles = []
+        scenario_handles = []
         # 按Grey, Blue, Green顺序添加
         for group in ['Grey', 'Blue', 'Green']:
             for name in pathway_order[group]:
@@ -389,23 +400,25 @@ class QuadrantChartVisualizer:
                         # 圆形图标
                         h = Line2D([0], [0], marker='o', color='w', markerfacecolor=d['color'],
                                   markersize=10, label=name, linestyle='None')
-                        all_handles.append(h)
+                        scenario_handles.append(h)
                         break
 
-        # 创建图例
-        # 这是一个大图例，放在右上角空白处 (如果有的话)
-        # 考虑到象限位置，左上是高成本低碳(Green costy)，右上是High C costy
-        # 我们的点主要分布在左下(Green Econ)和右下(Grey Econ)，右上(High C Costy)通常是空的，适合放图例
-        
-        legend = ax.legend(handles=all_handles, loc='upper right',
+        # Legend 1: Scenarios (Inside Top-Right, Far Right)
+        # 放在红色区域内，靠右。
+        # bbox_to_anchor=(x, y) where x,y are in axes coordinates.
+        # Top-Right is (1, 1). To be inside, use e.g. (0.98, 0.98).
+        legend_scenarios = ax.legend(handles=scenario_handles, loc='upper right',
                            title='Scenarios', title_fontsize=12,
-                           fontsize=11, framealpha=0.9, edgecolor='#cccccc',
+                           fontsize=11, framealpha=0.8, edgecolor='#cccccc',
                            facecolor='white',
-                           bbox_to_anchor=(0.98, 0.98), # 放在右上角
-                           ncol=1, # 单列显示
+                           bbox_to_anchor=(0.99, 0.99), # Inside, Top-Right
+                           ncol=1, 
                            handletextpad=0.5,
                            labelspacing=0.5)
-        legend.get_title().set_fontweight('bold')
+        legend_scenarios.get_title().set_fontweight('bold')
+        ax.add_artist(legend_scenarios) 
+
+        # 不再绘制“点大小”图例（MAC相关）
         
         # Quadrant Explanations Legend (Optional, simplify visually)
         # 可以省略背景色图例，因为已经有大字标注了
@@ -428,10 +441,10 @@ class QuadrantChartVisualizer:
         label_bbox = dict(facecolor='white', edgecolor='none', alpha=0.7, pad=0.2)
         label_y_ax = 0.90
         ax.text(ref_10 - 1, label_y_ax, f'{ref_10:.1f} g/MJ (10% reduction)', rotation=90,
-            fontsize=11, color='#888888', va='top', ha='right',
+            fontsize=14, color='#555555', va='top', ha='right',
             transform=ax.get_xaxis_transform(), bbox=label_bbox)
         ax.text(ref_70 - 1, label_y_ax, f'{ref_70:.1f} g/MJ (70% reduction)', rotation=90,
-            fontsize=11, color='#888888', va='top', ha='right',
+            fontsize=14, color='#555555', va='top', ha='right',
             transform=ax.get_xaxis_transform(), bbox=label_bbox)
 
         # 保存图片

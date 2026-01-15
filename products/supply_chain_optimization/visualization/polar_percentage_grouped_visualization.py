@@ -179,6 +179,54 @@ class GroupedPolarPercentageVisualizer:
         }
 
         self.data = {}
+        
+    def draw_curved_text(self, ax, text, radius, center_angle, fontsize=20, color='#333333'):
+        """
+        绘制沿圆弧弯曲的文字
+        """
+        # 规范化中心角度到 0-2pi
+        center_angle = center_angle % (2 * np.pi)
+        
+        # 粗调系数 - Percentage图通常半径是固定的(~100+something), 但坐标系是0-100? No, polar coordinates.
+        # Check radius range:
+        # INNER_RADIUS=35, BAR=100, RING=12, GAP=3. Total ~150.
+        # radius will be around 160-170.
+        # Use same heuristic
+        
+        char_angle_width = 0.06 * (20 / radius) * fontsize * 0.8 # Spacing adjusted to 0.06 as requested
+        
+        total_angle = len(text) * char_angle_width
+        
+        # Dynamic Flip for readability:
+        is_flipped = False
+        if 90 < np.degrees(center_angle) < 270:
+            is_flipped = True
+            
+        if is_flipped:
+            start_angle = center_angle - total_angle / 2
+            char_step = char_angle_width 
+            base_rotation = 90
+        else:
+            start_angle = center_angle + total_angle / 2
+            char_step = -char_angle_width
+            base_rotation = -90
+            
+        curr_angle = start_angle
+        
+        for char in text:
+            deg = np.degrees(curr_angle)
+            rotation = deg + base_rotation
+            
+            ax.text(
+                curr_angle, radius, char,
+                ha='center', va='center',
+                fontsize=fontsize,
+                fontweight='normal',
+                color=color,
+                rotation=rotation,
+                rotation_mode='anchor'
+            )
+            curr_angle += char_step
 
     def load_data(self):
         """加载所有场景数据"""
@@ -264,15 +312,17 @@ class GroupedPolarPercentageVisualizer:
 
         # 创建图形
         fig, ax = plt.subplots(figsize=(16, 16), subplot_kw=dict(projection='polar'))
-        fig.patch.set_facecolor('white')
-        ax.set_facecolor('white')
-
-        # === 几何参数 ===
-        INNER_RADIUS = 35           # 内圈半径（形成中间的空洞）
-        BAR_LIMIT = 100             # 柱状图数据最大值
-        RING_GAP = 5                # 柱子和外圈的间隙
-        RING_WIDTH = 8              # 外圈宽度
-        LABEL_GAP = 12              # 外圈和标签的间隙
+        # === 几何参数 (Scaled to match Stacked Chart Dimensions) ===
+        # Target 'Max Cost' equivalent = 400 (approx matching the other chart)
+        EQUIV_MAX_COST = 400.0
+        scale_factor = EQUIV_MAX_COST / 100.0 # 4.0
+        
+        # 使用与 Stacked Chart 相同的比例系数
+        INNER_RADIUS = EQUIV_MAX_COST * 0.35      # 140
+        BAR_LIMIT = EQUIV_MAX_COST                # 400
+        RING_GAP = EQUIV_MAX_COST * 0.02          # 8
+        RING_WIDTH = EQUIV_MAX_COST * 0.12        # 48
+        LABEL_GAP = RING_WIDTH * 0.5              # 24
         
         # 径向位置计算
         outer_ring_start = INNER_RADIUS + BAR_LIMIT + RING_GAP
@@ -350,7 +400,10 @@ class GroupedPolarPercentageVisualizer:
         bottom = np.zeros(n_scenarios) + INNER_RADIUS # 每个柱子从INNER_RADIUS开始
 
         for cat_name, cat_config in self.cost_categories.items():
-            values = np.array(cost_data[cat_name])
+            # Scale data values to match the new BAR_LIMIT (300)
+            # Original percentage is 0-100. New max is 300.
+            # So multiply percentage by scale_factor
+            values = np.array(cost_data[cat_name]) * scale_factor
             ax.bar(
                 angles,
                 values,
@@ -387,9 +440,9 @@ class GroupedPolarPercentageVisualizer:
 
         # 设置网格线 - 虚线
         # 只显示数据区域的网格 (20, 40, 60, 80, 100)
-        # 实际位置 = value + INNER_RADIUS
+        # 实际位置 = (value * scale_factor) + INNER_RADIUS
         grid_values = [20, 40, 60, 80, 100]
-        actual_grid_pos = [v + INNER_RADIUS for v in grid_values]
+        actual_grid_pos = [(v * scale_factor) + INNER_RADIUS for v in grid_values]
         
         ax.set_yticks(actual_grid_pos)
         ax.set_yticklabels([]) # 不使用默认标签
@@ -411,102 +464,67 @@ class GroupedPolarPercentageVisualizer:
             ax.text(
                 tick_angle, radius, f"{val}",
                 ha='center', va='center',
-                fontsize=11, color='#666666',
+                fontsize=22, color='#666666',
                 fontweight='bold',
                 bbox=dict(facecolor='white', edgecolor='none', alpha=0.7, pad=0.5)
             )
 
-        # 添加Y轴标题 "Species threatened (%)" -> "Cost Breakdown (%)"
+        # === 添加Y轴标题 "Species threatened (%)" -> "Cost Breakdown (%)"
         ax.text(
-            tick_angle, INNER_RADIUS + 50, 'Cost\nBreakdown\n(%)',
+            0, 0, 'Cost\nBreakdown\n(%)',
             ha='center', va='center',
-            fontsize=12, color='#333333',
+            fontsize=24, color='#333333',
             fontweight='bold',
             rotation=0,
             rotation_mode='anchor',
             bbox=dict(facecolor='white', edgecolor='none', alpha=0.8)
         )
 
-        # === 添加场景标签 (最外层) ===
+        # === 添加场景标签 (最外层) -> 使用弯曲文字
         for angle, label in zip(angles, labels):
-            # 计算旋转角度（使标签沿径向方向）
-            rotation_deg = np.degrees(angle) - 90
+             self.draw_curved_text(ax, label, label_radius, angle, fontsize=24, color='#333333')
 
-            # 调整旋转角度，使文字始终可读
-            if -90 <= rotation_deg <= 90:
-                rotation = rotation_deg
-                ha = 'left'
-                adjusted_radius = label_radius
-            else:
-                rotation = rotation_deg + 180
-                ha = 'right'
-                adjusted_radius = label_radius + 2 # 稍微调整一下右边的距离
 
-            ax.text(
-                angle, adjusted_radius, label,
-                ha=ha, va='center',
-                fontsize=12,
-                fontweight='normal',
-                color='#333333',
-                rotation=rotation,
-                rotation_mode='anchor'
-            )
 
-        # === 添加中心分组标签 ===
-        group_label_radius = INNER_RADIUS * 0.6  # 在内孔中间
-        
+
+        # Add labels to outer ring (Correct logic)
         for group_name, (min_ang, max_ang) in group_angular_ranges.items():
             center_angle = (min_ang + max_ang) / 2
             
-            # 计算旋转
-            rotation_deg = np.degrees(center_angle) - 90
-            if -90 <= rotation_deg <= 90:
-                rotation = rotation_deg
-            else:
-                rotation = rotation_deg + 180
+            deg = np.degrees(center_angle)
+            if deg < 0: deg += 360
             
+            rotation = deg - 90
+            if 90 < deg < 270:
+                rotation += 180
+
             ax.text(
-                center_angle, group_label_radius, group_name,
+                center_angle, outer_ring_start + RING_WIDTH/2, group_name,
                 ha='center', va='center',
-                fontsize=14, fontweight='bold',
-                color=self.group_colors.get(group_name, '#333333'),
+                fontsize=28, fontweight='bold',
+                color='white',
                 rotation=rotation,
                 rotation_mode='anchor'
             )
 
         # === 图例 ===
-        # 图例1：Cost Components (右侧)
+        # 图例1：Cost Components (Right Side)
         handles, _ = ax.get_legend_handles_labels()
-        # 只取前12个（对应12个category）
         cost_handles = handles[:len(self.cost_categories)]
         cost_labels = list(self.cost_categories.keys())
         
         legend1 = ax.legend(
             cost_handles, cost_labels,
-            loc='center left',
-            bbox_to_anchor=(1.15, 0.5), # 放在右边
-            fontsize=12,
+            loc='upper left',
+            bbox_to_anchor=(1.15, 1.0), # Right side
+            fontsize=24,
             title='Cost Components',
-            title_fontsize=13,
+            title_fontsize=26,
             frameon=False,
             labelspacing=0.8
         )
         legend1.get_title().set_fontweight('bold')
-        ax.add_artist(legend1) # 添加回图表，因为后续调用legend会覆盖
-        
-        # 图例2：Groups (ClassName) - 创建自定义handles
-        group_handles = [mpatches.Patch(color=c, label=l) for l, c in self.group_colors.items()]
-        
-        legend2 = ax.legend(
-            handles=group_handles,
-            loc='upper right',
-            bbox_to_anchor=(1.15, 0.85),
-            fontsize=12,
-            title='Scenario Groups',
-            title_fontsize=13,
-            frameon=False
-        )
-        legend2.get_title().set_fontweight('bold')
+        # 移除 Group Legend
 
         plt.tight_layout()
 

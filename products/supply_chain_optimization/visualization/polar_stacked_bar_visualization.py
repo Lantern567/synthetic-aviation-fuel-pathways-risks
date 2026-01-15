@@ -224,6 +224,104 @@ class PolarStackedBarVisualizer:
         # 数据存储
         self.data = {}
 
+    def draw_curved_text(self, ax, text, radius, center_angle, fontsize=20, color='#333333'):
+        """
+        绘制沿圆弧弯曲的文字
+        """
+        # 估算字符宽度 (heuristic)
+        # 假设平均字符宽高比，根据半径计算角度跨度
+        # 在半径 ~140 (approx max_cost + spacing) 的位置
+        # 这是一个粗略的估计，为了更好的效果可能需要微调系数
+        
+        # 规范化中心角度到 0-2pi
+        center_angle = center_angle % (2 * np.pi)
+        
+        # 判断是否需要翻转文字 (左半圆/下半圆)
+        # 通常：
+        # - 右半圆 (-90 to 90): 顺时针，字底朝内，从上往下读 (or normal left-to-right look)
+        # - 左半圆 (90 to 270): 逆时针，字底朝内? 
+        # 为了最佳的“环绕”阅读体验：
+        # - Right/Top (315 to 135 deg): Normal, base inward
+        # - Left/Bottom (135 to 225 deg): Flipped? 
+        
+        # 简单策略：严格的“脚朝圆心” (Base pointing center)
+        # 实际上用户抱怨之前的切向不对，可能是想让每个字母都垂直于半径
+        
+        # 计算总跨度
+        # 假设每个字符大概宽 0.5 * fontsize (point)
+        # 换算成 data coordinates? Plot coords are roughly values (e.g. 100).
+        # We need to map fontsize to data scale. Hard without renderer.
+        # Trial and error factor.
+        
+        # 粗调系数
+        # 增加间距系数，避免重叠
+        # Calculate angle per character: Width / Radius
+        # Width approx 0.6 * fontsize (for typical fonts)
+        # Using 0.08 angle spacing factor
+        char_angle_width = 0.06 * (20 / radius) * fontsize * 0.8
+        
+        total_angle = len(text) * char_angle_width
+        start_angle = center_angle + total_angle / 2
+        
+        # 检查是否在左侧 (90 ~ 270度)，为了可读性，通常希望字头朝圆心？
+        # 或者严格遵循“环绕” (字底朝圆心)
+        # 用户之前的抱怨暗示他想要“贴合”，通常意味着字底朝圆心 (Arch effect)
+        
+        # 如果在下半圆/左侧，为了防止字是倒着的，也可以翻转顺序
+        # 但“环绕”效果通常要求字底统一朝内或朝外
+        # Let's stick to Base Inward (Arch) for Top, and Base Outward (Smiley) for Bottom?
+        # Or Base Inward everywhere?
+        # User said "每个字体按照弧度走".
+        
+        # Let's try: Base Inward everywhere.
+        # Exception: Left side might look Upside Down. 
+        # But this is the truest "Wrapping".
+        
+        # Dynamic Flip for readability:
+        is_flipped = False
+        if 90 < np.degrees(center_angle) < 270:
+            is_flipped = True
+            
+        if is_flipped:
+            # Flip: Text drawn clockwise, Base Outward (so it's readable from outside)
+            # Or Counter-Clockwise, Base Inward?
+            # Usually:
+            # Top: Arch (Base Inward)
+            # Bottom: Smiley (Base Inward? No, Base Inward at bottom is upside down)
+            # Bottom: Smiley (Base Outward - readable)
+            
+            # Use Base Outward for Left/Bottom
+            # Start from left, move right
+            start_angle = center_angle - total_angle / 2
+            char_step = char_angle_width 
+            # Rotation: angle + 90 (Base Outward)
+            base_rotation = 90
+        else:
+            # Normal: Arch (Base Inward)
+            # Start from Left (higher angle), move Right (lower angle)
+            start_angle = center_angle + total_angle / 2
+            char_step = -char_angle_width
+            # Rotation: angle - 90 (Base Inward)
+            base_rotation = -90
+            
+        curr_angle = start_angle
+        
+        for char in text:
+            # Calculate rotation
+            deg = np.degrees(curr_angle)
+            rotation = deg + base_rotation
+            
+            ax.text(
+                curr_angle, radius, char,
+                ha='center', va='center',
+                fontsize=fontsize,
+                fontweight='normal',
+                color=color,
+                rotation=rotation,
+                rotation_mode='anchor'
+            )
+            curr_angle += char_step
+
     def load_data(self):
         """加载13个场景的数据"""
         logger.info("=" * 80)
@@ -392,8 +490,8 @@ class PolarStackedBarVisualizer:
             bottom += values
 
         # === 绘制外圈 (Group Ring) ===
-        RING_GAP = max_cost * 0.05
-        RING_WIDTH = max_cost * 0.08
+        RING_GAP = max_cost * 0.02 # 缩小间隙
+        RING_WIDTH = max_cost * 0.12 # 加宽以容纳大字体
         outer_ring_start = max(bottom) + RING_GAP
         
         # 绘制
@@ -414,23 +512,24 @@ class PolarStackedBarVisualizer:
             )
             
             # 添加组标签(在环的中间)
-             # 转换为显示坐标系判断旋转
-            true_angle = np.pi/2 - center_angle
-            # 归一化到 -pi 到 pi
-            true_angle = (true_angle + np.pi) % (2 * np.pi) - np.pi
+            # 计算旋转: Tangential (Tangent to the circle)
+            # 0度(Right) -> Vertical (-90)
+            # 90度(Top) -> Horizontal (0)
+            deg = np.degrees(center_angle)
+            if deg < 0: deg += 360
             
-            rotation_deg = np.degrees(true_angle) - 90
+            # Tangential rotation
+            rotation = deg - 90
             
-    
-            if -90 <= rotation_deg <= 90:
-                rotation = rotation_deg
-            else:
-                rotation = rotation_deg + 180
-            
+            # Flip text on the left/bottom side to be readable
+            # Range: 90 to 270 degrees
+            if 90 < deg < 270:
+                rotation += 180
+
             ax.text(
                 center_angle, outer_ring_start + RING_WIDTH/2, group_name,
                 ha='center', va='center',
-                fontsize=14, fontweight='bold',
+                fontsize=28, fontweight='bold',
                 color='white',
                 rotation=rotation,
                 rotation_mode='anchor'
@@ -464,90 +563,40 @@ class PolarStackedBarVisualizer:
             ax.text(
                 tick_angle, radius, f"{int(val)}",
                 ha='center', va='center',
-                fontsize=11, color='#666666',
+                fontsize=22, color='#666666',
                 fontweight='bold',
                 bbox=dict(facecolor='white', edgecolor='none', alpha=0.7, pad=0.5)
             )
 
-        # 4. 场景标签 (最外侧)
-        label_radius = outer_ring_start + RING_WIDTH * 1.5 # 标签放在环外面
+        # 4. 场景标签 (最外侧) -> 使用弯曲文字
+        label_radius = outer_ring_start + RING_WIDTH * 1.5
         
-        # 设置起始角度: 顶部
-        ax.set_theta_offset(np.pi / 2)
-        ax.set_theta_direction(-1) # 顺时针
-
         for angle, label in zip(angles, labels):
-            # 因为设置了theta_direction(-1)和offset(pi/2)
-            # 真实绘图角度是: pi/2 - angle
-            # 我们计算文本旋转应该基于真实绘图角度
-            
-            # 转换为笛卡尔坐标系的绝对角度 (0是右边, pi/2是上边)
-            true_angle = np.pi/2 - angle
-            
-            # 归一化到 -pi 到 pi
-            true_angle = (true_angle + np.pi) % (2 * np.pi) - np.pi
-            
-            rotation_deg = np.degrees(true_angle) - 90 # 径向向外
-            
-            # 调整可读性
-            if -90 <= rotation_deg <= 90:
-                rotation = rotation_deg
-                ha = 'left'
-                adjusted_radius = label_radius
-            else:
-                rotation = rotation_deg + 180
-                ha = 'right'
-                adjusted_radius = label_radius + max_cost * 0.05
-
-            ax.text(
-                angle, adjusted_radius, label,
-                ha=ha, va='center',
-                fontsize=12,
-                fontweight='normal',
-                color='#333333',
-                rotation=rotation,
-                rotation_mode='anchor'
-            )
+            self.draw_curved_text(ax, label, label_radius, angle, fontsize=24, color='#333333')
 
         # 5. 图例
-        # Cost Components Legend
+        # Cost Components Legend - Right Side
         handles, _ = ax.get_legend_handles_labels()
-        # 由于绘制顺序
-        # 12个costs + 3个groups (bars not labeled automatically in legend if no label passed)
-        # 我们的group bars没有label参数, 所以handles里应该只有costs
         
         cost_legend = ax.legend(
             handles=handles[:len(self.cost_categories)],
-            labels=list(self.cost_categories.keys()), # using keys as labels might be safer? No, use name_en
-            loc='upper right',
-            bbox_to_anchor=(1.25, 0.95),
-            fontsize=12,
+            labels=list(self.cost_categories.keys()), 
+            loc='upper left',
+            bbox_to_anchor=(1.15, 1.0), # Right side
+            fontsize=24,
             title='Cost Components',
-            title_fontsize=13,
+            title_fontsize=26,
             frameon=False,
             labelspacing=0.8
         )
         cost_legend.get_title().set_fontweight('bold')
-        ax.add_artist(cost_legend)
-        
-        # Group Legend
-        group_handles = [mpatches.Patch(color=c, label=l) for l, c in self.group_colors.items()]
-        group_legend = ax.legend(
-            handles=group_handles,
-            loc='upper right',
-            bbox_to_anchor=(1.25, 1.15),
-            fontsize=12,
-            title='Scenario Groups',
-            title_fontsize=13,
-            frameon=False
-        )
-        group_legend.get_title().set_fontweight('bold')
+        # 移除 Group Legend，因为标签已经在环上了
 
         # 6. 中心标题/单位
         ax.text(
-            0, 0, 'Cost\\n(100M CNY)',
+            0, 0, 'Cost\n(100M CNY)',
             ha='center', va='center',
-            fontsize=12, fontweight='bold',
+            fontsize=24, fontweight='bold',
             color='#555555'
         )
 
