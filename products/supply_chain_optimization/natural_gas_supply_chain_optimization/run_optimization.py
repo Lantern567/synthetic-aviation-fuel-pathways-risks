@@ -37,7 +37,7 @@ def main():
         print(f"OSM文件路径: {osm_file_path}")
 
         optimizer = NaturalGasSupplyChainOptimizer(
-            time_horizon_weeks=1,
+            time_horizon_weeks=4,
             log_subdir='default',  # 使用默认日志目录
             osm_pbf_path=osm_file_path
         )

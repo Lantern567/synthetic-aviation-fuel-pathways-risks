@@ -5438,7 +5438,7 @@ if __name__ == '__main__':
 
         optimizer = NaturalGasSupplyChainOptimizerOneStep(
             config_path=config_path,
-            time_horizon_weeks=12,  # 使用12周时间窗口，与绿氢配置保持一致
+            time_horizon_weeks=4,  # 使用4周时间窗口，与绿氢配置保持一致
             osm_pbf_path=osm_file_path
         )
 
