@@ -1064,7 +1064,7 @@ operational_parameters:
 # Gurobi优化求解器的控制参数
 # =============================================================================
 solver_parameters:
-  TimeLimit: 10800                       # 求解时间限制(秒) | Time limit (seconds)
+  TimeLimit: 3600                       # 求解时间限制(秒) | Time limit (seconds)
                                            # 1e100 = 无限制，让求解器运行至最优解或收敛
                                            # 如需设置限制，可修改为具体秒数：
                                            #   - 小规模问题: 600-1800秒

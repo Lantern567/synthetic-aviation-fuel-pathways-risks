@@ -50,8 +50,8 @@ from datetime import datetime
 project_root = Path(__file__).resolve().parents[2]  # dac_hydrogen_saf_supply_chain_optimization/
 repo_root = Path(__file__).resolve().parents[5]     # green_methanol_for_port_transportation-main/
 
-# 默认使用12个典型周的需求数据路径
-DEFAULT_TWELVE_WEEK_DEMAND = repo_root / "products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx"
+# 默认使用4个典型周的需求数据路径
+DEFAULT_FOUR_WEEK_DEMAND = repo_root / "products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx"
 
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -100,7 +100,7 @@ class UnifiedSAFOptimizer:
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: int = 10800,  # 3小时
+        time_limit: int = 3600,  # 1小时
         mip_gap: float = 0.01,  # MIP求解精度1%
         time_horizon_weeks: Optional[int] = None,
         parallel_workers: Optional[int] = None,
@@ -122,12 +122,12 @@ class UnifiedSAFOptimizer:
                 - 'byproduct_two_step': 副产氢两步法 (副产氢+CO₂→甲醇→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认10800(3小时)
+            time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
             mip_gap: MIP相对最优间隙,默认0.01(1%)
-            time_horizon_weeks: 优化时间范围(周数),默认None使用配置值(12个典型周)
+            time_horizon_weeks: 优化时间范围(周数),默认None使用配置值(4个典型周)
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
-            airport_excel_path: 机场数据Excel路径,默认指向12个典型周的需求文件
+            airport_excel_path: 机场数据Excel路径,默认指向4个典型周的需求文件
             results_dir: 结果保存目录,None时使用默认
             config_path: 自定义配置文件路径(仅当process_type='custom'时使用)
             solver_params: 完整的求解器参数字典,会覆盖默认参数
@@ -154,7 +154,7 @@ class UnifiedSAFOptimizer:
         self.process_type = process_type
         self.time_horizon_weeks = time_horizon_weeks
         self.osm_pbf_path = osm_pbf_path
-        self.airport_excel_path = Path(airport_excel_path) if airport_excel_path else DEFAULT_TWELVE_WEEK_DEMAND
+        self.airport_excel_path = Path(airport_excel_path) if airport_excel_path else DEFAULT_FOUR_WEEK_DEMAND
 
         if results_dir is None:
             # 使用映射表确定输出目录（副产氢类型统一输出到byproduct_hydrogen）
@@ -541,7 +541,7 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 10800,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -569,7 +569,7 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 10800,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -597,7 +597,7 @@ def run_one_step_optimization(
 
 def run_byproduct_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 10800,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -625,7 +625,7 @@ def run_byproduct_one_step_optimization(
 
 def run_byproduct_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: int = 10800,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -665,7 +665,7 @@ if __name__ == '__main__':
         help='Process type to use (two_step: DAC两步法, one_step: DAC一步法, byproduct_one_step: 副产氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=int, default=10800, help='Time limit in seconds (default: 10800 = 3 hours)')
+    parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds (default: 3600 = 1 hour)')
     parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance (default: 0.01 = 1%)')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 

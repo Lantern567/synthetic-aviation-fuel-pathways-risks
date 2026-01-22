@@ -58,7 +58,7 @@ class UnifiedSAFOptimizer:
     Attributes:
         process_type (str): 工艺类型,'two_step'或'one_step'
         threads (int): CPU线程数
-        time_limit (Optional[int]): 求解时间限制(秒)，默认不设置
+        time_limit (int): 求解时间限制(秒)，默认3600(1小时)
         mip_gap (float): MIP求解精度
         config_path (Path): 配置文件路径
         optimizer (CoalHydrogenSAFOptimizer): 底层优化器实例（煤炭制氢版本）
@@ -77,7 +77,7 @@ class UnifiedSAFOptimizer:
         self,
         process_type: str = 'two_step',
         threads: Optional[int] = None,
-        time_limit: Optional[int] = None,
+        time_limit: int = 3600,
         mip_gap: float = 0.01,
         time_horizon_weeks: Optional[int] = None,  # None时从配置文件读取
         parallel_workers: Optional[int] = None,
@@ -97,9 +97,9 @@ class UnifiedSAFOptimizer:
                 - 'one_step': 一步法 (H₂+CO₂→RWGS→FT→SAF)
                 - 'custom': 使用自定义配置文件(需提供config_path)
             threads: Gurobi求解器CPU线程数,None时自动检测(推荐cpu_count-2)
-            time_limit: Gurobi求解时间限制(秒),默认不设置
+            time_limit: Gurobi求解时间限制(秒),默认3600(1小时)
             mip_gap: MIP相对最优间隙,默认0.01(1%)
-            time_horizon_weeks: 优化时间范围(周数),默认12周
+            time_horizon_weeks: 优化时间范围(周数),默认使用配置文件(4周典型数据)
             parallel_workers: 数据处理+距离计算并行workers数,None时自动检测(cpu_count)
             osm_pbf_path: OSM地图文件路径,None时使用默认
             airport_excel_path: 机场数据Excel路径,None时使用默认
@@ -154,6 +154,8 @@ class UnifiedSAFOptimizer:
         # CPU线程数设置
         self.threads = self._determine_threads(threads)
         self.parallel_workers = parallel_workers  # 保存parallel_workers参数
+        if time_limit is None:
+            time_limit = 3600
         self.time_limit = time_limit
         self.mip_gap = mip_gap
 
@@ -161,6 +163,7 @@ class UnifiedSAFOptimizer:
         if solver_params is None:
             self.solver_params = {
                 'Threads': self.threads,
+                'TimeLimit': self.time_limit,
                 'MIPGap': self.mip_gap,
                 'NodefileStart': 100,  # 内存使用超过100GB时，将节点数据写入磁盘
                 'NodefileDir': '/tmp/gurobi_nodes',  # 节点文件存储目录
@@ -170,14 +173,10 @@ class UnifiedSAFOptimizer:
             self.solver_params = solver_params
             # 确保关键参数存在
             self.solver_params.setdefault('Threads', self.threads)
+            self.solver_params.setdefault('TimeLimit', self.time_limit)
             self.solver_params.setdefault('MIPGap', self.mip_gap)
             self.solver_params.setdefault('NodefileStart', 100)
             self.solver_params.setdefault('NodefileDir', '/tmp/gurobi_nodes')
-
-        # 去除TimeLimit配置，确保不对求解时间进行限制
-        if 'TimeLimit' in self.solver_params:
-            self.logger.info("TimeLimit provided but will not be applied; removing from solver parameters")
-            self.solver_params.pop('TimeLimit')
 
         # 性能监控
         self.start_time = None
@@ -189,7 +188,7 @@ class UnifiedSAFOptimizer:
 
         self.logger.info(f"Initialized {process_type} optimizer")
         self.logger.info(f"CPU threads: {self.threads}")
-        self.logger.info("Time limit: not set")
+        self.logger.info(f"Time limit: {self.time_limit}s")
         self.logger.info(f"MIP gap: {self.mip_gap:.1%}")
 
     def _setup_logging(self, log_level: str):
@@ -515,7 +514,7 @@ class UnifiedSAFOptimizer:
 
 def run_two_step_optimization(
     threads: Optional[int] = None,
-    time_limit: Optional[int] = None,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -524,7 +523,7 @@ def run_two_step_optimization(
 
     Args:
         threads: CPU线程数
-        time_limit: 求解时间限制(秒)，已忽略
+        time_limit: 求解时间限制(秒)，默认3600(1小时)
         mip_gap: MIP Gap
         **kwargs: 其他传递给UnifiedSAFOptimizer的参数
 
@@ -534,6 +533,7 @@ def run_two_step_optimization(
     optimizer = UnifiedSAFOptimizer(
         process_type='two_step',
         threads=threads,
+        time_limit=time_limit,
         mip_gap=mip_gap,
         **kwargs
     )
@@ -542,7 +542,7 @@ def run_two_step_optimization(
 
 def run_one_step_optimization(
     threads: Optional[int] = None,
-    time_limit: Optional[int] = None,
+    time_limit: int = 3600,
     mip_gap: float = 0.01,
     **kwargs
 ) -> Dict[str, Any]:
@@ -551,7 +551,7 @@ def run_one_step_optimization(
 
     Args:
         threads: CPU线程数
-        time_limit: 求解时间限制(秒)，已忽略
+        time_limit: 求解时间限制(秒)，默认3600(1小时)
         mip_gap: MIP Gap
         **kwargs: 其他传递给UnifiedSAFOptimizer的参数
 
@@ -561,6 +561,7 @@ def run_one_step_optimization(
     optimizer = UnifiedSAFOptimizer(
         process_type='one_step',
         threads=threads,
+        time_limit=time_limit,
         mip_gap=mip_gap,
         **kwargs
     )
@@ -579,7 +580,7 @@ if __name__ == '__main__':
         help='Process type to use (two_step: 绿氢两步法, one_step: 绿氢一步法, byproduct_two_step: 副产氢两步法)'
     )
     parser.add_argument('--threads', type=int, default=None, help='Number of CPU threads')
-    parser.add_argument('--time-limit', type=int, default=None, help='Time limit in seconds (ignored)')
+    parser.add_argument('--time-limit', type=int, default=3600, help='Time limit in seconds (default: 3600 = 1 hour)')
     parser.add_argument('--mip-gap', type=float, default=0.01, help='MIP gap tolerance')
     parser.add_argument('--log-level', default='INFO', help='Logging level')
 
@@ -588,6 +589,7 @@ if __name__ == '__main__':
     optimizer = UnifiedSAFOptimizer(
         process_type=args.process_type,
         threads=args.threads,
+        time_limit=args.time_limit,
         mip_gap=args.mip_gap,
         log_level=args.log_level,
     )

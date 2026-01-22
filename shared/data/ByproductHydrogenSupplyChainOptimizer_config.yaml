@@ -246,7 +246,7 @@ green_hydrogen_supply:
     liquefaction_cost_yuan_per_kg: 5.0
 data_paths:
   aviation_data:
-    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx
+    airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx
     backup_airport_excel_path: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
     # 副产氢原始数据路径（直接读取，不使用convert后的数据）
     steel_h2_data_path: products/gis_energy_mapping/industrial_byproduct_hydrogen/data/steel_daily_byproduct_h2_20251027_202950.csv
@@ -286,7 +286,7 @@ dependencies:
     naming_convention: temp_renewable_<records>_<plants>.csv 用于判定缓存有效性
     renewable_filter_cache_dir: cache/filtered_500km_data
   data_inputs:
-    airports_excel: products/aviation_fuel_analysis/resource_flight_data_process/results/typical_weeks_data/typical_12weeks_demand_20251129_163442.xlsx
+    airports_excel: products/aviation_fuel_analysis/resource_flight_data_process/results/4_typical_weeks_data/typical_4weeks_demand_20251129_231231.xlsx
     airports_excel_backup: products/aviation_fuel_analysis/resource_flight_data_process/data/capital_binhai_airports_data_20250726_123415.xlsx
     co2_capture_sources: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
     osm_pbf_default: products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
@@ -519,7 +519,7 @@ operational_parameters:
     co2_transport_distance_km: 80
   operational_efficiency: 0.9
 solver_parameters:
-  TimeLimit: 10800
+  TimeLimit: 3600
   MIPGap: 0.01
   Threads: 100
 technologies:

@@ -6906,6 +6906,9 @@ class NaturalGasSupplyChainOptimizer:
             inventory_df.to_csv(inventory_path, index=False, encoding='utf-8-sig')
             print(f"库存水平保存到: {inventory_path}")
 
+        # 保存逐时生产汇总（电力/氢气/SAF）
+        self._save_hourly_production_outputs(timestamp, output_dir)
+
         # 保存运输路径汇总表
         all_transport_summary = []
         
@@ -6996,6 +6999,91 @@ class NaturalGasSupplyChainOptimizer:
         print(f"完整解决方案保存到: {solution_path}")
         
         print(f"所有结果已成功保存到目录: {output_dir}")
+
+    def _save_hourly_production_outputs(self, timestamp: str, output_dir: Optional[str] = None):
+        """保存逐时电力/氢气/SAF生产汇总数据（按模型时段）"""
+        try:
+            total_hours = int(self.total_hours)
+        except Exception:
+            total_hours = 0
+
+        if total_hours <= 0:
+            logger.warning("总时段数为0，跳过逐时生产数据保存")
+            return
+
+        hours_per_period = int(getattr(self, 'hours_per_period', 1) or 1)
+
+        # 电力产出（仅统计可再生发电站，按时段汇总）
+        electricity_types = {'solar_plant', 'wind_farm'}
+        total_electricity_mwh = [0.0] * total_hours
+        for _, info in self.locations.items():
+            if info.get('type') not in electricity_types:
+                continue
+            hourly_gen = info.get('hourly_generation', [])
+            if not hourly_gen:
+                continue
+            max_len = min(total_hours, len(hourly_gen))
+            for hour in range(max_len):
+                try:
+                    total_electricity_mwh[hour] += float(hourly_gen[hour])
+                except (TypeError, ValueError):
+                    continue
+
+        # 市电用电（MTJ市电变量，MWh）
+        grid_electricity_mwh = [0.0] * total_hours
+        if hasattr(self, 'mtj_grid_electricity_vars') and self.mtj_grid_electricity_vars:
+            for (location, hour), var in self.mtj_grid_electricity_vars.items():
+                if hour >= total_hours:
+                    continue
+                try:
+                    value_mwh = var.x if hasattr(var, 'x') else float(var)
+                except (TypeError, ValueError):
+                    value_mwh = 0.0
+                grid_electricity_mwh[hour] += value_mwh
+
+        # 氢气产出（优化变量，按时段汇总）
+        total_h2_kg = [0.0] * total_hours
+        if hasattr(self, 'hydrogen_production_vars') and self.hydrogen_production_vars:
+            for (location, hour), var in self.hydrogen_production_vars.items():
+                if hour >= total_hours:
+                    continue
+                try:
+                    value = var.x if hasattr(var, 'x') else float(var)
+                except (TypeError, ValueError):
+                    value = 0.0
+                total_h2_kg[hour] += value
+
+        # SAF产出（优化变量，按时段汇总）
+        total_saf_kg = [0.0] * total_hours
+        if hasattr(self, 'production_vars') and self.production_vars:
+            for (location, tech, hour), var in self.production_vars.items():
+                if hour >= total_hours:
+                    continue
+                try:
+                    value = var.x if hasattr(var, 'x') else float(var)
+                except (TypeError, ValueError):
+                    value = 0.0
+                total_saf_kg[hour] += value
+
+        rows = []
+        for hour in range(total_hours):
+            rows.append({
+                "时段": hour,
+                "时段起始小时": hour * hours_per_period,
+                "时段长度(小时)": hours_per_period,
+                "电力产出(MWh)": total_electricity_mwh[hour],
+                "市电用电(MWh)": grid_electricity_mwh[hour],
+                "氢气产出(kg)": total_h2_kg[hour],
+                "SAF产出(kg)": total_saf_kg[hour]
+            })
+
+        hourly_df = pd.DataFrame(rows)
+        if output_dir is None:
+            output_dir = self._get_results_dir()
+        os.makedirs(output_dir, exist_ok=True)
+        hourly_path = os.path.join(output_dir, f"hourly_production_summary_{timestamp}.csv")
+        hourly_df.to_csv(hourly_path, index=False, encoding='utf-8-sig')
+        print(f"逐时生产汇总保存到: {hourly_path}")
     
     def _save_infrastructure_locations(self, output_dir: str, timestamp: str):
         """保存基础设施选点信息"""
