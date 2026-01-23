@@ -4102,6 +4102,7 @@ class NaturalGasSupplyChainOptimizer:
     
     def _add_production_capacity_constraints(self):
         """添加生产能力约束：基于产能决策变量"""
+        hours_per_period = int(getattr(self, 'hours_per_period', 1) or 1)
         for location in self.locations:
             for tech in self.technologies:
                 for hour in range(self.total_hours):
@@ -4109,7 +4110,7 @@ class NaturalGasSupplyChainOptimizer:
                         # 生产量不能超过设施产能
                         self.model.addConstr(
                             self.production_vars[(location, tech, hour)] <= 
-                            self.facility_capacity_vars[(location, tech)],
+                            self.facility_capacity_vars[(location, tech)] * hours_per_period,
                             name=f"capacity_{location}_{tech}_{hour}"
                         )
                 
@@ -4496,7 +4497,7 @@ class NaturalGasSupplyChainOptimizer:
                 for hour in range(self.total_hours):
                     self.model.addConstr(
                         self.hydrogen_production_vars[(location, hour)] <=
-                        self.electrolyzer_capacity_vars[location],
+                        self.electrolyzer_capacity_vars[location] * self.hours_per_period,
                         name=f"h2_production_capacity_{location}_{hour}"
                     )
 

@@ -211,6 +211,44 @@ class TemporalEfficiencyVisualizer:
         # 设置字体
         setup_fonts()
 
+    @staticmethod
+    def _sum_saf_capacity(facilities: dict) -> float:
+        """统计SAF产能（排除电解槽）"""
+        total = 0.0
+        for info in facilities.values():
+            tech = str(info.get('technology', '')).strip().lower()
+            mode = str(info.get('transport_mode', '')).strip().lower()
+            if tech == 'electrolyzer' or mode == 'hydrogen_pipeline':
+                continue
+            cap = info.get('capacity_kg_per_hour', 0)
+            try:
+                total += float(cap)
+            except (TypeError, ValueError):
+                continue
+        return total
+
+    @staticmethod
+    def _set_util_ylim(ax, values, pad: float = 0.05):
+        """根据数据自适应设置y轴范围"""
+        vals = np.asarray(values, dtype=float)
+        vals = vals[np.isfinite(vals)]
+        if vals.size == 0:
+            return
+        vmin = float(vals.min())
+        vmax = float(vals.max())
+        if vmin == vmax:
+            if vmax == 0:
+                vmin, vmax = 0.0, 1.0
+            else:
+                vmin = vmax * 0.9
+                vmax = vmax * 1.1
+        span = vmax - vmin
+        ymin = vmin - pad * span
+        ymax = vmax + pad * span
+        if ymin < 0:
+            ymin = 0.0
+        ax.set_ylim(ymin, ymax)
+
     def load_data(self):
         """加载所有场景的数据"""
         logger.info("=" * 80)
@@ -267,14 +305,15 @@ class TemporalEfficiencyVisualizer:
         config: dict
     ) -> List[dict]:
         """
-        计算每3小时时段的指标（不做周度聚合）
+        计算每3小时时段的指标（每时段单独计算）
 
         公式:
-        - U_t^ely = H_t^prod / Cap_ely   每时段电解槽利用率
-        - η_t^SAF = Q_t^SAF / Cap_SAF    每时段SAF工厂利用率
+        - U_t^ely = H_t^prod / Cap_ely         每时段电解槽利用率
+        - η_t^SAF = Q_t^SAF / Cap_SAF          每时段SAF工厂利用率
+        - 周度利用率 = 周产量 / (总产能 × 56)  （56个3小时时段）
 
-        注意：hourly_production_summary中的产出数据是每小时的产出率，
-        因此分母直接使用装机容量（kg/h），不需要乘以时段小时数。
+        注意：hourly_production_summary中的产出数据为“每时段产量”，
+        因此每小时利用率用“(时段产量 / 时段小时数) / 总产能”计算。
 
         Args:
             solution_data: complete_solution JSON数据
@@ -294,10 +333,7 @@ class TemporalEfficiencyVisualizer:
 
         # 获取SAF工厂总容量
         facilities = solution_data.get('facilities', {})
-        total_saf_cap = sum(
-            f.get('capacity_kg_per_hour', 0)
-            for f in facilities.values()
-        )
+        total_saf_cap = self._sum_saf_capacity(facilities)
 
         hourly_metrics = []
 
@@ -307,12 +343,15 @@ class TemporalEfficiencyVisualizer:
             h2_col = None
             saf_col = None
             period_col = None
+            length_col = None
 
             for col in hourly_df.columns:
                 col_clean = col.strip().lstrip('\ufeff')
                 # 精确匹配"时段"列（不包含其他文字）
                 if col_clean == '时段' or col_clean.lower() == 'period':
                     period_col = col
+                if '时段长度' in col_clean or 'period_length' in col_clean.lower():
+                    length_col = col
                 if '氢气产出' in col or 'hydrogen' in col.lower():
                     h2_col = col
                 if 'SAF产出' in col or 'saf' in col.lower():
@@ -325,24 +364,24 @@ class TemporalEfficiencyVisualizer:
 
             periods_per_week = 56  # 每周56个3小时时段
 
-            # 遍历每一行（每个3小时时段）
             for _, row in hourly_df.iterrows():
                 period = int(row[period_col])
                 week = period // periods_per_week
 
-                # 只处理前4周的数据
                 if week >= 4:
                     continue
 
-                # 获取该时段的产量（实际是每小时产出率）
                 h2_prod = float(row[h2_col]) if h2_col and pd.notna(row[h2_col]) else 0
                 saf_prod = float(row[saf_col]) if saf_col and pd.notna(row[saf_col]) else 0
+                hours_per_period = float(row[length_col]) if length_col and pd.notna(row[length_col]) else 3.0
+                if hours_per_period <= 0:
+                    hours_per_period = 3.0
 
-                # 计算该时段的利用率
-                # 利用率 = 实际产出率 / 装机容量
-                # 注意：产出数据是每小时的产出率，所以直接除以容量即可
-                h2_util = h2_prod / total_h2_cap if total_h2_cap > 0 else 0
-                saf_util = saf_prod / total_saf_cap if total_saf_cap > 0 else 0
+                h2_hourly = h2_prod / hours_per_period
+                saf_hourly = saf_prod / hours_per_period
+
+                h2_util = h2_hourly / total_h2_cap if total_h2_cap > 0 else 0
+                saf_util = saf_hourly / total_saf_cap if total_saf_cap > 0 else 0
 
                 hourly_metrics.append({
                     'period': period,
@@ -381,213 +420,741 @@ class TemporalEfficiencyVisualizer:
         week_labels = [week + 1 for week in range(weeks)]
         return week_labels, [0.0] * weeks
 
-    def plot_electrolyzer_efficiency_scatter(self):
+    def plot_combined_efficiency_analysis(self):
         """
-        绘制图T-Ely：电解槽效率时序图（使用每3小时时段数据）
+        绘制组合效率分析图 (Applied Energy Style)
 
-        采用4个子图（每周一个），折线图展示各场景的利用率变化
-        按类别(Grey/Blue/Green)分组，使用不同线型区分
+        Subplot (a): Electrolyzer Utilization (Time Series)
+        - X-axis: Time (0-672 hours, 4 weeks)
+        - Y-axis: Utilization
+        - Style: Line plot (Mean) with shaded area (Min-Max range) grouped by Category
+
+        Subplot (b): SAF Plant Utilization (Distribution)
+        - X-axis: Category
+        - Y-axis: Utilization
+        - Style: Boxplot/Violin plot with individual points
         """
-        logger.info("\n生成图T-Ely：电解槽效率时序图（3小时时段数据）...")
+        logger.info("\n生成组合效率分析图 (Applied Energy Style)...")
 
-        # 收集所有数据点
-        all_points = []
+        # 准备数据
+        # 1. Electrolyzer Data (TimeSeries) - 完整4周672小时
+        ely_data = []
         for scenario_name, scenario_data in self.data.items():
             config = scenario_data['config']
             for metric in scenario_data['hourly_metrics']:
-                if metric['h2_capacity_kg_per_hour'] > 0:  # 只绘制有电解槽的场景
-                    all_points.append({
-                        'period': metric['period'],
+                if metric['h2_capacity_kg_per_hour'] > 0:
+                    ely_data.append({
+                        'hour': metric['period'] * 3,  # 完整时间轴 0-672小时
                         'week': metric['week'],
-                        'period_in_week': metric['period'] % 56,  # 周内时段（0-55）
-                        'h2_utilization': metric['h2_utilization'],
-                        'scenario': scenario_name,
-                        'category': config['category'],
-                        'pathway': config['pathway'],
-                        'color': config['color'],
+                        'utilization': metric['h2_utilization'],
+                        'category': config['category']
                     })
 
-        if not all_points:
-            logger.warning("没有电解槽数据可绘制")
+        if not ely_data:
+            logger.warning("无电解槽数据")
             return
 
-        df = pd.DataFrame(all_points)
+        df_ely = pd.DataFrame(ely_data)
 
-        # 创建2x2子图布局（4周）
-        fig, axes = plt.subplots(2, 2, figsize=(16, 12), sharey=True)
-        axes = axes.flatten()
+        # 2. SAF Data (Distribution)
+        saf_data = []
+        for scenario_name, scenario_data in self.data.items():
+            config = scenario_data['config']
+            for metric in scenario_data['hourly_metrics']:
+                if metric['saf_capacity_kg_per_hour'] > 0:
+                    saf_data.append({
+                        'utilization': metric['saf_utilization'],
+                        'category': config['category'],
+                        'scenario': scenario_name
+                    })
 
-        # 线型映射（按类别）
-        linestyle_map = {
-            'Grey': '-',
-            'Blue': '--',
-            'Green': ':',
+        if not saf_data:
+            logger.warning("无SAF数据")
+            return
+
+        df_saf = pd.DataFrame(saf_data)
+
+        # 设置绘图风格
+        plt.rcParams['font.family'] = 'serif'
+        plt.rcParams['font.serif'] = ['Times New Roman']
+        plt.rcParams['font.size'] = 12
+
+        # 创建图形 1x2
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6), sharey=True)
+
+        # 颜色映射
+        colors = {
+            'Grey': '#7f7f7f',    # Neutral Gray
+            'Blue': '#1f77b4',    # Muted Blue
+            'Green': '#2ca02c'    # Muted Green
         }
 
-        # 为每周创建子图
-        for week in range(4):
-            ax = axes[week]
-            week_df = df[df['week'] == week]
+        categories = ['Grey', 'Blue', 'Green']
+        labels = ['Fossil Fuel', 'Blue Hydrogen', 'Green Hydrogen']
 
-            # 按场景绘制折线
-            for scenario_name in week_df['scenario'].unique():
-                scenario_df = week_df[week_df['scenario'] == scenario_name].sort_values('period_in_week')
-                config = self.data[scenario_name]['config']
+        # ==================== Subplot (a): Electrolyzer Time Series (4 weeks) ====================
 
-                linestyle = linestyle_map.get(config['category'], '-')
+        for idx, cat in enumerate(categories):
+            cat_df = df_ely[df_ely['category'] == cat]
+            if cat_df.empty:
+                continue
 
-                ax.plot(
-                    scenario_df['period_in_week'] * 3,  # 转换为小时
-                    scenario_df['h2_utilization'],
-                    color=config['color'],
-                    linestyle=linestyle,
-                    linewidth=1.5,
-                    alpha=0.8,
-                    label=scenario_name if week == 0 else None  # 只在第一个子图添加图例
-                )
+            # 计算每个小时的均值和范围（跨场景）
+            # Use IQR (25th and 75th percentile) instead of Min-Max to reduce noise
+            stats = cat_df.groupby('hour')['utilization'].agg([
+                'mean', 
+                lambda x: x.quantile(0.25), 
+                lambda x: x.quantile(0.75)
+            ]).reset_index()
+            stats.columns = ['hour', 'mean', 'q25', 'q75']
+            stats = stats.sort_values('hour')
 
-            # 设置子图标题和标签
-            ax.set_title(f'Week {week + 1}', fontsize=14, fontweight='bold')
-            ax.set_xlabel('Hour in Week', fontsize=11)
-            ax.set_ylabel('Electrolyzer Utilization', fontsize=11)
-            ax.set_xlim(0, 168)
-            ax.set_ylim(0, 1.05)
-            ax.set_xticks([0, 42, 84, 126, 168])
-            ax.grid(True, linestyle='--', alpha=0.3)
+            # Applying rolling mean to smooth the curve (window=24 hours for daily trend)
+            stats['mean_smooth'] = stats['mean'].rolling(window=8, center=True, min_periods=1).mean()
+            stats['q25_smooth'] = stats['q25'].rolling(window=8, center=True, min_periods=1).mean()
+            stats['q75_smooth'] = stats['q75'].rolling(window=8, center=True, min_periods=1).mean()
 
-            # 添加利用率参考线
-            ax.axhline(y=0.5, color='red', linestyle=':', alpha=0.4, linewidth=1)
+            # 绘制均值线和范围带
+            # Plot smoothed mean and IQR area
+            ax1.plot(stats['hour'], stats['mean_smooth'], color=colors[cat], label=labels[idx], linewidth=2)
+            ax1.fill_between(stats['hour'], stats['q25_smooth'], stats['q75_smooth'], color=colors[cat], alpha=0.15)
 
-        # 总标题
-        fig.suptitle('T-Ely: Electrolyzer Utilization by Week (3-hour Resolution)',
-                     fontsize=16, fontweight='bold', y=1.02)
+        # 添加周分隔线
+        for week in range(1, 4):
+            ax1.axvline(x=week * 168, color='gray', linestyle='--', alpha=0.3, linewidth=0.8)
 
-        # 图例放在图外右侧
-        handles, labels = axes[0].get_legend_handles_labels()
-        fig.legend(handles, labels, loc='center left', bbox_to_anchor=(1.02, 0.5),
-                   fontsize=9, title='Scenarios', title_fontsize=10, frameon=True)
+        ax1.set_xlabel('Time (h)', fontsize=14, fontweight='bold')
+        ax1.set_ylabel('Utilization', fontsize=14, fontweight='bold')
+        ax1.set_xlim(0, 672)  # 4周 = 672小时
+        ax1.set_xticks([0, 168, 336, 504, 672])
+        ax1.set_xticklabels(['0', '168\n(W1)', '336\n(W2)', '504\n(W3)', '672\n(W4)'])
+        ax1.grid(True, linestyle=(0, (5, 10)), alpha=0.5)
+        ax1.set_title('(a) Electrolyzer Utilization (4 Weeks)', y=-0.22, fontsize=14)
 
-        # 添加类别线型说明
-        legend_elements = [
-            plt.Line2D([0], [0], color='gray', linestyle='-', linewidth=2, label='Grey (Coal)'),
-            plt.Line2D([0], [0], color='gray', linestyle='--', linewidth=2, label='Blue (NG)'),
-            plt.Line2D([0], [0], color='gray', linestyle=':', linewidth=2, label='Green (H2/DAC)'),
-        ]
-        fig.legend(handles=legend_elements, loc='lower center', bbox_to_anchor=(0.5, -0.02),
-                   ncol=3, fontsize=10, title='Category Line Style', title_fontsize=10)
+        combined_vals = np.concatenate([df_ely['utilization'].values, df_saf['utilization'].values])
+        self._set_util_ylim(ax1, combined_vals)
 
-        plt.tight_layout()
+        # 添加图例
+        ax1.legend(loc='upper right', frameon=False, fontsize=11)
+
+        # ==================== Subplot (b): SAF Distribution ====================
+
+        # 准备绘图数据顺序
+        plot_data = [df_saf[df_saf['category'] == cat]['utilization'].values for cat in categories]
+
+        # Violin plot
+        parts = ax2.violinplot(plot_data, showmeans=False, showmedians=False, showextrema=False)
+
+        for i, pc in enumerate(parts['bodies']):
+            pc.set_facecolor(colors[categories[i]])
+            pc.set_edgecolor('black')
+            pc.set_alpha(0.3)
+
+        # Add boxplots inside violins
+        for i, data in enumerate(plot_data):
+            if len(data) > 0:
+                ax2.boxplot(data, positions=[i+1], widths=0.1,
+                           patch_artist=True,
+                           boxprops=dict(facecolor='white', color='black'),
+                           capprops=dict(color='black'),
+                           whiskerprops=dict(color='black'),
+                           medianprops=dict(color='black'),
+                           showfliers=False)
+
+        ax2.set_xlabel('Pathway Category', fontsize=14, fontweight='bold')
+        ax2.set_xticks([1, 2, 3])
+        ax2.set_xticklabels(labels, fontsize=12)
+        ax2.grid(True, axis='y', linestyle=(0, (5, 10)), alpha=0.5)
+        ax2.set_title('(b) SAF Plant Utilization', y=-0.22, fontsize=14)
+
+        # 调整布局
+        plt.subplots_adjust(bottom=0.22, wspace=0.08)
 
         # 保存
-        output_path = self.session_dir / "electrolyzer_efficiency_scatter.png"
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        output_path = self.session_dir / "combined_efficiency_analysis.png"
+        plt.savefig(output_path, dpi=600, bbox_inches='tight')
         logger.info(f"  保存图片: {output_path}")
 
-        # 同时保存到results根目录（覆盖最新版本）
-        latest_path = self.output_dir / "electrolyzer_efficiency_scatter_latest.png"
-        plt.savefig(latest_path, dpi=300, bbox_inches='tight')
-        logger.info(f"  保存最新版本: {latest_path}")
+        latest_path = self.output_dir / "combined_efficiency_analysis_latest.png"
+        plt.savefig(latest_path, dpi=600, bbox_inches='tight')
 
         plt.close()
 
-    def plot_saf_efficiency_boxplot(self):
+    def plot_13_scenarios_efficiency_analysis(self):
         """
-        绘制图T-SAF：SAF工厂效率分布箱线图（使用每3小时时段数据）
+        绘制13场景效率分析图
 
-        X轴：周度（4周）
-        Y轴：SAF利用率 η_t^SAF（每个时段的利用率）
-        按类别分组的箱线图，每周一个箱线图
+        Subplot (a): Electrolyzer Utilization - 13 scenarios as separate lines
+        Subplot (b): SAF Plant Utilization - 13 scenarios as separate lines
         """
-        logger.info("\n生成图T-SAF：SAF工厂效率分布箱线图（3小时时段数据）...")
+        logger.info("\n生成13场景效率分析图...")
 
-        # 收集所有数据点
-        all_records = []
+        # 准备数据
+        ely_data = []
+        saf_data = []
+
         for scenario_name, scenario_data in self.data.items():
             config = scenario_data['config']
             for metric in scenario_data['hourly_metrics']:
-                if metric['saf_capacity_kg_per_hour'] > 0:  # 只绘制有SAF工厂的场景
-                    all_records.append({
-                        'scenario': scenario_name,
-                        'category': config['category'],
-                        'pathway': config['pathway'],
-                        'period': metric['period'],
+                hour = metric['period'] * 3
+
+                if metric['h2_capacity_kg_per_hour'] > 0:
+                    ely_data.append({
+                        'hour': hour,
                         'week': metric['week'],
-                        'saf_production_kg': metric['saf_production_kg'],
-                        'saf_utilization': metric['saf_utilization'],
+                        'utilization': metric['h2_utilization'],
+                        'scenario': scenario_name,
+                        'scenario_cn': config['name_cn'],
+                        'category': config['category'],
+                        'pathway': config['pathway']
                     })
 
-        if not all_records:
-            logger.warning("没有SAF工厂数据可绘制")
-            return
+                if metric['saf_capacity_kg_per_hour'] > 0:
+                    saf_data.append({
+                        'hour': hour,
+                        'week': metric['week'],
+                        'utilization': metric['saf_utilization'],
+                        'scenario': scenario_name,
+                        'scenario_cn': config['name_cn'],
+                        'category': config['category'],
+                        'pathway': config['pathway']
+                    })
 
-        df = pd.DataFrame(all_records)
-        df = df[df['week'].between(0, 3)]
-        df['week_label'] = df['week'].apply(lambda w: f"W{int(w) + 1}")
-        week_order = [f"W{i}" for i in range(1, 5)]
+        df_ely = pd.DataFrame(ely_data)
+        df_saf = pd.DataFrame(saf_data)
 
-        # 创建图形
-        fig, ax = plt.subplots(figsize=(14, 8))
+        # 设置绘图风格
+        plt.rcParams['font.family'] = 'serif'
+        plt.rcParams['font.serif'] = ['Times New Roman']
+        plt.rcParams['font.size'] = 10
 
-        # 使用seaborn绘制箱线图
-        palette = self.CATEGORY_COLORS
+        # 13场景颜色配置 - 使用SCENARIOS中定义的颜色
+        scenario_colors = {}
+        for name, cfg in self.SCENARIOS.items():
+            scenario_colors[name] = cfg['color']
 
-        sns.boxplot(
-            data=df, x='week_label', y='saf_utilization',
-            hue='category', palette=palette, ax=ax,
-            width=0.6,
-            flierprops={'marker': 'o', 'markersize': 4, 'alpha': 0.5},
-            order=week_order
-        )
+        # 创建2x1图形
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 12), sharex=True)
 
-        # 叠加散点（显示个体数据，使用较小的点）
-        sns.stripplot(
-            data=df, x='week_label', y='saf_utilization',
-            hue='category', palette=palette, ax=ax,
-            dodge=True, alpha=0.3, size=3, jitter=True, legend=False,
-            order=week_order
-        )
+        # ==================== Subplot (a): Electrolyzer Utilization ====================
+        scenarios_with_h2 = df_ely['scenario'].unique()
 
-        # 设置标签
-        ax.set_xlabel('Week', fontsize=14, fontweight='bold')
-        ax.set_ylabel('SAF Plant Utilization Rate (per 3-hour period)', fontsize=14, fontweight='bold')
-        ax.set_title('T-SAF: SAF Plant Utilization Distribution by Week (3-hour data)',
-                     fontsize=16, fontweight='bold', pad=15)
+        for scenario in scenarios_with_h2:
+            scenario_df = df_ely[df_ely['scenario'] == scenario].sort_values('hour')
+            color = scenario_colors.get(scenario, '#666666')
 
-        ax.set_ylim(0, 1.05)
-        ax.set_xticks(range(len(week_order)))
-        ax.set_xticklabels(week_order)
-        ax.grid(True, axis='y', linestyle='--', alpha=0.4)
+            # 平滑处理
+            util_smooth = scenario_df['utilization'].rolling(window=4, center=True, min_periods=1).mean()
 
-        # 图例
-        handles, labels = ax.get_legend_handles_labels()
-        # 只保留前3个（Grey, Blue, Green）
-        ax.legend(handles[:3], labels[:3], title='Pathway Category',
-                  loc='upper right', fontsize=11)
+            ax1.plot(scenario_df['hour'], util_smooth,
+                    color=color, label=scenario, linewidth=1.5, alpha=0.8)
 
-        # 添加类别说明文字框
-        textstr = 'Grey: Coal-based\nBlue: Natural Gas\nGreen: Green H2/DAC'
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
-                verticalalignment='top', bbox=props)
+        # 添加周分隔线
+        for week in range(1, 4):
+            ax1.axvline(x=week * 168, color='gray', linestyle='--', alpha=0.3, linewidth=0.8)
 
+        ax1.set_ylabel('H2 Utilization', fontsize=14, fontweight='bold')
+        ax1.set_xlim(0, 672)
+        ax1.grid(True, linestyle=':', alpha=0.4)
+        ax1.set_title('(a) Electrolyzer Utilization by Scenario (4 Weeks)', fontsize=14, fontweight='bold')
+
+        self._set_util_ylim(ax1, df_ely['utilization'].values if not df_ely.empty else [])
+
+        # 图例放在右侧
+        ax1.legend(loc='upper left', bbox_to_anchor=(1.01, 1), frameon=True,
+                   fontsize=9, ncol=1, borderaxespad=0)
+
+        # ==================== Subplot (b): SAF Plant Utilization ====================
+        scenarios_with_saf = df_saf['scenario'].unique()
+
+        for scenario in scenarios_with_saf:
+            scenario_df = df_saf[df_saf['scenario'] == scenario].sort_values('hour')
+            color = scenario_colors.get(scenario, '#666666')
+
+            # 平滑处理
+            util_smooth = scenario_df['utilization'].rolling(window=4, center=True, min_periods=1).mean()
+
+            ax2.plot(scenario_df['hour'], util_smooth,
+                    color=color, label=scenario, linewidth=1.5, alpha=0.8)
+
+        # 添加周分隔线
+        for week in range(1, 4):
+            ax2.axvline(x=week * 168, color='gray', linestyle='--', alpha=0.3, linewidth=0.8)
+
+        ax2.set_xlabel('Time (h)', fontsize=14, fontweight='bold')
+        ax2.set_ylabel('SAF Utilization', fontsize=14, fontweight='bold')
+        ax2.set_xlim(0, 672)
+        ax2.set_xticks([0, 168, 336, 504, 672])
+        ax2.set_xticklabels(['0', '168\n(Week 1)', '336\n(Week 2)', '504\n(Week 3)', '672\n(Week 4)'])
+        ax2.grid(True, linestyle=':', alpha=0.4)
+        ax2.set_title('(b) SAF Plant Utilization by Scenario (4 Weeks)', fontsize=14, fontweight='bold')
+
+        self._set_util_ylim(ax2, df_saf['utilization'].values if not df_saf.empty else [])
+
+        # 图例放在右侧
+        ax2.legend(loc='upper left', bbox_to_anchor=(1.01, 1), frameon=True,
+                   fontsize=9, ncol=1, borderaxespad=0)
+
+        # 调整布局
         plt.tight_layout()
+        plt.subplots_adjust(right=0.78)  # 给右侧图例留空间
 
         # 保存
-        output_path = self.session_dir / "saf_efficiency_boxplot.png"
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        output_path = self.session_dir / "13_scenarios_efficiency_analysis.png"
+        plt.savefig(output_path, dpi=600, bbox_inches='tight')
         logger.info(f"  保存图片: {output_path}")
 
-        # 同时保存到results根目录（覆盖最新版本）
-        latest_path = self.output_dir / "saf_efficiency_boxplot_latest.png"
-        plt.savefig(latest_path, dpi=300, bbox_inches='tight')
-        logger.info(f"  保存最新版本: {latest_path}")
+        latest_path = self.output_dir / "13_scenarios_efficiency_analysis_latest.png"
+        plt.savefig(latest_path, dpi=600, bbox_inches='tight')
 
+        plt.close()
+
+    def plot_four_panel_efficiency(self):
+        """
+        绘制四面板效率分析图 (2x2 Grid)
+        
+        (a) Fossil Fuel Scenarios (Grey) - Electrolyzer Utilization (Time Series)
+        (b) Blue Hydrogen Scenarios (Blue) - Electrolyzer Utilization (Time Series)
+        (c) Green Hydrogen Scenarios (Green) - Electrolyzer Utilization (Time Series)
+        (d) SAF Plant Efficiency (Distribution) - Boxplot Grouped by Category
+        """
+        logger.info("\n生成四面板效率分析图 (Split Group Layout)...")
+
+        # 准备时序数据
+        ely_data = []
+        for scenario_name, scenario_data in self.data.items():
+            config = scenario_data['config']
+            for metric in scenario_data['hourly_metrics']:
+                if metric['h2_capacity_kg_per_hour'] > 0:
+                    ely_data.append({
+                        'hour': metric['period'] * 3,
+                        'utilization': metric['h2_utilization'],
+                        'scenario': scenario_name,
+                        'category': config['category'],
+                        'color': config['color']
+                    })
+        df_ely = pd.DataFrame(ely_data)
+
+        # 准备SAF分布数据
+        saf_data = []
+        for scenario_name, scenario_data in self.data.items():
+            config = scenario_data['config']
+            for metric in scenario_data['hourly_metrics']:
+                if metric['saf_capacity_kg_per_hour'] > 0:
+                    saf_data.append({
+                        'utilization': metric['saf_utilization'],
+                        'category': config['category'],
+                        'scenario': scenario_name
+                    })
+        df_saf = pd.DataFrame(saf_data)
+
+        # 设置字体
+        plt.rcParams['font.family'] = 'serif'
+        plt.rcParams['font.serif'] = ['Times New Roman']
+        plt.rcParams['font.size'] = 11
+
+        # 创建2x2布局
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+        axes = axes.flatten()  # 0,1,2,3
+
+        # 定义前三个面板的配置
+        panel_configs = [
+            {'cat': 'Grey', 'title': '(a) Fossil Fuel Pathways (Electrolyzer)', 'ax': axes[0]},
+            {'cat': 'Blue', 'title': '(b) Blue Hydrogen Pathways (Electrolyzer)', 'ax': axes[1]},
+            {'cat': 'Green', 'title': '(c) Green Hydrogen Pathways (Electrolyzer)', 'ax': axes[2]},
+        ]
+
+        # 绘制 (a), (b), (c) - 各类别的时序图
+        for panel in panel_configs:
+            ax = panel['ax']
+            category = panel['cat']
+            
+            # 筛选该类别的数据
+            cat_df = df_ely[df_ely['category'] == category]
+            
+            if cat_df.empty:
+                ax.text(0.5, 0.5, 'No Data', ha='center')
+                continue
+
+            # 获取该类别下的所有场景
+            scenarios = cat_df['scenario'].unique()
+            
+            for scenario in scenarios:
+                scenario_df = cat_df[cat_df['scenario'] == scenario].sort_values('hour')
+                # 获取场景特定颜色
+                color = scenario_df['color'].iloc[0]
+                
+                # 平滑处理 (Window=8 hours approx)
+                util_smooth = scenario_df['utilization'].rolling(window=4, center=True, min_periods=1).mean()
+                
+                ax.plot(scenario_df['hour'], util_smooth, 
+                       color=color, label=scenario, linewidth=1.5, alpha=0.9)
+
+            # 设置轴标签和网格
+            ax.set_title(panel['title'], fontsize=12, fontweight='bold', loc='left')
+            ax.set_ylabel('Utilization', fontsize=11)
+            # 仅在底部子图显示X轴标签 (c和d)
+            if panel['cat'] == 'Green': 
+                ax.set_xlabel('Time (h)', fontsize=11)
+            else:
+                pass # ax.set_xlabel('')
+
+            ax.set_xlim(0, 672)
+            self._set_util_ylim(ax, cat_df['utilization'].values)
+            # 标注周
+            ax.set_xticks([0, 168, 336, 504, 672])
+            ax.set_xticklabels(['0', '168\n(W1)', '336\n(W2)', '504\n(W3)', '672\n(W4)'])
+            ax.grid(True, linestyle='--', alpha=0.3)
+            
+            # 图例放在图内最佳位置或外部
+            # 由于面板较小，尝试放在图例上方或右上角
+            ax.legend(loc='upper right', fontsize=8, framealpha=0.9, ncol=1)
+
+        # ==================== (d) SAF Distribution ====================
+        ax_d = axes[3]
+        
+        # 颜色映射 (Category Colors)
+        cat_colors = {'Grey': '#7f7f7f', 'Blue': '#1f77b4', 'Green': '#2ca02c'}
+        labels = ['Fossil Fuel', 'Blue Hydrogen', 'Green Hydrogen']
+        categories_ord = ['Grey', 'Blue', 'Green']
+
+        # 准备绘图数据
+        plot_data = [df_saf[df_saf['category'] == cat]['utilization'].values for cat in categories_ord]
+        
+        # Violin Plot
+        parts = ax_d.violinplot(plot_data, showmeans=False, showmedians=False, showextrema=False)
+        
+        for i, pc in enumerate(parts['bodies']):
+            pc.set_facecolor(cat_colors[categories_ord[i]])
+            pc.set_edgecolor('black')
+            pc.set_alpha(0.5)
+            
+        # Box Plot inside
+        for i, data in enumerate(plot_data):
+            ax_d.boxplot(data, positions=[i+1], widths=0.15, 
+                       patch_artist=True,
+                       boxprops=dict(facecolor='white', color='black'),
+                       capprops=dict(color='black'),
+                       whiskerprops=dict(color='black'),
+                       medianprops=dict(color='black'),
+                       showfliers=False)
+
+        ax_d.set_title('(d) SAF Plant Utilization Distribution', fontsize=12, fontweight='bold', loc='left')
+        ax_d.set_xticks([1, 2, 3])
+        ax_d.set_xticklabels(labels, fontsize=10)
+        ax_d.set_ylabel('Utilization', fontsize=11)
+        ax_d.grid(True, axis='y', linestyle='--', alpha=0.3)
+        dist_vals = np.concatenate([v for v in plot_data if len(v) > 0]) if plot_data else []
+        self._set_util_ylim(ax_d, dist_vals)
+
+        plt.tight_layout()
+        
+        # 保存
+        output_path = self.session_dir / "four_panel_efficiency_analysis.png"
+        plt.savefig(output_path, dpi=600, bbox_inches='tight')
+        logger.info(f"  保存图片: {output_path}")
+
+        latest_path = self.output_dir / "four_panel_efficiency_analysis_latest.png"
+        plt.savefig(latest_path, dpi=600, bbox_inches='tight')
+        
+        plt.close()
+
+    def plot_split_timeseries_efficiency(self):
+        """
+        绘制分层时序效率分析图 (GridSpec Layout - Refined Aesthetics)
+        
+        Improvements:
+        1. Unified Legend at Top (No internal legends).
+        2. Distinct Line Styles for sub-groups (Solid, Dashed, Dotted).
+        3. Spines clean-up (removed top/right).
+        4. Adjusted aspect ratios.
+        """
+        logger.info("\n生成分层时序效率分析图 (Refined)...")
+
+        # 定义分组映射
+        GROUP_MAPPING = {
+            'Coal Hydrogen': 'Grey',
+            'Byproduct H2 + Coal': 'Grey',
+            
+            'Natural Gas Two-Step': 'Blue-GTL',
+            'Natural Gas One-Step': 'Blue-GTL',
+            
+            'Byproduct H2 + DAC Two-Step': 'Blue-DAC-BH',
+            'Byproduct H2 + DAC One-Step': 'Blue-DAC-BH',
+            
+            'Byproduct H2 Two-Step': 'Blue-CCU-BH',
+            'Byproduct H2 One-Step': 'Blue-CCU-BH',
+            'Byproduct H2 + NG Two-Step': 'Blue-CCU-BH',
+            
+            'DAC Two-Step': 'Green-DAC',
+            'DAC One-Step': 'Green-DAC',
+            
+            'Green H2 Two-Step': 'Green-CCU',
+            'Green H2 One-Step': 'Green-CCU',
+        }
+        
+        GROUPS_ORDER = ['Grey', 'Blue-GTL', 'Blue-DAC-BH', 'Blue-CCU-BH', 'Green-DAC', 'Green-CCU']
+        
+        # 定义时序图的3个大类
+        TS_CATEGORIES = {
+            'Grey': ['Grey'],
+            'Blue': ['Blue-GTL', 'Blue-DAC-BH', 'Blue-CCU-BH'],
+            'Green': ['Green-DAC', 'Green-CCU']
+        }
+        TS_CAT_ORDER = ['Grey', 'Blue', 'Green']
+        
+        GROUP_LABELS = {
+            'Grey': 'Grey (Coal)',
+            'Blue-GTL': 'Blue (GTL)',
+            'Blue-DAC-BH': 'Blue (DAC-BH)',
+            'Blue-CCU-BH': 'Blue (CCU-BH)',
+            'Green-DAC': 'Green (DAC)',
+            'Green-CCU': 'Green (CCU)'
+        }
+        GROUP_COLORS = {
+            'Grey': '#7f7f7f',
+            'Blue-GTL': '#1f77b4',
+            'Blue-DAC-BH': '#6baed6',
+            'Blue-CCU-BH': '#08519c',
+            'Green-DAC': '#74c476', 
+            'Green-CCU': '#238b45'
+        }
+        
+        # 线型映射 - 用于区分同色系下的不同子组
+        GROUP_STYLES = {
+            'Grey': '-',
+            'Blue-GTL': '-',          # Solid
+            'Blue-DAC-BH': '--',      # Dashed
+            'Blue-CCU-BH': ':',       # Dotted
+            'Green-DAC': '-',         # Solid
+            'Green-CCU': '--'         # Dashed
+        }
+
+        # 准备数据
+        data_rows = []
+        for scenario_name, scenario_data in self.data.items():
+            group = GROUP_MAPPING.get(scenario_name, 'Other')
+            for metric in scenario_data['hourly_metrics']:
+                data_rows.append({
+                    'scenario': scenario_name,
+                    'group': group,
+                    'hour': metric['period'] * 3,
+                    'h2_util': metric['h2_utilization'] if metric['h2_capacity_kg_per_hour'] > 0 else np.nan,
+                    'saf_util': metric['saf_utilization'] if metric['saf_capacity_kg_per_hour'] > 0 else np.nan
+                })
+        
+        df = pd.DataFrame(data_rows)
+        
+        # 设置字体
+        plt.rcParams['font.family'] = 'serif'
+        plt.rcParams['font.serif'] = ['Times New Roman']
+        plt.rcParams['font.size'] = 11
+
+        # 创建GridSpec布局
+        fig = plt.figure(figsize=(16, 12)) # Slightly wider, less tall
+        # 增加hspace让Stacked plot之间有点呼吸感
+        gs = fig.add_gridspec(6, 2, width_ratios=[1.3, 1], wspace=0.15, hspace=0.15)
+        
+        # Helper to style axes
+        def style_axis(ax, is_bottom=False, is_left_col=True):
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.grid(True, linestyle=':', alpha=0.4)
+            if not is_bottom:
+                ax.set_xticklabels([])
+                ax.tick_params(axis='x', length=0)
+            if is_left_col:
+                ax.set_ylabel('Utilization', fontsize=10)
+            
+        
+        # =================================================================================
+        # SECTION 1: Hydrogen (Rows 0-2)
+        # =================================================================================
+        
+        # --- Right: H2 Distribution ---
+        ax_h2_dist = fig.add_subplot(gs[0:3, 1])
+        
+        h2_violin_data = []
+        h2_violin_colors = []
+        h2_violin_labels = []
+        
+        for group in GROUPS_ORDER:
+            vals = df[df['group'] == group]['h2_util'].dropna().values
+            if len(vals) > 0:
+                h2_violin_data.append(vals)
+                h2_violin_labels.append(group)
+                h2_violin_colors.append(GROUP_COLORS[group])
+
+        if h2_violin_data:
+            parts = ax_h2_dist.violinplot(h2_violin_data, showmeans=False, showmedians=False, showextrema=False)
+            for i, pc in enumerate(parts['bodies']):
+                pc.set_facecolor(h2_violin_colors[i])
+                pc.set_edgecolor('black')
+                pc.set_alpha(0.6)
+            for i, d in enumerate(h2_violin_data):
+                ax_h2_dist.boxplot(d, positions=[i+1], widths=0.12, patch_artist=True,
+                           boxprops=dict(facecolor='white', color='black', linewidth=0.8),
+                           capprops=dict(color='black', linewidth=0.8), 
+                           whiskerprops=dict(color='black', linewidth=0.8),
+                           medianprops=dict(color='black', linewidth=0.8), showfliers=False)
+                           
+        ax_h2_dist.set_title('(b) H2 Electrolyzer Utilization (Distribution)', fontsize=12, fontweight='bold', loc='left')
+        ax_h2_dist.set_xticks(range(1, len(h2_violin_labels)+1))
+        # Cleaner labels: remove prefix
+        clean_labels = [l.replace('Blue-', '').replace('Green-', '') for l in h2_violin_labels]
+        ax_h2_dist.set_xticklabels(clean_labels, rotation=0, fontsize=9)
+        h2_dist_vals = np.concatenate([v for v in h2_violin_data if len(v) > 0]) if h2_violin_data else []
+        self._set_util_ylim(ax_h2_dist, h2_dist_vals)
+        style_axis(ax_h2_dist, is_bottom=True, is_left_col=False) # Keep bottom ticks
+        
+        # --- Left: H2 Time Series (Stacked) ---
+        for i, ts_cat in enumerate(TS_CAT_ORDER):
+            ax = fig.add_subplot(gs[i, 0])
+            
+            subgroups = TS_CATEGORIES[ts_cat]
+            for group in subgroups:
+                group_df = df[df['group'] == group].dropna(subset=['h2_util'])
+                if group_df.empty: continue
+                
+                stats = group_df.groupby('hour')['h2_util'].agg(['mean', 'min', 'max']).reset_index()
+                # Window=12
+                stats['mean_s'] = stats['mean'].rolling(window=12, center=True, min_periods=1).mean()
+                stats['min_s'] = stats['min'].rolling(window=12, center=True, min_periods=1).mean()
+                stats['max_s'] = stats['max'].rolling(window=12, center=True, min_periods=1).mean()
+                
+                # Plot with style
+                linestyle = GROUP_STYLES.get(group, '-')
+                ax.plot(stats['hour'], stats['mean_s'], color=GROUP_COLORS[group], 
+                        linestyle=linestyle, linewidth=2, label=None) # No label here
+                ax.fill_between(stats['hour'], stats['min_s'], stats['max_s'], color=GROUP_COLORS[group], alpha=0.15)
+            
+            style_axis(ax, is_bottom=(i==2), is_left_col=True)
+            
+            if i == 0:
+                ax.set_title('(a) H2 Electrolyzer Utilization (Time Series)', fontsize=12, fontweight='bold', loc='left')
+                
+            cat_vals = df[df['group'].isin(subgroups)]['h2_util'].dropna().values
+            self._set_util_ylim(ax, cat_vals)
+            ax.set_xlim(0, 672)
+            
+            # Label Inside (Category Name)
+            ax.text(0.015, 0.88, ts_cat.upper(), transform=ax.transAxes, 
+                   fontweight='bold', fontsize=9, color='#444', 
+                   bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=1))
+            
+            if i == 2:
+                # Custom X ticks for bottom only
+                ax.set_xticks([0, 168, 336, 504, 672])
+                ax.set_xticklabels(['0', '168\n(W1)', '336\n(W2)', '504\n(W3)', '672\n(W4)'])
+
+        # =================================================================================
+        # SECTION 2: SAF (Rows 3-5)
+        # =================================================================================
+
+        # --- Right: SAF Distribution ---
+        ax_saf_dist = fig.add_subplot(gs[3:6, 1])
+        
+        saf_violin_data = []
+        saf_violin_colors = []
+        saf_violin_labels = []
+        
+        for group in GROUPS_ORDER:
+            vals = df[df['group'] == group]['saf_util'].dropna().values
+            if len(vals) > 0:
+                saf_violin_data.append(vals)
+                saf_violin_labels.append(group)
+                saf_violin_colors.append(GROUP_COLORS[group])
+
+        if saf_violin_data:
+            parts = ax_saf_dist.violinplot(saf_violin_data, showmeans=False, showmedians=False, showextrema=False)
+            for i, pc in enumerate(parts['bodies']):
+                pc.set_facecolor(saf_violin_colors[i])
+                pc.set_edgecolor('black')
+                pc.set_alpha(0.6)
+            for i, d in enumerate(saf_violin_data):
+                ax_saf_dist.boxplot(d, positions=[i+1], widths=0.12, patch_artist=True,
+                           boxprops=dict(facecolor='white', color='black', linewidth=0.8),
+                           capprops=dict(color='black', linewidth=0.8), 
+                           whiskerprops=dict(color='black', linewidth=0.8),
+                           medianprops=dict(color='black', linewidth=0.8), showfliers=False)
+
+        ax_saf_dist.set_title('(d) SAF Plant Utilization (Distribution)', fontsize=12, fontweight='bold', loc='left')
+        ax_saf_dist.set_xticks(range(1, len(saf_violin_labels)+1))
+        # Use clean labels
+        clean_labels_saf = [l.replace('Blue-', '').replace('Green-', '') for l in saf_violin_labels]
+        ax_saf_dist.set_xticklabels(clean_labels_saf, rotation=0, fontsize=9)
+        saf_dist_vals = np.concatenate([v for v in saf_violin_data if len(v) > 0]) if saf_violin_data else []
+        self._set_util_ylim(ax_saf_dist, saf_dist_vals)
+        style_axis(ax_saf_dist, is_bottom=True, is_left_col=False)
+
+        # --- Left: SAF Time Series (Stacked) ---
+        for i, ts_cat in enumerate(TS_CAT_ORDER):
+            row_idx = i + 3
+            ax = fig.add_subplot(gs[row_idx, 0])
+            
+            subgroups = TS_CATEGORIES[ts_cat]
+            for group in subgroups:
+                group_df = df[df['group'] == group].dropna(subset=['saf_util'])
+                if group_df.empty: continue
+                
+                stats = group_df.groupby('hour')['saf_util'].agg(['mean', 'min', 'max']).reset_index()
+                stats['mean_s'] = stats['mean'].rolling(window=12, center=True, min_periods=1).mean()
+                stats['min_s'] = stats['min'].rolling(window=12, center=True, min_periods=1).mean()
+                stats['max_s'] = stats['max'].rolling(window=12, center=True, min_periods=1).mean()
+                
+                linestyle = GROUP_STYLES.get(group, '-')
+                ax.plot(stats['hour'], stats['mean_s'], color=GROUP_COLORS[group], 
+                        linestyle=linestyle, linewidth=2)
+                ax.fill_between(stats['hour'], stats['min_s'], stats['max_s'], color=GROUP_COLORS[group], alpha=0.15)
+            
+            style_axis(ax, is_bottom=(i==2), is_left_col=True)
+            
+            if i == 0:
+                ax.set_title('(c) SAF Plant Utilization (Time Series)', fontsize=12, fontweight='bold', loc='left')
+                
+            cat_vals = df[df['group'].isin(subgroups)]['saf_util'].dropna().values
+            self._set_util_ylim(ax, cat_vals)
+            ax.set_xlim(0, 672)
+            ax.text(0.015, 0.88, ts_cat.upper(), transform=ax.transAxes, 
+                   fontweight='bold', fontsize=9, color='#444', 
+                   bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=1))
+            
+            if i == 2:
+                ax.set_xlabel('Time (h)', fontsize=11)
+                ax.set_xticks([0, 168, 336, 504, 672])
+                ax.set_xticklabels(['0', '168\n(W1)', '336\n(W2)', '504\n(W3)', '672\n(W4)'])
+
+        # Create Unified Legend
+        # Create dummy lines for legend
+        legend_lines = []
+        for group in GROUPS_ORDER:
+            # Combo of color + line style
+            line = getattr(mpl.lines, 'Line2D')([0], [0], color=GROUP_COLORS[group], 
+                                                linestyle=GROUP_STYLES.get(group, '-'), 
+                                                linewidth=2, label=GROUP_LABELS[group])
+            legend_lines.append(line)
+            
+        fig.legend(handles=legend_lines, loc='upper center', bbox_to_anchor=(0.5, 0.98), 
+                  ncol=6, fontsize=10, frameon=False, columnspacing=1.5)
+
+        # Main Layout adjust
+        plt.subplots_adjust(left=0.06, right=0.96, top=0.92, bottom=0.06, hspace=0.15, wspace=0.15)
+        
+        # 保存
+        output_path = self.session_dir / "split_timeseries_efficiency.png"
+        plt.savefig(output_path, dpi=600, bbox_inches='tight')
+        logger.info(f"  保存图片: {output_path}")
+
+        latest_path = self.output_dir / "split_timeseries_efficiency_latest.png"
+        plt.savefig(latest_path, dpi=600, bbox_inches='tight')
+        
         plt.close()
 
     def generate_summary_table(self):
         """生成汇总表格（使用每3小时时段数据）"""
         logger.info("\n生成汇总表格...")
-
+        # ... (Existing code)
+        
         all_records = []
         for scenario_name, scenario_data in self.data.items():
             config = scenario_data['config']
@@ -614,16 +1181,6 @@ class TemporalEfficiencyVisualizer:
         df.to_csv(csv_path, index=False, encoding='utf-8-sig')
         logger.info(f"  保存CSV: {csv_path}")
 
-        # 打印统计信息
-        logger.info("\n" + "=" * 80)
-        logger.info("汇总统计")
-        logger.info("=" * 80)
-        logger.info(f"总数据点: {len(df)} (13场景 × 224时段)")
-        logger.info(f"场景数: {df['Scenario'].nunique()}")
-        logger.info(f"H2利用率范围: {df['H2_Utilization'].min():.2%} - {df['H2_Utilization'].max():.2%}")
-        logger.info(f"SAF利用率范围: {df['SAF_Utilization'].min():.2%} - {df['SAF_Utilization'].max():.2%}")
-        logger.info(f"SAF产量范围（每3小时）: {df['SAF_Production_kg'].min():.0f} - {df['SAF_Production_kg'].max():.0f} kg")
-
         return df
 
     def run_all_visualizations(self):
@@ -633,8 +1190,11 @@ class TemporalEfficiencyVisualizer:
         logger.info("=" * 80)
 
         # 生成图表
-        self.plot_electrolyzer_efficiency_scatter()
-        self.plot_saf_efficiency_boxplot()
+        # self.plot_electrolyzer_efficiency_scatter()
+        # self.plot_saf_efficiency_boxplot()
+        # self.plot_four_panel_efficiency() 
+        # self.plot_grouped_efficiency_2x2()
+        self.plot_split_timeseries_efficiency()
         self.generate_summary_table()
 
         logger.info("\n" + "=" * 80)

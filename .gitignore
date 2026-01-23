@@ -363,3 +363,10 @@ logs/monitor/termination_analysis_2644279_20251214_071056.json
 logs/monitor/termination_analysis_2709659_20251214_173656.json
 logs/monitor/termination_analysis_3051999_20251214_182841.json
 logs/monitor/termination_analysis_3800004_20251214_000917.json
+.claude/agents/architect.md
+.claude/agents/doc-updater.md
+.claude/agents/planner.md
+.claude/commands/learn.md
+.claude/commands/plan.md
+.claude/contexts/research.md
+.claude/rules/git-workflow.md

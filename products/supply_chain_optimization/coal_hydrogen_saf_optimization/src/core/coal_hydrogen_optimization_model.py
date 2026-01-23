@@ -4448,14 +4448,15 @@ class CoalHydrogenSAFOptimizer:
         注意：total_hours 实际上是期间数（periods），不是物理小时数
         例如：4周 × 56期间/周 = 224期间，每期间3小时
         """
+        hours_per_period = int(getattr(self, 'hours_per_period', 1) or 1)
         for location in self.locations:
             for tech in self.technologies:
                 for period in range(self.total_hours):
                     if (location, tech, period) in self.production_vars:
-                        # 生产量不能超过设施产能（每期间3小时）
+                        # 生产量不能超过设施产能（按每期间小时数折算）
                         self.model.addConstr(
                             self.production_vars[(location, tech, period)] <=
-                            self.facility_capacity_vars[(location, tech)],
+                            self.facility_capacity_vars[(location, tech)] * hours_per_period,
                             name=f"capacity_{location}_{tech}_{period}"
                         )
 
@@ -4786,7 +4787,7 @@ class CoalHydrogenSAFOptimizer:
                 for hour in range(self.total_hours):
                     self.model.addConstr(
                         self.hydrogen_production_vars[(location, hour)] <=
-                        self.electrolyzer_capacity_vars[location],
+                        self.electrolyzer_capacity_vars[location] * self.hours_per_period,
                         name=f"h2_production_capacity_{location}_{hour}"
                     )
 
