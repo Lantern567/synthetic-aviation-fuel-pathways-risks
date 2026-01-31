@@ -3178,13 +3178,21 @@ class NaturalGasSupplyChainOptimizer:
         )
 
         # 6. 电解槽投资成本（一次性投资）
-        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H₂/hour) [单位产能投资]")
+        electrolyzer_capacity_factor = self.economic_params['electrolyzer_capacity_factor']
         self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
             self.electrolyzer_capacity_vars[location] *
-            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
-            for location in self.locations
-            if location in self.electrolyzer_capacity_vars
+            self._get_electrolyzer_capex(location) *
+            electrolyzer_capacity_factor  # 电解槽/副产氢设备投资成本
+            for location in self.electrolyzer_capacity_vars
+        )
+
+        # 电解槽/副产氢设备运营成本（年化，20年现值）
+        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
+            self.electrolyzer_capacity_vars[location] *
+            self._get_electrolyzer_opex(location) *
+            electrolyzer_capacity_factor *
+            present_value_factor
+            for location in self.electrolyzer_capacity_vars
         )
 
         # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
@@ -3436,6 +3444,7 @@ class NaturalGasSupplyChainOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             self.cost_expressions['hydrogen_production_cost'] +
+            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：MTJ催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -4387,6 +4396,8 @@ class NaturalGasSupplyChainOptimizer:
     
     def _add_inventory_balance_constraints(self):
         """添加库存平衡约束"""
+        # 每周最后一个时段索引（3小时粒度时为55）
+        last_period_in_week = self.periods_per_week - 1
         for location in self.locations:
             for hour in range(self.total_hours):
                 # 库存平衡：当前库存 = 上期库存 + 生产 - 出库
@@ -4400,12 +4411,15 @@ class NaturalGasSupplyChainOptimizer:
                     if (location, tech, hour) in self.production_vars
                 )
                 
-                # 出库量（用于运输的部分，按小时平摊）
-                outflow = gp.quicksum(
-                    self.transport_vars[(location, airport, hour // self.hours_per_week)] / self.hours_per_week
-                    for airport in self.airports
-                    if (location, airport, hour // self.hours_per_week) in self.transport_vars
-                )
+                # 出库量（周级一次性出库：每周最后一个时段统一出库）
+                outflow = gp.LinExpr(0)
+                if hour % self.periods_per_week == last_period_in_week:
+                    week_idx = hour // self.periods_per_week
+                    outflow = gp.quicksum(
+                        self.transport_vars[(location, airport, week_idx)]
+                        for airport in self.airports
+                        if (location, airport, week_idx) in self.transport_vars
+                    )
                 
                 self.model.addConstr(
                     current_inventory == previous_inventory + production - outflow,
@@ -4625,37 +4639,12 @@ class NaturalGasSupplyChainOptimizer:
                         name=f"h2_balance_{location}_{hour}"
                     )
 
-                # 初始氢气库存下界：需要足够的库存来满足周运输量
-                # Inventory[0] >= WeeklyTransport（代表上周累积的库存）
-                weekly_outbound_total = gp.LinExpr(0)
-
-                # 【已禁用】罐车运输 - 修正日期：2025-11-16
-                # if hasattr(self, 'hydrogen_transport_vars') and self.hydrogen_transport_vars:
-                #     weekly_outbound_total += gp.quicksum(
-                #         self.hydrogen_transport_vars[(location, dest_loc)]
-                #         for dest_loc in self.locations
-                #         if (location, dest_loc) in self.hydrogen_transport_vars
-                #     )
-
-                # 管道运输
-                if hasattr(self, 'hydrogen_pipeline_transport_vars') and self.hydrogen_pipeline_transport_vars:
-                    weekly_outbound_total += gp.quicksum(
-                        self.hydrogen_pipeline_transport_vars[(location, dest_loc)]
-                        for dest_loc in self.locations
-                        if (location, dest_loc) in self.hydrogen_pipeline_transport_vars
-                    )
-
-                if weekly_outbound_total.size() > 0:
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, 0)] >= weekly_outbound_total,
-                        name=f"initial_h2_inventory_lower_bound_{location}"
-                    )
-                    logger.debug(f"[氢源库存] {location}: 初始库存 >= 周运输量（代表上周累积）")
-                else:
-                    self.model.addConstr(
-                        self.hydrogen_storage_vars[(location, 0)] >= 0,
-                        name=f"initial_h2_inventory_nonneg_{location}"
-                    )
+                # 初始氢气库存固定为0（避免“凭空库存”）
+                self.model.addConstr(
+                    self.hydrogen_storage_vars[(location, 0)] == 0,
+                    name=f"initial_h2_inventory_zero_{location}"
+                )
+                logger.debug(f"[氢源库存] {location}: 初始库存 = 0")
 
                 # 【已优化】氢气库存非负约束已通过变量下界 lb=0 实现，无需单独约束
 
@@ -4677,9 +4666,9 @@ class NaturalGasSupplyChainOptimizer:
                            self.technologies[tech]['h2_consumption_ratio'] > 0
                     )
 
-                    # 氢气运输入库（每周第一个小时统一入库周运输量）
+                    # 氢气运输入库（每周第一个时段统一入库周运输量）
                     h2_transport_inflow = 0
-                    if hour % self.hours_per_week == 0:  # 每周第一个小时入库（索引0）
+                    if hour % self.periods_per_week == 0:  # 每周第一个时段入库（索引0）
                         # 【已禁用】罐车运输入库 - 修正日期：2025-11-16
                         # weekly_inbound_transport = gp.quicksum(
                         #     self.hydrogen_transport_vars[(h_loc, location)]
@@ -4698,7 +4687,7 @@ class NaturalGasSupplyChainOptimizer:
                             weekly_inbound_transport += weekly_inbound_pipeline
 
                         h2_transport_inflow = weekly_inbound_transport
-                        logger.debug(f"[MTJ工厂] {location}: 在第0小时入库周运输量")
+                        logger.debug(f"[MTJ工厂] {location}: 在第0时段入库周运输量")
 
                     # 库存平衡方程：当前库存 = 上期库存 + 运输入库 - MTJ消耗
                     self.model.addConstr(
@@ -4718,58 +4707,8 @@ class NaturalGasSupplyChainOptimizer:
 
     def _add_daily_hydrogen_mtj_constraints(self):
         """添加氢气每日产量限制下一日MTJ每日产量约束"""
-        logger.info("添加氢气每日产量限制MTJ每日产量约束...")
-        
-        hours_per_day = 24  # 每日24小时
-        total_days = self.total_hours // hours_per_day
-        
-        for location in self.locations:
-            location_type = self.locations[location]['type']
-            
-            # 对于有氢气生产能力的位置（太阳能电站和风电场）
-            if location_type in ['solar_plant', 'wind_farm', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']:
-                for day in range(total_days - 1):  # 不包括最后一日，因为没有下一日
-                    # 计算当日氢气总产量（24小时累计）
-                    current_day_start = day * hours_per_day
-                    current_day_end = (day + 1) * hours_per_day
-                    
-                    daily_h2_production = gp.quicksum(
-                        self.hydrogen_production_vars[(location, hour)]
-                        for hour in range(current_day_start, current_day_end)
-                        if (location, hour) in self.hydrogen_production_vars
-                    )
-                    
-                    # 计算下一日MTJ总产量（24小时累计）
-                    next_day_start = (day + 1) * hours_per_day
-                    next_day_end = (day + 2) * hours_per_day
-                    
-                    next_day_mtj_production = gp.quicksum(
-                        self.production_vars[(location, tech, hour)]
-                        for tech in self.technologies
-                        for hour in range(next_day_start, next_day_end)
-                        if (location, tech, hour) in self.production_vars and
-                           self.technologies[tech].get('h2_consumption_ratio', 0) > 0
-                    )
-                    
-                    # 计算下一日MTJ生产所需的氢气需求
-                    next_day_h2_demand = gp.quicksum(
-                        self.production_vars[(location, tech, hour)] * 
-                        self.technologies[tech]['h2_consumption_ratio']
-                        for tech in self.technologies
-                        for hour in range(next_day_start, next_day_end)
-                        if (location, tech, hour) in self.production_vars and
-                           self.technologies[tech].get('h2_consumption_ratio', 0) > 0
-                    )
-                    
-                    # 约束：当日氢气产量必须能够满足下一日MTJ生产的氢气需求
-                    if daily_h2_production.size() > 0 and next_day_h2_demand.size() > 0:
-                        self.model.addConstr(
-                            daily_h2_production >= next_day_h2_demand,
-                            name=f"daily_h2_limits_next_day_mtj_{location}_day{day}"
-                        )
-                        
-        
-        logger.info("氢气每日产量限制MTJ每日产量约束添加完成")
+        logger.info("跳过每日氢气产量与次日需求耦合约束（由周级运输与库存约束统一管理）")
+        return
     
     def _add_hydrogen_transport_constraints(self):
         """添加氢气运输约束：氢气从可再生能源站运输到MTJ工厂"""
@@ -6580,6 +6519,7 @@ class NaturalGasSupplyChainOptimizer:
         cost_field_mapping = {
             'facility_investment_cost': 'MTJ工厂建设投资(元)',
             'electrolyzer_investment_cost': '电解槽建设投资(元)',
+            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
             'h2_storage_investment': '氢气储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
@@ -6632,6 +6572,7 @@ class NaturalGasSupplyChainOptimizer:
 
         # 运营成本类别
         operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
+                          'electrolyzer_operation_cost',
                           'hydrogen_transport_operation', 'hydrogen_pipeline_operation',
                           'ng_transport_operation', 'natural_gas_cost', 'transport_operation_cost',
                           'storage_operation_cost', 'h2_storage_operation', 'electricity_cost',

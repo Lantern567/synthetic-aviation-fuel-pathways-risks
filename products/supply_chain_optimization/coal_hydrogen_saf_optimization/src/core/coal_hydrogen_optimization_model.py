@@ -3496,14 +3496,22 @@ class CoalHydrogenSAFOptimizer:
             lifecycle_operation_factor
         )
 
-        # 6. 电解槽投资成本（一次性投资）
-        electrolyzer_capex_raw = self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
-        logger.info(f"电解槽投资成本参数: {electrolyzer_capex_raw} 元/(kg H₂/hour) [单位产能投资]")
+        # 6. 电解槽/副产氢设备投资成本（一次性投资）
+        electrolyzer_capacity_factor = self.economic_params['electrolyzer_capacity_factor']
         self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
             self.electrolyzer_capacity_vars[location] *
-            electrolyzer_capex_raw * self.economic_params['electrolyzer_capacity_factor']  # 电解槽投资成本 - 使用配置参数
-            for location in self.locations
-            if location in self.electrolyzer_capacity_vars
+            self._get_electrolyzer_capex(location) *
+            electrolyzer_capacity_factor  # 电解槽/副产氢设备投资成本
+            for location in self.electrolyzer_capacity_vars
+        )
+
+        # 电解槽/副产氢设备运营成本（年化，20年现值）
+        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
+            self.electrolyzer_capacity_vars[location] *
+            self._get_electrolyzer_opex(location) *
+            electrolyzer_capacity_factor *
+            present_value_factor
+            for location in self.electrolyzer_capacity_vars
         )
 
         # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
@@ -3778,6 +3786,7 @@ class CoalHydrogenSAFOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             self.cost_expressions['hydrogen_production_cost'] +
+            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：SAF合成催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -6339,8 +6348,20 @@ class CoalHydrogenSAFOptimizer:
                         if cluster_id is None:
                             for noise_loc, noise_coord in self.clustering_results.noise_points:
                                 if h_loc == noise_loc:
-                                    _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                                    route_coordinates = fallback_route if fallback_route else []
+                                    mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+                                    try:
+                                        route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+                                            noise_coord[0], noise_coord[1],
+                                            mtj_coords[0], mtj_coords[1]
+                                        )
+                                        layer2_distance = getattr(route, 'access_distance_km', layer2_distance)
+                                        layer3_distance = getattr(route, 'pipeline_distance_km', layer3_distance)
+                                        if route.route_geometry:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                    except Exception as e:
+                                        logger.warning(f"噪声点管道路径计算失败: {h_loc} -> {mtj_loc}, 使用道路路径, 错误: {str(e)}")
+                                        _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                                        route_coordinates = fallback_route if fallback_route else []
                                     break
 
                     if not route_coordinates:
@@ -7082,6 +7103,7 @@ class CoalHydrogenSAFOptimizer:
             'h2_storage_investment': '氢气储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
+            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             # 'hydrogen_transport_operation': '氢气罐车运输成本(元)',  # 【禁用罐车运输】
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'co2_pipeline_transport_cost': 'CO₂管道运输成本(元)',
@@ -7129,6 +7151,7 @@ class CoalHydrogenSAFOptimizer:
 
         # 运营成本类别（【禁用罐车运输】移除hydrogen_transport_operation）
         operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
+                          'electrolyzer_operation_cost',
                           # 'hydrogen_transport_operation',  # 【禁用罐车运输】
                           'hydrogen_pipeline_operation',
                           'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',
@@ -8376,9 +8399,8 @@ class CoalHydrogenSAFOptimizer:
         有效不等式不改变整数可行域，但能切掉LP松弛的非整数解区域，
         从而缩小LP最优解与MIP最优解之间的Gap，加速分支定界收敛。
 
-        精简版有效不等式（2个核心约束）：
-        1. 总SAF产能下界 - 基于50%利用率估算最小产能需求
-        2. 总生产量下界 - 至少满足80%的需求
+        精简版有效不等式（1个核心约束）：
+        1. 总生产量下界 - 至少满足90%的需求
         """
         logger.info("=" * 60)
         logger.info("添加有效不等式以收紧LP Relaxation（精简版）...")
@@ -8392,32 +8414,11 @@ class CoalHydrogenSAFOptimizer:
             sum(self.airports[airport]['weekly_demand_series'][:self.time_horizon_weeks])
             for airport in self.airports
         )
-        avg_weekly_demand = total_demand / self.time_horizon_weeks if self.time_horizon_weeks > 0 else 0
+        logger.info(f"需求统计: 总需求={total_demand:.0f} kg")
 
-        logger.info(f"需求统计: 总需求={total_demand:.0f} kg, 周均需求={avg_weekly_demand:.0f} kg/周")
-
-        # ==================== 1. 总SAF产能下界约束 ====================
-        # 所有设施的总产能必须足以满足总需求（考虑50%利用率）
-        utilization_factor = 0.5  # 50%利用率
-        min_total_capacity_per_hour = avg_weekly_demand / (self.hours_per_week * utilization_factor)
-
-        total_capacity = gp.quicksum(
-            self.facility_capacity_vars[(loc, tech)]
-            for loc in self.locations
-            for tech in self.technologies
-            if (loc, tech) in self.facility_capacity_vars
-        )
-
-        self.model.addConstr(
-            total_capacity >= min_total_capacity_per_hour,
-            name="valid_ineq_min_total_capacity"
-        )
-        valid_ineq_count += 1
-        logger.info(f"[有效不等式1] 总SAF产能下界: >= {min_total_capacity_per_hour:.0f} kg/h (基于50%利用率)")
-
-        # ==================== 2. 总生产量下界约束 ====================
+        # ==================== 1. 总生产量下界约束 ====================
         # 总生产量至少满足90%的需求
-        min_demand_satisfaction = 0.90  # 80%需求满足率
+        min_demand_satisfaction = 0.90  # 90%需求满足率
 
         total_production = gp.quicksum(
             self.production_vars[(loc, tech, hour)]
@@ -8434,7 +8435,7 @@ class CoalHydrogenSAFOptimizer:
             name="valid_ineq_min_production"
         )
         valid_ineq_count += 1
-        logger.info(f"[有效不等式3] 总生产量下界: >= {min_production:.0f} kg (总需求的80%)")
+        logger.info(f"[有效不等式1] 总生产量下界: >= {min_production:.0f} kg (总需求的90%)")
 
         logger.info("=" * 60)
         logger.info(f"有效不等式添加完成，共 {valid_ineq_count} 个约束")

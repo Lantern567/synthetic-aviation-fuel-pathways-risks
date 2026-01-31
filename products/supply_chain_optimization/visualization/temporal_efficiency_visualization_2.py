@@ -115,8 +115,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Blue',
             'pathway': 'Two-Step',
             'color': '#1976D2',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_*.csv',
         },
         'DAC-BH-MTJ': {
             'name_cn': '利用副产品氢气直接捕获 – MTJ',
@@ -145,8 +145,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Blue',
             'pathway': 'Two-Step',
             'color': '#64B5F6',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/hourly_production_summary_*.csv',
         },
         'GTL-GH-FT': {
             'name_cn': '通过绿氢集成进行气制油 – FT',
@@ -360,9 +360,6 @@ class TemporalEfficiencyVisualizer:
             f.get('capacity_kg_h2_per_hour', 0)
             for f in h2_facilities.values()
         )
-        # 避免极小数值导致“看似有产能”的情况
-        if total_h2_cap < 1e-6:
-            total_h2_cap = 0.0
 
         # 获取SAF工厂总容量
         facilities = solution_data.get('facilities', {})
@@ -396,26 +393,6 @@ class TemporalEfficiencyVisualizer:
                 logger.warning(f"  未找到'时段'列，使用第一列: {period_col}")
 
             periods_per_week = 56  # 每周56个3小时时段
-
-            # 若电解槽产能为0（典型BH路径），用副产氢“供给能力”作为分母
-            # 这里用4周内的最大小时供给量作为供给能力上限
-            if total_h2_cap <= 0 and h2_col is not None:
-                h2_hourly_series = []
-                for _, row in hourly_df.iterrows():
-                    try:
-                        period = int(row[period_col])
-                    except Exception:
-                        continue
-                    week = period // periods_per_week
-                    if week >= 4:
-                        continue
-                    h2_prod = float(row[h2_col]) if h2_col and pd.notna(row[h2_col]) else 0
-                    hours_per_period = float(row[length_col]) if length_col and pd.notna(row[length_col]) else 3.0
-                    if hours_per_period <= 0:
-                        hours_per_period = 3.0
-                    h2_hourly_series.append(h2_prod / hours_per_period)
-                if h2_hourly_series:
-                    total_h2_cap = max(h2_hourly_series)
 
             for _, row in hourly_df.iterrows():
                 period = int(row[period_col])
@@ -1238,21 +1215,14 @@ class TemporalEfficiencyVisualizer:
 
     def plot_h2_saf_vertical_layout(self):
         """
-        绘制最终竖向布局图 (3 cols x 3 rows) - 左侧分布 + 右侧时序 (H2 vs SAF)
-        Features:
-        - 左侧：13情境效率分布（中间一分为二：H2 vs SAF）
-        - 右侧：时序曲线（H2/SAF）
+        绘制最终竖向布局图 (2 cols x 3 rows) - H2 vs SAF
+        Features: 
         - 语义化配色：Grey/Blue/Green
         - 坐标轴：Open Axis, 右侧Y轴, 0-100% 刻度, 严格截断 (Spine Bounds)
         - 图例：嵌入子图内部 (自适应位置)
         """
         logger.info("\n生成H2与SAF竖向利用率分布图 (Final Percentage)...")
         import matplotlib.ticker as ticker
-        from matplotlib.colors import to_rgba
-
-        # 底色（可按需微调）
-        h2_bg = '#EAF2FF'   # H2 背景色（原浅蓝）
-        saf_bg = '#FFECEC'  # SAF 背景色（原浅红）
 
         # 1. 定义色系生成器
         def get_palette(category, n):
@@ -1298,123 +1268,14 @@ class TemporalEfficiencyVisualizer:
                 y_smooth = df['saf_utilization'].rolling(window=8, center=True, min_periods=1).mean()
                 data_map[cat]['saf'].append({'label': name, 'x': hours, 'y': y_smooth, 'color': scenario_colors[name]})
 
-        # 2.1 分布数据（用于左侧分布图 - ridgeline）
-        dist_map = {cat: {'h2': {}, 'saf': {}} for cat in categories}
-        for name, data in self.data.items():
-            cat = data['config']['category']
-            df = pd.DataFrame(data['hourly_metrics'])
-            if df.empty:
-                continue
-            if df['h2_capacity_kg_per_hour'].max() > 0:
-                vals = df['h2_utilization'].astype(float).clip(0, 1).dropna()
-                if not vals.empty:
-                    dist_map[cat]['h2'][name] = vals.values
-            if df['saf_capacity_kg_per_hour'].max() > 0:
-                vals = df['saf_utilization'].astype(float).clip(0, 1).dropna()
-                if not vals.empty:
-                    dist_map[cat]['saf'][name] = vals.values
-
         # 3. 设置绘图
-        fig, axes = plt.subplots(
-            3, 3,
-            figsize=(13.5, 12),
-            sharex=False,
-            sharey=False,
-            gridspec_kw={'width_ratios': [1, 1, 1]}
-        )
-        # 按列自上而下编号（竖向排列）
-        subplot_letters = [['a', 'd', 'g'], ['b', 'e', 'h'], ['c', 'f', 'i']]
-
-        # 分布图绘制函数（每一行一张：ridgeline，中间一分为二，左H2右SAF）
-        def plot_distribution_axis(ax, cat, scenario_order):
-            # 背景分区 + 中线
-            ax.axvspan(-1.0, 0, color=h2_bg, alpha=0.7, zorder=0)
-            ax.axvspan(0, 1.0, color=saf_bg, alpha=0.6, zorder=0)
-            ax.axvline(0, color='#666666', linestyle='--', linewidth=0.9, zorder=1)
-
-            if not scenario_order:
-                ax.text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=9)
-                ax.set_axis_off()
-                return
-
-            def _kde_1d(samples, grid):
-                samples = np.asarray(samples, dtype=float)
-                samples = samples[np.isfinite(samples)]
-                n = samples.size
-                if n < 2:
-                    return np.zeros_like(grid)
-                std = samples.std(ddof=1)
-                if std <= 0:
-                    return np.zeros_like(grid)
-                bw = 1.06 * std * (n ** (-1 / 5))
-                if not np.isfinite(bw) or bw <= 0:
-                    bw = max(std, 1e-3)
-                diff = (grid[:, None] - samples[None, :]) / bw
-                dens = np.exp(-0.5 * diff ** 2).sum(axis=1) / (n * bw * np.sqrt(2 * np.pi))
-                return dens
-
-            y_positions = np.arange(len(scenario_order), 0, -1)
-            ridge_height = 0.8
-            grid = np.linspace(0, 1.0, 220)
-
-            for y, scenario in zip(y_positions, scenario_order):
-                color = scenario_colors.get(scenario, self.CATEGORY_COLORS.get(cat, '#666666'))
-
-                h2_vals = dist_map[cat]['h2'].get(scenario)
-                saf_vals = dist_map[cat]['saf'].get(scenario)
-
-                def _draw_side(vals, sign):
-                    if vals is None or len(vals) == 0:
-                        return
-                    dens = _kde_1d(vals, grid)
-                    if dens.max() <= 0:
-                        return
-                    dens_scaled = dens / dens.max() * ridge_height
-                    x = sign * grid
-                    y_curve = y + dens_scaled
-                    ax.fill_between(x, y, y_curve, color=color, alpha=0.55, linewidth=0.6, zorder=2)
-                    ax.plot(x, y_curve, color=color, linewidth=1.0, zorder=3)
-
-                    mean = float(np.mean(vals))
-                    median = float(np.median(vals))
-                    mean_y = y + np.interp(mean, grid, dens_scaled)
-                    median_y = y + np.interp(median, grid, dens_scaled)
-
-                    # 垂直线 + 点（贴在密度曲线上）
-                    ax.vlines(sign * mean, y, mean_y, color='black', linewidth=1.2, zorder=4)
-                    ax.scatter(sign * mean, mean_y, s=26, color='black', zorder=6)
-
-                    # 白色bar（用黑色描边增强可见性）
-                    ax.vlines(sign * median, y, median_y, color='black', linewidth=2.4, zorder=4)
-                    ax.vlines(sign * median, y, median_y, color='white', linewidth=1.4, zorder=5)
-                    ax.scatter(sign * median, median_y, s=26, facecolor='white', edgecolor='black', zorder=7)
-
-                # H2 (left, mirrored) / SAF (right)
-                _draw_side(h2_vals, sign=-1.0)
-                _draw_side(saf_vals, sign=1.0)
-
-            ax.set_yticks(y_positions)
-            ax.set_yticklabels(scenario_order, fontsize=8)
-            ax.set_ylim(0.5, len(scenario_order) + 1)
-            ax.set_xlim(-1.0, 1.0)
-            ax.set_xticks([-1.0, -0.5, 0, 0.5, 1.0])
-            ax.set_xticklabels(['100%', '50%', '0', '50%', '100%'], fontsize=8)
-            ax.grid(True, axis='x', linestyle='--', alpha=0.25)
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
-            ax.spines['left'].set_visible(False)
-            ax.tick_params(axis='y', length=0)
+        fig, axes = plt.subplots(3, 2, figsize=(9, 12), sharex=False, sharey=False)
+        subplot_letters = [['a', 'b'], ['c', 'd'], ['e', 'f']]
 
         for row_idx, cat in enumerate(categories):
-            # --- 左侧分布图 ---
-            scenario_order = sorted(list(cat_scenarios[cat]))
-            ax_dist = axes[row_idx, 0]
-            plot_distribution_axis(ax_dist, cat, scenario_order)
-
-            # --- 右侧时序 (H2 & SAF) ---
+            # --- H2 & SAF Plotting ---
             for col_idx, key in enumerate(['h2', 'saf']):
-                ax = axes[row_idx, col_idx + 1]
-                ax.set_facecolor(to_rgba(h2_bg if col_idx == 0 else saf_bg, 0.35))
+                ax = axes[row_idx, col_idx]
                 items = sorted(data_map[cat][key], key=lambda x: x['label'])
                 
                 if items:
@@ -1431,25 +1292,8 @@ class TemporalEfficiencyVisualizer:
                     # frameon=False ensures clean look; fontsize small
                     ax.legend(loc='best', fontsize=8, frameon=False, labelspacing=0.4, handlelength=1.5)
 
-            # --- Axis Styling (分布图) ---
-            if row_idx == 2:
-                ax_dist.spines['bottom'].set_visible(True)
-                ax_dist.spines['bottom'].set_position(('outward', 10))
-            else:
-                ax_dist.spines['bottom'].set_visible(False)
-            if row_idx < 2:
-                ax_dist.tick_params(axis='x', bottom=False, labelbottom=False)
-            letter = subplot_letters[row_idx][0]
-            ax_dist.text(0.0, 1.05, f'({letter}) {cat} – Distribution', transform=ax_dist.transAxes, 
-                         fontsize=11, fontweight='bold', va='bottom', ha='left')
-            if row_idx == 0:
-                ax_dist.text(0.25, 1.01, 'H2', transform=ax_dist.transAxes,
-                             fontsize=9, fontweight='bold', ha='center', va='bottom')
-                ax_dist.text(0.75, 1.01, 'SAF', transform=ax_dist.transAxes,
-                             fontsize=9, fontweight='bold', ha='center', va='bottom')
-
-            # --- Axis Styling (时序图) ---
-            for col_idx, ax in enumerate([axes[row_idx, 1], axes[row_idx, 2]]):
+            # --- Axis Styling ---
+            for col_idx, ax in enumerate([axes[row_idx, 0], axes[row_idx, 1]]):
                 target_type = 'H2' if col_idx == 0 else 'SAF'
                 
                 # Hide Left/Top
@@ -1487,7 +1331,7 @@ class TemporalEfficiencyVisualizer:
                 ax.set_xlim(0, 672)
                 
                 # Subplot Title (Internal Top-Left)
-                letter = subplot_letters[row_idx][col_idx + 1]
+                letter = subplot_letters[row_idx][col_idx]
                 ax.text(0.0, 1.05, f'({letter}) {cat} – {target_type}', transform=ax.transAxes, 
                        fontsize=11, fontweight='bold', va='bottom', ha='left')
 
@@ -1496,27 +1340,14 @@ class TemporalEfficiencyVisualizer:
                     ax.set_ylabel('Utilization Ratio', fontsize=11, rotation=270, labelpad=25)
                     ax.yaxis.set_label_position("right")
 
-        # X Axis Labels (Bottom Row Only for Time Series)
-        for ax in axes[2, 1:]:
+        # X Axis Labels (Bottom Row Only)
+        for ax in axes[2, :]:
             ax.set_xticks([0, 168, 336, 504, 672])
             ax.set_xticklabels(['0', '168\nW1', '336\nW2', '504\nW3', '672\nW4'], fontsize=10)
 
-        # 分布图X轴标签（左侧列底部）
-        label_fontsize = 11
-
-        plt.subplots_adjust(top=0.92, bottom=0.10, left=0.07, right=0.94, wspace=0.25, hspace=0.25)
-
-        # 对齐底部标签位置（Utilization 与 Time）
-        left_pos = axes[2, 0].get_position()
-        right_pos_l = axes[2, 1].get_position()
-        right_pos_r = axes[2, 2].get_position()
-        left_center_x = (left_pos.x0 + left_pos.x1) / 2
-        right_center_x = (right_pos_l.x0 + right_pos_r.x1) / 2
-        label_y = 0.06
-        fig.text(left_center_x, label_y, 'Utilization (%)', ha='center', va='center',
-                 fontsize=label_fontsize, fontweight='bold')
-        fig.text(right_center_x, label_y, 'Time (h)', ha='center', va='center',
-                 fontsize=label_fontsize, fontweight='bold')
+        fig.text(0.5, 0.02, 'Time (h)', ha='center', fontsize=12, fontweight='bold')
+        
+        plt.subplots_adjust(top=0.92, bottom=0.10, left=0.08, right=0.85, wspace=0.15, hspace=0.25)
         
         # Save
         filename = "h2_saf_2col_3row_by_category.png"
@@ -1527,6 +1358,236 @@ class TemporalEfficiencyVisualizer:
         latest_path = self.output_dir / filename
         plt.savefig(latest_path, dpi=600, bbox_inches='tight')
         plt.close()
+
+    def plot_comprehensive_vertical_layout(self):
+        """
+        绘制综合竖向布局图 (3 rows x 4 cols)
+        
+        Structure:
+        Row 1: Grey Category
+            Col 1: H2 Distribution (Violin)
+            Col 2: SAF Distribution (Violin)
+            Col 3: H2 Time Series (Line)
+            Col 4: SAF Time Series (Line)
+        Row 2: Blue Category
+            ...
+        Row 3: Green Category
+            ...
+        """
+        logger.info("\n生成综合竖向布局图 (Distribution + TimeSeries)...")
+        import matplotlib.ticker as ticker
+
+        # 1. 定义布局和数据准备
+        categories = ['Grey', 'Blue', 'Green']
+        
+        # 准备颜色
+        def get_palette(category, n):
+            if n == 0: return []
+            if category == 'Grey':
+                base = sns.color_palette("Greys", n + 2)[2:]
+                return base[::-1]
+            elif category == 'Blue':
+                base = sns.color_palette("Blues", n + 2)[2:]
+                return base[::-1]
+            elif category == 'Green':
+                base = sns.color_palette("Greens", n + 2)[2:]
+                return base[::-1]
+            return sns.color_palette("husl", n)
+
+        # 整理场景和颜色
+        cat_scenarios = defaultdict(set)
+        for name, data in self.data.items():
+            cat_scenarios[data['config']['category']].add(name)
+        
+        scenario_colors = {}
+        for cat in categories:
+            scenarios = sorted(list(cat_scenarios[cat]))
+            palette = get_palette(cat, len(scenarios))
+            for i, name in enumerate(scenarios):
+                scenario_colors[name] = palette[i]
+
+        # 整理绘图数据
+        data_map = {cat: {'h2_ts': [], 'saf_ts': [], 'h2_dist': [], 'saf_dist': []} for cat in categories}
+        
+        for name, data in self.data.items():
+            cat = data['config']['category']
+            df = pd.DataFrame(data['hourly_metrics'])
+            if df.empty: continue
+            
+            # Time Series Data
+            df = df.sort_values('period')
+            hours = df['period'] * 3
+            
+            if df['h2_capacity_kg_per_hour'].max() > 0:
+                y_smooth = df['h2_utilization'].rolling(window=8, center=True, min_periods=1).mean()
+                data_map[cat]['h2_ts'].append({'label': name, 'x': hours, 'y': y_smooth, 'color': scenario_colors[name]})
+                # Distribution Data (Raw)
+                data_map[cat]['h2_dist'].append({'label': name, 'values': df['h2_utilization'].values, 'color': scenario_colors[name]})
+
+            if df['saf_capacity_kg_per_hour'].max() > 0:
+                y_smooth = df['saf_utilization'].rolling(window=8, center=True, min_periods=1).mean()
+                data_map[cat]['saf_ts'].append({'label': name, 'x': hours, 'y': y_smooth, 'color': scenario_colors[name]})
+                 # Distribution Data (Raw)
+                data_map[cat]['saf_dist'].append({'label': name, 'values': df['saf_utilization'].values, 'color': scenario_colors[name]})
+
+        # 2. 创建图形 (3行 x 4列)
+        # 调整宽度比例：分布图较窄，时序图较宽
+        fig = plt.figure(figsize=(18, 12))
+        gs = fig.add_gridspec(3, 4, width_ratios=[1, 1, 1.8, 1.8], wspace=0.25, hspace=0.2)
+        
+        subplot_letters = [
+            ['a1', 'a2', 'a3', 'a4'], 
+            ['b1', 'b2', 'b3', 'b4'], 
+            ['c1', 'c2', 'c3', 'c4']
+        ]
+        
+        for row_idx, cat in enumerate(categories):
+            # ------------------------------------------------------------------
+            # Column 1 & 2: Distribution (H2, SAF)
+            # ------------------------------------------------------------------
+            for col_idx, type_key in enumerate(['h2_dist', 'saf_dist']):
+                ax = fig.add_subplot(gs[row_idx, col_idx])
+                
+                items = sorted(data_map[cat][type_key], key=lambda x: x['label'])
+                if not items:
+                    ax.set_visible(False)
+                    continue
+                
+                # Prepare data for violin
+                violin_data = [item['values'] for item in items]
+                
+                # Violin Plot
+                parts = ax.violinplot(violin_data, showmeans=False, showmedians=False, showextrema=False)
+                
+                for i, pc in enumerate(parts['bodies']):
+                    pc.set_facecolor(items[i]['color'])
+                    pc.set_edgecolor('black')
+                    pc.set_alpha(0.7)
+                
+                # Box Plot inside
+                for i, d in enumerate(violin_data):
+                    ax.boxplot(d, positions=[i+1], widths=0.1, patch_artist=True,
+                               boxprops=dict(facecolor='white', color='black', linewidth=0.8),
+                               capprops=dict(color='black', linewidth=0.8),
+                               whiskerprops=dict(color='black', linewidth=0.8),
+                               medianprops=dict(color='black', linewidth=0.8), showfliers=False)
+                
+                # Styling
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.set_ylim(0, 1.1)
+                ax.yaxis.set_major_formatter(ticker.PercentFormatter(xmax=1.0, decimals=0))
+                ax.set_yticks([0, 0.5, 1.0])
+                
+                # X Labels (Scenario Names) - Simplified or Rotated
+                ax.set_xticks(range(1, len(items)+1))
+                # Shorten names for display
+                short_labels = [item['label'].replace('DAC-', '').replace('CCU-', '').replace('GTL-', '').replace('BH-', '').replace('GH-', '') for item in items]
+                # Further cleanup if needed, but let's try to keep meaningful distinctive parts
+                # If too long, maybe just indices? Let's try rotation.
+                ax.set_xticklabels(short_labels, rotation=45, ha='right', fontsize=8)
+                
+                if col_idx == 0:
+                    ax.set_ylabel('Distribution', fontsize=10)
+                else:
+                    # Hide Y labels for SAF dist to save space? Or keep it?
+                    # User said "divided into 2", so maybe keep them illustrative
+                    ax.tick_params(axis='y', left=False, labelleft=False)
+                    ax.spines['left'].set_visible(False)
+                    # Add a vertical divider line?
+                    
+                target_name = "H2" if "h2" in type_key else "SAF"
+                # ax.set_title(f"{target_name} Dist.", fontsize=10)
+                
+                # Add letter label
+                # ax.text(-0.1, 1.05, f'({subplot_letters[row_idx][col_idx]})', transform=ax.transAxes, fontweight='bold')
+
+
+            # ------------------------------------------------------------------
+            # Column 3 & 4: Time Series (H2, SAF)
+            # ------------------------------------------------------------------
+            for col_idx_rel, type_key in enumerate(['h2_ts', 'saf_ts']):
+                col_idx = col_idx_rel + 2
+                ax = fig.add_subplot(gs[row_idx, col_idx])
+                
+                items = sorted(data_map[cat][type_key], key=lambda x: x['label'])
+                if not items:
+                    ax.set_visible(False)
+                    continue
+                
+                # Shadow (Range)
+                ys_df = pd.concat([item['y'] for item in items], axis=1)
+                if not ys_df.empty:
+                    # Use a neutral color for shadow or the color of the first item
+                    shadow_color = items[0]['color']
+                    ax.fill_between(items[0]['x'], ys_df.min(axis=1), ys_df.max(axis=1), 
+                                    color=shadow_color, alpha=0.1, edgecolor='none')
+                
+                # Lines
+                for item in items:
+                    ax.plot(item['x'], item['y'], color=item['color'], linewidth=1.5, label=item['label'])
+                
+                # Styling
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(True)
+                ax.spines['right'].set_position(('outward', 5))
+                ax.spines['right'].set_bounds(0, 1.0)
+                ax.spines['left'].set_visible(False)
+                ax.tick_params(left=False, labelleft=False)
+                
+                ax.set_ylim(0, 1.02)
+                ax.yaxis.set_major_formatter(ticker.PercentFormatter(xmax=1.0, decimals=0))
+                ax.tick_params(axis='y', right=True, labelright=True, direction='out')
+                ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
+
+                if row_idx < 2:
+                    ax.set_xticklabels([])
+                    ax.tick_params(bottom=False)
+                    ax.spines['bottom'].set_visible(False)
+                else:
+                    ax.set_xticks([0, 168, 336, 504, 672])
+                    ax.set_xticklabels(['0', '168', '336', '504', '672'], fontsize=9)
+                    if col_idx == 2 and row_idx == 2:
+                        ax.set_xlabel('Time (h)', fontsize=10, x=1.1) # Shared Label approx
+                
+                target_name = "H2" if "h2" in type_key else "SAF"
+                # Subplot Title (Internal)
+                # ax.text(0.02, 0.9, f'{cat} {target_name}', transform=ax.transAxes, fontsize=9, fontweight='bold', color='#444')
+                
+                # Legend: Only in the last column or intelligently placed?
+                # Let's put legend in Time Series plots
+                ax.legend(loc='lower left', fontsize=7, frameon=False, ncol=1)
+
+            # Row Title / Annotation
+            # Add a large label on the far left or use schematic titles?
+            # Let's add text to the first subplot of the row
+            ax_first = fig.add_subplot(gs[row_idx, 0], frameon=False)
+            ax_first.set_xticks([])
+            ax_first.set_yticks([])
+            # This overlaps with the plot. 
+            # Better: Add text to the figure relative to rows
+            
+            # Row Label (Category)
+            # fig.text(0.01, 0.85 - row_idx * 0.28, f"{cat} Scenarios", rotation=90, va='center', fontsize=12, fontweight='bold')
+
+        # Add Column Headers
+        # Dist H2 | Dist SAF | TS H2 | TS SAF
+        header_y = 0.93
+        fig.text(0.18, header_y, "H2 Efficiency Dist.", ha='center', fontsize=11, fontweight='bold')
+        fig.text(0.38, header_y, "SAF Efficiency Dist.", ha='center', fontsize=11, fontweight='bold')
+        fig.text(0.62, header_y, "H2 Efficiency Time Series", ha='center', fontsize=11, fontweight='bold')
+        fig.text(0.85, header_y, "SAF Efficiency Time Series", ha='center', fontsize=11, fontweight='bold')
+        
+        # Save
+        filename = "comprehensive_efficiency_layout.png"
+        path = self.session_dir / filename
+        plt.savefig(path, dpi=300, bbox_inches='tight')
+        logger.info(f"保存: {path}")
+        
+        latest_path = self.output_dir / filename
+        plt.savefig(latest_path, dpi=300, bbox_inches='tight')
+        plt.close()
+
 
     def run_all_visualizations(self):
         """运行所有可视化"""
@@ -1539,7 +1600,8 @@ class TemporalEfficiencyVisualizer:
         # self.plot_saf_efficiency_boxplot()
         # self.plot_four_panel_efficiency() 
         # self.plot_grouped_efficiency_2x2()
-        self.plot_h2_saf_vertical_layout()
+        self.plot_comprehensive_vertical_layout()
+        # self.plot_h2_saf_vertical_layout()
         self.generate_summary_table()
 
         logger.info("\n" + "=" * 80)
@@ -1573,5 +1635,6 @@ def main():
     logger.info("\n程序执行成功")
 
 
+    
 if __name__ == "__main__":
     main()

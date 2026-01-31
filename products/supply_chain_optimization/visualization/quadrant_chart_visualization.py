@@ -4,7 +4,7 @@ Quadrant Chart Visualization for SAF Scenarios
 
 功能：
 - X轴：碳强度差值（方案 - 传统航煤，g CO2eq/MJ），以0为分界点（负值表示减排）
-- Y轴：LCOE成本（元/kg），以18元/kg（SAF市场售价）为分界点
+- Y轴：LCOE成本（元/kg），以8元/kg（SAF市场售价）为分界点
 - 四象限背景色区分不同区域
 - 点颜色表示场景类型
 
@@ -41,12 +41,12 @@ logger = logging.getLogger(__name__)
 class QuadrantChartVisualizer:
     """SAF场景象限图可视化器"""
 
-    def __init__(self, cost_threshold: float = 18.0, carbon_threshold: float = 0.0):
+    def __init__(self, cost_threshold: float = 8.0, carbon_threshold: float = 0.0):
         """
         初始化可视化器
 
         Args:
-            cost_threshold: 成本分界点（元/kg），默认18元（SAF市场售价）
+            cost_threshold: 成本分界点（元/kg），默认8元（SAF市场售价）
             carbon_threshold: 碳强度差值分界点（g CO2eq/MJ），默认0
         """
         self.cost_threshold = cost_threshold
@@ -539,7 +539,7 @@ class QuadrantChartVisualizer:
 def main():
     """主函数"""
     visualizer = QuadrantChartVisualizer(
-        cost_threshold=18.0,  # SAF市场售价
+        cost_threshold=8.0,  # SAF市场售价
         carbon_threshold=0.0   # 碳排放分界点
     )
     visualizer.run()

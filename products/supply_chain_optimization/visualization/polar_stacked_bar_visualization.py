@@ -257,8 +257,8 @@ class PolarStackedBarVisualizer:
         # 增加间距系数，避免重叠
         # Calculate angle per character: Width / Radius
         # Width approx 0.6 * fontsize (for typical fonts)
-        # Using 0.08 angle spacing factor
-        char_angle_width = 0.06 * (20 / radius) * fontsize * 0.8
+        # Using 0.08 angle spacing factor (keep consistent with polar_carbon_stacked_bar_visualization.py)
+        char_angle_width = 0.04 * (20 / radius) * fontsize * 0.8
         
         total_angle = len(text) * char_angle_width
         start_angle = center_angle + total_angle / 2

@@ -3685,12 +3685,21 @@ class GreenHydrogenSupplyChainOptimizer:
 
         # 6. 电解槽投资成本（一次性投资）- 支持副产氢动态CAPEX
         logger.info("计算电解槽/副产氢设备投资成本...")
+        electrolyzer_capacity_factor = self.economic_params['electrolyzer_capacity_factor']
         self.cost_expressions['electrolyzer_investment_cost'] = gp.quicksum(
             self.electrolyzer_capacity_vars[location] *
             self._get_electrolyzer_capex(location) *  # 根据plant_type动态选择CAPEX
-            self.economic_params['electrolyzer_capacity_factor']
-            for location in self.locations
-            if location in self.electrolyzer_capacity_vars
+            electrolyzer_capacity_factor
+            for location in self.electrolyzer_capacity_vars
+        )
+
+        # 电解槽/副产氢设备运营成本（年化，20年现值）
+        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
+            self.electrolyzer_capacity_vars[location] *
+            self._get_electrolyzer_opex(location) *
+            electrolyzer_capacity_factor *
+            present_value_factor
+            for location in self.electrolyzer_capacity_vars
         )
 
         # 7. 制氢运营成本（20年生命周期现值）- ❌ 已禁用
@@ -4382,6 +4391,7 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             # self.cost_expressions['hydrogen_production_cost'] +  # ❌ 已禁用 (2025-11-09)
+            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：SAF合成催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -7697,6 +7707,7 @@ class GreenHydrogenSupplyChainOptimizer:
             'co2_storage_investment': 'CO₂储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
+            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             # 'hydrogen_transport_operation': '氢气罐车运输成本(元)',  # 【禁用罐车运输】
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'co2_capture_cost': 'CO₂捕获成本(元)',
@@ -7749,6 +7760,7 @@ class GreenHydrogenSupplyChainOptimizer:
         # 运营成本类别（【禁用罐车运输】移除hydrogen_transport_operation）
         operation_fields = ['facility_operation_cost', 'production_cost',
                           # 'hydrogen_production_cost',  # ❌ 已禁用 (2025-11-09) - 避免与电力成本重复计算
+                          'electrolyzer_operation_cost',
                           # 'hydrogen_transport_operation',  # 【禁用罐车运输】
                           'hydrogen_pipeline_operation',
                           'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',

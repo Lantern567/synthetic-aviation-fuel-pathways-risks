@@ -63,9 +63,18 @@ from matplotlib import rcParams
 from matplotlib.lines import Line2D
 from math import radians, cos, sin, asin, sqrt
 
-# 配置中文字体 - 支持Linux和Windows系统,移除DejaVu Sans避免回退
-matplotlib.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'Noto Sans CJK TC', 'WenQuanYi Zen Hei', 'Microsoft YaHei', 'SimHei']
+# 配置科学期刊风格字体 (Applied Energy Standard)
+# 优先使用 Helvetica/Arial (无衬线), 备选 Times New Roman (虽然是衬线，但图表常用)
+matplotlib.rcParams['font.family'] = 'sans-serif'
+matplotlib.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'Noto Sans CJK SC', 'Microsoft YaHei', 'SimHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
+matplotlib.rcParams['xtick.direction'] = 'in'
+matplotlib.rcParams['ytick.direction'] = 'in'
+matplotlib.rcParams['xtick.labelsize'] = 10
+matplotlib.rcParams['ytick.labelsize'] = 10
+matplotlib.rcParams['axes.labelsize'] = 12
+matplotlib.rcParams['axes.titlesize'] = 14
+matplotlib.rcParams['legend.fontsize'] = 9
 
 # 添加frykit路径
 sys.path.append(str(Path(__file__).parent.parent.parent.parent / "shared"))
@@ -118,6 +127,10 @@ class ThirteenScenariosClusteredMapVisualizer:
         except Exception as e:
             logger.warning(f"GraphHopper初始化失败: {e}，将使用直线可视化")
             self.graphhopper = None
+
+        # 过滤阈值：非聚类H2路线最低周运输量（kg）
+        # 用于去掉非常小或噪声路线
+        self.min_h2_noncluster_weekly_kg = 1000
 
         # 模块配置 - 使用自动查找最新文件
         # 获取项目根目录
@@ -251,22 +264,28 @@ class ThirteenScenariosClusteredMapVisualizer:
         self.map_crs = fplt.CN_AZIMUTHAL_EQUIDISTANT
         self.data_crs = fplt.PLATE_CARREE
 
-        # 运输类型颜色
+        # 运输类型颜色 - SCI期刊配色方案 (Nature/Applied Energy Style)
+        # 使用更深沉、对比度更高的专业配色，避免高饱和度霓虹色
         self.transport_colors = {
-            'H2': '#1E90FF',          # 氢气 - 道奇蓝
-            'H2_cluster': 'gray',     # 氢气聚类路径 - 灰色
-            'CO2': '#8B4513',         # CO2 - 棕色
-            'CO2_cluster': '#A0522D', # CO2聚类路径 - 赭色
-            'SAF': '#FF4500',         # SAF - 橙红色
-            'NG': '#32CD32'           # 天然气 - lime green 青柠绿
+            'H2': '#0072B2',          # 氢气 - 深蓝 (Blue)
+            'H2_cluster': '#56B4E9',  # 氢气聚类 - 天蓝 (Sky Blue)
+            'CO2': '#663300',         # CO2 - 深褐 (Dark Brown)
+            'CO2_cluster': '#A6761D', # CO2聚类 - 赭石 (Ocher)
+            'SAF': '#D55E00',         # SAF - 朱红 (Vermilion) - 突出显示
+            'NG': '#009E73',          # 天然气 - 青绿 (Bluish Green)
+            'Route_Alpha': 0.7,       # 路线透明度
+            'Route_Width_Main': 1.5,  # 主干路线宽
+            'Route_Width_Feeder': 0.8 # 支线路线宽
         }
 
-        # 聚类颜色方案（用于区分不同聚类）
+        # 聚类颜色方案 - 使用Set2/Pastel等更柔和的色盘，或者Tableau 10
         self.cluster_colors = plt.cm.tab20.colors
 
         # 数据存储
         self.clustering_data = {}
         self.transport_data = {}
+        # 可视化过滤：已绘制设施坐标集合
+        self.visible_facility_coords = None
 
     def load_data(self):
         """加载十三个场景的聚类数据和运输数据"""
@@ -401,35 +420,44 @@ class ThirteenScenariosClusteredMapVisualizer:
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(projection=self.map_crs)
 
-        # 设置地图范围 - 京津冀及周边地区,扩大到44°N
+        # 设置地图范围 - 京津冀及周边地区（全覆盖端点/设施）
         if extent is None:
-            extent = [111, 121, 35, 44]
+            extent = [110.0, 119.5, 37.5, 41.7]
 
         min_lon, max_lon, min_lat, max_lat = extent
+        # 记录当前可视范围，用于过滤路线/点
+        self.current_extent = (min_lon, max_lon, min_lat, max_lat)
 
         # 设置刻度
         xticks = np.arange(min_lon, max_lon + 1, 2)
         yticks = np.arange(min_lat, max_lat + 1, 2)
 
         fplt.set_map_ticks(ax, (min_lon, max_lon, min_lat, max_lat), xticks, yticks)
-        ax.gridlines(xlocs=xticks, ylocs=yticks, lw=0.5, ls="--", color="gray", alpha=0.5)
+        
+        # 优化网格线 - 灰色虚线，更细更淡
+        ax.gridlines(xlocs=xticks, ylocs=yticks, lw=0.5, ls=":", color="#B0B0B0", alpha=0.4)
 
         # 设置刻度样式
         ax.tick_params(
-            length=8, width=0.9, labelsize=10,
-            top=True, right=True, labeltop=True, labelright=True
+            length=4, width=0.8, labelsize=10,
+            top=True, right=True, labeltop=False, labelright=False,  # 只在左下显示标签，符合期刊习惯
+            direction='in'
         )
 
-        # 添加地图要素
-        ax.set_facecolor("lightcyan")
-        from cartopy.feature import LAND
-        ax.add_feature(LAND, fc="floralwhite", ec="k", lw=0.5)
+        # 添加地图要素 - 期刊风格：极简、高对比
+        # 陆地使用纯白或极淡灰，海洋使用极淡蓝
+        ax.set_facecolor("#F0F8FF")  # AliceBlue 极淡蓝
+        from cartopy.feature import LAND, OCEAN, BORDERS
+        
+        # 陆地颜色
+        ax.add_feature(LAND, fc="#FFFFFF", ec="#808080", lw=0.3, zorder=0)
 
         # 使用frykit添加中国地图底图
-        fplt.add_cn_city(ax, lw=0.3, edgecolor='lightgreen', linestyle='--', zorder=2)
-        fplt.add_cn_line(ax, lw=1.2, edgecolor='dimgray', zorder=2.5)
-        fplt.add_cn_border(ax, lw=0.75, edgecolor='black', zorder=3)
-
+        # 省界：深灰，细线
+        fplt.add_cn_city(ax, lw=0.2, edgecolor='#D3D3D3', linestyle='-', zorder=1) # 市界极淡
+        fplt.add_cn_province(ax, lw=0.6, edgecolor='#606060', zorder=1.5) # 省界加深
+        fplt.add_cn_line(ax, lw=1.0, edgecolor='#000000', zorder=2.5) # 九段线/国界
+        
         return fig, ax
 
     def add_decorations(self, ax):
@@ -461,6 +489,93 @@ class ThirteenScenariosClusteredMapVisualizer:
         c = 2 * asin(sqrt(a))
         r = 6371  # 地球半径，单位：公里
         return c * r
+
+    @staticmethod
+    def _normalize_path_coords(path_coords):
+        """
+        统一路径坐标为[(lon, lat), ...]格式，兼容[lon, lat]与[lat, lon]两种顺序
+        """
+        if not path_coords:
+            return []
+
+        lonlat_votes = 0
+        latlon_votes = 0
+
+        for coord in path_coords:
+            if not isinstance(coord, (list, tuple)) or len(coord) < 2:
+                continue
+            try:
+                a = float(coord[0])
+                b = float(coord[1])
+            except (ValueError, TypeError):
+                continue
+
+            # 通过数值范围判断顺序（中国经度>90，纬度<90）
+            if abs(a) > 90 and abs(b) <= 90:
+                lonlat_votes += 1
+            elif abs(a) <= 90 and abs(b) > 90:
+                latlon_votes += 1
+
+        normalized = []
+        if latlon_votes > lonlat_votes:
+            # 输入为[lat, lon]，转换为[lon, lat]
+            for coord in path_coords:
+                if isinstance(coord, (list, tuple)) and len(coord) >= 2:
+                    try:
+                        lat = float(coord[0])
+                        lon = float(coord[1])
+                        normalized.append((lon, lat))
+                    except (ValueError, TypeError):
+                        continue
+        else:
+            # 默认按[lon, lat]处理
+            for coord in path_coords:
+                if isinstance(coord, (list, tuple)) and len(coord) >= 2:
+                    try:
+                        lon = float(coord[0])
+                        lat = float(coord[1])
+                        normalized.append((lon, lat))
+                    except (ValueError, TypeError):
+                        continue
+
+        return normalized
+
+    def _coord_key(self, lon: float, lat: float, precision: int = 4):
+        """统一坐标key（用于可视化过滤）"""
+        return (round(lon, precision), round(lat, precision))
+
+    def _in_extent(self, lon: float, lat: float) -> bool:
+        """判断坐标是否在当前地图范围内"""
+        extent = getattr(self, 'current_extent', None)
+        if not extent:
+            return True
+        min_lon, max_lon, min_lat, max_lat = extent
+        return (min_lon <= lon <= max_lon) and (min_lat <= lat <= max_lat)
+
+    def _should_draw_route(self, start_lon, start_lat, end_lon, end_lat, precision: int = 4) -> bool:
+        """仅在起终点都为已标注点（含设施/聚类中心）时才绘制路线"""
+        if start_lon is None or start_lat is None or end_lon is None or end_lat is None:
+            return False
+        # 起终点必须在当前可视范围内
+        if not self._in_extent(start_lon, start_lat) or not self._in_extent(end_lon, end_lat):
+            return False
+        visible = getattr(self, 'visible_facility_coords', None)
+        if visible is None:
+            return True
+        return (
+            self._coord_key(start_lon, start_lat, precision) in visible
+            and self._coord_key(end_lon, end_lat, precision) in visible
+        )
+
+    def _mark_visible(self, lon: float, lat: float, precision: int = 4):
+        """将已标注点加入可见集合（用于后续路线过滤）"""
+        if lon is None or lat is None:
+            return
+        if not self._in_extent(lon, lat):
+            return
+        if getattr(self, 'visible_facility_coords', None) is None:
+            self.visible_facility_coords = set()
+        self.visible_facility_coords.add(self._coord_key(lon, lat, precision))
 
     @staticmethod
     def _get_transport_volume(row, volume_type='kg'):
@@ -619,23 +734,23 @@ class ThirteenScenariosClusteredMapVisualizer:
         Returns:
             可视化属性字典列表（多角色设施返回多个标记）
         """
-        # 维度1: 形状映射
+        # 维度1: 形状映射 (使用更标准的形状代码)
         shape_map = {
-            'h2': ('^', 'H₂生产'),
-            'co2': ('s', 'CO₂捕获'),
-            'natural_gas': ('D', '天然气供应'),
+            'h2': ('^', 'H₂生产'),  # Triangle Up
+            'co2': ('s', 'CO₂捕获'), # Square
+            'natural_gas': ('d', '天然气供应'), # Thin Diamond
         }
 
-        # 维度2: 颜色映射
+        # 维度2: 颜色映射 (Applied Energy Style - Refined)
         color_map = {
-            'yes': ('#4169E1', '#1E3A8A', '有SAF生产'),  # 蓝色系: (填充色, 边框色, 标签)
-            'no': ('#A9A9A9', '#696969', '无SAF生产')   # 灰色系
+            'yes': ('#005AB5', '#002040', '有SAF生产'),  # Deep Blue fill, Very Dark Blue edge
+            'no': ('#E0E0E0', '#909090', '无SAF生产')    # Very Light Grey fill, Medium Grey edge (subtle)
         }
 
         # 维度3: 边框粗细映射
         linewidth_map = {
-            'yes': (3.0, '是消纳地'),
-            'no': (1.5, '非消纳地')
+            'yes': (2.5, '是消纳地'),   # 增加粗细，强调消纳地
+            'no': (1.2, '非消纳地')
         }
 
         # 获取维度2、3的属性（对所有标记通用）
@@ -644,6 +759,9 @@ class ThirteenScenariosClusteredMapVisualizer:
 
         # 生成标记列表
         markers = []
+        
+        # 基础大小设置 (加大)
+        base_size = 180
 
         if not raw_materials:
             # 无原材料生产 - 单一圆形标记
@@ -651,7 +769,7 @@ class ThirteenScenariosClusteredMapVisualizer:
                 'marker': 'o',
                 'color': color,
                 'edgecolor': edgecolor,
-                'size': 100,
+                'size': base_size,
                 'linewidth': linewidth,
                 'raw_material_label': '无原材料生产',
                 'saf_production_label': saf_label,
@@ -669,7 +787,7 @@ class ThirteenScenariosClusteredMapVisualizer:
                     'marker': marker,
                     'color': color,
                     'edgecolor': edgecolor,
-                    'size': 100,
+                    'size': base_size,
                     'linewidth': linewidth,
                     'raw_material_label': material_label,
                     'saf_production_label': saf_label,
@@ -716,6 +834,8 @@ class ThirteenScenariosClusteredMapVisualizer:
 
         # 筛选聚类数据（有聚类信息的行）
         h2_cluster_data = h2_data[h2_data['聚类信息'].notna() & (h2_data['聚类信息'] != '')].copy()
+        # 非聚类（孤立点）数据
+        h2_non_cluster_data = h2_data[~(h2_data['聚类信息'].notna() & (h2_data['聚类信息'] != ''))].copy()
         logger.info(f"    聚类运输数据: {len(h2_cluster_data)} 条")
 
         clusters = h2_clustering.get('clusters', [])
@@ -733,6 +853,8 @@ class ThirteenScenariosClusteredMapVisualizer:
         # 统计计数
         layer1_count = 0
         layer2_count = 0
+        layer3_count = 0
+        non_cluster_count = 0
 
         # 解析坐标字符串的辅助函数
         def parse_coord(coord_str):
@@ -780,36 +902,58 @@ class ThirteenScenariosClusteredMapVisualizer:
                 else:
                     continue
 
-                # 【关键修改】只有运输量>0时才标记聚类中心为已使用
-                used_cluster_centers[cluster_id] = (center_lat, center_lon)
             except:
                 continue
 
-            # 解析起点坐标
+            # 解析起点/终点坐标
             start_lat, start_lon = parse_coord(row.get('起点坐标'))
+            end_lat, end_lon = parse_coord(row.get('终点坐标'))
             if start_lat is None or start_lon is None:
                 continue
+            if end_lat is None or end_lon is None:
+                continue
+
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
+            # 通过过滤后再标记聚类中心为已使用
+            used_cluster_centers[cluster_id] = (center_lat, center_lon)
+            self._mark_visible(center_lon, center_lat)
 
             # Layer1: 可再生能源站 → 聚类中心 (灰色虚线)
             layer1_dist = row.get('Layer1距离(km)', 0)
-            if layer1_dist > 0:
+            draw_layer1 = False
+            if pd.notna(layer1_dist) and isinstance(layer1_dist, (int, float)) and layer1_dist > 0:
+                draw_layer1 = True
+            else:
+                # 回退：若Layer1缺失/为0，仍基于起点与聚类中心绘制
+                fallback_dist = self.haversine(start_lon, start_lat, center_lon, center_lat)
+                if fallback_dist > 0.01:
+                    draw_layer1 = True
+
+            if draw_layer1 and self._should_draw_route(start_lon, start_lat, center_lon, center_lat):
                 ax.plot(
                     [start_lon, center_lon],
                     [start_lat, center_lat],
                     color='gray',
-                    alpha=0.6,
-                    linewidth=1.5,
-                    linestyle=':',
-                    zorder=10,
+                    alpha=0.55,  # 略提高可见性
+                    linewidth=1.0,
+                    linestyle='--',
+                    zorder=6,
                     transform=self.data_crs
                 )
                 layer1_count += 1
 
             # Layer2: 聚类中心 → 管道接入点 (灰色虚线)
             layer2_dist = row.get('Layer2距离(km)', 0)
-            if layer2_dist > 0 and '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+            if '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
                 try:
                     path_coords = json.loads(row['路径坐标'])
+                    path_coords = self._normalize_path_coords(path_coords)
+
+                    if len(path_coords) < 2:
+                        continue
 
                     # 从路径坐标中找最接近聚类中心的点作为起点
                     min_dist_to_center = float('inf')
@@ -825,35 +969,109 @@ class ThirteenScenariosClusteredMapVisualizer:
                     pipeline_access_point = None
                     access_point_idx = start_idx
 
-                    for i in range(start_idx + 1, len(path_coords)):
-                        seg_dist = self.haversine(
-                            path_coords[i-1][0], path_coords[i-1][1],
-                            path_coords[i][0], path_coords[i][1]
-                        )
-                        cumulative_dist += seg_dist
+                    if layer2_dist > 0:
+                        for i in range(start_idx + 1, len(path_coords)):
+                            seg_dist = self.haversine(
+                                path_coords[i-1][0], path_coords[i-1][1],
+                                path_coords[i][0], path_coords[i][1]
+                            )
+                            cumulative_dist += seg_dist
 
-                        # 如果累计距离接近Layer2距离，这就是管道接入点
-                        if abs(cumulative_dist - layer2_dist) < 1:  # 1km容差
-                            pipeline_access_point = path_coords[i]
-                            access_point_idx = i
-                            break
+                            # 如果累计距离接近Layer2距离，这就是管道接入点
+                            if abs(cumulative_dist - layer2_dist) < 1:  # 1km容差
+                                pipeline_access_point = path_coords[i]
+                                access_point_idx = i
+                                break
 
-                    # 绘制Layer2：聚类中心 → 管道接入点
-                    if pipeline_access_point:
-                        ax.plot(
-                            [center_lon, pipeline_access_point[0]],
-                            [center_lat, pipeline_access_point[1]],
-                            color='gray',
-                            alpha=0.6,
-                            linewidth=1.5,
-                            linestyle=':',
-                            zorder=10,
-                            transform=self.data_crs
-                        )
-                        layer2_count += 1
+                        # 绘制Layer2：聚类中心 → 管道接入点
+                        if pipeline_access_point and self._should_draw_route(
+                            center_lon, center_lat, pipeline_access_point[0], pipeline_access_point[1]
+                        ):
+                            ax.plot(
+                                [center_lon, pipeline_access_point[0]],
+                                [center_lat, pipeline_access_point[1]],
+                                color='gray',
+                                alpha=0.5,
+                                linewidth=1.0,
+                                linestyle='--',
+                                zorder=6,
+                                transform=self.data_crs
+                            )
+                            layer2_count += 1
+
+                    # Layer3: 管道网络 → 目的地（沿路径坐标绘制）
+                    layer3_dist = row.get('Layer3距离(km)', 0)
+                    if layer3_dist > 0:
+                        if pipeline_access_point:
+                            segment_coords = path_coords[access_point_idx:]
+                        else:
+                            segment_coords = path_coords[start_idx:]
+
+                        if len(segment_coords) >= 2 and self._should_draw_route(
+                            segment_coords[0][0], segment_coords[0][1],
+                            segment_coords[-1][0], segment_coords[-1][1]
+                        ):
+                            lons = [coord[0] for coord in segment_coords]
+                            lats = [coord[1] for coord in segment_coords]
+                            ax.plot(
+                                lons, lats,
+                                color=self.transport_colors['H2'],
+                                alpha=0.7,
+                                linewidth=1.2,
+                                linestyle='-',
+                                zorder=7,
+                                transform=self.data_crs
+                            )
+                            layer3_count += 1
 
                 except Exception as e:
                     logger.warning(f"    解析路径坐标失败: {e}")
+
+        # 绘制非聚类（孤立点）H2线路：直接按路径坐标绘制
+        if len(h2_non_cluster_data) > 0:
+            for idx, row in h2_non_cluster_data.iterrows():
+                # 运输量过滤
+                volume = self._get_transport_volume(row, volume_type='kg')
+                if volume <= 0.01:
+                    continue
+                if volume < self.min_h2_noncluster_weekly_kg:
+                    continue
+
+                start_lat, start_lon = parse_coord(row.get('起点坐标'))
+                end_lat, end_lon = parse_coord(row.get('终点坐标'))
+                if start_lat is None or start_lon is None or end_lat is None or end_lon is None:
+                    continue
+
+                # 仅绘制起终点均为已标注设施的路线
+                if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                    continue
+
+                route_coords = None
+                if '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+                    try:
+                        path_coords = json.loads(row['路径坐标'])
+                        path_coords = self._normalize_path_coords(path_coords)
+                        if len(path_coords) >= 2:
+                            route_coords = path_coords
+                    except Exception as e:
+                        logger.warning(f"    解析非聚类路径坐标失败: {e}")
+
+                # 回退：使用起终点直线
+                if route_coords is None:
+                    route_coords = [(start_lon, start_lat), (end_lon, end_lat)]
+
+                lons = [coord[0] for coord in route_coords]
+                lats = [coord[1] for coord in route_coords]
+                ax.plot(
+                    lons, lats,
+                    color=self.transport_colors.get('H2_cluster', '#56B4E9'),
+                    alpha=0.55,
+                    linewidth=1.3,
+                    linestyle=':',
+                    zorder=6,
+                    transform=self.data_crs
+                )
+                non_cluster_count += 1
 
         # 【关键修改】只绘制实际使用的聚类中心
         if used_cluster_centers:
@@ -861,14 +1079,255 @@ class ThirteenScenariosClusteredMapVisualizer:
                 cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
                 ax.scatter(
                     center_lon, center_lat,
-                    c=cluster_color, s=150, marker='P',  # 使用五角星'P',大小150
-                    edgecolors='black', linewidth=2.0,
-                    transform=self.data_crs, zorder=25, alpha=1.0
+                    c=cluster_color, s=250, marker='*',  # 改用星号'*', 更醒目, 大小加大到250
+                    edgecolors='white', linewidth=1.5,
+                    transform=self.data_crs, zorder=25, alpha=1.0,
+                    label='Cluster Center' if cluster_id == list(used_cluster_centers.keys())[0] else "" 
                 )
 
         logger.info(f"    ✓ Layer1: {layer1_count} 条（源点→聚类中心）")
         logger.info(f"    ✓ Layer2: {layer2_count} 条（聚类中心→管道接入点）")
+        logger.info(f"    ✓ Layer3: {layer3_count} 条（管道网络→目的地）")
+        logger.info(f"    ✓ 非聚类H2线路: {non_cluster_count} 条（直接绘制）")
         logger.info(f"    ✓ 实际使用的聚类中心: {len(used_cluster_centers)} 个（总共{len(all_cluster_centers)}个）")
+
+    def plot_co2_routes(self, ax, co2_clustering, transport_summary, module_name):
+        """
+        绘制CO2运输路线（支持聚类与直达）
+
+        Args:
+            ax: matplotlib axes对象
+            co2_clustering: CO2聚类JSON数据
+            transport_summary: 运输汇总DataFrame（包含Layer信息）
+            module_name: 模块名称
+        """
+        if transport_summary is None or len(transport_summary) == 0:
+            return
+
+        if '货物类型' not in transport_summary.columns:
+            return
+
+        co2_df = transport_summary[
+            transport_summary['货物类型'].astype(str).str.contains(r'CO2|CO₂|二氧化碳', case=False, na=False)
+        ].copy()
+
+        if len(co2_df) == 0:
+            return
+
+        logger.info(f"  绘制CO2运输路线...")
+        used_cluster_centers = {}
+
+        all_cluster_centers = {}
+        if co2_clustering:
+            for cluster in co2_clustering.get('clusters', []):
+                cluster_id = cluster.get('cluster_id')
+                center = cluster.get('geo_center') or cluster.get('center_coord')
+                if center and len(center) >= 2 and cluster_id is not None:
+                    all_cluster_centers[cluster_id] = (center[0], center[1])
+
+        # 统计计数
+        layer1_count = 0
+        layer2_count = 0
+        layer3_count = 0
+
+        # 解析坐标字符串的辅助函数
+        def parse_coord(coord_str):
+            """解析 "(39.1244, 117.3462)" 格式的坐标字符串"""
+            if pd.isna(coord_str) or not coord_str:
+                return None, None
+            try:
+                import re
+                match = re.search(r'\(([\d.]+),\s*([\d.]+)\)', str(coord_str))
+                if match:
+                    lat = float(match.group(1))
+                    lon = float(match.group(2))
+                    return lat, lon
+            except:
+                pass
+            return None, None
+
+        for _, row in co2_df.iterrows():
+            volume = self._get_transport_volume(row, volume_type='kg')
+            if volume <= 0.01:
+                continue
+
+            cluster_info = row.get('聚类信息', '')
+            center_lat = None
+            center_lon = None
+
+            if cluster_info and pd.notna(cluster_info):
+                try:
+                    import re
+                    id_match = re.search(r'聚类(\\d+)', str(cluster_info))
+                    cluster_id = int(id_match.group(1)) if id_match else None
+
+                    center_match = re.search(r'中心:([\\d.]+),([\\d.]+)', str(cluster_info))
+                    if center_match:
+                        center_lat = float(center_match.group(1))
+                        center_lon = float(center_match.group(2))
+                    elif cluster_id in all_cluster_centers:
+                        center_lat, center_lon = all_cluster_centers[cluster_id]
+                except:
+                    pass
+
+            start_lat, start_lon = parse_coord(row.get('起点坐标'))
+            end_lat, end_lon = parse_coord(row.get('终点坐标'))
+
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
+            # 记录CO2聚类中心为可见点（避免“无点有线”）
+            if center_lat is not None and center_lon is not None:
+                used_cluster_centers[(center_lon, center_lat)] = (center_lat, center_lon)
+                self._mark_visible(center_lon, center_lat)
+
+            # Layer1: CO2源 -> 聚类中心
+            layer1_dist = row.get('Layer1距离(km)', 0)
+            if (layer1_dist > 0 and center_lat is not None and center_lon is not None and start_lat is not None
+                    and self._should_draw_route(start_lon, start_lat, center_lon, center_lat)):
+                ax.plot(
+                    [start_lon, center_lon],
+                    [start_lat, center_lat],
+                    color=self.transport_colors['CO2'],
+                    alpha=0.6,
+                    linewidth=0.9,
+                    linestyle='--',
+                    zorder=6,
+                    transform=self.data_crs
+                )
+                layer1_count += 1
+
+            path_coords = None
+            if '路径坐标' in row and row['路径坐标'] and row['路径坐标'] != '[]':
+                try:
+                    path_coords = json.loads(row['路径坐标'])
+                    path_coords = self._normalize_path_coords(path_coords)
+                except Exception:
+                    path_coords = None
+
+            # Layer2: 聚类中心 -> 管道接入点
+            pipeline_access_point = None
+            access_point_idx = 0
+            if path_coords and len(path_coords) >= 2 and center_lat is not None and center_lon is not None:
+                min_dist_to_center = float('inf')
+                start_idx = 0
+                for i, coord in enumerate(path_coords):
+                    dist = self.haversine(center_lon, center_lat, coord[0], coord[1])
+                    if dist < min_dist_to_center:
+                        min_dist_to_center = dist
+                        start_idx = i
+
+                access_point_idx = start_idx
+                layer2_dist = row.get('Layer2距离(km)', 0)
+                if layer2_dist > 0:
+                    cumulative_dist = 0
+                    for i in range(start_idx + 1, len(path_coords)):
+                        seg_dist = self.haversine(
+                            path_coords[i-1][0], path_coords[i-1][1],
+                            path_coords[i][0], path_coords[i][1]
+                        )
+                        cumulative_dist += seg_dist
+                        if abs(cumulative_dist - layer2_dist) < 1:
+                            pipeline_access_point = path_coords[i]
+                            access_point_idx = i
+                            break
+
+                    if pipeline_access_point and self._should_draw_route(
+                        center_lon, center_lat, pipeline_access_point[0], pipeline_access_point[1]
+                    ):
+                        ax.plot(
+                            [center_lon, pipeline_access_point[0]],
+                            [center_lat, pipeline_access_point[1]],
+                            color=self.transport_colors['CO2'],
+                            alpha=0.7,
+                            linewidth=1.0,
+                            linestyle='-',
+                            zorder=7,
+                            transform=self.data_crs
+                        )
+                        layer2_count += 1
+
+            # Layer3: 管道网络 -> 目的地（沿路径或直连）
+            layer3_dist = row.get('Layer3距离(km)', 0)
+            if layer3_dist > 0:
+                if path_coords and len(path_coords) >= 2:
+                    if pipeline_access_point:
+                        segment_coords = path_coords[access_point_idx:]
+                    else:
+                        segment_coords = path_coords
+
+                    if len(segment_coords) >= 2 and self._should_draw_route(
+                        segment_coords[0][0], segment_coords[0][1],
+                        segment_coords[-1][0], segment_coords[-1][1]
+                    ):
+                        lons = [coord[0] for coord in segment_coords]
+                        lats = [coord[1] for coord in segment_coords]
+                        ax.plot(
+                            lons, lats,
+                            color=self.transport_colors['CO2'],
+                            alpha=0.7,
+                            linewidth=1.1,
+                            linestyle='-',
+                            zorder=7,
+                            transform=self.data_crs
+                        )
+                        layer3_count += 1
+                else:
+                    if pipeline_access_point and end_lon is not None and end_lat is not None and self._should_draw_route(
+                        pipeline_access_point[0], pipeline_access_point[1], end_lon, end_lat
+                    ):
+                        ax.plot(
+                            [pipeline_access_point[0], end_lon],
+                            [pipeline_access_point[1], end_lat],
+                            color=self.transport_colors['CO2'],
+                            alpha=0.7,
+                            linewidth=1.1,
+                            linestyle='-',
+                            zorder=7,
+                            transform=self.data_crs
+                        )
+                        layer3_count += 1
+                    elif center_lon is not None and end_lon is not None and center_lat is not None and end_lat is not None \
+                            and self._should_draw_route(center_lon, center_lat, end_lon, end_lat):
+                        ax.plot(
+                            [center_lon, end_lon],
+                            [center_lat, end_lat],
+                            color=self.transport_colors['CO2'],
+                            alpha=0.7,
+                            linewidth=1.1,
+                            linestyle='-',
+                            zorder=7,
+                            transform=self.data_crs
+                        )
+                        layer3_count += 1
+                    elif start_lon is not None and end_lon is not None and start_lat is not None and end_lat is not None \
+                            and self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                        ax.plot(
+                            [start_lon, end_lon],
+                            [start_lat, end_lat],
+                            color=self.transport_colors['CO2'],
+                            alpha=0.7,
+                            linewidth=1.1,
+                            linestyle='-',
+                            zorder=7,
+                            transform=self.data_crs
+                        )
+                        layer3_count += 1
+
+        # 标注CO2聚类中心（用于避免“无点有线”）
+        if used_cluster_centers:
+            for (center_lon, center_lat), _ in used_cluster_centers.items():
+                ax.scatter(
+                    center_lon, center_lat,
+                    c='purple', s=160, marker='*',
+                    edgecolors='white', linewidth=1.2,
+                    transform=self.data_crs, zorder=24, alpha=0.9
+                )
+
+        logger.info(f"    ✓ CO2 Layer1: {layer1_count} 条（源点→聚类中心）")
+        logger.info(f"    ✓ CO2 Layer2: {layer2_count} 条（聚类中心→管道接入点）")
+        logger.info(f"    ✓ CO2 Layer3: {layer3_count} 条（管道网络→目的地）")
 
     def plot_pipeline_networks(self, ax):
         """
@@ -884,23 +1343,23 @@ class ThirteenScenariosClusteredMapVisualizer:
         pipeline_types = {
             'crude': {
                 'name': '原油管道',
-                'color': '#8B4513',  # 棕色
-                'alpha': 0.5,
-                'linewidth': 1.2,
+                'color': '#8c510a',  # 土褐色
+                'alpha': 0.3,        # 很淡
+                'linewidth': 0.8,
                 'file': 'crude_pipelines.geojson'
             },
             'refined': {
                 'name': '成品油管道',
-                'color': '#FF6B35',  # 橙红色
-                'alpha': 0.5,
-                'linewidth': 1.2,
+                'color': '#d8b365',  # 浅褐色
+                'alpha': 0.3,
+                'linewidth': 0.8,
                 'file': 'refined_product_pipelines.geojson'
             },
             'natural_gas': {
                 'name': '天然气管道',
-                'color': '#4169E1',  # 皇家蓝
-                'alpha': 0.6,
-                'linewidth': 1.5,
+                'color': '#5ab4ac',  # 浅青色
+                'alpha': 0.4,
+                'linewidth': 1.0,
                 'file': 'natural_gas_pipelines.geojson'
             }
         }
@@ -1023,6 +1482,18 @@ class ThirteenScenariosClusteredMapVisualizer:
             if start_lat is None or start_lon is None or end_lat is None or end_lon is None:
                 continue
 
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
             # 计算线宽（基于运输量）
             if max_volume > min_volume:
                 linewidth = 0.8 + 2.0 * (volume - min_volume) / (max_volume - min_volume)
@@ -1056,9 +1527,9 @@ class ThirteenScenariosClusteredMapVisualizer:
                 ax.plot(lons, lats,
                        color=self.transport_colors['SAF'],
                        linewidth=linewidth,
-                       alpha=0.8,
+                       alpha=0.9, # 提高不透明度
                        transform=self.data_crs,
-                       zorder=15)
+                       zorder=20) # 提高层级，覆盖在管道和聚类路线上
             else:
                 # 降级为直线
                 ax.plot([start_lon, end_lon], [start_lat, end_lat],
@@ -1285,8 +1756,6 @@ class ThirteenScenariosClusteredMapVisualizer:
                 else:
                     continue
 
-                # 【关键修改】只有运输量>0时才标记聚类中心为已使用
-                used_cluster_centers[cluster_id] = (center_lat, center_lon)
             except:
                 continue
 
@@ -1296,17 +1765,26 @@ class ThirteenScenariosClusteredMapVisualizer:
 
             if start_lat is None or start_lon is None:
                 continue
+            if end_lat is None or end_lon is None:
+                continue
+
+            # 仅绘制起终点均为已标注设施的路线
+            if not self._should_draw_route(start_lon, start_lat, end_lon, end_lat):
+                continue
+
+            # 通过过滤后再标记聚类中心为已使用
+            used_cluster_centers[cluster_id] = (center_lat, center_lon)
 
             # Layer1: 天然气管道节点 → 天然气聚类中心 (lime green虚线)
             layer1_dist = row.get('Layer1距离(km)', 0)
-            if layer1_dist > 0:
+            if layer1_dist > 0 and self._should_draw_route(start_lon, start_lat, center_lon, center_lat):
                 ax.plot(
                     [start_lon, center_lon],
                     [start_lat, center_lat],
                     color=self.transport_colors['NG'],
-                    alpha=0.6,
-                    linewidth=1.5,
-                    linestyle=':',
+                    alpha=0.4,
+                    linewidth=0.8,
+                    linestyle='--',
                     zorder=10,
                     transform=self.data_crs
                 )
@@ -1314,12 +1792,13 @@ class ThirteenScenariosClusteredMapVisualizer:
 
             # Layer2: 天然气聚类中心 → SAF工厂 (lime green实线)
             layer2_dist = row.get('Layer2距离(km)', 0)
-            if layer2_dist > 0 and end_lat is not None and end_lon is not None:
+            if layer2_dist > 0 and end_lat is not None and end_lon is not None \
+                    and self._should_draw_route(center_lon, center_lat, end_lon, end_lat):
                 ax.plot(
                     [center_lon, end_lon],
                     [center_lat, end_lat],
                     color=self.transport_colors['NG'],
-                    alpha=0.7,
+                    alpha=0.8,
                     linewidth=2.0,
                     linestyle='-',
                     zorder=14,
@@ -1333,8 +1812,8 @@ class ThirteenScenariosClusteredMapVisualizer:
                 cluster_color = self.cluster_colors[cluster_id % len(self.cluster_colors)]
                 ax.scatter(
                     center_lon, center_lat,
-                    c=cluster_color, s=150, marker='D',  # 使用菱形'D',大小150
-                    edgecolors='black', linewidth=2.0,
+                    c=cluster_color, s=220, marker='D',  # 菱形加大到220
+                    edgecolors='white', linewidth=1.5,
                     transform=self.data_crs, zorder=25, alpha=1.0
                 )
 
@@ -1358,6 +1837,7 @@ class ThirteenScenariosClusteredMapVisualizer:
         """
         if transport_summary is None:
             logger.warning("  运输汇总数据为None，跳过设施绘制")
+            self.visible_facility_coords = set()
             return {}
 
         logger.info(f"  绘制设施位置...")
@@ -1648,6 +2128,7 @@ class ThirteenScenariosClusteredMapVisualizer:
             logger.warning("    未收集到任何设施，检查坐标解析和数据格式")
             logger.info("    运输汇总数据前5行:")
             logger.info(f"\n{transport_summary.head().to_string()}")
+            self.visible_facility_coords = set()
             return {}
 
         # 第二步: 对每个坐标位置进行三维分类
@@ -1692,11 +2173,17 @@ class ThirteenScenariosClusteredMapVisualizer:
         logger.info(f"    设施三维张量分类统计：")
 
         total_facilities_plotted = 0
+        skipped_outside = 0
+        plotted_coords = []
 
         # 用于统计分类组合（用于图例）
         classification_stats = {}
 
         for (lon, lat), (raw_materials, saf_production, consumption) in facility_classifications.items():
+            # 仅绘制当前可视范围内的设施
+            if not self._in_extent(lon, lat):
+                skipped_outside += 1
+                continue
             # 获取可视化属性列表（多角色返回多个标记描述）
             markers = self.get_facility_visualization_attrs(raw_materials, saf_production, consumption)
 
@@ -1722,6 +2209,7 @@ class ThirteenScenariosClusteredMapVisualizer:
             )
 
             total_facilities_plotted += 1
+            plotted_coords.append((lon, lat))
 
             # 统计分类（对于多角色设施，统计组合分类）
             if len(markers) > 1:
@@ -1755,10 +2243,17 @@ class ThirteenScenariosClusteredMapVisualizer:
                     }
                 classification_stats[classification_key]['count'] += 1
 
+        if skipped_outside > 0:
+            logger.info(f"    跳过可视范围外设施: {skipped_outside} 个")
         logger.info(f"    总共绘制设施数（唯一坐标位置）: {total_facilities_plotted}")
         logger.info(f"    设施三维张量分类统计（共{len(classification_stats)}种组合）：")
         for (material, saf, cons), stats in sorted(classification_stats.items()):
             logger.info(f"      [{material} × {saf} × {cons}] {stats['count']}个设施")
+
+        # 记录已绘制设施坐标，用于过滤路线（仅保留有点的路线）
+        self.visible_facility_coords = {
+            self._coord_key(lon, lat) for (lon, lat) in plotted_coords
+        }
 
         return classification_stats
 
@@ -1774,32 +2269,37 @@ class ThirteenScenariosClusteredMapVisualizer:
         config = self.modules[module_name]
         data = self.transport_data[module_name]
 
-        fig, ax = self.create_base_map(figsize=(18, 14))
+        # 增加地图尺寸，使其更大更清晰
+        fig, ax = self.create_base_map(figsize=(24, 20))
+
+        # 先绘制管道网络（作为底层，增加透明度）
+        logger.info(f"  绘制管道网络...")
+        pipeline_stats = self.plot_pipeline_networks(ax)
+
+        # 先绘制设施（并建立可见点集合），用于过滤后续路线绘制
+        facility_classification = self.plot_facilities(
+            ax, data['transport_summary'], module_name, data.get('complete_solution')
+        )
 
         # 【特殊处理】一步法场景：只画机场和直接运输路线，不绘制聚类路线
         if module_name in ['Natural Gas One-Step', 'DAC One-Step', 'Green H2 One-Step']:
             logger.info(f"  {module_name}场景：一步法工艺，只绘制直接运输路线和机场设施")
-            # 绘制管道网络
-            logger.info(f"  绘制管道网络...")
-            pipeline_stats = self.plot_pipeline_networks(ax)
-
             # 绘制天然气运输路线（如果有）
             self.plot_ng_routes(ax, data['transport_summary'])
 
+            # 绘制CO2运输路线（如果有）
+            self.plot_co2_routes(ax, data.get('co2_clustering'), data['transport_summary'], module_name)
+
             # 绘制SAF运输路线
             self.plot_saf_routes(ax, data['transport_summary'])
-
-            # 绘制设施位置（从transport_summary和complete_solution中提取）
-            facility_classification = self.plot_facilities(ax, data['transport_summary'], module_name, data.get('complete_solution'))
         else:
             # 其他场景的正常处理流程
-            # 先绘制管道网络（作为底层）
-            logger.info(f"  绘制管道网络...")
-            pipeline_stats = self.plot_pipeline_networks(ax)
-
             # 绘制H2聚类运输路线（如果有H2聚类数据）
             if data['h2_clustering']:
                 self.plot_h2_clustered_routes(ax, data['h2_clustering'], data['transport_summary'], module_name)
+
+            # 绘制CO2运输路线（如果有）
+            self.plot_co2_routes(ax, data.get('co2_clustering'), data['transport_summary'], module_name)
 
             # 绘制天然气聚类运输路线（如果有天然气聚类数据）
             if data['ng_clustering']:
@@ -1811,32 +2311,41 @@ class ThirteenScenariosClusteredMapVisualizer:
             # 绘制SAF运输路线
             self.plot_saf_routes(ax, data['transport_summary'])
 
-            # 绘制设施位置并获取分类统计（从transport_summary和complete_solution中提取）
-            facility_classification = self.plot_facilities(ax, data['transport_summary'], module_name, data.get('complete_solution'))
-
         # 添加装饰元素
         self.add_decorations(ax)
 
         # 添加图例（分三部分：路线、设施三维分类矩阵、管道网络）
+        # 优化：使用 Custom Legend Handler 或 更好的布局
+        
+        # 字体设置
+        legend_font = {'family': 'Arial', 'size': 9}
+        
         legend_elements = [
             # === 路线图例 ===
-            Line2D([0], [0], color='gray', linewidth=2, linestyle=':',
-                   label='H₂ Layer1/2 (源点→聚类→管道)'),
-            Line2D([0], [0], marker='P', color='w', markerfacecolor='purple',
-                   markersize=12, markeredgecolor='black', markeredgewidth=1.5,
-                   label='H₂聚类中心 Cluster Center'),
-            Line2D([0], [0], color=self.transport_colors['NG'], linewidth=2.5,
-                   label='天然气运输 NG Transport'),
-            Line2D([0], [0], color=self.transport_colors['SAF'], linewidth=2.5,
-                   label='SAF卡车运输 Truck Transport'),
+            Line2D([0], [0], color='gray', linewidth=1, linestyle='--',
+                   label='Feeder Route (Layer1/2)'),
+            Line2D([0], [0], marker='*', color='w', markerfacecolor='purple',
+                   markersize=14, markeredgecolor='white', markeredgewidth=1.0,
+                   label='Cluster Center'),
+            Line2D([0], [0], color=self.transport_colors['H2'], linewidth=1.5,
+                   label='H2 Clustered Route (Layer3)'),
+            Line2D([0], [0], color=self.transport_colors.get('H2_cluster', '#56B4E9'),
+                   linewidth=1.3, linestyle=':',
+                   label='H2 Non-cluster Route'),
+            Line2D([0], [0], color=self.transport_colors['CO2'], linewidth=1.5,
+                   label='CO2 Transport'),
+            Line2D([0], [0], color=self.transport_colors['NG'], linewidth=2,
+                   label='NG Transport'),
+            Line2D([0], [0], color=self.transport_colors['SAF'], linewidth=2,
+                   label='SAF Truck Transport'),
         ]
 
         # === 设施三维张量分类矩阵图例 ===
         legend_elements.append(Line2D([0], [0], marker='', color='w', label=''))  # 空行
         legend_elements.append(Line2D([0], [0], marker='', color='w',
-                                     label='【设施三维张量分类】', markerfacecolor='w'))
-        legend_elements.append(Line2D([0], [0], marker='', color='w',
-                                     label='原材料类型×SAF生产×消纳地', markerfacecolor='w'))
+                                     label=r'$\bf{Facility\ Classification}$', markerfacecolor='w')) # Bold styling
+        # legend_elements.append(Line2D([0], [0], marker='', color='w',
+        #                              label='Raw Material × SAF Prod × Consumer', markerfacecolor='w')) # Too long
 
         # 定义三维张量的基础组合（单一原材料类型）
         # 维度1: H₂生产, CO₂捕获, 天然气供应, 无原材料生产
@@ -1858,42 +2367,64 @@ class ThirteenScenariosClusteredMapVisualizer:
                 else:
                     label = f"{attrs['full_label']} ({count})"
 
+                # 简化标签，移除中文以保持整洁，或者仅保留英文
+                # English Labels primarily for Applied Energy
+                clean_label = label.split(' ')[0] # 简化的处理，需根据实际label格式调整
+                
+                # 手动构建更清晰的图例标签
+                # full_label格式: "H₂生产 × 有SAF生产 × 是消纳地 (5)"
+                # 转换为: "H2 w/ SAF & Cons. (5)"
+                
+                # 简单的字符串替换来缩短标签
+                short_label = label \
+                    .replace('H₂生产', 'H2').replace('CO₂捕获', 'CO2').replace('天然气供应', 'NG') \
+                    .replace('无原材料生产', 'No Raw Mat.') \
+                    .replace('有SAF生产', 'SAF Prod.').replace('无SAF生产', 'No SAF') \
+                    .replace('是消纳地', 'Consumer').replace('非消纳地', 'Non-Cons.') \
+                    .replace(' × ', ' | ')
+                
                 legend_elements.append(
                     Line2D([0], [0], marker=attrs['marker'], color='w',
                           markerfacecolor=attrs['color'],
-                          markersize=10,
+                          markersize=12,  # 增加图例标记大小
                           markeredgecolor=attrs['edgecolor'],
                           markeredgewidth=attrs['linewidth'],
-                          label=label)
+                          label=short_label)
                 )
 
         # 添加管道网络图例
         legend_elements.append(Line2D([0], [0], marker='', color='w', label=''))  # 空行
         legend_elements.append(Line2D([0], [0], marker='', color='w',
-                                     label='【管道网络】', markerfacecolor='w'))
+                                     label=r'$\bf{Pipeline\ Network}$', markerfacecolor='w'))
 
-        pipeline_names = {
-            'crude': '原油管道',
-            'refined': '成品油管道',
-            'natural_gas': '天然气管道'
+        pipeline_names_en = {
+            'crude': 'Crude Oil',
+            'refined': 'Product Oil',
+            'natural_gas': 'Natural Gas'
         }
-        pipeline_colors = {
-            'crude': '#8B4513',
-            'refined': '#FF6B35',
-            'natural_gas': '#4169E1'
+        
+        # 稍微加深图例颜色以便可见
+        pipeline_colors_legend = {
+            'crude': '#8c510a',
+            'refined': '#d8b365',
+            'natural_gas': '#5ab4ac'
         }
 
         for pipeline_type, count in pipeline_stats.items():
             if count > 0:
                 legend_elements.append(
-                    Line2D([0], [0], color=pipeline_colors[pipeline_type],
-                          linewidth=2, alpha=0.6,
-                          label=f'{pipeline_names[pipeline_type]} ({count}段)')
+                    Line2D([0], [0], color=pipeline_colors_legend[pipeline_type],
+                          linewidth=1.5, alpha=1.0, # 图例中完全不透明
+                          label=f'{pipeline_names_en[pipeline_type]} ({count})')
                 )
 
-        # 将图例放到图外右侧
-        ax.legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1.02, 0.5),
-                 fontsize=8, framealpha=0.95, ncol=1, borderpad=1, labelspacing=0.5)
+        # 将图例放到图外右侧，且样式更加精简
+        # 调整bbox_to_anchor以适应新的图片尺寸
+        ax.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(1.01, 0.95),
+                 prop={'family': 'Arial', 'size': 11},  # 字体加大
+                 framealpha=0.9, 
+                 edgecolor='#D3D3D3',
+                 ncol=1, borderpad=1.0, labelspacing=0.8)
 
         # 添加标题
         h2_clusters = data['h2_clustering']['total_clusters'] if data['h2_clustering'] else 0
@@ -1906,24 +2437,17 @@ class ThirteenScenariosClusteredMapVisualizer:
 
         total_pipelines = sum(pipeline_stats.values())
 
-        # 根据场景类型生成不同的标题
-        if ng_clusters > 0:
-            # 天然气一步法场景
-            title = (f"{config['name_cn']} SAF供应链聚类运输网络（天然气聚类）\n"
-                    f"{module_name} SAF Supply Chain Clustered Transport Network (NG Clustering)\n"
-                    f"天然气聚类: {ng_clusters} 个 | SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
-        elif h2_clusters > 0:
-            # 氢气两步法场景
-            title = (f"{config['name_cn']} SAF供应链聚类运输网络（两层结构）\n"
-                    f"{module_name} SAF Supply Chain Clustered Transport Network (Two Layers)\n"
-                    f"H₂聚类: {h2_clusters} 个 | SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
-        else:
-            # 其他场景
-            title = (f"{config['name_cn']} SAF供应链运输网络\n"
-                    f"{module_name} SAF Supply Chain Transport Network\n"
-                    f"SAF路线: {saf_routes} 条 | 管道: {total_pipelines} 段")
-
-        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+        # 英文标题，去掉中文以符合SCI标准 (或者双语，但主要为了SCI)
+        simple_module_name = module_name.replace('Two-Step', '').replace('One-Step', '').strip()
+        
+        # 构建更学术的标题
+        # e.g., "Figure 1: Optimized Supply Chain Network for Coal Hydrogen Scenario"
+        # 实际论文中标题通常在Caption，但这里保留一个简洁的Top Title
+        
+        main_title = f"{module_name} Supply Chain Network"
+        sub_title = f"SAF Routes: {saf_routes} | NG Clusters: {ng_clusters} | H2 Clusters: {h2_clusters}"
+        
+        ax.set_title(f"{main_title}\n{sub_title}", fontsize=18, fontweight='bold', pad=20)
 
         # 调整布局以容纳外部图例
         plt.tight_layout(rect=[0, 0, 0.85, 1])  # 为右侧图例留出空间
