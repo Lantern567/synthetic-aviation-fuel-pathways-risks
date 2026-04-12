@@ -298,6 +298,11 @@ economic_parameters:
     storage_capacity_factor: 0.9
     transport_capacity_factor: 0.75
 equipment_raw_costs:
+  electrolyzer:
+    byproduct_steel_capex_raw: 280000     # 钢铁副产氢PSA净化设备CAPEX, 元/(kg H₂/hour)
+    byproduct_refinery_capex_raw: 224000  # 炼油副产氢PSA净化设备CAPEX, 元/(kg H₂/hour)
+    byproduct_steel_opex_raw: 130000      # 钢铁副产氢设备OPEX, 元/年
+    byproduct_refinery_opex_raw: 110000   # 炼油副产氢设备OPEX, 元/年
   ft_reactor:
     capex_raw: 5000000
     opex_raw: 100000

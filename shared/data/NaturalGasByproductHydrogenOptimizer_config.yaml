@@ -360,6 +360,10 @@ equipment_raw_costs:
   electrolyzer:
     capex_raw: 360000
     opex_raw: 130000
+    byproduct_steel_capex_raw: 280000     # 钢铁副产氢PSA净化设备CAPEX, 元/(kg H₂/hour)
+    byproduct_refinery_capex_raw: 224000  # 炼油副产氢PSA净化设备CAPEX, 元/(kg H₂/hour), 比钢铁低20%
+    byproduct_steel_opex_raw: 130000      # 钢铁副产氢设备OPEX, 元/年
+    byproduct_refinery_opex_raw: 110000   # 炼油副产氢设备OPEX, 元/年
   storage:
     capex_raw: 2000
     opex_raw: 30

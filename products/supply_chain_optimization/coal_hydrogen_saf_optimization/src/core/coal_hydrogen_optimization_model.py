@@ -11,6 +11,7 @@
 # CRITICAL: 必须在导入gurobipy之前设置Gurobi许可证路径
 # ============================================================================
 import os
+import sys  # 添加sys导入到顶部
 # 强制使用正确的许可证文件路径（无论环境变量如何设置）
 os.environ['GRB_LICENSE_FILE'] = '/home/ljt/gurobi.lic'
 
@@ -38,7 +39,6 @@ try:
     # 移除对外部成本分析引擎的依赖，直接在优化模型内部计算成本
     create_cost_analyzer = None
 except ModuleNotFoundError:
-    import sys
     # 动态加入项目根目录到sys.path后重试
     current_file = os.path.abspath(__file__)
     # core/green_hydrogen_optimization_model.py -> core/ -> src/ -> green_hydrogen_supply_chain_optimization/ -> supply_chain_optimization/ -> products/ -> 项目根
@@ -713,8 +713,18 @@ class CoalHydrogenSAFOptimizer:
                 if 'facility_lcoe_parameters' not in new_config:
                     new_config['facility_lcoe_parameters'] = {}
                 new_config['facility_lcoe_parameters'][param_key] = value
+            elif '.' in key:
+                # dot-notation 嵌套键支持, 如 "coal_parameters.coal_price_yuan_per_ton"
+                # 或 "equipment_raw_costs.electrolyzer.capex_raw"
+                parts = key.split('.')
+                d = new_config
+                for part in parts[:-1]:
+                    if part not in d:
+                        d[part] = {}
+                    d = d[part]
+                d[parts[-1]] = value
             # 可以继续添加其他类别的参数覆盖逻辑
-        
+
         return new_config
 
     def _build_mtj_locations(self):
@@ -3505,15 +3515,6 @@ class CoalHydrogenSAFOptimizer:
             for location in self.electrolyzer_capacity_vars
         )
 
-        # 电解槽/副产氢设备运营成本（年化，20年现值）
-        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
-            self.electrolyzer_capacity_vars[location] *
-            self._get_electrolyzer_opex(location) *
-            electrolyzer_capacity_factor *
-            present_value_factor
-            for location in self.electrolyzer_capacity_vars
-        )
-
         # 7. 制氢运营成本（20年生命周期现值）- 使用统一成本配置
         hydrogen_production_unit_cost = float(
             self.config.get('unified_costs', {}).get('production', {}).get('hydrogen_internal_cost_yuan_per_kg', 0)
@@ -3786,7 +3787,6 @@ class CoalHydrogenSAFOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             self.cost_expressions['hydrogen_production_cost'] +
-            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：SAF合成催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -5683,17 +5683,14 @@ class CoalHydrogenSAFOptimizer:
                         member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
                         return max(member_total_distance, 5)
                     except PipelineRouteNotFoundError as e:
-                        # 聚类到目的地找不到管道路径，使用直线距离作为降级方案
-                        logger.warning(f"管道路径未找到（聚类），使用直线距离: 聚类{cluster.cluster_id}成员{h2_loc} -> {mtj_loc}, 原因: {str(e)}")
-                        self.skipped_routes['hydrogen_pipeline'].append({
-                            'from': h2_loc,
-                            'from_cluster_id': cluster.cluster_id,
-                            'to': mtj_loc,
-                            'to_coords': mtj_coords,
-                            'reason': str(e),
-                            'type': 'cluster_route'
-                        })
-                        return self._calculate_location_distance(h2_loc, mtj_loc)  # 使用直线距离
+                        # 不再降级，直接抛出错误，强制修复管道网络
+                        raise RuntimeError(
+                            f"管道路径查找失败，无法继续优化（聚类路径）。\n"
+                            f"聚类ID: {cluster.cluster_id}, 成员: {h2_loc}\n"
+                            f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                            f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                            f"原始错误: {str(e)}"
+                        )
                     except Exception as e:
                         # 其他未预期的错误仍然抛出
                         raise RuntimeError(
@@ -5713,17 +5710,14 @@ class CoalHydrogenSAFOptimizer:
                     )
                     return max(route.total_distance_km, 5)
                 except PipelineRouteNotFoundError as e:
-                    # 找不到管道路径，使用直线距离作为降级方案
-                    logger.warning(f"管道路径未找到（噪声点），使用直线距离: {h2_loc} -> {mtj_loc}, 原因: {str(e)}")
-                    self.skipped_routes['hydrogen_pipeline'].append({
-                        'from': h2_loc,
-                        'from_coords': (noise_coord[0], noise_coord[1]),
-                        'to': mtj_loc,
-                        'to_coords': mtj_coords,
-                        'reason': str(e),
-                        'type': 'noise_point'
-                    })
-                    return self._calculate_location_distance(h2_loc, mtj_loc)  # 使用直线距离
+                    # 不再降级，直接抛出错误，强制修复管道网络
+                    raise RuntimeError(
+                        f"管道路径查找失败，无法继续优化（噪声点）。\n"
+                        f"起点: {h2_loc} (噪声点坐标: {noise_coord[0]:.6f}, {noise_coord[1]:.6f})\n"
+                        f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                        f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                        f"原始错误: {str(e)}"
+                    )
                 except Exception as e:
                     # 其他未预期的错误仍然抛出
                     raise RuntimeError(
@@ -5837,23 +5831,14 @@ class CoalHydrogenSAFOptimizer:
                     'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, mtj_coords]
                 }
             except PipelineRouteNotFoundError as e:
-                # 管道路径未找到，使用直线距离
-                logger.warning(f"CO2独立点管道路径未找到，使用直线距离: {co2_source_id} -> {mtj_loc}")
-                distance = self._calculate_haversine_distance(
-                    co2_coords[0], co2_coords[1],
-                    mtj_coords[0], mtj_coords[1]
+                # 不再降级，直接抛出错误，强制修复管道网络
+                raise RuntimeError(
+                    f"CO2管道路径查找失败，无法继续优化（独立点）。\n"
+                    f"起点: {co2_source_id} ({co2_coords[0]:.6f}, {co2_coords[1]:.6f})\n"
+                    f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                    f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                    f"原始错误: {str(e)}"
                 )
-                return {
-                    'total_distance_km': max(distance, 5),
-                    'layer1_distance_km': 0,
-                    'layer2_distance_km': 0,
-                    'layer3_distance_km': max(distance, 5),
-                    'cluster_id': -1,
-                    'cluster_center_coords': None,
-                    'pipeline_access_coords': None,
-                    'is_noise': True,
-                    'route_coordinates': [co2_coords, mtj_coords]  # 修复：使用直线路径坐标
-                }
         else:
             # 聚类成员：使用三层运输结构
             # Layer 1: CO2源 -> 聚类中心（直线距离）
@@ -5895,23 +5880,14 @@ class CoalHydrogenSAFOptimizer:
                     'route_coordinates': route.route_geometry if (hasattr(route, 'route_geometry') and route.route_geometry) else [co2_coords, cluster_center_coords, mtj_coords]
                 }
             except PipelineRouteNotFoundError as e:
-                # 管道路径未找到，使用直线距离
-                logger.warning(f"CO2聚类路径管道未找到，使用直线距离: cluster_{cluster_id} -> {mtj_loc}")
-                layer2_layer3_distance = self._calculate_haversine_distance(
-                    cluster_center_coords[0], cluster_center_coords[1],
-                    mtj_coords[0], mtj_coords[1]
+                # 不再降级，直接抛出错误，强制修复管道网络
+                raise RuntimeError(
+                    f"CO2管道路径查找失败，无法继续优化（聚类路径）。\n"
+                    f"聚类ID: {cluster_id}, 中心坐标: ({cluster_center_coords[0]:.6f}, {cluster_center_coords[1]:.6f})\n"
+                    f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                    f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                    f"原始错误: {str(e)}"
                 )
-                return {
-                    'total_distance_km': max(layer1_distance + layer2_layer3_distance, 5),
-                    'layer1_distance_km': layer1_distance,
-                    'layer2_distance_km': layer2_layer3_distance * 0.3,
-                    'layer3_distance_km': layer2_layer3_distance * 0.7,
-                    'cluster_id': cluster_id,
-                    'cluster_center_coords': cluster_center_coords,
-                    'pipeline_access_coords': None,
-                    'is_noise': False,
-                    'route_coordinates': [co2_coords, cluster_center_coords, mtj_coords]  # 修复：三层路径坐标
-                }
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
@@ -6308,7 +6284,10 @@ class CoalHydrogenSAFOptimizer:
                                     layer1_distance = route.layer1_distances.get(h_loc, 0)
                                     layer2_distance = route.layer2_distance
                                     layer3_distance = route.layer3_distance
-                                    if route.route_geometry:
+                                    # 使用每个成员的独立路径几何
+                                    if route.route_geometry_per_member and h_loc in route.route_geometry_per_member:
+                                        route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
+                                    elif route.route_geometry:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
                                 else:
                                     # 路径不在缓存中,重新计算聚类路径
@@ -6325,24 +6304,17 @@ class CoalHydrogenSAFOptimizer:
                                         layer1_distance = route.layer1_distances.get(h_loc, 0)
                                         layer2_distance = route.layer2_distance
                                         layer3_distance = route.layer3_distance
-                                        if route.route_geometry:
+                                        # 使用每个成员的独立路径几何
+                                        if route.route_geometry_per_member and h_loc in route.route_geometry_per_member:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
+                                        elif route.route_geometry:
                                             route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
                                         logger.info(f"重新计算聚类路径: {h_loc} (cluster_{cluster_id}) -> {mtj_loc}, Layer1={layer1_distance:.2f}km, Layer2={layer2_distance:.2f}km, Layer3={layer3_distance:.2f}km")
                                     except Exception as e:
-                                        logger.warning(f"聚类路径计算失败: {h_loc} (cluster_{cluster_id}) -> {mtj_loc}, 使用直线距离, 错误: {str(e)}")
-                                        # 降级处理:使用直线距离计算Layer距离
-                                        h_coords = self._get_location_coordinates(h_loc)
-                                        layer1_distance = self._calculate_haversine_distance(
-                                            h_coords[0], h_coords[1],
-                                            cluster_center[0], cluster_center[1]
-                                        )
-                                        layer2_layer3_distance = self._calculate_haversine_distance(
-                                            cluster_center[0], cluster_center[1],
-                                            mtj_coords[0], mtj_coords[1]
-                                        )
-                                        layer2_distance = layer2_layer3_distance * 0.3
-                                        layer3_distance = layer2_layer3_distance * 0.7
-                                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                                        # 【禁止降级】氢气必须使用管道运输，不允许降级到道路路径
+                                        error_msg = f"聚类路径计算失败: {h_loc} (cluster_{cluster_id}) -> {mtj_loc}, 错误: {str(e)}"
+                                        logger.error(error_msg)
+                                        raise RuntimeError(error_msg)
                                 break
 
                         if cluster_id is None:
@@ -6359,13 +6331,17 @@ class CoalHydrogenSAFOptimizer:
                                         if route.route_geometry:
                                             route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
                                     except Exception as e:
-                                        logger.warning(f"噪声点管道路径计算失败: {h_loc} -> {mtj_loc}, 使用道路路径, 错误: {str(e)}")
-                                        _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                                        route_coordinates = fallback_route if fallback_route else []
+                                        # 【禁止降级】氢气必须使用管道运输，不允许降级到道路路径
+                                        error_msg = f"噪声点管道路径计算失败: {h_loc} -> {mtj_loc}, 错误: {str(e)}"
+                                        logger.error(error_msg)
+                                        raise RuntimeError(error_msg)
                                     break
 
+                    # 【禁止降级】氢气必须使用管道运输，如果没有路径坐标则抛出错误
                     if not route_coordinates:
-                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                        error_msg = f"氢气管道路径坐标为空: {h_loc} -> {mtj_loc}, 请检查管道网络连通性"
+                        logger.error(error_msg)
+                        raise RuntimeError(error_msg)
 
                     solution['hydrogen_transport'][transport_key] = {
                         'from_location': h_loc,
@@ -7103,7 +7079,6 @@ class CoalHydrogenSAFOptimizer:
             'h2_storage_investment': '氢气储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
-            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             # 'hydrogen_transport_operation': '氢气罐车运输成本(元)',  # 【禁用罐车运输】
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'co2_pipeline_transport_cost': 'CO₂管道运输成本(元)',
@@ -7151,7 +7126,6 @@ class CoalHydrogenSAFOptimizer:
 
         # 运营成本类别（【禁用罐车运输】移除hydrogen_transport_operation）
         operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
-                          'electrolyzer_operation_cost',
                           # 'hydrogen_transport_operation',  # 【禁用罐车运输】
                           'hydrogen_pipeline_operation',
                           'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',

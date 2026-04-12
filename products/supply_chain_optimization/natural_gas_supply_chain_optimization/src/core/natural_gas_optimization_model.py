@@ -431,8 +431,18 @@ class NaturalGasSupplyChainOptimizer:
                 if 'facility_lcoe_parameters' not in new_config:
                     new_config['facility_lcoe_parameters'] = {}
                 new_config['facility_lcoe_parameters'][param_key] = value
+            elif '.' in key:
+                # dot-notation 嵌套键支持, 如 "natural_gas_parameters.natural_gas_price_yuan_per_m3"
+                # 或 "equipment_raw_costs.electrolyzer.byproduct_steel_capex_raw"
+                parts = key.split('.')
+                d = new_config
+                for part in parts[:-1]:
+                    if part not in d:
+                        d[part] = {}
+                    d = d[part]
+                d[parts[-1]] = value
             # 可以继续添加其他类别的参数覆盖逻辑
-        
+
         return new_config
 
     def _build_mtj_locations(self):
@@ -2048,11 +2058,11 @@ class NaturalGasSupplyChainOptimizer:
         plant_type = self.locations[location]['type']
 
         if plant_type == 'byproduct_hydrogen_refinery':
-            # 炼油副产氢: 224,000元/(kg H₂/hour), 比钢铁低20%
-            return 224000
+            # 炼油副产氢: 从配置文件读取，默认224,000元/(kg H₂/hour)
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_refinery_capex_raw', 224000)
         elif plant_type == 'byproduct_hydrogen_steel':
-            # 钢铁副产氢: 280,000元/(kg H₂/hour)
-            return 280000
+            # 钢铁副产氢: 从配置文件读取，默认280,000元/(kg H₂/hour)
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_steel_capex_raw', 280000)
         else:
             # 绿氢电解槽: 从配置文件读取
             return self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
@@ -2070,11 +2080,11 @@ class NaturalGasSupplyChainOptimizer:
         plant_type = self.locations[location]['type']
 
         if plant_type == 'byproduct_hydrogen_refinery':
-            # 炼油副产氢: 110,000元/年, 比钢铁低15%
-            return 110000
+            # 炼油副产氢: 从配置文件读取，默认110,000元/年
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_refinery_opex_raw', 110000)
         elif plant_type == 'byproduct_hydrogen_steel':
-            # 钢铁副产氢: 130,000元/年
-            return 130000
+            # 钢铁副产氢: 从配置文件读取，默认130,000元/年
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_steel_opex_raw', 130000)
         else:
             # 绿氢电解槽: 从配置文件读取
             return self.config['equipment_raw_costs']['electrolyzer']['opex_raw']
@@ -3065,6 +3075,18 @@ class NaturalGasSupplyChainOptimizer:
         return solution
 
 
+    def set_ng_price_override(self, price_yuan_per_m3: float):
+        """
+        强制覆盖所有管道天然气价格（敏感性分析专用）。
+        必须在 solve() 之前调用。
+
+        Args:
+            price_yuan_per_m3: 新的天然气价格 (元/m³)
+        """
+        for pid in self.ng_pipeline_sources:
+            self.ng_pipeline_sources[pid]['natural_gas_price_yuan_per_10k_m3'] = price_yuan_per_m3
+        logger.info(f"[敏感性分析] NG价格已强制覆盖为 {price_yuan_per_m3} 元/m³ (共{len(self.ng_pipeline_sources)}条管道)")
+
     def _create_cost_expressions(self):
         """创建所有成本表达式对象（用于目标函数和约束）"""
         logger.info("创建统一的成本表达式对象...")
@@ -3183,15 +3205,6 @@ class NaturalGasSupplyChainOptimizer:
             self.electrolyzer_capacity_vars[location] *
             self._get_electrolyzer_capex(location) *
             electrolyzer_capacity_factor  # 电解槽/副产氢设备投资成本
-            for location in self.electrolyzer_capacity_vars
-        )
-
-        # 电解槽/副产氢设备运营成本（年化，20年现值）
-        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
-            self.electrolyzer_capacity_vars[location] *
-            self._get_electrolyzer_opex(location) *
-            electrolyzer_capacity_factor *
-            present_value_factor
             for location in self.electrolyzer_capacity_vars
         )
 
@@ -3444,7 +3457,6 @@ class NaturalGasSupplyChainOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             self.cost_expressions['hydrogen_production_cost'] +
-            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：MTJ催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -5829,19 +5841,36 @@ class NaturalGasSupplyChainOptimizer:
                                     layer1_distance = route.layer1_distances.get(h_loc, 0)
                                     layer2_distance = route.layer2_distance
                                     layer3_distance = route.layer3_distance
-                                    if route.route_geometry:
+                                    # 使用每个成员的独立路径几何
+                                    if route.route_geometry_per_member and h_loc in route.route_geometry_per_member:
+                                        route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
+                                    elif route.route_geometry:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
                                 break
 
                         if cluster_id is None:
                             for noise_loc, noise_coord in self.clustering_results.noise_points:
                                 if h_loc == noise_loc:
-                                    _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                                    route_coordinates = fallback_route if fallback_route else []
+                                    # 【禁止降级】噪声点也必须使用管道路径
+                                    mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+                                    try:
+                                        route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+                                            noise_coord[0], noise_coord[1],
+                                            mtj_coords[0], mtj_coords[1]
+                                        )
+                                        if route.route_geometry:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                    except Exception as e:
+                                        error_msg = f"噪声点管道路径计算失败: {h_loc} -> {mtj_loc}, 错误: {str(e)}"
+                                        logger.error(error_msg)
+                                        raise RuntimeError(error_msg)
                                     break
 
+                    # 【禁止降级】氢气必须使用管道运输，如果没有路径坐标则抛出错误
                     if not route_coordinates:
-                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                        error_msg = f"氢气管道路径坐标为空: {h_loc} -> {mtj_loc}, 请检查管道网络连通性"
+                        logger.error(error_msg)
+                        raise RuntimeError(error_msg)
 
                     solution['hydrogen_transport'][transport_key] = {
                         'from_location': h_loc,
@@ -6519,7 +6548,6 @@ class NaturalGasSupplyChainOptimizer:
         cost_field_mapping = {
             'facility_investment_cost': 'MTJ工厂建设投资(元)',
             'electrolyzer_investment_cost': '电解槽建设投资(元)',
-            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             'storage_equipment_cost': 'MTJ储存设备投资(元)',
             'h2_storage_investment': '氢气储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
@@ -6572,7 +6600,6 @@ class NaturalGasSupplyChainOptimizer:
 
         # 运营成本类别
         operation_fields = ['facility_operation_cost', 'production_cost', 'hydrogen_production_cost',
-                          'electrolyzer_operation_cost',
                           'hydrogen_transport_operation', 'hydrogen_pipeline_operation',
                           'ng_transport_operation', 'natural_gas_cost', 'transport_operation_cost',
                           'storage_operation_cost', 'h2_storage_operation', 'electricity_cost',

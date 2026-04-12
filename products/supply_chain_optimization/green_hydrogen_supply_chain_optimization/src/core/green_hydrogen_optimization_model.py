@@ -710,8 +710,18 @@ class GreenHydrogenSupplyChainOptimizer:
                 if 'facility_lcoe_parameters' not in new_config:
                     new_config['facility_lcoe_parameters'] = {}
                 new_config['facility_lcoe_parameters'][param_key] = value
+            elif '.' in key:
+                # dot-notation 嵌套键支持, 如 "electricity_parameters.electricity_price_yuan_per_kwh"
+                # 或 "equipment_raw_costs.electrolyzer.capex_raw"
+                parts = key.split('.')
+                d = new_config
+                for part in parts[:-1]:
+                    if part not in d:
+                        d[part] = {}
+                    d = d[part]
+                d[parts[-1]] = value
             # 可以继续添加其他类别的参数覆盖逻辑
-        
+
         return new_config
 
     def _build_mtj_locations(self):
@@ -3693,15 +3703,6 @@ class GreenHydrogenSupplyChainOptimizer:
             for location in self.electrolyzer_capacity_vars
         )
 
-        # 电解槽/副产氢设备运营成本（年化，20年现值）
-        self.cost_expressions['electrolyzer_operation_cost'] = gp.quicksum(
-            self.electrolyzer_capacity_vars[location] *
-            self._get_electrolyzer_opex(location) *
-            electrolyzer_capacity_factor *
-            present_value_factor
-            for location in self.electrolyzer_capacity_vars
-        )
-
         # 7. 制氢运营成本（20年生命周期现值）- ❌ 已禁用
         # 移除原因：制氢成本应该已包含在电力成本和设备运营成本中，避免重复计算
         # 移除日期：2025-11-09
@@ -4240,7 +4241,9 @@ class GreenHydrogenSupplyChainOptimizer:
         self.cost_expressions['co2_pipeline_transport_cost'] = gp.quicksum(
             self.co2_pipeline_transport_vars.get((co2_source_id, methanol_loc), gp.LinExpr(0)) *
             co2_pipeline_unit_cost *
-            self.co2_distance_cache[(co2_source_id, methanol_loc)] * lifecycle_operation_factor  # 直接使用距离值（float）
+            (self.co2_distance_cache[(co2_source_id, methanol_loc)]['total_distance_km']
+             if isinstance(self.co2_distance_cache[(co2_source_id, methanol_loc)], dict)
+             else self.co2_distance_cache[(co2_source_id, methanol_loc)]) * lifecycle_operation_factor  # 兼容dict和float格式
             for co2_source_id in self.co2_capture_sources
             for methanol_loc in sum(self.mtj_locations.values(), [])
             if (co2_source_id, methanol_loc) in self.co2_pipeline_transport_vars
@@ -4391,7 +4394,6 @@ class GreenHydrogenSupplyChainOptimizer:
             self.cost_expressions['transport_operation_cost'] +
             self.cost_expressions['storage_operation_cost'] +
             # self.cost_expressions['hydrogen_production_cost'] +  # ❌ 已禁用 (2025-11-09)
-            self.cost_expressions['electrolyzer_operation_cost'] +
             self.cost_expressions['electricity_cost'] +
             self.cost_expressions['catalyst_cost'] +  # 新增：SAF合成催化剂成本 (2025-11-09)
             self.cost_expressions['h2_storage_operation'] +
@@ -6336,17 +6338,14 @@ class GreenHydrogenSupplyChainOptimizer:
                         member_total_distance = route.total_distance_per_member.get(h2_loc, 0)
                         return max(member_total_distance, 5)
                     except PipelineRouteNotFoundError as e:
-                        # 聚类到目的地找不到管道路径，使用直线距离作为降级方案
-                        logger.warning(f"管道路径未找到（聚类），使用直线距离: 聚类{cluster.cluster_id}成员{h2_loc} -> {mtj_loc}, 原因: {str(e)}")
-                        self.skipped_routes['hydrogen_pipeline'].append({
-                            'from': h2_loc,
-                            'from_cluster_id': cluster.cluster_id,
-                            'to': mtj_loc,
-                            'to_coords': mtj_coords,
-                            'reason': str(e),
-                            'type': 'cluster_route'
-                        })
-                        return self._calculate_location_distance(h2_loc, mtj_loc)  # 使用直线距离
+                        # 不再降级，直接抛出错误，强制修复管道网络
+                        raise RuntimeError(
+                            f"管道路径查找失败，无法继续优化（聚类路径）。\n"
+                            f"聚类ID: {cluster.cluster_id}, 成员: {h2_loc}\n"
+                            f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                            f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                            f"原始错误: {str(e)}"
+                        )
                     except Exception as e:
                         # 其他未预期的错误仍然抛出
                         raise RuntimeError(
@@ -6386,17 +6385,14 @@ class GreenHydrogenSupplyChainOptimizer:
                     )
                     return max(route.total_distance_km, 5)
                 except PipelineRouteNotFoundError as e:
-                    # 找不到管道路径，使用直线距离作为降级方案
-                    logger.warning(f"管道路径未找到（噪声点），使用直线距离: {h2_loc} -> {mtj_loc}, 原因: {str(e)}")
-                    self.skipped_routes['hydrogen_pipeline'].append({
-                        'from': h2_loc,
-                        'from_coords': (noise_coord[0], noise_coord[1]),
-                        'to': mtj_loc,
-                        'to_coords': mtj_coords,
-                        'reason': str(e),
-                        'type': 'noise_point'
-                    })
-                    return self._calculate_location_distance(h2_loc, mtj_loc)  # 使用直线距离
+                    # 不再降级，直接抛出错误，强制修复管道网络
+                    raise RuntimeError(
+                        f"管道路径查找失败，无法继续优化（噪声点）。\n"
+                        f"起点: {h2_loc} (噪声点坐标: {noise_coord[0]:.6f}, {noise_coord[1]:.6f})\n"
+                        f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                        f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                        f"原始错误: {str(e)}"
+                    )
                 except Exception as e:
                     # 其他未预期的错误仍然抛出
                     raise RuntimeError(
@@ -6416,7 +6412,7 @@ class GreenHydrogenSupplyChainOptimizer:
             f"请检查聚类配置或位置数据的一致性。"
         )
 
-    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> float:
+    def _get_co2_transport_distance_with_clustering(self, co2_source_id: str, mtj_loc: str) -> dict:
         """
         使用CO2聚类和管道路权算法计算CO₂管道运输距离（三层结构）
 
@@ -6430,10 +6426,19 @@ class GreenHydrogenSupplyChainOptimizer:
             mtj_loc: 甲醇生产位置
 
         Returns:
-            float: 总运输距离（公里）
+            dict: {
+                'total_distance_km': float,
+                'layer1_distance_km': float,
+                'layer2_distance_km': float,
+                'layer3_distance_km': float,
+                'cluster_id': int or None,
+                'cluster_center_coords': tuple or None,
+                'is_noise': bool,
+                'route_coordinates': list
+            }
 
         Raises:
-            RuntimeError: 如果CO2聚类结果未初始化
+            RuntimeError: 如果CO2聚类结果未初始化或管道路径未找到
         """
         # 检查CO2聚类结果是否初始化
         if not hasattr(self, 'co2_clustering_results') or self.co2_clustering_results is None:
@@ -6482,15 +6487,25 @@ class GreenHydrogenSupplyChainOptimizer:
                     co2_coords[0], co2_coords[1],
                     mtj_coords[0], mtj_coords[1]
                 )
-                return max(route.total_distance_km, 5)
+                return {
+                    'total_distance_km': max(route.total_distance_km, 5),
+                    'layer1_distance_km': 0,
+                    'layer2_distance_km': 0,
+                    'layer3_distance_km': max(route.total_distance_km, 5),
+                    'cluster_id': -1,
+                    'cluster_center_coords': None,
+                    'is_noise': True,
+                    'route_coordinates': getattr(route, 'route_geometry', []) or [co2_coords, mtj_coords]
+                }
             except PipelineRouteNotFoundError as e:
-                # 管道路径未找到，使用直线距离
-                logger.warning(f"CO2独立点管道路径未找到，使用直线距离: {co2_source_id} -> {mtj_loc}")
-                distance = self._calculate_haversine_distance(
-                    co2_coords[0], co2_coords[1],
-                    mtj_coords[0], mtj_coords[1]
+                # 不再降级，直接抛出错误，强制修复管道网络
+                raise RuntimeError(
+                    f"CO2管道路径查找失败，无法继续优化（噪声点）。\n"
+                    f"起点: {co2_source_id} ({co2_coords[0]:.6f}, {co2_coords[1]:.6f})\n"
+                    f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                    f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                    f"原始错误: {str(e)}"
                 )
-                return max(distance, 5)
         else:
             # 聚类成员：使用三层运输结构
             # Layer 1: CO2源 -> 聚类中心（直线距离）
@@ -6506,16 +6521,34 @@ class GreenHydrogenSupplyChainOptimizer:
                     mtj_coords[0], mtj_coords[1]
                 )
 
-                # 返回三层总距离
-                return max(layer1_distance + route.total_distance_km, 5)
+                # 计算Layer2和Layer3距离
+                if hasattr(route, 'access_distance_km') and hasattr(route, 'pipeline_distance_km'):
+                    layer2_distance = route.access_distance_km
+                    layer3_distance = route.pipeline_distance_km
+                else:
+                    # 如果路径对象没有细分距离，按30-70拆分
+                    layer2_distance = route.total_distance_km * 0.3
+                    layer3_distance = route.total_distance_km * 0.7
+
+                return {
+                    'total_distance_km': max(layer1_distance + route.total_distance_km, 5),
+                    'layer1_distance_km': layer1_distance,
+                    'layer2_distance_km': layer2_distance,
+                    'layer3_distance_km': layer3_distance,
+                    'cluster_id': cluster_id,
+                    'cluster_center_coords': cluster_center_coords,
+                    'is_noise': False,
+                    'route_coordinates': getattr(route, 'route_geometry', []) or [co2_coords, cluster_center_coords, mtj_coords]
+                }
             except PipelineRouteNotFoundError as e:
-                # 管道路径未找到，使用直线距离
-                logger.warning(f"CO2聚类路径管道未找到，使用直线距离: cluster_{cluster_id} -> {mtj_loc}")
-                layer2_layer3_distance = self._calculate_haversine_distance(
-                    cluster_center_coords[0], cluster_center_coords[1],
-                    mtj_coords[0], mtj_coords[1]
+                # 不再降级，直接抛出错误，强制修复管道网络
+                raise RuntimeError(
+                    f"CO2管道路径查找失败，无法继续优化（聚类路径）。\n"
+                    f"聚类中心: cluster_{cluster_id} ({cluster_center_coords[0]:.6f}, {cluster_center_coords[1]:.6f})\n"
+                    f"终点: {mtj_loc} ({mtj_coords[0]:.6f}, {mtj_coords[1]:.6f})\n"
+                    f"请检查管道网络连通性或增加mixed_link_distance_km配置。\n"
+                    f"原始错误: {str(e)}"
                 )
-                return max(layer1_distance + layer2_layer3_distance, 5)
 
     def _calculate_location_distance_with_route(self, location1: str, location2: str) -> tuple:
         """使用GraphHopper路径规划计算两个位置间的真实道路距离并返回路径坐标"""
@@ -6911,19 +6944,36 @@ class GreenHydrogenSupplyChainOptimizer:
                                     layer1_distance = route.layer1_distances.get(h_loc, 0)
                                     layer2_distance = route.layer2_distance
                                     layer3_distance = route.layer3_distance
-                                    if route.route_geometry:
+                                    # 使用每个成员的独立路径几何
+                                    if route.route_geometry_per_member and h_loc in route.route_geometry_per_member:
+                                        route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
+                                    elif route.route_geometry:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
                                 break
 
                         if cluster_id is None:
                             for noise_loc, noise_coord in self.clustering_results.noise_points:
                                 if h_loc == noise_loc:
-                                    _, fallback_route = self._calculate_location_distance_with_route(h_loc, mtj_loc)
-                                    route_coordinates = fallback_route if fallback_route else []
+                                    # 【禁止降级】噪声点也必须使用管道路径
+                                    mtj_coords = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+                                    try:
+                                        route = self.hydrogen_pipeline_calculator.calculate_pipeline_distance(
+                                            noise_coord[0], noise_coord[1],
+                                            mtj_coords[0], mtj_coords[1]
+                                        )
+                                        if route.route_geometry:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                    except Exception as e:
+                                        error_msg = f"噪声点管道路径计算失败: {h_loc} -> {mtj_loc}, 错误: {str(e)}"
+                                        logger.error(error_msg)
+                                        raise RuntimeError(error_msg)
                                     break
 
+                    # 【禁止降级】氢气必须使用管道运输，如果没有路径坐标则抛出错误
                     if not route_coordinates:
-                        _, route_coordinates = self._calculate_location_distance_with_route(h_loc, mtj_loc)
+                        error_msg = f"氢气管道路径坐标为空: {h_loc} -> {mtj_loc}, 请检查管道网络连通性"
+                        logger.error(error_msg)
+                        raise RuntimeError(error_msg)
 
                     solution['hydrogen_transport'][transport_key] = {
                         'from_location': h_loc,
@@ -6971,12 +7021,29 @@ class GreenHydrogenSupplyChainOptimizer:
                     co2_coords = (co2_source.get('latitude', 0), co2_source.get('longitude', 0))
                     mtj_coords = self._get_location_coordinates(mtj_loc)
 
-                    # 从缓存获取距离（现在是float格式）
-                    distance_km = self.co2_distance_cache.get((co2_source_id, mtj_loc), 0)
+                    # 从缓存获取距离信息（现在是dict格式）
+                    distance_info = self.co2_distance_cache.get((co2_source_id, mtj_loc))
 
-                    # 简化处理：只提供总距离，不提供层级细分和聚类信息
-                    # 这是内存优化的结果，详细信息已不在缓存中
-                    route_coordinates = [co2_coords, mtj_coords]  # 简单的起终点连线
+                    # 兼容dict和float格式
+                    if isinstance(distance_info, dict):
+                        distance_km = distance_info.get('total_distance_km', 0)
+                        route_coordinates = distance_info.get('route_coordinates', [])
+                        cluster_id = distance_info.get('cluster_id')
+                        cluster_center = distance_info.get('cluster_center_coords')
+                        layer1_distance_km = distance_info.get('layer1_distance_km', 0)
+                        layer2_distance_km = distance_info.get('layer2_distance_km', 0)
+                        layer3_distance_km = distance_info.get('layer3_distance_km', distance_km)
+                        is_noise = distance_info.get('is_noise', False)
+                    else:
+                        # 旧格式（float）：路径坐标在可视化时由管道计算器获取
+                        distance_km = distance_info if distance_info else 0
+                        route_coordinates = []
+                        cluster_id = None
+                        cluster_center = None
+                        layer1_distance_km = 0
+                        layer2_distance_km = 0
+                        layer3_distance_km = distance_km
+                        is_noise = False
 
                     solution['co2_transport'][transport_key] = {
                         'from_location': co2_source_id,
@@ -6990,12 +7057,12 @@ class GreenHydrogenSupplyChainOptimizer:
                         'route_coordinates': route_coordinates,
                         'transport_type': 'CO2',
                         'transport_mode': 'pipeline',
-                        'cluster_id': None,  # 不再提供聚类信息（内存优化）
-                        'cluster_center': None,  # 不再提供聚类信息（内存优化）
-                        'layer1_distance_km': 0,  # 不再提供层级细分（内存优化）
-                        'layer2_distance_km': 0,  # 不再提供层级细分（内存优化）
-                        'layer3_distance_km': distance_km,  # 将总距离归于layer3
-                        'is_noise': False  # 不再提供噪声点标记（内存优化）
+                        'cluster_id': cluster_id,
+                        'cluster_center': cluster_center,
+                        'layer1_distance_km': layer1_distance_km,
+                        'layer2_distance_km': layer2_distance_km,
+                        'layer3_distance_km': layer3_distance_km,
+                        'is_noise': is_noise
                     }
 
         # 输出CO2运输统计信息
@@ -7707,7 +7774,6 @@ class GreenHydrogenSupplyChainOptimizer:
             'co2_storage_investment': 'CO₂储存设备投资(元)',
             'facility_operation_cost': 'MTJ工厂运营成本(元)',
             'production_cost': 'MTJ生产运营成本(元)',
-            'electrolyzer_operation_cost': '电解槽运营成本(元)',
             # 'hydrogen_transport_operation': '氢气罐车运输成本(元)',  # 【禁用罐车运输】
             'hydrogen_pipeline_operation': '氢能管道运输成本(元)',
             'co2_capture_cost': 'CO₂捕获成本(元)',
@@ -7760,7 +7826,6 @@ class GreenHydrogenSupplyChainOptimizer:
         # 运营成本类别（【禁用罐车运输】移除hydrogen_transport_operation）
         operation_fields = ['facility_operation_cost', 'production_cost',
                           # 'hydrogen_production_cost',  # ❌ 已禁用 (2025-11-09) - 避免与电力成本重复计算
-                          'electrolyzer_operation_cost',
                           # 'hydrogen_transport_operation',  # 【禁用罐车运输】
                           'hydrogen_pipeline_operation',
                           'transport_operation_cost', 'storage_operation_cost', 'h2_storage_operation',
