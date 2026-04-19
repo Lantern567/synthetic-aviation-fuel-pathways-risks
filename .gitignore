@@ -2,6 +2,36 @@
 # 排除所有数据文件，只提交代码和配置文件
 
 # =============================================================================
+# SAF-paper workspace: heavy artefacts and local-only debris
+# =============================================================================
+# Heavy derived outputs (1.2 GB figures, 553 MB word backups, etc.)
+appendix_saf_workspace/figures/
+appendix_saf_workspace/cache/
+appendix_saf_workspace/word/render_check/
+# Every .docx under word/ is heavy (14-62 MB) and evolves fast; skip from Git.
+appendix_saf_workspace/word/*.docx
+appendix_saf_workspace/academic-figure.zip
+appendix_saf_workspace/academic-paper.zip
+appendix_saf_workspace/scripts/__pycache__/
+
+# Learning-curve reference PDFs (copyrighted upstream literature)
+products/supply_chain_optimization/learning_curves/references/**/*.pdf
+products/supply_chain_optimization/learning_curves/references/coal_ccs/
+products/supply_chain_optimization/learning_curves/references/dac/
+products/supply_chain_optimization/learning_curves/references/electrolyzer/
+products/supply_chain_optimization/learning_curves/references/ft_synthesis/
+products/supply_chain_optimization/learning_curves/references/gas_ccs/
+products/supply_chain_optimization/learning_curves/references/refinery_ccs/
+
+# Local-only / accidental captures
+.codex
+index.html
+1-s2.0-*.pdf
+clash-verge/
+y/
+
+
+# =============================================================================
 # 数据文件 - 完全排除
 # =============================================================================
 

@@ -1,0 +1,8 @@
+# Reference PDFs are upstream literature (copyrighted); keep local only
+references/**/*.pdf
+references/coal_ccs/
+references/dac/
+references/electrolyzer/
+references/ft_synthesis/
+references/gas_ccs/
+references/refinery_ccs/

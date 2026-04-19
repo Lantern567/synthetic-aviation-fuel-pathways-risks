@@ -1,0 +1,12 @@
+# Keep the appendix scripts, README, and drawio; exclude heavy derived artefacts
+figures/
+cache/
+academic-figure.zip
+academic-paper.zip
+word/render_check/
+# Exclude every Word draft — too heavy for Git (62 MB Appendix, 14 MB manuscript).
+# Manuscript_revised.docx is already committed once on main; keep further edits
+# out of this branch's history to avoid repeated 14-76 MB blobs per save.
+word/*.docx
+scripts/__pycache__/
+*.pyc
