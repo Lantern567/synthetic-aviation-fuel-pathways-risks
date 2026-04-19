@@ -76,7 +76,8 @@ class HydrogenPipelineDistanceCalculator:
 
     def __init__(self, gis_data_path: str, enable_cache: bool = False,
                  cache_dir: str = None, use_unified_config: bool = True,
-                 mixed_link_distance_km: float = 5.0):
+                 mixed_link_distance_km: float = 20.0,
+                 max_bridge_distance_km: float = 10.0):
         """
         初始化计算器
 
@@ -85,12 +86,16 @@ class HydrogenPipelineDistanceCalculator:
             enable_cache: 是否启用计算缓存（默认False，数据库缓存查询比计算更慢）
             cache_dir: 缓存目录路径
             use_unified_config: 是否使用统一配置系统
+            mixed_link_distance_km: 近邻接驳距离（km），默认20.0
+            max_bridge_distance_km: 跨连通分量桥接最大距离（km），默认10.0
         """
         self.gis_data_path = Path(gis_data_path)
         self.enable_cache = enable_cache
         self.use_unified_config = use_unified_config
         # mixed管网的近邻接驳距离（km）
         self.mixed_link_distance_km = mixed_link_distance_km
+        # 跨连通分量桥接最大距离（km）
+        self.max_bridge_distance_km = max_bridge_distance_km
 
         # 初始化高级缓存系统
         self.pipeline_cache_manager = None
@@ -356,6 +361,20 @@ class HydrogenPipelineDistanceCalculator:
                 f"{num_components}个连通分量 "
                 f"(最大分量{largest_component_size}节点)"
             )
+            # 强制连接所有孤立的连通分量
+            if num_components > 1:
+                self._force_bridge_components(self.max_bridge_distance_km)
+                # 重新统计连通性
+                components = list(nx.connected_components(self.pipeline_networks['mixed']))
+                num_components = len(components)
+                largest_component_size = max(len(c) for c in components) if components else 0
+                logger.info(
+                    f"桥接后mixed管道网络: "
+                    f"{self.pipeline_networks['mixed'].number_of_nodes()}节点, "
+                    f"{self.pipeline_networks['mixed'].number_of_edges()}边, "
+                    f"{num_components}个连通分量 "
+                    f"(最大分量{largest_component_size}节点)"
+                )
 
     def _add_mixed_intersections(self):
         """在混合管网中补充交叉点节点，使交叉处可联通"""
@@ -669,6 +688,86 @@ class HydrogenPipelineDistanceCalculator:
 
         logger.info(f"mixed管网近邻接驳完成: 新增{added}条接驳边 (<= {max_km}km)")
 
+    def _force_bridge_components(self, max_bridge_km: float = 100.0):
+        """
+        强制连接所有孤立的连通分量，确保管道网络完全连通
+
+        Args:
+            max_bridge_km: 允许的最大桥接距离（km）
+        """
+        graph = self.pipeline_networks.get('mixed')
+        if not graph:
+            return
+
+        components = list(nx.connected_components(graph))
+        if len(components) <= 1:
+            logger.info("管道网络已完全连通，无需桥接")
+            return
+
+        # 找到最大分量作为主干
+        main_comp = max(components, key=len)
+        main_nodes = set(main_comp)
+
+        # 预解析所有节点坐标
+        node_coords = {}
+        for node in graph.nodes:
+            try:
+                lat, lon = map(float, node.split(','))
+                node_coords[node] = (lat, lon)
+            except Exception:
+                continue
+
+        added_bridges = 0
+        failed_bridges = 0
+
+        for comp in components:
+            if comp == main_comp:
+                continue
+
+            # 找到comp和main_comp之间最近的节点对
+            min_dist = float('inf')
+            best_pair = None
+
+            for node1 in comp:
+                if node1 not in node_coords:
+                    continue
+                lat1, lon1 = node_coords[node1]
+
+                for node2 in main_nodes:
+                    if node2 not in node_coords:
+                        continue
+                    lat2, lon2 = node_coords[node2]
+
+                    dist = self._calculate_haversine_distance(lat1, lon1, lat2, lon2)
+                    if dist < min_dist:
+                        min_dist = dist
+                        best_pair = (node1, node2, lat1, lon1, lat2, lon2)
+
+            if best_pair and min_dist <= max_bridge_km:
+                node1, node2, lat1, lon1, lat2, lon2 = best_pair
+                graph.add_edge(
+                    node1, node2,
+                    weight=min_dist,
+                    pipeline_name='bridge',
+                    pipeline_type='bridge',
+                    geometry=[(lat1, lon1), (lat2, lon2)],
+                    is_bridge=True
+                )
+                # 将该分量加入主干
+                main_nodes.update(comp)
+                added_bridges += 1
+                logger.debug(f"添加桥接边: {node1} <-> {node2}, 距离 {min_dist:.2f}km")
+            else:
+                failed_bridges += 1
+                logger.warning(
+                    f"无法桥接分量（{len(comp)}节点），"
+                    f"最近距离 {min_dist:.2f}km 超过阈值 {max_bridge_km}km"
+                )
+
+        logger.info(
+            f"连通分量桥接完成: 成功 {added_bridges} 个, 失败 {failed_bridges} 个"
+        )
+
     def _build_spatial_indexes(self):
         """
         🚀 性能优化：构建管道的空间索引（KDTree）
@@ -862,7 +961,7 @@ class HydrogenPipelineDistanceCalculator:
                                        pipeline_type: str,
                                        max_access_distance_km: float) -> PipelineRoute:
         """
-        计算单一管道类型的路径
+        计算单一管道类型的路径（改进版：起点和终点都使用多候选策略，支持跳跃逻辑）
 
         Args:
             start_lat, start_lon: 起点坐标
@@ -873,12 +972,12 @@ class HydrogenPipelineDistanceCalculator:
         Returns:
             PipelineRoute: 单一管道类型的路径结果
         """
-        # 1. 找到起点最近的管道接入点
-        start_access_point, start_access_distance = self._find_nearest_pipeline_point(
-            start_lat, start_lon, pipeline_type, float('inf')  # 移除距离限制
+        # 1. 起点也使用多候选策略（取最近5个候选点）
+        start_candidates = self._find_nearest_pipeline_points(
+            start_lat, start_lon, pipeline_type, k=5
         )
 
-        if start_access_point is None:
+        if not start_candidates:
             return PipelineRoute(
                 total_distance_km=0.0,
                 access_distance_km=0.0,
@@ -889,7 +988,7 @@ class HydrogenPipelineDistanceCalculator:
                 calculation_method=f'{pipeline_type}_start_access_failed'
             )
 
-        # 2. 终点不再只取最近点：尝试最近前5个接入点
+        # 2. 终点也取最近5个候选点
         end_candidates = self._find_nearest_pipeline_points(
             end_lat, end_lon, pipeline_type, k=5
         )
@@ -905,27 +1004,130 @@ class HydrogenPipelineDistanceCalculator:
                 calculation_method=f'{pipeline_type}_end_access_failed'
             )
 
+        # 3. 可达性预检查：过滤不在同一连通分量的候选对，并实现跳跃逻辑
+        graph = self.pipeline_networks.get(pipeline_type)
+        valid_pairs = []
+        jump_pairs = []  # 需要跳跃的候选对
+
+        if graph:
+            for start_access_point, start_access_distance in start_candidates:
+                start_node = f"{start_access_point[0]:.6f},{start_access_point[1]:.6f}"
+                # 如果节点不在图中，找最近的图节点
+                if start_node not in graph:
+                    start_node = self._find_nearest_graph_node(start_access_point, graph)
+                if not start_node:
+                    continue
+
+                for end_access_point, end_access_distance in end_candidates:
+                    end_node = f"{end_access_point[0]:.6f},{end_access_point[1]:.6f}"
+                    if end_node not in graph:
+                        end_node = self._find_nearest_graph_node(end_access_point, graph)
+                    if not end_node:
+                        continue
+
+                    # 检查是否在同一连通分量
+                    try:
+                        if nx.has_path(graph, start_node, end_node):
+                            valid_pairs.append((
+                                start_access_point, start_access_distance,
+                                end_access_point, end_access_distance,
+                                None  # 不需要跳跃
+                            ))
+                        else:
+                            # 不在同一连通分量，尝试跳跃逻辑
+                            # 在起点所在连通分量中找到距离终点接入点最近的边界节点
+                            nearest_node, jump_distance = self._find_nearest_node_in_component(
+                                start_node, end_access_point, graph
+                            )
+
+                            if nearest_node and jump_distance <= self.max_bridge_distance_km:
+                                # 跳跃距离满足条件，记录跳跃段
+                                try:
+                                    nearest_lat, nearest_lon = map(float, nearest_node.split(','))
+                                    jump_segment = ((nearest_lat, nearest_lon), end_access_point)
+                                    jump_pairs.append((
+                                        start_access_point, start_access_distance,
+                                        end_access_point, end_access_distance,
+                                        jump_segment
+                                    ))
+                                except (ValueError, AttributeError):
+                                    continue
+                            # 如果跳跃距离 > 10km，跳过该候选对（不添加到任何列表）
+                    except (nx.NetworkXError, nx.NodeNotFound):
+                        continue
+        else:
+            # 如果没有图，使用所有组合
+            for start_access_point, start_access_distance in start_candidates:
+                for end_access_point, end_access_distance in end_candidates:
+                    valid_pairs.append((
+                        start_access_point, start_access_distance,
+                        end_access_point, end_access_distance,
+                        None
+                    ))
+
+        # 合并有效候选对和跳跃候选对
+        all_pairs = valid_pairs + jump_pairs
+
+        if not all_pairs:
+            # 如果可达性检查过滤掉了所有候选，回退到不检查可达性的模式
+            logger.debug("可达性检查过滤了所有候选对，回退到全量搜索")
+            for start_access_point, start_access_distance in start_candidates:
+                for end_access_point, end_access_distance in end_candidates:
+                    all_pairs.append((
+                        start_access_point, start_access_distance,
+                        end_access_point, end_access_distance,
+                        None
+                    ))
+
         best = None
         best_pipeline_coords = None
+        best_start_access_point = None
+        best_start_access_distance = None
         best_end_access_point = None
         best_end_access_distance = None
+        best_jump_segment = None
 
-        # 3. 对候选点逐一计算网络路径，选择总距离最短的
-        for end_access_point, end_access_distance in end_candidates:
-            network_result = self._calculate_network_distance(
-                start_access_point, end_access_point, pipeline_type
-            )
-            if network_result is None:
-                continue
-            pipeline_distance, pipeline_coords = network_result
-            if pipeline_distance == 0.0 or not pipeline_coords:
-                continue
-            total_distance = start_access_distance + pipeline_distance + end_access_distance
+        # 4. 笛卡尔积搜索：对所有有效候选对计算网络路径，选择总距离最短的
+        for start_access_point, start_access_distance, end_access_point, end_access_distance, jump_segment in all_pairs:
+            if jump_segment:
+                # 有跳跃段：计算起点到跳跃起点的管道距离
+                network_result = self._calculate_network_distance(
+                    start_access_point, jump_segment[0], pipeline_type
+                )
+                if network_result is None:
+                    continue
+                pipeline_distance, pipeline_coords = network_result
+                if pipeline_distance == 0.0 or not pipeline_coords:
+                    continue
+
+                # 计算跳跃距离
+                jump_distance = self._calculate_haversine_distance(
+                    jump_segment[0][0], jump_segment[0][1],
+                    jump_segment[1][0], jump_segment[1][1]
+                )
+
+                # 总距离 = 起点接入 + 管道距离 + 跳跃距离 + 终点离开
+                total_distance = start_access_distance + pipeline_distance + jump_distance + end_access_distance
+            else:
+                # 无跳跃段：正常计算
+                network_result = self._calculate_network_distance(
+                    start_access_point, end_access_point, pipeline_type
+                )
+                if network_result is None:
+                    continue
+                pipeline_distance, pipeline_coords = network_result
+                if pipeline_distance == 0.0 or not pipeline_coords:
+                    continue
+                total_distance = start_access_distance + pipeline_distance + end_access_distance
+
             if best is None or total_distance < best:
                 best = total_distance
                 best_pipeline_coords = pipeline_coords
+                best_start_access_point = start_access_point
+                best_start_access_distance = start_access_distance
                 best_end_access_point = end_access_point
                 best_end_access_distance = end_access_distance
+                best_jump_segment = jump_segment
 
         if best is None:
             return PipelineRoute(
@@ -938,13 +1140,20 @@ class HydrogenPipelineDistanceCalculator:
                 calculation_method=f'{pipeline_type}_network_path_failed'
             )
 
-        pipeline_distance = best - start_access_distance - best_end_access_distance
+        # 计算各段距离
+        if best_jump_segment:
+            pipeline_distance = best - best_start_access_distance - best_end_access_distance - self._calculate_haversine_distance(
+                best_jump_segment[0][0], best_jump_segment[0][1],
+                best_jump_segment[1][0], best_jump_segment[1][1]
+            )
+        else:
+            pipeline_distance = best - best_start_access_distance - best_end_access_distance
+
         pipeline_coords = best_pipeline_coords
+        start_access_point = best_start_access_point
+        start_access_distance = best_start_access_distance
         end_access_point = best_end_access_point
         end_access_distance = best_end_access_distance
-
-        # 4. 计算总距离
-        total_distance = best
 
         # 5. 构建完整的路径几何信息
         complete_route_geometry = []
@@ -955,6 +1164,10 @@ class HydrogenPipelineDistanceCalculator:
             complete_route_geometry.append(start_access_point)
         # 添加管道路径坐标
         complete_route_geometry.extend(pipeline_coords)
+        # 如果有跳跃段，添加跳跃段
+        if best_jump_segment:
+            complete_route_geometry.append(best_jump_segment[0])
+            complete_route_geometry.append(best_jump_segment[1])
         # 添加终点离开坐标
         if end_access_point != (end_lat, end_lon):
             complete_route_geometry.append(end_access_point)
@@ -962,19 +1175,20 @@ class HydrogenPipelineDistanceCalculator:
         complete_route_geometry.append((end_lat, end_lon))
 
         return PipelineRoute(
-            total_distance_km=total_distance,
+            total_distance_km=best,
             access_distance_km=start_access_distance,
             pipeline_distance_km=pipeline_distance,
             egress_distance_km=end_access_distance,
             pipeline_types_used=[pipeline_type],
             route_found=True,
-            calculation_method=f'{pipeline_type}_success',
+            calculation_method=f'{pipeline_type}_success' + ('_with_jump' if best_jump_segment else ''),
             # 添加几何信息
             route_geometry=complete_route_geometry,
             access_point_coords=start_access_point,
             egress_point_coords=end_access_point,
             start_coords=(start_lat, start_lon),
-            end_coords=(end_lat, end_lon)
+            end_coords=(end_lat, end_lon),
+            jump_segments=[best_jump_segment] if best_jump_segment else None
         )
 
     def _calculate_graph_only_route(self, start_lat: float, start_lon: float,
@@ -1107,7 +1321,7 @@ class HydrogenPipelineDistanceCalculator:
         segments = index_data['segments']
 
         # Step 1: KDTree查询最近的k个线段中点（O(logN)）
-        k = min(10, len(segments))  # 查询最近10个候选线段
+        k = min(30, len(segments))  # 查询最近30个候选线段
         distances, indices = tree.query([lat, lon], k=k)
 
         # Step 2: 对这k个候选线段进行精确距离计算
@@ -1420,6 +1634,44 @@ class HydrogenPipelineDistanceCalculator:
                 continue
 
         return nearest_node
+
+    def _find_nearest_node_in_component(self, start_node: str, target_coord: Tuple[float, float],
+                                       graph: nx.Graph) -> Tuple[Optional[str], float]:
+        """
+        在start_node所在的连通分量中，找到距离target_coord最近的节点
+
+        Args:
+            start_node: 起始节点（必须在图中）
+            target_coord: 目标坐标 (lat, lon)
+            graph: NetworkX图
+
+        Returns:
+            Tuple[Optional[str], float]: (最近节点, 最小距离km)，如果未找到返回(None, inf)
+        """
+        if start_node not in graph:
+            return None, float('inf')
+
+        # 获取start_node所在的连通分量
+        component = nx.node_connected_component(graph, start_node)
+
+        min_distance = float('inf')
+        nearest_node = None
+
+        for node in component:
+            try:
+                node_lat, node_lon = map(float, node.split(','))
+                distance = self._calculate_haversine_distance(
+                    target_coord[0], target_coord[1], node_lat, node_lon
+                )
+
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_node = node
+
+            except (ValueError, AttributeError):
+                continue
+
+        return nearest_node, min_distance
 
     def get_pipeline_coverage_info(self) -> Dict[str, Dict]:
         """
@@ -1938,6 +2190,19 @@ class HydrogenPipelineDistanceCalculator:
                 layer1_distances[member_name] + layer2_distance + layer3_distance
             )
 
+        # 构建每个成员的独立路径几何
+        route_geometry_per_member = {}
+        for member_name, member_coord in cluster_members:
+            # 每个成员的路径：成员坐标 -> 聚类中心 -> 管道接入点 -> 管道网络路径
+            member_route = [
+                member_coord,
+                cluster_center,
+                center_access_point
+            ]
+            member_route.extend(pipeline_coords)
+            route_geometry_per_member[member_name] = member_route
+
+        # 保留旧的route_geometry字段以兼容（但不再使用）
         route_geometry = []
         for member_name, member_coord in cluster_members:
             route_geometry.append(member_coord)
@@ -1952,6 +2217,7 @@ class HydrogenPipelineDistanceCalculator:
             layer3_distance=layer3_distance,
             total_distance_per_member=total_distance_per_member,
             route_geometry=route_geometry,
+            route_geometry_per_member=route_geometry_per_member,
             cluster_center=cluster_center,
             pipeline_access_point=center_access_point,
             pipeline_types_used=['mixed'],

@@ -104,21 +104,21 @@ class PolarStackedBarVisualizer:
                 'group': 'Blue',
                 'solution_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json')
             },
-            'GTL-BH-MTJ': {
-                'name_cn': 'GTL副产氢-MTJ',
-                'label': 'GTL-BH-MTJ',
+            'GTL-BH': {
+                'name_cn': 'GTL-BH',
+                'label': 'GTL-BH',
                 'group': 'Blue',
                 'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json')
             },
-            'GTL-GH-MTJ': {
-                'name_cn': 'GTL绿氢-MTJ',
-                'label': 'GTL-GH-MTJ',
+            'GTL-GH': {
+                'name_cn': 'GTL-GH',
+                'label': 'GTL-GH',
                 'group': 'Blue',
                 'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json')
             },
-            'GTL-GH-FT': {
-                'name_cn': 'GTL绿氢-FT',
-                'label': 'GTL-GH-FT',
+            'GTL': {
+                'name_cn': 'GTL',
+                'label': 'GTL',
                 'group': 'Blue',
                 'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json')
             },

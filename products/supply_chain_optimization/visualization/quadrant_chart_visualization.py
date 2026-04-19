@@ -4,7 +4,7 @@ Quadrant Chart Visualization for SAF Scenarios
 
 功能：
 - X轴：碳强度差值（方案 - 传统航煤，g CO2eq/MJ），以0为分界点（负值表示减排）
-- Y轴：LCOE成本（元/kg），以8元/kg（SAF市场售价）为分界点
+- Y轴：LCOE成本（元/kg），以6-8元/kg市场价格区间作为参考带
 - 四象限背景色区分不同区域
 - 点颜色表示场景类型
 
@@ -19,10 +19,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from matplotlib.font_manager import FontProperties
 from matplotlib.ticker import MultipleLocator
 try:
@@ -41,15 +39,23 @@ logger = logging.getLogger(__name__)
 class QuadrantChartVisualizer:
     """SAF场景象限图可视化器"""
 
-    def __init__(self, cost_threshold: float = 8.0, carbon_threshold: float = 0.0):
+    def __init__(
+        self,
+        cost_threshold: float = 8.0,
+        carbon_threshold: float = 0.0,
+        market_price_low: float = 6.0,
+    ):
         """
         初始化可视化器
 
         Args:
-            cost_threshold: 成本分界点（元/kg），默认8元（SAF市场售价）
+            cost_threshold: 市场价格区间上界（元/kg），默认8元/kg
             carbon_threshold: 碳强度差值分界点（g CO2eq/MJ），默认0
+            market_price_low: 市场价格区间下界（元/kg），默认6元/kg
         """
         self.cost_threshold = cost_threshold
+        self.market_price_low = market_price_low
+        self.market_price_mid = (market_price_low + cost_threshold) / 2.0
         self.carbon_threshold = carbon_threshold
 
         # 传统航煤基准碳强度（g CO2eq/MJ），用于参考线与回退计算
@@ -119,14 +125,14 @@ class QuadrantChartVisualizer:
             },
             # ========== Blue蓝色系 - 副产氢/天然气路径 (7个) ==========
             'Natural Gas Two-Step': {
-                'name_en': 'GTL-GH-MTJ',
+                'name_en': 'GTL-GH',
                 'category': 'Blue',
                 'color': '#1565C0',  # Deeper Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
             },
             'Natural Gas One-Step': {
-                'name_en': 'GTL-GH-FT',
+                'name_en': 'GTL',
                 'category': 'Blue',
                 'color': '#1E88E5',  # Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json'),
@@ -147,7 +153,7 @@ class QuadrantChartVisualizer:
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + NG Two-Step': {
-                'name_en': 'GTL-BH-MTJ',
+                'name_en': 'GTL-BH',
                 'category': 'Blue',
                 'color': '#90CAF9',  # Pale Blue
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json'),
@@ -178,6 +184,44 @@ class QuadrantChartVisualizer:
 
         # 数据存储
         self.data = {}
+        self.pareto_optimal_names = []
+
+    @staticmethod
+    def _identify_pareto_optimal(data: Dict[str, dict]) -> List[str]:
+        """识别同时追求更低碳排与更低成本的帕累托最优解。"""
+        sorted_items = sorted(
+            data.items(),
+            key=lambda item: (item[1]['carbon_diff'], item[1]['lcoe'])
+        )
+
+        pareto_names: List[str] = []
+        best_cost = float('inf')
+        for _, scenario in sorted_items:
+            cost = float(scenario['lcoe'])
+            if cost < best_cost - 1e-9:
+                pareto_names.append(scenario['name_en'])
+                best_cost = cost
+        return pareto_names
+
+    @staticmethod
+    def _draw_pareto_path(ax, pareto_points: List[dict], color: str, linewidth: float, zorder: int):
+        """使用直线折线连接帕累托点。"""
+        points = [
+            (float(point['carbon_diff']), float(point['lcoe']))
+            for point in pareto_points
+        ]
+        if len(points) < 2:
+            return
+
+        ax.plot(
+            [point[0] for point in points],
+            [point[1] for point in points],
+            color=color,
+            linewidth=linewidth,
+            solid_capstyle='round',
+            solid_joinstyle='round',
+            zorder=zorder,
+        )
 
     def load_data(self):
         """加载所有场景数据"""
@@ -244,6 +288,8 @@ class QuadrantChartVisualizer:
                 continue
 
         logger.info(f"\n成功加载 {len(self.data)} 个场景")
+        self.pareto_optimal_names = self._identify_pareto_optimal(self.data)
+        logger.info("帕累托最优场景: %s", ", ".join(self.pareto_optimal_names))
 
     def plot_quadrant_chart(self):
         """绑制象限图 - 统一风格版"""
@@ -277,23 +323,32 @@ class QuadrantChartVisualizer:
         y_min = max(0, y_data_min - y_margin)
         y_max = max(y_values) + y_margin
 
-        # ========== 绘制四象限背景色 (更淡雅的颜色) ==========
-        # ========== 绘制四象限背景色 (更淡雅的颜色) ==========
+        # ========== 绘制区域背景色 ==========
         # 左下：浅绿（低排+低成本 -> 理想区域）
-        ax.fill_between([x_min, self.carbon_threshold], y_min, self.cost_threshold,
+        ax.fill_between([x_min, self.carbon_threshold], y_min, self.market_price_low,
                 color='#F1F8E9', alpha=0.6, zorder=0)
         # 左上：白色（低排+高成本 -> 技术可行但贵）
         ax.fill_between([x_min, self.carbon_threshold], self.cost_threshold, y_max,
             color='#FFFFFF', alpha=1.0, zorder=0)
         # 右下：浅橙（高排+低成本 -> 经济但不够环保）
-        ax.fill_between([self.carbon_threshold, x_max], y_min, self.cost_threshold,
+        ax.fill_between([self.carbon_threshold, x_max], y_min, self.market_price_low,
                 color='#FFF3E0', alpha=0.6, zorder=0)
-        # 右上：浅红（高排+高成本 -> 需避免）
+        # 右上：浅灰（高排+高成本 -> 需避免）
         ax.fill_between([self.carbon_threshold, x_max], self.cost_threshold, y_max,
-                color='#FFEBEE', alpha=0.6, zorder=0)
+                color='#F2F2F2', alpha=0.6, zorder=0)
+        # 中间：市场价格带（6-8 CNY/kg）
+        ax.fill_between(
+            [x_min, x_max],
+            self.market_price_low,
+            self.cost_threshold,
+            color='#FFF8E1',
+            alpha=0.55,
+            zorder=0,
+        )
 
         # ========== 绘制分界线（灰色虚线） ==========
         ax.axvline(x=self.carbon_threshold, color='#999999', linestyle='--', linewidth=1.5, zorder=1)
+        ax.axhline(y=self.market_price_low, color='#999999', linestyle='--', linewidth=1.2, zorder=1)
         ax.axhline(y=self.cost_threshold, color='#999999', linestyle='--', linewidth=1.5, zorder=1)
 
         # ========== 象限标注（大字体） ==========
@@ -306,7 +361,7 @@ class QuadrantChartVisualizer:
         text_x_pos = x_max + 2
         ax.text(text_x_pos, self.cost_threshold + (y_max - self.cost_threshold)/2, 'Higher\ncost', 
                 fontsize=14, ha='left', va='center', fontweight='bold', color='#555555')
-        ax.text(text_x_pos, y_min + (self.cost_threshold - y_min)/2, 'Lower\ncost', 
+        ax.text(text_x_pos, y_min + (self.market_price_low - y_min)/2, 'Lower\ncost', 
                 fontsize=14, ha='left', va='center', fontweight='bold', color='#555555')
 
         # ========== 绘制气泡散点 ==========
@@ -337,6 +392,37 @@ class QuadrantChartVisualizer:
             text = ax.text(x, y, data['name_en'], fontsize=12, color='#333333', fontweight='normal', zorder=10)
             texts.append(text)
 
+        # ========== 叠加帕累托前沿 ==========
+        pareto_points = sorted(
+            [d for d in self.data.values() if d['name_en'] in self.pareto_optimal_names],
+            key=lambda item: item['carbon_diff']
+        )
+        if pareto_points:
+            pareto_x = [float(d['carbon_diff']) for d in pareto_points]
+            pareto_y = [float(d['lcoe']) for d in pareto_points]
+
+            # 先绘制白色底边，提升和背景的区分度
+            self._draw_pareto_path(ax, pareto_points, color='white', linewidth=4.6, zorder=6)
+            self._draw_pareto_path(ax, pareto_points, color='#D97706', linewidth=2.2, zorder=7)
+            ax.scatter(
+                pareto_x,
+                pareto_y,
+                s=fixed_size + 120,
+                facecolors='none',
+                edgecolors='white',
+                linewidths=4.0,
+                zorder=8,
+            )
+            ax.scatter(
+                pareto_x,
+                pareto_y,
+                s=fixed_size + 120,
+                facecolors='none',
+                edgecolors='#D97706',
+                linewidths=2.0,
+                zorder=9,
+            )
+
         # ========== 设置轴标签（大字体） ==========
         ax.set_xlabel('Carbon intensity difference vs traditional jet fuel (g CO2eq/MJ)',
                       fontsize=16, labelpad=15, fontweight='bold')
@@ -351,6 +437,14 @@ class QuadrantChartVisualizer:
         ax.xaxis.set_major_locator(MultipleLocator(200))
         ax.yaxis.set_major_locator(MultipleLocator(20))
         ax.grid(True, linestyle='--', alpha=0.5, color='#aaaaaa', dashes=(4, 4))
+
+        # 将市场价格区间的6和8直接纳入左侧Y轴刻度
+        y_ticks = sorted({
+            round(float(tick), 6)
+            for tick in ax.get_yticks()
+            if y_min <= tick <= y_max
+        } | {float(self.market_price_low), float(self.cost_threshold)})
+        ax.set_yticks(y_ticks)
 
         # ========== 使用adjustText自动调整标签位置 ==========
         if adjust_text:
@@ -387,7 +481,7 @@ class QuadrantChartVisualizer:
         # 顺序
         pathway_order = {
             'Grey': ['CTL', 'CTL-BH'],
-            'Blue': ['DAC-BH-MTJ', 'DAC-BH-FT', 'GTL-BH-MTJ', 'GTL-GH-MTJ', 'GTL-GH-FT', 'CCU-BH-MTJ', 'CCU-BH-FT'],
+            'Blue': ['DAC-BH-MTJ', 'DAC-BH-FT', 'GTL-BH', 'GTL-GH', 'GTL', 'CCU-BH-MTJ', 'CCU-BH-FT'],
             'Green': ['DAC-GH-MTJ', 'DAC-GH-FT', 'CCU-GH-MTJ', 'CCU-GH-FT']
         }
 
@@ -418,6 +512,43 @@ class QuadrantChartVisualizer:
         legend_scenarios.get_title().set_fontweight('bold')
         ax.add_artist(legend_scenarios) 
 
+        # 2. Pareto Legend
+        pareto_handles = [
+            Line2D(
+                [0], [0],
+                color='#D97706',
+                linewidth=2.2,
+                linestyle='--',
+                marker='o',
+                markerfacecolor='none',
+                markeredgecolor='#D97706',
+                markeredgewidth=1.8,
+                markersize=8,
+                label='Pareto-optimal frontier'
+            ),
+            Line2D(
+                [0], [0],
+                marker='*',
+                color='w',
+                markerfacecolor='#D97706',
+                markeredgecolor='white',
+                markeredgewidth=1.2,
+                markersize=14,
+                linestyle='None',
+                label='Traditional jet fuel'
+            )
+        ]
+        legend_pareto = ax.legend(
+            handles=pareto_handles,
+            loc='lower right',
+            bbox_to_anchor=(0.985, 0.02),
+            fontsize=11,
+            framealpha=0.82,
+            edgecolor='#cccccc',
+            facecolor='white',
+        )
+        ax.add_artist(legend_pareto)
+
         # 不再绘制“点大小”图例（MAC相关）
         
         # Quadrant Explanations Legend (Optional, simplify visually)
@@ -425,10 +556,18 @@ class QuadrantChartVisualizer:
 
         # ========== 添加阈值标注 ==========
         ax.text(self.carbon_threshold + 2, y_min + 0.5, f'Baseline: {self.carbon_threshold} g CO2eq/MJ',
-                fontsize=12, color='#666666', va='bottom', fontweight='bold')
-        ax.text(x_min + 5, self.cost_threshold + 0.2, f'Market Price: {self.cost_threshold} CNY/kg',
-                fontsize=12, color='#666666', va='bottom', fontweight='bold')
-
+                fontsize=14, color='#555555', va='bottom', fontweight='normal')
+        ax.text(
+            0.01,
+            self.market_price_mid,
+            'Market price',
+            transform=ax.get_yaxis_transform(),
+            fontsize=13,
+            color='#666666',
+            va='center',
+            ha='left',
+            fontweight='normal',
+        )
         # 添加 -10% 和 -70% 的参考线（映射到绝对差值：diff = -ratio * traditional_jet_ci）
         traditional_jet_ci = self.traditional_jet_ci_gco2e_per_mj or 89
         ref_10 = -0.10 * traditional_jet_ci
@@ -446,6 +585,20 @@ class QuadrantChartVisualizer:
         ax.text(ref_70 - 1, label_y_ax, f'{ref_70:.1f} g/MJ (70% reduction)', rotation=90,
             fontsize=14, color='#555555', va='top', ha='right',
             transform=ax.get_xaxis_transform(), bbox=label_bbox)
+
+        # ========== 强调传统航煤基准点 ==========
+        jet_x = self.carbon_threshold
+        jet_y = self.market_price_mid
+        ax.scatter(
+            [jet_x],
+            [jet_y],
+            s=430,
+            marker='*',
+            c='#D97706',
+            edgecolors='white',
+            linewidths=1.6,
+            zorder=11,
+        )
 
         # 保存图片
         output_path = self.session_dir / "quadrant_chart.png"
@@ -492,7 +645,8 @@ class QuadrantChartVisualizer:
                 'LCOE (CNY/kg)': f"{data['lcoe']:.2f}",
                 'Carbon Diff (g CO2eq/MJ)': f"{data['carbon_diff']:.2f}",
                 'Production (kt)': f"{data['production']:.1f}",
-                'Quadrant': quadrant
+                'Quadrant': quadrant,
+                'Pareto Optimal': 'Yes' if data['name_en'] in self.pareto_optimal_names else 'No',
             })
 
         df = pd.DataFrame(summary_data)
@@ -539,7 +693,8 @@ class QuadrantChartVisualizer:
 def main():
     """主函数"""
     visualizer = QuadrantChartVisualizer(
-        cost_threshold=8.0,  # SAF市场售价
+        cost_threshold=8.0,  # 市场价格区间上界
+        market_price_low=6.0,  # 市场价格区间下界
         carbon_threshold=0.0   # 碳排放分界点
     )
     visualizer.run()

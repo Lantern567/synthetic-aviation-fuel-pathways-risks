@@ -31,9 +31,9 @@ SCENARIO_NAME_MAP: Dict[str, str] = {
     "Coal Hydrogen": "CTL",
     "Byproduct H2 + Coal": "CTL-BH",
 
-    "Natural Gas Two-Step": "GTL-GH-MTJ",
-    "Natural Gas One-Step": "GTL-GH-FT",
-    "Byproduct H2 + NG Two-Step": "GTL-BH-MTJ",
+    "Natural Gas Two-Step": "GTL-GH",
+    "Natural Gas One-Step": "GTL",
+    "Byproduct H2 + NG Two-Step": "GTL-BH",
 
     "DAC Two-Step": "DAC-GH-MTJ",
     "DAC One-Step": "DAC-GH-FT",
@@ -53,6 +53,9 @@ SAF_TECH = {
     "green_h2_co2_to_saf",
     "airport_integrated_conversion",
     "pipeline_direct_conversion",
+    "lng_terminal_conversion",
+    "lng_to_hplant_conversion",
+    "integrated_supply_conversion",
 }
 
 ELECTROLYZER_TECH = "electrolyzer"
@@ -428,34 +431,37 @@ def _compute_scenario_metrics(
 
     data = _load_complete_solution(solution_path)
 
-    saf_count = 0
+    saf_locations: set[str] = set()
     saf_counts_by_cat = Counter({c: 0 for c in CATEGORY_ORDER})
-    saf_seen: set[Tuple[str, str, str]] = set()
 
     electrolyzer_locations: set[str] = set()
 
     for info in _iter_facility_entries(data.get("facilities", {})):
+        if not info.get("built", True):
+            continue
         tech = info.get("technology")
         location = info.get("location") or info.get("name") or info.get("source_id")
         if tech == ELECTROLYZER_TECH and location:
             electrolyzer_locations.add(str(location))
-        if tech in SAF_TECH:
-            key = (str(location), tech, str(info.get("location_type")))
-            if key in saf_seen:
+        if tech in SAF_TECH and location:
+            location_key = str(location)
+            if location_key in saf_locations:
                 continue
-            saf_seen.add(key)
-            saf_count += 1
+            saf_locations.add(location_key)
             loc_type = info.get("location_type")
             category = LOCATION_CATEGORY.get(loc_type, "Other site")
             saf_counts_by_cat[category] += 1
 
     for info in _iter_facility_entries(data.get("hydrogen_facilities", {})):
+        if not info.get("built", True):
+            continue
         if info.get("technology") == ELECTROLYZER_TECH:
             location = info.get("location") or info.get("name") or info.get("source_id")
             if location:
                 electrolyzer_locations.add(str(location))
 
     electrolyzer_count = len(electrolyzer_locations)
+    saf_count = len(saf_locations)
 
     saf_shares = {}
     for cat in CATEGORY_ORDER:

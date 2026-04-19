@@ -54,10 +54,10 @@ def collect_latest_data():
         'CCU-GH-FT': {
             'base_path': 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step'
         },
-        'GTL-GH-MTJ': {
+        'GTL-GH': {
             'base_path': 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results'
         },
-        'GTL-GH-FT': {
+        'GTL': {
             'base_path': 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step'
         },
         'DAC-BH-MTJ': {
@@ -68,7 +68,7 @@ def collect_latest_data():
              # Keeping key as DAC-BH-FT for consistency with file naming
             'base_path': 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step'
         },
-        'GTL-BH-MTJ': {
+        'GTL-BH': {
             'base_path': 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step'
         },
         'CCU-BH-MTJ': {

@@ -86,16 +86,16 @@ class GroupedPolarCarbonPercentageVisualizer:
                     'full_name': 'DAC with By-product H2 - FT',
                     'carbon_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
                 }),
-                ('GTL-BH-MTJ', {
-                    'full_name': 'GTL with By-product H2 - MTJ',
+                ('GTL-BH', {
+                    'full_name': 'GTL-BH',
                     'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
                 }),
-                ('GTL-GH-MTJ', {
-                    'full_name': 'GTL with Green H2 - MTJ',
+                ('GTL-GH', {
+                    'full_name': 'GTL-GH',
                     'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
                 }),
-                ('GTL-GH-FT', {
-                    'full_name': 'GTL with Green H2 - FT',
+                ('GTL', {
+                    'full_name': 'GTL',
                     'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_*.json')
                 }),
             ])),

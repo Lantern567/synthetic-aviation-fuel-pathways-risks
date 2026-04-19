@@ -104,21 +104,21 @@ class PolarCarbonStackedBarVisualizer:
                 'group': 'Blue',
                 'carbon_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
             },
-            'GTL-BH-MTJ': {
-                'name_cn': 'GTL-BH-MTJ',
-                'label': 'GTL-BH-MTJ',
+            'GTL-BH': {
+                'name_cn': 'GTL-BH',
+                'label': 'GTL-BH',
                 'group': 'Blue',
                 'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_*.json')
             },
-            'GTL-GH-MTJ': {
-                'name_cn': 'GTL-GH-MTJ',
-                'label': 'GTL-GH-MTJ',
+            'GTL-GH': {
+                'name_cn': 'GTL-GH',
+                'label': 'GTL-GH',
                 'group': 'Blue',
                 'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
             },
-            'GTL-GH-FT': {
-                'name_cn': 'GTL-GH-FT',
-                'label': 'GTL-GH-FT',
+            'GTL': {
+                'name_cn': 'GTL',
+                'label': 'GTL',
                 'group': 'Blue',
                 'carbon_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_*.json')
             },

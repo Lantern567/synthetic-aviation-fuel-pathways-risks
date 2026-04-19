@@ -108,9 +108,9 @@ class TemporalEfficiencyVisualizer:
             'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json',
             'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_*.csv',
         },
-        'GTL-BH-MTJ': {
-            'name_cn': '副产品氢气的气转液 – MTJ',
-            'abbr': 'GTL-BH-MTJ',
+        'GTL-BH': {
+            'name_cn': 'GTL-BH',
+            'abbr': 'GTL-BH',
             'description': 'Natural gas-to-liquid process enhanced by industrial by-product hydrogen (MTJ).',
             'category': 'Blue',
             'pathway': 'Two-Step',
@@ -138,9 +138,9 @@ class TemporalEfficiencyVisualizer:
             'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json',
             'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_*.csv',
         },
-        'GTL-GH-MTJ': {
-            'name_cn': '采用绿氢集成的气制液 – MTJ',
-            'abbr': 'GTL-GH-MTJ',
+        'GTL-GH': {
+            'name_cn': 'GTL-GH',
+            'abbr': 'GTL-GH',
             'description': 'Natural gas-to-liquid process integrated with low-carbon hydrogen via Methanol-to-Jet.',
             'category': 'Blue',
             'pathway': 'Two-Step',
@@ -148,10 +148,10 @@ class TemporalEfficiencyVisualizer:
             'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json',
             'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_*.csv',
         },
-        'GTL-GH-FT': {
-            'name_cn': '通过绿氢集成进行气制油 – FT',
-            'abbr': 'GTL-GH-FT',
-            'description': 'Natural gas-to-liquid process integrated with low-carbon hydrogen via Fischer-Tropsch.',
+        'GTL': {
+            'name_cn': 'GTL',
+            'abbr': 'GTL',
+            'description': 'Natural gas-to-liquid via Fischer-Tropsch.',
             'category': 'Blue',
             'pathway': 'One-Step',
             'color': '#90CAF9',
@@ -167,8 +167,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'Two-Step',
             'color': '#1B5E20', # Green Dark
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
         },
         'DAC-GH-FT': {
             'name_cn': '使用绿色氢气直接捕获 – FT',
@@ -177,8 +177,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'One-Step',
             'color': '#2E7D32',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
         },
         'CCU-GH-MTJ': {
             'name_cn': '碳捕获与绿色氢利用 – MTJ',
@@ -187,8 +187,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'Two-Step',
             'color': '#388E3C',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
         },
         'CCU-GH-FT': {
             'name_cn': '碳捕获和绿色氢利用 – FT',
@@ -197,8 +197,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'One-Step',
             'color': '#4CAF50',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
         },
     }
 
@@ -929,9 +929,9 @@ class TemporalEfficiencyVisualizer:
             'CTL': 'Grey',
             'CTL-BH': 'Grey',
 
-            'GTL-BH-MTJ': 'Blue-GTL',
-            'GTL-GH-MTJ': 'Blue-GTL',
-            'GTL-GH-FT': 'Blue-GTL',
+            'GTL-BH': 'Blue-GTL',
+            'GTL-GH': 'Blue-GTL',
+            'GTL': 'Blue-GTL',
 
             'DAC-BH-MTJ': 'Blue-DAC-BH',
             'DAC-BH-FT': 'Blue-DAC-BH',
@@ -1282,8 +1282,22 @@ class TemporalEfficiencyVisualizer:
             for i, name in enumerate(scenarios):
                 scenario_colors[name] = palette[i]
 
+        def infer_line_style(scenario_name, scenario_cfg):
+            # Preserve category color while using linestyles to distinguish pathway/subtype
+            if scenario_name == 'CTL':
+                return '-'
+            if scenario_name == 'CTL-BH':
+                return (0, (4, 1.8))
+            if '-FT' in scenario_name or scenario_cfg.get('pathway') == 'One-Step':
+                return (0, (6, 2.2))
+            if '-MTJ' in scenario_name or scenario_cfg.get('pathway') == 'Two-Step':
+                return '-'
+            return '-'
+
         for name, data in self.data.items():
             cat = data['config']['category']
+            line_style = infer_line_style(name, data['config'])
+            line_width = 1.9 if line_style == '-' else 1.7
             df = pd.DataFrame(data['hourly_metrics'])
             if df.empty: continue
             
@@ -1292,11 +1306,25 @@ class TemporalEfficiencyVisualizer:
             
             if df['h2_capacity_kg_per_hour'].max() > 0:
                 y_smooth = df['h2_utilization'].rolling(window=8, center=True, min_periods=1).mean()
-                data_map[cat]['h2'].append({'label': name, 'x': hours, 'y': y_smooth, 'color': scenario_colors[name]})
+                data_map[cat]['h2'].append({
+                    'label': name,
+                    'x': hours,
+                    'y': y_smooth,
+                    'color': scenario_colors[name],
+                    'linestyle': line_style,
+                    'linewidth': line_width
+                })
 
             if df['saf_capacity_kg_per_hour'].max() > 0:
                 y_smooth = df['saf_utilization'].rolling(window=8, center=True, min_periods=1).mean()
-                data_map[cat]['saf'].append({'label': name, 'x': hours, 'y': y_smooth, 'color': scenario_colors[name]})
+                data_map[cat]['saf'].append({
+                    'label': name,
+                    'x': hours,
+                    'y': y_smooth,
+                    'color': scenario_colors[name],
+                    'linestyle': line_style,
+                    'linewidth': line_width
+                })
 
         # 2.1 分布数据（用于左侧分布图 - ridgeline）
         dist_map = {cat: {'h2': {}, 'saf': {}} for cat in categories}
@@ -1425,11 +1453,17 @@ class TemporalEfficiencyVisualizer:
                                     color=shadow_color, alpha=0.1, edgecolor='none')
                     # Lines
                     for item in items:
-                        ax.plot(item['x'], item['y'], color=item['color'], linestyle='-', linewidth=1.8, label=item['label'])
+                        ax.plot(
+                            item['x'],
+                            item['y'],
+                            color=item['color'],
+                            linestyle=item.get('linestyle', '-'),
+                            linewidth=item.get('linewidth', 1.8),
+                            label=item['label']
+                        )
                     
                     # In-plot Legend (Adaptive)
-                    # frameon=False ensures clean look; fontsize small
-                    ax.legend(loc='best', fontsize=8, frameon=False, labelspacing=0.4, handlelength=1.5)
+                    ax.legend(loc='best', fontsize=8, frameon=False, labelspacing=0.4, handlelength=2.2)
 
             # --- Axis Styling (分布图) ---
             if row_idx == 2:
@@ -1491,10 +1525,14 @@ class TemporalEfficiencyVisualizer:
                 ax.text(0.0, 1.05, f'({letter}) {cat} – {target_type}', transform=ax.transAxes, 
                        fontsize=11, fontweight='bold', va='bottom', ha='left')
 
-                # Y Label (Right Side - Only for Right Column)
-                if col_idx == 1:
-                    ax.set_ylabel('Utilization Ratio', fontsize=11, rotation=270, labelpad=25)
+                # Y Label: keep a single right-side label to reduce repetition in publication figure
+                if col_idx == 1 and row_idx == 1:
+                    ax.set_ylabel('Utilization (%)', fontsize=11, rotation=270, labelpad=28)
                     ax.yaxis.set_label_position("right")
+
+                # Week separators for better temporal reading in paper body
+                for week_x in (168, 336, 504):
+                    ax.axvline(week_x, color='#8A8A8A', linestyle=':', linewidth=0.7, alpha=0.30, zorder=0)
 
         # X Axis Labels (Bottom Row Only for Time Series)
         for ax in axes[2, 1:]:
@@ -1504,7 +1542,7 @@ class TemporalEfficiencyVisualizer:
         # 分布图X轴标签（左侧列底部）
         label_fontsize = 11
 
-        plt.subplots_adjust(top=0.92, bottom=0.10, left=0.07, right=0.94, wspace=0.25, hspace=0.25)
+        plt.subplots_adjust(top=0.92, bottom=0.12, left=0.07, right=0.94, wspace=0.25, hspace=0.25)
 
         # 对齐底部标签位置（Utilization 与 Time）
         left_pos = axes[2, 0].get_position()
@@ -1512,7 +1550,7 @@ class TemporalEfficiencyVisualizer:
         right_pos_r = axes[2, 2].get_position()
         left_center_x = (left_pos.x0 + left_pos.x1) / 2
         right_center_x = (right_pos_l.x0 + right_pos_r.x1) / 2
-        label_y = 0.06
+        label_y = 0.038
         fig.text(left_center_x, label_y, 'Utilization (%)', ha='center', va='center',
                  fontsize=label_fontsize, fontweight='bold')
         fig.text(right_center_x, label_y, 'Time (h)', ha='center', va='center',

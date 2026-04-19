@@ -25,9 +25,9 @@ SCENARIO_NAME_MAP: Dict[str, str] = {
     "Coal Hydrogen": "CTL",
     "Byproduct H2 + Coal": "CTL-BH",
 
-    "Natural Gas Two-Step": "GTL-GH-MTJ",
-    "Natural Gas One-Step": "GTL-GH-FT",
-    "Byproduct H2 + NG Two-Step": "GTL-BH-MTJ",
+    "Natural Gas Two-Step": "GTL-GH",
+    "Natural Gas One-Step": "GTL",
+    "Byproduct H2 + NG Two-Step": "GTL-BH",
 
     "DAC Two-Step": "DAC-GH-MTJ",
     "DAC One-Step": "DAC-GH-FT",

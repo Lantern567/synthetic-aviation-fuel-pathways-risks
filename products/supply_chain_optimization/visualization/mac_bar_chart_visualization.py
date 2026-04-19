@@ -100,14 +100,14 @@ class MacBarChartVisualizer:
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_detailed_*.json')
             },
             'Natural Gas Two-Step': {
-                'name_en': 'GTL-GH-MTJ',
+                'name_en': 'GTL-GH',
                 'category': 'Blue',
                 'color': '#1565C0',
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json'),
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_*.json')
             },
             'Natural Gas One-Step': {
-                'name_en': 'GTL-GH-FT',
+                'name_en': 'GTL',
                 'category': 'Blue',
                 'color': '#1E88E5',
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json'),
@@ -128,7 +128,7 @@ class MacBarChartVisualizer:
                 'carbon_pattern': str(self.project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_*.json')
             },
             'Byproduct H2 + NG Two-Step': {
-                'name_en': 'GTL-BH-MTJ',
+                'name_en': 'GTL-BH',
                 'category': 'Blue',
                 'color': '#90CAF9',
                 'solution_pattern': str(self.project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json'),
@@ -227,16 +227,13 @@ class MacBarChartVisualizer:
 
         # 定义类别顺序
         categories = ["Blue", "Green"]
-        category_names = {
-            "Blue": "Blue\n(BH/NG)",
-            "Green": "Green\n(GH)"
-        }
         
         # 准备绘图数据
         grouped_data = {}
         means = []
         stds = []
         x_indices = []
+        counts = {cat: 0 for cat in categories}
         
         for i, cat in enumerate(categories):
             cat_df = plot_df[plot_df["Category"] == cat]
@@ -245,35 +242,42 @@ class MacBarChartVisualizer:
                 grouped_data[i] = {
                     "values": values,
                     "names": cat_df["Scenario"].tolist(),
-                    "color": cat_df.iloc[0]["Color"] # Assume same color for category or use map
+                    "category": cat,
                 }
                 means.append(np.mean(values))
                 stds.append(np.std(values, ddof=1) if len(values) > 1 else 0.0)
                 x_indices.append(i)
+                counts[cat] = len(values)
             else:
                 means.append(np.nan)
                 stds.append(np.nan)
                 x_indices.append(i)
 
-        # 字体设置 (Academic Style)
-        plt.rcParams["font.family"] = ["Arial", "DejaVu Sans"]
+        category_names = {
+            "Blue": f"Blue\n(BH/NG)\n(n={counts.get('Blue', 0)})",
+            "Green": f"Green\n(GH)\n(n={counts.get('Green', 0)})",
+        }
+
+        # 字体设置：与 quadrant_chart_visualization.py 一致
+        plt.rcParams["font.family"] = ["Times New Roman", "DejaVu Sans"]
         plt.rcParams["axes.unicode_minus"] = False
 
         # 创建图形
         fig, ax = plt.subplots(figsize=(10, 8))
 
         # 类别颜色
-        category_colors = {
-            "Blue": "#90CAF9",  # Light Blue
-            "Green": "#A5D6A7"  # Light Green
+        category_styles = {
+            "Blue": {"fill": "#D7E7FF", "edge": "#4A74B8", "point": "#1E5AA8"},
+            "Green": {"fill": "#D9F2E3", "edge": "#2F7D4D", "point": "#2E7D32"},
         }
-        bar_colors = [category_colors.get(c, "#cccccc") for c in categories]
+        bar_colors = [category_styles.get(c, {}).get("fill", "#cccccc") for c in categories]
+        bar_edgecolors = [category_styles.get(c, {}).get("edge", "#999999") for c in categories]
 
         # 1. 绘制柱状图 (Mean)
         # 宽度 0.5, 透明度高一点; 增强误差棒视觉
-        error_kw = dict(ecolor='black', elinewidth=2.5, capsize=12, capthick=2.5)
-        bars = ax.bar(x_indices, means, yerr=stds, align='center', alpha=0.85, 
-                      color=bar_colors, edgecolor='none', width=0.5, error_kw=error_kw)
+        error_kw = dict(ecolor="#333333", elinewidth=2.2, capsize=10, capthick=2.2)
+        bars = ax.bar(x_indices, means, yerr=stds, align="center", alpha=0.95,
+                      color=bar_colors, edgecolor=bar_edgecolors, linewidth=1.6, width=0.55, error_kw=error_kw)
 
         # 2. 绘制散点 (Jitter)
         np.random.seed(42) # 固定随机种子
@@ -287,8 +291,11 @@ class MacBarChartVisualizer:
                 jitter = np.random.uniform(-0.12, 0.12, size=len(vals))
                 x_scatter = i + jitter
                 
-                # 绘制点 - 黑色，不透明度略微提升，带白色边缘以区分重叠
-                ax.scatter(x_scatter, vals, s=60, color='black', alpha=0.7, zorder=10, linewidth=1.0, edgecolor='white')
+                # 绘制点 - 类别色，带白色边缘以区分重叠
+                cat = grouped_data[i]["category"]
+                point_color = category_styles.get(cat, {}).get("point", "#333333")
+                ax.scatter(x_scatter, vals, s=65, color=point_color, alpha=0.85, zorder=10,
+                           linewidth=1.0, edgecolor="white")
                 
                 scatter_x_all.extend(x_scatter)
                 scatter_y_all.extend(vals)
@@ -300,7 +307,8 @@ class MacBarChartVisualizer:
         
         if len(valid_indices) > 1:
             # 绘制折线
-            ax.plot(valid_indices, valid_means, color='#66BB6A', linewidth=4, alpha=0.8, zorder=5)
+            trend_color = "#2F7D4D"
+            ax.plot(valid_indices, valid_means, color=trend_color, linewidth=3.5, alpha=0.85, zorder=5)
             # 添加箭头 (末端)
             last_idx = valid_indices[-1]
             prev_idx = valid_indices[-2]
@@ -314,35 +322,50 @@ class MacBarChartVisualizer:
             ax.annotate("", 
                         xy=(last_idx, last_mean), 
                         xytext=(prev_idx, prev_mean),
-                        arrowprops=dict(arrowstyle="->", color='#66BB6A', lw=4, alpha=0.8))
+                        arrowprops=dict(arrowstyle="->", color=trend_color, lw=3.5, alpha=0.85))
 
         # 样式调整
         # X轴标签
         ax.set_xticks(x_indices)
-        ax.set_xticklabels([category_names[c] for c in categories], fontsize=28, fontweight='bold')
+        ax.set_xticklabels([category_names[c] for c in categories], fontsize=24, fontweight="bold")
         
         # 标题和Y轴
-        ax.set_ylabel("Marginal Abatement Cost\n(CNY/tCO2e)", fontsize=28, fontweight="bold", labelpad=20)
+        ax.set_ylabel("Marginal Abatement Cost\n(CNY/tCO2e)", fontsize=26, fontweight="bold", labelpad=18)
         # ax.set_title("MAC Distribution by Pathway Category", fontsize=32, fontweight="bold", pad=25) # Optional title if needed, maybe hide for paper
         
-        # 移除上方和右侧边框
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_linewidth(2.0)
-        ax.spines['bottom'].set_linewidth(2.0)
+        # 边框：启用四周边框（带框框）
+        for spine in ["top", "right", "left", "bottom"]:
+            ax.spines[spine].set_visible(True)
+            ax.spines[spine].set_linewidth(2.0)
+            ax.spines[spine].set_color("#333333")
         
         # 网格 - 减少刻度
         from matplotlib.ticker import MaxNLocator
         ax.yaxis.set_major_locator(MaxNLocator(nbins=5)) # Reduce ticks
-        ax.yaxis.grid(True, linestyle='--', alpha=0.3, color='gray')
+        ax.yaxis.grid(True, linestyle="--", alpha=0.25, color="#9AA0A6", dashes=(3, 3))
         ax.set_axisbelow(True)
 
         # 调整Y轴刻度字体
-        ax.tick_params(axis='y', labelsize=28, width=2.5, length=10)
-        ax.tick_params(axis='x', width=2.5, length=10)
+        ax.tick_params(axis="y", labelsize=24, width=2.0, length=8)
+        ax.tick_params(axis="x", width=2.0, length=8)
         
         # 强制设置Y轴刻度为粗体
         plt.setp(ax.get_yticklabels(), fontweight="bold")
+
+        # 0 基线（便于区分正负）
+        ax.axhline(0, color="#666666", linewidth=1.2, alpha=0.6, zorder=1)
+
+        # 柱顶数值标注
+        ymin, ymax = ax.get_ylim()
+        offset = 0.03 * (ymax - ymin)
+        for rect, mean in zip(bars, means):
+            if not np.isfinite(mean):
+                continue
+            y = mean + offset if mean >= 0 else mean - offset
+            va = "bottom" if mean >= 0 else "top"
+            ax.text(rect.get_x() + rect.get_width() / 2, y, f"{mean:,.0f}",
+                    ha="center", va=va, fontsize=14, fontweight="bold", color="#333333",
+                    bbox=dict(facecolor="white", alpha=0.6, edgecolor="none", pad=1.2))
 
         # 保存
         plt.tight_layout()

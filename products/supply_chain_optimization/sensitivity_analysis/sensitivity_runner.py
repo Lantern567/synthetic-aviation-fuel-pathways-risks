@@ -16,6 +16,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# 各模型 src 父目录（用于解析内部 `from src.xxx` 相对导入）
+_SRC_PARENT_DIRS = [
+    PROJECT_ROOT / "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization",
+    PROJECT_ROOT / "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization",
+    PROJECT_ROOT / "products/supply_chain_optimization/coal_hydrogen_saf_optimization",
+    PROJECT_ROOT / "products/supply_chain_optimization/natural_gas_supply_chain_optimization",
+]
+for _d in _SRC_PARENT_DIRS:
+    if str(_d) not in sys.path:
+        sys.path.insert(0, str(_d))
+
 logger = logging.getLogger(__name__)
 
 # 结果保存目录
@@ -131,10 +142,10 @@ def run_single(
         extra_kwargs = dict(scenario_config.get("model_kwargs", {}))
         extra_kwargs.update(overrides)  # dot-notation overrides
 
-        # 加入求解器参数
-        extra_kwargs["gurobi_threads"] = gurobi_threads
-        extra_kwargs["time_limit"] = time_limit_s
-        extra_kwargs["mip_gap"] = mip_gap
+        # 加入求解器参数（用dot-notation覆盖config['solver_parameters']）
+        extra_kwargs["solver_parameters.TimeLimit"] = time_limit_s
+        extra_kwargs["solver_parameters.MIPGap"] = mip_gap
+        extra_kwargs["solver_parameters.Threads"] = gurobi_threads
 
         # 动态log_subdir，避免并行运行互相覆盖
         log_subdir = scenario_config.get("log_subdir", "sensitivity/unknown")
@@ -148,7 +159,13 @@ def run_single(
             **extra_kwargs
         )
 
-        # 对NG价格场景，额外强制覆盖管道价格
+        # 加载数据（必须在 set_ng_price_override 之前，否则 ng_pipeline_sources 为空）
+        if hasattr(optimizer, "load_data_from_excel"):
+            optimizer.load_data_from_excel(airport_excel_path=None)
+        elif hasattr(optimizer, "load_data"):
+            optimizer.load_data()
+
+        # 对NG价格场景，额外强制覆盖管道价格（在数据加载之后，此时 ng_pipeline_sources 已填充）
         if param_config.get("use_ng_override"):
             if isinstance(param_value, tuple):
                 ng_price = param_value[0]
@@ -157,23 +174,20 @@ def run_single(
             if hasattr(optimizer, "set_ng_price_override"):
                 optimizer.set_ng_price_override(ng_price)
 
-        # 加载数据
-        if hasattr(optimizer, "load_data_from_excel"):
-            optimizer.load_data_from_excel(airport_excel_path=None)
-        elif hasattr(optimizer, "load_data"):
-            optimizer.load_data()
-
         # 构建模型
         optimizer.build_model()
 
         # 求解
         solution = optimizer.solve()
 
-        if solution is None or solution.get("status") in ("infeasible", None):
-            result["status"] = solution.get("status", "no_solution") if solution else "no_solution"
-            logger.warning(f"[{run_id}] 无可行解: {result['status']}")
+        opt_status = solution.get("optimization_status") if solution else None
+        # Gurobi状态码: 2=OPTIMAL, 9=TIME_LIMIT(有可行解), 13=SUBOPTIMAL
+        FEASIBLE_STATUSES = (2, 9, 13)
+        if solution is None or opt_status not in FEASIBLE_STATUSES:
+            result["status"] = f"no_solution_gurobi_{opt_status}" if solution else "no_solution"
+            logger.warning(f"[{run_id}] 无可行解: status={result['status']}, opt_status={opt_status}")
         else:
-            result["status"] = "optimal" if solution.get("optimization_status") == 2 else "feasible"
+            result["status"] = "optimal" if opt_status == 2 else "feasible"
             result["lco_per_kg"] = solution.get("lifecycle_levelized_cost_per_kg")
             result["lco_excluding_shortage_per_kg"] = solution.get(
                 "lifecycle_levelized_cost_excluding_shortage_per_kg"

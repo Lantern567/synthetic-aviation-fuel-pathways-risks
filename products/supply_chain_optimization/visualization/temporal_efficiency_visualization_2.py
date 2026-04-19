@@ -108,15 +108,15 @@ class TemporalEfficiencyVisualizer:
             'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json',
             'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_*.csv',
         },
-        'GTL-BH-MTJ': {
-            'name_cn': '副产品氢气的气转液 – MTJ',
-            'abbr': 'GTL-BH-MTJ',
+        'GTL-BH': {
+            'name_cn': 'GTL-BH',
+            'abbr': 'GTL-BH',
             'description': 'Natural gas-to-liquid process enhanced by industrial by-product hydrogen (MTJ).',
             'category': 'Blue',
             'pathway': 'Two-Step',
             'color': '#1976D2',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/hourly_production_summary_*.csv',
         },
         'DAC-BH-MTJ': {
             'name_cn': '利用副产品氢气直接捕获 – MTJ',
@@ -138,20 +138,20 @@ class TemporalEfficiencyVisualizer:
             'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json',
             'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_*.csv',
         },
-        'GTL-GH-MTJ': {
-            'name_cn': '采用绿氢集成的气制液 – MTJ',
-            'abbr': 'GTL-GH-MTJ',
+        'GTL-GH': {
+            'name_cn': 'GTL-GH',
+            'abbr': 'GTL-GH',
             'description': 'Natural gas-to-liquid process integrated with low-carbon hydrogen via Methanol-to-Jet.',
             'category': 'Blue',
             'pathway': 'Two-Step',
             'color': '#64B5F6',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_*.csv',
         },
-        'GTL-GH-FT': {
-            'name_cn': '通过绿氢集成进行气制油 – FT',
-            'abbr': 'GTL-GH-FT',
-            'description': 'Natural gas-to-liquid process integrated with low-carbon hydrogen via Fischer-Tropsch.',
+        'GTL': {
+            'name_cn': 'GTL',
+            'abbr': 'GTL',
+            'description': 'Natural gas-to-liquid via Fischer-Tropsch.',
             'category': 'Blue',
             'pathway': 'One-Step',
             'color': '#90CAF9',
@@ -167,8 +167,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'Two-Step',
             'color': '#1B5E20', # Green Dark
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
         },
         'DAC-GH-FT': {
             'name_cn': '使用绿色氢气直接捕获 – FT',
@@ -177,8 +177,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'One-Step',
             'color': '#2E7D32',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
         },
         'CCU-GH-MTJ': {
             'name_cn': '碳捕获与绿色氢利用 – MTJ',
@@ -187,8 +187,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'Two-Step',
             'color': '#388E3C',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hourly_production_summary_*.csv',
         },
         'CCU-GH-FT': {
             'name_cn': '碳捕获和绿色氢利用 – FT',
@@ -197,8 +197,8 @@ class TemporalEfficiencyVisualizer:
             'category': 'Green',
             'pathway': 'One-Step',
             'color': '#4CAF50',
-            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_*.json',
-            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
+            'solution_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_*.json',
+            'hourly_pattern': PROJECT_ROOT / 'products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hourly_production_summary_*.csv',
         },
     }
 
@@ -906,9 +906,9 @@ class TemporalEfficiencyVisualizer:
             'CTL': 'Grey',
             'CTL-BH': 'Grey',
 
-            'GTL-BH-MTJ': 'Blue-GTL',
-            'GTL-GH-MTJ': 'Blue-GTL',
-            'GTL-GH-FT': 'Blue-GTL',
+            'GTL-BH': 'Blue-GTL',
+            'GTL-GH': 'Blue-GTL',
+            'GTL': 'Blue-GTL',
 
             'DAC-BH-MTJ': 'Blue-DAC-BH',
             'DAC-BH-FT': 'Blue-DAC-BH',

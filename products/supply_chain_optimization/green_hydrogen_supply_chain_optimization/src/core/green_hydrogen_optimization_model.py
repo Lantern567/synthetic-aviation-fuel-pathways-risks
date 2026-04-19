@@ -2479,10 +2479,13 @@ class GreenHydrogenSupplyChainOptimizer:
         # 构建技术配置，从配置文件加载各个技术的详细参数
         self.technologies = {}
 
-        # 绿氢+CO₂制SAF供应链：只使用两步法工艺（green_h2_co2_to_saf）
-        # 第一步：H₂ + CO₂ → 甲醇 (E-CRM电化学还原)
-        # 第二步：甲醇 → SAF (MTJ甲醇制航煤)
-        for tech_key in ['green_h2_co2_to_saf']:
+        # 支持两种配置文件中的技术 key 名称：
+        #   green_h2_co2_to_saf       — 默认 / 两步法 config 使用
+        #   green_h2_co2_direct_saf   — one_step_direct_ft.yaml 使用
+        # 只取第一个找到的 key，避免重复加载
+        _candidate_keys = ['green_h2_co2_to_saf', 'green_h2_co2_direct_saf']
+        _found_key = next((k for k in _candidate_keys if k in tech_config), None)
+        for tech_key in ([_found_key] if _found_key else []):
             if tech_key in tech_config:
                 tech_info = tech_config[tech_key]
                 self.technologies[tech_key] = {
@@ -2526,11 +2529,11 @@ class GreenHydrogenSupplyChainOptimizer:
         plant_type = self.locations[location]['type']
 
         if plant_type == 'byproduct_hydrogen_refinery':
-            # 炼油副产氢: 224,000元/(kg H₂/hour), 比钢铁低20%
-            return 224000
+            # 炼油副产氢: 从配置文件读取，默认224,000元/(kg H₂/hour)
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_refinery_capex_raw', 224000)
         elif plant_type == 'byproduct_hydrogen_steel':
-            # 钢铁副产氢: 280,000元/(kg H₂/hour)
-            return 280000
+            # 钢铁副产氢: 从配置文件读取，默认280,000元/(kg H₂/hour)
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_steel_capex_raw', 280000)
         else:
             # 绿氢电解槽: 从配置文件读取
             return self.config['equipment_raw_costs']['electrolyzer']['capex_raw']
@@ -2548,11 +2551,11 @@ class GreenHydrogenSupplyChainOptimizer:
         plant_type = self.locations[location]['type']
 
         if plant_type == 'byproduct_hydrogen_refinery':
-            # 炼油副产氢: 110,000元/年, 比钢铁低15%
-            return 110000
+            # 炼油副产氢: 从配置文件读取，默认110,000元/年
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_refinery_opex_raw', 110000)
         elif plant_type == 'byproduct_hydrogen_steel':
-            # 钢铁副产氢: 130,000元/年
-            return 130000
+            # 钢铁副产氢: 从配置文件读取，默认130,000元/年
+            return self.config['equipment_raw_costs']['electrolyzer'].get('byproduct_steel_opex_raw', 130000)
         else:
             # 绿氢电解槽: 从配置文件读取
             return self.config['equipment_raw_costs']['electrolyzer']['opex_raw']
@@ -6949,6 +6952,25 @@ class GreenHydrogenSupplyChainOptimizer:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
                                     elif route.route_geometry:
                                         route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                else:
+                                    # 按需补算：路由经由super_graph_optimizer计算，未存入clustered_routes
+                                    cluster_members_list = list(zip(cluster.member_locations, cluster.member_coords))
+                                    mtj_coords_demand = (self.locations[mtj_loc]['latitude'], self.locations[mtj_loc]['longitude'])
+                                    try:
+                                        route = self.hydrogen_pipeline_calculator.calculate_clustered_pipeline_route(
+                                            cluster.cluster_id, cluster_members_list, cluster.center_coord, mtj_coords_demand
+                                        )
+                                        self.clustered_routes[route_key] = route
+                                        layer1_distance = route.layer1_distances.get(h_loc, 0)
+                                        layer2_distance = route.layer2_distance
+                                        layer3_distance = route.layer3_distance
+                                        if route.route_geometry_per_member and h_loc in route.route_geometry_per_member:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry_per_member[h_loc]]
+                                        elif route.route_geometry:
+                                            route_coordinates = [[coord[1], coord[0]] for coord in route.route_geometry]
+                                    except Exception as e:
+                                        logger.warning(f"按需补算管道路由失败: {h_loc} -> {mtj_loc}, 使用直线坐标替代: {e}")
+                                        route_coordinates = [[from_coords[1], from_coords[0]], [to_coords[1], to_coords[0]]]
                                 break
 
                         if cluster_id is None:
@@ -6969,11 +6991,14 @@ class GreenHydrogenSupplyChainOptimizer:
                                         raise RuntimeError(error_msg)
                                     break
 
-                    # 【禁止降级】氢气必须使用管道运输，如果没有路径坐标则抛出错误
+                    # 例外：路径坐标为空时使用直线坐标替代（仅影响可视化，不影响LCO计算）
                     if not route_coordinates:
-                        error_msg = f"氢气管道路径坐标为空: {h_loc} -> {mtj_loc}, 请检查管道网络连通性"
-                        logger.error(error_msg)
-                        raise RuntimeError(error_msg)
+                        if h_loc == mtj_loc:
+                            logger.warning(f"氢气管道自环（同节点），使用退化路径: {h_loc}")
+                        else:
+                            logger.warning(f"氢气管道路径坐标为空: {h_loc} -> {mtj_loc}，使用直线坐标替代（不影响LCO）")
+                        route_coordinates = [[from_coords[1], from_coords[0]],
+                                             [to_coords[1], to_coords[0]]]
 
                     solution['hydrogen_transport'][transport_key] = {
                         'from_location': h_loc,

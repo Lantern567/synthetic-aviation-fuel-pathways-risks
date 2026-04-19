@@ -164,7 +164,7 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
         "description": "CCU+绿氢一步法FT（电解水制氢）",
         "model_module": "products.supply_chain_optimization.green_hydrogen_supply_chain_optimization.src.core.green_hydrogen_optimization_model",
         "model_class": "GreenHydrogenSupplyChainOptimizer",
-        "config_path": _cfg("shared/data/GreenHydrogenSupplyChainOptimizer_config_one_step_direct_ft.yaml"),
+        "config_path": _cfg("shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml"),  # 与主结果一致（h2_ratio=0.45）
         "model_kwargs": {"process_mode": "one_step"},
         "log_subdir": "sensitivity/ccu_gh_ft",
         "sensitivity_params": {
@@ -189,7 +189,12 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
         "sensitivity_params": {
             "bh_capex": {
                 "values": BH_CAPEX_VALUES,
-                "config_key": "equipment_raw_costs.electrolyzer.capex_raw",
+                # 同步扫描钢铁+炼油两类副产氢PSA设备CAPEX（与GTL-BH一致）
+                "config_key": [
+                    "equipment_raw_costs.electrolyzer.byproduct_steel_capex_raw",
+                    "equipment_raw_costs.electrolyzer.byproduct_refinery_capex_raw",
+                ],
+                "scale_factors": [1.0, 224000/280000],  # 炼油=钢铁×(224k/280k)
                 "label": "副产氢PSA设备CAPEX (元/(kg/h))",
             }
         }
@@ -205,7 +210,11 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
         "sensitivity_params": {
             "bh_capex": {
                 "values": BH_CAPEX_VALUES,
-                "config_key": "equipment_raw_costs.electrolyzer.capex_raw",
+                "config_key": [
+                    "equipment_raw_costs.electrolyzer.byproduct_steel_capex_raw",
+                    "equipment_raw_costs.electrolyzer.byproduct_refinery_capex_raw",
+                ],
+                "scale_factors": [1.0, 224000/280000],
                 "label": "副产氢PSA设备CAPEX (元/(kg/h))",
             }
         }
@@ -276,7 +285,11 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
             },
             "bh_capex": {
                 "values": BH_CAPEX_VALUES,
-                "config_key": "equipment_raw_costs.electrolyzer.capex_raw",
+                "config_key": [
+                    "equipment_raw_costs.electrolyzer.byproduct_steel_capex_raw",
+                    "equipment_raw_costs.electrolyzer.byproduct_refinery_capex_raw",
+                ],
+                "scale_factors": [1.0, 224000/280000],
                 "label": "副产氢PSA设备CAPEX (元/(kg/h))",
             }
         }
@@ -297,7 +310,11 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
             },
             "bh_capex": {
                 "values": BH_CAPEX_VALUES,
-                "config_key": "equipment_raw_costs.electrolyzer.capex_raw",
+                "config_key": [
+                    "equipment_raw_costs.electrolyzer.byproduct_steel_capex_raw",
+                    "equipment_raw_costs.electrolyzer.byproduct_refinery_capex_raw",
+                ],
+                "scale_factors": [1.0, 224000/280000],
                 "label": "副产氢PSA设备CAPEX (元/(kg/h))",
             }
         }

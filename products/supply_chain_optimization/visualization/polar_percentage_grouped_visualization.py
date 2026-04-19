@@ -86,16 +86,16 @@ class GroupedPolarPercentageVisualizer:
                     'full_name': 'DAC with By-product H2 – FT',
                     'solution_pattern': str(project_root / 'products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_*.json')
                 }),
-                ('GTL-BH-MTJ', {
-                    'full_name': 'GTL with By-product H2 – MTJ',
+                ('GTL-BH', {
+                    'full_name': 'GTL-BH',
                     'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_*.json')
                 }),
-                ('GTL-GH-MTJ', {
-                    'full_name': 'GTL with Green H2 – MTJ',
+                ('GTL-GH', {
+                    'full_name': 'GTL-GH',
                     'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_*.json')
                 }),
-                ('GTL-GH-FT', {
-                    'full_name': 'GTL with Green H2 – FT',
+                ('GTL', {
+                    'full_name': 'GTL',
                     'solution_pattern': str(project_root / 'products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_*.json')
                 }),
             ])),

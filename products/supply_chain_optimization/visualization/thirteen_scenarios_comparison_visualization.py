@@ -28,8 +28,8 @@ Thirteen Scenarios Comparison Visualization Script
 13. 副产氢+工业CO₂一步法 (Byproduct H2 One-Step)
 
 注意 | Note:
-- 天然气一步法不包含副产氢场景，因为一步法不需要绿氢，无法进行副产氢化
-- Natural Gas One-Step does not have a byproduct hydrogen scenario because it doesn't require green hydrogen
+- 天然气一步法不包含副产氢场景，因为一步法不需要外部氢气
+- Natural Gas One-Step does not have a byproduct hydrogen scenario because it does not require external hydrogen
 
 作者 | Author: Claude Code
 创建时间 | Created: 2025-11-19
@@ -136,7 +136,7 @@ class ThirteenScenariosComparisonVisualizer:
             },
 
             # ========== 副产氢场景 (6个) ==========
-            # 注意：天然气一步法不包含副产氢场景（一步法不需要绿氢，无法副产氢化）
+            # 注意：天然气一步法不包含副产氢场景（一步法不需要外部氢气）
             'Byproduct H2 + Coal': {
                 'name_cn': '副产氢+煤',
                 'color': '#FF6B6B',  # 亮红色
