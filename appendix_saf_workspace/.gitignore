@@ -1,0 +1,10 @@
+# Keep the manuscript, scripts and core outputs; exclude heavy derived artefacts
+figures/
+cache/
+academic-figure.zip
+academic-paper.zip
+word/render_check/
+word/*_backup_*.docx
+word/*_pre_refs_*.docx
+scripts/__pycache__/
+*.pyc
