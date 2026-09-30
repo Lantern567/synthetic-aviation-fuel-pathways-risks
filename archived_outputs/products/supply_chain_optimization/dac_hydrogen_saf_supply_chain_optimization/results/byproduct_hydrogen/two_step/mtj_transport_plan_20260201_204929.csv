@@ -1,0 +1,143 @@
+﻿运输ID,起点,终点,周次,运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+refinery_Hebei Qianhai Refinery_天津_0,refinery_Hebei Qianhai Refinery,天津,0,0.03566641473751475,114.788195,38.360699,117.405885,39.1244,117.3462,MTJ,truck
+refinery_Hebei Qianhai Refinery_天津_3,refinery_Hebei Qianhai Refinery,天津,3,0.03566641473751475,114.788195,38.360699,117.405885,39.1244,117.3462,MTJ,truck
+refinery_Huabei Refinery_北京_1,refinery_Huabei Refinery,北京,1,1.2664713722188032e-08,177.291333,38.733113,116.136531,40.0801,116.5846,MTJ,truck
+refinery_Huabei Refinery_北京_2,refinery_Huabei Refinery,北京,2,2.1330379240680493e-08,177.291333,38.733113,116.136531,40.0801,116.5846,MTJ,truck
+refinery_Huabei Refinery_北京_3,refinery_Huabei Refinery,北京,3,2.367996785324068e-07,177.291333,38.733113,116.136531,40.0801,116.5846,MTJ,truck
+refinery_Huabei Refinery_天津_1,refinery_Huabei Refinery,天津,1,1.2664713722188032e-08,144.855556,38.733113,116.136531,39.1244,117.3462,MTJ,truck
+refinery_Huabei Refinery_天津_2,refinery_Huabei Refinery,天津,2,2.1330379240680493e-08,144.855556,38.733113,116.136531,39.1244,117.3462,MTJ,truck
+refinery_Huabei Refinery_天津_3,refinery_Huabei Refinery,天津,3,2.367996785324068e-07,144.855556,38.733113,116.136531,39.1244,117.3462,MTJ,truck
+refinery_Lianhe Refinery_北京_2,refinery_Lianhe Refinery,北京,2,1.0527287486183926e-08,444.105524,38.097408,118.879765,40.0801,116.5846,MTJ,truck
+refinery_Lianhe Refinery_北京_3,refinery_Lianhe Refinery,北京,3,1.2775558388966608e-08,444.105524,38.097408,118.879765,40.0801,116.5846,MTJ,truck
+refinery_Lianhe Refinery_天津_2,refinery_Lianhe Refinery,天津,2,1.0527287486183926e-08,302.295521,38.097408,118.879765,39.1244,117.3462,MTJ,truck
+refinery_Lianhe Refinery_天津_3,refinery_Lianhe Refinery,天津,3,1.2775558388966608e-08,302.295521,38.097408,118.879765,39.1244,117.3462,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_北京_1,refinery_PetroChina Rosneft Tianjin  Refinery,北京,1,1.5258819985319867e-08,192.18246,38.821201,117.410056,40.0801,116.5846,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_北京_2,refinery_PetroChina Rosneft Tianjin  Refinery,北京,2,2.763481461443008e-07,192.18246,38.821201,117.410056,40.0801,116.5846,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_北京_3,refinery_PetroChina Rosneft Tianjin  Refinery,北京,3,2.763481461443008e-07,192.18246,38.821201,117.410056,40.0801,116.5846,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_天津_1,refinery_PetroChina Rosneft Tianjin  Refinery,天津,1,1.5258819985319867e-08,51.558561999999995,38.821201,117.410056,39.1244,117.3462,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_天津_2,refinery_PetroChina Rosneft Tianjin  Refinery,天津,2,2.763481461443008e-07,51.558561999999995,38.821201,117.410056,39.1244,117.3462,MTJ,truck
+refinery_PetroChina Rosneft Tianjin  Refinery_天津_3,refinery_PetroChina Rosneft Tianjin  Refinery,天津,3,2.763481461443008e-07,51.558561999999995,38.821201,117.410056,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Beijing Refinery_北京_1,refinery_Sinopec Beijing Refinery,北京,1,1.2824557416024624e-08,68.84913,39.72377,116.083453,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Beijing Refinery_北京_2,refinery_Sinopec Beijing Refinery,北京,2,2.567685442045332e-07,68.84913,39.72377,116.083453,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Beijing Refinery_北京_3,refinery_Sinopec Beijing Refinery,北京,3,2.567685442045332e-07,68.84913,39.72377,116.083453,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Beijing Refinery_天津_1,refinery_Sinopec Beijing Refinery,天津,1,1.2824557416024624e-08,151.38819099999998,39.72377,116.083453,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Beijing Refinery_天津_2,refinery_Sinopec Beijing Refinery,天津,2,2.567685442045332e-07,151.38819099999998,39.72377,116.083453,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Beijing Refinery_天津_3,refinery_Sinopec Beijing Refinery,天津,3,2.567685442045332e-07,151.38819099999998,39.72377,116.083453,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Shijiazhuang Refinery_北京_0,refinery_Sinopec Shijiazhuang Refinery,北京,0,0.00816417101028084,322.99554,37.978178,114.67409,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Tianjin Refinery_北京_1,refinery_Sinopec Tianjin Refinery,北京,1,1.707826413621661e-08,190.65340700000002,38.972631,117.741279,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Tianjin Refinery_北京_2,refinery_Sinopec Tianjin Refinery,北京,2,3.1145464163273584e-07,190.65340700000002,38.972631,117.741279,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Tianjin Refinery_北京_3,refinery_Sinopec Tianjin Refinery,北京,3,3.1145464163273584e-07,190.65340700000002,38.972631,117.741279,40.0801,116.5846,MTJ,truck
+refinery_Sinopec Tianjin Refinery_天津_1,refinery_Sinopec Tianjin Refinery,天津,1,1.707826413621661e-08,46.006116999999996,38.972631,117.741279,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Tianjin Refinery_天津_2,refinery_Sinopec Tianjin Refinery,天津,2,3.1145464163273584e-07,46.006116999999996,38.972631,117.741279,39.1244,117.3462,MTJ,truck
+refinery_Sinopec Tianjin Refinery_天津_3,refinery_Sinopec Tianjin Refinery,天津,3,3.1145464163273584e-07,46.006116999999996,38.972631,117.741279,39.1244,117.3462,MTJ,truck
+refinery_Wudi Xinyue Refinery_北京_1,refinery_Wudi Xinyue Refinery,北京,1,1.0298663255525756e-08,294.585635,38.095197,117.762038,40.0801,116.5846,MTJ,truck
+refinery_Wudi Xinyue Refinery_北京_2,refinery_Wudi Xinyue Refinery,北京,2,1.7465481505496434e-08,294.585635,38.095197,117.762038,40.0801,116.5846,MTJ,truck
+refinery_Wudi Xinyue Refinery_北京_3,refinery_Wudi Xinyue Refinery,北京,3,1.7554702935740357e-07,294.585635,38.095197,117.762038,40.0801,116.5846,MTJ,truck
+refinery_Wudi Xinyue Refinery_天津_1,refinery_Wudi Xinyue Refinery,天津,1,1.0298663255525756e-08,151.80385800000002,38.095197,117.762038,39.1244,117.3462,MTJ,truck
+refinery_Wudi Xinyue Refinery_天津_2,refinery_Wudi Xinyue Refinery,天津,2,1.7465481505496434e-08,151.80385800000002,38.095197,117.762038,39.1244,117.3462,MTJ,truck
+refinery_Wudi Xinyue Refinery_天津_3,refinery_Wudi Xinyue Refinery,天津,3,1.7554702935740357e-07,151.80385800000002,38.095197,117.762038,39.1244,117.3462,MTJ,truck
+refinery_Yatong Refinery_北京_3,refinery_Yatong Refinery,北京,3,1.1976680980296812e-08,443.057576,38.086922,118.879533,40.0801,116.5846,MTJ,truck
+refinery_Yatong Refinery_天津_3,refinery_Yatong Refinery,天津,3,1.1976680980296812e-08,301.247573,38.086922,118.879533,39.1244,117.3462,MTJ,truck
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd_天津_0,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,0,160000.0,135.488177,38.289221,117.814367,39.1244,117.3462,MTJ,truck
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd_天津_3,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,3,160000.0,135.488177,38.289221,117.814367,39.1244,117.3462,MTJ,truck
+steel_Chengde Iron and Steel Group Co Ltd_北京_0,steel_Chengde Iron and Steel Group Co Ltd,北京,0,1505594.8707780836,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Iron and Steel Group Co Ltd_北京_1,steel_Chengde Iron and Steel Group Co Ltd,北京,1,1505594.870778083,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Iron and Steel Group Co Ltd_北京_2,steel_Chengde Iron and Steel Group Co Ltd,北京,2,1505594.8707780845,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Iron and Steel Group Co Ltd_北京_3,steel_Chengde Iron and Steel Group Co Ltd,北京,3,1505594.8707780836,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_北京_0,steel_Chengde Jianlong Special Steel Co Ltd,北京,0,406952.6723260272,140.279606,40.515035,117.596071,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_北京_1,steel_Chengde Jianlong Special Steel Co Ltd,北京,1,406952.67232602765,140.279606,40.515035,117.596071,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_北京_2,steel_Chengde Jianlong Special Steel Co Ltd,北京,2,406952.6723260293,140.279606,40.515035,117.596071,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_北京_3,steel_Chengde Jianlong Special Steel Co Ltd,北京,3,406952.6723260271,140.279606,40.515035,117.596071,40.0801,116.5846,MTJ,truck
+steel_Hbis Laoting Steel Co Ltd_北京_0,steel_Hbis Laoting Steel Co Ltd,北京,0,5.332876753527676e-07,285.330314,39.257823,119.033567,40.0801,116.5846,MTJ,truck
+steel_Hbis Laoting Steel Co Ltd_天津_0,steel_Hbis Laoting Steel Co Ltd,天津,0,5.332876753527676e-07,184.282092,39.257823,119.033567,39.1244,117.3462,MTJ,truck
+steel_Hebei Anfeng Iron and Steel Co Ltd_北京_0,steel_Hebei Anfeng Iron and Steel Co Ltd,北京,0,160000.0,258.52475599999997,39.65849,118.894804,40.0801,116.5846,MTJ,truck
+steel_Hebei Anfeng Iron and Steel Co Ltd_北京_3,steel_Hebei Anfeng Iron and Steel Co Ltd,北京,3,160000.0,258.52475599999997,39.65849,118.894804,40.0801,116.5846,MTJ,truck
+steel_Hebei Donghai Special Steel Co Ltd_北京_0,steel_Hebei Donghai Special Steel Co Ltd,北京,0,2.2094536689110127e-07,212.753584,39.610605,118.474722,40.0801,116.5846,MTJ,truck
+steel_Hebei Donghai Special Steel Co Ltd_天津_0,steel_Hebei Donghai Special Steel Co Ltd,天津,0,2.2094536689110127e-07,148.003076,39.610605,118.474722,39.1244,117.3462,MTJ,truck
+steel_Hebei Huaxi Special Steel Co Ltd_北京_0,steel_Hebei Huaxi Special Steel Co Ltd,北京,0,2.0814513845834902e-07,286.710053,39.260784,119.005925,40.0801,116.5846,MTJ,truck
+steel_Hebei Huaxi Special Steel Co Ltd_天津_0,steel_Hebei Huaxi Special Steel Co Ltd,天津,0,2.0814513845834902e-07,185.66182999999998,39.260784,119.005925,39.1244,117.3462,MTJ,truck
+steel_Hebei Jinxi Iron and Steel Group Co Ltd_北京_0,steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,0,1374463.6126027403,181.755346,40.209844,118.220547,40.0801,116.5846,MTJ,truck
+steel_Hebei Jinxi Iron and Steel Group Co Ltd_北京_1,steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,1,912779.2818904049,181.755346,40.209844,118.220547,40.0801,116.5846,MTJ,truck
+steel_Hebei Jinxi Iron and Steel Group Co Ltd_北京_2,steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,2,1374463.6126027352,181.755346,40.209844,118.220547,40.0801,116.5846,MTJ,truck
+steel_Hebei Jinxi Iron and Steel Group Co Ltd_北京_3,steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,3,1374463.6126027403,181.755346,40.209844,118.220547,40.0801,116.5846,MTJ,truck
+steel_Hebei Rongxin Steel Co Ltd_北京_0,steel_Hebei Rongxin Steel Co Ltd,北京,0,160000.0,217.210475,39.880661,118.558755,40.0801,116.5846,MTJ,truck
+steel_Hebei Rongxin Steel Co Ltd_北京_2,steel_Hebei Rongxin Steel Co Ltd,北京,2,160000.0,217.210475,39.880661,118.558755,40.0801,116.5846,MTJ,truck
+steel_Hebei Rongxin Steel Co Ltd_北京_3,steel_Hebei Rongxin Steel Co Ltd,北京,3,160000.0,217.210475,39.880661,118.558755,40.0801,116.5846,MTJ,truck
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base_北京_0,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,北京,0,2.2984204406384402e-07,239.68312,39.160401,118.429806,40.0801,116.5846,MTJ,truck
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd_北京_0,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,0,160000.0,283.984312,39.270032,119.01376,40.0801,116.5846,MTJ,truck
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd_北京_3,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,3,54178.37658466162,283.984312,39.270032,119.01376,40.0801,116.5846,MTJ,truck
+steel_Hebei Xinda Iron and Steel Group Co Ltd_北京_0,steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,0,160000.0,218.869789,39.898362,118.579364,40.0801,116.5846,MTJ,truck
+steel_Hebei Xinda Iron and Steel Group Co Ltd_北京_2,steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,2,160000.0,218.869789,39.898362,118.579364,40.0801,116.5846,MTJ,truck
+steel_Hebei Xinda Iron and Steel Group Co Ltd_北京_3,steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,3,160000.0,218.869789,39.898362,118.579364,40.0801,116.5846,MTJ,truck
+steel_Hebei Yanshan Iron and Steel Group Co Ltd_北京_0,steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,0,160000.0,220.770709,39.925508,118.672757,40.0801,116.5846,MTJ,truck
+steel_Hebei Yanshan Iron and Steel Group Co Ltd_北京_2,steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,2,160000.0,220.770709,39.925508,118.672757,40.0801,116.5846,MTJ,truck
+steel_Hebei Yanshan Iron and Steel Group Co Ltd_北京_3,steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,3,160000.0,220.770709,39.925508,118.672757,40.0801,116.5846,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_北京_0,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,0,324671.1880305507,205.45492800000002,39.222566,118.094201,40.0801,116.5846,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_北京_2,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,2,1467332.7756164365,205.45492800000002,39.222566,118.094201,40.0801,116.5846,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_北京_3,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,3,324671.18802938575,205.45492800000002,39.222566,118.094201,40.0801,116.5846,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_0,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,0,1142661.5875858865,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_1,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,1,1462661.6232548126,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_3,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,3,1142661.5875870513,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Jingye Iron and Steel Co Ltd_北京_0,steel_Jingye Iron and Steel Co Ltd,北京,0,160000.0,329.931598,38.391372,114.139998,40.0801,116.5846,MTJ,truck
+steel_Lingyuan Iron and Steel Co Ltd_北京_0,steel_Lingyuan Iron and Steel Co Ltd,北京,0,160000.0,353.235119,41.271048,119.41374,40.0801,116.5846,MTJ,truck
+steel_Qian an Jiujiang Wire Co Ltd_北京_0,steel_Qian an Jiujiang Wire Co Ltd,北京,0,1067838.96709893,208.873568,39.952209,118.559444,40.0801,116.5846,MTJ,truck
+steel_Qian an Jiujiang Wire Co Ltd_北京_1,steel_Qian an Jiujiang Wire Co Ltd,北京,1,587838.9670990105,208.873568,39.952209,118.559444,40.0801,116.5846,MTJ,truck
+steel_Qian an Jiujiang Wire Co Ltd_北京_2,steel_Qian an Jiujiang Wire Co Ltd,北京,2,1067838.9670988882,208.873568,39.952209,118.559444,40.0801,116.5846,MTJ,truck
+steel_Qian an Jiujiang Wire Co Ltd_北京_3,steel_Qian an Jiujiang Wire Co Ltd,北京,3,1067838.9670988899,208.873568,39.952209,118.559444,40.0801,116.5846,MTJ,truck
+steel_Qinhuangdao Baigong Steel Co Ltd_北京_0,steel_Qinhuangdao Baigong Steel Co Ltd,北京,0,1.7586262401891888e-07,248.649285,39.748773,118.819472,40.0801,116.5846,MTJ,truck
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd_北京_0,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,0,160000.0,249.917257,39.700721,118.871477,40.0801,116.5846,MTJ,truck
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd_北京_3,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,3,160000.0,249.917257,39.700721,118.871477,40.0801,116.5846,MTJ,truck
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd_北京_0,steel_Shanxi Tongde Xinghua Special Steel Co Ltd,北京,0,160000.0,351.821025,40.183517,113.305462,40.0801,116.5846,MTJ,truck
+steel_Shougang Jingtang United Iron and Steel Co Ltd_天津_0,steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,0,160000.0,152.191947,38.953664,118.50339,39.1244,117.3462,MTJ,truck
+steel_Shougang Jingtang United Iron and Steel Co Ltd_天津_3,steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,3,160000.0,152.191947,38.953664,118.50339,39.1244,117.3462,MTJ,truck
+steel_Shougang Qian an Iron and Steel Co Ltd_北京_0,steel_Shougang Qian an Iron and Steel Co Ltd,北京,0,1458045.8593150696,206.79656,39.976702,118.558788,40.0801,116.5846,MTJ,truck
+steel_Shougang Qian an Iron and Steel Co Ltd_北京_1,steel_Shougang Qian an Iron and Steel Co Ltd,北京,1,978045.8593150757,206.79656,39.976702,118.558788,40.0801,116.5846,MTJ,truck
+steel_Shougang Qian an Iron and Steel Co Ltd_北京_2,steel_Shougang Qian an Iron and Steel Co Ltd,北京,2,1458045.8593150685,206.79656,39.976702,118.558788,40.0801,116.5846,MTJ,truck
+steel_Shougang Qian an Iron and Steel Co Ltd_北京_3,steel_Shougang Qian an Iron and Steel Co Ltd,北京,3,1458045.8593150703,206.79656,39.976702,118.558788,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghai Iron and Steel Group Co Ltd_北京_0,steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,0,160000.0,226.14307699999998,39.748373,118.624794,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghai Iron and Steel Group Co Ltd_北京_2,steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,2,160000.0,226.14307699999998,39.748373,118.624794,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghai Iron and Steel Group Co Ltd_北京_3,steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,3,160000.0,226.14307699999998,39.748373,118.624794,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd_北京_0,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,0,860897.1411369861,207.418195,39.468366,118.256774,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd_北京_1,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,1,380897.141136983,207.418195,39.468366,118.256774,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd_北京_2,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,2,860897.1411369861,207.418195,39.468366,118.256774,40.0801,116.5846,MTJ,truck
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd_北京_3,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,3,860897.1411369861,207.418195,39.468366,118.256774,40.0801,116.5846,MTJ,truck
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd_北京_0,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,0,650084.1410958901,208.327878,39.600956,118.358726,40.0801,116.5846,MTJ,truck
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd_北京_1,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,1,170084.14109589084,208.327878,39.600956,118.358726,40.0801,116.5846,MTJ,truck
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd_北京_2,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,2,650084.14109589,208.327878,39.600956,118.358726,40.0801,116.5846,MTJ,truck
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd_北京_3,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,3,650084.14109589,208.327878,39.600956,118.358726,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_北京_0,steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,0,776757.679446575,167.150278,40.183913,118.073913,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_北京_1,steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,1,776757.6794465746,167.150278,40.183913,118.073913,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_北京_2,steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,2,776757.6794465743,167.150278,40.183913,118.073913,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_北京_3,steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,3,776757.6794465749,167.150278,40.183913,118.073913,40.0801,116.5846,MTJ,truck
+steel_Tangshan Guotang Steel Co Ltd_北京_0,steel_Tangshan Guotang Steel Co Ltd,北京,0,160000.0,280.757088,39.293147,119.046972,40.0801,116.5846,MTJ,truck
+steel_Tangshan Guotang Steel Co Ltd_北京_3,steel_Tangshan Guotang Steel Co Ltd,北京,3,160000.0,280.757088,39.293147,119.046972,40.0801,116.5846,MTJ,truck
+steel_Tangshan Medium Thick Plate Co Ltd_北京_0,steel_Tangshan Medium Thick Plate Co Ltd,北京,0,160000.0,283.980331,39.268452,119.024819,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd_北京_0,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,0,847152.5050109591,209.347008,39.497472,118.272056,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd_北京_1,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,1,37278.709416853046,209.347008,39.497472,118.272056,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd_北京_2,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,2,847152.5050109593,209.347008,39.497472,118.272056,40.0801,116.5846,MTJ,truck
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd_北京_3,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,3,847152.5050109585,209.347008,39.497472,118.272056,40.0801,116.5846,MTJ,truck
+steel_Tangshan Songting Iron and Steel Co Ltd_北京_0,steel_Tangshan Songting Iron and Steel Co Ltd,北京,0,160000.0,217.153541,39.938866,118.576678,40.0801,116.5846,MTJ,truck
+steel_Tangshan Songting Iron and Steel Co Ltd_北京_2,steel_Tangshan Songting Iron and Steel Co Ltd,北京,2,160000.0,217.153541,39.938866,118.576678,40.0801,116.5846,MTJ,truck
+steel_Tangshan Songting Iron and Steel Co Ltd_北京_3,steel_Tangshan Songting Iron and Steel Co Ltd,北京,3,160000.0,217.153541,39.938866,118.576678,40.0801,116.5846,MTJ,truck
+steel_Tangshan Wenfeng Special Steel Co Ltd_北京_0,steel_Tangshan Wenfeng Special Steel Co Ltd,北京,0,160000.0,242.39622200000002,39.146541,118.432261,40.0801,116.5846,MTJ,truck
+steel_Tangshan Wenfeng Special Steel Co Ltd_北京_2,steel_Tangshan Wenfeng Special Steel Co Ltd,北京,2,116694.05141341267,242.39622200000002,39.146541,118.432261,40.0801,116.5846,MTJ,truck
+steel_Tangshan Wenfeng Special Steel Co Ltd_北京_3,steel_Tangshan Wenfeng Special Steel Co Ltd,北京,3,160000.0,242.39622200000002,39.146541,118.432261,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_北京_2,steel_Tianjin Iron and Steel Group Co Ltd,北京,2,180644.36916799267,167.619647,39.031083,117.499246,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_0,steel_Tianjin Iron and Steel Group Co Ltd,天津,0,1021560.7931506856,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_1,steel_Tianjin Iron and Steel Group Co Ltd,天津,1,1021560.7931506863,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_2,steel_Tianjin Iron and Steel Group Co Ltd,天津,2,840916.4239826935,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_3,steel_Tianjin Iron and Steel Group Co Ltd,天津,3,1021560.7931506864,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_北京_0,steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,0,2.9686998459510537e-07,168.65177400000002,39.300258,117.800231,40.0801,116.5846,MTJ,truck
+steel_Tianjin Pipe Corporation_北京_0,steel_Tianjin Pipe Corporation,北京,0,1.0599251254461715e-07,166.1351,39.034002,117.486798,40.0801,116.5846,MTJ,truck
+steel_Tianjin Pipe Corporation_天津_0,steel_Tianjin Pipe Corporation,天津,0,1.0599251254461715e-07,22.400651000000003,39.034002,117.486798,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_0,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,0,802389.5684383556,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_1,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,1,802389.5684383571,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_2,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,2,802389.5684383571,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_3,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,3,802389.5684383571,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+steel_Xinji Aosen Iron and Steel Group Co Ltd_北京_0,steel_Xinji Aosen Iron and Steel Group Co Ltd,北京,0,3.062832547584551e-07,352.534819,37.752351,115.184798,40.0801,116.5846,MTJ,truck
+steel_Xinji Aosen Iron and Steel Group Co Ltd_天津_0,steel_Xinji Aosen Iron and Steel Group Co Ltd,天津,0,3.062832547584551e-07,313.375186,37.752351,115.184798,39.1244,117.3462,MTJ,truck
+airport_北京_北京_0,airport_北京,北京,0,7.79225956648589e-07,5.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+airport_北京_天津_0,airport_北京,天津,0,6.57455530017615e-07,149.89441399999998,40.0801,116.5846,39.1244,117.3462,MTJ,truck
+airport_天津_北京_0,airport_天津,北京,0,7.79225956648589e-07,149.89441399999998,39.1244,117.3462,40.0801,116.5846,MTJ,truck
+airport_天津_天津_0,airport_天津,天津,0,5.324254743754868e-07,5.0,39.1244,117.3462,39.1244,117.3462,MTJ,truck
+airport_天津_天津_3,airport_天津,天津,3,1.250300556421282e-07,0.0,39.1244,117.3462,39.1244,117.3462,MTJ,truck

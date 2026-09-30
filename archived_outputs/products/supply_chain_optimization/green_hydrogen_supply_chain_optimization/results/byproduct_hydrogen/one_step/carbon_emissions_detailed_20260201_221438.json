@@ -1,0 +1,61 @@
+{
+  "detailed": {
+    "saf_facility": 356153.4580151621,
+    "electrolyzer_facility": 8944.493237823699,
+    "methanol_to_saf": 28588518.32082645,
+    "saf_synthesis_energy": 232792220.6124454,
+    "h2_production": 533353694.3768784,
+    "mtj_storage": 240581139.7050736,
+    "h2_storage": 30147364.329568274,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 18490823.626913007,
+    "h2_transport": 18490823.626913007,
+    "mtj_transport": 278886.8427324808,
+    "co2_pipeline_transport": 296236.0088021434,
+    "co2_transport": 296236.0088021434,
+    "co2_utilization_credit": -159108718.03555262
+  },
+  "by_stage": {
+    "raw_material_emissions": 0.0,
+    "facility_emissions": 365097.95125298604,
+    "production_emissions": 794734433.3101841,
+    "storage_emissions": 270728504.03463906,
+    "transport_emissions": 19065946.47844762,
+    "co2_utilization_credit": -159108718.03555262,
+    "total_emissions": 925785263.7389805,
+    "annual_emissions": 12035208428.606104
+  },
+  "total_production_kg": 51050925.5729044,
+  "carbon_intensity_kg": 18.134544150759666,
+  "carbon_intensity_mj": 420.26753535943607,
+  "vs_traditional_jet": 372.2107138870069,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": 331.26753535943607,
+  "vs_corsia": 1300.8917845314536,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 0.0,
+      "percentage": 0.0
+    },
+    "facility_emissions": {
+      "value": 365097.95125298604,
+      "percentage": 0.03943656974820061
+    },
+    "production_emissions": {
+      "value": 794734433.3101841,
+      "percentage": 85.8443598573259
+    },
+    "storage_emissions": {
+      "value": 270728504.03463906,
+      "percentage": 29.24312090918843
+    },
+    "transport_emissions": {
+      "value": 19065946.47844762,
+      "percentage": 2.059435079085807
+    },
+    "co2_utilization_credit": {
+      "value": -159108718.03555262,
+      "percentage": -17.186352415349347
+    }
+  }
+}

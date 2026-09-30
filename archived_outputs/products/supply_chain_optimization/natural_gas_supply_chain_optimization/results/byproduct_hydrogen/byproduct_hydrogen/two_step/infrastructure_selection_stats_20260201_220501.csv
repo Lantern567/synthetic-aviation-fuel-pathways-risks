@@ -1,0 +1,6 @@
+﻿设施类型,选取数量,类型代码
+byproduct_hydrogen_refinery,28,byproduct_hydrogen_refinery
+byproduct_hydrogen_steel,36,byproduct_hydrogen_steel
+机场,2,airport
+LNG接收站,20,lng_terminal
+天然气管道,134,ng_pipeline

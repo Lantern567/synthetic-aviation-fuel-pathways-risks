@@ -1,0 +1,24 @@
+﻿Cluster,MaterialLabel,SAF_Production,Consumption,Count
+0,Natural gas supply,no,no,2
+0,No raw material production,no,yes,2
+0,No raw material production,yes,no,2
+1,CO2 capture,yes,no,12
+1,CO2 capture+H2 production,yes,no,40
+1,H2 production,no,no,10
+1,No raw material production,no,yes,4
+2,CO2 capture,no,no,5
+2,H2 production,no,no,182
+2,H2 production,yes,no,5
+2,Natural gas supply,no,no,2
+2,No raw material production,no,yes,4
+2,No raw material production,yes,no,5
+2,No raw material production,yes,yes,6
+3,CO2 capture,no,no,9
+3,CO2 capture,yes,no,2
+3,CO2 capture+H2 production,no,no,10
+3,CO2 capture+H2 production,yes,no,33
+3,H2 production,no,no,232
+3,H2 production,yes,no,9
+3,No raw material production,no,yes,8
+3,No raw material production,yes,no,1
+3,No raw material production,yes,yes,2

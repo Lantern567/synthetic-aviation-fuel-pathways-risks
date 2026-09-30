@@ -1,0 +1,62 @@
+{
+  "detailed": {
+    "dac_equipment": 1294918.6801122443,
+    "saf_facility": 96563.25222958633,
+    "electrolyzer_facility": 12492.412027319873,
+    "methanol_to_saf": 355177.69511649443,
+    "saf_synthesis_energy": 24304346.567680407,
+    "h2_production": 17610894.049525328,
+    "mtj_storage": 7618858.328320023,
+    "h2_storage": 755665.1405056791,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 27251067.954628743,
+    "co2_pipeline_transport": 585051.6216960105,
+    "co2_truck_transport": 0.0,
+    "h2_transport": 27251067.954628743,
+    "co2_transport": 585051.6216960105,
+    "mtj_transport": 442102.4060912749,
+    "dac_grid_electricity": 0.0,
+    "co2_utilization_credit": -46123770.12971332
+  },
+  "by_stage": {
+    "raw_material_emissions": 1294918.6801122443,
+    "facility_emissions": 109055.66425690624,
+    "production_emissions": 42270418.312323764,
+    "storage_emissions": 8374523.46882567,
+    "transport_emissions": 28278221.982418757,
+    "co2_utilization_credit": -46123770.12971332,
+    "total_emissions": 34203367.97822568,
+    "annual_emissions": 1778575134.867622
+  },
+  "total_production_kg": 14799070.629854182,
+  "carbon_intensity_kg": 2.311183508322961,
+  "carbon_intensity_mj": 53.56161085337105,
+  "vs_traditional_jet": -39.8184147714932,
+  "vs_corsia": 78.53870284457017,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 1294918.6801122443,
+      "percentage": 3.7859390950522966
+    },
+    "facility_emissions": {
+      "value": 109055.66425690624,
+      "percentage": 0.3188448117926063
+    },
+    "production_emissions": {
+      "value": 42270418.312323764,
+      "percentage": 123.58554379566853
+    },
+    "storage_emissions": {
+      "value": 8374523.46882567,
+      "percentage": 24.48449952109103
+    },
+    "transport_emissions": {
+      "value": 28278221.982418757,
+      "percentage": 82.67671768587542
+    },
+    "co2_utilization_credit": {
+      "value": -46123770.12971332,
+      "percentage": -134.85154490948472
+    }
+  }
+}

@@ -1,0 +1,4 @@
+﻿设施ID,位置,技术类型,是否建设,小时产能(kg/h),年产能(kg),实际年产量(kg),产能利用率,位置类型,运输模式
+steel_Tianjin New Tiangang United Special Steel Co Ltd_green_h2_co2_to_saf,steel_Tianjin New Tiangang United Special Steel Co Ltd,green_h2_co2_to_saf,True,34263.269774114364,300146243.22124183,214797262.3494104,0.7156420151861786,byproduct_hydrogen_steel,renewable_h2_pipeline
+steel_Tianjin Rockcheck Steel Group Co Ltd_green_h2_co2_to_saf,steel_Tianjin Rockcheck Steel Group Co Ltd,green_h2_co2_to_saf,True,19563.166576451975,171373339.2097193,149540845.31039858,0.8726027397260255,byproduct_hydrogen_steel,renewable_h2_pipeline
+airport_北京_green_h2_co2_to_saf,airport_北京,green_h2_co2_to_saf,True,34263.26977681544,300146243.24490327,299323924.7702597,0.9972602739726026,airport,renewable_h2_pipeline

@@ -1,0 +1,32 @@
+﻿运输ID,起点,终点,天,氢气运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+refinery_Binyang Refinery_airport_北京_weekly_pipeline,refinery_Binyang Refinery,airport_北京,0,5453.11788,283.58853954875974,37.683837,117.61415,40.0801,116.5846,H2,pipeline
+refinery_CNOOC Dongying Refinery_airport_北京_weekly_pipeline,refinery_CNOOC Dongying Refinery,airport_北京,0,2581.2670800000014,334.20024802040285,38.088644,118.88525,40.0801,116.5846,H2,pipeline
+refinery_Fuyu Refinery_airport_北京_weekly_pipeline,refinery_Fuyu Refinery,airport_北京,0,1022.1409799999989,306.8062960027734,37.888481,118.403848,40.0801,116.5846,H2,pipeline
+refinery_Guangyuan Refinery_airport_北京_weekly_pipeline,refinery_Guangyuan Refinery,airport_北京,0,340.7136600000001,352.3881816632327,37.676005,118.339336,40.0801,116.5846,H2,pipeline
+refinery_Haike Ruilin Refinery_airport_北京_weekly_pipeline,refinery_Haike Ruilin Refinery,airport_北京,0,5111.554560000003,337.018474092383,38.059069,118.873916,40.0801,116.5846,H2,pipeline
+refinery_Haiyue Refinery_airport_北京_weekly_pipeline,refinery_Haiyue Refinery,airport_北京,0,1704.417959999998,310.2785433553925,37.979206,118.455462,40.0801,116.5846,H2,pipeline
+refinery_Hebei Dagang Refinery_airport_北京_weekly_pipeline,refinery_Hebei Dagang Refinery,airport_北京,0,3147.140640000003,200.1756369015991,38.435733,117.378077,40.0801,116.5846,H2,pipeline
+refinery_Hebei Qianhai Refinery_airport_北京_weekly_pipeline,refinery_Hebei Qianhai Refinery,airport_北京,0,15343.160280000018,206.6542514527597,38.360699,117.405885,40.0801,116.5846,H2,pipeline
+refinery_Huabei Refinery_airport_北京_weekly_pipeline,refinery_Huabei Refinery,airport_北京,0,17039.931300000004,186.56353182569543,38.733113,116.136531,40.0801,116.5846,H2,pipeline
+refinery_Hualian Refinery_airport_北京_weekly_pipeline,refinery_Hualian Refinery,airport_北京,0,10564.672440000006,306.5367165625044,37.887633,118.414912,40.0801,116.5846,H2,pipeline
+refinery_Huayu Refinery_airport_北京_weekly_pipeline,refinery_Huayu Refinery,airport_北京,0,3147.140640000004,207.5889213683861,38.490239,117.268074,40.0801,116.5846,H2,pipeline
+refinery_Lianhe Refinery_airport_北京_weekly_pipeline,refinery_Lianhe Refinery,airport_北京,0,7156.686180000001,335.0256856481718,38.097408,118.879765,40.0801,116.5846,H2,pipeline
+refinery_PetroChina Qinhuangdao Refinery_airport_北京_weekly_pipeline,refinery_PetroChina Qinhuangdao Refinery,airport_北京,0,1377.2988600000006,283.25209487925645,39.990302,119.640584,40.0801,116.5846,H2,pipeline
+refinery_PetroChina Rosneft Tianjin  Refinery_airport_北京_weekly_pipeline,refinery_PetroChina Rosneft Tianjin  Refinery,airport_北京,0,22182.07362000001,177.57346334942184,38.821201,117.410056,40.0801,116.5846,H2,pipeline
+refinery_Petrochina Dagang Refinery_airport_北京_weekly_pipeline,refinery_Petrochina Dagang Refinery,airport_北京,0,8519.540819999906,177.57346334942193,38.737926,117.512307,40.0801,116.5846,H2,pipeline
+refinery_Qinhuangdao Far East Refinery_airport_北京_weekly_pipeline,refinery_Qinhuangdao Far East Refinery,airport_北京,0,2164.084020000001,245.12839001815345,39.86328,119.223595,40.0801,116.5846,H2,pipeline
+refinery_Shenchi Refinery_airport_北京_weekly_pipeline,refinery_Shenchi Refinery,airport_北京,0,4430.127239999996,334.9847789840087,38.096965,118.87927,40.0801,116.5846,H2,pipeline
+refinery_Sinopec Beijing Refinery_airport_北京_weekly_pipeline,refinery_Sinopec Beijing Refinery,airport_北京,0,18768.989388085327,58.33907314185444,39.72377,116.083453,40.0801,116.5846,H2,pipeline
+refinery_Sinopec Cangzhou Refinery_airport_北京_weekly_pipeline,refinery_Sinopec Cangzhou Refinery,airport_北京,0,5963.763540000004,202.057247987649,38.338765,116.872577,40.0801,116.5846,H2,pipeline
+refinery_Sinopec Shijiazhuang Refinery_airport_北京_weekly_pipeline,refinery_Sinopec Shijiazhuang Refinery,airport_北京,0,17062.87212,307.5947650148543,37.978178,114.67409,40.0801,116.5846,H2,pipeline
+refinery_Sinopec Tianjin Refinery_airport_北京_weekly_pipeline,refinery_Sinopec Tianjin Refinery,airport_北京,0,23546.627579999997,184.87003402822828,38.972631,117.741279,40.0801,116.5846,H2,pipeline
+refinery_Tianhong 1 Refinery_airport_北京_weekly_pipeline,refinery_Tianhong 1 Refinery,airport_北京,0,8519.54082,335.02405643503926,38.092496,118.893292,40.0801,116.5846,H2,pipeline
+refinery_Tianjin  Refinery_airport_北京_weekly_pipeline,refinery_Tianjin  Refinery,airport_北京,0,2215.0636193841583,119.33165701012896,39.075368,117.002342,40.0801,116.5846,H2,pipeline
+refinery_Wudi Xinyue Refinery_airport_北京_weekly_pipeline,refinery_Wudi Xinyue Refinery,airport_北京,0,13679.526,251.5432240022669,38.095197,117.762038,40.0801,116.5846,H2,pipeline
+refinery_Xinhai  Refinery_airport_北京_weekly_pipeline,refinery_Xinhai  Refinery,airport_北京,0,9834.814499999962,236.66040935507039,38.296875,117.701561,40.0801,116.5846,H2,pipeline
+refinery_Yatong Refinery_airport_北京_weekly_pipeline,refinery_Yatong Refinery,airport_北京,0,6815.972520000002,334.0468375439839,38.086922,118.879533,40.0801,116.5846,H2,pipeline
+refinery_Zhonghai  Refinery_airport_北京_weekly_pipeline,refinery_Zhonghai  Refinery,airport_北京,0,3919.481580000005,308.62626113489534,37.712921,118.171638,40.0801,116.5846,H2,pipeline
+refinery_Zhongjie Refinery_airport_北京_weekly_pipeline,refinery_Zhongjie Refinery,airport_北京,0,4917.832080000002,209.48444973924072,38.465418,117.611834,40.0801,116.5846,H2,pipeline
+steel_Chengde Jianlong Special Steel Co Ltd_airport_北京_weekly_pipeline,steel_Chengde Jianlong Special Steel Co Ltd,airport_北京,0,854600.6117610546,104.5192763061155,40.515035,117.596071,40.0801,116.5846,H2,pipeline
+steel_Tangshan Songting Iron and Steel Co Ltd_airport_北京_weekly_pipeline,steel_Tangshan Songting Iron and Steel Co Ltd,airport_北京,0,628691.7127944981,201.56516793024252,39.938866,118.576678,40.0801,116.5846,H2,pipeline
+steel_Tianjin New Tiangang United Special Steel Co Ltd_airport_北京_weekly_pipeline,steel_Tianjin New Tiangang United Special Steel Co Ltd,airport_北京,0,17046.920288469977,200.9530074885991,39.300258,117.800231,40.0801,116.5846,H2,pipeline

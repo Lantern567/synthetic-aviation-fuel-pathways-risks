@@ -1,0 +1,61 @@
+{
+  "detailed": {
+    "coal_mining": 3675666.6412491607,
+    "coal_transport": 4594583.30156144,
+    "coal_gasification_direct": 13783749.904684398,
+    "coal_gasification_energy": 122399699.15359645,
+    "coal_co2_fugitive": 33632349.76743006,
+    "co2_capture_energy": 13721998.705111472,
+    "saf_facility": 380154.0819561524,
+    "electrolyzer_facility": 16675.91759741207,
+    "methanol_to_saf": 1225222.2137497123,
+    "saf_synthesis_energy": 200511803.67723823,
+    "h2_production": 26035972.04218216,
+    "mtj_storage": 10361593.025153361,
+    "h2_storage": 929861.027842571,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 5901603.298658963,
+    "h2_transport": 5901603.298658963,
+    "mtj_transport": 152485.74756745435,
+    "co2_utilization_credit": 0.0
+  },
+  "by_stage": {
+    "raw_material_emissions": 191808047.47363272,
+    "facility_emissions": 396829.9995535647,
+    "production_emissions": 227772997.93316808,
+    "storage_emissions": 11291454.052995965,
+    "transport_emissions": 6054089.046226422,
+    "co2_utilization_credit": 0.0,
+    "total_emissions": 437323418.50552106,
+    "annual_emissions": 5685204440.571819
+  },
+  "total_production_kg": 51050925.57290544,
+  "carbon_intensity_kg": 8.566415076666589,
+  "carbon_intensity_mj": 198.52642124372161,
+  "vs_traditional_jet": 123.06339465586697,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": 109.52642124372161,
+  "vs_corsia": 561.754737479072,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 191808047.47363272,
+      "percentage": 43.85954178468291
+    },
+    "facility_emissions": {
+      "value": 396829.9995535647,
+      "percentage": 0.09074062416087028
+    },
+    "production_emissions": {
+      "value": 227772997.93316808,
+      "percentage": 52.08342116951885
+    },
+    "storage_emissions": {
+      "value": 11291454.052995965,
+      "percentage": 2.581945895233007
+    },
+    "transport_emissions": {
+      "value": 6054089.046226422,
+      "percentage": 1.3843505264170963
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "detailed": {
+    "dac_equipment": 1942901.1503241605,
+    "saf_facility": 389175.1387898405,
+    "electrolyzer_facility": 56645.52326146837,
+    "methanol_to_saf": 1225222.2137497063,
+    "saf_synthesis_energy": 162029044.21500292,
+    "h2_production": 60750601.43175596,
+    "mtj_storage": 8789371.253818823,
+    "h2_storage": 1931989.3370971156,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 8869657.921437722,
+    "co2_pipeline_transport": 288384.14901699475,
+    "co2_truck_transport": 0.0,
+    "h2_transport": 8869657.921437722,
+    "co2_transport": 288384.14901699475,
+    "mtj_transport": 210076.40504986487,
+    "dac_grid_electricity": 762977757.5808166,
+    "co2_utilization_credit": -159108718.0355541
+  },
+  "by_stage": {
+    "raw_material_emissions": 1942901.1503241605,
+    "facility_emissions": 445820.6620513087,
+    "production_emissions": 986982625.4413319,
+    "storage_emissions": 10721360.590916036,
+    "transport_emissions": 9368118.475504532,
+    "co2_utilization_credit": -159108718.0355541,
+    "total_emissions": 850352108.2845623,
+    "annual_emissions": 11054577407.699345
+  },
+  "total_production_kg": 51050925.57290601,
+  "carbon_intensity_kg": 16.65693812093909,
+  "carbon_intensity_mj": 386.02405842269036,
+  "vs_traditional_jet": 333.73489710414646,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": 297.02405842269036,
+  "vs_corsia": 1186.746861408968,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 1942901.1503241605,
+      "percentage": 0.22848195840234065
+    },
+    "facility_emissions": {
+      "value": 445820.6620513087,
+      "percentage": 0.05242777170867188
+    },
+    "production_emissions": {
+      "value": 986982625.4413319,
+      "percentage": 116.06752259748
+    },
+    "storage_emissions": {
+      "value": 10721360.590916036,
+      "percentage": 1.260814254055831
+    },
+    "transport_emissions": {
+      "value": 9368118.475504532,
+      "percentage": 1.1016752218564008
+    },
+    "co2_utilization_credit": {
+      "value": -159108718.0355541,
+      "percentage": -18.710921803501883
+    }
+  }
+}

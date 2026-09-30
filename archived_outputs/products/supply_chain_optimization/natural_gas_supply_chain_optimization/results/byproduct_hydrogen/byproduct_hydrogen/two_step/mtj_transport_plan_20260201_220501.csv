@@ -1,0 +1,11 @@
+﻿运输ID,起点,终点,周次,运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+steel_Tianjin Iron and Steel Group Co Ltd_北京_0,steel_Tianjin Iron and Steel Group Co Ltd,北京,0,10759848.920977945,167.619647,39.031083,117.499246,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_北京_1,steel_Tianjin Iron and Steel Group Co Ltd,北京,1,5756229.322504992,167.619647,39.031083,117.499246,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_北京_2,steel_Tianjin Iron and Steel Group Co Ltd,北京,2,11512458.64500998,167.619647,39.031083,117.499246,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_北京_3,steel_Tianjin Iron and Steel Group Co Ltd,北京,3,10660788.014850501,167.619647,39.031083,117.499246,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_0,steel_Tianjin Iron and Steel Group Co Ltd,天津,0,3286611.984843936,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_1,steel_Tianjin Iron and Steel Group Co Ltd,天津,1,3286611.984843936,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_2,steel_Tianjin Iron and Steel Group Co Ltd,天津,2,1643305.992421968,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_3,steel_Tianjin Iron and Steel Group Co Ltd,天津,3,3286611.984843936,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_北京_0,steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,0,752609.7240320358,168.65177400000002,39.300258,117.800231,40.0801,116.5846,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_北京_3,steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,3,105848.99857584934,168.65177400000002,39.300258,117.800231,40.0801,116.5846,MTJ,truck

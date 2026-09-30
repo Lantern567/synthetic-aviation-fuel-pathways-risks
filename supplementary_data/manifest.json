@@ -1,0 +1,46 @@
+[
+  {
+    "file": "archived_temporal_mapping_check.csv",
+    "sha256": "58fdbe717f70cb495c01f992dede4b70945288aad28feebcee44d8f85d12293a"
+  },
+  {
+    "file": "carbon_accounting_sensitivity.csv",
+    "sha256": "b3e2a1b0d6a6716791bf833d402c8e72d720e8f3ec3feefd86224780a0ada91a"
+  },
+  {
+    "file": "fixed_dispatch_aggregate_energy_check.csv",
+    "sha256": "efa5decf6c1f2ee75a5d90ad17baa57ce1961412506d7545aa903db1901be736"
+  },
+  {
+    "file": "headline_accounting_ratios.csv",
+    "sha256": "7d502d5ff559ff3430a53fd7af8466974dff8f0600a2a9fa9df7cf232a189197"
+  },
+  {
+    "file": "leave_one_week_out_metrics.csv",
+    "sha256": "b36372eeb19772743189bba5bf73731e39649fdc359c8fd965820b99e7cac7fc"
+  },
+  {
+    "file": "leave_one_week_out_ranges.csv",
+    "sha256": "ab98e264ba6f7e5d61eda228aba8300e7073b368b4478286e60e0fa7758ab327"
+  },
+  {
+    "file": "physical_site_capacity_matching.csv",
+    "sha256": "ff497da0921b193c92d4a62ddb35e0bb59f51750201f7cbe4b04b07e947a1758"
+  },
+  {
+    "file": "solver_run_evidence.csv",
+    "sha256": "ba21dc49d83fcab7ffaa858acdce711d9cf10aa8eccfc532dcbaca07b0c523d1"
+  },
+  {
+    "file": "synthesis_physical_sites.csv",
+    "sha256": "550b86d7fce2ab05d784cf03e14c9399f7619909f0a8d3dfbbddd5737684e7d2"
+  },
+  {
+    "file": "temporal_metrics_verified.csv",
+    "sha256": "34558e15fd921582cc3fe369e94b0dc543edd5a08532f93629752cab2e06cd89"
+  },
+  {
+    "file": "twelve_week_joint_relative_states.csv",
+    "sha256": "c3759d64b7a7a8c8a4717fa717dca2acc074c859659604e360a83a77773ea458"
+  }
+]

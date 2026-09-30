@@ -1,0 +1,10 @@
+work/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.lic
+license.dat
+license.key
+*.pem
+*.pfx

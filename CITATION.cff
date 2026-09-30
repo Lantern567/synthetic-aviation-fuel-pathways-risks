@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "Cite this fixed revision snapshot together with the manuscript."
+title: "Synthetic aviation fuel pathway revision archive"
+version: nexus-r1-20260930
+date-released: 2026-09-30
+type: software
+authors:
+  - family-names: Liao
+    given-names: Junteng
+  - family-names: Zhang
+    given-names: Haoran
+repository-code: "https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks"
+url: "https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks/releases/tag/nexus-r1-20260930"
+abstract: "Current revision snapshot preserving original pathway outputs, scientific source files, supplementary documents and an archive-summary reproduction entry point. Validation is limited to the stated archival and temporal-indexing checks."

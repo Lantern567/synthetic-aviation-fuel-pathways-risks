@@ -1,0 +1,35 @@
+﻿运输ID,起点,终点,周次,运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+steel_Chengde Iron and Steel Group Co Ltd_北京_0,steel_Chengde Iron and Steel Group Co Ltd,北京,0,1505594.8707780817,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_天津_0,steel_Chengde Jianlong Special Steel Co Ltd,天津,0,3.971508704125886e-07,185.88809700000002,40.515035,117.596071,39.1244,117.3462,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_天津_3,steel_Chengde Jianlong Special Steel Co Ltd,天津,3,4.069297574460511e-07,185.88809700000002,40.515035,117.596071,39.1244,117.3462,MTJ,truck
+steel_Hebei Jinxi Iron and Steel Group Co Ltd_天津_0,steel_Hebei Jinxi Iron and Steel Group Co Ltd,天津,0,4.0771556086838293e-07,197.11212700000002,40.209844,118.220547,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_0,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,0,1467332.775616438,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_3,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,3,1467332.7756164377,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd_天津_0,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,天津,0,4.0003214962780523e-07,121.24927000000001,39.468366,118.256774,39.1244,117.3462,MTJ,truck
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd_天津_0,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,天津,0,3.9239239413291264e-07,130.499292,39.600956,118.358726,39.1244,117.3462,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_天津_3,steel_Tangshan Ganglu Iron and Steel Co Ltd,天津,3,4.053581506013875e-07,179.610512,40.183913,118.073913,39.1244,117.3462,MTJ,truck
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd_天津_0,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,天津,0,5.37183950655163e-07,123.178083,39.497472,118.272056,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_0,steel_Tianjin Iron and Steel Group Co Ltd,天津,0,1819279.2092243813,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_1,steel_Tianjin Iron and Steel Group Co Ltd,天津,1,1301345.6430864797,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_2,steel_Tianjin Iron and Steel Group Co Ltd,天津,2,1643305.9924211884,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_3,steel_Tianjin Iron and Steel Group Co Ltd,天津,3,1819279.2092243813,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_天津_0,steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,0,1.5615175167719533e-07,64.788977,39.300258,117.800231,39.1244,117.3462,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_天津_3,steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,3,2.2046012981306952e-07,64.788977,39.300258,117.800231,39.1244,117.3462,MTJ,truck
+steel_Tianjin Pipe Corporation_北京_0,steel_Tianjin Pipe Corporation,北京,0,3.758245189341589e-07,166.1351,39.034002,117.486798,40.0801,116.5846,MTJ,truck
+steel_Tianjin Pipe Corporation_天津_0,steel_Tianjin Pipe Corporation,天津,0,3.8974394556134987e-07,22.400651000000003,39.034002,117.486798,39.1244,117.3462,MTJ,truck
+steel_Tianjin Pipe Corporation_天津_1,steel_Tianjin Pipe Corporation,天津,1,7.794878911226997e-07,22.400651000000003,39.034002,117.486798,39.1244,117.3462,MTJ,truck
+steel_Tianjin Pipe Corporation_天津_2,steel_Tianjin Pipe Corporation,天津,2,7.794878911226997e-07,22.400651000000003,39.034002,117.486798,39.1244,117.3462,MTJ,truck
+steel_Tianjin Pipe Corporation_天津_3,steel_Tianjin Pipe Corporation,天津,3,7.794878911226997e-07,22.400651000000003,39.034002,117.486798,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_北京_0,steel_Tianjin Rockcheck Steel Group Co Ltd,北京,0,3.8954518017891303e-07,175.785214,38.970638,117.495794,40.0801,116.5846,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_0,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,0,3.980239853262906e-07,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+steel_Tianjin Rockcheck Steel Group Co Ltd_天津_3,steel_Tianjin Rockcheck Steel Group Co Ltd,天津,3,6.059999577701099e-07,32.050766,38.970638,117.495794,39.1244,117.3462,MTJ,truck
+airport_北京_北京_0,airport_北京,北京,0,10006863.774232605,5.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+airport_北京_北京_1,airport_北京,北京,1,5756229.322504992,0.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+airport_北京_北京_2,airport_北京,北京,2,11512458.64501011,0.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+airport_北京_北京_3,airport_北京,北京,3,10766637.01342635,0.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+airport_北京_天津_1,airport_北京,天津,1,1985266.3417563955,149.89441399999998,40.0801,116.5846,39.1244,117.3462,MTJ,truck
+co2_source_11_北京_2,co2_source_11,北京,2,6.749923645555988e-07,135.52115700000002,39.1512174,117.0382573,40.0801,116.5846,MTJ,truck
+co2_source_11_天津_0,co2_source_11,天津,0,6.82368408888579e-07,30.36641,39.1512174,117.0382573,39.1244,117.3462,MTJ,truck
+co2_source_11_天津_1,co2_source_11,天津,1,6.808340701758864e-07,30.36641,39.1512174,117.0382573,39.1244,117.3462,MTJ,truck
+co2_source_11_天津_3,co2_source_11,天津,3,6.823684088885799e-07,30.36641,39.1512174,117.0382573,39.1244,117.3462,MTJ,truck
+co2_source_30_北京_0,co2_source_30,北京,0,6.516347639262676e-07,28.872987000000002,39.885741,116.53263,40.0801,116.5846,MTJ,truck

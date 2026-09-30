@@ -1,0 +1,5 @@
+﻿设施类型,选取数量,类型代码
+太阳能发电站,65,solar_plant
+风电场,44,wind_farm
+机场,2,airport
+co2_capture,31,co2_capture

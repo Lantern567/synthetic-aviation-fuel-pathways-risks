@@ -1,0 +1,17 @@
+{
+  "archive_version": "nexus-r1-20260930",
+  "archive_type": "revision_snapshot",
+  "source_repository": "https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks",
+  "source_commit": "35d257cdb51b597ab7a099dcc5ad26ea10eb6664",
+  "source_snapshot_date": "2026-09-29",
+  "archived_results_date": "2026-02-01",
+  "adopted_results": "original Gurobi results",
+  "validation_scope": [
+    "archive integrity",
+    "solver record association",
+    "temporal indexing"
+  ],
+  "complete_physical_validation_certified": false,
+  "solver": "Gurobi 12.0.3",
+  "model_source_files": 301
+}

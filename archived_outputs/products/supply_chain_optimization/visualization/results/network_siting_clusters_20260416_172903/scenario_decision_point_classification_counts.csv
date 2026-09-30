@@ -1,0 +1,55 @@
+﻿Scenario,OfficialName,Cluster,MaterialLabel,SAF_Production,Consumption,Count
+Coal Hydrogen,CTL,2,H2 production,yes,no,2
+Coal Hydrogen,CTL,2,No raw material production,yes,yes,1
+Coal Hydrogen,CTL,2,No raw material production,no,yes,1
+Coal Hydrogen,CTL,2,H2 production,no,no,55
+DAC Two-Step,DAC-GH-MTJ,3,CO2 capture+H2 production,yes,no,28
+DAC Two-Step,DAC-GH-MTJ,3,No raw material production,yes,yes,1
+DAC Two-Step,DAC-GH-MTJ,3,No raw material production,no,yes,1
+DAC Two-Step,DAC-GH-MTJ,3,H2 production,no,no,29
+DAC One-Step,DAC-GH-FT,3,CO2 capture+H2 production,yes,no,5
+DAC One-Step,DAC-GH-FT,3,No raw material production,yes,yes,1
+DAC One-Step,DAC-GH-FT,3,No raw material production,no,yes,1
+DAC One-Step,DAC-GH-FT,3,H2 production,no,no,42
+DAC One-Step,DAC-GH-FT,3,CO2 capture+H2 production,no,no,10
+Natural Gas Two-Step,GTL-GH,2,H2 production,yes,no,2
+Natural Gas Two-Step,GTL-GH,2,No raw material production,yes,yes,1
+Natural Gas Two-Step,GTL-GH,2,No raw material production,no,yes,1
+Natural Gas Two-Step,GTL-GH,2,H2 production,no,no,55
+Natural Gas Two-Step,GTL-GH,2,Natural gas supply,no,no,2
+Natural Gas One-Step,GTL,2,No raw material production,yes,yes,2
+Green H2 Two-Step,CCU-GH-MTJ,3,H2 production,yes,no,3
+Green H2 Two-Step,CCU-GH-MTJ,3,No raw material production,no,yes,2
+Green H2 Two-Step,CCU-GH-MTJ,3,H2 production,no,no,54
+Green H2 Two-Step,CCU-GH-MTJ,3,CO2 capture,no,no,3
+Green H2 One-Step,CCU-GH-FT,3,H2 production,yes,no,3
+Green H2 One-Step,CCU-GH-FT,3,No raw material production,no,yes,2
+Green H2 One-Step,CCU-GH-FT,3,H2 production,no,no,54
+Green H2 One-Step,CCU-GH-FT,3,CO2 capture,no,no,3
+Byproduct H2 + Coal,CTL-BH,2,H2 production,yes,no,1
+Byproduct H2 + Coal,CTL-BH,2,No raw material production,yes,yes,1
+Byproduct H2 + Coal,CTL-BH,2,No raw material production,yes,no,1
+Byproduct H2 + Coal,CTL-BH,2,No raw material production,no,yes,1
+Byproduct H2 + Coal,CTL-BH,2,H2 production,no,no,30
+Byproduct H2 + DAC Two-Step,DAC-BH-MTJ,1,CO2 capture+H2 production,yes,no,22
+Byproduct H2 + DAC Two-Step,DAC-BH-MTJ,1,No raw material production,no,yes,2
+Byproduct H2 + DAC Two-Step,DAC-BH-MTJ,1,CO2 capture,yes,no,6
+Byproduct H2 + DAC Two-Step,DAC-BH-MTJ,1,H2 production,no,no,6
+Byproduct H2 + DAC One-Step,DAC-BH-FT,1,CO2 capture+H2 production,yes,no,18
+Byproduct H2 + DAC One-Step,DAC-BH-FT,1,No raw material production,no,yes,2
+Byproduct H2 + DAC One-Step,DAC-BH-FT,1,CO2 capture,yes,no,6
+Byproduct H2 + DAC One-Step,DAC-BH-FT,1,H2 production,no,no,4
+Byproduct H2 + NG Two-Step,GTL-BH,0,No raw material production,yes,no,2
+Byproduct H2 + NG Two-Step,GTL-BH,0,No raw material production,no,yes,2
+Byproduct H2 + NG Two-Step,GTL-BH,0,Natural gas supply,no,no,2
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,H2 production,yes,no,3
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,No raw material production,no,yes,2
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,No raw material production,yes,no,1
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,H2 production,no,no,53
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,CO2 capture,no,no,3
+Byproduct H2 Two-Step,CCU-BH-MTJ,3,CO2 capture,yes,no,2
+Byproduct H2 One-Step,CCU-BH-FT,2,No raw material production,yes,no,4
+Byproduct H2 One-Step,CCU-BH-FT,2,No raw material production,yes,yes,1
+Byproduct H2 One-Step,CCU-BH-FT,2,No raw material production,no,yes,1
+Byproduct H2 One-Step,CCU-BH-FT,2,H2 production,no,no,42
+Byproduct H2 One-Step,CCU-BH-FT,2,CO2 capture,no,no,5

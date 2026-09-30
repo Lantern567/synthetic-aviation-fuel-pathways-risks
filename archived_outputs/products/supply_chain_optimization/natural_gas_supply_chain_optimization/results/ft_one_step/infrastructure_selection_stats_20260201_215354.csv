@@ -1,0 +1,4 @@
+﻿设施类型,选取数量,类型代码
+LNG接收站,20,lng_terminal
+天然气管道,72,ng_pipeline
+机场,2,airport

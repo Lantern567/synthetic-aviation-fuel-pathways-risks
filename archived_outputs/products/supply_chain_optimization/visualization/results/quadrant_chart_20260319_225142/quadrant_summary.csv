@@ -1,0 +1,14 @@
+﻿Scenario,Category,LCOE (CNY/kg),Carbon Diff (g CO2eq/MJ),Production (kt),Quadrant,Pareto Optimal
+CTL,Grey (Coal-based),13.10,109.53,13273.2,IV-Neither,No
+CTL-BH,Grey (Coal-based),12.46,498.41,13273.2,IV-Neither,No
+DAC-GH-MTJ,Green (GH),53.52,-35.44,13273.2,III-Green,No
+DAC-GH-FT,Green (GH),34.05,-115.93,13273.2,III-Green,No
+CCU-GH-MTJ,Green (GH),25.89,-120.55,13273.2,III-Green,No
+CCU-GH-FT,Green (GH),18.56,-130.61,13273.2,III-Green,Yes
+GTL-GH,Blue (BH/NG),9.77,-1.61,13273.2,III-Green,No
+GTL,Blue (BH/NG),6.50,-32.06,13273.2,I-Green&Economic,Yes
+DAC-BH-MTJ,Blue (BH/NG),24.78,694.63,13273.2,IV-Neither,No
+DAC-BH-FT,Blue (BH/NG),18.72,471.34,13273.2,IV-Neither,No
+GTL-BH,Blue (BH/NG),5.23,100.20,13273.2,II-Economic,Yes
+CCU-BH-MTJ,Blue (BH/NG),10.96,483.34,13273.2,IV-Neither,No
+CCU-BH-FT,Blue (BH/NG),9.58,331.27,13273.2,IV-Neither,No

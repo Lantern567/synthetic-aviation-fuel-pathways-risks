@@ -1,0 +1,1808 @@
+[
+  {
+    "path": "model_source/shared/cost_visualization_engine.py",
+    "git_blob_sha1": "8bd5128d07295a2b421118873886e0eee3613a20",
+    "source_commit_blob_sha1": "8bd5128d07295a2b421118873886e0eee3613a20",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/technology_routes_comparison_visualizer.py",
+    "git_blob_sha1": "5074d6deeadb11583e64c8cfa31c54c99409c057",
+    "source_commit_blob_sha1": "5074d6deeadb11583e64c8cfa31c54c99409c057",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/fig_s7b_demand_aircraft.py",
+    "git_blob_sha1": "f9f5bbfd465ab76058cd391544ec67a7f5446f19",
+    "source_commit_blob_sha1": "f9f5bbfd465ab76058cd391544ec67a7f5446f19",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/generate_appendix_docx.py",
+    "git_blob_sha1": "e5356bed325986bcc769623328f55c84d4865754",
+    "source_commit_blob_sha1": "e5356bed325986bcc769623328f55c84d4865754",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/insert_section1_refs.py",
+    "git_blob_sha1": "904e9e2a27af9371144c41bc07f4f5dbd499dffd",
+    "source_commit_blob_sha1": "904e9e2a27af9371144c41bc07f4f5dbd499dffd",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/pareto_three_breakdown_visualization.py",
+    "git_blob_sha1": "3bc39a7efc0a47b17a980bfd71b31a9b050aaad1",
+    "source_commit_blob_sha1": "3bc39a7efc0a47b17a980bfd71b31a9b050aaad1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/preview_map_template.py",
+    "git_blob_sha1": "0ce789214d0d89924b3c1c52aee347bcd1d1fd02",
+    "source_commit_blob_sha1": "0ce789214d0d89924b3c1c52aee347bcd1d1fd02",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/appendix_saf_workspace/scripts/verify_references.py",
+    "git_blob_sha1": "703acb3c9e6d3f3a65af8589605237d706d143a1",
+    "source_commit_blob_sha1": "703acb3c9e6d3f3a65af8589605237d706d143a1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/extract_4_typical_weeks.py",
+    "git_blob_sha1": "f8d1ddbbc71593f15420ab2cc9b2c3ddbb64e8a7",
+    "source_commit_blob_sha1": "f8d1ddbbc71593f15420ab2cc9b2c3ddbb64e8a7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/extract_typical_weeks_data.py",
+    "git_blob_sha1": "3c75436145cc9b2ece6057643df34d32cd036e58",
+    "source_commit_blob_sha1": "3c75436145cc9b2ece6057643df34d32cd036e58",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/filter_100km_12weeks_data.py",
+    "git_blob_sha1": "aa220724806687a1d4a2aef2ea0ddedd733cafe3",
+    "source_commit_blob_sha1": "aa220724806687a1d4a2aef2ea0ddedd733cafe3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/filter_500km_renewable_data.py",
+    "git_blob_sha1": "266fc3bc2a7db504803f6924ea3ff48f02b4253d",
+    "source_commit_blob_sha1": "266fc3bc2a7db504803f6924ea3ff48f02b4253d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/process_2024_flight_data.py",
+    "git_blob_sha1": "dd653c1a06b2e9e4d9fd28e1837251016d5b2113",
+    "source_commit_blob_sha1": "dd653c1a06b2e9e4d9fd28e1837251016d5b2113",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/real_pybada_carbon_calculator.py",
+    "git_blob_sha1": "b91801ecaee5f2d8bc2d66d9e92ebb070a143e7c",
+    "source_commit_blob_sha1": "b91801ecaee5f2d8bc2d66d9e92ebb070a143e7c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/visualize_12weeks_distribution.py",
+    "git_blob_sha1": "786869aeba823a01fe6e4f216264848525a2c22f",
+    "source_commit_blob_sha1": "786869aeba823a01fe6e4f216264848525a2c22f",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/tests/test_weekly_analysis.py",
+    "git_blob_sha1": "f3b6b84bcaee2392734a532af1cf4c68f052a1ab",
+    "source_commit_blob_sha1": "f3b6b84bcaee2392734a532af1cf4c68f052a1ab",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/correct_schedule_calculator.py",
+    "git_blob_sha1": "ae25ab97f33dded81417b76d2dff3ef491ad4fc9",
+    "source_commit_blob_sha1": "ae25ab97f33dded81417b76d2dff3ef491ad4fc9",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/correct_schedule_main.py",
+    "git_blob_sha1": "65e14300c40b8b2a690a613212c0b25d124d76a1",
+    "source_commit_blob_sha1": "65e14300c40b8b2a690a613212c0b25d124d76a1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/data_loader.py",
+    "git_blob_sha1": "fbc9900790ec0f637ccdea89fb1e9ab6ee7a2271",
+    "source_commit_blob_sha1": "fbc9900790ec0f637ccdea89fb1e9ab6ee7a2271",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/filter_capital_binhai_airport.py",
+    "git_blob_sha1": "863f978f826aef0595c410e6751e97c3987e7846",
+    "source_commit_blob_sha1": "863f978f826aef0595c410e6751e97c3987e7846",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/final_correct_calculator.py",
+    "git_blob_sha1": "15f5f6d374818cb8967112106b5f187c9b5221c6",
+    "source_commit_blob_sha1": "15f5f6d374818cb8967112106b5f187c9b5221c6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/final_main.py",
+    "git_blob_sha1": "48b3559ff05c2a970168ed992e5671544a6e4c48",
+    "source_commit_blob_sha1": "48b3559ff05c2a970168ed992e5671544a6e4c48",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/main_processor.py",
+    "git_blob_sha1": "51495203e5fa444d0312daca7ebb72886d7a6c31",
+    "source_commit_blob_sha1": "51495203e5fa444d0312daca7ebb72886d7a6c31",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/results_saver.py",
+    "git_blob_sha1": "178e0054245a6a06036383cc928df7caa0853099",
+    "source_commit_blob_sha1": "178e0054245a6a06036383cc928df7caa0853099",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/schedule_aware_calculator.py",
+    "git_blob_sha1": "d00bb90f93f3ee00dff36566f326c1d32fa1a1b7",
+    "source_commit_blob_sha1": "d00bb90f93f3ee00dff36566f326c1d32fa1a1b7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/schedule_aware_main.py",
+    "git_blob_sha1": "66eac4094de919a6caab58a7ee178de1ec5d0456",
+    "source_commit_blob_sha1": "66eac4094de919a6caab58a7ee178de1ec5d0456",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/aviation_fuel_analysis/resource_flight_data_process/src/weekly_analysis/weekly_calculator.py",
+    "git_blob_sha1": "b4fca0238f87697dd875ec10035286203374c63d",
+    "source_commit_blob_sha1": "b4fca0238f87697dd875ec10035286203374c63d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/analyze_cost_and_power.py",
+    "git_blob_sha1": "5194e05e6ca8235643dfe9254db6b08a92e025de",
+    "source_commit_blob_sha1": "5194e05e6ca8235643dfe9254db6b08a92e025de",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/analyze_cost_and_power_simple.py",
+    "git_blob_sha1": "b55ce03cac6ef8d6719cb1e92ca8f220069637b7",
+    "source_commit_blob_sha1": "b55ce03cac6ef8d6719cb1e92ca8f220069637b7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/clean_ng_code.py",
+    "git_blob_sha1": "02561ad3d4b2133eed28067b568d64f76426cd80",
+    "source_commit_blob_sha1": "02561ad3d4b2133eed28067b568d64f76426cd80",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/debug_province_match.py",
+    "git_blob_sha1": "be12c5468df66aab7a2867e6cc1869e38ac9f75d",
+    "source_commit_blob_sha1": "be12c5468df66aab7a2867e6cc1869e38ac9f75d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/generate_co2_data.py",
+    "git_blob_sha1": "58851d50a66c52041308960b1c7c38a4d5931493",
+    "source_commit_blob_sha1": "58851d50a66c52041308960b1c7c38a4d5931493",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/run_optimizer.py",
+    "git_blob_sha1": "29614a1918433d47a7771ad13a3a5a7dc4279433",
+    "source_commit_blob_sha1": "29614a1918433d47a7771ad13a3a5a7dc4279433",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/visualize_co2_sources.py",
+    "git_blob_sha1": "bde397603c33fc8ad51bc2de028637909b60c3b0",
+    "source_commit_blob_sha1": "bde397603c33fc8ad51bc2de028637909b60c3b0",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/clean_ng_code.py",
+    "git_blob_sha1": "02561ad3d4b2133eed28067b568d64f76426cd80",
+    "source_commit_blob_sha1": "02561ad3d4b2133eed28067b568d64f76426cd80",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/debug_province_match.py",
+    "git_blob_sha1": "be12c5468df66aab7a2867e6cc1869e38ac9f75d",
+    "source_commit_blob_sha1": "be12c5468df66aab7a2867e6cc1869e38ac9f75d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/generate_co2_data.py",
+    "git_blob_sha1": "58851d50a66c52041308960b1c7c38a4d5931493",
+    "source_commit_blob_sha1": "58851d50a66c52041308960b1c7c38a4d5931493",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/run_optimizer.py",
+    "git_blob_sha1": "8248841a0b333466523c606bbbc8d87415aa6788",
+    "source_commit_blob_sha1": "8248841a0b333466523c606bbbc8d87415aa6788",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/visualize_co2_sources.py",
+    "git_blob_sha1": "bde397603c33fc8ad51bc2de028637909b60c3b0",
+    "source_commit_blob_sha1": "bde397603c33fc8ad51bc2de028637909b60c3b0",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/learning_curves/generate_lcoe_projection.py",
+    "git_blob_sha1": "11bcfb364c2d0b1055ccfcea86fc351b7c46741b",
+    "source_commit_blob_sha1": "11bcfb364c2d0b1055ccfcea86fc351b7c46741b",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/ajax_based_scraper.py",
+    "git_blob_sha1": "c03f2e4ded58b8a836aca7157c0234441be16d07",
+    "source_commit_blob_sha1": "c03f2e4ded58b8a836aca7157c0234441be16d07",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/browser_based_scraper.py",
+    "git_blob_sha1": "eed58a31ddad4015c3e32356044c61e4aa23e844",
+    "source_commit_blob_sha1": "eed58a31ddad4015c3e32356044c61e4aa23e844",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/complete_scraper.py",
+    "git_blob_sha1": "9337ed88cd89b9f6e21a043c66cb98197097efca",
+    "source_commit_blob_sha1": "9337ed88cd89b9f6e21a043c66cb98197097efca",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/multi_page_scraper.py",
+    "git_blob_sha1": "3309bd9f8d5d4ab7ed5f10b3dec9323c2ea87a4b",
+    "source_commit_blob_sha1": "3309bd9f8d5d4ab7ed5f10b3dec9323c2ea87a4b",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/natural_gas_price_scraper.py",
+    "git_blob_sha1": "17a16cc782dc175ee72c79bd1e0d706bd8ce6513",
+    "source_commit_blob_sha1": "17a16cc782dc175ee72c79bd1e0d706bd8ce6513",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/parallel_scraper.py",
+    "git_blob_sha1": "dc7262fbbb8b67485718d5fc0891bd2e0d91d0c3",
+    "source_commit_blob_sha1": "dc7262fbbb8b67485718d5fc0891bd2e0d91d0c3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/real_data_scraper.py",
+    "git_blob_sha1": "319514b63c65e875df0d6bdc37482e0dfacba73d",
+    "source_commit_blob_sha1": "319514b63c65e875df0d6bdc37482e0dfacba73d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/selenium_scraper.py",
+    "git_blob_sha1": "ea0e2ddaf3cb26b2336c1290785bc5cfc4ca4436",
+    "source_commit_blob_sha1": "ea0e2ddaf3cb26b2336c1290785bc5cfc4ca4436",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/simple_scraper.py",
+    "git_blob_sha1": "651ea18b436b83777a43d7d521d31ca7baef98d6",
+    "source_commit_blob_sha1": "651ea18b436b83777a43d7d521d31ca7baef98d6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_price_scraper/true_selenium_scraper.py",
+    "git_blob_sha1": "daef5e3d5f7cd0baf5407cde1a4d06502a5ff706",
+    "source_commit_blob_sha1": "daef5e3d5f7cd0baf5407cde1a4d06502a5ff706",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/extract_sensitivity_data_fixed.py",
+    "git_blob_sha1": "97b446e66206fa98b23ce034d8ac72711dde7c10",
+    "source_commit_blob_sha1": "97b446e66206fa98b23ce034d8ac72711dde7c10",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/run_byproduct_one_step.py",
+    "git_blob_sha1": "38acf82579870d961995c8dba5f7978afd6a0aef",
+    "source_commit_blob_sha1": "38acf82579870d961995c8dba5f7978afd6a0aef",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/run_byproduct_two_step.py",
+    "git_blob_sha1": "7b0f3c094b4b46079b46194463ca4c8a818d2157",
+    "source_commit_blob_sha1": "7b0f3c094b4b46079b46194463ca4c8a818d2157",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/run_optimization.py",
+    "git_blob_sha1": "348ca7681747ce8fdc18cd1ff5fc37b2006dd7f4",
+    "source_commit_blob_sha1": "348ca7681747ce8fdc18cd1ff5fc37b2006dd7f4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/parallel_executor.py",
+    "git_blob_sha1": "e34581873c23b257962d9b76ab327cbe9b3476fd",
+    "source_commit_blob_sha1": "e34581873c23b257962d9b76ab327cbe9b3476fd",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/result_collector.py",
+    "git_blob_sha1": "507dc3f07d860ed94f6b38a9f5f31a885dfbb8f9",
+    "source_commit_blob_sha1": "507dc3f07d860ed94f6b38a9f5f31a885dfbb8f9",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_all_sensitivity.py",
+    "git_blob_sha1": "fc8fb7cf01285a8132594a8af9c95192b09da1af",
+    "source_commit_blob_sha1": "fc8fb7cf01285a8132594a8af9c95192b09da1af",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_bh_rerun.py",
+    "git_blob_sha1": "92943622de561a73f03e8a2caf958cd4a5a1ac7b",
+    "source_commit_blob_sha1": "92943622de561a73f03e8a2caf958cd4a5a1ac7b",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_group_a_ng_price.py",
+    "git_blob_sha1": "bd219263a5e3425ce670abef6eb35f28d9872302",
+    "source_commit_blob_sha1": "bd219263a5e3425ce670abef6eb35f28d9872302",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_group_b_coal_price.py",
+    "git_blob_sha1": "8428894b09b4876d93c906a44744f3c4957995d3",
+    "source_commit_blob_sha1": "8428894b09b4876d93c906a44744f3c4957995d3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_group_c_green_hydrogen.py",
+    "git_blob_sha1": "cce8fe3beb56fd350847f8283bb7d71f29ed3cb3",
+    "source_commit_blob_sha1": "cce8fe3beb56fd350847f8283bb7d71f29ed3cb3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_group_d_dac.py",
+    "git_blob_sha1": "296ed5553c23d8028c17aa9ef7e256c671f8b931",
+    "source_commit_blob_sha1": "296ed5553c23d8028c17aa9ef7e256c671f8b931",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/run_gtl_bh_capex.py",
+    "git_blob_sha1": "fb9c8917967d4616e10bb93dd20c711953952400",
+    "source_commit_blob_sha1": "fb9c8917967d4616e10bb93dd20c711953952400",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/scenario_registry.py",
+    "git_blob_sha1": "fcbd75ecf3256eefc83c0a0f731174d9448b6ed0",
+    "source_commit_blob_sha1": "fcbd75ecf3256eefc83c0a0f731174d9448b6ed0",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/sensitivity_data_analyzer.py",
+    "git_blob_sha1": "2e4f1333d9e84e650fc0834e2faed23b210f6273",
+    "source_commit_blob_sha1": "2e4f1333d9e84e650fc0834e2faed23b210f6273",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/sensitivity_runner.py",
+    "git_blob_sha1": "d22b8033bc7eacd7e8714ff56af6139b6a742ca2",
+    "source_commit_blob_sha1": "d22b8033bc7eacd7e8714ff56af6139b6a742ca2",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/sensitivity_visualizer.py",
+    "git_blob_sha1": "359382c89f9b2102d59927beabb9f101013f96f6",
+    "source_commit_blob_sha1": "359382c89f9b2102d59927beabb9f101013f96f6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/sensitivity_analysis/__init__.py",
+    "git_blob_sha1": "3a7490276760ee4d19f2c24ea4b92056128e442d",
+    "source_commit_blob_sha1": "3a7490276760ee4d19f2c24ea4b92056128e442d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/byproduct_h2_coal_facility_routes_visualization.py",
+    "git_blob_sha1": "50e65dc7fd2a2a738710c1bbc61219d734b6771e",
+    "source_commit_blob_sha1": "50e65dc7fd2a2a738710c1bbc61219d734b6771e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/carbon_price_cost_emission_visualization.py",
+    "git_blob_sha1": "edad3a4a4c7ddf7d0aa1ae33efbefb1279c8b25a",
+    "source_commit_blob_sha1": "edad3a4a4c7ddf7d0aa1ae33efbefb1279c8b25a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/check_data_completeness.py",
+    "git_blob_sha1": "29466644c90cdd9634f65bc60470ce7e2de6e8b5",
+    "source_commit_blob_sha1": "29466644c90cdd9634f65bc60470ce7e2de6e8b5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/collect_visualization_data.py",
+    "git_blob_sha1": "dfd7e8adb1b640e6b7c1a1f88777d1f5233a66ca",
+    "source_commit_blob_sha1": "dfd7e8adb1b640e6b7c1a1f88777d1f5233a66ca",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/cost_increase_fit_comparison_visualization.py",
+    "git_blob_sha1": "79d47ea52a384c10d91420a3564676381cc7dbbc",
+    "source_commit_blob_sha1": "79d47ea52a384c10d91420a3564676381cc7dbbc",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/cost_increase_group_effect_visualization.py",
+    "git_blob_sha1": "a719c7723b679b0e85a66239a194bd1a8e2e8c07",
+    "source_commit_blob_sha1": "a719c7723b679b0e85a66239a194bd1a8e2e8c07",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/cost_increase_two_group_linear_visualization.py",
+    "git_blob_sha1": "d7cce846195b995e16e1752ce75422a76c595a84",
+    "source_commit_blob_sha1": "d7cce846195b995e16e1752ce75422a76c595a84",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/hourly_utilization_from_inventory.py",
+    "git_blob_sha1": "c4b6b02185722eb6bf374643f3a1a03a5af03cbc",
+    "source_commit_blob_sha1": "c4b6b02185722eb6bf374643f3a1a03a5af03cbc",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/mac_bar_chart_visualization.py",
+    "git_blob_sha1": "7f3e8d9bdd65594f7cdcb75a5c424291b18dfccd",
+    "source_commit_blob_sha1": "7f3e8d9bdd65594f7cdcb75a5c424291b18dfccd",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/marginal_cost_saving_visualization.py",
+    "git_blob_sha1": "45d8597b1bdb6507712c136038abf8b7cb6436d6",
+    "source_commit_blob_sha1": "45d8597b1bdb6507712c136038abf8b7cb6436d6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/market_price_gap_lollipop_visualization.py",
+    "git_blob_sha1": "10fd767ccb4a8b5eb584cb63fef3c184c367174e",
+    "source_commit_blob_sha1": "10fd767ccb4a8b5eb584cb63fef3c184c367174e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/network_classification_metrics_builder.py",
+    "git_blob_sha1": "2b6a0a4679747dd86c6e47f485850d7c7802dcbe",
+    "source_commit_blob_sha1": "2b6a0a4679747dd86c6e47f485850d7c7802dcbe",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/network_radar_cluster_visualization.py",
+    "git_blob_sha1": "e03b9a1bb28d3f8797eae10ba8b1950d579e9663",
+    "source_commit_blob_sha1": "e03b9a1bb28d3f8797eae10ba8b1950d579e9663",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/network_siting_cluster_visualization.py",
+    "git_blob_sha1": "500c8d680284fec4df443eae086f6efe8a74469d",
+    "source_commit_blob_sha1": "500c8d680284fec4df443eae086f6efe8a74469d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/network_structure_and_siting_visualization.py",
+    "git_blob_sha1": "0e3879092fb381c8d54fb933a64933d4f9c84b8d",
+    "source_commit_blob_sha1": "0e3879092fb381c8d54fb933a64933d4f9c84b8d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/pareto_penalty_driver_heatmap_visualization.py",
+    "git_blob_sha1": "fedb06a79f4b42dbb7b244d3814949c793e7b779",
+    "source_commit_blob_sha1": "fedb06a79f4b42dbb7b244d3814949c793e7b779",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/pareto_penalty_visualization.py",
+    "git_blob_sha1": "f9939e5df90c41de758b3c4512a88c2bfe138a68",
+    "source_commit_blob_sha1": "f9939e5df90c41de758b3c4512a88c2bfe138a68",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/pareto_temporal_distribution_visualization.py",
+    "git_blob_sha1": "253a9561f5efab8b40ea6578acdd0df0dc129ff9",
+    "source_commit_blob_sha1": "253a9561f5efab8b40ea6578acdd0df0dc129ff9",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/pareto_three_breakdown_visualization.py",
+    "git_blob_sha1": "94994f86fdb5f093b074533f394da1342b3a310d",
+    "source_commit_blob_sha1": "94994f86fdb5f093b074533f394da1342b3a310d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/polar_carbon_percentage_grouped_visualization.py",
+    "git_blob_sha1": "b0815a543c629af9fede7f8c2ba409358bd55a04",
+    "source_commit_blob_sha1": "b0815a543c629af9fede7f8c2ba409358bd55a04",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/polar_carbon_stacked_bar_visualization.py",
+    "git_blob_sha1": "b22cc5748d2d1d67d300bc1abd9b4da8f7138b62",
+    "source_commit_blob_sha1": "b22cc5748d2d1d67d300bc1abd9b4da8f7138b62",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/polar_percentage_grouped_visualization.py",
+    "git_blob_sha1": "fdd1e53fa4059c4ca198d2fbed8b441a5e637b33",
+    "source_commit_blob_sha1": "fdd1e53fa4059c4ca198d2fbed8b441a5e637b33",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/polar_stacked_bar_visualization.py",
+    "git_blob_sha1": "c1be4475796d75643334697f366b0d5b6d936bd1",
+    "source_commit_blob_sha1": "c1be4475796d75643334697f366b0d5b6d936bd1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/pyecharts_carbon_analysis.py",
+    "git_blob_sha1": "0aefc9a9a03024a7f658d7a3f60192a97f405dbc",
+    "source_commit_blob_sha1": "0aefc9a9a03024a7f658d7a3f60192a97f405dbc",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/quadrant_chart_box_visualization.py",
+    "git_blob_sha1": "bcc295aa95e367dd54f89a0f94e9fbc4d0c2bf96",
+    "source_commit_blob_sha1": "bcc295aa95e367dd54f89a0f94e9fbc4d0c2bf96",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/quadrant_chart_visualization.py",
+    "git_blob_sha1": "41694bf923d1ec9473f6fd867acdb027ace974e6",
+    "source_commit_blob_sha1": "41694bf923d1ec9473f6fd867acdb027ace974e6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/seven_scenarios_clustered_map_visualization.py",
+    "git_blob_sha1": "abdbdac9e18332fb0d1b4b1a8a8b21a1959c002d",
+    "source_commit_blob_sha1": "abdbdac9e18332fb0d1b4b1a8a8b21a1959c002d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/seven_scenarios_comparison_visualization.py",
+    "git_blob_sha1": "4175b8666518517fadd4591a4f93ed76c3dfb73d",
+    "source_commit_blob_sha1": "4175b8666518517fadd4591a4f93ed76c3dfb73d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/temporal_efficiency_visualization.py",
+    "git_blob_sha1": "f0676041a70101014ee50dc33af6a66cf4f1f158",
+    "source_commit_blob_sha1": "f0676041a70101014ee50dc33af6a66cf4f1f158",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/temporal_efficiency_visualization_2.py",
+    "git_blob_sha1": "c55be532469d89cc85f1bd9fe2b5abe0e894925f",
+    "source_commit_blob_sha1": "c55be532469d89cc85f1bd9fe2b5abe0e894925f",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/temporal_robustness_space_visualization.py",
+    "git_blob_sha1": "6967447fecc1b10c2861ad950dfc38a3c0ab7feb",
+    "source_commit_blob_sha1": "44b8bd0692f8d633c43221afefd3496473248fce",
+    "status": "pathway_label_update"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/thirteen_scenarios_clustered_map_visualization.py",
+    "git_blob_sha1": "3bae80629f38a5ce0bd44263d1e755332a7c9ce8",
+    "source_commit_blob_sha1": "3bae80629f38a5ce0bd44263d1e755332a7c9ce8",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/thirteen_scenarios_comparison_visualization.py",
+    "git_blob_sha1": "25aba3146de0fdd55fbf1e8f1344cd6b72f100fb",
+    "source_commit_blob_sha1": "25aba3146de0fdd55fbf1e8f1344cd6b72f100fb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/weekly_factory_efficiency_visualization.py",
+    "git_blob_sha1": "f4d1cba025a2480c7ba2c631051d1f2f75f695db",
+    "source_commit_blob_sha1": "f4d1cba025a2480c7ba2c631051d1f2f75f695db",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/visualization/weekly_production_inventory_transport_visualization.py",
+    "git_blob_sha1": "989bc62c6604ec59678b9b6191b1c42576fa6fcf",
+    "source_commit_blob_sha1": "989bc62c6604ec59678b9b6191b1c42576fa6fcf",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/data/CoalHydrogenSAFOptimizer_config.yaml",
+    "git_blob_sha1": "90d2d360bff6d8129cf74d73154f8f39fffe4725",
+    "source_commit_blob_sha1": "90d2d360bff6d8129cf74d73154f8f39fffe4725",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/diagnose_constraints.py",
+    "git_blob_sha1": "7f335be0a22d2e78298e7968ae8e4b04ebf85c9a",
+    "source_commit_blob_sha1": "7f335be0a22d2e78298e7968ae8e4b04ebf85c9a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/__init__.py",
+    "git_blob_sha1": "240868867f1326e599f046b1a347b2572930d644",
+    "source_commit_blob_sha1": "240868867f1326e599f046b1a347b2572930d644",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/tests/test_co2_capture_calculator.py",
+    "git_blob_sha1": "9fa85807b407cc0f20741571ef3fdaa90a9710ab",
+    "source_commit_blob_sha1": "9fa85807b407cc0f20741571ef3fdaa90a9710ab",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/tests/test_co2_emission_calculator.py",
+    "git_blob_sha1": "e6e17a62a8ef4fe6a7bec91f907945353fe884e3",
+    "source_commit_blob_sha1": "e6e17a62a8ef4fe6a7bec91f907945353fe884e3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/tests/test_coal_supply_manager.py",
+    "git_blob_sha1": "14fa066a77317704247c151fb23f77ed3db2c7de",
+    "source_commit_blob_sha1": "14fa066a77317704247c151fb23f77ed3db2c7de",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/tests/__init__.py",
+    "git_blob_sha1": "3a0a0e654d1f15c84279c08398be619be0d9b97e",
+    "source_commit_blob_sha1": "3a0a0e654d1f15c84279c08398be619be0d9b97e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/cache_management_utility.py",
+    "git_blob_sha1": "0cece765fd4179e0daafba46bf444ce8c1a70d76",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/data_cache_manager.py",
+    "git_blob_sha1": "2e7468b28e16729aa94caf92373e4b1a4ac1f234",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/pipeline_route_cache_manager.py",
+    "git_blob_sha1": "304546f23fdb6d0557e2398e7df6b1a45f6a5ae8",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/pipeline_route_types.py",
+    "git_blob_sha1": "02976c0ea85f531c38bac1dd486ed8e7bd49af93",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/unified_cache_configuration.py",
+    "git_blob_sha1": "1c8147261f2e65e2fbd398a353d21ea72b53d566",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/cache/__init__.py",
+    "git_blob_sha1": "6f12296b80f30e6f20d2b681a9336883bcf68689",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/co2/co2_capture_calculator.py",
+    "git_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "source_commit_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/co2/co2_emission_calculator.py",
+    "git_blob_sha1": "4544a6dfc0a13517079bf3a52b1fddcc9a03adf0",
+    "source_commit_blob_sha1": "4544a6dfc0a13517079bf3a52b1fddcc9a03adf0",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/co2/__init__.py",
+    "git_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "source_commit_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/core/coal_hydrogen_optimization_model.py",
+    "git_blob_sha1": "cac603c0facd99439251df4f51d5c93498646377",
+    "source_commit_blob_sha1": "cac603c0facd99439251df4f51d5c93498646377",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/core/__init__.py",
+    "git_blob_sha1": "e25ba363b75cc4dde6c50efc01d30dc6d490f0d6",
+    "source_commit_blob_sha1": "e25ba363b75cc4dde6c50efc01d30dc6d490f0d6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/hydrogen/co2_clustering_optimizer.py",
+    "git_blob_sha1": "5a828e0aa50603affd61cb41ff45d2fb74e0d3d1",
+    "source_commit_blob_sha1": "5a828e0aa50603affd61cb41ff45d2fb74e0d3d1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/hydrogen/hydrogen_clustering_optimizer.py",
+    "git_blob_sha1": "9bd4735f6c1061c712f6bff7ec353f31dc1f84ca",
+    "source_commit_blob_sha1": "9bd4735f6c1061c712f6bff7ec353f31dc1f84ca",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/hydrogen/hydrogen_pipeline_distance_calculator.py",
+    "git_blob_sha1": "c66b6579a948620548a3872c6a807a6981566dce",
+    "source_commit_blob_sha1": "c66b6579a948620548a3872c6a807a6981566dce",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/hydrogen/hydrogen_transport_visualizer.py",
+    "git_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "source_commit_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/hydrogen/__init__.py",
+    "git_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "source_commit_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/modules/coal_supply_manager.py",
+    "git_blob_sha1": "ab9a1a373286628ed66486aef96828a1b9666d39",
+    "source_commit_blob_sha1": "ab9a1a373286628ed66486aef96828a1b9666d39",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/modules/__init__.py",
+    "git_blob_sha1": "902143243c97d7d39bd3c13fd01479975e9e6e8e",
+    "source_commit_blob_sha1": "902143243c97d7d39bd3c13fd01479975e9e6e8e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/routing/graphhopper_routing_engine.py",
+    "git_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "source_commit_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/routing/osm_routing_engine.py",
+    "git_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "source_commit_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/routing/pipeline_coordinate_integrator.py",
+    "git_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "source_commit_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/routing/__init__.py",
+    "git_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "source_commit_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/runner/coal_optimizer_runner.py",
+    "git_blob_sha1": "580deda3114495e210d4b05dc3596430819a7e8f",
+    "source_commit_blob_sha1": "580deda3114495e210d4b05dc3596430819a7e8f",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/runner/unified_optimizer_runner.py",
+    "git_blob_sha1": "df7054e43476981a696b316013ecc800a82a0ecf",
+    "source_commit_blob_sha1": "df7054e43476981a696b316013ecc800a82a0ecf",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/runner/__init__.py",
+    "git_blob_sha1": "2e694dc248885712934a469cf1188784dce7e081",
+    "source_commit_blob_sha1": "2e694dc248885712934a469cf1188784dce7e081",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/sensitivity_analysis/extract_sensitivity_data_corrected.py",
+    "git_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "source_commit_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/sensitivity_analysis/fast_sensitivity_analyzer.py",
+    "git_blob_sha1": "b2c757bfc9ecbdcef2dea69a838888472a052a19",
+    "source_commit_blob_sha1": "b2c757bfc9ecbdcef2dea69a838888472a052a19",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/sensitivity_analysis/sensitivity_visualization_tradeoff.py",
+    "git_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "source_commit_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/sensitivity_analysis/__init__.py",
+    "git_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "source_commit_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/utils/direct_capacity_preprocessor.py",
+    "git_blob_sha1": "921228956cb818aaa25fde466a44ddea0ca9b136",
+    "source_commit_blob_sha1": "921228956cb818aaa25fde466a44ddea0ca9b136",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/utils/__init__.py",
+    "git_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "source_commit_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/coal_hydrogen_transport_route_visualizer.py",
+    "git_blob_sha1": "9c83eb30dc8f6cceb8009a4ef110609f634b2c21",
+    "source_commit_blob_sha1": "9c83eb30dc8f6cceb8009a4ef110609f634b2c21",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/green_h2_vs_natural_gas_comparison.py",
+    "git_blob_sha1": "6e0817bf83e220f66f15365d3beb6b2e0d60330e",
+    "source_commit_blob_sha1": "6e0817bf83e220f66f15365d3beb6b2e0d60330e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/method_comparison_visualizer.py",
+    "git_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "source_commit_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/method_comparison_visualizer_en.py",
+    "git_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "source_commit_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/pipeline_network_visualizer.py",
+    "git_blob_sha1": "49ec0c169ddcb43fe22b4edefaac7cc4d52c3551",
+    "source_commit_blob_sha1": "49ec0c169ddcb43fe22b4edefaac7cc4d52c3551",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/transport_route_visualizer.py",
+    "git_blob_sha1": "bc6ad0cf5c136e7467584d6221f863feb551a3c5",
+    "source_commit_blob_sha1": "bc6ad0cf5c136e7467584d6221f863feb551a3c5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/transport_route_visualizer_one_step.py",
+    "git_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "source_commit_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/coal_hydrogen_saf_optimization/src/visualization/__init__.py",
+    "git_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "source_commit_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/cache_management_utility.py",
+    "git_blob_sha1": "0cece765fd4179e0daafba46bf444ce8c1a70d76",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/data_cache_manager.py",
+    "git_blob_sha1": "2e7468b28e16729aa94caf92373e4b1a4ac1f234",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/pipeline_route_cache_manager.py",
+    "git_blob_sha1": "304546f23fdb6d0557e2398e7df6b1a45f6a5ae8",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/pipeline_route_types.py",
+    "git_blob_sha1": "49c5b8d25dd4b9f0a9123050bf3824be6f6638a4",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/unified_cache_configuration.py",
+    "git_blob_sha1": "1c8147261f2e65e2fbd398a353d21ea72b53d566",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/cache/__init__.py",
+    "git_blob_sha1": "6f12296b80f30e6f20d2b681a9336883bcf68689",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/co2/co2_capture_calculator.py",
+    "git_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "source_commit_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/co2/co2_clustering_optimizer.py",
+    "git_blob_sha1": "589effff566201b833c098f9936de749cd539bb2",
+    "source_commit_blob_sha1": "589effff566201b833c098f9936de749cd539bb2",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/co2/co2_emission_calculator.py",
+    "git_blob_sha1": "96a7aa7e36331b51e75922bcfa5866c1f7ae62cd",
+    "source_commit_blob_sha1": "96a7aa7e36331b51e75922bcfa5866c1f7ae62cd",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/co2/__init__.py",
+    "git_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "source_commit_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/core/dac_hydrogen_optimization_model.py",
+    "git_blob_sha1": "939ad6dc01ddaa614d4b01ac818340a401005713",
+    "source_commit_blob_sha1": "939ad6dc01ddaa614d4b01ac818340a401005713",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/core/__init__.py",
+    "git_blob_sha1": "c6704e02e73acfe9d1653b456f9fedb481a7d8de",
+    "source_commit_blob_sha1": "c6704e02e73acfe9d1653b456f9fedb481a7d8de",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/hydrogen/co2_clustering_optimizer.py",
+    "git_blob_sha1": "881b82d1ea29d2ace1a40b8fe42bce593c69583e",
+    "source_commit_blob_sha1": "881b82d1ea29d2ace1a40b8fe42bce593c69583e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/hydrogen/hydrogen_clustering_optimizer.py",
+    "git_blob_sha1": "af5f0e2e57a238a97cf9e39bc172dc6387675a95",
+    "source_commit_blob_sha1": "af5f0e2e57a238a97cf9e39bc172dc6387675a95",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/hydrogen/hydrogen_pipeline_distance_calculator.py",
+    "git_blob_sha1": "e3511097db12cb30f9d36c167832372c368d1e33",
+    "source_commit_blob_sha1": "e3511097db12cb30f9d36c167832372c368d1e33",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/hydrogen/hydrogen_transport_visualizer.py",
+    "git_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "source_commit_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/hydrogen/__init__.py",
+    "git_blob_sha1": "1b32fd73aff0de2fa63eb0c8800cb711f7f6c2fb",
+    "source_commit_blob_sha1": "1b32fd73aff0de2fa63eb0c8800cb711f7f6c2fb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/routing/graphhopper_routing_engine.py",
+    "git_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "source_commit_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/routing/osm_routing_engine.py",
+    "git_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "source_commit_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/routing/pipeline_coordinate_integrator.py",
+    "git_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "source_commit_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/routing/__init__.py",
+    "git_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "source_commit_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/runner/unified_optimizer_runner.py",
+    "git_blob_sha1": "039163bc42aba946678faea61dc7320cf1539bb7",
+    "source_commit_blob_sha1": "039163bc42aba946678faea61dc7320cf1539bb7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/runner/__init__.py",
+    "git_blob_sha1": "13012939a84fc62f4e01f698fed18ebf46c341c7",
+    "source_commit_blob_sha1": "13012939a84fc62f4e01f698fed18ebf46c341c7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/sensitivity_analysis/extract_sensitivity_data_corrected.py",
+    "git_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "source_commit_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/sensitivity_analysis/fast_sensitivity_analyzer.py",
+    "git_blob_sha1": "b5a79e242f3bb6bdef7edbf9bf4d7ddb1e1dd5df",
+    "source_commit_blob_sha1": "b5a79e242f3bb6bdef7edbf9bf4d7ddb1e1dd5df",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/sensitivity_analysis/sensitivity_visualization_tradeoff.py",
+    "git_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "source_commit_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/sensitivity_analysis/__init__.py",
+    "git_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "source_commit_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/utils/direct_capacity_preprocessor.py",
+    "git_blob_sha1": "6321bb343bdf224774f1962e812176310620c9fa",
+    "source_commit_blob_sha1": "6321bb343bdf224774f1962e812176310620c9fa",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/utils/province_mapper.py",
+    "git_blob_sha1": "9e299433c87ba1dec60d5e2e60db87fe8dae22b3",
+    "source_commit_blob_sha1": "9e299433c87ba1dec60d5e2e60db87fe8dae22b3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/utils/__init__.py",
+    "git_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "source_commit_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/dac_hydrogen_transport_route_visualizer.py",
+    "git_blob_sha1": "5f424d00eff85c3ecbe289021742fb348f104e23",
+    "source_commit_blob_sha1": "5f424d00eff85c3ecbe289021742fb348f104e23",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/green_h2_vs_natural_gas_comparison.py",
+    "git_blob_sha1": "8b6c75a0d9972d68084bfe9485904774ccdf7814",
+    "source_commit_blob_sha1": "8b6c75a0d9972d68084bfe9485904774ccdf7814",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/method_comparison_visualizer.py",
+    "git_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "source_commit_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/method_comparison_visualizer_en.py",
+    "git_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "source_commit_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/pipeline_network_visualizer.py",
+    "git_blob_sha1": "a8c1a1448d98cf18b5df375e54018c5a754b0909",
+    "source_commit_blob_sha1": "a8c1a1448d98cf18b5df375e54018c5a754b0909",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/transport_route_visualizer.py",
+    "git_blob_sha1": "8a2302df2b595a619652f786cf75138a31947fb7",
+    "source_commit_blob_sha1": "8a2302df2b595a619652f786cf75138a31947fb7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/transport_route_visualizer_one_step.py",
+    "git_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "source_commit_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/src/visualization/__init__.py",
+    "git_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "source_commit_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts/fix_wind_data_duplicates.py",
+    "git_blob_sha1": "5e52b25390622a8e9eaf7dab580525b6f7d4c893",
+    "source_commit_blob_sha1": "5e52b25390622a8e9eaf7dab580525b6f7d4c893",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts/generate_html_visualization.py",
+    "git_blob_sha1": "48f2969f14cb02d79595314e3b9fc69ea5f8198e",
+    "source_commit_blob_sha1": "48f2969f14cb02d79595314e3b9fc69ea5f8198e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/scripts/preprocess_renewable_ultra_parallel.py",
+    "git_blob_sha1": "b0b05620d291f18542b201fec0a1b5b71b893f2a",
+    "source_commit_blob_sha1": "b0b05620d291f18542b201fec0a1b5b71b893f2a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/diagnose_constraints.py",
+    "git_blob_sha1": "7f335be0a22d2e78298e7968ae8e4b04ebf85c9a",
+    "source_commit_blob_sha1": "7f335be0a22d2e78298e7968ae8e4b04ebf85c9a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/tests/test_co2_capture_calculator.py",
+    "git_blob_sha1": "9fa85807b407cc0f20741571ef3fdaa90a9710ab",
+    "source_commit_blob_sha1": "9fa85807b407cc0f20741571ef3fdaa90a9710ab",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/tests/test_co2_emission_calculator.py",
+    "git_blob_sha1": "e6e17a62a8ef4fe6a7bec91f907945353fe884e3",
+    "source_commit_blob_sha1": "e6e17a62a8ef4fe6a7bec91f907945353fe884e3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/cache_management_utility.py",
+    "git_blob_sha1": "0cece765fd4179e0daafba46bf444ce8c1a70d76",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/data_cache_manager.py",
+    "git_blob_sha1": "e98c1c144d873556cae9c58c0d6a819c67768913",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/pipeline_route_cache_manager.py",
+    "git_blob_sha1": "304546f23fdb6d0557e2398e7df6b1a45f6a5ae8",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/pipeline_route_types.py",
+    "git_blob_sha1": "49c5b8d25dd4b9f0a9123050bf3824be6f6638a4",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/unified_cache_configuration.py",
+    "git_blob_sha1": "1c8147261f2e65e2fbd398a353d21ea72b53d566",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/cache/__init__.py",
+    "git_blob_sha1": "6f12296b80f30e6f20d2b681a9336883bcf68689",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/co2/co2_capture_calculator.py",
+    "git_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "source_commit_blob_sha1": "15d8a9b8698f16a3ef6b5b5fe9f57a5847e51bb5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/co2/co2_emission_calculator.py",
+    "git_blob_sha1": "5ec1c7639f996a509a69a73a0fd5c0f6a9b4199c",
+    "source_commit_blob_sha1": "5ec1c7639f996a509a69a73a0fd5c0f6a9b4199c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/co2/__init__.py",
+    "git_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "source_commit_blob_sha1": "6da0a886826a792739d7d5f50e9f473041df1e80",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/core/green_hydrogen_optimization_model.py",
+    "git_blob_sha1": "d0d849b5fcd284f27d94dafe58a7592d25c06cfa",
+    "source_commit_blob_sha1": "d0d849b5fcd284f27d94dafe58a7592d25c06cfa",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/core/__init__.py",
+    "git_blob_sha1": "e007d710b42b1cab6b378dea95b89ea9fcdb0bf7",
+    "source_commit_blob_sha1": "e007d710b42b1cab6b378dea95b89ea9fcdb0bf7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/hydrogen/co2_clustering_optimizer.py",
+    "git_blob_sha1": "18e74207d7114a2bdab061dc5fd5361af6de6a70",
+    "source_commit_blob_sha1": "18e74207d7114a2bdab061dc5fd5361af6de6a70",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/hydrogen/hydrogen_clustering_optimizer.py",
+    "git_blob_sha1": "9bd4735f6c1061c712f6bff7ec353f31dc1f84ca",
+    "source_commit_blob_sha1": "9bd4735f6c1061c712f6bff7ec353f31dc1f84ca",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/hydrogen/hydrogen_pipeline_distance_calculator.py",
+    "git_blob_sha1": "a367a4919611d00b578c794bdaba315289494924",
+    "source_commit_blob_sha1": "a367a4919611d00b578c794bdaba315289494924",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/hydrogen/hydrogen_transport_visualizer.py",
+    "git_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "source_commit_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/hydrogen/__init__.py",
+    "git_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "source_commit_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/optimizer/super_graph_optimizer.py",
+    "git_blob_sha1": "5439ed553ac4f806b785612da0590be6b1d55913",
+    "source_commit_blob_sha1": "5439ed553ac4f806b785612da0590be6b1d55913",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/optimizer/__init__.py",
+    "git_blob_sha1": "deacd5fa7f1706fe94874d7d52d10a4d44aa52aa",
+    "source_commit_blob_sha1": "deacd5fa7f1706fe94874d7d52d10a4d44aa52aa",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/routing/graphhopper_routing_engine.py",
+    "git_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "source_commit_blob_sha1": "456a2516240027e1203ac2a98505302b19599735",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/routing/osm_routing_engine.py",
+    "git_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "source_commit_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/routing/pipeline_coordinate_integrator.py",
+    "git_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "source_commit_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/routing/__init__.py",
+    "git_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "source_commit_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/runner/unified_optimizer_runner.py",
+    "git_blob_sha1": "4a92a790780ca9fe41780296178eb72f9bc74beb",
+    "source_commit_blob_sha1": "4a92a790780ca9fe41780296178eb72f9bc74beb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/runner/__init__.py",
+    "git_blob_sha1": "13012939a84fc62f4e01f698fed18ebf46c341c7",
+    "source_commit_blob_sha1": "13012939a84fc62f4e01f698fed18ebf46c341c7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/sensitivity_analysis/extract_sensitivity_data_corrected.py",
+    "git_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "source_commit_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/sensitivity_analysis/fast_sensitivity_analyzer.py",
+    "git_blob_sha1": "b2c757bfc9ecbdcef2dea69a838888472a052a19",
+    "source_commit_blob_sha1": "b2c757bfc9ecbdcef2dea69a838888472a052a19",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/sensitivity_analysis/sensitivity_visualization_tradeoff.py",
+    "git_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "source_commit_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/sensitivity_analysis/__init__.py",
+    "git_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "source_commit_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/utils/direct_capacity_preprocessor.py",
+    "git_blob_sha1": "921228956cb818aaa25fde466a44ddea0ca9b136",
+    "source_commit_blob_sha1": "921228956cb818aaa25fde466a44ddea0ca9b136",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/utils/province_mapper.py",
+    "git_blob_sha1": "9e299433c87ba1dec60d5e2e60db87fe8dae22b3",
+    "source_commit_blob_sha1": "9e299433c87ba1dec60d5e2e60db87fe8dae22b3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/utils/__init__.py",
+    "git_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "source_commit_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/green_h2_vs_natural_gas_comparison.py",
+    "git_blob_sha1": "6e0817bf83e220f66f15365d3beb6b2e0d60330e",
+    "source_commit_blob_sha1": "6e0817bf83e220f66f15365d3beb6b2e0d60330e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/method_comparison_visualizer.py",
+    "git_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "source_commit_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/method_comparison_visualizer_en.py",
+    "git_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "source_commit_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/pipeline_network_visualizer.py",
+    "git_blob_sha1": "49ec0c169ddcb43fe22b4edefaac7cc4d52c3551",
+    "source_commit_blob_sha1": "49ec0c169ddcb43fe22b4edefaac7cc4d52c3551",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/transport_route_visualizer.py",
+    "git_blob_sha1": "bc6ad0cf5c136e7467584d6221f863feb551a3c5",
+    "source_commit_blob_sha1": "bc6ad0cf5c136e7467584d6221f863feb551a3c5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/transport_route_visualizer_one_step.py",
+    "git_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "source_commit_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/src/visualization/__init__.py",
+    "git_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "source_commit_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/main_function_comparison.py",
+    "git_blob_sha1": "7c86f72dca13e9e04beec9f17ac984d8a2df3d5a",
+    "source_commit_blob_sha1": "7c86f72dca13e9e04beec9f17ac984d8a2df3d5a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/simple_direct_comparison.py",
+    "git_blob_sha1": "dbf309d42351a588a212c904e07d20648fab2e07",
+    "source_commit_blob_sha1": "dbf309d42351a588a212c904e07d20648fab2e07",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_airport_data_excel_loading.py",
+    "git_blob_sha1": "0ae1bae455b38ce12f7197e465f0f0b92e2922e0",
+    "source_commit_blob_sha1": "0ae1bae455b38ce12f7197e465f0f0b92e2922e0",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_average_distance_no_mtj_attribute.py",
+    "git_blob_sha1": "240a03ac9e75c9d5ddc75590afc5cce583c70bb5",
+    "source_commit_blob_sha1": "240a03ac9e75c9d5ddc75590afc5cce583c70bb5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_comparison.py",
+    "git_blob_sha1": "95026ac8cd3b6b2f00d4e5a5c4be861821f430b1",
+    "source_commit_blob_sha1": "95026ac8cd3b6b2f00d4e5a5c4be861821f430b1",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_direct_comparison.py",
+    "git_blob_sha1": "2ec3a3e192bc7162501be89c70cedd4ecad2c086",
+    "source_commit_blob_sha1": "2ec3a3e192bc7162501be89c70cedd4ecad2c086",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_final_comparison.py",
+    "git_blob_sha1": "837fd98ac7abf9cea2f4e95488351085c8dcf1ea",
+    "source_commit_blob_sha1": "837fd98ac7abf9cea2f4e95488351085c8dcf1ea",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_fuel_demand_data_processor.py",
+    "git_blob_sha1": "5c054d41c10f4f44c2062567710151f547ac4923",
+    "source_commit_blob_sha1": "5c054d41c10f4f44c2062567710151f547ac4923",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_function_by_function_verification.py",
+    "git_blob_sha1": "bb690334a08753ba96344d5cb6b675f2dea86e84",
+    "source_commit_blob_sha1": "bb690334a08753ba96344d5cb6b675f2dea86e84",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_original_vs_refactored.py",
+    "git_blob_sha1": "e680014c520ab7bc910da703c5de0a92fe074ee6",
+    "source_commit_blob_sha1": "e680014c520ab7bc910da703c5de0a92fe074ee6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_output_comparison.py",
+    "git_blob_sha1": "251b949478609c7880704671631882216cf6be87",
+    "source_commit_blob_sha1": "251b949478609c7880704671631882216cf6be87",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_refactored_model.py",
+    "git_blob_sha1": "454d09205025cbb5944fe1da16d31b7ceba91d4c",
+    "source_commit_blob_sha1": "454d09205025cbb5944fe1da16d31b7ceba91d4c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_transport_route_visualizer.py",
+    "git_blob_sha1": "eec342b910e41620a93c6b90a4e3c0cf86b7352c",
+    "source_commit_blob_sha1": "eec342b910e41620a93c6b90a4e3c0cf86b7352c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/tests/test_true_comparison.py",
+    "git_blob_sha1": "d30f02cebe232c22d53dbed701a48f41b5da68d6",
+    "source_commit_blob_sha1": "d30f02cebe232c22d53dbed701a48f41b5da68d6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/cache/data_cache_manager.py",
+    "git_blob_sha1": "c7eece6be9d0998b9aa2becfc052ba8037634447",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/cache/pipeline_route_cache_manager.py",
+    "git_blob_sha1": "304546f23fdb6d0557e2398e7df6b1a45f6a5ae8",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/cache/pipeline_route_types.py",
+    "git_blob_sha1": "49c5b8d25dd4b9f0a9123050bf3824be6f6638a4",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/cache/unified_cache_configuration.py",
+    "git_blob_sha1": "1c8147261f2e65e2fbd398a353d21ea72b53d566",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/cache/__init__.py",
+    "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "source_commit_blob_sha1": null,
+    "status": "server_helper"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/core/natural_gas_optimization_model.py",
+    "git_blob_sha1": "f59136a9a0dc1115c81ff1306cf5c06abd719d31",
+    "source_commit_blob_sha1": "f59136a9a0dc1115c81ff1306cf5c06abd719d31",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/core/natural_gas_optimization_model_one_step.py",
+    "git_blob_sha1": "7e37b50c5fa7aed8b53ed32daa2ff9d66d0c965f",
+    "source_commit_blob_sha1": "7e37b50c5fa7aed8b53ed32daa2ff9d66d0c965f",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/core/__init__.py",
+    "git_blob_sha1": "3b045e457cdd1618943d98ef6ae0c982cac13aff",
+    "source_commit_blob_sha1": "3b045e457cdd1618943d98ef6ae0c982cac13aff",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/docs/__init__.py",
+    "git_blob_sha1": "b97fcae1907dcec49eb584bd8e2d1ade77c2de06",
+    "source_commit_blob_sha1": "b97fcae1907dcec49eb584bd8e2d1ade77c2de06",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/hydrogen/co2_clustering_optimizer.py",
+    "git_blob_sha1": "18e74207d7114a2bdab061dc5fd5361af6de6a70",
+    "source_commit_blob_sha1": "18e74207d7114a2bdab061dc5fd5361af6de6a70",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/hydrogen/hydrogen_clustering_optimizer.py",
+    "git_blob_sha1": "5966d56b29ed31e85d693e9e52aee4dcf8c9e348",
+    "source_commit_blob_sha1": "5966d56b29ed31e85d693e9e52aee4dcf8c9e348",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/hydrogen/hydrogen_pipeline_distance_calculator.py",
+    "git_blob_sha1": "69023b1127fa38fdfafdf7d705539a5536b6862c",
+    "source_commit_blob_sha1": "69023b1127fa38fdfafdf7d705539a5536b6862c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/hydrogen/hydrogen_transport_visualizer.py",
+    "git_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "source_commit_blob_sha1": "538b5366b042d0c75244bb9479975a0944ceb006",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/hydrogen/__init__.py",
+    "git_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "source_commit_blob_sha1": "6fb275e00cacf57846a02874ed49993fdad532eb",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/routing/graphhopper_routing_engine.py",
+    "git_blob_sha1": "664b55903b6d2f33f2c5d4f31c1c209bbc8d0bd5",
+    "source_commit_blob_sha1": "664b55903b6d2f33f2c5d4f31c1c209bbc8d0bd5",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/routing/osm_routing_engine.py",
+    "git_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "source_commit_blob_sha1": "8d7f1e1178251cee0456afde2ea2e102e837b3f4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/routing/pipeline_coordinate_integrator.py",
+    "git_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "source_commit_blob_sha1": "d08c0e07247026339f5319c21a3decb9514a864d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/routing/__init__.py",
+    "git_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "source_commit_blob_sha1": "da7014bc46aa9c8a42d2c77dcd443051b4e248c6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/sensitivity_analysis/extract_sensitivity_data_corrected.py",
+    "git_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "source_commit_blob_sha1": "7ff2a446c60e483581205d14342ae8abf1d2a60d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/sensitivity_analysis/fast_sensitivity_analyzer.py",
+    "git_blob_sha1": "a3c7b8581d9050ca2a7f62f2b5d3330031989ba4",
+    "source_commit_blob_sha1": "a3c7b8581d9050ca2a7f62f2b5d3330031989ba4",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/sensitivity_analysis/sensitivity_visualization_tradeoff.py",
+    "git_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "source_commit_blob_sha1": "425344c6520f2a9aa86d107b38f204e3b8d4db50",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/sensitivity_analysis/__init__.py",
+    "git_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "source_commit_blob_sha1": "ec5efd944f1f24e047dd19f6232782c3813f67d3",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/tests/cache_performance_monitor.py",
+    "git_blob_sha1": "59ec927428d8b669ade07a41021c35327c27a2d2",
+    "source_commit_blob_sha1": "59ec927428d8b669ade07a41021c35327c27a2d2",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/tests/__init__.py",
+    "git_blob_sha1": "d74b280f4adc1953c753d908e426b2ab6c1b9e13",
+    "source_commit_blob_sha1": "d74b280f4adc1953c753d908e426b2ab6c1b9e13",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/utils/direct_capacity_preprocessor.py",
+    "git_blob_sha1": "ef514ea3970ead0db877c0603aed0634e3bbf2ac",
+    "source_commit_blob_sha1": "ef514ea3970ead0db877c0603aed0634e3bbf2ac",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/utils/__init__.py",
+    "git_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "source_commit_blob_sha1": "8458f6a33fb36963c9cde7697e8356d717235d1c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/visualization/method_comparison_visualizer.py",
+    "git_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "source_commit_blob_sha1": "3f33417bd83762b65509d1c29d0e72e48d148eac",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/visualization/method_comparison_visualizer_en.py",
+    "git_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "source_commit_blob_sha1": "11080d02ea2f011eac6d6452f644d1c8813f76db",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/visualization/transport_route_visualizer.py",
+    "git_blob_sha1": "2c3b0e19370f129e831abff6c88812a43b4a715d",
+    "source_commit_blob_sha1": "2c3b0e19370f129e831abff6c88812a43b4a715d",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/visualization/transport_route_visualizer_one_step.py",
+    "git_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "source_commit_blob_sha1": "cd0cc045d1792a7e96ea24be0d3cadc53ca3ada7",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/products/supply_chain_optimization/natural_gas_supply_chain_optimization/src/visualization/__init__.py",
+    "git_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "source_commit_blob_sha1": "989baf2ed05fa8a06acc1a60a451a85baf1ab066",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/config/DACHydrogenSAFOptimizer_config.yaml",
+    "git_blob_sha1": "e2ef565d7aab6a37254a396999dbe2b9327ebe3f",
+    "source_commit_blob_sha1": "e2ef565d7aab6a37254a396999dbe2b9327ebe3f",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/config/DACHydrogenSAFOptimizer_config_two_step.yaml",
+    "git_blob_sha1": "4c673f7a3de92b750cefc8a251f779c5d7c5c727",
+    "source_commit_blob_sha1": "4c673f7a3de92b750cefc8a251f779c5d7c5c727",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/core/cost_calculator.py",
+    "git_blob_sha1": "659b439f6f5c1554fab5278a18bd2351541d7da9",
+    "source_commit_blob_sha1": "659b439f6f5c1554fab5278a18bd2351541d7da9",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/core/__init__.py",
+    "git_blob_sha1": "f170a6be03b4277bdb916afe9b33fa2ebb51c72c",
+    "source_commit_blob_sha1": "f170a6be03b4277bdb916afe9b33fa2ebb51c72c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/ByproductHydrogenSupplyChainOptimizer_config.yaml",
+    "git_blob_sha1": "500335085721ce0844f347ae8c00a1e6f2731df8",
+    "source_commit_blob_sha1": "500335085721ce0844f347ae8c00a1e6f2731df8",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/ByproductHydrogenSupplyChainOptimizer_config_two_step.yaml",
+    "git_blob_sha1": "d2ed30be3feb2c6e9128a4e6ea6e2a12962f7386",
+    "source_commit_blob_sha1": "d2ed30be3feb2c6e9128a4e6ea6e2a12962f7386",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/CoalByproductHydrogenSAFOptimizer_config.yaml",
+    "git_blob_sha1": "d0bf527e5decd410af1f55c4653d1b719a197512",
+    "source_commit_blob_sha1": "d0bf527e5decd410af1f55c4653d1b719a197512",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/DACByproductHydrogenSAFOptimizer_config_one_step.yaml",
+    "git_blob_sha1": "e284995c5ab99240ce9f3357fec70ba9deee34d9",
+    "source_commit_blob_sha1": "e284995c5ab99240ce9f3357fec70ba9deee34d9",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/DACByproductHydrogenSAFOptimizer_config_two_step.yaml",
+    "git_blob_sha1": "7cb82ca84c9cfb87c18341ca512cfc71578a563e",
+    "source_commit_blob_sha1": "7cb82ca84c9cfb87c18341ca512cfc71578a563e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/GreenHydrogenSupplyChainOptimizer_config.yaml",
+    "git_blob_sha1": "fb4f9ad08b1d9ffd7f048d945fde2356aba99292",
+    "source_commit_blob_sha1": "fb4f9ad08b1d9ffd7f048d945fde2356aba99292",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/GreenHydrogenSupplyChainOptimizer_config_one_step_direct_ft.yaml",
+    "git_blob_sha1": "10af2930cf932e3bd599d584e67df73630279530",
+    "source_commit_blob_sha1": "10af2930cf932e3bd599d584e67df73630279530",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/GreenHydrogenSupplyChainOptimizer_config_two_step.yaml",
+    "git_blob_sha1": "06efadfa82ce68469e27123639c6f64638ec5c7e",
+    "source_commit_blob_sha1": "06efadfa82ce68469e27123639c6f64638ec5c7e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/NaturalGasByproductHydrogenOptimizer_config.yaml",
+    "git_blob_sha1": "125e4cd0481f69577c53bd774c6e022d211bd755",
+    "source_commit_blob_sha1": "125e4cd0481f69577c53bd774c6e022d211bd755",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/NaturalGasByproductHydrogenOptimizer_config_one_step.yaml",
+    "git_blob_sha1": "072d0348b63f632ca2edd7e232e12e84b0afd41e",
+    "source_commit_blob_sha1": "072d0348b63f632ca2edd7e232e12e84b0afd41e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/NaturalGasSupplyChainOptimizer_config.yaml",
+    "git_blob_sha1": "71b46a5dd18c3b23033d7d963573af6efdb946cc",
+    "source_commit_blob_sha1": "71b46a5dd18c3b23033d7d963573af6efdb946cc",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/NaturalGasSupplyChainOptimizer_config_backup.yaml",
+    "git_blob_sha1": "6f3a89922a624a9d578706ed2603024aa40ce57a",
+    "source_commit_blob_sha1": "6f3a89922a624a9d578706ed2603024aa40ce57a",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/data/NaturalGasSupplyChainOptimizer_config_one_step.yaml",
+    "git_blob_sha1": "96e4911415ba1bd8d9e76ea9297d66ea86b8672c",
+    "source_commit_blob_sha1": "96e4911415ba1bd8d9e76ea9297d66ea86b8672c",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/optimizers/super_graph_optimizer.py",
+    "git_blob_sha1": "236f37db4b9191bce3e24c79ea5ac5abd94e555b",
+    "source_commit_blob_sha1": "236f37db4b9191bce3e24c79ea5ac5abd94e555b",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/optimizers/__init__.py",
+    "git_blob_sha1": "808c42bc8a75e558dea895a07d51dce131c51167",
+    "source_commit_blob_sha1": "808c42bc8a75e558dea895a07d51dce131c51167",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/types/pipeline_route_types.py",
+    "git_blob_sha1": "5c544acaa1f9ed0fac3ff5acaeabcb711aa30d99",
+    "source_commit_blob_sha1": "5c544acaa1f9ed0fac3ff5acaeabcb711aa30d99",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/types/__init__.py",
+    "git_blob_sha1": "277983ab779793ac4f7ab28bd0df31c3e579448e",
+    "source_commit_blob_sha1": "277983ab779793ac4f7ab28bd0df31c3e579448e",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/utils/geographic_calculator.py",
+    "git_blob_sha1": "2a66180a2c48513c70a8c24bbc786872b2f893a6",
+    "source_commit_blob_sha1": "2a66180a2c48513c70a8c24bbc786872b2f893a6",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/utils/id_mapper.py",
+    "git_blob_sha1": "120728be3fbecebf1ed1d83a544a39207570c7ae",
+    "source_commit_blob_sha1": "120728be3fbecebf1ed1d83a544a39207570c7ae",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/utils/log_preserver.py",
+    "git_blob_sha1": "8d7605019dd320a42ccd354f21a05fa7d3ab5515",
+    "source_commit_blob_sha1": "8d7605019dd320a42ccd354f21a05fa7d3ab5515",
+    "status": "identical"
+  },
+  {
+    "path": "model_source/shared/utils/__init__.py",
+    "git_blob_sha1": "1ec5850cee8ad646285325f356f4b5bc36fe9753",
+    "source_commit_blob_sha1": "1ec5850cee8ad646285325f356f4b5bc36fe9753",
+    "status": "identical"
+  }
+]

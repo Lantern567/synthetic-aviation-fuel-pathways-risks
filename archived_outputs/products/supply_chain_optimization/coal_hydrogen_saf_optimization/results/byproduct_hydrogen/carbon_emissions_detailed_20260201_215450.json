@@ -1,0 +1,61 @@
+{
+  "detailed": {
+    "coal_mining": 3675666.6412491226,
+    "coal_transport": 4594583.301561437,
+    "coal_gasification_direct": 13783749.90468445,
+    "coal_gasification_energy": 122399699.15359709,
+    "coal_co2_fugitive": 33632349.76742964,
+    "co2_capture_energy": 13721998.705111502,
+    "saf_facility": 356153.45801533223,
+    "electrolyzer_facility": 5962.995491882523,
+    "methanol_to_saf": 28588518.32082691,
+    "saf_synthesis_energy": 232792220.61244845,
+    "h2_production": 590403954.250646,
+    "mtj_storage": 233145109.3461821,
+    "h2_storage": 11080528.359170645,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 5419908.438641349,
+    "h2_transport": 5419908.438641349,
+    "mtj_transport": 378635.42758550146,
+    "co2_utilization_credit": 0.0
+  },
+  "by_stage": {
+    "raw_material_emissions": 191808047.47363028,
+    "facility_emissions": 362116.45350721455,
+    "production_emissions": 851784693.1839089,
+    "storage_emissions": 244225637.7053497,
+    "transport_emissions": 5798543.866226848,
+    "co2_utilization_credit": 0.0,
+    "total_emissions": 1293979038.6826637,
+    "annual_emissions": 16821727502.87452
+  },
+  "total_production_kg": 51050925.57290561,
+  "carbon_intensity_kg": 25.346828175225497,
+  "carbon_intensity_mj": 587.41200869584,
+  "vs_traditional_jet": 560.0134929166742,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": 498.41200869584,
+  "vs_corsia": 1858.0400289861334,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 191808047.47363028,
+      "percentage": 14.823118593087923
+    },
+    "facility_emissions": {
+      "value": 362116.45350721455,
+      "percentage": 0.027984723297826173
+    },
+    "production_emissions": {
+      "value": 851784693.1839089,
+      "percentage": 65.82677676533841
+    },
+    "storage_emissions": {
+      "value": 244225637.7053497,
+      "percentage": 18.87400262325608
+    },
+    "transport_emissions": {
+      "value": 5798543.866226848,
+      "percentage": 0.44811729501662256
+    }
+  }
+}

@@ -1,0 +1,2 @@
+﻿运输ID,起点,终点,天,氢气运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+refinery_Petrochina Dagang Refinery_airport_天津_weekly_pipeline,refinery_Petrochina Dagang Refinery,airport_天津,0,5.537983620314748e-09,46.14507886512666,38.737926,117.512307,39.1244,117.3462,H2,pipeline

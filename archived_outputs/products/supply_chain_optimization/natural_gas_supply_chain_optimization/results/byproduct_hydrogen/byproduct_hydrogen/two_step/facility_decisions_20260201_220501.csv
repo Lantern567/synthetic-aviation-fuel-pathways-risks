@@ -1,0 +1,4 @@
+﻿设施ID,位置,技术类型,是否建设,小时产能(kg/h),年产能(kg),实际年产量(kg),产能利用率,位置类型,运输模式
+steel_Tianjin Iron and Steel Group Co Ltd_pipeline_direct_conversion,steel_Tianjin Iron and Steel Group Co Ltd,pipeline_direct_conversion,True,42565.03304794518,372869689.49999976,326251034.52693206,0.8749733317406919,byproduct_hydrogen_steel,pipeline_direct
+steel_Tianjin Iron and Steel Group Co Ltd_lng_to_hplant_conversion,steel_Tianjin Iron and Steel Group Co Ltd,lng_to_hplant_conversion,True,42565.03304794518,372869689.49999976,326251034.5269322,0.8749733317406921,byproduct_hydrogen_steel,lng_transfer
+steel_Tianjin New Tiangang United Special Steel Co Ltd_lng_to_hplant_conversion,steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_to_hplant_conversion,True,4586.95549969305,40181730.17731112,11159963.393902095,0.2777372538379057,byproduct_hydrogen_steel,lng_transfer

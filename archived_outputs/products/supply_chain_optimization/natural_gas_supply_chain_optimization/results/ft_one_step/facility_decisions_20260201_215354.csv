@@ -1,0 +1,3 @@
+﻿设施ID,位置,技术类型,是否建设,小时产能(kg/h),年产能(kg),实际年产量(kg),产能利用率,位置类型,运输模式
+ft_ft_candidate_26,ft_candidate_26,ft_direct_conversion,True,68526.53955363082,600292486.4898059,514121187.13736695,0.8564511445806637,airport_with_ng_supply,ng_pipeline_direct
+ft_ft_candidate_27,ft_candidate_27,ft_direct_conversion,True,19563.166576451997,171373339.20971948,149540845.3103991,0.8726027397260276,airport_with_ng_supply,ng_pipeline_direct

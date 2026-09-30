@@ -1,0 +1,89 @@
+﻿位置ID,管道ID,管道名称,运营商,纬度,经度,输送能力(万立方米/天),坐标
+ft_candidate_21,,,,40.422117075,116.8977789925,0.0,"(40.4221, 116.8978)"
+ft_candidate_22,,,,40.1566825,116.4002635,0.0,"(40.1567, 116.4003)"
+ft_candidate_23,,,,38.93046025166667,117.029809515,0.0,"(38.9305, 117.0298)"
+ft_candidate_24,,,,39.05381028,117.662896114,0.0,"(39.0538, 117.6629)"
+ft_candidate_25,,,,39.17081926666666,117.0072864733333,0.0,"(39.1708, 117.0073)"
+ng_pipeline_0,pipeline_15,Russia - China Natural Gas Pipeline (East) Shenyang - Yongqing Section,CNPC,40.27422751333334,119.3083004233333,51.253408,"(40.2742, 119.3083)"
+ng_pipeline_1,pipeline_18,Shaan - Jing Natural Gas Pipeline 1 (Jingbian - Beijing),CNPC,39.82283435,112.5682832988889,9.061376,"(39.8228, 112.5683)"
+ng_pipeline_2,pipeline_19,Shaan - Jing Natural Gas Pipeline 2 (Yulin - Beijing),CNPC,38.79812714615385,114.3923520176923,46.439552,"(38.7981, 114.3924)"
+ng_pipeline_3,pipeline_20,Shaan - Jing Natural Gas Pipeline 3 (Yulin - Beijing),CNPC,38.79812714615385,114.3923520176923,41.05936,"(38.7981, 114.3924)"
+ng_pipeline_4,pipeline_21,Shaan - Jing Natural Gas Pipeline 4 (Jingbian - Beijing),CNPC,39.82283435,112.5682832988889,68.526656,"(39.8228, 112.5683)"
+ng_pipeline_5,pipeline_22,Yong - Tang - Qin Natural Gas Pipeline (Yongqing - Tangshan - Qinhuangdao),CNPC,39.61418774666667,118.09851572,24.635616,"(39.6142, 118.0985)"
+ng_pipeline_6,pipeline_25,West East Gas Pipeline Ji-Ning Connecting Line Wucheng Branchline,CNPC,37.322611935,116.190888575,0.5663360000000001,"(37.3226, 116.1909)"
+ng_pipeline_7,pipeline_26,West East Gas Pipeline Ji-Ning Connecting Line Jining Branchline (Qufu - Jining),CNPC,35.497040625,116.78732621,1.982176,"(35.4970, 116.7873)"
+ng_pipeline_8,pipeline_62,Qin - Shen Natural Gas Pipeline (Qinhuangdao - Shenyang),CNPC,41.31139747857143,121.7191884285714,24.635616,"(41.3114, 121.7192)"
+ng_pipeline_9,pipeline_63,"Qin - Shen Natural Gas Pipeline Huludao Branchline
+",CNPC,40.774751875,120.73996254,1.982176,"(40.7748, 120.7400)"
+ng_pipeline_10,pipeline_68,"Da - Shen Natural Gas Pipeline Dalian Branchline (Songlan - Qianguan)
+",CNPC,39.06391249333333,121.7300050333333,5.380192,"(39.0639, 121.7300)"
+ng_pipeline_11,pipeline_70,"Qin - Shen Natural Gas Pipeline Jinzhou Refinery Branchline
+",CNPC,41.19013504,120.95306527,0.283168,"(41.1901, 120.9531)"
+ng_pipeline_12,pipeline_71,Qin - Shen Natural Gas Pipeline Zhaoyang Branchline (Tanghezi - Jianping),CNPC,41.40379820333333,120.2900387033333,0.0,"(41.4038, 120.2900)"
+ng_pipeline_13,pipeline_76,Anping - Jinan Natural Gas Pipeline,Sinopec,37.5128725075,116.1698141925,8.211872,"(37.5129, 116.1698)"
+ng_pipeline_14,pipeline_77,Yulin - Jinan Natural Gas Pipeline,Sinopec,36.79509798333333,113.8528474033333,8.211872,"(36.7951, 113.8528)"
+ng_pipeline_15,pipeline_84,Er - An - Cang Natural Gas Pipeline (Ordos - Anping - Cangzhou),Sinopec,38.36699125,114.29427075,82.11872,"(38.3670, 114.2943)"
+ng_pipeline_16,pipeline_85,"Er - An - Cang Natural Gas Pipeline Puyang Branchline (Anping - Puyang)
+",Sinopec,36.99338824500001,115.282155255,82.11872,"(36.9934, 115.2822)"
+ng_pipeline_17,pipeline_86,"Er - An - Cang Natural Gas Pipeline Baoding Branchline (Anping - Baoding)
+",Sinopec,38.553245835,115.499361055,82.11872,"(38.5532, 115.4994)"
+ng_pipeline_18,pipeline_94,Xin - Yue - Zhe SNG Pipeline Yu - Lu Branchline (Puyang - Linyi Section),Sinopec,35.45450325,116.5092545,41.05936,"(35.4545, 116.5093)"
+ng_pipeline_19,pipeline_95,Xin - Yue - Zhe SNG Pipeline Yu - Lu Branchline (Puyang - Qihe Section),Sinopec,36.008417705,115.6741082125,41.05936,"(36.0084, 115.6741)"
+ng_pipeline_20,pipeline_99,CNOOC Western Inner Mongolia SNG Pipeline (Hangjing Qi - Huanghua),CNOOC,39.50537472222223,113.6407189066667,54.651424,"(39.5054, 113.6407)"
+ng_pipeline_21,pipeline_149,Gang - Qing Natural Gas Pipeline 3 (Yongqing - Dagang),CNPC,38.93046025166667,117.029809515,18.40592,"(38.9305, 117.0298)"
+ng_pipeline_22,pipeline_150,Shaan - Jing Natural Gas Pipeline 4 Baodi - Xianghe - Xiji Connecting Line,CNPC,39.76380104333333,117.0674134966667,46.439552,"(39.7638, 117.0674)"
+ng_pipeline_23,pipeline_151,Keqi Coal-to-Gas Project SNG Pipeline,Datang International,41.811705224,117.17910677,16.423744,"(41.8117, 117.1791)"
+ng_pipeline_24,pipeline_152,Keqi Coal-to-Gas Project SNG Pipeline Beijing Section (Gubeikou - Gaoliying),CNPC,40.422117075,116.8977789925,3.964352,"(40.4221, 116.8978)"
+ng_pipeline_25,pipeline_153,Jing - Han Natural Gas Pipeline (Zhuozhou - Handan),Hebei Natural Gas,37.88678384,114.89744258875,4.24752,"(37.8868, 114.8974)"
+ng_pipeline_26,pipeline_154,Jing - Han Natural Gas Pipeline Zhuozhou Branchline,Hebei Natural Gas,39.4050136,116.237682585,18.972256,"(39.4050, 116.2377)"
+ng_pipeline_27,pipeline_155,Jing - Shi - Han Natural Gas Pipeline 2 (Zhuozhou - Shijiazhuang - Handan),Hebei Natural Gas,38.06020565217391,115.3157635217391,41.342528,"(38.0602, 115.3158)"
+ng_pipeline_28,pipeline_156,Ying - Zhang Natural Gas Pipeline (Yingxian - Zhangjiakou),CNPC,40.1279885,114.057702,2.548512,"(40.1280, 114.0577)"
+ng_pipeline_29,pipeline_157,Ying - Zhang Natural Gas Pipeline Zhangbei - Shangyi Branchline,Zhangjiakou Natural Gas,40.874442958,114.6277032,0.0,"(40.8744, 114.6277)"
+ng_pipeline_30,pipeline_158,Licheng - Dongyangguan - Shexian - Shahe CBM Pipeline,"Hebei Xintian Guohua
+",36.684298102,114.063819908,6.796032,"(36.6843, 114.0638)"
+ng_pipeline_31,pipeline_159,Qinhuangdao - Fengnan Coastal Natural Gas Pipeline,"Hebei Jiantou Natural Gas
+",39.68444047333333,118.9344476633333,2.265344,"(39.6844, 118.9344)"
+ng_pipeline_32,pipeline_160,Han - Bo Natural Gas Pipeline (Handan - Hebei Bohai New District),"Hebei Jiantou Natural Gas
+",37.53420181111111,116.3231118,12.459392,"(37.5342, 116.3231)"
+ng_pipeline_33,pipeline_161,Han - Bo Natural Gas Pipeline Wuyi - Jingxian Branchline,"Hebei Jiantou Natural Gas
+",37.74353381666666,115.9454342833333,0.0,"(37.7435, 115.9454)"
+ng_pipeline_34,pipeline_162,Shaan - Jing Natural Gas Pipeline 4 Gaoliying - Xishatun Branchline,CNPC,40.1566825,116.4002635,46.439552,"(40.1567, 116.4003)"
+ng_pipeline_35,pipeline_163,Tianjing Coastal Natural Gas Pipeline (Xianshuigu - Beitang - Lutai),"Tianjin Natural Gas
+",39.05381028,117.662896114,0.5663360000000001,"(39.0538, 117.6629)"
+ng_pipeline_36,pipeline_164,Nan - Tang Natural Gas Pipeline (Nanpu Oil Storage - Tangshan),CNPC,39.3927485,118.336240035,1.132672,"(39.3927, 118.3362)"
+ng_pipeline_37,pipeline_165,West East Gas Jining Pipeline Jizao Branchline,CNPC,37.645336,115.7464255,0.5663360000000001,"(37.6453, 115.7464)"
+ng_pipeline_38,pipeline_166,Jizhou - Shahe Natural Gas Pipeline,CNPC,37.202604335,115.039381715,4.24752,"(37.2026, 115.0394)"
+ng_pipeline_39,pipeline_167,Gaoyi - Qinghe Natural Gas Pipeline,"Hebei Jiantou Natural Gas
+",37.32608992500001,115.157937175,1.41584,"(37.3261, 115.1579)"
+ng_pipeline_40,pipeline_168,Tai - Qing - Wei Natural Gas Pipeline (Tai’an - Qingdao - Weihai),CNPC,36.72221963357144,120.2193437878571,30.015808,"(36.7222, 120.2193)"
+ng_pipeline_41,pipeline_169,Tai - Qing - Wei Natural Gas Pipeline Dongying Branchline (Linqu - Dongying),CNPC,37.16240908714285,118.5917004685714,5.097024,"(37.1624, 118.5917)"
+ng_pipeline_42,pipeline_171,Tai - Qing - Wei Natural Gas Pipeline Zhaoyuan Branchline,CNPC,37.12495469,120.52766718,0.0,"(37.1250, 120.5277)"
+ng_pipeline_43,pipeline_172,Zhaoyuan - Longkou Natural Gas Pipeline,CNPC,37.510311425,120.486421315,0.0,"(37.5103, 120.4864)"
+ng_pipeline_44,pipeline_173,Tai - Qing - Wei Natural Gas Pipeline Laiwu Branchline,CNPC,36.14039697,117.74322088,1.132672,"(36.1404, 117.7432)"
+ng_pipeline_45,pipeline_174,Shandong Natural Gas Pipeline Zibo Branchline,CNPC,36.69120823666666,118.073688,6.512864,"(36.6912, 118.0737)"
+ng_pipeline_46,pipeline_175,Shandong Natural Gas Pipeline Changyi Branchline,CNPC,36.74881979333333,119.6264246333333,0.0,"(36.7488, 119.6264)"
+ng_pipeline_47,pipeline_176,Gu - Dong - Xin Natural Gas Pipeline (Gudao - Dongying - Xindian),Sinopec,37.37183839,118.5421426066667,0.0,"(37.3718, 118.5421)"
+ng_pipeline_48,pipeline_177,Jinan - Qilu Petrochemical Natural Gas Pipeline (Jinan - Zibo),Sinopec,36.755230835,117.915532985,9.91088,"(36.7552, 117.9155)"
+ng_pipeline_49,pipeline_178,Ji - Qing Natural Gas Pipeline (Jinan - Qingdao),Sinopec,36.3949844525,119.5298752825,8.211872,"(36.3950, 119.5299)"
+ng_pipeline_50,pipeline_179,Ji - Qing Natural Gas Pipeline 2 (Jinan - Qingdao),Sionpec,36.834629501,118.642862293,14.441568,"(36.8346, 118.6429)"
+ng_pipeline_51,pipeline_180,Ji - Qing Natural Gas Pipeline 2 Linzi Connecting Line,Sinopec,36.992219315,118.17990015,10.194048,"(36.9922, 118.1799)"
+ng_pipeline_52,pipeline_181,Xuan - Ning Natural Gas Pipeline (Xuanzhangtun - Jining),Sinopec,36.0476662925,116.8274132225,2.265344,"(36.0477, 116.8274)"
+ng_pipeline_53,pipeline_183,Zibo - Laiwu Natural Gas Pipeline,Sinopec,36.5444862275,117.799980265,1.41584,"(36.5445, 117.8000)"
+ng_pipeline_54,pipeline_187,Rizhao - Lanshan Natural Gas Pipeline,"Rizhao Natural Gas
+",37.202604335,115.039381715,5.946528,"(37.2026, 115.0394)"
+ng_pipeline_55,pipeline_188,Weifang - Dongying Natural Gas Pipeine Guangrao Branchline,CNPC,36.987899765,118.5618682116667,3.398016,"(36.9879, 118.5619)"
+ng_pipeline_56,pipeline_189,Jiao - Lai Natural Gas Pipeline (Jiaozhou - Laizhou),Sinopec,36.721988665,119.99572327,1.132672,"(36.7220, 119.9957)"
+ng_pipeline_57,pipeline_190,Liaocheng - Tai’an Natural Gas Pipeline,"Taian Gangtai
+",36.33593422,116.455496445,1.982176,"(36.3359, 116.4555)"
+ng_pipeline_58,pipeline_191,Tai’an - Xintai Natural Gas Pipeline,CNPC,35.997646795,117.312392475,1.132672,"(35.9976, 117.3124)"
+ng_pipeline_59,pipeline_196,Yucheng - Jiyang Natural Gas Pipeline,Jinan Towngas,36.81339734,116.8617636166667,2.265344,"(36.8134, 116.8618)"
+ng_pipeline_60,pipeline_198,Shenchi - Yuanping - Wutai Natural Gas Pipeline,CNPC,38.803430458,112.687466982,1.41584,"(38.8034, 112.6875)"
+ng_pipeline_61,pipeline_199,Taiyuan - Heshun - Changzhi CBM Pipeline,"Shanxi Guohua Energy
+",37.06789416666667,113.11197125,9.627712,"(37.0679, 113.1120)"
+ng_pipeline_62,pipeline_201,Qing - Tai Coal Gas Pipeline (Qingxu - Taiyuan),"Shanxi Natural Gas
+",37.66955019,112.54770425,0.0,"(37.6696, 112.5477)"
+ng_pipeline_63,pipeline_202,Mengxian - Shouyang Natural Gas Pipeline,"Shanxi Guohua Energy
+",37.99500292,113.29937139,5.380192,"(37.9950, 113.2994)"
+ng_pipeline_64,pipeline_213,Nanle - Sizhuang Natural Gas Pipeline,Sinopec,36.010832785,115.140089245,1.132672,"(36.0108, 115.1401)"
+ng_pipeline_65,pipeline_405,Shenmu - Anping CBM Gas Pipeline,China CBM,38.07737211571428,113.3360335442857,13.592064,"(38.0774, 113.3360)"
+ng_pipeline_66,pipeline_406,Tianjin Nangang LNG Terminal Gas Pipeline,Beijing Gas Group,39.17081926666666,117.0072864733333,12.459392,"(39.1708, 117.0073)"

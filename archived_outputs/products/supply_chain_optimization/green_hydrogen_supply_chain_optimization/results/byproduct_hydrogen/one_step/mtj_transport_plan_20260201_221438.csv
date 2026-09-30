@@ -1,0 +1,18 @@
+﻿运输ID,起点,终点,周次,运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+steel_Chengde Iron and Steel Group Co Ltd_北京_3,steel_Chengde Iron and Steel Group Co Ltd,北京,3,2.3085158318281198e-07,171.116119,40.947707,117.719747,40.0801,116.5846,MTJ,truck
+steel_Chengde Jianlong Special Steel Co Ltd_北京_2,steel_Chengde Jianlong Special Steel Co Ltd,北京,2,1.94122549146414e-07,140.279606,40.515035,117.596071,40.0801,116.5846,MTJ,truck
+steel_Hebei Donghai Special Steel Co Ltd_北京_0,steel_Hebei Donghai Special Steel Co Ltd,北京,0,1071812.9897482293,212.753584,39.610605,118.474722,40.0801,116.5846,MTJ,truck
+steel_Hebei Donghai Special Steel Co Ltd_天津_0,steel_Hebei Donghai Special Steel Co Ltd,天津,0,1004094.3338848837,148.003076,39.610605,118.474722,39.1244,117.3462,MTJ,truck
+steel_Hebei Donghai Special Steel Co Ltd_天津_3,steel_Hebei Donghai Special Steel Co Ltd,天津,3,1004094.3338846024,148.003076,39.610605,118.474722,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_0,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,0,2282517.6509589003,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_2,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,2,1643305.9924219681,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd_天津_3,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,3,2282517.6509589003,95.24757000000001,39.222566,118.094201,39.1244,117.3462,MTJ,truck
+steel_Tangshan Ganglu Iron and Steel Co Ltd_北京_2,steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,2,1.9813887774944324e-07,167.150278,40.183913,118.073913,40.0801,116.5846,MTJ,truck
+steel_Tianjin Iron and Steel Group Co Ltd_天津_3,steel_Tianjin Iron and Steel Group Co Ltd,天津,3,2.3219035938382173e-07,23.885198,39.031083,117.499246,39.1244,117.3462,MTJ,truck
+steel_Tianjin New Tiangang United Special Steel Co Ltd_天津_3,steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,3,2.0075822249054927e-07,64.788977,39.300258,117.800231,39.1244,117.3462,MTJ,truck
+airport_北京_北京_3,airport_北京,北京,3,5.736364983022218e-07,5.0,40.0801,116.5846,40.0801,116.5846,MTJ,truck
+co2_source_29_北京_0,co2_source_29,北京,0,10440645.65526175,20.25209,39.946923,116.61362,40.0801,116.5846,MTJ,truck
+co2_source_29_北京_1,co2_source_29,北京,1,5756229.322504992,20.25209,39.946923,116.61362,40.0801,116.5846,MTJ,truck
+co2_source_29_北京_2,co2_source_29,北京,2,11512458.645010388,20.25209,39.946923,116.61362,40.0801,116.5846,MTJ,truck
+co2_source_29_北京_3,co2_source_29,北京,3,10766637.013425933,20.25209,39.946923,116.61362,40.0801,116.5846,MTJ,truck
+co2_source_29_天津_1,co2_source_29,天津,1,3286611.9848439405,130.303981,39.946923,116.61362,39.1244,117.3462,MTJ,truck

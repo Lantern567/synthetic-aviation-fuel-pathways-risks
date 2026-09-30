@@ -1,0 +1,10 @@
+{
+  "original_output_files_verified": 197,
+  "model_source_files": 301,
+  "source_commit_identical": 277,
+  "server_helpers": 23,
+  "plotting_label_updates": 1,
+  "supplementary_csv_files": 11,
+  "private_file_and_credential_pattern_scan": "passed",
+  "physical_feasibility_certified": false
+}

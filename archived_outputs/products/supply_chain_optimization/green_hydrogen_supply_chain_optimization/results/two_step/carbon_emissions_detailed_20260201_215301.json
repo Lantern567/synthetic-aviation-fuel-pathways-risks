@@ -1,0 +1,35 @@
+{
+  "detailed": {
+    "saf_facility": 596465.289239923,
+    "electrolyzer_facility": 65440.942889938866,
+    "methanol_to_saf": 1225222.2137497126,
+    "saf_synthesis_energy": 11639611.030622246,
+    "h2_production": 60750601.4317581,
+    "mtj_storage": 10907126.387156028,
+    "h2_storage": 951486.3974194408,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 2557938.388716669,
+    "h2_transport": 2557938.388716669,
+    "mtj_transport": 646130.3546143242,
+    "co2_pipeline_transport": 268464.3310508841,
+    "co2_transport": 268464.3310508841,
+    "co2_utilization_credit": -159108718.03555253
+  },
+  "by_stage": {
+    "raw_material_emissions": 0.0,
+    "facility_emissions": 661906.2321298622,
+    "production_emissions": 73615434.67612788,
+    "storage_emissions": 11858612.78457546,
+    "transport_emissions": 3472533.074381875,
+    "co2_utilization_credit": -159108718.03555253,
+    "total_emissions": -69500231.268339,
+    "annual_emissions": -903503006.4884202
+  },
+  "total_production_kg": 51050925.572904475,
+  "carbon_intensity_kg": -1.3613902292346796,
+  "carbon_intensity_mj": -31.550179124789793,
+  "vs_traditional_jet": -135.44963946605594,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": -120.55017912478979,
+  "vs_corsia": -205.1672637492993
+}

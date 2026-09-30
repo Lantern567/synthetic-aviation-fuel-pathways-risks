@@ -1,0 +1,1054 @@
+{
+  "CTL": {
+    "solution": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/complete_solution_20260201_205438.json",
+    "carbon": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_20260201_205438.json",
+    "timestamp_match": true
+  },
+  "CTL-BH": {
+    "solution": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/complete_solution_20260201_215450.json",
+    "carbon": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/carbon_emissions_detailed_20260201_215450.json",
+    "timestamp_match": true
+  },
+  "GTL-GH": {
+    "solution": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_20260201_215938.json",
+    "carbon": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_20260201_215938.json",
+    "timestamp_match": true
+  },
+  "GTL": {
+    "solution": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_20260201_215354.json",
+    "carbon": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_20260201_215354.json",
+    "timestamp_match": true
+  },
+  "GTL-BH": {
+    "solution": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_20260201_220501.json",
+    "carbon": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_220501.json",
+    "timestamp_match": true
+  },
+  "CCU-GH-MTJ": {
+    "solution": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_20260201_215301.json",
+    "carbon": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20260201_215301.json",
+    "timestamp_match": true
+  },
+  "CCU-GH-FT": {
+    "solution": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_20260201_215531.json",
+    "carbon": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_detailed_20260201_215531.json",
+    "timestamp_match": true
+  },
+  "CCU-BH-MTJ": {
+    "solution": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_20260201_221232.json",
+    "carbon": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_221232.json",
+    "timestamp_match": true
+  },
+  "CCU-BH-FT": {
+    "solution": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_20260201_221438.json",
+    "carbon": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_20260201_221438.json",
+    "timestamp_match": true
+  },
+  "DAC-GH-MTJ": {
+    "solution": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_20260201_194439.json",
+    "carbon": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20251116_190513.json",
+    "timestamp_match": false
+  },
+  "DAC-GH-FT": {
+    "solution": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_20260201_194442.json",
+    "carbon": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/carbon_emissions_detailed_20251116_202839.json",
+    "timestamp_match": false
+  },
+  "DAC-BH-MTJ": {
+    "solution": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_20260201_204929.json",
+    "carbon": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_204929.json",
+    "timestamp_match": true
+  },
+  "DAC-BH-FT": {
+    "solution": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_20260201_205000.json",
+    "carbon": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_20260201_205000.json",
+    "timestamp_match": true
+  },
+  "_files": [
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/airports_20260201_205438.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/airports_20260201_215450.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/carbon_emissions_20260201_215450.csv",
+      "sha256": "c9c9a7e38f3579c73de369da55799ceb36e4778293c1767e2349957c142b985e",
+      "bytes": 1447
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/carbon_emissions_detailed_20260201_215450.json",
+      "sha256": "8faabb5aedf1cfbb1fc5af83588d7cbec6d8975e8bdcaad650a6c1e1d4c5847d",
+      "bytes": 2049
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/complete_solution_20260201_215450.json",
+      "sha256": "79ae5de4a3e3db2357035b75a1d496f5a3a60afa3a4e81352f2168c2a34e7e99",
+      "bytes": 2355760
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/facility_decisions_20260201_215450.csv",
+      "sha256": "7b60e859b9cad15e24acd0f5aa336b47cc5f17ea9117daad5d819ff951457ecb",
+      "bytes": 849
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/hourly_production_summary_20260201_215450.csv",
+      "sha256": "cc7021ca9d8e62290277f01f63280f68fa1270e806f3f6fc6af96cfceb3571b3",
+      "bytes": 12216
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/hydrogen_transport_plan_20260201_215450.csv",
+      "sha256": "09ba1d351c428f29d6eb68263a5385aa63c2295871cac6508d6bdbbef5f075ad",
+      "bytes": 6273
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/infrastructure_selection_stats_20260201_215450.csv",
+      "sha256": "e8cf0e69b733db7f1082a5b3f213e213ff1909d6660235c26cb2656b0d0e15bc",
+      "bytes": 171
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/infrastructure_summary_20260201_215450.csv",
+      "sha256": "bfbf066897833591921b81e2515ad5048d4568eeb7100248e9aff8b9bab3c7a9",
+      "bytes": 7582
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/inventory_levels_20260201_215450.csv",
+      "sha256": "850b30be7b7b1bbe4f9e36d4b0a94e7401b1d9c829d419fc006c7d1f3aaa9e6d",
+      "bytes": 256020
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/mtj_transport_plan_20260201_215450.csv",
+      "sha256": "56290c269a4638c31dd9ac3218a934e94cc8d07b15aa321ebe99717c97c15e46",
+      "bytes": 6410
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/optimization_summary_20260201_215450.csv",
+      "sha256": "37639efa5c0fd4df2bae42089ef1691748f88b8b9794cd8c715457c5dc510b89",
+      "bytes": 2334
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/byproduct_hydrogen/transport_summary_20260201_215450.csv",
+      "sha256": "dc10a7cf59aadfd6e2b487c4df067d34b94412554e260aeba8e79dbc3dcf7b47",
+      "bytes": 731013
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/carbon_emissions_20260201_205438.csv",
+      "sha256": "543669ded151e52abb86ccbf067c173f0c68c338e7361d9ad40957ce6211ed22",
+      "bytes": 1448
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/carbon_emissions_detailed_20260201_205438.json",
+      "sha256": "3e4bee31274a0a4dc6b18639312aae43688d6b7d4e9ce7cab366418ffed781c8",
+      "bytes": 2052
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/complete_solution_20260201_205438.json",
+      "sha256": "0cf4b2bf2eb65205833f0ea9a1ba16f3e435022de498dd38ebc1b5b2bb814daa",
+      "bytes": 5713713
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/facility_decisions_20260201_205438.csv",
+      "sha256": "dd8f9ba6dc35e9272a8b43f18c3f1a0e985fe6e404b6debbe0987844c4de788f",
+      "bytes": 26546
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/hourly_production_summary_20260201_205438.csv",
+      "sha256": "0a733ae98cb13e14f5f73e18e30673fe0373fbf8a22f9156b0da40a4a2778902",
+      "bytes": 15436
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/hydrogen_transport_plan_20260201_205438.csv",
+      "sha256": "9c913990b5acf201ffb87c68b44488aae0ca997baf7cc4fc67fd19f9f99239ea",
+      "bytes": 25061
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/infrastructure_selection_stats_20260201_205438.csv",
+      "sha256": "121983d7666a6c5d290872eb857350b14214086f99ced1ed39eac79ceae2a937",
+      "bytes": 116
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/infrastructure_summary_20260201_205438.csv",
+      "sha256": "e556a3c21e44921cf8be9d43baad864a5509c21cd7cade97f0ac6d232701dc12",
+      "bytes": 15095
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/inventory_levels_20260201_205438.csv",
+      "sha256": "3ce0aa2ca4c1f379612efcabc9b3e8eb78d302b3123fc4784b2e443c8b3aaa5c",
+      "bytes": 796302
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/mtj_transport_plan_20260201_205438.csv",
+      "sha256": "9173efdbd905701dcca7cd4226c0ca5c2c546e776019d10f0cb9e72f5f90594f",
+      "bytes": 21642
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/optimization_summary_20260201_205438.csv",
+      "sha256": "eacab3bcf5f9482a0a53069a84225b1e51baf5478ea2d8458aac4033482785fb",
+      "bytes": 2335
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/renewable_energy_plants_20260201_205438.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/coal_hydrogen_saf_optimization/results/transport_summary_20260201_205438.csv",
+      "sha256": "f7eb49a8c8c4e7c3d7eb1c336ccfa7921f381a6492eca78586ba598118495cd5",
+      "bytes": 1643073
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/airports_20260201_205000.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_20260201_205000.csv",
+      "sha256": "75cf9eb968326d9b71f308bbf6474a732e3f2862eee803ca8fd73728fba1c796",
+      "bytes": 1844
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_20260201_205000.json",
+      "sha256": "fd1f7838048d1963d15dff777789cc1b13e0686a9d397ea8b8ca80e1653e4da2",
+      "bytes": 2143
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_20260201_205000.json",
+      "sha256": "85f6726ed3b0b406c8f5a1fddd64e5341371cb59f0985fb442ac9d1c87d6b475",
+      "bytes": 10378758
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/facility_decisions_20260201_205000.csv",
+      "sha256": "c30b760030c985420ff385b7f45c1e057752de718f6f043bad24d699a0e5e0db",
+      "bytes": 18977
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_20260201_205000.csv",
+      "sha256": "5b93489e9a36a6d175be6a079ffbc0ee093103a88627cc9471a48d70926c715b",
+      "bytes": 12334
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/hydrogen_transport_plan_20260201_205000.csv",
+      "sha256": "6ca6d85f7b4c6aaef05eda91be05297ed0931f1324af900f398702a3d8bb5a5e",
+      "bytes": 349
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/infrastructure_selection_stats_20260201_205000.csv",
+      "sha256": "e8cf0e69b733db7f1082a5b3f213e213ff1909d6660235c26cb2656b0d0e15bc",
+      "bytes": 171
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/infrastructure_summary_20260201_205000.csv",
+      "sha256": "22e751a6db01d0c7cd989cc7f42a7317f2d8f9cf4ba60a1d85164966cce6c7fc",
+      "bytes": 10238
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/inventory_levels_20260201_205000.csv",
+      "sha256": "ff1225f4320739755c215dba33da19cdab9bea8a8d4c5071a09c0f10cf64c347",
+      "bytes": 767968
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/mtj_transport_plan_20260201_205000.csv",
+      "sha256": "3732ac62870dffe1527b6b5f3cad329343b624b22f9198a25475deb33f3cb237",
+      "bytes": 24327
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/optimization_summary_20260201_205000.csv",
+      "sha256": "1332c8f0aad9f00b0dbbe5e30b8b0a20c1493b7dedb4a4ee665a5be5acb94d1a",
+      "bytes": 2394
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/renewable_energy_plants_20260201_205000.csv",
+      "sha256": "b31a345337dc234e62ce1a589527a95ef5d64a3a1e035f34ae1fdad1aaa48ba7",
+      "bytes": 11718
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/one_step/transport_summary_20260201_205000.csv",
+      "sha256": "310fd9c832f15e9d646bebec57ee95d4e6e202c273bf33caf520932dbb14a8d2",
+      "bytes": 3144181
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/airports_20260201_204929.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_20260201_204929.csv",
+      "sha256": "5cffafeee979ac540941373ff7ecc9ee42373f8c7f9e782cc971c78921bcdd60",
+      "bytes": 1818
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_204929.json",
+      "sha256": "bda6bb083429d565d0277b16440b1c95c0342c203572c03c9cc093a63b3b4b46",
+      "bytes": 2098
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_20260201_204929.json",
+      "sha256": "251df5d8b1e412fb8731c8a61512dafdac8fa79e7aa8c5a47815cd07e323de57",
+      "bytes": 10736327
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/facility_decisions_20260201_204929.csv",
+      "sha256": "8b2ac46decc1a7fdbe45016faa3de4a4ea19d57252f404f380f178c04953c7e7",
+      "bytes": 19588
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/hourly_production_summary_20260201_204929.csv",
+      "sha256": "58fc83c2276877c9b8855885b3ec83c075d152c4cbf0e4c46956f6b4511efd09",
+      "bytes": 12339
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/infrastructure_selection_stats_20260201_204929.csv",
+      "sha256": "e8cf0e69b733db7f1082a5b3f213e213ff1909d6660235c26cb2656b0d0e15bc",
+      "bytes": 171
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/infrastructure_summary_20260201_204929.csv",
+      "sha256": "22e751a6db01d0c7cd989cc7f42a7317f2d8f9cf4ba60a1d85164966cce6c7fc",
+      "bytes": 10238
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/inventory_levels_20260201_204929.csv",
+      "sha256": "3970f5ab0f8916c173f7a0707a9942d288f10c9057e597b249567fa89af58f9a",
+      "bytes": 657926
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/mtj_transport_plan_20260201_204929.csv",
+      "sha256": "b5e5de036e88bc4e1e1680a561eb37f1540b8b3f5682ff7d2ec248167fe235fe",
+      "bytes": 25544
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/optimization_summary_20260201_204929.csv",
+      "sha256": "dfe1c82da081f65c8302bb6f7877300682e2f3c2f8a74645201f8e235126c355",
+      "bytes": 2368
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/renewable_energy_plants_20260201_204929.csv",
+      "sha256": "b31a345337dc234e62ce1a589527a95ef5d64a3a1e035f34ae1fdad1aaa48ba7",
+      "bytes": 11718
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/byproduct_hydrogen/two_step/transport_summary_20260201_204929.csv",
+      "sha256": "7b86966388294bce294cbf1d5eda3389655554a13415c00f7a43a1c649686973",
+      "bytes": 3377223
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/airports_20260201_194442.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/carbon_emissions_20260201_194442.csv",
+      "sha256": "0c21f2a54bcf12301ca11c906aa3c8006071a402e5b3d9e30d691946f7a53137",
+      "bytes": 1846
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/carbon_emissions_detailed_20251116_202839.json",
+      "sha256": "a32cfc547df5e1ca35c0a5b8868c5878b04fa6944406c7e23d42072fe5e425af",
+      "bytes": 1329
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/carbon_emissions_detailed_20260201_194442.csv",
+      "sha256": "02433c235f2e7467f394f6fa51872f0a88faf40cd2f06f2236cfa77e3658682f",
+      "bytes": 2136
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/complete_solution_20260201_194442.json",
+      "sha256": "a046938c9434971d4ae804e482ed6a0ce851acf57770c52b09f4458a4540fa69",
+      "bytes": 22217015
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/facility_decisions_20260201_194442.csv",
+      "sha256": "60a344fb5fa5e37d3d85d96f2ef71cf75d9dc5f222f551dafee02e0890d67d9f",
+      "bytes": 26631
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hourly_production_summary_20260201_194442.csv",
+      "sha256": "98053c6ec7c745426966f70aae38cc4f144d05e4b56eed264f4314d9b1e217dd",
+      "bytes": 18524
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/hydrogen_transport_plan_20260201_194442.csv",
+      "sha256": "6e91edbf94a76b0addd2847b0c96ccd7b8b13679d6d5d250c080d8f207e3df19",
+      "bytes": 25069
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/infrastructure_selection_stats_20260201_194442.csv",
+      "sha256": "121983d7666a6c5d290872eb857350b14214086f99ced1ed39eac79ceae2a937",
+      "bytes": 116
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/infrastructure_summary_20260201_194442.csv",
+      "sha256": "e556a3c21e44921cf8be9d43baad864a5509c21cd7cade97f0ac6d232701dc12",
+      "bytes": 15095
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/inventory_levels_20260201_194442.csv",
+      "sha256": "1be0d1e471a43daf084caf341c04d0fe509cca2e531decdf3e916f58b03ebab7",
+      "bytes": 714543
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/mtj_transport_plan_20260201_194442.csv",
+      "sha256": "c53f3c82bb405e1c6ed75395d3047fdf331926ccb1ba210d8ea5e6d483ab8859",
+      "bytes": 65041
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/optimization_summary_20260201_194442.csv",
+      "sha256": "d69e28379c85a747adc521819b22a5f082c6f2e42b0d43673a0b5aaab58cda8e",
+      "bytes": 2404
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/renewable_energy_plants_20260201_194442.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/one_step/transport_summary_20260201_194442.csv",
+      "sha256": "c1238aa18ac6a774c5f02a119d6abd846189c657e10728163bcc4a43a752d5da",
+      "bytes": 7449461
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/airports_20260201_194439.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_20260201_194439.csv",
+      "sha256": "1a66a6a9ef30bef5fb62432046ee209b120a2070e9cead6078dbc5d7a24dd011",
+      "bytes": 1846
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20251116_190513.json",
+      "sha256": "870d818994c5c2d992a943af22a39d253905e76cf5f233f8375e40587ab5c32b",
+      "bytes": 2013
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20260201_194439.csv",
+      "sha256": "a057e557ecd5f5b79e670b7f4ffe573cb28e24b7fadea62b0dfff6fe19911cb5",
+      "bytes": 2134
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/complete_solution_20260201_194439.json",
+      "sha256": "d0902f0ca30255f1d0ad2c541ee4c6155834cc0f135ffd009bc03329aeb56318",
+      "bytes": 20320248
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/facility_decisions_20260201_194439.csv",
+      "sha256": "0c811dd833cb7f5ec1e254bb48a809289706617327dd3a6f9c188ba6a0336f12",
+      "bytes": 31278
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hourly_production_summary_20260201_194439.csv",
+      "sha256": "8793c0a71c730e11ec8c2b1efac6725cad20b1d385d6aec5ea042863e023b70c",
+      "bytes": 18690
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/hydrogen_transport_plan_20260201_194439.csv",
+      "sha256": "84789aa2e40c6050d755c863a712b0dc3993260913a77fa7c2ee36df2bcb4993",
+      "bytes": 24623
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/infrastructure_selection_stats_20260201_194439.csv",
+      "sha256": "121983d7666a6c5d290872eb857350b14214086f99ced1ed39eac79ceae2a937",
+      "bytes": 116
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/infrastructure_summary_20260201_194439.csv",
+      "sha256": "e556a3c21e44921cf8be9d43baad864a5509c21cd7cade97f0ac6d232701dc12",
+      "bytes": 15095
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/inventory_levels_20260201_194439.csv",
+      "sha256": "53f07e645138bb2a324ec778172bbd6406664571dd5d607b487a5dc0678b6773",
+      "bytes": 2214167
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/mtj_transport_plan_20260201_194439.csv",
+      "sha256": "9505f2373c4d21c2f486753b550dfffd4a114b6e0442ee41c9cd3f268b93cafa",
+      "bytes": 65122
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/optimization_summary_20260201_194439.csv",
+      "sha256": "c6fafa5e1e111b174dfd2ba796067be151a1abfd720ff9a73db08f7eb7a2f399",
+      "bytes": 2408
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/renewable_energy_plants_20260201_194439.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/two_step/transport_summary_20260201_194439.csv",
+      "sha256": "7299413922496a708e54ce06fccf3552395af59cd9fe36c97d4d9daf866e92dd",
+      "bytes": 5640626
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/airports_20260201_221438.csv",
+      "sha256": "daf642c67155fccac61482ca217f36e5d41968338b35fc3654a7a1d54dcc8187",
+      "bytes": 301
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/byproduct_hydrogen_facilities_20260201_221438.csv",
+      "sha256": "2abe52251e38d9f0c4132f13a2b8c971ac910ad5905693b952592295ddc33dad",
+      "bytes": 11416
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_20260201_221438.csv",
+      "sha256": "42c78f464e09dce54b698cc0d2e6d6b5d606b9d6d4ab5a1b61c7cc9ae0a3a3ed",
+      "bytes": 1648
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/carbon_emissions_detailed_20260201_221438.json",
+      "sha256": "9843146247f7a31f043054b12a03af4fb4075c9cf495343be4a70435505b4ef2",
+      "bytes": 1970
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/complete_solution_20260201_221438.json",
+      "sha256": "df18796c2867c51234b37ea18d8f831afa92aa4fd5cad3cfc7a99d53e0d2bda3",
+      "bytes": 981237
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/facility_decisions_20260201_221438.csv",
+      "sha256": "6ca9d207b0dac7659830043cd3b1dd71989224832cf9fd33dc1c425b725587e3",
+      "bytes": 14076
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/hourly_production_summary_20260201_221438.csv",
+      "sha256": "d815885965720fe641fbc944d78780b8727432d5dba0cf20d8bfd5ecca5538ea",
+      "bytes": 12366
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/hydrogen_transport_plan_20260201_221438.csv",
+      "sha256": "454d2eb78976791445386bc92c27f000604c4bce96573027d36a2d5d2e0ad695",
+      "bytes": 8947
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/infrastructure_selection_stats_20260201_221438.csv",
+      "sha256": "2fdee3b855761cee7b03b12e1b5c42037fb9d5b1269084cfbbe86c03f56fece5",
+      "bytes": 198
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/infrastructure_summary_20260201_221438.csv",
+      "sha256": "10591b9e91d4d92134dd65c913d800fbd8b193b754d7cee32ee3bfbca16f4fc3",
+      "bytes": 13245
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/inventory_levels_20260201_221438.csv",
+      "sha256": "8e77fecd1883263a6d14c295d672430dbcfa1f366724118573d383e439b57fbf",
+      "bytes": 118728
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/mtj_transport_plan_20260201_221438.csv",
+      "sha256": "7f1e42c999e92fa1f6612f4d14a09744bb68449f65601593276dcaf654b43aaa",
+      "bytes": 2994
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/optimization_summary_20260201_221438.csv",
+      "sha256": "f3157c7fdd865930eed88352e8f4410eac56306c1b6b22d115a107193a24e5b3",
+      "bytes": 2493
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/one_step/transport_summary_20260201_221438.csv",
+      "sha256": "be8e195d81138ca0f0cf7e54a9f32ab5ea942f147425cf5f5665b630e05b65b9",
+      "bytes": 274979
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/airports_20260201_221232.csv",
+      "sha256": "daf642c67155fccac61482ca217f36e5d41968338b35fc3654a7a1d54dcc8187",
+      "bytes": 301
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/byproduct_hydrogen_facilities_20260201_221232.csv",
+      "sha256": "2abe52251e38d9f0c4132f13a2b8c971ac910ad5905693b952592295ddc33dad",
+      "bytes": 11416
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_20260201_221232.csv",
+      "sha256": "fdcad61c6a9e9dbeb5445718fc27b4936bd852b2516b1e38d8490542daa622a0",
+      "bytes": 1646
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_221232.json",
+      "sha256": "e1e7185d7dbf08a9795257fe2cd0b7f60009dddaad9d19f5bc7119e4fb74a362",
+      "bytes": 1966
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/complete_solution_20260201_221232.json",
+      "sha256": "87767d3b5d962102c3e54e5d3afc08d9b4774d1144c5b0a03ea8a91e86d47e5d",
+      "bytes": 1489417
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/facility_decisions_20260201_221232.csv",
+      "sha256": "71d81e580683e791a0f26652a4640573777cf6f48c88270f91d83884594d9204",
+      "bytes": 14810
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/hourly_production_summary_20260201_221232.csv",
+      "sha256": "8349d6fe6ec3c0414e35f774a163724a18d899dd0a7dc15226ee96a0f10ee0e5",
+      "bytes": 12303
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/hydrogen_transport_plan_20260201_221232.csv",
+      "sha256": "2ebf32cc4789100df98df0fbda6019734111e14d2ab8a38d8f3f58dc7207bce3",
+      "bytes": 11589
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/infrastructure_selection_stats_20260201_221232.csv",
+      "sha256": "2fdee3b855761cee7b03b12e1b5c42037fb9d5b1269084cfbbe86c03f56fece5",
+      "bytes": 198
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/infrastructure_summary_20260201_221232.csv",
+      "sha256": "10591b9e91d4d92134dd65c913d800fbd8b193b754d7cee32ee3bfbca16f4fc3",
+      "bytes": 13245
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/inventory_levels_20260201_221232.csv",
+      "sha256": "b79592c6b92011ec0d97aebf2406583876d6c99b3c6c558b3662d2c00151215a",
+      "bytes": 172972
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/mtj_transport_plan_20260201_221232.csv",
+      "sha256": "d453bc28a134a4aabbc56bbfda4dd8b006069e20e090959c8faaeda8d276916c",
+      "bytes": 5944
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/optimization_summary_20260201_221232.csv",
+      "sha256": "287e8acb50255fce114094d84a92c8523e4286139d831008f226cd5664f26299",
+      "bytes": 2494
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/byproduct_hydrogen/two_step/transport_summary_20260201_221232.csv",
+      "sha256": "f75d7e3ccbc9bb24478c55b41a67dad40e318c4a9c9b3788a26a68fc4b384d2b",
+      "bytes": 432600
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/airports_20260201_215531.csv",
+      "sha256": "daf642c67155fccac61482ca217f36e5d41968338b35fc3654a7a1d54dcc8187",
+      "bytes": 301
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_20260201_215531.csv",
+      "sha256": "bd79c517dada486a64225f1bf71151b1c221d6325537de19c097cfa609ec9e52",
+      "bytes": 1239
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/carbon_emissions_detailed_20260201_215531.json",
+      "sha256": "4e4f66b2240832ed4425a36590f741f920b42dce55d16f066c6ff70f7b3502ee",
+      "bytes": 1314
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/complete_solution_20260201_215531.json",
+      "sha256": "486f39247036e22f2c1afeead96dabd9906c162410e33a9e0d6152a0c08ba0ce",
+      "bytes": 16212438
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/facility_decisions_20260201_215531.csv",
+      "sha256": "5918d71d5ea6506aec3762f2547a42367a6dd64c8a02116c65a2159f30080e17",
+      "bytes": 26249
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hourly_production_summary_20260201_215531.csv",
+      "sha256": "40ecf27c56fb024a248c3fb91bfdb3f218e5ab643b347bcccea9524288ddccdc",
+      "bytes": 15402
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/hydrogen_transport_plan_20260201_215531.csv",
+      "sha256": "910942eda856080f0fea975a38042eafc6d2f30218a58c2feeca6dad4bfbf0b0",
+      "bytes": 33413
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/infrastructure_selection_stats_20260201_215531.csv",
+      "sha256": "3dbb93009534c94fbb6d4284cf10341ff34e601cb2079f87d10930245e6ac872",
+      "bytes": 143
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/infrastructure_summary_20260201_215531.csv",
+      "sha256": "2a59b6005a896fe609dedf03d3354f816337f0d08c3eb64904659e08020dffc8",
+      "bytes": 17462
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/inventory_levels_20260201_215531.csv",
+      "sha256": "522173fc578cee4a28a862840eeffb4df0ef9840b16a718feba7055c15e7af3b",
+      "bytes": 2710867
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/mtj_transport_plan_20260201_215531.csv",
+      "sha256": "6a5f733479af712feb40b132d58faac88bdede609187b6f443bc51e1c32d5d2b",
+      "bytes": 77528
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/optimization_summary_20260201_215531.csv",
+      "sha256": "b44cca0b749c47ea10b6d39d4da5a484df7121ffd1871bc283f9409487a8fc42",
+      "bytes": 2502
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/renewable_energy_plants_20260201_215531.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/one_step/transport_summary_20260201_215531.csv",
+      "sha256": "17fffe73ab0fe698ba8c7d0cc0abf2a86a58bbf611b91d4f4accd228cfa8c8f3",
+      "bytes": 4466149
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/airports_20260201_215301.csv",
+      "sha256": "daf642c67155fccac61482ca217f36e5d41968338b35fc3654a7a1d54dcc8187",
+      "bytes": 301
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/carbon_emissions_20260201_215301.csv",
+      "sha256": "c233db6efb35e5c5642a3547430eb639baadec94991fbdfe28603cd88b90edba",
+      "bytes": 1237
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/carbon_emissions_detailed_20260201_215301.json",
+      "sha256": "8d4b908630e6899a733a0281293f6131ba54bf88e75932d268087e44462b80d1",
+      "bytes": 1311
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/complete_solution_20260201_215301.json",
+      "sha256": "d2bcac2fb655dde61f77dd87a900005e00afceac74f6daf86e0dec3b2d33fd73",
+      "bytes": 6937573
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/facility_decisions_20260201_215301.csv",
+      "sha256": "32934345515fa2f2683ce4b48d9ca7ebae0d736ccda2b66dc95a66d9d6689ad9",
+      "bytes": 26263
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hourly_production_summary_20260201_215301.csv",
+      "sha256": "39b1754989a8a339c6d57241f2e091c7a6bd478998be5075b7e7e8b07e667ffc",
+      "bytes": 15419
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/hydrogen_transport_plan_20260201_215301.csv",
+      "sha256": "f149e16aebbab9423ac50469335bf695a66b1940b111cfbf2b25d08c44dbb73c",
+      "bytes": 33458
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/infrastructure_selection_stats_20260201_215301.csv",
+      "sha256": "3dbb93009534c94fbb6d4284cf10341ff34e601cb2079f87d10930245e6ac872",
+      "bytes": 143
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/infrastructure_summary_20260201_215301.csv",
+      "sha256": "2a59b6005a896fe609dedf03d3354f816337f0d08c3eb64904659e08020dffc8",
+      "bytes": 17462
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/inventory_levels_20260201_215301.csv",
+      "sha256": "785b7d8e557bcc43bfde5c8a63063f11c96377a33702e17e2f7ca14b8992f797",
+      "bytes": 677614
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/mtj_transport_plan_20260201_215301.csv",
+      "sha256": "786b316e9877e318d77bbd4ac8efeb127ddffef8f8086c9e2bcdc52c922d12a6",
+      "bytes": 50015
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/optimization_summary_20260201_215301.csv",
+      "sha256": "1a14955aa71c4c906b14eadfae450e54eb66a22422de3cf73bf7bbaac8912f83",
+      "bytes": 2496
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/renewable_energy_plants_20260201_215301.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/two_step/transport_summary_20260201_215301.csv",
+      "sha256": "dbe2385faed47cfa1c078f696ea858886c40e7f1484a001f08cb03ff427b834a",
+      "bytes": 2248455
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/airports_20260201_215938.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/airports_20260201_220501.csv",
+      "sha256": "5eb43b11462f30a1bde5c37d9dd7178574d224d1384d498d8feaf1fae97fab41",
+      "bytes": 302
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_20260201_220501.csv",
+      "sha256": "0a8ec28e4501a324803844a2d4a96155cd6028d4799c425b83148a23bf5f0da7",
+      "bytes": 1598
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/carbon_emissions_detailed_20260201_220501.json",
+      "sha256": "1fb3fe3076223c8c28fbfe2ccd5da4165e8bb46b59dba482e04b0c4fee8531c5",
+      "bytes": 1802
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/complete_solution_20260201_220501.json",
+      "sha256": "6fcf80ef2b77346bec740467f09c2fe8cda5eaeee08b2a1b337fc61a361c231d",
+      "bytes": 88602
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/facility_decisions_20260201_220501.csv",
+      "sha256": "9324cc18dd3b229ebf65144cd08ce0c2990885b8c13c221d6ea80662df3874b1",
+      "bytes": 926
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/hourly_production_summary_20260201_220501.csv",
+      "sha256": "4ec222bb094579d59998f4320875632f2e76f4fb3405c3e90b120e980380e80a",
+      "bytes": 12089
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/infrastructure_selection_stats_20260201_220501.csv",
+      "sha256": "6a2a5a131864daffe206620ed860c6934be3f352dffbf1c38ffc5992a43bd8ee",
+      "bytes": 232
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/infrastructure_summary_20260201_220501.csv",
+      "sha256": "568b6f31cb6aa211f2c978feea356f14dbd3f0e553f4e21bf56261ce43b3e8ed",
+      "bytes": 34380
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/inventory_levels_20260201_220501.csv",
+      "sha256": "98b71909c53fe07aa037024c4c37cc3823ee5d1fe8674a66133e94521a998ad2",
+      "bytes": 38329
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/lng_terminals_20260201_220501.csv",
+      "sha256": "4ac4d95fefc3d85f22c7353c599c48264d00eb8d4975e82679ce2c87c73060c8",
+      "bytes": 1702
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/mtj_transport_plan_20260201_220501.csv",
+      "sha256": "1380c26396e34dd1d21e85aeae5a2c48e1486305c5c5015bb349a67bcc91cf06",
+      "bytes": 1993
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/ng_pipelines_20260201_220501.csv",
+      "sha256": "e6dd76156602f2aa73816fd1f739b26bcad49fc2be439592cd43b4f24b28fe1e",
+      "bytes": 21131
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/ng_transport_plan_20260201_220501.csv",
+      "sha256": "66aeb0b3292a3f64d0564242f3f1898da0abfbff34e779396bfd8be05e44c510",
+      "bytes": 2777
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/optimization_summary_20260201_220501.csv",
+      "sha256": "235ec5c30114d5695e6820cb4d1c06ae35cc01b6bd82d891ee25c31c62855b4d",
+      "bytes": 2413
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/renewable_energy_plants_20260201_220501.csv",
+      "sha256": "b31a345337dc234e62ce1a589527a95ef5d64a3a1e035f34ae1fdad1aaa48ba7",
+      "bytes": 11718
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/byproduct_hydrogen/byproduct_hydrogen/two_step/transport_summary_20260201_220501.csv",
+      "sha256": "e034199948e530c9d9b5d50c9b780e68d53e6a94b6e550ce4cf1943746770505",
+      "bytes": 5855
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_20260201_215938.csv",
+      "sha256": "e9097c8cf0f8a78d180d2797eeece487f72d84963b36ec6f64fe1cee78910926",
+      "bytes": 1638
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/carbon_emissions_detailed_20260201_215938.json",
+      "sha256": "ae3ecbc07eecd55dd2fbcaa575e686533d9dfcf531fe770e4020db60e827ea88",
+      "bytes": 1861
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/complete_solution_20260201_215938.json",
+      "sha256": "e7de93e2680834637407e4967b8b67196442f11eb86c27d3ec18319cf1ce2012",
+      "bytes": 5170379
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/facility_decisions_20260201_215938.csv",
+      "sha256": "c9bd3a2f1b69c977f9059bc3518fd9a9bba0c73a1db7140583dd1d5159cef059",
+      "bytes": 64183
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/airports_20260201_215354.csv",
+      "sha256": "d92f4b0953b9adaeed25c2aaef299029f9c156d48835e8e57bd79c9d4e3dcff7",
+      "bytes": 257
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_20260201_215354.csv",
+      "sha256": "f6fb37d654085d5dcb350b44485d08e705b095256ed9114f630d1fd86a8a845e",
+      "bytes": 1101
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/carbon_emissions_detailed_20260201_215354.json",
+      "sha256": "0442290ff1527e4178028743bfb966994e9d0090835cd2d9470fa81f5028511c",
+      "bytes": 1310
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/complete_solution_20260201_215354.json",
+      "sha256": "600de5945d834feee140891dc11b50e9b40cca3972d9f5da21ebe43a4e3b3f08",
+      "bytes": 14896
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/facility_decisions_20260201_215354.csv",
+      "sha256": "509d75813498479f4d370994b508047f7dccbe4e17b3c73a0a751654d912e4cc",
+      "bytes": 495
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/hourly_production_summary_20260201_215354.csv",
+      "sha256": "e8381de3da9747d6c5a1bcc34345502720f0514be91a40d19f64bbf39b864e09",
+      "bytes": 9150
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/infrastructure_selection_stats_20260201_215354.csv",
+      "sha256": "e302ba266cbe0e9a3616f03f79565eaf86e1452a63d9f7901bbf3b843a0d544c",
+      "bytes": 119
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/infrastructure_summary_20260201_215354.csv",
+      "sha256": "16e081663862f79adc0df59297e51beba488ea5522f9ee99e0f3cde11555bccd",
+      "bytes": 13849
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/inventory_levels_20260201_215354.csv",
+      "sha256": "951a1ebeda31b6ad38bee3f434370d1893640e5a737881f375957361fb340dbf",
+      "bytes": 2118
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/lng_terminals_20260201_215354.csv",
+      "sha256": "5eb543ea2288d9af7271c9e5c5eeb5dd2e2e3807a47fbc58d334b713cdb8b265",
+      "bytes": 1249
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/ng_pipelines_20260201_215354.csv",
+      "sha256": "7ec2a75696950e1c796b5a80bf9c32fff74f57af6c356ed9d775f3a7a4e318ad",
+      "bytes": 10822
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/optimization_summary_20260201_215354.csv",
+      "sha256": "13ee98ee1e0b3a3f241f37867b5cca0f66486e82c5261f332034368ef9592a92",
+      "bytes": 1440
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ft_one_step/transport_summary_20260201_215354.csv",
+      "sha256": "fdec7bc6f31867017fbbb64aa6a97b4c6cdfc7a9cf97b2422e49be08760920ae",
+      "bytes": 1335
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hourly_production_summary_20260201_215938.csv",
+      "sha256": "053b7ef631b5511afa2f0fdc090ef6eb200bfe58ef515b31042a43a269c0ed4d",
+      "bytes": 16410
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/hydrogen_transport_plan_20260201_215938.csv",
+      "sha256": "4f08b3f3c3db91c5d8ad4de49350b1b4d37c3b6d2a51c8965b8cbc09db1be872",
+      "bytes": 24861
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/infrastructure_selection_stats_20260201_215938.csv",
+      "sha256": "7635de59e5c39241df59ac448e3a60885438ee8463cba2ae0daece576c4a3f1d",
+      "bytes": 177
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/infrastructure_summary_20260201_215938.csv",
+      "sha256": "ba48ccb06a981177c8d64c1e100825e1a92ea508cd1eeef556f74f8446c5fbb4",
+      "bytes": 39687
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/inventory_levels_20260201_215938.csv",
+      "sha256": "53cccab1ea47079e63660f1ed7ece76d2a9cfb781b0922e9c927f0cf0a876877",
+      "bytes": 2422045
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/lng_terminals_20260201_215938.csv",
+      "sha256": "4ac4d95fefc3d85f22c7353c599c48264d00eb8d4975e82679ce2c87c73060c8",
+      "bytes": 1702
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/mtj_transport_plan_20260201_215938.csv",
+      "sha256": "fb4a163c2277998835701fd89deb47aa4e9e56f2f481921b27921c8bc1cf1dc6",
+      "bytes": 44923
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ng_pipelines_20260201_215938.csv",
+      "sha256": "e6dd76156602f2aa73816fd1f739b26bcad49fc2be439592cd43b4f24b28fe1e",
+      "bytes": 21131
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/ng_transport_plan_20260201_215938.csv",
+      "sha256": "55082d90b7735589d86134764f95a89097dc5308e035ee04a320ba92e04ded1c",
+      "bytes": 153812
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/optimization_summary_20260201_215938.csv",
+      "sha256": "215eed0a5f2dfd25b6037010e8a1745417c31b5a0fed5f8ef5ec81e0f751e127",
+      "bytes": 2434
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/renewable_energy_plants_20260201_215938.csv",
+      "sha256": "eb7a531b0c5cfc86825b7d66e9fcf5d4dc386fd61831e6ccf7482b7690778765",
+      "bytes": 17636
+    },
+    {
+      "path": "products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/transport_summary_20260201_215938.csv",
+      "sha256": "57c96182633965f79723a987d945a2d5e076e544b767ad2bab320ba979548e9c",
+      "bytes": 313938
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/market_price_gap_lollipop_20260414_175854/market_price_gap_summary.csv",
+      "sha256": "e6b09067c66137f4e1adab8be0876cc449555656d74fc9cdd813e85f38bea957",
+      "bytes": 1566
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/network_classification_recomputed_20260209_155012/scenario_network_metrics.csv",
+      "sha256": "6b10e8281fe4ba451f6c8ba459d35392b3c01a35e91ba5567959b124598f3d41",
+      "bytes": 3674
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/network_siting_clusters_20260416_172903/cluster_decision_point_classification_counts.csv",
+      "sha256": "f1037de5de8f9e2b59dc8c1822ca1b0b87a592de336aa4ba3c013ed4ca2bd537",
+      "bytes": 791
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/network_siting_clusters_20260416_172903/scenario_decision_point_classification_counts.csv",
+      "sha256": "b020401f116d93f37aff37d863345ea317828a2210462848a1b24f06bd6060b6",
+      "bytes": 3366
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/network_siting_clusters_20260416_172903/scenario_siting_metrics.csv",
+      "sha256": "1577e65be04c1907925a0787085b51fc0e6d18605820ae55702acc1b84d42122",
+      "bytes": 1802
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/pareto_penalty_driver_heatmap_values_latest.csv",
+      "sha256": "8916a3fa179a592b341cda3990317539431d59ac6b0f5488191c37dcb2ac7b45",
+      "bytes": 686
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/pareto_penalty_summary_latest.csv",
+      "sha256": "3cd6a79d4c43bb5ed0a6dfca6e18052388c2303b7a457dd9e305c752e2600388",
+      "bytes": 556
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/pareto_temporal_distribution_summary_latest.csv",
+      "sha256": "426a1c3926e78719ac16e083f150c7baa88bdb100242627afe837ee09731b1e2",
+      "bytes": 554
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/penalty_class_weekly_metrics_latest.csv",
+      "sha256": "847ba5459702c0f55ae406cf825662acd9af147efb495c22f38f8b061debf00a",
+      "bytes": 7520
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/quadrant_chart_20260319_225142/quadrant_summary.csv",
+      "sha256": "aea0d38866f49198dde355135c7b2387753e5b896eb8a57f1a4620b9f370283a",
+      "bytes": 842
+    },
+    {
+      "path": "products/supply_chain_optimization/visualization/results/temporal_robustness_metrics_latest.csv",
+      "sha256": "b6f82abdace2daa76182380fe2e7a47ef374035c6324280e7192132158ed0384",
+      "bytes": 13940
+    }
+  ]
+}

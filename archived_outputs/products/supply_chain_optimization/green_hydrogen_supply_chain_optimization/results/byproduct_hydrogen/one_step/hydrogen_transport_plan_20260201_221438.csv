@@ -1,0 +1,44 @@
+﻿运输ID,起点,终点,天,氢气运输量(kg),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+refinery_Binyang Refinery_co2_source_29_weekly_pipeline,refinery_Binyang Refinery,co2_source_29,0,1817.7059600000014,268.5859048162515,37.683837,117.61415,39.946923,116.61362,H2,pipeline
+refinery_CNOOC Dongying Refinery_co2_source_29_weekly_pipeline,refinery_CNOOC Dongying Refinery,co2_source_29,0,860.42236,317.61108928187195,38.088644,118.88525,39.946923,116.61362,H2,pipeline
+refinery_Fuyu Refinery_co2_source_29_weekly_pipeline,refinery_Fuyu Refinery,co2_source_29,0,340.7136600000001,289.9702505750635,37.888481,118.403848,39.946923,116.61362,H2,pipeline
+refinery_Guangyuan Refinery_co2_source_29_weekly_pipeline,refinery_Guangyuan Refinery,co2_source_29,0,113.57122000000027,335.7990229247018,37.676005,118.339336,39.946923,116.61362,H2,pipeline
+refinery_Haike Ruilin Refinery_co2_source_29_weekly_pipeline,refinery_Haike Ruilin Refinery,co2_source_29,0,1703.8515199999981,320.4293153538521,38.059069,118.873916,39.946923,116.61362,H2,pipeline
+refinery_Haiyue Refinery_co2_source_29_weekly_pipeline,refinery_Haiyue Refinery,co2_source_29,0,568.1393199999985,293.4424979276826,37.979206,118.455462,39.946923,116.61362,H2,pipeline
+refinery_Hebei Dagang Refinery_co2_source_29_weekly_pipeline,refinery_Hebei Dagang Refinery,co2_source_29,0,1049.0468800000074,185.1730021690908,38.435733,117.378077,39.946923,116.61362,H2,pipeline
+refinery_Hebei Qianhai Refinery_co2_source_29_weekly_pipeline,refinery_Hebei Qianhai Refinery,co2_source_29,0,5114.386760000005,191.6516167202514,38.360699,117.405885,39.946923,116.61362,H2,pipeline
+refinery_Huabei Refinery_co2_source_29_weekly_pipeline,refinery_Huabei Refinery,co2_source_29,0,5679.977100000003,155.90380686111638,38.733113,116.136531,39.946923,116.61362,H2,pipeline
+refinery_Hualian Refinery_co2_source_29_weekly_pipeline,refinery_Hualian Refinery,co2_source_29,0,3521.55748,289.7006711347945,37.887633,118.414912,39.946923,116.61362,H2,pipeline
+refinery_Huayu Refinery_co2_source_29_weekly_pipeline,refinery_Huayu Refinery,co2_source_29,0,1049.0468800000024,192.58628663587783,38.490239,117.268074,39.946923,116.61362,H2,pipeline
+refinery_Lianhe Refinery_co2_source_29_weekly_pipeline,refinery_Lianhe Refinery,co2_source_29,0,2385.562059999999,318.4365269096409,38.097408,118.879765,39.946923,116.61362,H2,pipeline
+refinery_PetroChina Qinhuangdao Refinery_co2_source_29_weekly_pipeline,refinery_PetroChina Qinhuangdao Refinery,co2_source_29,0,459.0996200000009,272.10694668716184,39.990302,119.640584,39.946923,116.61362,H2,pipeline
+refinery_PetroChina Rosneft Tianjin  Refinery_co2_source_29_weekly_pipeline,refinery_PetroChina Rosneft Tianjin  Refinery,co2_source_29,0,7394.024540000004,161.9807509620039,38.821201,117.410056,39.946923,116.61362,H2,pipeline
+refinery_Petrochina Dagang Refinery_co2_source_29_weekly_pipeline,refinery_Petrochina Dagang Refinery,co2_source_29,0,2839.846939999999,161.98075096200398,38.737926,117.512307,39.946923,116.61362,H2,pipeline
+refinery_Qinhuangdao Far East Refinery_co2_source_29_weekly_pipeline,refinery_Qinhuangdao Far East Refinery,co2_source_29,0,721.3613400000014,233.98324182605887,39.86328,119.223595,39.946923,116.61362,H2,pipeline
+refinery_Shenchi Refinery_co2_source_29_weekly_pipeline,refinery_Shenchi Refinery,co2_source_29,0,1476.7090799999985,318.3956202454778,38.096965,118.87927,39.946923,116.61362,H2,pipeline
+refinery_Sinopec Beijing Refinery_co2_source_29_weekly_pipeline,refinery_Sinopec Beijing Refinery,co2_source_29,0,6256.3297999999795,51.66978723244715,39.72377,116.083453,39.946923,116.61362,H2,pipeline
+refinery_Sinopec Cangzhou Refinery_co2_source_29_weekly_pipeline,refinery_Sinopec Cangzhou Refinery,co2_source_29,0,1987.9211800000055,185.70181538238558,38.338765,116.872577,39.946923,116.61362,H2,pipeline
+refinery_Sinopec Shijiazhuang Refinery_co2_source_29_weekly_pipeline,refinery_Sinopec Shijiazhuang Refinery,co2_source_29,0,5687.624040000024,300.12779091823944,37.978178,114.67409,39.946923,116.61362,H2,pipeline
+refinery_Sinopec Tianjin Refinery_co2_source_29_weekly_pipeline,refinery_Sinopec Tianjin Refinery,co2_source_29,0,7848.875860000042,157.13088164668756,38.972631,117.741279,39.946923,116.61362,H2,pipeline
+refinery_Tianhong 1 Refinery_co2_source_29_weekly_pipeline,refinery_Tianhong 1 Refinery,co2_source_29,0,2839.846940000039,318.43489769650836,38.092496,118.893292,39.946923,116.61362,H2,pipeline
+refinery_Tianjin  Refinery_co2_source_29_weekly_pipeline,refinery_Tianjin  Refinery,co2_source_29,0,738.35454,104.3290222776207,39.075368,117.002342,39.946923,116.61362,H2,pipeline
+refinery_Wudi Xinyue Refinery_co2_source_29_weekly_pipeline,refinery_Wudi Xinyue Refinery,co2_source_29,0,4559.841999999997,235.18779139700354,38.095197,117.762038,39.946923,116.61362,H2,pipeline
+refinery_Xinhai  Refinery_co2_source_29_weekly_pipeline,refinery_Xinhai  Refinery,co2_source_29,0,3407.98626,220.03670629004685,38.296875,117.701561,39.946923,116.61362,H2,pipeline
+refinery_Yatong Refinery_co2_source_29_weekly_pipeline,refinery_Yatong Refinery,co2_source_29,0,2271.990839999999,317.457678805453,38.086922,118.879533,39.946923,116.61362,H2,pipeline
+refinery_Zhonghai  Refinery_co2_source_29_weekly_pipeline,refinery_Zhonghai  Refinery,co2_source_29,0,1306.4938600000023,291.79021570718544,37.712921,118.171638,39.946923,116.61362,H2,pipeline
+refinery_Zhongjie Refinery_co2_source_29_weekly_pipeline,refinery_Zhongjie Refinery,co2_source_29,0,1639.2773599999994,192.64840431153078,38.465418,117.611834,39.946923,116.61362,H2,pipeline
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd_co2_source_29_weekly_pipeline,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,co2_source_29,0,350000.0,220.03670629004725,38.289221,117.814367,39.946923,116.61362,H2,pipeline
+steel_Chengde Jianlong Special Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Chengde Jianlong Special Steel Co Ltd,co2_source_29,0,284866.87062822137,117.07989083748669,40.515035,117.596071,39.946923,116.61362,H2,pipeline
+steel_Hebei Anfeng Iron and Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Hebei Anfeng Iron and Steel Co Ltd,co2_source_29,0,350000.0,205.61060240807475,39.65849,118.894804,39.946923,116.61362,H2,pipeline
+steel_Hebei Rongxin Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Hebei Rongxin Steel Co Ltd,co2_source_29,0,172922.38153150678,194.89013188239906,39.880661,118.558755,39.946923,116.61362,H2,pipeline
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base_co2_source_29_weekly_pipeline,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,co2_source_29,0,345844.76306301367,198.68228905289885,39.160401,118.429806,39.946923,116.61362,H2,pipeline
+steel_Hebei Xinda Iron and Steel Group Co Ltd_co2_source_29_weekly_pipeline,steel_Hebei Xinda Iron and Steel Group Co Ltd,co2_source_29,0,350000.0,192.52090558904302,39.898362,118.579364,39.946923,116.61362,H2,pipeline
+steel_Hebei Yanshan Iron and Steel Group Co Ltd_co2_source_29_weekly_pipeline,steel_Hebei Yanshan Iron and Steel Group Co Ltd,co2_source_29,0,350000.0,196.66988766293164,39.925508,118.672757,39.946923,116.61362,H2,pipeline
+steel_Qian an Jiujiang Wire Co Ltd_co2_source_29_weekly_pipeline,steel_Qian an Jiujiang Wire Co Ltd,co2_source_29,0,350000.0,192.48147227685592,39.952209,118.559444,39.946923,116.61362,H2,pipeline
+steel_Qinhuangdao Baigong Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Qinhuangdao Baigong Steel Co Ltd,co2_source_29,0,236630.62735890437,206.23282264494316,39.748773,118.819472,39.946923,116.61362,H2,pipeline
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,co2_source_29,0,350000.0,200.79465342985975,39.700721,118.871477,39.946923,116.61362,H2,pipeline
+steel_Shougang Jingtang United Iron and Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Shougang Jingtang United Iron and Steel Co Ltd,co2_source_29,0,350000.0,217.43068529456878,38.953664,118.50339,39.946923,116.61362,H2,pipeline
+steel_Shougang Qian an Iron and Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Shougang Qian an Iron and Steel Co Ltd,co2_source_29,0,350000.0,194.87952764024706,39.976702,118.558788,39.946923,116.61362,H2,pipeline
+steel_Tangshan Medium Thick Plate Co Ltd_co2_source_29_weekly_pipeline,steel_Tangshan Medium Thick Plate Co Ltd,co2_source_29,0,172352.6804477831,223.87273321134438,39.268452,119.024819,39.946923,116.61362,H2,pipeline
+steel_Tangshan Songting Iron and Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Tangshan Songting Iron and Steel Co Ltd,co2_source_29,0,350000.0,190.42001973814794,39.938866,118.576678,39.946923,116.61362,H2,pipeline
+steel_Tangshan Wenfeng Special Steel Co Ltd_co2_source_29_weekly_pipeline,steel_Tangshan Wenfeng Special Steel Co Ltd,co2_source_29,0,260033.65643835615,198.6822890528981,39.146541,118.432261,39.946923,116.61362,H2,pipeline

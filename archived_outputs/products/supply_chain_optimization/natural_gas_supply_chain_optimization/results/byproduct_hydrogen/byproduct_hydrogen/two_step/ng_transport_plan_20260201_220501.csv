@@ -1,0 +1,13 @@
+﻿运输ID,起点,终点,天,天然气运输量(m3),距离(km),起点纬度,起点经度,终点纬度,终点经度,运输类型,运输方式
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_0,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,0,2349589.8242465733,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_1,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,1,2451745.9035616415,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_2,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,2,1995360.7013517874,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_3,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,3,1940965.5069863002,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_4,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,4,2043121.5863013687,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_5,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,5,2043121.5863013687,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_6,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,6,1940965.506986305,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_7,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,7,2247433.744931505,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_8,ng_pipeline_35,steel_Tianjin Iron and Steel Group Co Ltd,8,2247433.744931505,18.609137999999998,39.05381028,117.662896114,39.031083,117.499246,NG,truck
+ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_0,ng_pipeline_35,steel_Tianjin New Tiangang United Special Steel Co Ltd,0,249809.59684917715,36.47656,39.05381028,117.662896114,39.300258,117.800231,NG,truck
+ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_1,ng_pipeline_35,steel_Tianjin New Tiangang United Special Steel Co Ltd,1,264208.6367823192,36.47656,39.05381028,117.662896114,39.300258,117.800231,NG,truck
+ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_2,ng_pipeline_35,steel_Tianjin New Tiangang United Special Steel Co Ltd,2,88069.54559410656,36.47656,39.05381028,117.662896114,39.300258,117.800231,NG,truck
