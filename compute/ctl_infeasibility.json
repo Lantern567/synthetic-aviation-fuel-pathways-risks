@@ -1,0 +1,38 @@
+{
+  "scenario": "CTL",
+  "minimum_production_fraction": 0.9,
+  "constraint": "valid_ineq_min_production",
+  "bounds": [
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "renewable_energy_mwh": 617618.3715870596,
+      "h2_intensity_kwh_kg": 55,
+      "minimum_h2_ratio_kg_kg": 0.3,
+      "saf_energy_only_upper_bound_kg": 37431416.4598218,
+      "demand_kg": 51050925.57290507,
+      "fulfillment_upper_bound": 0.7332171951783037,
+      "minimum_shortage_kg": 13619509.113083271,
+      "scope": "Necessary bound only; ignores synthesis/DAC electricity, all capacity, transport and operating restrictions; zero initial hydrogen stock; renewable electrolysis only"
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer",
+      "renewable_energy_mwh": 806909.1648197284,
+      "h2_intensity_kwh_kg": 55,
+      "minimum_h2_ratio_kg_kg": 0.3,
+      "saf_energy_only_upper_bound_kg": 48903585.74665021,
+      "demand_kg": 56807154.89541006,
+      "fulfillment_upper_bound": 0.8608701815235874,
+      "minimum_shortage_kg": 7903569.148759857,
+      "scope": "Necessary bound only; ignores synthesis/DAC electricity, all capacity, transport and operating restrictions; zero initial hydrogen stock; renewable electrolysis only"
+    }
+  ],
+  "projection_lp_status": {
+    "status": 2,
+    "has_solution": false,
+    "seconds": 26.454324960708618
+  },
+  "verified": true,
+  "conclusion": "Original minimum-production model is infeasible for both week sets. Partial-supply diagnostic has a separately identified model scope."
+}

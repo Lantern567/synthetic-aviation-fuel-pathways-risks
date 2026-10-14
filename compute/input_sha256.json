@@ -1,0 +1,15 @@
+{
+  "renewable_12weeks.csv": "a4c19115b7e6d79bd88dc271c439b25a7b55e1c2790ccf66d5c26ddb8ba51d68",
+  "phase_mapping.json": "33f124b17c49d980ad3dc99e221ae49419aaff6ade91a1824f43c15cd95665c0",
+  "solar_grid_mapping.csv": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6",
+  "solar_hdf5_provenance.json": "2cc2088902abecc6f6f6834b0017014e45b0121172526b670bba9898eae81d8e",
+  "wind_selected_raw.csv.gz": "3d8b5dd1b5c511e2eb0b4337cdde78f90603027b5ba65f211d08d8da34d456ca",
+  "inputs/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "inputs/baseline/renewable_periods.csv": "4ca3e99522f17692aa11793d68e3b17e8c6f09324605dc3d5a9f08edd110225f",
+  "inputs/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "inputs/baseline/manifest.json": "c424a452cd84ee6a7a51858c5e9bae85c96797a4b57e9c8e44ab8bc89bc15637",
+  "inputs/summer/airport_input.csv": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4",
+  "inputs/summer/renewable_periods.csv": "9f82438468e527fbaf910b9eedca5758edaf8bcb7a7c9a06a2933889497e4690",
+  "inputs/summer/airport_input.xlsx": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a",
+  "inputs/summer/manifest.json": "8afece6cc578d3f8c3c6f39bac46b07c1e7e95dffa8ba48fce7099652fa0f094"
+}

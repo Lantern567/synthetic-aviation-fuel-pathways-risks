@@ -1,0 +1,94 @@
+[
+  {
+    "scenario": "CCU-GH-FT",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 0.0,
+      "saf_build": 0.0,
+      "h2_capacity": 4.547473508864641e-13,
+      "h2_build": 0.0
+    },
+    "summary_sha256": [
+      "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+      "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  },
+  {
+    "scenario": "CCU-GH-MTJ",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 0.0,
+      "saf_build": 0.0,
+      "h2_capacity": 2.2737367544323206e-13,
+      "h2_build": 0.0
+    },
+    "summary_sha256": [
+      "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+      "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  },
+  {
+    "scenario": "DAC-GH-FT",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 0.0,
+      "saf_build": 0.0,
+      "h2_capacity": 4.547473508864641e-13,
+      "h2_build": 0.0,
+      "dac_build": 0.0
+    },
+    "summary_sha256": [
+      "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+      "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  },
+  {
+    "scenario": "DAC-GH-MTJ",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 0.0,
+      "saf_build": 0.0,
+      "h2_capacity": 4.547473508864641e-13,
+      "h2_build": 0.0,
+      "dac_build": 0.0
+    },
+    "summary_sha256": [
+      "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+      "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  },
+  {
+    "scenario": "GTL-GH",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 0.0,
+      "saf_build": 0.0,
+      "h2_capacity": 0.0,
+      "h2_build": 0.0
+    },
+    "summary_sha256": [
+      "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+      "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  },
+  {
+    "scenario": "CTL",
+    "passed": true,
+    "maximum_differences": {
+      "saf_capacity": 4.440892098500626e-16,
+      "saf_build": 0.0,
+      "h2_capacity": 3.552713678800501e-15,
+      "h2_build": 0.0
+    },
+    "summary_sha256": [
+      "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+      "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb"
+    ],
+    "scope": "SAF and electrolyzer capacity/build; DAC build where applicable. Auxiliary inventory and routes reoptimized."
+  }
+]

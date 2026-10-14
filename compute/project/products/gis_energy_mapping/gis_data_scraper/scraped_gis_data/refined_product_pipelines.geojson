@@ -1,0 +1,4508 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.366383,
+            29.537647
+          ],
+          [
+            113.133853,
+            27.827986
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Changling Petrochemical Zuzhou Refined Product Pipeline",
+        "Capacity": 139,
+        "Capacity_o": 139,
+        "Product": "N/A",
+        "Length": 274,
+        "Operator": "SINOPEC",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 274 km; \nProducts: N/A",
+        "ObjectId": 1,
+        "Shape__Length": 218490.78668157908
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.962579,
+            39.729487
+          ],
+          [
+            116.143267,
+            39.749144
+          ],
+          [
+            116.287149,
+            39.858427
+          ],
+          [
+            116.341395,
+            39.726929
+          ],
+          [
+            116.656434,
+            39.909946
+          ],
+          [
+            116.63947961,
+            40.01185334
+          ],
+          [
+            116.65465,
+            40.130347
+          ],
+          [
+            116.603112,
+            40.079857
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Beijing Circular Aviation Fuel Pipeline",
+        "Capacity": 28,
+        "Capacity_o": 28,
+        "Product": "Kerosene",
+        "Length": 133,
+        "Operator": "SINOPEC",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 133 km; \nProducts: Kerosene",
+        "ObjectId": 2,
+        "Shape__Length": 148357.17377658034
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            102.478494,
+            24.919493
+          ],
+          [
+            101.528068,
+            25.045532
+          ],
+          [
+            100.267638,
+            25.606486
+          ],
+          [
+            99.161761,
+            25.112046
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anning Chuxiong Dali Baoshan Refined Product Pipeline",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": 486,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 486 km; \nProducts: N/A",
+        "ObjectId": 3,
+        "Shape__Length": 400673.74722550134
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            101.528068,
+            25.045532
+          ],
+          [
+            101.718637,
+            26.582347
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anning Chuxiong Dali Baoshan Product Pipeline Chuxiong Panzhihua Branch",
+        "Capacity": 23,
+        "Capacity_o": 23,
+        "Product": "N/A",
+        "Length": 208,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 208 km; \nProducts: N/A",
+        "ObjectId": 4,
+        "Shape__Length": 191229.8181321688
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100.267638,
+            25.606486
+          ],
+          [
+            100.22775,
+            26.855047
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anning Chuxiong Dali Baoshan Product Pipeline Dali Lijiang Branch",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": 215,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 215 km; \nProducts: N/A",
+        "ObjectId": 5,
+        "Shape__Length": 155013.42068712608
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            102.478494,
+            24.919493
+          ],
+          [
+            102.527197,
+            24.347324
+          ],
+          [
+            103.364905,
+            23.396201
+          ],
+          [
+            104.216248,
+            23.400733
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anning Yuxi Mengzi Wenshan Refined Product Pipeline",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": 105,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 105 km; \nProducts: N/A",
+        "ObjectId": 6,
+        "Shape__Length": 313721.66742771736
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.60783,
+            21.748762
+          ],
+          [
+            108.64504701,
+            21.92034078
+          ],
+          [
+            108.366543,
+            22.817002
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qinzhougang Nanning Luizhou Refined Product Pipeline Qinzhougang Nanning Part",
+        "Capacity": 116,
+        "Capacity_o": 116,
+        "Product": "N/A",
+        "Length": 172,
+        "Operator": "PetroChina",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 172 km; \nProducts: N/A",
+        "ObjectId": 7,
+        "Shape__Length": 133292.51104664156
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.366543,
+            22.817002
+          ],
+          [
+            109.221465,
+            23.750306
+          ],
+          [
+            109.428608,
+            24.326292
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qinzhougang Nanning Luizhou Refined Product Pipeline Nanning Liuzhou Part",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "N/A",
+        "Length": 193,
+        "Operator": "PetroChina",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 193 km; \nProducts: N/A",
+        "ObjectId": 8,
+        "Shape__Length": 221717.27015319804
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.296482,
+            26.074478
+          ],
+          [
+            119.43658631,
+            25.88917395
+          ],
+          [
+            119.20817395,
+            25.58053925
+          ],
+          [
+            119.007777,
+            25.454084
+          ],
+          [
+            118.70096415,
+            25.24376569
+          ],
+          [
+            118.675675,
+            24.874132
+          ],
+          [
+            118.40201267,
+            24.82377018
+          ],
+          [
+            118.02916309,
+            24.68955728
+          ],
+          [
+            117.94854696,
+            24.51853168
+          ],
+          [
+            118.089425,
+            24.479833
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "S I N O P E C Fujian Refined Product Pipeline Stage I",
+        "Capacity": 139,
+        "Capacity_o": 139,
+        "Product": "Gasoline, diesel, and kerosene",
+        "Length": 346,
+        "Operator": "SINOPEC",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 346 km; \nProducts: Gasoline, diesel, and kerosene",
+        "ObjectId": 9,
+        "Shape__Length": 304078.0639296631
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.968258,
+            39.724386
+          ],
+          [
+            116.097095,
+            39.717458
+          ],
+          [
+            116.210836,
+            39.826424
+          ],
+          [
+            116.309062,
+            39.793698
+          ],
+          [
+            116.4875,
+            39.858333
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yanshan Petrochemical Beijing Refined Product Pipeline",
+        "Capacity": 17,
+        "Capacity_o": 17,
+        "Product": "Gasoline, diesel, and kerosene",
+        "Length": 75,
+        "Operator": "SINOPEC",
+        "YearOnline": 1981,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 75 km; \nProducts: Gasoline, diesel, and kerosene",
+        "ObjectId": 10,
+        "Shape__Length": 68491.25722406126
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.362676,
+            35.637918
+          ],
+          [
+            109.15487,
+            34.358423
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yanchang Petroleum Yan'an Xi'an Refined Product Pipeline",
+        "Capacity": 116,
+        "Capacity_o": 116,
+        "Product": "N/A",
+        "Length": 201,
+        "Operator": "Yanchang Petroleum",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 201 km; \nProducts: N/A",
+        "ObjectId": 11,
+        "Shape__Length": 175413.553902134
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.650117,
+            29.595021
+          ],
+          [
+            106.641667,
+            29.719167
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tangjiatuo Chongqing Jiangbei Airport Aviation Fuel Pipeline",
+        "Capacity": 14,
+        "Capacity_o": 14,
+        "Product": "Kerosene",
+        "Length": 17,
+        "Operator": "CNAF",
+        "YearOnline": 1998,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 17 km; \nProducts: Kerosene",
+        "ObjectId": 12,
+        "Shape__Length": 15930.944905367905
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.829125,
+            23.140228
+          ],
+          [
+            113.794342,
+            23.167651
+          ],
+          [
+            113.823621,
+            23.29435
+          ],
+          [
+            113.7001,
+            23.272801
+          ],
+          [
+            113.620873,
+            23.288906
+          ],
+          [
+            113.481452,
+            23.431485
+          ],
+          [
+            113.404729,
+            23.385158
+          ],
+          [
+            113.326417,
+            23.436851
+          ],
+          [
+            113.273491,
+            23.436141
+          ],
+          [
+            113.301106,
+            23.329581
+          ],
+          [
+            113.30797,
+            23.395908
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Xiaweicun Guangzhou Baiyun Airport Aviation Fuel Pipeline",
+        "Capacity": 23,
+        "Capacity_o": 23,
+        "Product": "Kerosene",
+        "Length": 100,
+        "Operator": "CNAF",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 100 km; \nProducts: Kerosene",
+        "ObjectId": 13,
+        "Shape__Length": 115271.62902292176
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.666708,
+            37.982371
+          ],
+          [
+            114.696667,
+            38.280833
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "S I N O P E C Petrochemical Zhengding Airport Aviation Fuel Pipeline",
+        "Capacity": 10,
+        "Capacity_o": 10,
+        "Product": "Kerosene",
+        "Length": 34,
+        "Operator": "CNAF",
+        "YearOnline": 1995,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 34 km; \nProducts: Kerosene",
+        "ObjectId": 14,
+        "Shape__Length": 42370.1431056073
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.212463,
+            25.238628
+          ],
+          [
+            110.047065,
+            25.215879
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lingui Guilin Liangjiang Airport Aviation Fuel Pipeline",
+        "Capacity": 15,
+        "Capacity_o": 15,
+        "Product": "Kerosene",
+        "Length": 17,
+        "Operator": "CNAF",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 17 km; \nProducts: Kerosene",
+        "ObjectId": 15,
+        "Shape__Length": 18623.61866314204
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.937407,
+            30.526351
+          ],
+          [
+            103.93561661,
+            30.56542919
+          ],
+          [
+            103.949294,
+            30.567456
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Muma Mountain Chengdu Shuangliu Airport Aviation Fuel Pipeline",
+        "Capacity": 24,
+        "Capacity_o": 24,
+        "Product": "Kerosene",
+        "Length": 13,
+        "Operator": "CNAF",
+        "YearOnline": 1992,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 13 km; \nProducts: Kerosene",
+        "ObjectId": 16,
+        "Shape__Length": 6600.025125788969
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.984615,
+            28.025258
+          ],
+          [
+            113.220833,
+            28.196667
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Muyunzhen C Hangsha Huanghua Airport Aviation Fuel Pipeline",
+        "Capacity": 9,
+        "Capacity_o": 9,
+        "Product": "Kerosene",
+        "Length": 35,
+        "Operator": "CNAF",
+        "YearOnline": 1989,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 35 km; \nProducts: Kerosene",
+        "ObjectId": 17,
+        "Shape__Length": 34050.73284072079
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.013413,
+            19.943685
+          ],
+          [
+            110.462132,
+            19.93854
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Macun Harbor Haikou Meilan Airport Aviation Fuel Pipeline",
+        "Capacity": 19,
+        "Capacity_o": 19,
+        "Product": "Kerosene",
+        "Length": 51,
+        "Operator": "CNAF",
+        "YearOnline": 1999,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 51 km; \nProducts: Kerosene",
+        "ObjectId": 18,
+        "Shape__Length": 49954.88615822725
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.452307,
+            31.145254
+          ],
+          [
+            121.43792365,
+            31.1394567
+          ],
+          [
+            121.40706279,
+            31.14125357
+          ],
+          [
+            121.34891001,
+            31.16281328
+          ],
+          [
+            121.337007,
+            31.191895
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shanghai Longhua Wharf Hongqiao Airport Aviation Fuel Pipeline",
+        "Capacity": 30,
+        "Capacity_o": 30,
+        "Product": "Kerosene",
+        "Length": 18,
+        "Operator": "CNAF",
+        "YearOnline": 1988,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 18 km; \nProducts: Kerosene",
+        "ObjectId": 19,
+        "Shape__Length": 16277.215712153296
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.796167,
+            25.489999
+          ],
+          [
+            106.630153,
+            26.647661
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southwestern Refined Product Pipeline Qujing Guiyang Branch",
+        "Capacity": 232,
+        "Capacity_o": 232,
+        "Product": "N/A",
+        "Length": 1539,
+        "Operator": "SINOPEC",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1539 km; \nProducts: N/A",
+        "ObjectId": 20,
+        "Shape__Length": 346568.4542729806
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.618283,
+            23.902479
+          ],
+          [
+            104.216248,
+            23.400733
+          ],
+          [
+            103.160034,
+            23.359121
+          ],
+          [
+            102.527197,
+            24.347324
+          ],
+          [
+            102.832891,
+            24.880095
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southwestern Refined Product Pipeline Baise Kunming Branch",
+        "Capacity": 163,
+        "Capacity_o": 163,
+        "Product": "N/A",
+        "Length": 800,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 800 km; \nProducts: N/A",
+        "ObjectId": 21,
+        "Shape__Length": 604914.6919976312
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.925439,
+            21.662991
+          ],
+          [
+            110.853299,
+            21.918203
+          ],
+          [
+            110.639569,
+            21.664044
+          ],
+          [
+            110.264052,
+            22.321048
+          ],
+          [
+            110.18122,
+            22.654032
+          ],
+          [
+            109.598926,
+            23.11153
+          ],
+          [
+            108.810326,
+            23.217786
+          ],
+          [
+            108.366543,
+            22.817002
+          ],
+          [
+            106.618283,
+            23.902479
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southwestern Refined Product Pipeline Maoming Kunming",
+        "Capacity": 232,
+        "Capacity_o": 232,
+        "Product": "N/A",
+        "Length": 1539,
+        "Operator": "SINOPEC",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1539 km; \nProducts: N/A",
+        "ObjectId": 22,
+        "Shape__Length": 678800.7959135077
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.598926,
+            23.11153
+          ],
+          [
+            109.221465,
+            23.750306
+          ],
+          [
+            109.32638,
+            24.254891
+          ],
+          [
+            109.428608,
+            24.326292
+          ],
+          [
+            109.24473,
+            24.651518
+          ],
+          [
+            108.636414,
+            24.485214
+          ],
+          [
+            108.085261,
+            24.692931
+          ],
+          [
+            106.630153,
+            26.647661
+          ],
+          [
+            105.61933,
+            25.94361
+          ],
+          [
+            105.218991,
+            25.834783
+          ],
+          [
+            104.953062,
+            25.784135
+          ],
+          [
+            104.471535,
+            25.710002
+          ],
+          [
+            104.255014,
+            25.674238
+          ],
+          [
+            103.822324,
+            25.600507
+          ],
+          [
+            103.796167,
+            25.489999
+          ],
+          [
+            103.578478,
+            25.42805
+          ],
+          [
+            102.832891,
+            24.880095
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southwestern Refined Product Pipeline Guigang Kunming",
+        "Capacity": 232,
+        "Capacity_o": 232,
+        "Product": "N/A",
+        "Length": 1539,
+        "Operator": "SINOPEC",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1539 km; \nProducts: N/A",
+        "ObjectId": 23,
+        "Shape__Length": 1131167.2171745643
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.428608,
+            24.326292
+          ],
+          [
+            110.179953,
+            25.234479
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southwestern Refined Product Pipeline Liuzhou Guiling Branch",
+        "Capacity": 232,
+        "Capacity_o": 232,
+        "Product": "N/A",
+        "Length": 1539,
+        "Operator": "SINOPEC",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1539 km; \nProducts: N/A",
+        "ObjectId": 24,
+        "Shape__Length": 139266.65309352012
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            102.478494,
+            24.919493
+          ],
+          [
+            102.72780261,
+            25.03667261
+          ],
+          [
+            102.832891,
+            24.880095
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anning Kuming Refined Product Pipeline",
+        "Capacity": 81,
+        "Capacity_o": 81,
+        "Product": "N/A",
+        "Length": 55,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 55 km; \nProducts: N/A",
+        "ObjectId": 25,
+        "Shape__Length": 53766.84002077357
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            102.832891,
+            24.880095
+          ],
+          [
+            103.796167,
+            25.489999
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Kunming Qujing Refined Product Pipeline",
+        "Capacity": 46,
+        "Capacity_o": 46,
+        "Product": "N/A",
+        "Length": 175,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 175 km; \nProducts: N/A",
+        "ObjectId": 26,
+        "Shape__Length": 130872.46149711707
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.796167,
+            25.489999
+          ],
+          [
+            103.717465,
+            27.338257
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qujing Zhaotong Refined Product Pipeline",
+        "Capacity": 14,
+        "Capacity_o": 14,
+        "Product": "N/A",
+        "Length": 255,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 255 km; \nProducts: N/A",
+        "ObjectId": 27,
+        "Shape__Length": 229912.3881052429
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.630153,
+            26.647661
+          ],
+          [
+            106.750625,
+            26.630845
+          ],
+          [
+            106.623007,
+            26.678561
+          ],
+          [
+            106.592108,
+            26.838926
+          ],
+          [
+            106.740407,
+            27.090479
+          ],
+          [
+            106.93427,
+            27.750125
+          ],
+          [
+            106.825301,
+            28.133231
+          ],
+          [
+            106.651361,
+            29.028066
+          ],
+          [
+            106.650117,
+            29.595021
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Guiyang Chongqing Refined Product Pipeline",
+        "Capacity": 134,
+        "Capacity_o": 134,
+        "Product": "N/A",
+        "Length": 498,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 498 km; \nProducts: N/A",
+        "ObjectId": 28,
+        "Shape__Length": 407479.64868684916
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 29,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.627951,
+            36.088553
+          ],
+          [
+            103.859565,
+            35.394988
+          ],
+          [
+            104.634983,
+            35.00394
+          ],
+          [
+            105.742203,
+            33.750477
+          ],
+          [
+            105.843357,
+            32.435435
+          ],
+          [
+            104.679004,
+            31.46746
+          ],
+          [
+            104.397894,
+            31.126855
+          ],
+          [
+            103.958014,
+            30.990108
+          ],
+          [
+            104.54722,
+            30.411264
+          ],
+          [
+            104.627636,
+            30.128901
+          ],
+          [
+            105.287612,
+            29.339476
+          ],
+          [
+            105.927375,
+            29.356117
+          ],
+          [
+            106.474213,
+            29.403688
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Chengdu Chongqing Refined Product Pipeline",
+        "Capacity": 116,
+        "Capacity_o": 116,
+        "Product": "N/A",
+        "Length": 1250,
+        "Operator": "PetroChina",
+        "YearOnline": 2002,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1250 km; \nProducts: N/A",
+        "ObjectId": 29,
+        "Shape__Length": 1266729.3298561617
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.958014,
+            30.990108
+          ],
+          [
+            103.58770796,
+            30.33709273
+          ],
+          [
+            103.765678,
+            29.552115
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Chengdu Chongqing Refined Product Pipeline Pengzhou Leshan Branch",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "N/A",
+        "Length": 205,
+        "Operator": "PetroChina",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 205 km; \nProducts: N/A",
+        "ObjectId": 30,
+        "Shape__Length": 196802.47229413863
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.358011,
+            43.874097
+          ],
+          [
+            89.189752,
+            42.951303
+          ],
+          [
+            90.21333,
+            42.868744
+          ],
+          [
+            93.51515,
+            42.81842
+          ],
+          [
+            97.045678,
+            40.291843
+          ],
+          [
+            98.494548,
+            39.73287
+          ],
+          [
+            100.164444,
+            39.152642
+          ],
+          [
+            100.449818,
+            38.925875
+          ],
+          [
+            101.088574,
+            38.784758
+          ],
+          [
+            101.984648,
+            38.243169
+          ],
+          [
+            102.638201,
+            37.928267
+          ],
+          [
+            102.897533,
+            37.47012
+          ],
+          [
+            103.834303,
+            36.061089
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Western Refined Product Pipeline",
+        "Capacity": 232,
+        "Capacity_o": 232,
+        "Product": "N/A",
+        "Length": 1930,
+        "Operator": "PetroChina",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1930 km; \nProducts: N/A",
+        "ObjectId": 31,
+        "Shape__Length": 2281895.1842160453
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.987026,
+            45.581208
+          ],
+          [
+            87.358011,
+            43.874097
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Karamay Urumqi Wangjia Ditch Refined Product Pipeline",
+        "Capacity": 30,
+        "Capacity_o": 30,
+        "Product": "N/A",
+        "Length": 291,
+        "Operator": "PetroChina",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 291 km; \nProducts: N/A",
+        "ObjectId": 32,
+        "Shape__Length": 375798.5835230505
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.835685,
+            40.733701
+          ],
+          [
+            120.99568961,
+            40.86555852
+          ],
+          [
+            121.04355543,
+            40.87508373
+          ],
+          [
+            121.061193,
+            40.833745
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Petro China Jinxi Petrochemical Jinzhou Port Gasoline Pipeline",
+        "Capacity": 38,
+        "Capacity_o": 38,
+        "Product": "Gasoline",
+        "Length": 30,
+        "Operator": "PetroChina",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 30 km; \nProducts: Gasoline",
+        "ObjectId": 33,
+        "Shape__Length": 38232.104276268095
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 34,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.835685,
+            40.733701
+          ],
+          [
+            120.98991632,
+            40.86801926
+          ],
+          [
+            121.03536786,
+            40.87746475
+          ],
+          [
+            121.061193,
+            40.833745
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Petro China Jinxi Petrochemical Jinzhou Port Diesel Pipeline",
+        "Capacity": 38,
+        "Capacity_o": 38,
+        "Product": "Diesel",
+        "Length": 30,
+        "Operator": "PetroChina",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 30 km; \nProducts: Diesel",
+        "ObjectId": 34,
+        "Shape__Length": 38465.97396955939
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 35,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.926181,
+            32.142991
+          ],
+          [
+            118.91814483,
+            31.98323796
+          ],
+          [
+            118.89295229,
+            31.84852138
+          ],
+          [
+            118.871939,
+            31.733822
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Nanjing Refinery Nanjing Lukou Airport Aviation Fuel Pipeline",
+        "Capacity": 28,
+        "Capacity_o": 28,
+        "Product": "Kerosene",
+        "Length": 67,
+        "Operator": "CNAF",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 67 km; \nProducts: Kerosene",
+        "ObjectId": 35,
+        "Shape__Length": 54095.25720417924
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 36,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.501654,
+            26.010717
+          ],
+          [
+            119.50681051,
+            25.96488592
+          ],
+          [
+            119.54753845,
+            25.93921349
+          ],
+          [
+            119.59372477,
+            25.91844494
+          ],
+          [
+            119.64662911,
+            25.91126949
+          ],
+          [
+            119.670196,
+            25.930638
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Houan Fuzhou Changle Airport Aviation Fuel Pipeline",
+        "Capacity": 30,
+        "Capacity_o": 30,
+        "Product": "Kerosene",
+        "Length": 67,
+        "Operator": "CNAF",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 67 km; \nProducts: Kerosene",
+        "ObjectId": 36,
+        "Shape__Length": 26499.596548825997
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 37,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.801308,
+            41.905729
+          ],
+          [
+            123.530132,
+            41.81341
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Fushun Petrochemical Yichang Dongling Refined Product Pipeline",
+        "Capacity": 93,
+        "Capacity_o": 93,
+        "Product": "Gasoline and diesel",
+        "Length": 32,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 32 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 37,
+        "Shape__Length": 33191.33896765834
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 38,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.886974,
+            44.328095
+          ],
+          [
+            87.616848,
+            43.825592
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dushanzi Urumqi Refined Product Pipeline",
+        "Capacity": 120,
+        "Capacity_o": 120,
+        "Product": "N/A",
+        "Length": null,
+        "Operator": "N/A",
+        "YearOnline": null,
+        "Status": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length:  km; \nProducts: N/A",
+        "ObjectId": 38,
+        "Shape__Length": 313705.28635954886
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 39,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.886974,
+            44.328095
+          ],
+          [
+            87.358011,
+            43.874097
+          ],
+          [
+            84.889207,
+            45.579888
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dushanzi703 Wangjia Ditch Karamay Refined Product Pipeline",
+        "Capacity": 30,
+        "Capacity_o": 30,
+        "Product": "N/A",
+        "Length": 80.3,
+        "Operator": "PetroChina",
+        "YearOnline": 1998,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 80.3 km; \nProducts: N/A",
+        "ObjectId": 39,
+        "Shape__Length": 667313.3187860503
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 40,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            94.928484,
+            36.406404
+          ],
+          [
+            94.566716,
+            35.874223
+          ],
+          [
+            94.171164,
+            35.71785
+          ],
+          [
+            94.069853,
+            35.64031
+          ],
+          [
+            93.083359,
+            35.218564
+          ],
+          [
+            92.444803,
+            34.213448
+          ],
+          [
+            92.06982,
+            33.595014
+          ],
+          [
+            91.68233,
+            32.265176
+          ],
+          [
+            91.101162,
+            30.473118
+          ],
+          [
+            91.17211,
+            29.652491
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Golmud Lhasa Refined Product Pipeline",
+        "Capacity": 6,
+        "Capacity_o": 6,
+        "Product": "Gasoline, diesel, and kerosene",
+        "Length": 1080,
+        "Operator": "PetroChina",
+        "YearOnline": 1977,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1080 km; \nProducts: Gasoline, diesel, and kerosene",
+        "ObjectId": 40,
+        "Shape__Length": 1048481.140402273
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 41,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.156475,
+            38.496118
+          ],
+          [
+            105.728957,
+            38.851921
+          ],
+          [
+            106.383303,
+            38.983236
+          ],
+          [
+            106.794216,
+            39.655248
+          ],
+          [
+            107.387657,
+            40.743213
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Ningxia Petrochemical Refined Product Pipeline",
+        "Capacity": 44,
+        "Capacity_o": 44,
+        "Product": "Gasoline and diesel",
+        "Length": 368.6,
+        "Operator": "PetroChina",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 368.6 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 41,
+        "Shape__Length": 423539.06313292927
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 42,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.598076,
+            22.746065
+          ],
+          [
+            114.415801,
+            23.112257
+          ],
+          [
+            113.751799,
+            23.020673
+          ],
+          [
+            113.672784,
+            22.814704
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "C N O O C Huizhou Dongguan Refined Product Pipeline",
+        "Capacity": 93,
+        "Capacity_o": 93,
+        "Product": "Gasoline and diesel",
+        "Length": 162,
+        "Operator": "CNOOC",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 162 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 42,
+        "Shape__Length": 149834.90456026432
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 43,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.925439,
+            21.662991
+          ],
+          [
+            111.00516811,
+            21.43808456
+          ],
+          [
+            111.072321,
+            21.482587
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Maoming Shuidong Harbor Jet Fuel Pipeline",
+        "Capacity": 5,
+        "Capacity_o": 5,
+        "Product": "Kerosene",
+        "Length": 37,
+        "Operator": "CNAF",
+        "YearOnline": 1991,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 37 km; \nProducts: Kerosene",
+        "ObjectId": 43,
+        "Shape__Length": 37520.645912380896
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 44,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.359368,
+            21.270702
+          ],
+          [
+            110.925439,
+            21.662991
+          ],
+          [
+            111.982232,
+            21.857958
+          ],
+          [
+            113.081508,
+            22.579117
+          ],
+          [
+            112.465091,
+            23.047191
+          ],
+          [
+            113.121435,
+            23.021478
+          ],
+          [
+            113.264385,
+            23.12911
+          ],
+          [
+            113.751799,
+            23.020673
+          ],
+          [
+            114.057865,
+            22.543096
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhujiang Delta Refined Product Pipeline",
+        "Capacity": 220,
+        "Capacity_o": 220,
+        "Product": "Gasoline and diesel",
+        "Length": 1135,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1135 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 44,
+        "Shape__Length": 653886.0775021666
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 45,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.576677,
+            22.270978
+          ],
+          [
+            113.39277,
+            22.517585
+          ],
+          [
+            113.121435,
+            23.021478
+          ],
+          [
+            113.056042,
+            23.681774
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhujiang Delta Refined Product Pipeline Zhuhai Qingyuan Part",
+        "Capacity": 220,
+        "Capacity_o": 220,
+        "Product": "Gasoline and diesel",
+        "Length": 1135,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 1135 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 45,
+        "Shape__Length": 184377.85831925168
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 46,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.120161,
+            21.481291
+          ],
+          [
+            109.18248786,
+            21.51467863
+          ],
+          [
+            109.13882079,
+            21.64273318
+          ],
+          [
+            108.654146,
+            21.979933
+          ],
+          [
+            108.366543,
+            22.817002
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Beihai Nanning Refined Product Pipeline",
+        "Capacity": 185,
+        "Capacity_o": 185,
+        "Product": "Gasoline and diesel",
+        "Length": 230,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 230 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 46,
+        "Shape__Length": 197259.21386510733
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 47,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            111.749995,
+            40.842356
+          ],
+          [
+            109.840313,
+            40.657978
+          ],
+          [
+            109.781327,
+            39.608266
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Hohhot Baotou Ordos Refined Product Pipeline",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "N/A",
+        "Length": 306.5,
+        "Operator": "PetroChina",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 306.5 km; \nProducts: N/A",
+        "ObjectId": 47,
+        "Shape__Length": 367290.18339530774
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 48,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.115101,
+            30.531919
+          ],
+          [
+            117.227219,
+            31.820591
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anhui Refined Product Pipeline Anqing Hefei Part",
+        "Capacity": 95,
+        "Capacity_o": 95,
+        "Product": "Ethanol, gasoline, and diesel",
+        "Length": 520,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 520 km; \nProducts: Ethanol, gasoline, and diesel",
+        "ObjectId": 48,
+        "Shape__Length": 168139.28942793905
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 49,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.227219,
+            31.820591
+          ],
+          [
+            116.999932,
+            32.625478
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anhui Refined Product Pipeline Hefei Huainan Part",
+        "Capacity": 95,
+        "Capacity_o": 95,
+        "Product": "Ethanol, gasoline, and diesel",
+        "Length": 520,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 520 km; \nProducts: Ethanol, gasoline, and diesel",
+        "ObjectId": 49,
+        "Shape__Length": 108894.08512881474
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 50,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.227219,
+            31.820591
+          ],
+          [
+            116.521442,
+            31.734476
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Hefei LiuAn Refined Product Pipeline",
+        "Capacity": 95,
+        "Capacity_o": 95,
+        "Product": "Ethanol, gasoline, and diesel",
+        "Length": 520,
+        "Operator": "SINOPEC",
+        "YearOnline": 2019,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 520 km; \nProducts: Ethanol, gasoline, and diesel",
+        "ObjectId": 50,
+        "Shape__Length": 79371.87844134151
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 51,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.999932,
+            32.625478
+          ],
+          [
+            117.389719,
+            32.916287
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anhui Refined Product Pipeline Huainan Bengbu Part",
+        "Capacity": 95,
+        "Capacity_o": 95,
+        "Product": "Ethanol, gasoline, and diesel",
+        "Length": 520,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 520 km; \nProducts: Ethanol, gasoline, and diesel",
+        "ObjectId": 51,
+        "Shape__Length": 58009.07465624354
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 52,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.999932,
+            32.625478
+          ],
+          [
+            115.814504,
+            32.890479
+          ],
+          [
+            115.778676,
+            33.844582
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Anhui Refined Product Pipeline Huainan Fuyang Bozhou Part",
+        "Capacity": 95,
+        "Capacity_o": 95,
+        "Product": "Ethanol, gasoline, and diesel",
+        "Length": 520,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 520 km; \nProducts: Ethanol, gasoline, and diesel",
+        "ObjectId": 52,
+        "Shape__Length": 263782.9112787758
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 53,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.199427,
+            31.035395
+          ],
+          [
+            111.286471,
+            30.691966
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jingmen Yichang Refined Product Pipeline",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": null,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Planned",
+        "CapUnit": "KBD",
+        "Note": "Length:  km; \nProducts: N/A",
+        "ObjectId": 53,
+        "Shape__Length": 110960.31913459853
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 54,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.199427,
+            31.035395
+          ],
+          [
+            112.122426,
+            32.009016
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jingmen Xiangyang Refined Product Pipeline",
+        "Capacity": 81,
+        "Capacity_o": 81,
+        "Product": "N/A",
+        "Length": 136,
+        "Operator": "SINOPEC",
+        "YearOnline": 2019,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 136 km; \nProducts: N/A",
+        "ObjectId": 54,
+        "Shape__Length": 127436.06957320342
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 55,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.82828,
+            37.582295
+          ],
+          [
+            108.96625189,
+            37.86722445
+          ],
+          [
+            109.24840834,
+            38.12663419
+          ],
+          [
+            109.734589,
+            38.28539
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yanchang Petroleum Jingbian Yulin Refined Product Pipeline I I",
+        "Capacity": 28,
+        "Capacity_o": 28,
+        "Product": "N/A",
+        "Length": 135,
+        "Operator": "Yanchang Petroleum",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 135 km; \nProducts: N/A",
+        "ObjectId": 55,
+        "Shape__Length": 149813.57580799842
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 56,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.199427,
+            31.035395
+          ],
+          [
+            112.239631,
+            30.335237
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jingmen Jingzhou Refined Product Pipeline",
+        "Capacity": 58,
+        "Capacity_o": 58,
+        "Product": "N/A",
+        "Length": 91.3,
+        "Operator": "SINOPEC",
+        "YearOnline": 2003,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 91.3 km; \nProducts: N/A",
+        "ObjectId": 56,
+        "Shape__Length": 90742.517416853
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 57,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.415801,
+            23.112257
+          ],
+          [
+            115.375158,
+            22.786186
+          ],
+          [
+            116.372708,
+            23.549701
+          ],
+          [
+            116.681972,
+            23.354091
+          ],
+          [
+            116.122523,
+            24.288578
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhujiang Delta Refined Product Pipeline Stage I I",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "N/A",
+        "Length": 502,
+        "Operator": "SINOPEC",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 502 km; \nProducts: N/A",
+        "ObjectId": 57,
+        "Shape__Length": 429800.4348771755
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 58,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.54399,
+            29.868336
+          ],
+          [
+            121.30093921,
+            29.46292842
+          ],
+          [
+            121.42076,
+            28.65638
+          ],
+          [
+            120.699361,
+            27.993828
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yong Taizhou Wenzhou Refined Product Pipeline",
+        "Capacity": 139,
+        "Capacity_o": 139,
+        "Product": "Gasoline and diesel",
+        "Length": 430,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 430 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 58,
+        "Shape__Length": 278198.53445172927
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 59,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.716539,
+            29.948998
+          ],
+          [
+            120.264253,
+            30.183806
+          ],
+          [
+            120.15507,
+            30.274084
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhenhai Hangzhou Refined Product Pipeline",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "Gasoline, diesel, and kerosene",
+        "Length": 158.5,
+        "Operator": "SINOPEC",
+        "YearOnline": 2000,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 158.5 km; \nProducts: Gasoline, diesel, and kerosene",
+        "ObjectId": 59,
+        "Shape__Length": 181287.72509063734
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 60,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.586109,
+            29.995762
+          ],
+          [
+            120.617471,
+            30.078418
+          ],
+          [
+            120.495065,
+            30.081941
+          ],
+          [
+            120.443797,
+            30.262306
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shaoxing Xiaoshan Refined Product Pipeline",
+        "Capacity": 116,
+        "Capacity_o": 116,
+        "Product": "N/A",
+        "Length": 91,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 91 km; \nProducts: N/A",
+        "ObjectId": 60,
+        "Shape__Length": 48736.625169277235
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 61,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.172189,
+            29.028439
+          ],
+          [
+            119.64742,
+            29.079175
+          ],
+          [
+            120.07514,
+            29.306756
+          ],
+          [
+            120.246863,
+            29.708692
+          ],
+          [
+            120.586109,
+            29.995762
+          ],
+          [
+            120.868122,
+            30.03312
+          ],
+          [
+            121.716539,
+            29.948998
+          ],
+          [
+            121.812167,
+            29.946727
+          ],
+          [
+            121.43781868,
+            29.50690338
+          ],
+          [
+            121.429477,
+            29.287939
+          ],
+          [
+            121.131229,
+            28.845441
+          ],
+          [
+            120.699361,
+            27.993828
+          ],
+          [
+            120.655148,
+            27.778657
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yong Shao Jin Qu Refined Product Pipeline",
+        "Capacity": 176,
+        "Capacity_o": 176,
+        "Product": "Gasoline and diesel",
+        "Length": 402,
+        "Operator": "SINOPEC",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 402 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 61,
+        "Shape__Length": 663221.5923125033
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 62,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.246863,
+            29.708692
+          ],
+          [
+            119.691434,
+            29.793535
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yong Shao Jin Qu Refined Product Pipeline Zhuji Tonglu Branch",
+        "Capacity": 176,
+        "Capacity_o": 176,
+        "Product": "Gasoline and diesel",
+        "Length": 402,
+        "Operator": "SINOPEC",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 402 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 62,
+        "Shape__Length": 62779.78876753649
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 63,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.498976,
+            28.075673
+          ],
+          [
+            116.358181,
+            27.949217
+          ],
+          [
+            117.069202,
+            28.260189
+          ],
+          [
+            117.943433,
+            28.454862
+          ],
+          [
+            118.859457,
+            28.970079
+          ],
+          [
+            119.172189,
+            29.028439
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jiangxi Refined Product Pipeline Zhangshu Quzhou Part",
+        "Capacity": 100,
+        "Capacity_o": 100,
+        "Product": "N/A",
+        "Length": 390,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 390 km; \nProducts: N/A",
+        "ObjectId": 63,
+        "Shape__Length": 442433.90055030317
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 64,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.498976,
+            28.075673
+          ],
+          [
+            114.964696,
+            27.087637
+          ],
+          [
+            114.919634,
+            25.935746
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jiangxi Refined Product Pipeline Zhangshu Ganzhou Part",
+        "Capacity": 51,
+        "Capacity_o": 51,
+        "Product": "Gasoline and diesel",
+        "Length": 352,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 352 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 64,
+        "Shape__Length": 280997.3382425639
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 65,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.05324,
+            29.749122
+          ],
+          [
+            116.00193,
+            29.705077
+          ],
+          [
+            115.756882,
+            29.314347
+          ],
+          [
+            115.80911,
+            29.021823
+          ],
+          [
+            115.872271,
+            28.699714
+          ],
+          [
+            115.815278,
+            28.692863
+          ],
+          [
+            115.771093,
+            28.159141
+          ],
+          [
+            115.498976,
+            28.075673
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jiujiang Nanchang Zhangshu Refined Product Pipeline",
+        "Capacity": 76,
+        "Capacity_o": 76,
+        "Product": "Gasoline and diesel",
+        "Length": 240,
+        "Operator": "SINOPEC",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 240 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 65,
+        "Shape__Length": 250469.16752401434
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 66,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.938814,
+            28.228209
+          ],
+          [
+            112.944026,
+            27.829795
+          ],
+          [
+            112.572018,
+            26.893368
+          ],
+          [
+            113.014717,
+            25.770509
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "S I N O P E C Hunan Refined Product Pipeline",
+        "Capacity": 120,
+        "Capacity_o": 120,
+        "Product": "N/A",
+        "Length": 482,
+        "Operator": "SINOPEC",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 482 km; \nProducts: N/A",
+        "ObjectId": 66,
+        "Shape__Length": 322636.1574972152
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 67,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.944026,
+            27.829795
+          ],
+          [
+            111.993497,
+            27.700062
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "S I N O P E C Hunan Refined Product Pipeline Xiangtan Loudi Branch",
+        "Capacity": 120,
+        "Capacity_o": 120,
+        "Product": "N/A",
+        "Length": 130,
+        "Operator": "SINOPEC",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 130 km; \nProducts: N/A",
+        "ObjectId": 67,
+        "Shape__Length": 107063.70416028504
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 68,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.834303,
+            36.061089
+          ],
+          [
+            104.626282,
+            35.580662
+          ],
+          [
+            107.237743,
+            34.363184
+          ],
+          [
+            108.708991,
+            34.329605
+          ],
+          [
+            108.93977,
+            34.341574
+          ],
+          [
+            111.200367,
+            34.772792
+          ],
+          [
+            112.453926,
+            34.620202
+          ],
+          [
+            113.625328,
+            34.746611
+          ],
+          [
+            114.016536,
+            33.580873
+          ],
+          [
+            114.022298,
+            33.011529
+          ],
+          [
+            114.091192,
+            32.147679
+          ],
+          [
+            113.825889,
+            31.616853
+          ],
+          [
+            113.957037,
+            30.917766
+          ],
+          [
+            114.560639,
+            30.658141
+          ],
+          [
+            114.894843,
+            30.39194
+          ],
+          [
+            114.305539,
+            30.592849
+          ],
+          [
+            114.322439,
+            29.841438
+          ],
+          [
+            112.938814,
+            28.228209
+          ],
+          [
+            113.12873,
+            29.356803
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Zhengzhou Changsha Refined Product Pipeline",
+        "Capacity": 347,
+        "Capacity_o": 347,
+        "Product": "N/A",
+        "Length": 2737.8,
+        "Operator": "PetroChina",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 2737.8 km; \nProducts: N/A",
+        "ObjectId": 68,
+        "Shape__Length": 2380673.7109031435
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 69,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.708991,
+            34.329605
+          ],
+          [
+            107.643631,
+            35.709077
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Zhengzhou Changsha Refined Product Pipeline Xianyang Qinyang Branch",
+        "Capacity": 347,
+        "Capacity_o": 347,
+        "Product": "N/A",
+        "Length": 2737.8,
+        "Operator": "PetroChina",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 2737.8 km; \nProducts: N/A",
+        "ObjectId": 69,
+        "Shape__Length": 221873.54361177288
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 70,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.016536,
+            33.580873
+          ],
+          [
+            114.69695,
+            33.626149
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Zhengzhou Changsha Refined Product Pipeline Luohe Zhoukou Branch",
+        "Capacity": 347,
+        "Capacity_o": 347,
+        "Product": "N/A",
+        "Length": 2737.8,
+        "Operator": "PetroChina",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 2737.8 km; \nProducts: N/A",
+        "ObjectId": 70,
+        "Shape__Length": 75984.68608904464
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 71,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.188228,
+            36.7776
+          ],
+          [
+            118.055019,
+            36.813546
+          ],
+          [
+            117.120095,
+            36.6512
+          ],
+          [
+            117.087614,
+            36.200252
+          ],
+          [
+            116.986503,
+            35.580996
+          ],
+          [
+            117.323725,
+            34.810487
+          ],
+          [
+            117.41889036,
+            34.59991513
+          ],
+          [
+            117.284124,
+            34.205768
+          ],
+          [
+            116.964358,
+            33.646357
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lu Wan Refined Product Pipeline",
+        "Capacity": 153,
+        "Capacity_o": 153,
+        "Product": "Gasoline and diesel",
+        "Length": 776.64,
+        "Operator": "SINOPEC",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 776.64 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 71,
+        "Shape__Length": 550673.5761936175
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 72,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.986503,
+            35.580996
+          ],
+          [
+            116.587282,
+            35.414982
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lu Wan Refined Product Pipeline Qufu Jining Branch",
+        "Capacity": 153,
+        "Capacity_o": 153,
+        "Product": "Gasoline and diesel",
+        "Length": 776.64,
+        "Operator": "SINOPEC",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 776.64 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 72,
+        "Shape__Length": 49902.744949137195
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 73,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.323725,
+            34.810487
+          ],
+          [
+            118.356414,
+            35.104673
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lu Wan Refined Product Pipeline Zaozhuang Linyi Branch",
+        "Capacity": 153,
+        "Capacity_o": 153,
+        "Product": "Gasoline and diesel",
+        "Length": 776.64,
+        "Operator": "SINOPEC",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 776.64 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 73,
+        "Shape__Length": 121704.91136060876
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 74,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            126.549572,
+            43.837883
+          ],
+          [
+            126.05141245,
+            43.74474242
+          ],
+          [
+            125.74238397,
+            43.75444818
+          ],
+          [
+            125.323544,
+            43.817071
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jilin Changchun Refined Product Pipeline",
+        "Capacity": 57,
+        "Capacity_o": 57,
+        "Product": "N/A",
+        "Length": 157,
+        "Operator": "PetroChina",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 157 km; \nProducts: N/A",
+        "ObjectId": 74,
+        "Shape__Length": 139332.6534996517
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 75,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.216954,
+            41.199609
+          ],
+          [
+            122.994329,
+            41.108647
+          ],
+          [
+            122.107814,
+            40.230636
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Petro China Liaoyang Petrochemical Bayuquan Refined Product Pipeline",
+        "Capacity": 65,
+        "Capacity_o": 65,
+        "Product": "Diesel",
+        "Length": 190,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 190 km; \nProducts: Diesel",
+        "ObjectId": 75,
+        "Shape__Length": 190508.9637626957
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 76,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.907553,
+            41.861306
+          ],
+          [
+            123.530132,
+            41.81341
+          ],
+          [
+            123.236944,
+            41.267244
+          ],
+          [
+            122.994329,
+            41.108647
+          ],
+          [
+            122.832761,
+            41.07609
+          ],
+          [
+            122.107814,
+            40.230636
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Petro China Fushun Petrochemical Bayuquan Refined Product Pipeline",
+        "Capacity": 56,
+        "Capacity_o": 56,
+        "Product": "Gasoline and diesel",
+        "Length": 246,
+        "Operator": "PetroChina",
+        "YearOnline": 1995,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 246 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 76,
+        "Shape__Length": 332548.0150189757
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 77,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.453926,
+            34.620202
+          ],
+          [
+            113.13267808,
+            34.63437617
+          ],
+          [
+            113.625328,
+            34.746611
+          ],
+          [
+            113.713786,
+            34.34921427
+          ],
+          [
+            113.852454,
+            34.035771
+          ],
+          [
+            113.91196731,
+            33.77039842
+          ],
+          [
+            114.016536,
+            33.580873
+          ],
+          [
+            113.98586543,
+            33.2438553
+          ],
+          [
+            114.022298,
+            33.011529
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Luoyang Zumadian Refined Product Pipeline",
+        "Capacity": 91,
+        "Capacity_o": 91,
+        "Product": "N/A",
+        "Length": 425,
+        "Operator": "SINOPEC",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 425 km; \nProducts: N/A",
+        "ObjectId": 77,
+        "Shape__Length": 372337.20756502106
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 78,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.57722,
+            31.278387
+          ],
+          [
+            121.52011431,
+            30.99811675
+          ],
+          [
+            121.427534,
+            30.781672
+          ],
+          [
+            121.271708,
+            30.700702
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Gaoqiao Petrochemical Shanghai Petrochemical Refined Product Pipeline",
+        "Capacity": 34,
+        "Capacity_o": 34,
+        "Product": "N/A",
+        "Length": 114,
+        "Operator": "SINOPEC",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 114 km; \nProducts: N/A",
+        "ObjectId": 78,
+        "Shape__Length": 87180.6288476824
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 79,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.271708,
+            30.700702
+          ],
+          [
+            121.109619,
+            30.600842
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shanghai Petrochemical Chenshancun Refined Product Pipeline",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": 24.8,
+        "Operator": "SINOPEC",
+        "YearOnline": 2017,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 24.8 km; \nProducts: N/A",
+        "ObjectId": 79,
+        "Shape__Length": 22193.302173836746
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 80,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.341969,
+            30.741991
+          ],
+          [
+            120.758543,
+            30.753924
+          ],
+          [
+            120.565098,
+            30.630173
+          ],
+          [
+            120.103644,
+            30.833449
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jinshan Jiaxing Huzhou Refined Product Pipeline",
+        "Capacity": 118,
+        "Capacity_o": 118,
+        "Product": "Gasoline and diesel",
+        "Length": 177,
+        "Operator": "SINOPEC",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 177 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 80,
+        "Shape__Length": 149526.2488209249
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 81,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.758543,
+            30.753924
+          ],
+          [
+            120.585289,
+            31.298974
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Suzhou Refined Product Pipeline",
+        "Capacity": 58,
+        "Capacity_o": 58,
+        "Product": "Gasoline and diesel",
+        "Length": 76,
+        "Operator": "SINOPEC",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 76 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 81,
+        "Shape__Length": 73384.9491004575
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 82,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.773483,
+            32.23786
+          ],
+          [
+            119.425836,
+            32.187849
+          ],
+          [
+            119.974061,
+            31.811226
+          ],
+          [
+            120.284938,
+            31.920658
+          ],
+          [
+            120.31191,
+            31.491169
+          ],
+          [
+            120.585289,
+            31.298974
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Southern Jiangsu Refined Product Pipeline",
+        "Capacity": 185,
+        "Capacity_o": 185,
+        "Product": "N/A",
+        "Length": 393,
+        "Operator": "SINOPEC",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 393 km; \nProducts: N/A",
+        "ObjectId": 82,
+        "Shape__Length": 284621.86995018675
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 83,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.773483,
+            32.23786
+          ],
+          [
+            119.113185,
+            33.551052
+          ],
+          [
+            118.275198,
+            33.963232
+          ],
+          [
+            118.356414,
+            35.104673
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Northern Jiangsu Refined Product Pipeline North Part",
+        "Capacity": 126,
+        "Capacity_o": 126,
+        "Product": "N/A",
+        "Length": 618,
+        "Operator": "SINOPEC",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 618 km; \nProducts: N/A",
+        "ObjectId": 83,
+        "Shape__Length": 441063.3491584024
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 84,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.773483,
+            32.23786
+          ],
+          [
+            119.922933,
+            32.455536
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Northern Jiangsu Refined Product Pipeline East Part",
+        "Capacity": 126,
+        "Capacity_o": 126,
+        "Product": "N/A",
+        "Length": 618,
+        "Operator": "SINOPEC",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 618 km; \nProducts: N/A",
+        "ObjectId": 84,
+        "Shape__Length": 131131.4768363981
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 85,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.113185,
+            33.551052
+          ],
+          [
+            120.16366,
+            33.347316
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Northern Jiangsu Refined Product Pipeline Huaian Yancheng Branch",
+        "Capacity": 29,
+        "Capacity_o": 126,
+        "Product": "N/A",
+        "Length": 119.3,
+        "Operator": "SINOPEC",
+        "YearOnline": 2021,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 119.3 km; \nProducts: N/A",
+        "ObjectId": 85,
+        "Shape__Length": 120055.92783594444
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 86,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.431472,
+            41.805699
+          ],
+          [
+            123.236944,
+            41.267244
+          ],
+          [
+            122.070714,
+            41.119997
+          ],
+          [
+            121.126846,
+            41.095685
+          ],
+          [
+            120.83694,
+            40.71104
+          ],
+          [
+            119.600523,
+            39.935361
+          ],
+          [
+            119.244847,
+            39.876253
+          ],
+          [
+            118.892986,
+            39.891946
+          ],
+          [
+            118.180193,
+            39.630867
+          ],
+          [
+            116.407396,
+            39.9042
+          ],
+          [
+            115.464589,
+            38.874434
+          ],
+          [
+            114.514893,
+            38.042805
+          ],
+          [
+            114.4729212,
+            37.59685257
+          ],
+          [
+            114.504677,
+            37.070834
+          ],
+          [
+            114.49643424,
+            36.87214775
+          ],
+          [
+            114.538961,
+            36.625656
+          ],
+          [
+            114.43933114,
+            36.36504074
+          ],
+          [
+            114.392392,
+            36.097577
+          ],
+          [
+            114.31840695,
+            35.88502735
+          ],
+          [
+            114.297201,
+            35.748233
+          ],
+          [
+            114.13366166,
+            35.55230713
+          ],
+          [
+            113.926763,
+            35.303704
+          ],
+          [
+            113.76417108,
+            35.06440077
+          ],
+          [
+            113.625328,
+            34.746611
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jinzhou Zhengzhou Refined Product Pipeline",
+        "Capacity": 301,
+        "Capacity_o": 301,
+        "Product": "N/A",
+        "Length": 1636,
+        "Operator": "PetroChina",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 1636 km; \nProducts: N/A",
+        "ObjectId": 86,
+        "Shape__Length": 1752328.3694132692
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 87,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.896921,
+            38.052675
+          ],
+          [
+            118.051171,
+            37.390319
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Binzhou Zhonghai Liqing Dongying Harbor Refined Product Pipeline",
+        "Capacity": 35,
+        "Capacity_o": 35,
+        "Product": "N/A",
+        "Length": 121,
+        "Operator": "CNOOC",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 121 km; \nProducts: N/A",
+        "ObjectId": 87,
+        "Shape__Length": 132488.97369379798
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 88,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.177161,
+            37.710157
+          ],
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            119.161748,
+            36.706962
+          ],
+          [
+            118.356414,
+            35.104673
+          ],
+          [
+            119.374407,
+            35.102063
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Binzhou Zhonghai Petrochemical Rizhao Lanshan Harbar Refined Product Pipeline",
+        "Capacity": 116,
+        "Capacity_o": 116,
+        "Product": "N/A",
+        "Length": 510,
+        "Operator": "Shandong province",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 510 km; \nProducts: N/A",
+        "ObjectId": 88,
+        "Shape__Length": 533723.2865991539
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 89,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.209566,
+            39.841329
+          ],
+          [
+            116.340091,
+            39.74288
+          ],
+          [
+            116.656434,
+            39.909946
+          ],
+          [
+            116.65465,
+            40.130347
+          ],
+          [
+            116.290595,
+            40.148968
+          ],
+          [
+            116.209566,
+            39.841329
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Beijing Circular Refined Product Pipeline",
+        "Capacity": 58,
+        "Capacity_o": 58,
+        "Product": "Gasoline and diesel",
+        "Length": 130,
+        "Operator": "SINOPEC",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 130 km; \nProducts: Gasoline and diesel",
+        "ObjectId": 89,
+        "Shape__Length": 181356.8898580661
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 90,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.659841,
+            39.029711
+          ],
+          [
+            117.3592,
+            39.130406
+          ],
+          [
+            116.603112,
+            40.079857
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jing Jin Tang Aviation Kerosene Pipeline",
+        "Capacity": 100,
+        "Capacity_o": 100,
+        "Product": "Kerosene",
+        "Length": 185,
+        "Operator": "CNAF",
+        "YearOnline": 2000,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 185 km; \nProducts: Kerosene",
+        "ObjectId": 90,
+        "Shape__Length": 197396.57642082902
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 91,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.515483,
+            38.72879
+          ],
+          [
+            116.357464,
+            37.434092
+          ],
+          [
+            117.120095,
+            36.6512
+          ],
+          [
+            116.768358,
+            36.182571
+          ],
+          [
+            116.783833,
+            35.553144
+          ],
+          [
+            117.323725,
+            34.810487
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Petro China Dagang Petrochemical Zaozhuang Refined Product Pipeline",
+        "Capacity": 69,
+        "Capacity_o": 69,
+        "Product": "N/A",
+        "Length": 647,
+        "Operator": "PetroChina",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 647 km; \nProducts: N/A",
+        "ObjectId": 91,
+        "Shape__Length": 642118.6970072092
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 92,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.514893,
+            38.042805
+          ],
+          [
+            113.580519,
+            37.856971
+          ],
+          [
+            112.752652,
+            37.687357
+          ],
+          [
+            112.548879,
+            37.87059
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shijiazhuang Taiyuan Refined Product Pipeline",
+        "Capacity": 79,
+        "Capacity_o": 79,
+        "Product": "N/A",
+        "Length": 316,
+        "Operator": "SINOPEC",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 316 km; \nProducts: N/A",
+        "ObjectId": 92,
+        "Shape__Length": 236833.85585144756
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 93,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.514893,
+            38.042805
+          ],
+          [
+            114.504677,
+            37.070834
+          ],
+          [
+            114.538961,
+            36.625656
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shijiazhuang Handan Refined Product Pipeline",
+        "Capacity": 39,
+        "Capacity_o": 39,
+        "Product": "N/A",
+        "Length": 210,
+        "Operator": "SINOPEC",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 210 km; \nProducts: N/A",
+        "ObjectId": 93,
+        "Shape__Length": 198540.99447906794
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 94,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.625328,
+            34.746611
+          ],
+          [
+            113.926763,
+            35.303704
+          ],
+          [
+            114.357763,
+            35.924514
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhengzhou Tangyin Refined Product Pipeline",
+        "Capacity": 0,
+        "Capacity_o": null,
+        "Product": "N/A",
+        "Length": 204.7,
+        "Operator": "SINOPEC",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 204.7 km; \nProducts: N/A",
+        "ObjectId": 94,
+        "Shape__Length": 180445.98522423446
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 95,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.120095,
+            36.6512
+          ],
+          [
+            115.98546,
+            36.45703
+          ],
+          [
+            115.029215,
+            35.761829
+          ],
+          [
+            114.357763,
+            35.924514
+          ],
+          [
+            114.538961,
+            36.625656
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jinan Handan Refined Product Pipeline",
+        "Capacity": 137,
+        "Capacity_o": 137,
+        "Product": "N/A",
+        "Length": 480,
+        "Operator": "SINOPEC",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 480 km; \nProducts: N/A",
+        "ObjectId": 95,
+        "Shape__Length": 449254.1927978698
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 96,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.075489,
+            29.592756
+          ],
+          [
+            104.851944,
+            29.764059
+          ],
+          [
+            104.677091,
+            30.108216
+          ],
+          [
+            104.577247,
+            30.333407
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Neijiang Jianyang Refined Product Pipeline",
+        "Capacity": 88,
+        "Capacity_o": 88,
+        "Product": "N/A",
+        "Length": 159,
+        "Operator": "SINOPEC",
+        "YearOnline": 2017,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 159 km; \nProducts: N/A",
+        "ObjectId": 96,
+        "Shape__Length": 112553.64147757179
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 97,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.194466,
+            19.733261
+          ],
+          [
+            109.21236077,
+            19.77295168
+          ],
+          [
+            109.24195521,
+            19.79860053
+          ],
+          [
+            109.31905651,
+            19.79640222
+          ],
+          [
+            109.79490394,
+            19.82204729
+          ],
+          [
+            109.994277,
+            19.86600065
+          ],
+          [
+            110.031288,
+            19.950737
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yangpu Macun Refined Product Pipeline",
+        "Capacity": 58,
+        "Capacity_o": 58,
+        "Product": "Gasoline, diese,l and kerosene",
+        "Length": 112,
+        "Operator": "SINOPEC",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 112 km; \nProducts: Gasoline, diese,l and kerosene",
+        "ObjectId": 97,
+        "Shape__Length": 104864.34643526636
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 98,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.946241,
+            25.176287
+          ],
+          [
+            118.80670844,
+            25.25055054
+          ],
+          [
+            118.98614626,
+            25.49850877
+          ],
+          [
+            119.486399,
+            26.023033
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "SINOPEC Fujian refined product pipeline north line phase I",
+        "Capacity": 139,
+        "Capacity_o": 139,
+        "Product": "Gasoline, diesel and fuel oil",
+        "Length": 346,
+        "Operator": "Sinopec",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 346 km; \nProducts: Gasoline, diesel and fuel oil",
+        "ObjectId": 98,
+        "Shape__Length": 139988.1255554106
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 99,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.557845,
+            35.384424
+          ],
+          [
+            119.26233977,
+            35.52223424
+          ],
+          [
+            119.36789143,
+            35.70529408
+          ],
+          [
+            118.79439408,
+            35.77954239
+          ],
+          [
+            118.67125047,
+            36.83706578
+          ],
+          [
+            118.57273559,
+            36.85958982
+          ],
+          [
+            118.54107009,
+            36.99740472
+          ],
+          [
+            118.05553245,
+            36.94680779
+          ],
+          [
+            118.214626,
+            37.196677
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Rizhao Port Jinbo DN400 Product Pipeline",
+        "Capacity": 80,
+        "Capacity_o": 80,
+        "Product": null,
+        "Length": 428,
+        "Operator": "Rizhao Port Group",
+        "YearOnline": 2021,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 428 km; \nProducts: ",
+        "ObjectId": 99,
+        "Shape__Length": 401498.07283287926
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 100,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.20277,
+            29.547879
+          ],
+          [
+            112.879217,
+            30.459078
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jianli Qianjiang Gasoline Pipeline",
+        "Capacity": 9,
+        "Capacity_o": 9,
+        "Product": "Gasoline",
+        "Length": 128,
+        "Operator": "JinAo Chemical",
+        "YearOnline": null,
+        "Status": "Planned ",
+        "CapUnit": "KBD",
+        "Note": "Length: 128 km; \nProducts: Gasoline",
+        "ObjectId": 100,
+        "Shape__Length": 122544.90647717047
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 101,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.19573322,
+            29.53264026
+          ],
+          [
+            112.87218022,
+            30.44383926
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jianli Qianjiang Diesel Pipeline",
+        "Capacity": 12,
+        "Capacity_o": 12,
+        "Product": "Diesel",
+        "Length": 128,
+        "Operator": "JinAo Chemical",
+        "YearOnline": null,
+        "Status": "Planned ",
+        "CapUnit": "KBD",
+        "Note": "Length: 128 km; \nProducts: Diesel",
+        "ObjectId": 101,
+        "Shape__Length": 122527.71790888926
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 102,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.396769,
+            21.234667
+          ],
+          [
+            110.26933825,
+            21.27749829
+          ],
+          [
+            110.23767275,
+            21.39384083
+          ],
+          [
+            109.76620866,
+            21.63115409
+          ],
+          [
+            109.61139956,
+            21.81582513
+          ],
+          [
+            109.28418941,
+            21.6573166
+          ],
+          [
+            109.514588,
+            21.512832
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Sinopec Kuwait Petroleum Zhanjiang Beihai Product Pipeline",
+        "Capacity": 185,
+        "Capacity_o": 185,
+        "Product": null,
+        "Length": 248,
+        "Operator": "Sinopec and Kuwait Petroleum",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 248 km; \nProducts: ",
+        "ObjectId": 102,
+        "Shape__Length": 189160.0331241114
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 103,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.23426604,
+            34.59823952
+          ],
+          [
+            117.284124,
+            34.205768
+          ],
+          [
+            113.625328,
+            34.746611
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lianyungang Xuzhou Zhengzhou refined product pipeline",
+        "Capacity": 93,
+        "Capacity_o": null,
+        "Product": null,
+        "Length": 680,
+        "Operator": "Shenghong Holding Group",
+        "YearOnline": null,
+        "Status": "Announced",
+        "CapUnit": "KBD",
+        "Note": "Length: 680 km\n",
+        "ObjectId": 103,
+        "Shape__Length": 637244.9872853889
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 104,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.29796937,
+            30.70432059
+          ],
+          [
+            121.43060405,
+            30.84375626
+          ],
+          [
+            121.43396588,
+            30.92309834
+          ],
+          [
+            121.37345295,
+            31.01822203
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shanghai Petrochemical Minxing oil storage refined product pipeline",
+        "Capacity": 69,
+        "Capacity_o": null,
+        "Product": "Gasoline and diesel",
+        "Length": 61,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "CapUnit": "KBD",
+        "Note": "Length: 61 km\n",
+        "ObjectId": 104,
+        "Shape__Length": 47697.59739897943
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 105,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.85742283,
+            38.29540208
+          ],
+          [
+            117.75648594,
+            38.09681701
+          ],
+          [
+            117.75579929,
+            38.09627664
+          ]
+        ]
+      },
+      "properties": {
+        "id": "363",
+        "Name": "Binzhou Port to Xinyue Petrochemical Diesel Pipeline",
+        "Capacity": 60,
+        "Capacity_o": null,
+        "Product": "Diesel",
+        "Length": 31.3,
+        "Operator": "Xinyue Chemical",
+        "YearOnline": 2024,
+        "Status": "Operating",
+        "CapUnit": "KBD",
+        "Note": "Length: 31.3 km",
+        "ObjectId": 105,
+        "Shape__Length": 30398.09721647036
+      }
+    }
+  ],
+  "metadata": {
+    "dataset": "refined_product_pipelines",
+    "total_features": 105,
+    "source_url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaRefinedProductPipelines_Mar2023/FeatureServer",
+    "layer_id": 0,
+    "extraction_time": "2025-08-03T13:48:55.155397",
+    "coordinate_system": "EPSG:4326",
+    "geometry_verified": true,
+    "geometry_stats": {
+      "total_features": 105,
+      "features_with_geometry": 105,
+      "features_without_geometry": 0,
+      "geometry_types": {
+        "LineString": 105
+      },
+      "coordinate_ranges": {
+        "longitude": {
+          "min": 84.886974,
+          "max": 126.549572
+        },
+        "latitude": {
+          "min": 19.733261,
+          "max": 45.581208
+        }
+      }
+    }
+  }
+}

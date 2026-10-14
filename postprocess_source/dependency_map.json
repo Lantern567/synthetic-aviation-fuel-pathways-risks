@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-15",
+  "portable_entry": {
+    "script": "verify_postprocess.py",
+    "input_argument": "--data /path/to/Accompanying_Data",
+    "output_argument": "--output /path/to/verification_output",
+    "dependencies": "requirements-verification.txt",
+    "tested_python": "3.12",
+    "execution_scope": "Hash verification, retained-design inventory accounting, cost/carbon ledger reconciliation, original learning-function and carbon-category checks. No new optimization or full-figure rendering.",
+    "source_execution": "The original all_site_inventory.py is executed byte-for-byte within a copied-input workspace. Original update_carbon.corrected, compute_lcoe_projection and _aggregate functions are imported without changing their source."
+  },
+  "original_cost_pipeline": {
+    "script_order": [
+      "inventory_cost_update_20261013/figures_data/update_data.py",
+      "inventory_cost_update_20261013/figures_data/render_figures.py",
+      "inventory_cost_update_20261013/figures_data/verify_outputs.py"
+    ],
+    "workspace_root": "original_source/ acts as the original work/nexus_targeted_revision directory; author packet directories are two parent levels above it",
+    "source_data": "submission_final_20261012/data_stage: pre-accounting data including the retained GTL-BH source solution",
+    "source_gtlbh_record_in_this_folder": "accounting_reference/source_GTL-BH_complete_solution.json",
+    "output_data": "inventory_cost_update_20261013/figures_data/data_stage",
+    "other_inputs": [
+      "revision_20261007/figures_cost/adapted_data/pathway_summary.csv",
+      "revision_20261007/figures_cost/figures/ and S24_fixed_design_component_sensitivity.csv",
+      "revision_20261007_minimal/figures_cost/figures/Figure_1.png",
+      "revision_20261007/figures_space_time/outputs/Figure_S26.png",
+      "Result-stage Word files read by verify_outputs.py for image matching"
+    ],
+    "retained_source_scope": "All three processing scripts and their plotting modules are copied byte-for-byte. A current-data directory is not a pre-accounting input stage."
+  },
+  "original_carbon_pipeline": {
+    "script_order": [
+      "inventory_carbon_update_20261013/audit/unit_ledger.py",
+      "inventory_carbon_update_20261013/audit/all_site_inventory.py",
+      "inventory_carbon_update_20261013/audit/final_inventory_ledger.py",
+      "inventory_carbon_update_20261013/figures_data/update_carbon.py",
+      "inventory_carbon_update_20261013/figures_data/add_inventory_records.py",
+      "inventory_carbon_update_20261013/figures_data/render_figures.py",
+      "inventory_carbon_update_20261013/figures_data/verify_outputs.py"
+    ],
+    "source_data": "Nexus系统提交文件_库存成本修正20261013/Accompanying_Data: inventory-cost-accounted, pre-inventory-carbon data",
+    "inventory_inputs": "inventory_cost_review_20261012/raw_inventory/{scenario}/{label}/{saf,h2}_inventory.csv, matching summary.json; corresponding run configuration and model_parameters.json",
+    "inventory_current_archive_location": "Accompanying_Data/figure_data/inventory_records/{scenario}/{label}/",
+    "model_unit_evidence": [
+      "github_archive/repository/model_source/products/supply_chain_optimization: archived model families and one-step GTL",
+      "corrected_runs_20261006/project/products/supply_chain_optimization: current COPT model families",
+      "github_archive/repository/model_source/shared/data: archived comparator configurations"
+    ],
+    "archived_inventory_evidence": "github_archive/repository/archived_outputs/products/supply_chain_optimization plus normalized manifest source hashes",
+    "output_data": "inventory_carbon_update_20261013/figures_data/data_stage",
+    "render_inputs": [
+      "Nexus系统提交文件_库存成本修正20261013/Figures/Figure_1.png",
+      "inventory_carbon_update_20261013/figures_data/input_figure_manifest.json and input_figures/",
+      "Figure templates listed by the cost pipeline",
+      "Pre-carbon Word files read by verify_outputs.py for image matching"
+    ],
+    "reference_ledger": "accounting_reference/final_inventory_carbon_ledger.json",
+    "retained_source_scope": "All seven processing scripts and their plotting modules are copied byte-for-byte. The portable verifier reconstructs the twelve full-inventory accounts using the original script and the delivered real inputs."
+  },
+  "wrapper_for_full_pipeline": {
+    "method": "Copy preserved sources and their named source data/template stages into a temporary workspace with the documented relative layout, then execute scripts in the stated sequence. Import-time path constants may instead be assigned by a separate wrapper for main-guarded scripts; top-level audit/render scripts require the workspace layout. Preserve original source files and input versions.",
+    "not_tested_by_portable_verifier": "Full regeneration of old-to-current document images, original author-workspace screenshot matching and pixel-identical figure rendering.",
+    "do_not_reapply_to_current_results": true
+  },
+  "plotting_packages_observed": {
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "matplotlib": "3.11.2",
+    "Pillow": "12.3.0",
+    "PyMuPDF": "1.28.2",
+    "PyYAML": "6.0.3",
+    "python-docx": "1.2.0",
+    "openpyxl": "3.1.5",
+    "Cartopy_dependency_directory": "0.26.0",
+    "frykit_dependency_directory": "0.8.1",
+    "shapely_dependency_directory": "2.2.0",
+    "pyproj_dependency_directory": "3.8.0"
+  }
+}

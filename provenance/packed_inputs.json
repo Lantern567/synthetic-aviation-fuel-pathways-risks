@@ -1,0 +1,264 @@
+{
+  "files": [
+    {
+      "path": "validation_records/CCU-GH-FT/baseline/h2_flows.csv.gz",
+      "sha256": "fa16d2130256fa7fe37bb2aaad393ad33d7a82823d8af4fbd7def7d9084de606",
+      "unpacked_path": "validation_records/CCU-GH-FT/baseline/h2_flows.csv",
+      "unpacked_sha256": "2ee581c4c07f62a55f80fd6c2c875d5cad45d4ef1a2192b606ac65ee595ef318",
+      "unpacked_bytes": 331772917
+    },
+    {
+      "path": "validation_records/CCU-GH-FT/baseline/variables.csv.gz",
+      "sha256": "39d8acec5fa28fe65f7f27010aab08364bdb3e803e65caa7a6b5f2c77c3f373e",
+      "unpacked_path": "validation_records/CCU-GH-FT/baseline/variables.csv",
+      "unpacked_sha256": "1660ba6f5916e27b8b2ffd319912d630ccf3d53e7a7c66138f5077ea8d54e77b",
+      "unpacked_bytes": 160279448
+    },
+    {
+      "path": "validation_records/CCU-GH-FT/summer_fixed/h2_flows.csv.gz",
+      "sha256": "416acf34057506f6e6556861889900d4b6dd5e8ad2288b8fbf170f31404c1710",
+      "unpacked_path": "validation_records/CCU-GH-FT/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "da291105a26cf2853186099f95b401b0c65af3cf64b17485ee04535736ad90b6",
+      "unpacked_bytes": 331762727
+    },
+    {
+      "path": "validation_records/CCU-GH-FT/summer_fixed/variables.csv.gz",
+      "sha256": "2bc6800fcfd6cd54fd42f1d38f0fe05f87970070ba1e7ae6f1f487596e9dc591",
+      "unpacked_path": "validation_records/CCU-GH-FT/summer_fixed/variables.csv",
+      "unpacked_sha256": "be94a372113181e9a02633f1e684df54ad5858c4edb8e0852863abfb209a1a7d",
+      "unpacked_bytes": 160308675
+    },
+    {
+      "path": "validation_records/CCU-GH-MTJ/baseline/h2_flows.csv.gz",
+      "sha256": "c7ace489689035a130e828d2852160c793aa37e4693175d884868f16941b0695",
+      "unpacked_path": "validation_records/CCU-GH-MTJ/baseline/h2_flows.csv",
+      "unpacked_sha256": "37d1083f37dbde8489747abbee23122a5ffc985bed4cc90aa59a479e8c203172",
+      "unpacked_bytes": 331733501
+    },
+    {
+      "path": "validation_records/CCU-GH-MTJ/baseline/variables.csv.gz",
+      "sha256": "5c3b6f5eb7bb7149b519a589c7efa9356ae5bb9ef29b20c6249930cd8796a577",
+      "unpacked_path": "validation_records/CCU-GH-MTJ/baseline/variables.csv",
+      "unpacked_sha256": "ecafdc5b254b2c6d8db550ccf40a46722f8e3e359dc68a6d655649ccd188eb1e",
+      "unpacked_bytes": 160613698
+    },
+    {
+      "path": "validation_records/CCU-GH-MTJ/summer_fixed/h2_flows.csv.gz",
+      "sha256": "0b4095ce7246313648a6f8935c91d224dae88478e4669ddcc9422a697256af59",
+      "unpacked_path": "validation_records/CCU-GH-MTJ/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "a6caf619f0b19dad57d5aad2ca5e06b0caeca5417c144d86c1e4a33fdfc8b6f3",
+      "unpacked_bytes": 331727794
+    },
+    {
+      "path": "validation_records/CCU-GH-MTJ/summer_fixed/variables.csv.gz",
+      "sha256": "ea8d4e595938d5ea28d975a637348585ebdbd522782aa20ee5dc6fb445ac4dc5",
+      "unpacked_path": "validation_records/CCU-GH-MTJ/summer_fixed/variables.csv",
+      "unpacked_sha256": "3b03b193ded7160298069cca60f66b7441094347afbf5e8ac818865551c37afb",
+      "unpacked_bytes": 160666208
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/baseline/electricity_constraint_residuals.csv.gz",
+      "sha256": "db1256cfdf77c9e8eda22425637ba3707f009f5ad8a1c701912ce8868de9ce6b",
+      "unpacked_path": "validation_records/DAC-GH-FT/baseline/electricity_constraint_residuals.csv",
+      "unpacked_sha256": "21b02f1379c883a4b686edf32e520e8d181b9bab777e713794f1773e77381177",
+      "unpacked_bytes": 8691876
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/baseline/h2_flows.csv.gz",
+      "sha256": "94b6a63bbef2a70ad1b0da3cd9f4ffe6601ccc9e8034c7d774f66a1d79a9068f",
+      "unpacked_path": "validation_records/DAC-GH-FT/baseline/h2_flows.csv",
+      "unpacked_sha256": "6a8a7948fa8e92c5834a98b96c747e0e0546c82291f7e53457746af34a072d80",
+      "unpacked_bytes": 279305354
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/baseline/variables.csv.gz",
+      "sha256": "868146cf85e5e1d6ee67d83f4f588fbe9d7fe58d43887ab4f009bb4dd5da39db",
+      "unpacked_path": "validation_records/DAC-GH-FT/baseline/variables.csv",
+      "unpacked_sha256": "69359f1c93a90e5a353de0a7a10110beefa8d0c792aef399929716a9bbcefd97",
+      "unpacked_bytes": 134446756
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/summer_fixed/electricity_constraint_residuals.csv.gz",
+      "sha256": "2e4c5b282512a02ea4e23db56e86247cb39097d6318515d87a6f5dea416b694c",
+      "unpacked_path": "validation_records/DAC-GH-FT/summer_fixed/electricity_constraint_residuals.csv",
+      "unpacked_sha256": "0207746eb08b70693ea8cdaf2e0cc8e2c8bc25c196e891e86180956968427097",
+      "unpacked_bytes": 8535973
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/summer_fixed/h2_flows.csv.gz",
+      "sha256": "591a39880b2ed3a473d1af8ab1c7d68caa75f79dff59fe55e985c5a7afea2110",
+      "unpacked_path": "validation_records/DAC-GH-FT/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "9ea479b76ace6bff9bc407921fe3f16f042a30c7252610b778891fbe70e7b066",
+      "unpacked_bytes": 279300115
+    },
+    {
+      "path": "validation_records/DAC-GH-FT/summer_fixed/variables.csv.gz",
+      "sha256": "66ccd099fa45ec49f6f1fa64133dc4d08db6400d5a8fca7fb1c0969137be9796",
+      "unpacked_path": "validation_records/DAC-GH-FT/summer_fixed/variables.csv",
+      "unpacked_sha256": "80aee7318deb28fd08126cb11468c28077dcfe3b036f13e91fa012b56e272296",
+      "unpacked_bytes": 134470985
+    },
+    {
+      "path": "validation_records/DAC-GH-MTJ/baseline/h2_flows.csv.gz",
+      "sha256": "c026ea0ab1b14fbe54dd2786d54a519f5682ff736b69f107a1cd292062ac2aef",
+      "unpacked_path": "validation_records/DAC-GH-MTJ/baseline/h2_flows.csv",
+      "unpacked_sha256": "b7d6aa51c8c4f1b76bff8959387bd8403b8036e586d0605f1756f849422e960b",
+      "unpacked_bytes": 279308836
+    },
+    {
+      "path": "validation_records/DAC-GH-MTJ/baseline/variables.csv.gz",
+      "sha256": "ca4fd78c507bffe379208815c2bce7cab56ff7cff702de007ae8711c6a4b6680",
+      "unpacked_path": "validation_records/DAC-GH-MTJ/baseline/variables.csv",
+      "unpacked_sha256": "c5d344f90b990f6c9b4b75deaa8908d21cf39dc9960c6863275a762ceb2d2d73",
+      "unpacked_bytes": 134413083
+    },
+    {
+      "path": "validation_records/DAC-GH-MTJ/summer_fixed/electricity_constraint_residuals.csv.gz",
+      "sha256": "79a56e80ecaed31b034ca430184bcc2c00bfd0d4abdbe45762a165979bf218fc",
+      "unpacked_path": "validation_records/DAC-GH-MTJ/summer_fixed/electricity_constraint_residuals.csv",
+      "unpacked_sha256": "8a7cbb1fd95fa609f86b5f0805731b03485a8ca70113609e05e6734c22c8b63b",
+      "unpacked_bytes": 8560675
+    },
+    {
+      "path": "validation_records/DAC-GH-MTJ/summer_fixed/h2_flows.csv.gz",
+      "sha256": "7196069ae7dd3183622cf7a788e2f01ddad601c0edb4b359738eb3120eaa0e51",
+      "unpacked_path": "validation_records/DAC-GH-MTJ/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "1d0446fcd8bd8421775d9b02651abf9ab819b981a00674c60af4cb26b28735b2",
+      "unpacked_bytes": 279299534
+    },
+    {
+      "path": "validation_records/DAC-GH-MTJ/summer_fixed/variables.csv.gz",
+      "sha256": "a84f0386046061bacac5d364de184e7f30763a6e560802141fe646ee2ae8864a",
+      "unpacked_path": "validation_records/DAC-GH-MTJ/summer_fixed/variables.csv",
+      "unpacked_sha256": "38b56ae59be4c640979d5b3a6cec097ff7aae6a98d1c0b6e5a4d6658d0380b95",
+      "unpacked_bytes": 134476935
+    },
+    {
+      "path": "validation_records/GTL-GH/baseline/h2_flows.csv.gz",
+      "sha256": "183009771e0c63fd19b90dbcc81787df216f60441b965f81cade721c5495fb8c",
+      "unpacked_path": "validation_records/GTL-GH/baseline/h2_flows.csv",
+      "unpacked_sha256": "3bad53e69f9e8f92e3dd8e1335931798c73ee4ebcab53de6043dc516567d183f",
+      "unpacked_bytes": 40299287
+    },
+    {
+      "path": "validation_records/GTL-GH/baseline/ng_flows.csv.gz",
+      "sha256": "d16cf5f0a9ea60b7ad2abb6e901e33909412af015abb40861c5b0496ad000ad1",
+      "unpacked_path": "validation_records/GTL-GH/baseline/ng_flows.csv",
+      "unpacked_sha256": "7d315580e5279353859e62d4a788d2d19197d1c95ec18e4318dcd73288e6efcd",
+      "unpacked_bytes": 18757439
+    },
+    {
+      "path": "validation_records/GTL-GH/baseline/ng_technology_flows.csv.gz",
+      "sha256": "485ebc091ca2300afda64b0081c8a3808ae97d291cd3295c5bfdf5df9afb0cc5",
+      "unpacked_path": "validation_records/GTL-GH/baseline/ng_technology_flows.csv",
+      "unpacked_sha256": "e58d7a0903f9a2b3e7fbd8cee1fa17d4ee9253975d29537cb68678a457bfa0e1",
+      "unpacked_bytes": 25808151
+    },
+    {
+      "path": "validation_records/GTL-GH/baseline/saf_production.csv.gz",
+      "sha256": "63fe96e31c92822bc155d2bbb044917e0d072bc9b4b140f29d5c265533d0dfe8",
+      "unpacked_path": "validation_records/GTL-GH/baseline/saf_production.csv",
+      "unpacked_sha256": "8ff6df85134c3f072f06bcbd5136430592dd96e52fc79a334682da37d8bf745d",
+      "unpacked_bytes": 15525188
+    },
+    {
+      "path": "validation_records/GTL-GH/baseline/variables.csv.gz",
+      "sha256": "bc04322e9218e68ee631c8f5aa43a6cd9eecf552fc5df14de8c90227d74f5dd6",
+      "unpacked_path": "validation_records/GTL-GH/baseline/variables.csv",
+      "unpacked_sha256": "359f650bbbd18e809dcfe204018a241b60b85d74a3899b669859ee7481390d9e",
+      "unpacked_bytes": 110578587
+    },
+    {
+      "path": "validation_records/GTL-GH/summer_fixed/h2_flows.csv.gz",
+      "sha256": "2e6afd220c502eef767368e1e643623b5adf414522715dea4e7dc6b4e8d39b82",
+      "unpacked_path": "validation_records/GTL-GH/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "124512a1eb25b08beb649a13ead44c0c7fc3838229243a7cf208213980bb3989",
+      "unpacked_bytes": 40296877
+    },
+    {
+      "path": "validation_records/GTL-GH/summer_fixed/ng_flows.csv.gz",
+      "sha256": "7c342c2c0e2ed424c970e9d7466c15b589e3863fe8b87932859142a44c284120",
+      "unpacked_path": "validation_records/GTL-GH/summer_fixed/ng_flows.csv",
+      "unpacked_sha256": "854c0a76eb3931832c72e32edbb37b8697f0f251e5f058b388dd442a87af9653",
+      "unpacked_bytes": 18758469
+    },
+    {
+      "path": "validation_records/GTL-GH/summer_fixed/ng_technology_flows.csv.gz",
+      "sha256": "2d8951fcaf27053f2e9993ed249746a8876b22dee770db5ebf1f0946323306f9",
+      "unpacked_path": "validation_records/GTL-GH/summer_fixed/ng_technology_flows.csv",
+      "unpacked_sha256": "01e2f11f261b707ac65aa11dfe1450e7605eb8ea5625b97c6d58c8676958fa51",
+      "unpacked_bytes": 25808978
+    },
+    {
+      "path": "validation_records/GTL-GH/summer_fixed/saf_production.csv.gz",
+      "sha256": "f5c0465b846298caf45c2ee545bbc142d76c68e6f6987c68a328a359ae9a3dc9",
+      "unpacked_path": "validation_records/GTL-GH/summer_fixed/saf_production.csv",
+      "unpacked_sha256": "74d3988c5175b74d7a671b50702a43d4d11b255cd44136958306d4d4b757579c",
+      "unpacked_bytes": 15529006
+    },
+    {
+      "path": "validation_records/GTL-GH/summer_fixed/variables.csv.gz",
+      "sha256": "69cb3c01081b406afbd6040bde7509ded55c09279fada7ba14adabeb57656539",
+      "unpacked_path": "validation_records/GTL-GH/summer_fixed/variables.csv",
+      "unpacked_sha256": "9c5ea9eab68c9b55c645626230e51f42f42dea5096f04e3ffa4307865868daa1",
+      "unpacked_bytes": 110565755
+    },
+    {
+      "path": "validation_records/CTL/baseline/h2_flows.csv.gz",
+      "sha256": "8f12f312e50087d2129e2c418ff4b15b83489fa4a874cdd6a279d43ca8caae56",
+      "unpacked_path": "validation_records/CTL/baseline/h2_flows.csv",
+      "unpacked_sha256": "0825af5f5e21549dadb38571f61d5ce43a064d9f070de0d3ae880b5aec30414e",
+      "unpacked_bytes": 279307220
+    },
+    {
+      "path": "validation_records/CTL/baseline/variables.csv.gz",
+      "sha256": "a5aed9d04d876586362f39cd17e6d35e32f49f85232ede0a5790f31cb311ba2b",
+      "unpacked_path": "validation_records/CTL/baseline/variables.csv",
+      "unpacked_sha256": "91b860706c9c55aa91f53b3727815b79a22841658e1ffc9773e9a3161e1ef4df",
+      "unpacked_bytes": 125549245
+    },
+    {
+      "path": "validation_records/CTL/summer_fixed/h2_flows.csv.gz",
+      "sha256": "031692a4c21feb58ce4d8e3a0503538cfb7a5d4ca583a9fae75c905d59afd99b",
+      "unpacked_path": "validation_records/CTL/summer_fixed/h2_flows.csv",
+      "unpacked_sha256": "e6fea067848f109637a5ed74fc1def92c9b1e28e90ac03d3280c807a07844c87",
+      "unpacked_bytes": 279299911
+    },
+    {
+      "path": "validation_records/CTL/summer_fixed/variables.csv.gz",
+      "sha256": "5e4d62543bd41fe6c7f6fa003e22c1329c3a59829679d5adac680f06147b0312",
+      "unpacked_path": "validation_records/CTL/summer_fixed/variables.csv",
+      "unpacked_sha256": "51cdfa52495762879840a85ab26e4c36469d4529f9cdaf5e0aab16a9dcde2c73",
+      "unpacked_bytes": 125644819
+    },
+    {
+      "path": "compute/routing/new_routes.jsonl.gz",
+      "sha256": "ef178b16cc8bd323cdb9a5f8d4dc5a667d7926bfa5599efa4c78dd74081f85cb",
+      "unpacked_path": "compute/routing/new_routes.jsonl",
+      "unpacked_sha256": "e4d6e219ef7f42d0b09bf735dc1149f3a64aa2500c06b8cb71985f806097aa92",
+      "unpacked_bytes": 73791867
+    },
+    {
+      "path": "compute/project/shared/data/cache/graphhopper_routes/route_cache.db.gz",
+      "sha256": "fb6f18876248f3e533f8a0b116ce69efe92306f88a8d6344adbcd9a7280bbd74",
+      "unpacked_path": "compute/project/shared/data/cache/graphhopper_routes/route_cache.db",
+      "unpacked_sha256": "6c2020ebbfa60e573de2adbc08eab1f2119c2718d4a2849ab8afb7fc81d79de2",
+      "unpacked_bytes": 83968000
+    },
+    {
+      "path": "compute/ctl_partial/routing/new_routes.jsonl.gz",
+      "sha256": "ef178b16cc8bd323cdb9a5f8d4dc5a667d7926bfa5599efa4c78dd74081f85cb",
+      "unpacked_path": "compute/ctl_partial/routing/new_routes.jsonl",
+      "unpacked_sha256": "e4d6e219ef7f42d0b09bf735dc1149f3a64aa2500c06b8cb71985f806097aa92",
+      "unpacked_bytes": 73791867
+    },
+    {
+      "path": "compute/ctl_partial/project/shared/data/cache/graphhopper_routes/route_cache.db.gz",
+      "sha256": "fb6f18876248f3e533f8a0b116ce69efe92306f88a8d6344adbcd9a7280bbd74",
+      "unpacked_path": "compute/ctl_partial/project/shared/data/cache/graphhopper_routes/route_cache.db",
+      "unpacked_sha256": "6c2020ebbfa60e573de2adbc08eab1f2119c2718d4a2849ab8afb7fc81d79de2",
+      "unpacked_bytes": 83968000
+    }
+  ],
+  "compression": "Lossless gzip; original bytes and SHA256 are retained."
+}

@@ -1,0 +1,571 @@
+{
+  "date": "2026-10-15",
+  "main_processing_source_count": 10,
+  "figure_dependency_source_count": 16,
+  "sources": [
+    {
+      "archive_path": "original_source/inventory_cost_update_20261013/figures_data/update_data.py",
+      "source_path": "inventory_cost_update_20261013/figures_data/update_data.py",
+      "sha256": "ddf483269e07b48841e930ef2b5198bd28fd1906b68a7def0255682353076890",
+      "bytes": 12075,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "copy",
+        "csv",
+        "hashlib",
+        "importlib",
+        "json",
+        "numpy",
+        "pathlib",
+        "shutil",
+        "sys"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_cost_update_20261013/figures_data/render_figures.py",
+      "source_path": "inventory_cost_update_20261013/figures_data/render_figures.py",
+      "sha256": "3d60affc5fea8deb14ee9a337f71d9c6278b5d7d402ebcf5bbaa739da11c9900",
+      "bytes": 14859,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "PIL",
+        "ast",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "pymupdf",
+        "re",
+        "shutil",
+        "sys",
+        "update_data"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_cost_update_20261013/figures_data/verify_outputs.py",
+      "source_path": "inventory_cost_update_20261013/figures_data/verify_outputs.py",
+      "sha256": "4ff3c3d5f5fead9de6543fcddb2d365cf7d411ca2e867d72c66572e18d6c36eb",
+      "bytes": 8242,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "PIL",
+        "csv",
+        "hashlib",
+        "json",
+        "numpy",
+        "pathlib",
+        "zipfile"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/audit/unit_ledger.py",
+      "source_path": "inventory_carbon_update_20261013/audit/unit_ledger.py",
+      "sha256": "24b1d76708b32079f244b5dbe269bb651680d2752bb5e66f2c7e97ba6b49e299",
+      "bytes": 9755,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "ast",
+        "csv",
+        "hashlib",
+        "json",
+        "pathlib",
+        "yaml"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/audit/all_site_inventory.py",
+      "source_path": "inventory_carbon_update_20261013/audit/all_site_inventory.py",
+      "sha256": "5254bc3dd29b4237c634e694374c44b8f9b9f00ef8c18409d600d941246fd291",
+      "bytes": 7512,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "csv",
+        "hashlib",
+        "json",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "yaml"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/audit/final_inventory_ledger.py",
+      "source_path": "inventory_carbon_update_20261013/audit/final_inventory_ledger.py",
+      "sha256": "fdac560278c3966273649adb49c9bd04a9d5835e1698d9395cfb5fa5f4dc52e4",
+      "bytes": 8434,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "csv",
+        "hashlib",
+        "json",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "yaml"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/figures_data/update_carbon.py",
+      "source_path": "inventory_carbon_update_20261013/figures_data/update_carbon.py",
+      "sha256": "e9a1498f858098231e7735ba9e00c5351fa643a0e58ffebdae102b777e85fa34",
+      "bytes": 13909,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "copy",
+        "csv",
+        "hashlib",
+        "importlib",
+        "json",
+        "pathlib",
+        "shutil",
+        "sys"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/figures_data/add_inventory_records.py",
+      "source_path": "inventory_carbon_update_20261013/figures_data/add_inventory_records.py",
+      "sha256": "b506658ea3cf14d60a1611d9fa31032a7bde075b0c52f075200e2c5fce714c25",
+      "bytes": 4310,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "pathlib",
+        "shutil",
+        "update_carbon"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/figures_data/render_figures.py",
+      "source_path": "inventory_carbon_update_20261013/figures_data/render_figures.py",
+      "sha256": "42758971cb7f7087eca22e181425b75ac50d446a3571b7c86530aef13993b925",
+      "bytes": 12899,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "PIL",
+        "ast",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "pymupdf",
+        "re",
+        "shutil",
+        "sys",
+        "update_carbon"
+      ]
+    },
+    {
+      "archive_path": "original_source/inventory_carbon_update_20261013/figures_data/verify_outputs.py",
+      "source_path": "inventory_carbon_update_20261013/figures_data/verify_outputs.py",
+      "sha256": "cd0c9e3bf838d3c1e3f4ef314a3bd6744f0b42281059a9b92c4c9af8f601fa21",
+      "bytes": 7772,
+      "role": "Inventory cost/emissions processing and verification",
+      "imports": [
+        "PIL",
+        "hashlib",
+        "numpy",
+        "pathlib",
+        "update_carbon",
+        "zipfile"
+      ]
+    },
+    {
+      "archive_path": "original_source/corrected_runs_20261006/project/products/supply_chain_optimization/visualization/quadrant_chart_box_visualization.py",
+      "source_path": "corrected_runs_20261006/project/products/supply_chain_optimization/visualization/quadrant_chart_box_visualization.py",
+      "sha256": "d392b9eca7c8241d095f7cc07345ed66d9cc0f28fe7d513b728cae361152f640",
+      "bytes": 46579,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "adjustText",
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/corrected_runs_20261006/project/products/supply_chain_optimization/visualization/pareto_three_breakdown_visualization.py",
+      "source_path": "corrected_runs_20261006/project/products/supply_chain_optimization/visualization/pareto_three_breakdown_visualization.py",
+      "sha256": "050faac4a9fe61086392d52113a61c667c81a0f0c522b5afb257325e471644f8",
+      "bytes": 33259,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "PIL",
+        "__future__",
+        "base64",
+        "collections",
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pathlib",
+        "sys",
+        "tempfile",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/corrected_runs_20261006/project/appendix_saf_workspace/scripts/pareto_three_breakdown_visualization.py",
+      "source_path": "corrected_runs_20261006/project/appendix_saf_workspace/scripts/pareto_three_breakdown_visualization.py",
+      "sha256": "53c93c3e42ffaac7693c8d821a4a16e863bc44895b17f837b5b21bf5c352eb86",
+      "bytes": 38983,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "__future__",
+        "collections",
+        "cycler",
+        "datetime",
+        "figure_export",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pathlib",
+        "shutil",
+        "sys",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_cost/compose_learning_panels.py",
+      "source_path": "revision_20261007/figures_cost/compose_learning_panels.py",
+      "sha256": "fe89e1cde9b05d541fb4ecfca3ea1955b94a325a58f8c6ce2042fcd19dcd3986",
+      "bytes": 2404,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "PIL",
+        "base64",
+        "importlib",
+        "json",
+        "pathlib"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_cost/derive_sensitivity.py",
+      "source_path": "revision_20261007/figures_cost/derive_sensitivity.py",
+      "sha256": "bcfc7b6638d07d209e7b3928c68d9ddc6b94d892182ca00cb8b0ef8e58e486f0",
+      "bytes": 11108,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "importlib",
+        "json",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "yaml"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_cost/sensitivity_visualizer_original.py",
+      "source_path": "revision_20261007/figures_cost/sensitivity_visualizer_original.py",
+      "sha256": "d7ee4a40737abee0f70419708f4958bd97b750fdcf5d012a5f2a7a7454a859c1",
+      "bytes": 32109,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "datetime",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "products",
+        "sys",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/reviewer_edits/figure_sources/panel_b_plot.py",
+      "source_path": "reviewer_edits/figure_sources/panel_b_plot.py",
+      "sha256": "35a18e1ce5de3a918416da345556c5a5915269eb99efe9ca3b7f4a2804aa113c",
+      "bytes": 20446,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/generate_appendix_docx.py",
+      "source_path": "revision_20261007/figures_space_time/source/generate_appendix_docx.py",
+      "sha256": "830be0a0504e4fcc783c760facff6657b9de578e25b2e7e06ab0487f8f153232",
+      "bytes": 431536,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "PIL",
+        "__future__",
+        "appendix_saf_workspace",
+        "ast",
+        "base64",
+        "cartopy",
+        "collections",
+        "cycler",
+        "dataclasses",
+        "docx",
+        "figure_export",
+        "frykit",
+        "glob",
+        "importlib",
+        "json",
+        "math",
+        "matplotlib",
+        "numpy",
+        "openpyxl",
+        "pandas",
+        "pareto_three_breakdown_visualization",
+        "pathlib",
+        "products",
+        "re",
+        "shapely",
+        "shutil",
+        "style_presets",
+        "subprocess",
+        "sys",
+        "textwrap",
+        "typing",
+        "warnings",
+        "yaml"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/network_classification_metrics_builder.py",
+      "source_path": "revision_20261007/figures_space_time/source/network_classification_metrics_builder.py",
+      "sha256": "cccce7b79241d48bc50cd770a5000fb9c1a7887c01bcc25fd8d51a7b3f77a9a6",
+      "bytes": 11977,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "__future__",
+        "argparse",
+        "dataclasses",
+        "datetime",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/network_structure_and_siting_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/network_structure_and_siting_visualization.py",
+      "sha256": "253c7f35a4a65f3e45a5921133f39c39e472f7d4ced43d3a9e7c9fddf0ba9259",
+      "bytes": 51702,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "__future__",
+        "collections",
+        "csv",
+        "datetime",
+        "decimal",
+        "json",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "re",
+        "svgpath2mpl",
+        "sys",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/pareto_penalty_driver_heatmap_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/pareto_penalty_driver_heatmap_visualization.py",
+      "sha256": "acc5be258ee167922b2885fbf0d34fe428a6dd78737600e3ed86aa168379a5e4",
+      "bytes": 13295,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "datetime",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "shutil",
+        "temporal_robustness_space_visualization",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/pareto_penalty_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/pareto_penalty_visualization.py",
+      "sha256": "be3ec2d149bc03f22a5d0473d0023995e6cec2eddd0badac62a5b8141f522366",
+      "bytes": 13946,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "datetime",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "shutil",
+        "temporal_robustness_space_visualization",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/pareto_temporal_distribution_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/pareto_temporal_distribution_visualization.py",
+      "sha256": "bc42263e0c3790c9686edd8694b8baac7d049e9b6077293f109061c01c14e725",
+      "bytes": 35293,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "collections",
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas",
+        "pathlib",
+        "shutil",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/pareto_three_breakdown_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/pareto_three_breakdown_visualization.py",
+      "sha256": "53c93c3e42ffaac7693c8d821a4a16e863bc44895b17f837b5b21bf5c352eb86",
+      "bytes": 38983,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "__future__",
+        "collections",
+        "cycler",
+        "datetime",
+        "figure_export",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pathlib",
+        "shutil",
+        "sys",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/temporal_efficiency_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/temporal_efficiency_visualization.py",
+      "sha256": "3158b6584ff05f28fa49e18548c1a4192274ff95343f9461eef12368bb9eaad4",
+      "bytes": 73741,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "collections",
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "seaborn",
+        "typing"
+      ]
+    },
+    {
+      "archive_path": "original_source/revision_20261007/figures_space_time/source/temporal_robustness_space_visualization.py",
+      "source_path": "revision_20261007/figures_space_time/source/temporal_robustness_space_visualization.py",
+      "sha256": "8863e7da1e2e3bd19af254ce845a281f4d238137340f648806f84601ceb07d26",
+      "bytes": 109543,
+      "role": "Figure and supplementary-panel dependency",
+      "imports": [
+        "adjustText",
+        "datetime",
+        "glob",
+        "json",
+        "logging",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "pathlib",
+        "typing"
+      ]
+    }
+  ],
+  "reference_records": [
+    {
+      "archive_path": "accounting_reference/unit_corrected_inventory_carbon.json",
+      "sha256": "9503b3194bf340ae96620bc45effc3f6f57d4e0e57b285964167aef3a3ac259d",
+      "bytes": 51378,
+      "role": "Inventory accounting reference ledger"
+    },
+    {
+      "archive_path": "accounting_reference/all_site_inventory_carbon.json",
+      "sha256": "a6b160842ee9d6cea2d0ba9bc0db8756df6c68d3b63e12f0791ec691c8219bc2",
+      "bytes": 59815,
+      "role": "Inventory accounting reference ledger"
+    },
+    {
+      "archive_path": "accounting_reference/final_inventory_carbon_ledger.json",
+      "sha256": "288230d3629a95a15471350d125a1e8ee37107bb307490dcd94a904d309d894a",
+      "bytes": 54136,
+      "role": "Inventory accounting reference ledger"
+    },
+    {
+      "archive_path": "accounting_reference/final_inventory_carbon_ledger.csv",
+      "sha256": "a988d6eb59bf4f52e478636dc9c21b41865dc36cc7f1fe991a991978d71f9d5b",
+      "bytes": 3127,
+      "role": "Inventory accounting reference ledger"
+    },
+    {
+      "archive_path": "accounting_reference/archive_inventory_reconstruction.json",
+      "sha256": "58e919630a40036289c645159ddfe261cc7958cbc186b56b5ff8e31187201547",
+      "bytes": 10278,
+      "role": "Inventory accounting reference ledger"
+    },
+    {
+      "archive_path": "accounting_reference/cost_impact.json",
+      "sha256": "6fb8c6c6f50312377bbed81ae3d56d22062ad5c42de301270c0b2f785af35964",
+      "bytes": 1475,
+      "role": "GTL-BH fixed-design cost accounting reference"
+    },
+    {
+      "archive_path": "accounting_reference/source_GTL-BH_complete_solution.json",
+      "sha256": "c77f4f650dacf61f5de73e5c50623bb7ff45bb0bd85327478cf3aac11d042275",
+      "bytes": 92934,
+      "role": "Retained GTL-BH source record used by cost accounting"
+    },
+    {
+      "archive_path": "accounting_reference/pathway_summary.csv",
+      "sha256": "75238507c06904cfcc2aed04755f68aa4c0c5d67b4f36b44ed95fa5eab190ec2",
+      "bytes": 784,
+      "role": "Final cost/emissions summary used to draw Figure 1"
+    },
+    {
+      "archive_path": "accounting_reference/carbon_categories.csv",
+      "sha256": "ab0fcf806bebe7575bbe50f8c151fbea70d5d46d79676966bec3e03306d95372",
+      "bytes": 5020,
+      "role": "Final positive emissions categories used by Figure 1 and supplementary diagrams"
+    }
+  ],
+  "scientific_inputs": "Accompanying_Data: twelve run/config/model-parameter records; 24 SAF/H2 inventory CSVs; thirteen normalized pathway records and figure tables",
+  "original_sources_preserved_byte_for_byte": true,
+  "original_script_execution_layout": "Original scripts refer to an author-workspace layout and Windows fonts. Use the portable verification entry for the delivered data; these snapshots are not advertised as turnkey figure-generation scripts."
+}

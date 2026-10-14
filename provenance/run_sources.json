@@ -1,0 +1,426 @@
+{
+  "records": [
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CCU-GH-FT/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/CCU-GH-FT/baseline/summary.json",
+          "sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+          "bytes": 5250
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/baseline/config.yaml",
+          "sha256": "b63b6ce872185b3a009aa3dc25af069259eb4a1719e70b75770c8cd27f82862c",
+          "bytes": 22735
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/baseline/source/corrected_model.py",
+          "sha256": "74b024e053776ad45f64546a75b89beefe19ef04036eae2f62c50cdbecbb5953",
+          "bytes": 8678
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/baseline/source/green_hydrogen_optimization_model.py",
+          "sha256": "5393492a223850d53066a93ef718c58c1cd9c6630dfc1e82bebf14c0b4f386d8",
+          "bytes": 482672
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/baseline/source/run_model.py",
+          "sha256": "2c586c6191eb0b5c3aaa4103528eb3f9841475f32bd019b606de242bbe5102ad",
+          "bytes": 16498
+        }
+      ]
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CCU-GH-FT/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/CCU-GH-FT/summer_fixed/summary.json",
+          "sha256": "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53",
+          "bytes": 5246
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/summer_fixed/config.yaml",
+          "sha256": "54dab202f877d256472f8842a67d454ee6e1c709513bc77be2d8d1b0bf838940",
+          "bytes": 22733
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/summer_fixed/source/corrected_model.py",
+          "sha256": "74b024e053776ad45f64546a75b89beefe19ef04036eae2f62c50cdbecbb5953",
+          "bytes": 8678
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/summer_fixed/source/green_hydrogen_optimization_model.py",
+          "sha256": "5393492a223850d53066a93ef718c58c1cd9c6630dfc1e82bebf14c0b4f386d8",
+          "bytes": 482672
+        },
+        {
+          "path": "source_snapshots/CCU-GH-FT/summer_fixed/source/run_model.py",
+          "sha256": "2c586c6191eb0b5c3aaa4103528eb3f9841475f32bd019b606de242bbe5102ad",
+          "bytes": 16498
+        }
+      ]
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CCU-GH-MTJ/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/baseline/summary.json",
+          "sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+          "bytes": 5260
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/baseline/config.yaml",
+          "sha256": "3254c130788eb41987ca3dd4d5faf3ab6eabfbbe797d6d3e0ca4ebe46f1c3030",
+          "bytes": 22730
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/baseline/source/corrected_model.py",
+          "sha256": "74b024e053776ad45f64546a75b89beefe19ef04036eae2f62c50cdbecbb5953",
+          "bytes": 8678
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/baseline/source/green_hydrogen_optimization_model.py",
+          "sha256": "5393492a223850d53066a93ef718c58c1cd9c6630dfc1e82bebf14c0b4f386d8",
+          "bytes": 482672
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/baseline/source/run_model.py",
+          "sha256": "2c586c6191eb0b5c3aaa4103528eb3f9841475f32bd019b606de242bbe5102ad",
+          "bytes": 16498
+        }
+      ]
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CCU-GH-MTJ/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/summer_fixed/summary.json",
+          "sha256": "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8",
+          "bytes": 5395
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/summer_fixed/config.yaml",
+          "sha256": "101ad6fc4050843408353ed3c00c40ea622731d35b05a7f36c81ae94d6f8190e",
+          "bytes": 22728
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/summer_fixed/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/summer_fixed/source/green_hydrogen_optimization_model.py",
+          "sha256": "5393492a223850d53066a93ef718c58c1cd9c6630dfc1e82bebf14c0b4f386d8",
+          "bytes": 482672
+        },
+        {
+          "path": "source_snapshots/CCU-GH-MTJ/summer_fixed/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/DAC-GH-FT/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/DAC-GH-FT/baseline/summary.json",
+          "sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+          "bytes": 5395
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/baseline/config.yaml",
+          "sha256": "a1c810af14da6313c177d32ae154f9ba129b9e40e5be82dba7472c5872befcea",
+          "bytes": 22991
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/baseline/source/corrected_model.py",
+          "sha256": "74b024e053776ad45f64546a75b89beefe19ef04036eae2f62c50cdbecbb5953",
+          "bytes": 8678
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/baseline/source/dac_hydrogen_optimization_model.py",
+          "sha256": "eabd4d2af87a6d61487647cda51397c555891250985034f9d11cc8d4ff62d01f",
+          "bytes": 472401
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/baseline/source/run_model.py",
+          "sha256": "2c586c6191eb0b5c3aaa4103528eb3f9841475f32bd019b606de242bbe5102ad",
+          "bytes": 16498
+        }
+      ]
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/DAC-GH-FT/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/DAC-GH-FT/summer_fixed/summary.json",
+          "sha256": "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589",
+          "bytes": 5495
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/summer_fixed/config.yaml",
+          "sha256": "62b0a1a142fd367972e22852945122a4810774ad91f17786d99bb80ad5506f29",
+          "bytes": 22989
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/summer_fixed/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/summer_fixed/source/dac_hydrogen_optimization_model.py",
+          "sha256": "eabd4d2af87a6d61487647cda51397c555891250985034f9d11cc8d4ff62d01f",
+          "bytes": 472401
+        },
+        {
+          "path": "source_snapshots/DAC-GH-FT/summer_fixed/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/DAC-GH-MTJ/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/baseline/summary.json",
+          "sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+          "bytes": 5527
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/baseline/config.yaml",
+          "sha256": "b5214405524c96e1c263cbf7cad664274940c18171ac2aa5eb3588ab5b54704c",
+          "bytes": 22987
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/baseline/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/baseline/source/dac_hydrogen_optimization_model.py",
+          "sha256": "eabd4d2af87a6d61487647cda51397c555891250985034f9d11cc8d4ff62d01f",
+          "bytes": 472401
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/baseline/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/DAC-GH-MTJ/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/summer_fixed/summary.json",
+          "sha256": "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08",
+          "bytes": 5504
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/summer_fixed/config.yaml",
+          "sha256": "eeb391a51b2eafed556fc717fc8ab077afbedf0ae39f01ff51b073f9b82c59dd",
+          "bytes": 22985
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/summer_fixed/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/summer_fixed/source/dac_hydrogen_optimization_model.py",
+          "sha256": "eabd4d2af87a6d61487647cda51397c555891250985034f9d11cc8d4ff62d01f",
+          "bytes": 472401
+        },
+        {
+          "path": "source_snapshots/DAC-GH-MTJ/summer_fixed/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "summary_sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/GTL-GH/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/GTL-GH/baseline/summary.json",
+          "sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+          "bytes": 5057
+        },
+        {
+          "path": "source_snapshots/GTL-GH/baseline/config.yaml",
+          "sha256": "ed5f9ae8019bceaa5ecaa3fd1affe21cc43e4f9fb135935057ca36386d931a81",
+          "bytes": 21899
+        },
+        {
+          "path": "source_snapshots/GTL-GH/baseline/source/corrected_model.py",
+          "sha256": "532a04b698dc11caac72508e4bbbdfc6c5aaf01afe87306cee6542babba0ae95",
+          "bytes": 16811
+        },
+        {
+          "path": "source_snapshots/GTL-GH/baseline/source/natural_gas_optimization_model.py",
+          "sha256": "be7ea9cabc823e69672e8a49e62c838bdc85cd4bdf84c2505e5fdab42278d7dd",
+          "bytes": 434923
+        },
+        {
+          "path": "source_snapshots/GTL-GH/baseline/source/run_model.py",
+          "sha256": "1d2e014416f5c1223ac31f71d02880beec581ec21263c725ce4e6dbb4fb5da4c",
+          "bytes": 18217
+        }
+      ]
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "summary_sha256": "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/GTL-GH/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/GTL-GH/summer_fixed/summary.json",
+          "sha256": "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7",
+          "bytes": 5024
+        },
+        {
+          "path": "source_snapshots/GTL-GH/summer_fixed/config.yaml",
+          "sha256": "8db34eb23456a67b1ac4b2180773b635cbca5e97cadb53bf2d2eaca7ab923a1a",
+          "bytes": 21897
+        },
+        {
+          "path": "source_snapshots/GTL-GH/summer_fixed/source/corrected_model.py",
+          "sha256": "532a04b698dc11caac72508e4bbbdfc6c5aaf01afe87306cee6542babba0ae95",
+          "bytes": 16811
+        },
+        {
+          "path": "source_snapshots/GTL-GH/summer_fixed/source/natural_gas_optimization_model.py",
+          "sha256": "be7ea9cabc823e69672e8a49e62c838bdc85cd4bdf84c2505e5fdab42278d7dd",
+          "bytes": 434923
+        },
+        {
+          "path": "source_snapshots/GTL-GH/summer_fixed/source/run_model.py",
+          "sha256": "2d146b725362cac27bcf303111a1a01a3031871d65307ef19c3e46597954457f",
+          "bytes": 18258
+        }
+      ]
+    },
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "summary_sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CTL/baseline",
+      "files": [
+        {
+          "path": "source_snapshots/CTL/baseline/summary.json",
+          "sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+          "bytes": 5668
+        },
+        {
+          "path": "source_snapshots/CTL/baseline/config.yaml",
+          "sha256": "d42fbb257e3f1e041e3dec7ae59c27d52f35cef4244f245fdcdca9bbda90ea67",
+          "bytes": 24141
+        },
+        {
+          "path": "source_snapshots/CTL/baseline/source/coal_hydrogen_optimization_model.py",
+          "sha256": "56d02434566d4e3fb01e6eb07b3f804b97b55b07a35843bbbabb8a02a69b73f0",
+          "bytes": 434594
+        },
+        {
+          "path": "source_snapshots/CTL/baseline/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/CTL/baseline/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "summary_sha256": "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb",
+      "solver": "COPT",
+      "solver_version": "8.0.7",
+      "source_snapshot": "source_snapshots/CTL/summer_fixed",
+      "files": [
+        {
+          "path": "source_snapshots/CTL/summer_fixed/summary.json",
+          "sha256": "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb",
+          "bytes": 5678
+        },
+        {
+          "path": "source_snapshots/CTL/summer_fixed/config.yaml",
+          "sha256": "0f8c2bdacc2c6c6750e4465a25d8c5bba49fc2197398bdd4489f1e45b387cc67",
+          "bytes": 24139
+        },
+        {
+          "path": "source_snapshots/CTL/summer_fixed/source/coal_hydrogen_optimization_model.py",
+          "sha256": "56d02434566d4e3fb01e6eb07b3f804b97b55b07a35843bbbabb8a02a69b73f0",
+          "bytes": 434594
+        },
+        {
+          "path": "source_snapshots/CTL/summer_fixed/source/corrected_model.py",
+          "sha256": "f5b899d029e69edd94b6e1d0d7f900ac7c864891d819963437866746ff453f34",
+          "bytes": 8877
+        },
+        {
+          "path": "source_snapshots/CTL/summer_fixed/source/run_model.py",
+          "sha256": "cb33918272ec5b2ca8644da4d8d7c1bd67c63f1027c3aec9c98c1d1088406cd3",
+          "bytes": 17103
+        }
+      ]
+    }
+  ],
+  "source_snapshots": 36,
+  "scope": "Exact execution sources and original configs linked by SHA256 to the twelve COPT source summaries."
+}

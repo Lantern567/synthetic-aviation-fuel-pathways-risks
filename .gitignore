@@ -1,0 +1,5 @@
+/work/
+/validation_records/
+/accompanying_data/
+__pycache__/
+*.pyc

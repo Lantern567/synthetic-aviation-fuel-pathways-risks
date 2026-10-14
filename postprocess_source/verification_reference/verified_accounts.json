@@ -1,0 +1,96 @@
+{
+  "status": "passed",
+  "source_files_checked": 26,
+  "source_reference_files_checked": 9,
+  "data_files_checked": 302,
+  "raw_inventory_csv_count": 24,
+  "original_inventory_script_runs": 1,
+  "recomputed_inventory_case_count": 12,
+  "normalized_pathway_count": 13,
+  "final_carbon_ledger_case_count": 19,
+  "learning_projection_rows_checked": 143,
+  "carbon_category_rows_checked": 104,
+  "no_optimization_performed": true,
+  "gtlbh_design_and_dispatch_preserved": true,
+  "gtlbh_inventory_cost_increment_cny_kg": 0.06509024900796423,
+  "pathways": [
+    {
+      "scenario": "CTL",
+      "cost_cny_kg": 20.763573144778114,
+      "carbon_g_mj": 173.40227366259353,
+      "fulfillment_ratio": 0.6324410121757308
+    },
+    {
+      "scenario": "CTL-BH",
+      "cost_cny_kg": 12.46058065199471,
+      "carbon_g_mj": 491.95164515574265,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "cost_cny_kg": 39.97344351005898,
+      "carbon_g_mj": 23.41122498996342,
+      "fulfillment_ratio": 0.4387608501526231
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "cost_cny_kg": 56.641197985705006,
+      "carbon_g_mj": 33.23954703282721,
+      "fulfillment_ratio": 0.2916573289807046
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "cost_cny_kg": 18.721793976466888,
+      "carbon_g_mj": 467.82610156747467,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "cost_cny_kg": 24.78218673047206,
+      "carbon_g_mj": 691.2988400784772,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "cost_cny_kg": 26.063813275934226,
+      "carbon_g_mj": 19.43638790367873,
+      "fulfillment_ratio": 0.43841300164492225
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "cost_cny_kg": 41.507640513329825,
+      "carbon_g_mj": 29.28150825269682,
+      "fulfillment_ratio": 0.29165732898070484
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "cost_cny_kg": 9.579852429699091,
+      "carbon_g_mj": 338.752735700195,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "cost_cny_kg": 10.964111832103136,
+      "carbon_g_mj": 509.65567635485735,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "GTL-GH",
+      "cost_cny_kg": 7.241342568601884,
+      "carbon_g_mj": 90.6045606011737,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "GTL",
+      "cost_cny_kg": 6.501554612497708,
+      "carbon_g_mj": 56.94035770298387,
+      "fulfillment_ratio": 1.0
+    },
+    {
+      "scenario": "GTL-BH",
+      "cost_cny_kg": 5.290539354389216,
+      "carbon_g_mj": 87.34169131743451,
+      "fulfillment_ratio": 1.0
+    }
+  ]
+}

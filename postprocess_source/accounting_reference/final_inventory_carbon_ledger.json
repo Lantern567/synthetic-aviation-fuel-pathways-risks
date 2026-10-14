@@ -1,0 +1,1042 @@
+{
+  "input_version": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data",
+  "method": "Static inventory electricity account for retained capacities, output, dispatch and cost. SAF energy rates use tonnes and period hours/24 days; H2 rates use kilograms and the same duration. Emission weighting follows the configured storage-electricity rule.",
+  "hydrogen_scope_definition": "Archived BH comparators cover source-location storage represented in the saved ledger; electricity-dependent configurations include inventories at both supply and receiving locations.",
+  "methanol_co2_scope": "No separate MeOH/CO2 inventory electricity expression or storage-energy coefficient is defined in these source ledgers. The mtj_storage field represents final SAF stock. No unsupported new coefficients or stock values are inserted.",
+  "time_stock_convention": "The existing saved stock-state summation is retained, with each indexed state multiplied by 3 h. No transport-in-transit stock is added. H2 endpoint totals are documented in all_site_inventory_carbon.json.",
+  "records": [
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 420.26753535943607,
+      "unit_corrected_ci_g_mj": 338.752735700195,
+      "old_storage_g_mj": 122.8993435072274,
+      "unit_corrected_storage_g_mj": 41.38454384798626,
+      "cost_cny_kg_unchanged": 9.579852429699091,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CCU-BH-FT_carbon_emissions.json",
+      "source_carbon_sha256": "583eb2156d860f0a3234acc2c0a70a4c834f1225ebac12c359b31ae91a4dc48e",
+      "source_solution_sha256": "0aa4c55fc094b649d70d75e0a04c603af745c02fd7d8399fcc93617f1217aee3",
+      "original_optimization_source_sha256": "df18796c2867c51234b37ea18d8f831afa92aa4fd5cad3cfc7a99d53e0d2bda3",
+      "model_evidence_key": "archived_CCU",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\ByproductHydrogenSupplyChainOptimizer_config.yaml",
+      "config_sha256": "432d85b3824dbd2ba8aee53c7cb23a306557be0ebee90ef79b041399358a2c43",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 240581139.7050736,
+        "h2_storage": 30147364.329568274
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 721743.4191152208,
+        "h2_storage": 90442092.98870483
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 925785263.7389805,
+      "unit_corrected_total_kg_co2e": 746220596.1121588,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 721743.4191152208,
+        "h2_storage": 90442092.98870483
+      },
+      "final_total_kg_co2e": 746220596.1121588,
+      "final_ci_g_mj": 338.752735700195,
+      "final_storage_ci_g_mj": 41.38454384798626,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "df18796c2867c51234b37ea18d8f831afa92aa4fd5cad3cfc7a99d53e0d2bda3"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 572.3401441979162,
+      "unit_corrected_ci_g_mj": 509.65567635485735,
+      "old_storage_g_mj": 133.60450026986072,
+      "unit_corrected_storage_g_mj": 70.92003242680188,
+      "cost_cny_kg_unchanged": 10.964111832103136,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CCU-BH-MTJ_carbon_emissions.json",
+      "source_carbon_sha256": "4a1423f0836c2cdeb20089afd355d09b90734a5242f0f7a36134df74242da4fd",
+      "source_solution_sha256": "4a5628224e042736451c043fd49320d5a9f5439a96c70c09534ebe84346acf8f",
+      "original_optimization_source_sha256": "87767d3b5d962102c3e54e5d3afc08d9b4774d1144c5b0a03ea8a91e86d47e5d",
+      "model_evidence_key": "archived_CCU",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\ByproductHydrogenSupplyChainOptimizer_config_two_step.yaml",
+      "config_sha256": "2c7bab0566547ee7f6626dc17d5e903d2ce6bd274b7f7f3d62b957c53f608fbf",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 242477471.4031267,
+        "h2_storage": 51832859.784473
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 727432.41420938,
+        "h2_storage": 155498579.353419
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 1260778020.5802407,
+      "unit_corrected_total_kg_co2e": 1122693701.1602695,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 727432.41420938,
+        "h2_storage": 155498579.353419
+      },
+      "final_total_kg_co2e": 1122693701.1602695,
+      "final_ci_g_mj": 509.65567635485735,
+      "final_storage_ci_g_mj": 70.92003242680188,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "87767d3b5d962102c3e54e5d3afc08d9b4774d1144c5b0a03ea8a91e86d47e5d"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 22.986769482295525,
+      "unit_corrected_ci_g_mj": 19.237042713228764,
+      "old_storage_g_mj": 4.142164614493805,
+      "unit_corrected_storage_g_mj": 0.3924378454283964,
+      "cost_cny_kg_unchanged": 26.063813275934226,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CCU-GH-FT_carbon_emissions.json",
+      "source_carbon_sha256": "ce1cc3fb456ddd3cf242ec62cac5d117c3bfd43bcc0ec3bb57544ebfecea134a",
+      "source_solution_sha256": "b2da36cd183546763bd8dbd2048ae10418b34d8c8d3b93b854af9c9858892b76",
+      "original_optimization_source_sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+      "model_evidence_key": "COPT_CCU",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-FT\\baseline\\config.yaml",
+      "config_sha256": "b63b6ce872185b3a009aa3dc25af069259eb4a1719e70b75770c8cd27f82862c",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 3877868.971991986,
+        "h2_storage": 122455.32425262916
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 11633.606915975959,
+        "h2_storage": 367365.97275788744
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 22199632.561786287,
+      "unit_corrected_total_kg_co2e": 18578307.845215537,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 11633.606915975934,
+        "h2_storage": 559884.977412169
+      },
+      "final_total_kg_co2e": 18770826.849869817,
+      "final_ci_g_mj": 19.43638790367873,
+      "final_storage_ci_g_mj": 0.5917830358783683,
+      "added_receiving_h2_kg_co2e": 192519.00465428154,
+      "added_receiving_h2_ci_g_mj": 0.19934519044997207,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "38a9c7867c152632a410b1ef1809f9794c0502870a00ec9d2e76b6d5f6dd2fdd",
+        "h2": "f80081890bf3c4713e9d10e73246da9980445b878f23c2ea7439ea08e70caaa2"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 16.07535954997312,
+      "unit_corrected_ci_g_mj": 12.383807153494505,
+      "old_storage_g_mj": 4.161305950421629,
+      "unit_corrected_storage_g_mj": 0.4697535539430171,
+      "cost_cny_kg_unchanged": 24.7855208908343,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-FT\\summer_fixed\\summary.json",
+      "source_summary_sha256": "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-FT\\summer_fixed\\config.yaml",
+      "config_sha256": "54dab202f877d256472f8842a67d454ee6e1c709513bc77be2d8d1b0bf838940",
+      "model_evidence_key": "COPT_CCU",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 4304834.723204393,
+        "h2_storage": 163845.7872391184
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 12914.50416961318,
+        "h2_storage": 491537.3617173552
+      },
+      "original_total_kg_co2e": 17262764.808739517,
+      "unit_corrected_total_kg_co2e": 13298536.164182972,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 12914.504169613167,
+        "h2_storage": 728046.1315635727
+      },
+      "final_total_kg_co2e": 13535044.93402919,
+      "final_ci_g_mj": 12.604047859668928,
+      "final_storage_ci_g_mj": 0.689994260117441,
+      "added_receiving_h2_kg_co2e": 236508.76984621747,
+      "added_receiving_h2_ci_g_mj": 0.22024070617442396,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "67d707b11ff9f44536d334d2ad1f1f9602db9695bcaf675fc45163b63110fed4",
+        "h2": "eeb5f7821da4a70f82e23c5ec6e30e51754cddb15bdff54652241cb6dcc08483"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 32.55833328987949,
+      "unit_corrected_ci_g_mj": 28.975895249518956,
+      "old_storage_g_mj": 4.180785622384321,
+      "unit_corrected_storage_g_mj": 0.5983475820270948,
+      "cost_cny_kg_unchanged": 41.507640513329825,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CCU-GH-MTJ_carbon_emissions.json",
+      "source_carbon_sha256": "b36da46e1e1373161ab500a360a703232b4548d709b2f589f4cca59bb5717dc7",
+      "source_solution_sha256": "f924ecafb90a9756d2632f25cd6eae47757824e60b2acb368eb0befa2514dbaf",
+      "original_optimization_source_sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+      "model_evidence_key": "COPT_CCU",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-MTJ\\baseline\\config.yaml",
+      "config_sha256": "3254c130788eb41987ca3dd4d5faf3ab6eabfbbe797d6d3e0ca4ebe46f1c3030",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 2560475.9681513845,
+        "h2_storage": 125580.96408275983
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 7681.427904454154,
+        "h2_storage": 376742.89224827953
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 20917967.27558264,
+      "unit_corrected_total_kg_co2e": 18616334.66350123,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 7681.42790445414,
+        "h2_storage": 573092.0954630187
+      },
+      "final_total_kg_co2e": 18812683.866715968,
+      "final_ci_g_mj": 29.28150825269682,
+      "final_storage_ci_g_mj": 0.9039605852049596,
+      "added_receiving_h2_kg_co2e": 196349.20321473922,
+      "added_receiving_h2_ci_g_mj": 0.3056130031778647,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "864f257336f8f8edec08843a0963adbef2304692b3cfe276ddb3731e3bbf1d6f",
+        "h2": "0f13dc5e25b0f4251613654a47809d9592ae508c1439f666c0aa44e903d3b244"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 26.00325843440021,
+      "unit_corrected_ci_g_mj": 22.444765661796755,
+      "old_storage_g_mj": 4.228286588292166,
+      "unit_corrected_storage_g_mj": 0.669793815688717,
+      "cost_cny_kg_unchanged": 39.095812996984534,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-MTJ\\summer_fixed\\summary.json",
+      "source_summary_sha256": "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CCU-GH-MTJ\\summer_fixed\\config.yaml",
+      "config_sha256": "101ad6fc4050843408353ed3c00c40ea622731d35b05a7f36c81ae94d6f8190e",
+      "model_evidence_key": "COPT_CCU",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 2874168.494903803,
+        "h2_storage": 157189.4708545571
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 8622.505484711408,
+        "h2_storage": 471568.41256367124
+      },
+      "original_total_kg_co2e": 18642346.71534655,
+      "unit_corrected_total_kg_co2e": 16091179.66763657,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 8622.505484711412,
+        "h2_storage": 729330.5074611609
+      },
+      "final_total_kg_co2e": 16348941.76253406,
+      "final_ci_g_mj": 22.804304858795714,
+      "final_storage_ci_g_mj": 1.0293330126876727,
+      "added_receiving_h2_kg_co2e": 257762.09489748965,
+      "added_receiving_h2_ci_g_mj": 0.35953919699895553,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "d86358c528112effe846d1458dfb729ad854b3d35df5126bc2c95569796ed68d",
+        "h2": "1fd798ee31d560011a502eff76ea319a6116c70931cc2000a4142fb417d0f1c4"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "CTL-BH",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 587.41200869584,
+      "unit_corrected_ci_g_mj": 491.95164515574265,
+      "old_storage_g_mj": 110.86815793057545,
+      "unit_corrected_storage_g_mj": 15.407794390478033,
+      "cost_cny_kg_unchanged": 12.46058065199471,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CTL-BH_carbon_emissions.json",
+      "source_carbon_sha256": "9411e7c2c06b15a1050182c58f8db1b1831da7d39bf7405e0a76dd81f5146e76",
+      "source_solution_sha256": "7faf2f8d138e8ab7cca43108fc9a0d7275d6293ed195c4247f2ee332eb4ea917",
+      "original_optimization_source_sha256": "79ae5de4a3e3db2357035b75a1d496f5a3a60afa3a4e81352f2168c2a34e7e99",
+      "model_evidence_key": "archived_CTL",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\CoalByproductHydrogenSAFOptimizer_config.yaml",
+      "config_sha256": "af3fde7753c962ba96e7680ab6a89205f145e840013ec391e187d7ba6c2a53ee",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 233145109.3461821,
+        "h2_storage": 11080528.359170645
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 699435.3280385464,
+        "h2_storage": 33241585.077511936
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 1293979038.6826637,
+      "unit_corrected_total_kg_co2e": 1083694421.3828614,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 699435.3280385464,
+        "h2_storage": 33241585.077511936
+      },
+      "final_total_kg_co2e": 1083694421.3828614,
+      "final_ci_g_mj": 491.95164515574265,
+      "final_storage_ci_g_mj": 15.407794390478033,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "79ae5de4a3e3db2357035b75a1d496f5a3a60afa3a4e81352f2168c2a34e7e99"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 177.1708590564453,
+      "unit_corrected_ci_g_mj": 173.3981052936932,
+      "old_storage_g_mj": 4.1694357062608605,
+      "unit_corrected_storage_g_mj": 0.3966819435078485,
+      "cost_cny_kg_unchanged": 20.763573144778114,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\CTL_carbon_emissions.json",
+      "source_carbon_sha256": "92e302b16300704a04f1601c62602551774f9477b2024b0f624aee69aeec0050",
+      "source_solution_sha256": "16dccfbeef551f8211c55169c688e5898a4b05ee9f7749d5f23ba48ce70ff0fd",
+      "original_optimization_source_sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+      "model_evidence_key": "COPT_CTL",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CTL\\baseline\\config.yaml",
+      "config_sha256": "d42fbb257e3f1e041e3dec7ae59c27d52f35cef4244f245fdcdca9bbda90ea67",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 5630152.06140503,
+        "h2_storage": 178585.11632847838
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 16890.45618421509,
+        "h2_storage": 535755.3489854352
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 246829314.16037875,
+      "unit_corrected_total_kg_co2e": 241573222.7878149,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 16890.45618421505,
+        "h2_storage": 541562.5999199899
+      },
+      "final_total_kg_co2e": 241579030.03874946,
+      "final_ci_g_mj": 173.40227366259353,
+      "final_storage_ci_g_mj": 0.40085031240816027,
+      "added_receiving_h2_kg_co2e": 5807.25093455473,
+      "added_receiving_h2_ci_g_mj": 0.004168368900311791,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "3764b6496602e18180412bd59d1952b0f0c763b13e36f9abcbdfbc3eaab24707",
+        "h2": "4b7863f8e2782f5dde21f32686c075e2756b6d840d67e21cabf1d1d146240d14"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 170.72242271775283,
+      "unit_corrected_ci_g_mj": 166.95872711724394,
+      "old_storage_g_mj": 4.188587683404564,
+      "unit_corrected_storage_g_mj": 0.424892082895647,
+      "cost_cny_kg_unchanged": 19.689374590752976,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CTL\\summer_fixed\\summary.json",
+      "source_summary_sha256": "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\CTL\\summer_fixed\\config.yaml",
+      "config_sha256": "0f8c2bdacc2c6c6750e4465a25d8c5bba49fc2197398bdd4489f1e45b387cc67",
+      "model_evidence_key": "COPT_CTL",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 6249321.378275989,
+        "h2_storage": 212238.45409215672
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 18747.964134827966,
+        "h2_storage": 636715.3622764702
+      },
+      "original_total_kg_co2e": 263366373.70354843,
+      "unit_corrected_total_kg_co2e": 257560277.1975916,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 18747.964134827955,
+        "h2_storage": 642511.716555417
+      },
+      "final_total_kg_co2e": 257566073.55187055,
+      "final_ci_g_mj": 166.96248449762442,
+      "final_storage_ci_g_mj": 0.4286494632761283,
+      "added_receiving_h2_kg_co2e": 5796.3542789468775,
+      "added_receiving_h2_ci_g_mj": 0.00375738038048132,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "411b6d22131d78c6851a1b708f7c5980d82e9a0e80a31dcca7114c945bd03b97",
+        "h2": "57f4249f69b628eddc982cecb58fc5876b0713f1044d59d9493b2e78c15a94e4"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 560.3365013585365,
+      "unit_corrected_ci_g_mj": 467.82610156747467,
+      "old_storage_g_mj": 92.78876608933106,
+      "unit_corrected_storage_g_mj": 0.2783662982692095,
+      "cost_cny_kg_unchanged": 18.721793976466888,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\DAC-BH-FT_carbon_emissions.json",
+      "source_carbon_sha256": "0a375ae2ba04d7d31392555607b24302c5e159984263091bce3ca6950cc1f633",
+      "source_solution_sha256": "54cd953e1ed4a91428e1ec01df7e4fb3a5edd6e5a84648391151e634f114539d",
+      "original_optimization_source_sha256": "85f6726ed3b0b406c8f5a1fddd64e5341371cb59f0985fb442ac9d1c87d6b475",
+      "model_evidence_key": "archived_DAC",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\DACByproductHydrogenSAFOptimizer_config_one_step.yaml",
+      "config_sha256": "36c385f336d711a51029682781f8292c0ab585579318747449114856bc60069f",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 204399495.69875157,
+        "h2_storage": 8.940487559019072e-07
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 613198.4870962547,
+        "h2_storage": 2.6821462677057215e-06
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 1234335826.699362,
+      "unit_corrected_total_kg_co2e": 1030549529.4877086,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 613198.4870962547,
+        "h2_storage": 2.6821462677057215e-06
+      },
+      "final_total_kg_co2e": 1030549529.4877086,
+      "final_ci_g_mj": 467.82610156747467,
+      "final_storage_ci_g_mj": 0.2783662982692095,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "85f6726ed3b0b406c8f5a1fddd64e5341371cb59f0985fb442ac9d1c87d6b475"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 783.6336827451001,
+      "unit_corrected_ci_g_mj": 691.2988400784772,
+      "old_storage_g_mj": 92.61268081206788,
+      "unit_corrected_storage_g_mj": 0.2778381454448888,
+      "cost_cny_kg_unchanged": 24.78218673047206,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\DAC-BH-MTJ_carbon_emissions.json",
+      "source_carbon_sha256": "2e5341d3b42948bddbfe59297a11826b8272282fbc3ee4bd16364523931c2666",
+      "source_solution_sha256": "0a7db45f87921ef15c9f1f1ad8f99154ec4ee117645fe9c768c903e885dbffae",
+      "original_optimization_source_sha256": "251df5d8b1e412fb8731c8a61512dafdac8fa79e7aa8c5a47815cd07e323de57",
+      "model_evidence_key": "archived_DAC",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\DACByproductHydrogenSAFOptimizer_config_two_step.yaml",
+      "config_sha256": "5061b0fce152d47948824bb8c4ab1d6be51d5255bb23243c7bea9d2e99c8e0f6",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 204011606.62102506,
+        "h2_storage": 0.0757131859267918
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 612034.8198630752,
+        "h2_storage": 0.2271395577803754
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 1726225450.7341511,
+      "unit_corrected_total_kg_co2e": 1522825879.0844154,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 612034.8198630752,
+        "h2_storage": 0.2271395577803754
+      },
+      "final_total_kg_co2e": 1522825879.0844154,
+      "final_ci_g_mj": 691.2988400784772,
+      "final_storage_ci_g_mj": 0.2778381454448888,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "251df5d8b1e412fb8731c8a61512dafdac8fa79e7aa8c5a47815cd07e323de57"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 26.92651004696456,
+      "unit_corrected_ci_g_mj": 23.407446555211685,
+      "old_storage_g_mj": 4.098771185814587,
+      "unit_corrected_storage_g_mj": 0.5797076940652776,
+      "cost_cny_kg_unchanged": 39.97344351005898,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\DAC-GH-FT_carbon_emissions.json",
+      "source_carbon_sha256": "1373e66d062f02e3ed0736cbcc67b353453a82eaad040f42bf2bf172e6cfce3c",
+      "source_solution_sha256": "1f4eca1685883f0c6543c732dd3e06e6d05553dddf2532747124931ae8e429e6",
+      "original_optimization_source_sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+      "model_evidence_key": "COPT_DAC",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-FT\\baseline\\config.yaml",
+      "config_sha256": "a1c810af14da6313c177d32ae154f9ba129b9e40e5be82dba7472c5872befcea",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 3778569.091197894,
+        "h2_storage": 182988.4122911518
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 11335.707273593682,
+        "h2_storage": 548965.2368734553
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 26025097.05554881,
+      "unit_corrected_total_kg_co2e": 22623840.496206813,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 11335.707273593664,
+        "h2_storage": 552617.1817768416
+      },
+      "final_total_kg_co2e": 22627492.441110197,
+      "final_ci_g_mj": 23.41122498996342,
+      "final_storage_ci_g_mj": 0.5834861288170132,
+      "added_receiving_h2_kg_co2e": 3651.944903386291,
+      "added_receiving_h2_ci_g_mj": 0.0037784347517356574,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "c6b777097b97529808bb74e53283432120b20d0aa2942f52c1a915e78505080b",
+        "h2": "93c5b47d1f471ec9311dacbbd6fd912317e208dc70005cf3b0b27dab2a28fcdf"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 16.79688958527823,
+      "unit_corrected_ci_g_mj": 13.239850845017559,
+      "old_storage_g_mj": 4.181604776456927,
+      "unit_corrected_storage_g_mj": 0.6245660361962567,
+      "cost_cny_kg_unchanged": 37.3676248181793,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-FT\\summer_fixed\\summary.json",
+      "source_summary_sha256": "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-FT\\summer_fixed\\config.yaml",
+      "config_sha256": "62b0a1a142fd367972e22852945122a4810774ad91f17786d99bb80ad5506f29",
+      "model_evidence_key": "COPT_DAC",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 4275840.466000706,
+        "h2_storage": 219534.44610780917
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 12827.521398002118,
+        "h2_storage": 658603.3383234275
+      },
+      "original_total_kg_co2e": 18057257.937966757,
+      "unit_corrected_total_kg_co2e": 14233313.885579672,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 12827.521398002084,
+        "h2_storage": 662379.6877046567
+      },
+      "final_total_kg_co2e": 14237090.2349609,
+      "final_ci_g_mj": 13.243363611120245,
+      "final_storage_ci_g_mj": 0.6280788022989422,
+      "added_receiving_h2_kg_co2e": 3776.349381229258,
+      "added_receiving_h2_ci_g_mj": 0.0035127661026856834,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "214a567b40f1833818c11e858cd25193cd49b8958fcd421f2d2231bc76b64b53",
+        "h2": "1f60af8a22f02e795eb8e27158d9ce6097a6612423743a875b27df8737354919"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 36.53809020918116,
+      "unit_corrected_ci_g_mj": 33.226486897548995,
+      "old_storage_g_mj": 4.193541938100164,
+      "unit_corrected_storage_g_mj": 0.8819386264725749,
+      "cost_cny_kg_unchanged": 56.641197985705006,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\DAC-GH-MTJ_carbon_emissions.json",
+      "source_carbon_sha256": "ae7bdf775d538636d771b85678e5cebdfbd551dca71a2b4e03ec679dfb3bfb1b",
+      "source_solution_sha256": "14776d82ca7fff20e1e201bbfe630567062e219964af87746df86753434cdd87",
+      "original_optimization_source_sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+      "model_evidence_key": "COPT_DAC",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-MTJ\\baseline\\config.yaml",
+      "config_sha256": "b5214405524c96e1c263cbf7cad664274940c18171ac2aa5eb3588ab5b54704c",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 2,
+        "saf_storage_energy": 5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 2507885.4753283304,
+        "h2_storage": 186367.09125617432
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 7523.656425984991,
+        "h2_storage": 559101.273768523
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 23474867.970145676,
+      "unit_corrected_total_kg_co2e": 21347240.33375568,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 7523.656425984976,
+        "h2_storage": 567492.1050783526
+      },
+      "final_total_kg_co2e": 21355631.16506551,
+      "final_ci_g_mj": 33.23954703282721,
+      "final_storage_ci_g_mj": 0.8949987617507983,
+      "added_receiving_h2_kg_co2e": 8390.831309829606,
+      "added_receiving_h2_ci_g_mj": 0.013060135278223459,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "45593bb13d94ad9b178412ad1b11926a33c2cfe647ee171059689468a1c25325",
+        "h2": "7b4c3ed758bdbed53e4e45496ca8be5403b73a1d1fb4a4a8494c7962b146a3b8"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 26.31813628134455,
+      "unit_corrected_ci_g_mj": 23.011814901260173,
+      "old_storage_g_mj": 4.304683495317843,
+      "unit_corrected_storage_g_mj": 0.998362115233468,
+      "cost_cny_kg_unchanged": 52.75680391391735,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-MTJ\\summer_fixed\\summary.json",
+      "source_summary_sha256": "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\DAC-GH-MTJ\\summer_fixed\\config.yaml",
+      "config_sha256": "eeb391a51b2eafed556fc717fc8ab077afbedf0ae39f01ff51b073f9b82c59dd",
+      "model_evidence_key": "COPT_DAC",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 2850215.336582524,
+        "h2_storage": 235717.74455353623
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 8550.646009747572,
+        "h2_storage": 707153.2336606088
+      },
+      "original_total_kg_co2e": 18866894.040592317,
+      "unit_corrected_total_kg_co2e": 16496664.839126613,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 8550.64600974757,
+        "h2_storage": 715585.3556376311
+      },
+      "final_total_kg_co2e": 16505096.961103637,
+      "final_ci_g_mj": 23.02357718363982,
+      "final_storage_ci_g_mj": 1.010124397613108,
+      "added_receiving_h2_kg_co2e": 8432.121977022383,
+      "added_receiving_h2_ci_g_mj": 0.011762282379640084,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "13dd1dd2f18cd953ff7a76564221305ab24589a2b3ef87ba6d6a26099c6cad92",
+        "h2": "bd0c9ad59860a76ca3d8107bbf814a84da7dc90e62ca94f367bb74d0857f94cd"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "GTL-BH",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 189.19546691609287,
+      "unit_corrected_ci_g_mj": 87.34169131743451,
+      "old_storage_g_mj": 102.21532968293361,
+      "unit_corrected_storage_g_mj": 0.36155408427527036,
+      "cost_cny_kg_unchanged": 5.290539354389216,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\GTL-BH_carbon_emissions.json",
+      "source_carbon_sha256": "a37fce01d6add5d2b60bc9f47c5f52ebb0f62b1b86c9b8051282b1f41c77487c",
+      "source_solution_sha256": "69eaf08ee0c89a3bfa9572a8246d17c322ba45f3a28c4cc9279317363fc028d8",
+      "original_optimization_source_sha256": "6fcf80ef2b77346bec740467f09c2fe8cda5eaeee08b2a1b337fc61a361c231d",
+      "model_evidence_key": "archived_GTL",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\NaturalGasByproductHydrogenOptimizer_config.yaml",
+      "config_sha256": "b08b075744396e010081cc7067e92a28303d68664587cfd8f2401bb64650ab31",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 0.5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 225124418.75378612,
+        "h2_storage": 40358.41071769831
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 675373.2562613584,
+        "h2_storage": 121075.23215309493
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 416768749.6664117,
+      "unit_corrected_total_kg_co2e": 192400420.99032235,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 675373.2562613584,
+        "h2_storage": 121075.23215309493
+      },
+      "final_total_kg_co2e": 192400420.99032235,
+      "final_ci_g_mj": 87.34169131743451,
+      "final_storage_ci_g_mj": 0.36155408427527036,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.7,
+      "h2_storage_scope": "Source-location storage represented in the saved archived ledger",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "6fcf80ef2b77346bec740467f09c2fe8cda5eaeee08b2a1b337fc61a361c231d"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 95.35455195869454,
+      "unit_corrected_ci_g_mj": 90.60455071801255,
+      "old_storage_g_mj": 4.7666503160255145,
+      "unit_corrected_storage_g_mj": 0.01664907534854328,
+      "cost_cny_kg_unchanged": 7.241342568601884,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\GTL-GH_carbon_emissions.json",
+      "source_carbon_sha256": "8eaa57af80d778197b7e491bbb3a351100efaecc2aa9c725c843cb7cc112ee66",
+      "source_solution_sha256": "640e8fac31a72c6a7e87bc3de8b46cb27c93240cdd09c201f81a4ab0665d9d1d",
+      "original_optimization_source_sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+      "model_evidence_key": "COPT_GTL",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\GTL-GH\\baseline\\config.yaml",
+      "config_sha256": "ed5f9ae8019bceaa5ecaa3fd1affe21cc43e4f9fb135935057ca36386d931a81",
+      "storage_energy_parameters": {
+        "h2_storage_energy": 0.5,
+        "mtj_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 10498476.791206151,
+        "h2_storage": 1726.647536942787
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 31495.430373618456,
+        "h2_storage": 5179.942610828361
+      },
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_total_kg_co2e": 210051530.52873522,
+      "unit_corrected_total_kg_co2e": 199588002.46297657,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 31495.43037361846,
+        "h2_storage": 5201.713707067301
+      },
+      "final_total_kg_co2e": 199588024.23407283,
+      "final_ci_g_mj": 90.6045606011737,
+      "final_storage_ci_g_mj": 0.01665895850970039,
+      "added_receiving_h2_kg_co2e": 21.771096238940117,
+      "added_receiving_h2_ci_g_mj": 9.88316115711259e-06,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "c5e116e9b8f816ca772be8759caf2c42a525e733d43dde1b0efdc6a84f45a34e",
+        "h2": "f7ecf43621ce06b6932842391b5837270e790ed6c2e151d14fd1a8571805bd06"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "origin": "COPT",
+      "period_hours": 3,
+      "saf_factor": 0.003,
+      "h2_factor": 3,
+      "original_ci_g_mj": 88.96799265921398,
+      "unit_corrected_ci_g_mj": 84.85753761967294,
+      "old_storage_g_mj": 4.1259624764493275,
+      "unit_corrected_storage_g_mj": 0.015507436908300238,
+      "cost_cny_kg_unchanged": 7.088769284890537,
+      "source_summary_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\GTL-GH\\summer_fixed\\summary.json",
+      "source_summary_sha256": "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\runs\\GTL-GH\\summer_fixed\\config.yaml",
+      "config_sha256": "8db34eb23456a67b1ac4b2180773b635cbca5e97cadb53bf2d2eaca7ab923a1a",
+      "model_evidence_key": "COPT_GTL",
+      "field_factors": {
+        "mtj_storage": 0.003,
+        "h2_storage": 3
+      },
+      "original_storage_fields_kg_co2e": {
+        "mtj_storage": 10111118.136417365,
+        "h2_storage": 2559.64017566208
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "mtj_storage": 30333.354409252093,
+        "h2_storage": 7678.92052698624
+      },
+      "original_total_kg_co2e": 218080899.98916274,
+      "unit_corrected_total_kg_co2e": 208005234.48750594,
+      "coverage_status": "All saved SAF and H2 stock arrays included; the same storage-electricity factor rule and dispatch are retained",
+      "final_storage_fields_kg_co2e": {
+        "mtj_storage": 30333.35440925209,
+        "h2_storage": 7713.290064156694
+      },
+      "final_total_kg_co2e": 208005268.85704312,
+      "final_ci_g_mj": 84.8575516410234,
+      "final_storage_ci_g_mj": 0.015521458258775371,
+      "added_receiving_h2_kg_co2e": 34.36953717045435,
+      "added_receiving_h2_ci_g_mj": 1.4021350475137974e-05,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "All recorded hydrogen-supply and receiving locations",
+      "raw_inventory_source_hashes": {
+        "saf": "d2f0813b86da554d2abcf2e3bdc73916f40c8d4740e48b513aed849ce036dba4",
+        "h2": "8b1bb080957fd9430a0e38ec7db5b8313ec7f36d50c57bb9f5004115d5a27acc"
+      },
+      "scope_evidence_file": "all_site_inventory_carbon.json"
+    },
+    {
+      "scenario": "GTL",
+      "label": "baseline",
+      "origin": "archived",
+      "period_hours": 3,
+      "saf_factor": 1.0,
+      "h2_factor": null,
+      "original_ci_g_mj": 56.94035770298387,
+      "unit_corrected_ci_g_mj": 56.940357702983874,
+      "old_storage_g_mj": 0.0,
+      "unit_corrected_storage_g_mj": 0.0,
+      "cost_cny_kg_unchanged": 6.501554612497708,
+      "source_carbon_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_库存成本修正20261013\\Accompanying_Data\\figure_data\\normalized_pathway_records\\GTL_carbon_emissions.json",
+      "source_carbon_sha256": "c8bb841a3daa8f16d8325b8f70b4e520856629c88110b1c4577b6569979e6a16",
+      "source_solution_sha256": "374bd890c606fdaf98e6a182d880a49d4b6fc93ea5b201c3ec0ff318d5f6d1e2",
+      "original_optimization_source_sha256": "600de5945d834feee140891dc11b50e9b40cca3972d9f5da21ebe43a4e3b3f08",
+      "model_evidence_key": "archived_GTL_FT",
+      "config_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\model_source\\shared\\data\\NaturalGasSupplyChainOptimizer_config_one_step.yaml",
+      "config_sha256": "04d6e7de7987a09ab83333b4dd068e9d29152f84a14fba0a069c1bde543e52ee",
+      "storage_energy_parameters": {
+        "saf_storage_energy": 5,
+        "storage_loss_rate": 0.001
+      },
+      "energy_content_mj_kg": 43.15,
+      "original_storage_fields_kg_co2e": {
+        "saf_storage": 0.0
+      },
+      "unit_corrected_storage_fields_kg_co2e": {
+        "saf_storage": 0.0
+      },
+      "field_factors": {
+        "saf_storage": 1.0
+      },
+      "original_total_kg_co2e": 125430921.11163288,
+      "unit_corrected_total_kg_co2e": 125430921.11163288,
+      "coverage_status": "Saved SAF stock independently reconstructed; H2 source-location ledger corrected using documented period length; receiving stock not inferred",
+      "final_storage_fields_kg_co2e": {
+        "saf_storage": 0.0
+      },
+      "final_total_kg_co2e": 125430921.11163288,
+      "final_ci_g_mj": 56.940357702983874,
+      "final_storage_ci_g_mj": 0.0,
+      "added_receiving_h2_kg_co2e": null,
+      "added_receiving_h2_ci_g_mj": null,
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "h2_storage_scope": "No standalone hydrogen stock item in GTL FT report",
+      "raw_inventory_source_hashes": {
+        "original_complete_solution": "600de5945d834feee140891dc11b50e9b40cca3972d9f5da21ebe43a4e3b3f08"
+      },
+      "scope_evidence_file": "archive_inventory_reconstruction.json"
+    }
+  ]
+}

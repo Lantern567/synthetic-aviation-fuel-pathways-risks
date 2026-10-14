@@ -1,0 +1,10 @@
+{
+  "periods": 43680,
+  "hdf5_files": 2016,
+  "phases": 66,
+  "maximum_capacity_factor": 0.15575928888888893,
+  "unit": "raw*0.0001 MJ/m2/hour; raw/36 W/m2",
+  "effective_pv_factor": 0.1632,
+  "time": "UTC+8 local weeks; cyclic source weather year for the first eight hours",
+  "coordinate_mapping": "native HDF5 array[longitude_index,latitude_index]; 71.025+0.05*x,59.975-0.05*y"
+}

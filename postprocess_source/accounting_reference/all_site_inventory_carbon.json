@@ -1,0 +1,1167 @@
+{
+  "records": [
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+      "matching_inventory_summary_sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-FT\\baseline\\saf_inventory.csv",
+        "sha256": "38a9c7867c152632a410b1ef1809f9794c0502870a00ec9d2e76b6d5f6dd2fdd",
+        "total_locations": 142,
+        "source_scope_locations": 142,
+        "positive_locations": 71,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 3877868.971991986,
+        "original_formula_reconstructed_carbon_kg_co2e": 3877868.9719919786,
+        "reconstruction_residual_kg_co2e": -7.450580596923828e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 11633.606915975957,
+        "all_site_unit_corrected_carbon_kg_co2e": 11633.606915975934,
+        "additional_non_source_site_carbon_kg_co2e": -2.3646862246096134e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 386458558.2930194,
+            "emissions_kg_co2e": 7246.097967994113,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 4363826.7741983915,
+            "emissions_kg_co2e": 81.82175201621985,
+            "positive_site_count": 25
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 229636650.4514987,
+            "emissions_kg_co2e": 4305.687195965601,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-FT\\baseline\\h2_inventory.csv",
+        "sha256": "f80081890bf3c4713e9d10e73246da9980445b878f23c2ea7439ea08e70caaa2",
+        "total_locations": 142,
+        "source_scope_locations": 109,
+        "positive_locations": 71,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 25669200.620570835,
+        "old_reported_carbon_kg_co2e": 122455.32425262916,
+        "original_formula_reconstructed_carbon_kg_co2e": 122455.32425262925,
+        "reconstruction_residual_kg_co2e": 8.731149137020111e-11,
+        "unit_corrected_original_scope_carbon_kg_co2e": 367365.97275788744,
+        "all_site_unit_corrected_carbon_kg_co2e": 559884.977412169,
+        "additional_non_source_site_carbon_kg_co2e": 192519.00465428154,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 25669200.620570835,
+            "emissions_kg_co2e": 192519.00465428128,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 184703.05711802843,
+            "emissions_kg_co2e": 1385.2729283852132,
+            "positive_site_count": 25
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 48797426.64393367,
+            "emissions_kg_co2e": 365980.6998295025,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 571518.5843281449,
+      "all_site_corrected_total_carbon_kg_co2e": 18770826.849869817,
+      "all_site_corrected_ci_g_mj": 19.43638790367873,
+      "all_site_corrected_storage_ci_g_mj": 0.5917830358783683,
+      "additional_h2_non_source_site_ci_g_mj": 0.19934519044997207,
+      "cost_cny_kg_unchanged": 26.063813275934226,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53",
+      "matching_inventory_summary_sha256": "3c01b58b04d1688b099f3305b5c11ce07a6dd60568293f9754266c30ceeb8e53",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-FT\\summer_fixed\\saf_inventory.csv",
+        "sha256": "67d707b11ff9f44536d334d2ad1f1f9602db9695bcaf675fc45163b63110fed4",
+        "total_locations": 142,
+        "source_scope_locations": 142,
+        "positive_locations": 71,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 4304834.723204393,
+        "original_formula_reconstructed_carbon_kg_co2e": 4304834.723204389,
+        "reconstruction_residual_kg_co2e": -3.725290298461914e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 12914.50416961318,
+        "all_site_unit_corrected_carbon_kg_co2e": 12914.504169613167,
+        "additional_non_source_site_carbon_kg_co2e": -1.2732925824820995e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 386313167.0487641,
+            "emissions_kg_co2e": 7243.371882164327,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 5231332.5156010315,
+            "emissions_kg_co2e": 98.08748466751933,
+            "positive_site_count": 25
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 297229056.1483371,
+            "emissions_kg_co2e": 5573.044802781321,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-FT\\summer_fixed\\h2_inventory.csv",
+        "sha256": "eeb5f7821da4a70f82e23c5ec6e30e51754cddb15bdff54652241cb6dcc08483",
+        "total_locations": 142,
+        "source_scope_locations": 109,
+        "positive_locations": 71,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 31534502.646162204,
+        "old_reported_carbon_kg_co2e": 163845.7872391184,
+        "original_formula_reconstructed_carbon_kg_co2e": 163845.78723911868,
+        "reconstruction_residual_kg_co2e": 2.9103830456733704e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 491537.3617173552,
+        "all_site_unit_corrected_carbon_kg_co2e": 728046.1315635727,
+        "additional_non_source_site_carbon_kg_co2e": 236508.76984621747,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 7892.202873198034,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 31534502.646162204,
+            "emissions_kg_co2e": 236508.7698462165,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 329010.8096843937,
+            "emissions_kg_co2e": 2467.581072632953,
+            "positive_site_count": 25
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 65209304.085963085,
+            "emissions_kg_co2e": 489069.7806447231,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 740960.6357331858,
+      "all_site_corrected_total_carbon_kg_co2e": 13535044.93402919,
+      "all_site_corrected_ci_g_mj": 12.604047859668928,
+      "all_site_corrected_storage_ci_g_mj": 0.689994260117441,
+      "additional_h2_non_source_site_ci_g_mj": 0.22024070617442396,
+      "cost_cny_kg_unchanged": 24.7855208908343,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+      "matching_inventory_summary_sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-MTJ\\baseline\\saf_inventory.csv",
+        "sha256": "864f257336f8f8edec08843a0963adbef2304692b3cfe276ddb3731e3bbf1d6f",
+        "total_locations": 142,
+        "source_scope_locations": 142,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 2560475.9681513845,
+        "original_formula_reconstructed_carbon_kg_co2e": 2560475.9681513794,
+        "reconstruction_residual_kg_co2e": -5.122274160385132e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 7681.427904454153,
+        "all_site_unit_corrected_carbon_kg_co2e": 7681.42790445414,
+        "additional_non_source_site_carbon_kg_co2e": -1.2732925824820995e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 248470009.34281176,
+            "emissions_kg_co2e": 4658.812675177721,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 3443655.9333682987,
+            "emissions_kg_co2e": 64.5685487506556,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 157762489.62804073,
+            "emissions_kg_co2e": 2958.046680525764,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-MTJ\\baseline\\h2_inventory.csv",
+        "sha256": "0f13dc5e25b0f4251613654a47809d9592ae508c1439f666c0aa44e903d3b244",
+        "total_locations": 142,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 26179893.761965573,
+        "old_reported_carbon_kg_co2e": 125580.96408275983,
+        "original_formula_reconstructed_carbon_kg_co2e": 125580.96408275899,
+        "reconstruction_residual_kg_co2e": -8.440110832452774e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 376742.89224827953,
+        "all_site_unit_corrected_carbon_kg_co2e": 573092.0954630187,
+        "additional_non_source_site_carbon_kg_co2e": 196349.20321473922,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 26179893.76196557,
+            "emissions_kg_co2e": 196349.20321474175,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 236781.85608984108,
+            "emissions_kg_co2e": 1775.863920673808,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 49995603.777013764,
+            "emissions_kg_co2e": 374967.02832760324,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 580773.5233674729,
+      "all_site_corrected_total_carbon_kg_co2e": 18812683.866715968,
+      "all_site_corrected_ci_g_mj": 29.28150825269682,
+      "all_site_corrected_storage_ci_g_mj": 0.9039605852049596,
+      "additional_h2_non_source_site_ci_g_mj": 0.3056130031778647,
+      "cost_cny_kg_unchanged": 41.507640513329825,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8",
+      "matching_inventory_summary_sha256": "9703a7a2b1ab0304d3fe448059dcdbc7d3d99f6647f68b6c44ff4f5128c488d8",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-MTJ\\summer_fixed\\saf_inventory.csv",
+        "sha256": "d86358c528112effe846d1458dfb729ad854b3d35df5126bc2c95569796ed68d",
+        "total_locations": 142,
+        "source_scope_locations": 142,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 2874168.494903803,
+        "original_formula_reconstructed_carbon_kg_co2e": 2874168.4949038043,
+        "reconstruction_residual_kg_co2e": 1.3969838619232178e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 8622.505484711408,
+        "all_site_unit_corrected_carbon_kg_co2e": 8622.505484711412,
+        "additional_non_source_site_carbon_kg_co2e": 3.637978807091713e-12,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 248453519.6502661,
+            "emissions_kg_co2e": 4658.50349344249,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 4330077.585276768,
+            "emissions_kg_co2e": 81.18895472393939,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 207083361.94906574,
+            "emissions_kg_co2e": 3882.813036544982,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CCU-GH-MTJ\\summer_fixed\\h2_inventory.csv",
+        "sha256": "1fd798ee31d560011a502eff76ea319a6116c70931cc2000a4142fb417d0f1c4",
+        "total_locations": 142,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 34368279.31966573,
+        "old_reported_carbon_kg_co2e": 157189.4708545571,
+        "original_formula_reconstructed_carbon_kg_co2e": 157189.47085455598,
+        "reconstruction_residual_kg_co2e": -1.1059455573558807e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 471568.41256367124,
+        "all_site_unit_corrected_carbon_kg_co2e": 729330.5074611609,
+        "additional_non_source_site_carbon_kg_co2e": 257762.09489748965,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 7082.623903820704,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 34368279.31966573,
+            "emissions_kg_co2e": 257762.09489749296,
+            "positive_site_count": 2
+          },
+          "co2_capture": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 373171.372687916,
+            "emissions_kg_co2e": 2798.7852951593695,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 62502616.96913447,
+            "emissions_kg_co2e": 468769.62726850854,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 737953.0129458723,
+      "all_site_corrected_total_carbon_kg_co2e": 16348941.76253406,
+      "all_site_corrected_ci_g_mj": 22.804304858795714,
+      "all_site_corrected_storage_ci_g_mj": 1.0293330126876727,
+      "additional_h2_non_source_site_ci_g_mj": 0.35953919699895553,
+      "cost_cny_kg_unchanged": 39.095812996984534,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+      "matching_inventory_summary_sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-FT\\baseline\\saf_inventory.csv",
+        "sha256": "c6b777097b97529808bb74e53283432120b20d0aa2942f52c1a915e78505080b",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 3778569.091197894,
+        "original_formula_reconstructed_carbon_kg_co2e": 3778569.0911978874,
+        "reconstruction_residual_kg_co2e": -6.51925802230835e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 11335.707273593684,
+        "all_site_unit_corrected_carbon_kg_co2e": 11335.707273593664,
+        "additional_non_source_site_carbon_kg_co2e": -2.000888343900442e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 5.4569682106375694e-11,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 386833246.9058369,
+            "emissions_kg_co2e": 7253.123379484441,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 4079989.6055455953,
+            "emissions_kg_co2e": 76.49980510397991,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 213657818.08027953,
+            "emissions_kg_co2e": 4006.0840890052414,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-FT\\baseline\\h2_inventory.csv",
+        "sha256": "93c5b47d1f471ec9311dacbbd6fd912317e208dc70005cf3b0b27dab2a28fcdf",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 486925.98711833154,
+        "old_reported_carbon_kg_co2e": 182988.4122911518,
+        "original_formula_reconstructed_carbon_kg_co2e": 182988.41229115136,
+        "reconstruction_residual_kg_co2e": -4.3655745685100555e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 548965.2368734553,
+        "all_site_unit_corrected_carbon_kg_co2e": 552617.1817768416,
+        "additional_non_source_site_carbon_kg_co2e": 3651.944903386291,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": -2.3099300250351007e-12,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 486925.98711833154,
+            "emissions_kg_co2e": 3651.9449033874866,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 332359.8355873064,
+            "emissions_kg_co2e": 2492.698766904798,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 72863005.08087325,
+            "emissions_kg_co2e": 546472.5381065494,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 563952.8890504353,
+      "all_site_corrected_total_carbon_kg_co2e": 22627492.441110197,
+      "all_site_corrected_ci_g_mj": 23.41122498996342,
+      "all_site_corrected_storage_ci_g_mj": 0.5834861288170132,
+      "additional_h2_non_source_site_ci_g_mj": 0.0037784347517356574,
+      "cost_cny_kg_unchanged": 39.97344351005898,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589",
+      "matching_inventory_summary_sha256": "5266914acc7628764940237a42734f9315c4cc18dd5ae136c9ff5ebff0efb589",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-FT\\summer_fixed\\saf_inventory.csv",
+        "sha256": "214a567b40f1833818c11e858cd25193cd49b8958fcd421f2d2231bc76b64b53",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 4275840.466000706,
+        "original_formula_reconstructed_carbon_kg_co2e": 4275840.466000696,
+        "reconstruction_residual_kg_co2e": -1.0244548320770264e-08,
+        "unit_corrected_original_scope_carbon_kg_co2e": 12827.521398002118,
+        "all_site_unit_corrected_carbon_kg_co2e": 12827.521398002084,
+        "additional_non_source_site_carbon_kg_co2e": -3.456079866737127e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 386823576.4823154,
+            "emissions_kg_co2e": 7252.942059043415,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 5872938.563267211,
+            "emissions_kg_co2e": 110.11759806126021,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 291437959.5145286,
+            "emissions_kg_co2e": 5464.46174089741,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-FT\\summer_fixed\\h2_inventory.csv",
+        "sha256": "1f60af8a22f02e795eb8e27158d9ce6097a6612423743a875b27df8737354919",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 503513.2508305093,
+        "old_reported_carbon_kg_co2e": 219534.44610780917,
+        "original_formula_reconstructed_carbon_kg_co2e": 219534.44610780932,
+        "reconstruction_residual_kg_co2e": 1.4551915228366852e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 658603.3383234275,
+        "all_site_unit_corrected_carbon_kg_co2e": 662379.6877046567,
+        "additional_non_source_site_carbon_kg_co2e": 3776.349381229258,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 4767.287856057359,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 503513.2508305093,
+            "emissions_kg_co2e": 3776.3493812288193,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 375629.1074148041,
+            "emissions_kg_co2e": 2817.2183056110307,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 87438149.33570892,
+            "emissions_kg_co2e": 655786.1200178169,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 675207.2091026588,
+      "all_site_corrected_total_carbon_kg_co2e": 14237090.2349609,
+      "all_site_corrected_ci_g_mj": 13.243363611120245,
+      "all_site_corrected_storage_ci_g_mj": 0.6280788022989422,
+      "additional_h2_non_source_site_ci_g_mj": 0.0035127661026856834,
+      "cost_cny_kg_unchanged": 37.3676248181793,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+      "matching_inventory_summary_sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-MTJ\\baseline\\saf_inventory.csv",
+        "sha256": "45593bb13d94ad9b178412ad1b11926a33c2cfe647ee171059689468a1c25325",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 2507885.4753283304,
+        "original_formula_reconstructed_carbon_kg_co2e": 2507885.4753283253,
+        "reconstruction_residual_kg_co2e": -5.122274160385132e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 7523.656425984992,
+        "all_site_unit_corrected_carbon_kg_co2e": 7523.656425984976,
+        "additional_non_source_site_carbon_kg_co2e": -1.6370904631912708e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 248576983.62795126,
+            "emissions_kg_co2e": 4660.818443024085,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 2882502.797589886,
+            "emissions_kg_co2e": 54.046927454810366,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 149802189.62699088,
+            "emissions_kg_co2e": 2808.791055506079,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-MTJ\\baseline\\h2_inventory.csv",
+        "sha256": "7b4c3ed758bdbed53e4e45496ca8be5403b73a1d1fb4a4a8494c7962b146a3b8",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 1118777.5079775983,
+        "old_reported_carbon_kg_co2e": 186367.09125617432,
+        "original_formula_reconstructed_carbon_kg_co2e": 186367.09125617356,
+        "reconstruction_residual_kg_co2e": -7.566995918750763e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 559101.273768523,
+        "all_site_unit_corrected_carbon_kg_co2e": 567492.1050783526,
+        "additional_non_source_site_carbon_kg_co2e": 8390.831309829606,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 1118777.5079775983,
+            "emissions_kg_co2e": 8390.831309831987,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 307239.53988180857,
+            "emissions_kg_co2e": 2304.296549113564,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 74239596.96258761,
+            "emissions_kg_co2e": 556796.9772194071,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 575015.7615043375,
+      "all_site_corrected_total_carbon_kg_co2e": 21355631.16506551,
+      "all_site_corrected_ci_g_mj": 33.23954703282721,
+      "all_site_corrected_storage_ci_g_mj": 0.8949987617507983,
+      "additional_h2_non_source_site_ci_g_mj": 0.013060135278223459,
+      "cost_cny_kg_unchanged": 56.641197985705006,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08",
+      "matching_inventory_summary_sha256": "be5229e372b63b1c9d201064ee022c425a98e4404720d150e8fee9614556dc08",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-MTJ\\summer_fixed\\saf_inventory.csv",
+        "sha256": "13dd1dd2f18cd953ff7a76564221305ab24589a2b3ef87ba6d6a26099c6cad92",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 2850215.336582524,
+        "original_formula_reconstructed_carbon_kg_co2e": 2850215.336582524,
+        "reconstruction_residual_kg_co2e": 0.0,
+        "unit_corrected_original_scope_carbon_kg_co2e": 8550.646009747572,
+        "all_site_unit_corrected_carbon_kg_co2e": 8550.64600974757,
+        "additional_non_source_site_carbon_kg_co2e": -1.8189894035458565e-12,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 248523377.37705,
+            "emissions_kg_co2e": 4659.813325819688,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 4090099.8007045216,
+            "emissions_kg_co2e": 76.68937126320978,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 203420976.67544925,
+            "emissions_kg_co2e": 3814.143312664673,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\DAC-GH-MTJ\\summer_fixed\\h2_inventory.csv",
+        "sha256": "bd0c9ad59860a76ca3d8107bbf814a84da7dc90e62ca94f367bb74d0857f94cd",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 1124282.9302698388,
+        "old_reported_carbon_kg_co2e": 235717.74455353623,
+        "original_formula_reconstructed_carbon_kg_co2e": 235717.74455353574,
+        "reconstruction_residual_kg_co2e": -4.94765117764473e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 707153.2336606088,
+        "all_site_unit_corrected_carbon_kg_co2e": 715585.3556376311,
+        "additional_non_source_site_carbon_kg_co2e": 8432.121977022383,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 7082.6239038182375,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 1124282.9302698388,
+            "emissions_kg_co2e": 8432.121977023791,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 350299.84254878556,
+            "emissions_kg_co2e": 2627.2488191158914,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 93936797.97886553,
+            "emissions_kg_co2e": 704525.9848414914,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 724136.0016473787,
+      "all_site_corrected_total_carbon_kg_co2e": 16505096.961103637,
+      "all_site_corrected_ci_g_mj": 23.02357718363982,
+      "all_site_corrected_storage_ci_g_mj": 1.010124397613108,
+      "additional_h2_non_source_site_ci_g_mj": 0.011762282379640084,
+      "cost_cny_kg_unchanged": 52.75680391391735,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "summary_sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+      "matching_inventory_summary_sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\GTL-GH\\baseline\\saf_inventory.csv",
+        "sha256": "c5e116e9b8f816ca772be8759caf2c42a525e733d43dde1b0efdc6a84f45a34e",
+        "total_locations": 265,
+        "source_scope_locations": 265,
+        "positive_locations": 3,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 10498476.791206151,
+        "original_formula_reconstructed_carbon_kg_co2e": 10498476.791206153,
+        "reconstruction_residual_kg_co2e": 1.862645149230957e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 31495.430373618452,
+        "all_site_unit_corrected_carbon_kg_co2e": 31495.43037361846,
+        "additional_non_source_site_carbon_kg_co2e": 7.275957614183426e-12,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 1583828058.28909,
+            "emissions_kg_co2e": 29696.776092920438,
+            "positive_site_count": 1
+          },
+          "lng_terminal": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "ng_pipeline": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 95928228.30389473,
+            "emissions_kg_co2e": 1798.6542806980262,
+            "positive_site_count": 2
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\GTL-GH\\baseline\\h2_inventory.csv",
+        "sha256": "f7ecf43621ce06b6932842391b5837270e790ed6c2e151d14fd1a8571805bd06",
+        "total_locations": 131,
+        "source_scope_locations": 109,
+        "positive_locations": 110,
+        "outside_original_scope_positive_locations": 1,
+        "outside_original_scope_inventory_kg_period_sum": 11611.25132745926,
+        "old_reported_carbon_kg_co2e": 1726.647536942787,
+        "original_formula_reconstructed_carbon_kg_co2e": 1726.6475369427717,
+        "reconstruction_residual_kg_co2e": -1.5234036254696548e-11,
+        "unit_corrected_original_scope_carbon_kg_co2e": 5179.942610828361,
+        "all_site_unit_corrected_carbon_kg_co2e": 5201.713707067301,
+        "additional_non_source_site_carbon_kg_co2e": 21.771096238940117,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 11611.25132745926,
+            "emissions_kg_co2e": 21.77109623898611,
+            "positive_site_count": 1
+          },
+          "lng_terminal": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 20901.158474054064,
+            "emissions_kg_co2e": 39.18967213885137,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 2741734.900634381,
+            "emissions_kg_co2e": 5140.752938689464,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 36697.14408068576,
+      "all_site_corrected_total_carbon_kg_co2e": 199588024.23407283,
+      "all_site_corrected_ci_g_mj": 90.6045606011737,
+      "all_site_corrected_storage_ci_g_mj": 0.01665895850970039,
+      "additional_h2_non_source_site_ci_g_mj": 9.88316115711259e-06,
+      "cost_cny_kg_unchanged": 7.241342568601884,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "summary_sha256": "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7",
+      "matching_inventory_summary_sha256": "c165e40a40b23a69f76dcafeed95d75df07661c294f98daa3a001a7cb55158f7",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\GTL-GH\\summer_fixed\\saf_inventory.csv",
+        "sha256": "d2f0813b86da554d2abcf2e3bdc73916f40c8d4740e48b513aed849ce036dba4",
+        "total_locations": 265,
+        "source_scope_locations": 265,
+        "positive_locations": 3,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 10111118.136417365,
+        "original_formula_reconstructed_carbon_kg_co2e": 10111118.136417363,
+        "reconstruction_residual_kg_co2e": -1.862645149230957e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 30333.354409252093,
+        "all_site_unit_corrected_carbon_kg_co2e": 30333.35440925209,
+        "additional_non_source_site_carbon_kg_co2e": -3.637978807091713e-12,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 1313254388.5163822,
+            "emissions_kg_co2e": 24623.519784682165,
+            "positive_site_count": 1
+          },
+          "lng_terminal": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "ng_pipeline": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 304524513.3103959,
+            "emissions_kg_co2e": 5709.834624569923,
+            "positive_site_count": 2
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\GTL-GH\\summer_fixed\\h2_inventory.csv",
+        "sha256": "8b1bb080957fd9430a0e38ec7db5b8313ec7f36d50c57bb9f5004115d5a27acc",
+        "total_locations": 131,
+        "source_scope_locations": 109,
+        "positive_locations": 110,
+        "outside_original_scope_positive_locations": 1,
+        "outside_original_scope_inventory_kg_period_sum": 18330.419824234705,
+        "old_reported_carbon_kg_co2e": 2559.64017566208,
+        "original_formula_reconstructed_carbon_kg_co2e": 2559.640175662085,
+        "reconstruction_residual_kg_co2e": 5.002220859751105e-12,
+        "unit_corrected_original_scope_carbon_kg_co2e": 7678.92052698624,
+        "all_site_unit_corrected_carbon_kg_co2e": 7713.290064156694,
+        "additional_non_source_site_carbon_kg_co2e": 34.36953717045435,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 18330.419824234705,
+            "emissions_kg_co2e": 34.36953717044007,
+            "positive_site_count": 1
+          },
+          "lng_terminal": {
+            "inventory_kg_period_sum": 0.0,
+            "emissions_kg_co2e": 0.0,
+            "positive_site_count": 0
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 17592.178667383243,
+            "emissions_kg_co2e": 32.98533500134358,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 4077832.1023919526,
+            "emissions_kg_co2e": 7645.9351919849105,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 38046.644473408785,
+      "all_site_corrected_total_carbon_kg_co2e": 208005268.85704312,
+      "all_site_corrected_ci_g_mj": 84.8575516410234,
+      "all_site_corrected_storage_ci_g_mj": 0.015521458258775371,
+      "additional_h2_non_source_site_ci_g_mj": 1.4021350475137974e-05,
+      "cost_cny_kg_unchanged": 7.088769284890537,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "summary_sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+      "matching_inventory_summary_sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CTL\\baseline\\saf_inventory.csv",
+        "sha256": "3764b6496602e18180412bd59d1952b0f0c763b13e36f9abcbdfbc3eaab24707",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 5630152.06140503,
+        "original_formula_reconstructed_carbon_kg_co2e": 5630152.061405018,
+        "reconstruction_residual_kg_co2e": -1.210719347000122e-08,
+        "unit_corrected_original_scope_carbon_kg_co2e": 16890.45618421509,
+        "all_site_unit_corrected_carbon_kg_co2e": 16890.45618421505,
+        "additional_non_source_site_carbon_kg_co2e": -4.001776687800884e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 580180360.8703865,
+            "emissions_kg_co2e": 10878.381766319746,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 5931299.997772882,
+            "emissions_kg_co2e": 111.21187495824151,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 314712668.95664346,
+            "emissions_kg_co2e": 5900.862542937065,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CTL\\baseline\\h2_inventory.csv",
+        "sha256": "4b7863f8e2782f5dde21f32686c075e2756b6d840d67e21cabf1d1d146240d14",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 774300.1246070876,
+        "old_reported_carbon_kg_co2e": 178585.11632847838,
+        "original_formula_reconstructed_carbon_kg_co2e": 178585.1163284789,
+        "reconstruction_residual_kg_co2e": 5.238689482212067e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 535755.3489854352,
+        "all_site_unit_corrected_carbon_kg_co2e": 541562.5999199899,
+        "additional_non_source_site_carbon_kg_co2e": 5807.25093455473,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 774300.1246070876,
+            "emissions_kg_co2e": 5807.250934553156,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 263488.66146499326,
+            "emissions_kg_co2e": 1976.1649609874494,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 71170557.86992657,
+            "emissions_kg_co2e": 533779.1840244493,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 558453.056104205,
+      "all_site_corrected_total_carbon_kg_co2e": 241579030.03874946,
+      "all_site_corrected_ci_g_mj": 173.40227366259353,
+      "all_site_corrected_storage_ci_g_mj": 0.40085031240816027,
+      "additional_h2_non_source_site_ci_g_mj": 0.004168368900311791,
+      "cost_cny_kg_unchanged": 20.763573144778114,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "summary_sha256": "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb",
+      "matching_inventory_summary_sha256": "44a538d41a4ed38855dd30e1db6dd2bdf1ba65517e2fa7846988a109539dcbdb",
+      "storage_electricity_ci_kg_kwh": 0.03,
+      "period_hours": 3,
+      "inventory_state_count": 225,
+      "electricity_factor_basis": "沿用原储存表达式的动态强度函数；真实轨迹精确重构原已报告项，确认这批结果使用风/光参数50%-50%均值；无另加电网/购电归属假设",
+      "source_hydrogen_location_types": [
+        "byproduct_hydrogen_refinery",
+        "byproduct_hydrogen_steel",
+        "solar_plant",
+        "wind_farm"
+      ],
+      "saf": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CTL\\summer_fixed\\saf_inventory.csv",
+        "sha256": "411b6d22131d78c6851a1b708f7c5980d82e9a0e80a31dcca7114c945bd03b97",
+        "total_locations": 111,
+        "source_scope_locations": 111,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 0,
+        "outside_original_scope_inventory_kg_period_sum": 0.0,
+        "old_reported_carbon_kg_co2e": 6249321.378275989,
+        "original_formula_reconstructed_carbon_kg_co2e": 6249321.378275984,
+        "reconstruction_residual_kg_co2e": -4.6566128730773926e-09,
+        "unit_corrected_original_scope_carbon_kg_co2e": 18747.964134827966,
+        "all_site_unit_corrected_carbon_kg_co2e": 18747.964134827955,
+        "additional_non_source_site_carbon_kg_co2e": -1.0913936421275139e-11,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 0.0,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 580136359.6383713,
+            "emissions_kg_co2e": 10877.556743219464,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 7961897.067390514,
+            "emissions_kg_co2e": 149.2855700135721,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 411793163.8183956,
+            "emissions_kg_co2e": 7721.1218215949175,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "h2": {
+        "raw_file": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_review_20261012\\raw_inventory\\CTL\\summer_fixed\\h2_inventory.csv",
+        "sha256": "57f4249f69b628eddc982cecb58fc5876b0713f1044d59d9493b2e78c15a94e4",
+        "total_locations": 111,
+        "source_scope_locations": 109,
+        "positive_locations": 111,
+        "outside_original_scope_positive_locations": 2,
+        "outside_original_scope_inventory_kg_period_sum": 772847.2371929979,
+        "old_reported_carbon_kg_co2e": 212238.45409215672,
+        "original_formula_reconstructed_carbon_kg_co2e": 212238.45409215655,
+        "reconstruction_residual_kg_co2e": -1.7462298274040222e-10,
+        "unit_corrected_original_scope_carbon_kg_co2e": 636715.3622764702,
+        "all_site_unit_corrected_carbon_kg_co2e": 642511.716555417,
+        "additional_non_source_site_carbon_kg_co2e": 5796.3542789468775,
+        "initial_inventory_sum_kg": 0.0,
+        "terminal_inventory_sum_kg": 4136.072214157715,
+        "by_location_type": {
+          "airport": {
+            "inventory_kg_period_sum": 772847.2371929979,
+            "emissions_kg_co2e": 5796.354278947484,
+            "positive_site_count": 2
+          },
+          "solar_plant": {
+            "inventory_kg_period_sum": 344407.8377917782,
+            "emissions_kg_co2e": 2583.0587834383364,
+            "positive_site_count": 65
+          },
+          "wind_farm": {
+            "inventory_kg_period_sum": 84550973.79907084,
+            "emissions_kg_co2e": 634132.3034930312,
+            "positive_site_count": 44
+          }
+        }
+      },
+      "all_site_corrected_storage_carbon_kg_co2e": 661259.680690245,
+      "all_site_corrected_total_carbon_kg_co2e": 257566073.55187055,
+      "all_site_corrected_ci_g_mj": 166.96248449762442,
+      "all_site_corrected_storage_ci_g_mj": 0.4286494632761283,
+      "additional_h2_non_source_site_ci_g_mj": 0.00375738038048132,
+      "cost_cny_kg_unchanged": 19.689374590752976,
+      "scope": "对匹配最新版summary的真实SAF/H2库存数组逐地点核算；保持原报告库存状态求和与电力碳强度规则、调度和成本。未新增运输中库存。MeOH/CO2原模型未定义独立库存能源项，另作范围说明。"
+    }
+  ],
+  "scope": "真实库存数组只读静态核算，匹配最新版输入；不重新优化、不调整成本"
+}

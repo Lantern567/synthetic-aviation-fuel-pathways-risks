@@ -1,0 +1,10 @@
+coptpy==8.0.7
+numpy
+pandas
+scipy
+PyYAML
+requests
+openpyxl
+psutil
+scikit-learn
+networkx

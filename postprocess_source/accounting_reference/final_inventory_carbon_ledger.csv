@@ -1,0 +1,20 @@
+﻿scenario,label,origin,final_ci_g_mj,final_storage_ci_g_mj,cost_cny_kg_unchanged,storage_electricity_ci_kg_kwh,h2_storage_scope,added_receiving_h2_ci_g_mj
+CCU-BH-FT,baseline,archived,338.752735700195,41.38454384798626,9.579852429699091,0.7,Source-location storage represented in the saved archived ledger,
+CCU-BH-MTJ,baseline,archived,509.65567635485735,70.92003242680188,10.964111832103136,0.7,Source-location storage represented in the saved archived ledger,
+CCU-GH-FT,baseline,COPT,19.43638790367873,0.5917830358783683,26.063813275934226,0.03,All recorded hydrogen-supply and receiving locations,0.19934519044997207
+CCU-GH-FT,summer_fixed,COPT,12.604047859668928,0.689994260117441,24.7855208908343,0.03,All recorded hydrogen-supply and receiving locations,0.22024070617442396
+CCU-GH-MTJ,baseline,COPT,29.28150825269682,0.9039605852049596,41.507640513329825,0.03,All recorded hydrogen-supply and receiving locations,0.3056130031778647
+CCU-GH-MTJ,summer_fixed,COPT,22.804304858795714,1.0293330126876727,39.095812996984534,0.03,All recorded hydrogen-supply and receiving locations,0.35953919699895553
+CTL-BH,baseline,archived,491.95164515574265,15.407794390478033,12.46058065199471,0.7,Source-location storage represented in the saved archived ledger,
+CTL,baseline,COPT,173.40227366259353,0.40085031240816027,20.763573144778114,0.03,All recorded hydrogen-supply and receiving locations,0.004168368900311791
+CTL,summer_fixed,COPT,166.96248449762442,0.4286494632761283,19.689374590752976,0.03,All recorded hydrogen-supply and receiving locations,0.00375738038048132
+DAC-BH-FT,baseline,archived,467.82610156747467,0.2783662982692095,18.721793976466888,0.7,Source-location storage represented in the saved archived ledger,
+DAC-BH-MTJ,baseline,archived,691.2988400784772,0.2778381454448888,24.78218673047206,0.7,Source-location storage represented in the saved archived ledger,
+DAC-GH-FT,baseline,COPT,23.41122498996342,0.5834861288170132,39.97344351005898,0.03,All recorded hydrogen-supply and receiving locations,0.0037784347517356574
+DAC-GH-FT,summer_fixed,COPT,13.243363611120245,0.6280788022989422,37.3676248181793,0.03,All recorded hydrogen-supply and receiving locations,0.0035127661026856834
+DAC-GH-MTJ,baseline,COPT,33.23954703282721,0.8949987617507983,56.641197985705006,0.03,All recorded hydrogen-supply and receiving locations,0.013060135278223459
+DAC-GH-MTJ,summer_fixed,COPT,23.02357718363982,1.010124397613108,52.75680391391735,0.03,All recorded hydrogen-supply and receiving locations,0.011762282379640084
+GTL-BH,baseline,archived,87.34169131743451,0.36155408427527036,5.290539354389216,0.7,Source-location storage represented in the saved archived ledger,
+GTL-GH,baseline,COPT,90.6045606011737,0.01665895850970039,7.241342568601884,0.03,All recorded hydrogen-supply and receiving locations,9.88316115711259e-06
+GTL-GH,summer_fixed,COPT,84.8575516410234,0.015521458258775371,7.088769284890537,0.03,All recorded hydrogen-supply and receiving locations,1.4021350475137974e-05
+GTL,baseline,archived,56.940357702983874,0.0,6.501554612497708,0.03,No standalone hydrogen stock item in GTL FT report,

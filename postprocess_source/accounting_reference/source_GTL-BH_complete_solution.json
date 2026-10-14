@@ -1,0 +1,2571 @@
+{
+  "optimization_status": 2,
+  "optimization_time": 65.00945496559143,
+  "objective_value_lifecycle_total": 34048669280.714252,
+  "project_lifespan_years": 20,
+  "time_window_weeks": 4,
+  "facility_investment_cost": 4143694530.476968,
+  "facility_operation_cost": 294544422.2234788,
+  "production_cost": 1954779498.9898672,
+  "transport_operation_cost": 1312551903.5472126,
+  "storage_equipment_cost": 145299195.65067166,
+  "storage_operation_cost": 211862603.6077463,
+  "electrolyzer_investment_cost": 1130110848.0979357,
+  "hydrogen_production_cost": 0.0,
+  "electricity_cost": 6271584225.925798,
+  "catalyst_cost": 651593166.3299557,
+  "h2_storage_investment": 273234.8915343778,
+  "h2_storage_operation": 199203.633776915,
+  "hydrogen_transport_investment": 0.0,
+  "hydrogen_transport_operation": 0.0,
+  "hydrogen_pipeline_operation": 0.0,
+  "ng_transport_investment": 0.0,
+  "ng_transport_operation": 4743930760.820971,
+  "natural_gas_cost": 13188245686.518265,
+  "shortage_cost": 0.0,
+  "final_inventory_cost": 0.0,
+  "total_investment_cost": 5419377809.11711,
+  "total_operation_cost": 28629291471.59688,
+  "total_cost_excluding_shortage": 34048669280.71402,
+  "demand_fulfillment_ratio": 1.0,
+  "cost_breakdown": {
+    "facility_investment_cost": 4143694530.476968,
+    "facility_operation_cost": 294544422.2234788,
+    "production_cost": 1954779498.9898672,
+    "transport_operation_cost": 1312551903.5472126,
+    "storage_equipment_cost": 145299195.65067166,
+    "storage_operation_cost": 211862603.6077463,
+    "electrolyzer_investment_cost": 1130110848.0979357,
+    "hydrogen_production_cost": 0.0,
+    "electricity_cost": 6271584225.925798,
+    "catalyst_cost": 651593166.3299557,
+    "h2_storage_investment": 273234.8915343778,
+    "h2_storage_operation": 199203.633776915,
+    "hydrogen_transport_investment": 0.0,
+    "hydrogen_transport_operation": 0.0,
+    "hydrogen_pipeline_operation": 0.0,
+    "ng_transport_investment": 0.0,
+    "ng_transport_operation": 4743930760.820971,
+    "natural_gas_cost": 13188245686.518265,
+    "final_inventory_cost": 0.0
+  },
+  "facilities": {
+    "steel_Tianjin Iron and Steel Group Co Ltd_pipeline_direct_conversion": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "technology": "pipeline_direct_conversion",
+      "built": true,
+      "max_annual_capacity_kg": 372869689.49999976,
+      "capacity_kg_per_hour": 42565.03304794518,
+      "location_type": "byproduct_hydrogen_steel",
+      "transport_mode": "pipeline_direct",
+      "actual_annual_production_kg": 326251034.52693206,
+      "utilization_rate": 0.8749733317406919
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_lng_to_hplant_conversion": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "technology": "lng_to_hplant_conversion",
+      "built": true,
+      "max_annual_capacity_kg": 372869689.49999976,
+      "capacity_kg_per_hour": 42565.03304794518,
+      "location_type": "byproduct_hydrogen_steel",
+      "transport_mode": "lng_transfer",
+      "actual_annual_production_kg": 326251034.5269322,
+      "utilization_rate": 0.8749733317406921
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_lng_to_hplant_conversion": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "technology": "lng_to_hplant_conversion",
+      "built": true,
+      "max_annual_capacity_kg": 40181730.17731112,
+      "capacity_kg_per_hour": 4586.95549969305,
+      "location_type": "byproduct_hydrogen_steel",
+      "transport_mode": "lng_transfer",
+      "actual_annual_production_kg": 11159963.393902095,
+      "utilization_rate": 0.2777372538379057
+    }
+  },
+  "hydrogen_facilities": {},
+  "transport_plan": {
+    "steel_Tianjin Iron and Steel Group Co Ltd_北京_0": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "北京",
+      "week": 0,
+      "transport_kg": 10759848.920977945,
+      "distance_km": 167.619647,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_北京_1": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "北京",
+      "week": 1,
+      "transport_kg": 5756229.322504992,
+      "distance_km": 167.619647,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_北京_2": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "北京",
+      "week": 2,
+      "transport_kg": 11512458.64500998,
+      "distance_km": 167.619647,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_北京_3": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "北京",
+      "week": 3,
+      "transport_kg": 10660788.014850501,
+      "distance_km": 167.619647,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_天津_0": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "天津",
+      "week": 0,
+      "transport_kg": 3286611.984843936,
+      "distance_km": 23.885198,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          117.3462,
+          39.1244
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_天津_1": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "天津",
+      "week": 1,
+      "transport_kg": 3286611.984843936,
+      "distance_km": 23.885198,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          117.3462,
+          39.1244
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_天津_2": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "天津",
+      "week": 2,
+      "transport_kg": 1643305.992421968,
+      "distance_km": 23.885198,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          117.3462,
+          39.1244
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_天津_3": {
+      "from_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "to_airport": "天津",
+      "week": 3,
+      "transport_kg": 3286611.984843936,
+      "distance_km": 23.885198,
+      "from_latitude": 39.031083,
+      "from_longitude": 117.499246,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "route_coordinates": [
+        [
+          117.499246,
+          39.031083
+        ],
+        [
+          117.3462,
+          39.1244
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_北京_0": {
+      "from_location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "to_airport": "北京",
+      "week": 0,
+      "transport_kg": 752609.7240320358,
+      "distance_km": 168.65177400000002,
+      "from_latitude": 39.300258,
+      "from_longitude": 117.800231,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.800231,
+          39.300258
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_北京_3": {
+      "from_location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "to_airport": "北京",
+      "week": 3,
+      "transport_kg": 105848.99857584934,
+      "distance_km": 168.65177400000002,
+      "from_latitude": 39.300258,
+      "from_longitude": 117.800231,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "route_coordinates": [
+        [
+          117.800231,
+          39.300258
+        ],
+        [
+          116.5846,
+          40.0801
+        ]
+      ],
+      "transport_type": "MTJ",
+      "transport_mode": "truck"
+    }
+  },
+  "hydrogen_transport": {},
+  "ng_transport": {
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_0": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 0,
+      "transport_m3_ng": 2349589.8242465733,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_1": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 1,
+      "transport_m3_ng": 2451745.9035616415,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_2": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 2,
+      "transport_m3_ng": 1995360.7013517874,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_3": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 3,
+      "transport_m3_ng": 1940965.5069863002,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_4": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 4,
+      "transport_m3_ng": 2043121.5863013687,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_5": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 5,
+      "transport_m3_ng": 2043121.5863013687,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_6": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 6,
+      "transport_m3_ng": 1940965.506986305,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_7": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 7,
+      "transport_m3_ng": 2247433.744931505,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin Iron and Steel Group Co Ltd_day_8": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "day": 8,
+      "transport_m3_ng": 2247433.744931505,
+      "distance_km": 18.609137999999998,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.031083,
+      "to_longitude": 117.499246,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_0": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "day": 0,
+      "transport_m3_ng": 249809.59684917715,
+      "distance_km": 36.47656,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.300258,
+      "to_longitude": 117.800231,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_1": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "day": 1,
+      "transport_m3_ng": 264208.6367823192,
+      "distance_km": 36.47656,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.300258,
+      "to_longitude": 117.800231,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    },
+    "ng_pipeline_35_steel_Tianjin New Tiangang United Special Steel Co Ltd_day_2": {
+      "from_location": "ng_pipeline_35",
+      "to_location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "day": 2,
+      "transport_m3_ng": 88069.54559410656,
+      "distance_km": 36.47656,
+      "from_latitude": 39.05381028,
+      "from_longitude": 117.662896114,
+      "to_latitude": 39.300258,
+      "to_longitude": 117.800231,
+      "transport_type": "NG",
+      "transport_mode": "truck"
+    }
+  },
+  "inventory": {
+    "steel_Tianjin Iron and Steel Group Co Ltd_2": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 2,
+      "inventory_kg": 255390.19828767108,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_3": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 3,
+      "inventory_kg": 510780.39657534205,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_4": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 4,
+      "inventory_kg": 766170.5948630131,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_5": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 5,
+      "inventory_kg": 1021560.7931506842,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_6": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 6,
+      "inventory_kg": 1276950.9914383455,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_7": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 7,
+      "inventory_kg": 1532341.1897260167,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_8": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 8,
+      "inventory_kg": 1787731.388013688,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_9": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 9,
+      "inventory_kg": 2043121.5863013589,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_10": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 10,
+      "inventory_kg": 2298511.78458903,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_11": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 11,
+      "inventory_kg": 2553901.982876701,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_12": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 12,
+      "inventory_kg": 2809292.1811643722,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_13": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 13,
+      "inventory_kg": 3064682.379452043,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_14": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 14,
+      "inventory_kg": 3320072.577739714,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_15": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 15,
+      "inventory_kg": 3575462.7760273856,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_16": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 16,
+      "inventory_kg": 3830852.9743150566,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_17": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 17,
+      "inventory_kg": 4086243.1726027275,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_18": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 18,
+      "inventory_kg": 4341633.3708903985,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_19": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 19,
+      "inventory_kg": 4597023.56917807,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_20": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 20,
+      "inventory_kg": 4852413.767465741,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_21": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 21,
+      "inventory_kg": 5107803.965753412,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_22": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 22,
+      "inventory_kg": 5363194.164041083,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_23": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 23,
+      "inventory_kg": 5618584.362328755,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_24": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 24,
+      "inventory_kg": 5873974.560616425,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_25": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 25,
+      "inventory_kg": 6129364.758904097,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_26": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 26,
+      "inventory_kg": 6384754.957191768,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_27": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 27,
+      "inventory_kg": 6640145.155479439,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_28": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 28,
+      "inventory_kg": 6895535.35376711,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_29": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 29,
+      "inventory_kg": 7150925.5520547815,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_30": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 30,
+      "inventory_kg": 7406315.750342452,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_31": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 31,
+      "inventory_kg": 7661705.948630123,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_32": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 32,
+      "inventory_kg": 7917096.146917795,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_33": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 33,
+      "inventory_kg": 8172486.345205465,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_34": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 34,
+      "inventory_kg": 8427876.543493137,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_35": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 35,
+      "inventory_kg": 8683266.741780808,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_36": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 36,
+      "inventory_kg": 8938656.94006848,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_37": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 37,
+      "inventory_kg": 9194047.138356151,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_38": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 38,
+      "inventory_kg": 9449437.336643822,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_39": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 39,
+      "inventory_kg": 9704827.534931492,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_40": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 40,
+      "inventory_kg": 9960217.733219163,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_41": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 41,
+      "inventory_kg": 10215607.931506835,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_42": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 42,
+      "inventory_kg": 10470998.129794504,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_43": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 43,
+      "inventory_kg": 10726388.328082176,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_44": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 44,
+      "inventory_kg": 10981778.526369847,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_45": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 45,
+      "inventory_kg": 11237168.724657517,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_46": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 46,
+      "inventory_kg": 11492558.922945188,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_47": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 47,
+      "inventory_kg": 11747949.12123286,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_48": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 48,
+      "inventory_kg": 12003339.31952053,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_49": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 49,
+      "inventory_kg": 12258729.5178082,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_50": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 50,
+      "inventory_kg": 12514119.716095872,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_51": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 51,
+      "inventory_kg": 12769509.914383542,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_52": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 52,
+      "inventory_kg": 13024900.112671213,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_53": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 53,
+      "inventory_kg": 13280290.310958885,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_54": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 54,
+      "inventory_kg": 13535680.509246537,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_55": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 55,
+      "inventory_kg": 13791070.707534209,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_57": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 57,
+      "inventory_kg": 127695.09914383554,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_58": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 58,
+      "inventory_kg": 263683.08505755354,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_59": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 59,
+      "inventory_kg": 391378.1842013891,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_60": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 60,
+      "inventory_kg": 519073.2833452246,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_61": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 61,
+      "inventory_kg": 646768.3824890648,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_62": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 62,
+      "inventory_kg": 902158.5807767359,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_63": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 63,
+      "inventory_kg": 1157548.779064407,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_64": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 64,
+      "inventory_kg": 1412938.977352078,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_65": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 65,
+      "inventory_kg": 1540634.0764959136,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_66": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 66,
+      "inventory_kg": 1796024.2747835848,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_67": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 67,
+      "inventory_kg": 1796024.2747835848,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_68": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 68,
+      "inventory_kg": 1923719.3739274202,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_69": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 69,
+      "inventory_kg": 2179109.5722150914,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_70": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 70,
+      "inventory_kg": 2434499.7705027624,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_71": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 71,
+      "inventory_kg": 2689889.9687904334,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_72": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 72,
+      "inventory_kg": 2945280.1670781043,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_73": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 73,
+      "inventory_kg": 3200670.3653657753,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_74": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 74,
+      "inventory_kg": 3200670.3653657753,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_75": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 75,
+      "inventory_kg": 3456060.5636534463,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_76": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 76,
+      "inventory_kg": 3711450.7619411177,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_77": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 77,
+      "inventory_kg": 3966840.9602287887,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_78": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 78,
+      "inventory_kg": 4222231.15851646,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_79": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 79,
+      "inventory_kg": 4477621.356804131,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_80": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 80,
+      "inventory_kg": 4605316.455947966,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_81": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 81,
+      "inventory_kg": 4733011.555091802,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_82": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 82,
+      "inventory_kg": 4988401.7533794725,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_83": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 83,
+      "inventory_kg": 5243791.951667144,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_84": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 84,
+      "inventory_kg": 5499182.149954815,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_85": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 85,
+      "inventory_kg": 5626877.24909865,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_86": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 86,
+      "inventory_kg": 5754572.348242486,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_87": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 87,
+      "inventory_kg": 5882267.447386322,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_88": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 88,
+      "inventory_kg": 6009962.546530156,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_89": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 89,
+      "inventory_kg": 6265352.744817828,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_90": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 90,
+      "inventory_kg": 6520742.943105499,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_91": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 91,
+      "inventory_kg": 6776133.1413931735,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_92": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 92,
+      "inventory_kg": 7031523.339680845,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_93": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 93,
+      "inventory_kg": 7286913.537968516,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_94": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 94,
+      "inventory_kg": 7286913.537968515,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_95": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 95,
+      "inventory_kg": 7542303.736256187,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_96": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 96,
+      "inventory_kg": 7797693.934543858,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_97": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 97,
+      "inventory_kg": 8053084.132831529,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_98": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 98,
+      "inventory_kg": 8308474.3311192,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_99": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 99,
+      "inventory_kg": 8308474.3311192,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_100": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 100,
+      "inventory_kg": 8563864.529406872,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_101": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 101,
+      "inventory_kg": 8819254.727694543,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_102": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 102,
+      "inventory_kg": 9074644.925982215,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_103": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 103,
+      "inventory_kg": 9330035.124269884,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_104": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 104,
+      "inventory_kg": 9585425.322557556,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_105": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 105,
+      "inventory_kg": 9713120.42170139,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_106": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 106,
+      "inventory_kg": 9968510.61998906,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_107": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 107,
+      "inventory_kg": 10223900.818276731,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_108": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 108,
+      "inventory_kg": 10479291.016564399,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_109": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 109,
+      "inventory_kg": 10734681.214852069,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_110": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 110,
+      "inventory_kg": 10990071.41313974,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_111": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 111,
+      "inventory_kg": 11245461.611427411,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_112": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 112,
+      "inventory_kg": 2330315.403222317,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_113": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 113,
+      "inventory_kg": 2585705.601509988,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_114": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 114,
+      "inventory_kg": 2841095.7997976537,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_115": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 115,
+      "inventory_kg": 3096485.9980853247,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_116": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 116,
+      "inventory_kg": 3224181.0972291604,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_117": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 117,
+      "inventory_kg": 3351876.1963729956,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_118": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 118,
+      "inventory_kg": 3479571.2955168313,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_119": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 119,
+      "inventory_kg": 3734961.4938045023,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_120": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 120,
+      "inventory_kg": 3862656.5929483385,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_121": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 121,
+      "inventory_kg": 4118046.7912360094,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_122": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 122,
+      "inventory_kg": 4373436.989523681,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_123": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 123,
+      "inventory_kg": 4628827.187811351,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_124": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 124,
+      "inventory_kg": 4884217.386099023,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_125": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 125,
+      "inventory_kg": 5011912.4852428585,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_126": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 126,
+      "inventory_kg": 5267302.683530529,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_127": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 127,
+      "inventory_kg": 5522692.8818182,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_128": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 128,
+      "inventory_kg": 5778083.080105872,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_129": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 129,
+      "inventory_kg": 6033473.278393541,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_130": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 130,
+      "inventory_kg": 6288863.476681213,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_131": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 131,
+      "inventory_kg": 6416558.575825049,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_132": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 132,
+      "inventory_kg": 6544253.674968883,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_133": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 133,
+      "inventory_kg": 6799643.873256555,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_134": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 134,
+      "inventory_kg": 7055034.071544226,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_135": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 135,
+      "inventory_kg": 7310424.269831897,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_136": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 136,
+      "inventory_kg": 7438119.3689757325,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_137": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 137,
+      "inventory_kg": 7565814.468119568,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_138": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 138,
+      "inventory_kg": 7821204.666407239,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_139": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 139,
+      "inventory_kg": 7948899.765551074,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_140": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 140,
+      "inventory_kg": 8204289.963838746,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_141": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 141,
+      "inventory_kg": 8459680.162126416,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_142": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 142,
+      "inventory_kg": 8715070.360414088,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_143": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 143,
+      "inventory_kg": 8842765.459557923,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_144": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 144,
+      "inventory_kg": 8970460.55870176,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_145": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 145,
+      "inventory_kg": 8970460.55870176,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_146": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 146,
+      "inventory_kg": 9225850.75698943,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_147": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 147,
+      "inventory_kg": 9225850.75698943,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_148": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 148,
+      "inventory_kg": 9353545.856133265,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_149": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 149,
+      "inventory_kg": 9608936.054420937,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_150": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 150,
+      "inventory_kg": 9864326.252708606,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_151": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 151,
+      "inventory_kg": 10119716.450996278,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_152": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 152,
+      "inventory_kg": 10247411.550140113,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_153": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 153,
+      "inventory_kg": 10502801.748427784,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_154": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 154,
+      "inventory_kg": 10758191.946715456,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_155": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 155,
+      "inventory_kg": 11013582.145003127,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_156": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 156,
+      "inventory_kg": 11268972.343290797,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_157": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 157,
+      "inventory_kg": 11524362.541578468,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_158": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 158,
+      "inventory_kg": 11652057.640722303,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_159": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 159,
+      "inventory_kg": 11779752.739866138,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_160": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 160,
+      "inventory_kg": 11907447.839009972,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_161": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 161,
+      "inventory_kg": 12162838.037297644,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_162": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 162,
+      "inventory_kg": 12418228.23558531,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_163": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 163,
+      "inventory_kg": 12673618.433872981,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_164": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 164,
+      "inventory_kg": 12929008.632160652,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_165": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 165,
+      "inventory_kg": 13184398.83044832,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_166": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 166,
+      "inventory_kg": 13312093.929592155,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_167": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 167,
+      "inventory_kg": 13567484.127879826,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_168": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 168,
+      "inventory_kg": 667109.6887355553,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_169": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 169,
+      "inventory_kg": 794804.7878793909,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_170": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 170,
+      "inventory_kg": 922499.8870232258,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_171": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 171,
+      "inventory_kg": 1177890.0853108969,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_172": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 172,
+      "inventory_kg": 1433280.2835985678,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_173": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 173,
+      "inventory_kg": 1688670.4818862388,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_174": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 174,
+      "inventory_kg": 1944060.6801739098,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_175": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 175,
+      "inventory_kg": 2199450.8784615807,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_176": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 176,
+      "inventory_kg": 2454841.0767492517,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_177": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 177,
+      "inventory_kg": 2710231.2750369227,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_178": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 178,
+      "inventory_kg": 2965621.4733245936,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_179": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 179,
+      "inventory_kg": 3221011.671612265,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_180": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 180,
+      "inventory_kg": 3476401.869899936,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_181": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 181,
+      "inventory_kg": 3731792.068187607,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_182": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 182,
+      "inventory_kg": 3987182.2664752784,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_183": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 183,
+      "inventory_kg": 4242572.464762949,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_184": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 184,
+      "inventory_kg": 4497962.663050621,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_185": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 185,
+      "inventory_kg": 4753352.861338291,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_186": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 186,
+      "inventory_kg": 5008743.059625963,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_187": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 187,
+      "inventory_kg": 5264133.257913634,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_188": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 188,
+      "inventory_kg": 5519523.456201307,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_189": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 189,
+      "inventory_kg": 5774913.654488978,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_190": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 190,
+      "inventory_kg": 6030303.852776649,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_191": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 191,
+      "inventory_kg": 6285694.05106432,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_192": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 192,
+      "inventory_kg": 6285694.05106432,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_193": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 193,
+      "inventory_kg": 6541084.24935199,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_194": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 194,
+      "inventory_kg": 6668779.348495826,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_195": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 195,
+      "inventory_kg": 6924169.546783498,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_196": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 196,
+      "inventory_kg": 7179559.745071169,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_197": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 197,
+      "inventory_kg": 7434949.94335884,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_198": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 198,
+      "inventory_kg": 7690340.141646512,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_199": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 199,
+      "inventory_kg": 7945730.339934183,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_200": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 200,
+      "inventory_kg": 8201120.538221855,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_201": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 201,
+      "inventory_kg": 8456510.736509526,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_202": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 202,
+      "inventory_kg": 8711900.934797198,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_203": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 203,
+      "inventory_kg": 8967291.133084867,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_204": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 204,
+      "inventory_kg": 9222681.331372539,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_205": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 205,
+      "inventory_kg": 9478071.52966021,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_206": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 206,
+      "inventory_kg": 9733461.72794788,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_207": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 207,
+      "inventory_kg": 9988851.926235551,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_208": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 208,
+      "inventory_kg": 10244242.124523222,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_209": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 209,
+      "inventory_kg": 10499632.322810877,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_210": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 210,
+      "inventory_kg": 10755022.521098549,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_211": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 211,
+      "inventory_kg": 11010412.71938622,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_212": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 212,
+      "inventory_kg": 11265802.917673891,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_213": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 213,
+      "inventory_kg": 11393498.016817726,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_214": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 214,
+      "inventory_kg": 11521193.115961561,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_215": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 215,
+      "inventory_kg": 11648888.215105398,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_216": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 216,
+      "inventory_kg": 11904278.413393069,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_217": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 217,
+      "inventory_kg": 12159668.61168074,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_218": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 218,
+      "inventory_kg": 12415058.80996841,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_219": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 219,
+      "inventory_kg": 12670449.008256081,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_220": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 220,
+      "inventory_kg": 12925839.206543753,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_221": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 221,
+      "inventory_kg": 13181229.404831426,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_222": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 222,
+      "inventory_kg": 13436619.603119098,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin Iron and Steel Group Co Ltd_223": {
+      "location": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "hour": 223,
+      "inventory_kg": 13692009.80140677,
+      "latitude": 39.031083,
+      "longitude": 117.499246
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_2": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 2,
+      "inventory_kg": 9522.933081729994,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_3": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 3,
+      "inventory_kg": 23283.799580809144,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_4": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 4,
+      "inventory_kg": 37044.666079888295,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_5": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 5,
+      "inventory_kg": 50805.532578967446,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_6": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 6,
+      "inventory_kg": 64566.39907804659,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_7": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 7,
+      "inventory_kg": 78327.26557712574,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_8": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 8,
+      "inventory_kg": 92088.1320762049,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_9": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 9,
+      "inventory_kg": 105848.99857531546,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_10": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 10,
+      "inventory_kg": 119609.86507439462,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_11": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 11,
+      "inventory_kg": 133370.73157347378,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_12": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 12,
+      "inventory_kg": 147131.5980725529,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_13": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 13,
+      "inventory_kg": 160892.46457163207,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_14": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 14,
+      "inventory_kg": 174653.33107071123,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_15": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 15,
+      "inventory_kg": 188414.19756979035,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_16": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 16,
+      "inventory_kg": 202175.0640688695,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_17": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 17,
+      "inventory_kg": 215935.93056794867,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_18": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 18,
+      "inventory_kg": 229696.7970670278,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_19": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 19,
+      "inventory_kg": 243457.66356610696,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_20": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 20,
+      "inventory_kg": 257218.53006518612,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_21": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 21,
+      "inventory_kg": 270979.39656426525,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_22": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 22,
+      "inventory_kg": 284740.2630633444,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_23": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 23,
+      "inventory_kg": 298501.12956242356,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_24": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 24,
+      "inventory_kg": 312261.9960615027,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_25": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 25,
+      "inventory_kg": 326022.8625605819,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_26": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 26,
+      "inventory_kg": 339783.72905966104,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_27": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 27,
+      "inventory_kg": 353544.5955587402,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_28": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 28,
+      "inventory_kg": 367305.46205781936,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_29": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 29,
+      "inventory_kg": 381066.3285568985,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_30": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 30,
+      "inventory_kg": 394827.1950559777,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_31": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 31,
+      "inventory_kg": 408588.06155505683,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_32": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 32,
+      "inventory_kg": 422348.928054136,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_33": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 33,
+      "inventory_kg": 436109.79455321515,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_34": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 34,
+      "inventory_kg": 449870.6610522943,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_35": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 35,
+      "inventory_kg": 463631.52755137347,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_36": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 36,
+      "inventory_kg": 477392.3940504526,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_37": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 37,
+      "inventory_kg": 491153.2605495318,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_38": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 38,
+      "inventory_kg": 504914.12704861094,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_39": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 39,
+      "inventory_kg": 518674.9935476901,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_40": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 40,
+      "inventory_kg": 532435.8600467693,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_41": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 41,
+      "inventory_kg": 546196.7265458484,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_42": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 42,
+      "inventory_kg": 559957.5930449276,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_43": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 43,
+      "inventory_kg": 573718.4595440067,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_44": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 44,
+      "inventory_kg": 587479.3260430859,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_45": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 45,
+      "inventory_kg": 601240.192542165,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_46": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 46,
+      "inventory_kg": 615001.0590412442,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_47": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 47,
+      "inventory_kg": 628761.9255403234,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_48": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 48,
+      "inventory_kg": 642522.7920394025,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_49": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 49,
+      "inventory_kg": 656283.6585384817,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_50": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 50,
+      "inventory_kg": 670044.5250375608,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_51": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 51,
+      "inventory_kg": 683805.39153664,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_52": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 52,
+      "inventory_kg": 697566.2580357192,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_53": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 53,
+      "inventory_kg": 711327.1245347983,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_54": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 54,
+      "inventory_kg": 725087.9910338775,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_55": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 55,
+      "inventory_kg": 738848.8575329566,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_217": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 217,
+      "inventory_kg": 9522.933082295267,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_218": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 218,
+      "inventory_kg": 23283.79958137442,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_219": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 219,
+      "inventory_kg": 37044.66608045357,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_220": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 220,
+      "inventory_kg": 50805.53257953272,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_221": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 221,
+      "inventory_kg": 64566.39907861189,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_222": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 222,
+      "inventory_kg": 78327.26557769104,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    },
+    "steel_Tianjin New Tiangang United Special Steel Co Ltd_223": {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "hour": 223,
+      "inventory_kg": 92088.13207677018,
+      "latitude": 39.300258,
+      "longitude": 117.800231
+    }
+  },
+  "annual_production_kg": 663662032.447765,
+  "lifecycle_total_production_kg": 13273240648.9553,
+  "lifecycle_levelized_cost_per_kg": 5.225449105381287,
+  "lifecycle_levelized_cost_excluding_shortage_per_kg": 5.2254491053812515,
+  "annual_levelized_cost_per_kg": 2.565211479337876,
+  "levelized_cost_constraint_satisfied": true,
+  "levelized_cost_threshold": 20,
+  "levelized_cost_margin_or_violation": 14.774550894618748,
+  "carbon_emissions": {
+    "detailed": {
+      "ng_extraction": 4965456.471205989,
+      "saf_facility": 362732.8196202973,
+      "electrolyzer_facility": 758.9266989668675,
+      "ng_to_methanol": 49008888.54998924,
+      "methanol_to_saf": 0.0,
+      "h2_production": 98400659.0417751,
+      "mtj_storage": 225124418.75378612,
+      "h2_storage": 40358.41071769831,
+      "h2_truck_transport": 0.0,
+      "h2_pipeline_transport": 0.0,
+      "mtj_transport": 828555.1670958506,
+      "ng_transport": 38036921.525512785,
+      "co2_utilization_credit": 0.0
+    },
+    "by_stage": {
+      "raw_material_emissions": 4965456.471205989,
+      "facility_emissions": 363491.7463192641,
+      "production_emissions": 147409547.59176472,
+      "storage_emissions": 225164777.1645038,
+      "transport_emissions": 38865476.69260863,
+      "co2_utilization_credit": 0.0,
+      "total_emissions": 416768749.6664117,
+      "annual_emissions": 5417993745.663145
+    },
+    "total_production_kg": 51050925.572905,
+    "carbon_intensity_kg": 8.163784397429406,
+    "carbon_intensity_mj": 189.19546691609287,
+    "vs_traditional_jet": 112.57917631021672,
+    "traditional_jet_ci_gco2e_per_mj": 89,
+    "abs_diff_vs_traditional_jet_gco2e_per_mj": 100.19546691609287,
+    "vs_corsia": 530.6515563869763,
+    "stage_contributions": {
+      "raw_material_emissions": {
+        "value": 4965456.471205989,
+        "percentage": 1.1914176567174048
+      },
+      "facility_emissions": {
+        "value": 363491.7463192641,
+        "percentage": 0.08721665110692889
+      },
+      "production_emissions": {
+        "value": 147409547.59176472,
+        "percentage": 35.36962589199734
+      },
+      "storage_emissions": {
+        "value": 225164777.1645038,
+        "percentage": 54.02631011675641
+      },
+      "transport_emissions": {
+        "value": 38865476.69260863,
+        "percentage": 9.325429683419683
+      }
+    },
+    "detailed_raw": {
+      "ng_extraction": 4965456.471205989,
+      "saf_facility": 362732.8196202973,
+      "electrolyzer_facility": 758.9266989668675,
+      "ng_to_methanol": 49008888.54998924,
+      "methanol_to_saf": 0.0,
+      "h2_production": 98400659.0417751,
+      "mtj_storage": 225124418.75378612,
+      "h2_storage": 40358.41071769831,
+      "h2_truck_transport": 0.0,
+      "h2_pipeline_transport": 0.0,
+      "h2_transport": 0.0,
+      "mtj_transport": 828555.1670958506,
+      "ng_transport": 38036921.525512785,
+      "co2_utilization_credit": 0.0
+    },
+    "revision_scope": "Archived control pathway; no new physical certification"
+  },
+  "cost_breakdown_raw": {
+    "facility_investment_cost": 4143694530.476968,
+    "facility_operation_cost": 294544422.2234788,
+    "production_cost": 1954779498.9898672,
+    "transport_operation_cost": 1312551903.5472126,
+    "storage_equipment_cost": 145299195.65067166,
+    "storage_operation_cost": 211862603.6077463,
+    "electrolyzer_investment_cost": 1130110848.0979357,
+    "hydrogen_production_cost": 0.0,
+    "electricity_cost": 6271584225.925798,
+    "catalyst_cost": 651593166.3299557,
+    "h2_storage_investment": 273234.8915343778,
+    "h2_storage_operation": 199203.633776915,
+    "hydrogen_transport_investment": 0.0,
+    "hydrogen_transport_operation": 0.0,
+    "hydrogen_pipeline_operation": 0.0,
+    "ng_transport_investment": 0.0,
+    "ng_transport_operation": 4743930760.820971,
+    "natural_gas_cost": 13188245686.518265,
+    "shortage_cost": 0.0,
+    "final_inventory_cost": 0.0,
+    "total_investment_cost": 5419377809.11711,
+    "total_operation_cost": 28629291471.59688,
+    "total_cost_excluding_shortage": 34048669280.71402,
+    "demand_fulfillment_ratio": 1.0
+  },
+  "revision_scope": "Archived control pathway; no new physical certification",
+  "source_sha256": "6fcf80ef2b77346bec740467f09c2fe8cda5eaeee08b2a1b337fc61a361c231d",
+  "period_hours": 3,
+  "representative_source_weeks": [
+    1,
+    5,
+    14,
+    44
+  ]
+}

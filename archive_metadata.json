@@ -1,0 +1,34 @@
+{
+  "archive_version": "nexus-r1-20261015",
+  "article_title": "Infrastructure incompatibility across synthetic aviation fuel pathways risks stranding decarbonization investments",
+  "authors": [
+    "Junteng Liao",
+    "Haoran Zhang"
+  ],
+  "historical_archive": {
+    "tag": "nexus-r1-20260930",
+    "commit": "d20ad94829016234eb434cfca1bd6dcd48911b78",
+    "scope": "Source provenance for seven retained Gurobi comparators."
+  },
+  "solver": "COPT 8.0.7",
+  "electricity_dependent_configurations": 6,
+  "archived_source_solutions": 12,
+  "represented_periods_per_solution": 224,
+  "hours_per_period": 3,
+  "baseline_weeks": [
+    1,
+    5,
+    14,
+    44
+  ],
+  "alternative_weeks": [
+    1,
+    14,
+    27,
+    44
+  ],
+  "source_summary_policy": "Original solver summaries are retained byte-identically; final manuscript cost and emissions accounts are separate data records.",
+  "ctl_scope": "Partial-supply diagnostic with no 90% minimum-service constraint; original infeasibility records are included.",
+  "accompanying_data_files": 303,
+  "access": "Download the complete release ZIP to obtain saved validation records and accompanying data alongside the versioned source code."
+}

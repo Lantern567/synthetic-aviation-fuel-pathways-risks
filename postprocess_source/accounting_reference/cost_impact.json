@@ -1,0 +1,38 @@
+{
+  "scenario": "GTL-BH",
+  "source_stage": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage",
+  "stage": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\inventory_cost_update_20261013\\figures_data\\data_stage",
+  "old_cost_cny_kg": 5.2254491053812515,
+  "new_cost_cny_kg": 5.290539354389216,
+  "difference_cny_kg": 0.06509024900796423,
+  "difference_percent": 1.2456393258319796,
+  "old_storage_cny_kg": 0.0548861246961924,
+  "new_storage_cny_kg": 0.1199763737041563,
+  "discounted_actual_production_kg": 6515931663.299553,
+  "additional_lifecycle_cost_cny": 424123614.4830464,
+  "old_2036_cost_cny_kg": 4.5242165145474855,
+  "new_2036_cost_cny_kg": 4.589306763555449,
+  "annual_learning_increment_cny_kg": [
+    0.06509024900796412,
+    0.06509024900796412,
+    0.06509024900796412,
+    0.06509024900796412,
+    0.065090249007965,
+    0.06509024900796412,
+    0.065090249007965,
+    0.065090249007965,
+    0.065090249007965,
+    0.06509024900796412,
+    0.06509024900796323
+  ],
+  "old_inventory_operating_costs": {
+    "storage_operation_cost": 211862603.6077463,
+    "h2_storage_operation": 199203.633776915
+  },
+  "new_inventory_operating_costs": {
+    "storage_operation_cost": 635587810.8232388,
+    "h2_storage_operation": 597610.901330745
+  },
+  "unchanged_cost_order": true,
+  "no_new_optimization": true
+}
