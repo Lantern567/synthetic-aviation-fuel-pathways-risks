@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "publication_values_sha256": "813bf71f875424e8c2bfd70d8c71a1bbfe88ec4e7295677c040ae3f1110b6211",
+  "docx_modified": false,
+  "plans": {
+    "main_result_replacements.json": {
+      "Manuscript_Clean.docx": {
+        "source_sha256": "721d0ed976a0ea52f614a84f917084c3b42359efa3b5121fe21efc2f5e6acb06",
+        "expected_replacements": 27,
+        "missing_expected_paragraphs": []
+      },
+      "Manuscript_Marked_Changes.docx": {
+        "source_sha256": "68cca7e81ea869e9a6c1dfa85625ad486f3bf7b3f8b69f3042f196f7eb3f1747",
+        "expected_replacements": 27,
+        "missing_expected_paragraphs": []
+      },
+      "作者审阅/Manuscript_Chinese.docx": {
+        "source_sha256": "918fe6b1ce01a3ebf2a63c1e78cafbbf15b8fa50bb302a36b1d686d6cc4ce61e",
+        "expected_replacements": 28,
+        "missing_expected_paragraphs": []
+      },
+      "作者审阅/Manuscript_Marked_Changes_Chinese.docx": {
+        "source_sha256": "075e902eadc6c8606d1ba106f79f595a405194956114631995615a7e23a34173",
+        "expected_replacements": 28,
+        "missing_expected_paragraphs": []
+      }
+    },
+    "si_result_replacements.json": {
+      "Supplementary_Information.docx": {
+        "source_sha256": "8fdcaced1b5ff485c923615bf498048521dec035ef6cd4f9849840232dcb586f",
+        "expected_replacements": 49,
+        "missing_expected_paragraphs": []
+      },
+      "Supplementary_Information_Marked_Changes.docx": {
+        "source_sha256": "e92e21f54acaac8fafeedb7b965f745294082811eec97d0ebc67aeb93de4809e",
+        "expected_replacements": 49,
+        "missing_expected_paragraphs": []
+      },
+      "Supplementary_Figure_Archive.docx": {
+        "source_sha256": "00da62299e48d31520d2e60e8a7c2f063d265e812e146daf439bf904fd25ae1e",
+        "expected_replacements": 8,
+        "missing_expected_paragraphs": []
+      },
+      "Supplementary_Figure_Archive_Marked_Changes.docx": {
+        "source_sha256": "8c3714dcd0dffa4a42bfe3c71de0c6c858cfb83e02b3ce21e0bdf103ec27a8c1",
+        "expected_replacements": 8,
+        "missing_expected_paragraphs": []
+      }
+    }
+  },
+  "tables": {
+    "Supplementary_Information.docx": {
+      "5": true,
+      "8": true,
+      "9": true,
+      "18": true,
+      "19": true,
+      "21": true,
+      "22": true,
+      "23": true,
+      "24": true,
+      "25": true,
+      "26": true,
+      "27": true,
+      "28": true,
+      "29": true,
+      "32": true
+    },
+    "Supplementary_Information_Marked_Changes.docx": {
+      "5": true,
+      "8": true,
+      "9": true,
+      "18": true,
+      "19": true,
+      "21": true,
+      "22": true,
+      "23": true,
+      "24": true,
+      "25": true,
+      "26": true,
+      "27": true,
+      "28": true,
+      "29": true,
+      "32": true
+    }
+  },
+  "candidates": {
+    "Manuscript_Clean.docx": {
+      "old_numeric_values": [],
+      "old_computation_scope": [],
+      "CTL_infeasibility": [
+        {
+          "location": "P44",
+          "text": "The fixed-asset comparison shows how mean utilization and relative worst-week performance respond to alternative resource–demand conditions. For weeks 1, 14, 27 and 44, CCU-GH-FT fuel-synthesis mean utilization rises from 72.71% to 81.23%, while worst-week retention falls from 61.29% to 54.91%. GTL-GH retention rises from 94.68% to 98.33%. The comparison fixes baseline synthesis and electrolyzer construction and capacity, together with DAC construction decisions where applicable; alternative-week demand totals 56.807 million kg. Thus, even with production assets held fixed, weekly loading patterns change with the resource–demand combination. Table S32 reports all twelve A/B solutions and their supply levels, including the CTL partial-supply diagnostic with its original 90% minimum-service inequality removed in both week sets. Tables S27–S29 document all eighteen new solutions and their validation scope; Table S25 separately reports 52 leave-one-week-out calculations retaining the remaining stored schedules without re-optimization. Assessment of these configurations therefore needs to consider both average capacity use and relative worst-week performance."
+        },
+        {
+          "location": "P68",
+          "text": "To represent spatial heterogeneity, we constructed a multi-commodity flow network comprising georeferenced hydrogen sources, carbon sources, candidate production plants, and airports. Spatial resolution is at the facility or resource-site level, using point coordinates and candidate transport links. The resource search domain is mainland China, while fuel demand is restricted to Beijing and Tianjin airports. To limit model size, candidate transport links were screened using a maximum-distance threshold and a nearest-neighbour rule; scenario- and commodity-specific screening distances are reported in the Supplementary Information (Tables S3 and S10). The comparative runs represent four weeks (weeks 1, 5, 14 and 44), totalling 672 hours and 224 three-hour periods. Production and inventory decisions use the three-hour periods. Hydrogen deliveries in the recomputed configurations are balanced at both ends of each three-hour interval and sum to a common route-specific volume in each week. GTL-GH and GTL-BH natural-gas deliveries satisfy 28 daily balances, with eight periods per day. Airport deliveries and demand are weekly. Carbon supply options included coal-chemical sources, natural-gas-chemical sources, industrial capture, and direct air capture (DAC). Hydrogen supply options included green hydrogen, by-product hydrogen, and grey hydrogen, which were activated or deactivated through scenario-specific indicator parameters. Two synthesis routes were considered: Fischer–Tropsch (FT) and methanol-to-jet (MTJ) 29 (route-module activation assumptions in Table S5; feedstock, process, and capture parameters in Table S9); the MTJ route explicitly includes methanol intermediate inventory. Capacity, material-flow and inventory limits are enforced, and shortage variables report unmet demand. The baseline CTL case cannot satisfy its 90% minimum-production requirement under the available resources: the necessary resource bound is 78.6147%. A partial-supply diagnostic removes that inequality while retaining all other constraints; its production assets are fixed for the alternative-week test, which uses the same diagnostic service scope."
+        },
+        {
+          "location": "P81",
+          "text": "Pathways share the Beijing–Tianjin airport-demand definition and baseline week set, with resource supplies, process modules and service constraints configured for their carbon and hydrogen sources. The six electricity-dependent configurations are CCU-GH-FT, CCU-GH-MTJ, DAC-GH-FT, DAC-GH-MTJ, GTL-GH and the modelled CTL configuration. This CTL instance combines coal-derived carbon with electrolysis-based hydrogen supply and represents that specific process combination. The baseline CTL model cannot satisfy its 90% minimum-production requirement; its necessary resource upper bound is 78.6147%. The partial-supply diagnostic removes this inequality while retaining the remaining constraints, and its baseline production assets define the alternative-week comparison under the same diagnostic service scope. Result provenance, achieved solver gaps and validation scope are reported below."
+        }
+      ],
+      "carbon_benchmark": [
+        {
+          "location": "P12",
+          "text": "Aviation emitted approximately 1 billion tonnes of CO₂ in 20241. Its emissions continue to grow as air travel recovers. The energy density requirements of aero-propulsion limit electrification for long-distance flight, making sustainable aviation fuel (SAF) an important technological means for deep decarbonization of aviation. Dray et al. assess cost and climate-impact pathways, while Bergero et al. compare demand, efficiency and alternative-fuel measures toward net-zero aviation2,3. IATA’s Fly Net Zero strategy identifies SAF as contributing approximately 65% of the emission reductions needed to reach net zero by 20504. The EU ReFuelEU Aviation regulation mandates SAF blending shares rising from 2% in 2025 to 70% by 2050, and ICAO’s CORSIA mechanism provides an international framework for aviation carbon reduction5. Pathway-specific studies include Zhang et al.’s municipal-solid-waste jet-fuel analysis and Almena et al.’s fuel-production study integrating carbon capture and storage6,7. Yet global SAF production in 2023 supplied approximately 0.2% of total jet fuel consumption, as reported by IATA8. A large gap separates current output from scenario targets. Economic and management reviews9, production-scale-up assessments10 and lifecycle prediction models11 examine different aspects of this challenge. Whether and how this gap can be bridged has become a defining uncertainty for global net-zero commitments."
+        },
+        {
+          "location": "P15",
+          "text": "To test this hypothesis, we compiled techno-economic, lifecycle and process parameters for 13 carbon–hydrogen–route combinations (retained pathway set and activation matrix in Tables S6–S7; techno-economic, lifecycle, and process parameters in Tables S8–S9), together with renewable power output series. Ethanol–alcohol-to-jet co-location27, ethanol-to-jet techno-economic and lifecycle assessment28, and Fischer–Tropsch versus methanol-to-jet plant comparison29 provide context for route-specific process configurations. Four representative weeks selected from airport demand were used for comparative optimization. Demand coverage diagnostics are shown in Figs. S4–S5 and Table S2; Table S26 evaluates their joint demand–renewable coverage against the twelve-week resource pool. We then developed a multi-commodity flow programming framework that integrates a three-layer production–transport–consumption network with three-hour production and inventory decisions, commodity-specific transport time scales and weekly airport-demand decisions, jointly optimizing facility siting, capacity planning, inventory scheduling, and demand fulfilment for Beijing and Tianjin airports within a mainland-China resource search domain. An overview of this cost-driven mixed-integer linear programming (MILP) framework is provided in Fig. S19. In the pathway labels, GTL denotes natural-gas-to-liquids, BH industrial by-product hydrogen, GH green hydrogen, FT Fischer–Tropsch synthesis, CCU industrial carbon capture and utilization, DAC direct air capture, and MTJ methanol-to-jet. The comparison reveals linked differences in cost, space and operations. In cost, GTL supplies 100.00% of demand at 6.50 yuan/kg, whereas CCU-GH-FT supplies 47.02% at 29.61 yuan/kg. In space, the 4-identifier demand-driven network of GTL and the 135-identifier resource-driven network of CCU-GH-FT differ upstream but show partial synthesis-site overlap: capacity matched within 25 km represents 8.3% and 14.9% of their respective installed synthesis capacities. In operations, their mean-utilization and additional worst-week capacity premiums are 15.96% and 47.70% for GTL, and 37.54% and 86.86% for CCU-GH-FT; CCU-GH-FT hydrogen-production utilization is 27.65%. These linked differences in cost, space and operations show that pathway switching can involve industrial regime reconstruction despite partial spatial continuity. This finding exposes the risk that net-zero scenarios overestimate the contribution of synthetic aviation fuels when they assume continuity between pathways with different infrastructure requirements, and provides empirical grounding for pathway-sensitive aviation decarbonization policy."
+        },
+        {
+          "location": "P21",
+          "text": "Stage decomposition reveals that the three representative pathways differ in the constituent elements of their production systems (Figure 1c–e). GTL and GTL-BH retain recognizable continuity through fossil-linked feedstock supply and fuel conversion. GTL-BH storage contributes 0.89 g CO₂e/MJ, or 0.79% of its supply-chain intensity. CCU-GH-FT combines industrial carbon capture, electrolytic hydrogen and fuel synthesis, bringing electricity supply and capture facilities into the cost–emission structure. The different combinations of feedstock, hydrogen, capture and synthesis facilities distribute cost burdens across different stages and call for different sources of cost reduction. Figures S28–S29 show the cost and positive-emission compositions, with capture credits identified separately. Figure S25 extends the comparison to all thirteen pathways, and Figs. S36–S48 show learning projections for fixed production designs and supplied quantities."
+        },
+        {
+          "location": "P42",
+          "text": "GTL’s average utilization coexists with prolonged low output concentrated in its worst representative week. It maintains fuel-synthesis mean utilization of 86.24% (Figure 3a), with an additional worst-week capacity premium of 47.70% and a mean-utilization capacity premium of 15.96%. The worst-week component accounts for 74.93% of the total premium of 63.66% (Figure 3b,c), and worst-week retention is 70.85%. Across the four weeks, 1 low-load episode lasts more than 12 h; the maximum duration is 168 h (Figure 3d). GTL meets each week’s demand, so prolonged low output reflects demand-following dispatch in the lowest-demand week. The distribution of production across weeks therefore has a central role in characterizing its operating requirements. All-pathway utilization distributions grouped by feedstock category are shown in Fig. S30; the four-panel overview in Fig. S31 reports worst-week retention, the two capacity-premium components and low-load episode statistics for all 13 pathways."
+        },
+        {
+          "location": "P61",
+          "text": "Here, the emissions-difference term is in tonnes CO₂e/year, the supplied fuel energy is in MJ/year, and the reference and synthetic-fuel intensities are in g CO₂e/MJ. The factor 10⁻⁶ converts grams to tonnes. Equation (2) requires a common accounting boundary for the two fuel intensities. Figure 1 reports supply-chain carbon intensity directly; Tables S21–S22 provide the combustion-inclusive accounts and captured-carbon attribution variants for comparison with the 89 g CO₂e/MJ reference."
+        },
+        {
+          "location": "P65",
+          "text": "Combustion emissions and capture attribution affect the carbon-intensity interpretation of CCU-GH-FT. Tables S21–S22 add combustion emissions of 72.229 g CO₂/MJ using the model’s 0.85 fuel-carbon fraction and 43.15 MJ/kg lower heating value. The baseline account is 15.035 g CO₂e/MJ; retaining the configured capture attribution and adding combustion gives 87.264 g CO₂e/MJ. Adding combustion without point-source capture attribution gives 159.492 g CO₂e/MJ. The accounting distinguishes carbon recycling from permanent removal; changes in the source process require separate assessment. Comparison with the 89 g CO₂e/MJ conventional-fuel reference requires a consistent accounting boundary and explicit attribution of captured carbon."
+        }
+      ]
+    },
+    "Supplementary_Information.docx": {
+      "old_numeric_values": [],
+      "old_computation_scope": [],
+      "CTL_infeasibility": [
+        {
+          "location": "P67",
+          "text": "Tables S6–S7 define 13 carbon–hydrogen–conversion cases. Twelve baseline configurations were recomputed, and GTL retains its archived baseline. Six electricity-dependent configurations also have fixed-production-asset alternative-week solutions, giving eighteen new solutions. CTL† denotes a partial-supply diagnostic with the original 90% output floor removed; its baseline resource bound establishes infeasibility with that floor. Cost and carbon intensity describe each configuration at its achieved demand-fulfillment level. Table S20 explains additional omitted combinations."
+        },
+        {
+          "location": "P69",
+          "text": "Other omissions reflect the comparison boundary. Supplementary hydrogen in a natural-gas FT chain, fossil-derived hydrogen for captured CO₂, coal-to-methanol upgrading, and other hybrid supply chains require explicit source, conversion and allocation choices. Their omission from Tables S6–S7 does not establish technical infeasibility or inferior performance. In particular, the retained natural-gas cases comprise an internally supplied FT reference and two externally supplied MTJ variants, so effects of hydrogen origin and conversion route cannot be isolated across that family."
+        },
+        {
+          "location": "P85",
+          "text": "Capacity bounds, production requirements and scenario activation rules determine feasible scale. The CTL implementation includes a 90% minimum-production requirement; its baseline necessary resource upper bound is 78.6147%. The partial-supply diagnostic removes only that requirement, and both week sets use this diagnostic scope. The COPT calculations target a 1% gap for the full objective, including shortage penalties. Unit production cost is reported separately."
+        },
+        {
+          "location": "P125",
+          "text": "Delivered fuel plus explicit shortage covers each airport-week demand. Shortage is penalized in the objective and reported in the results. This slack preserves feasibility only when the other production and resource restrictions are compatible. In particular, the baseline CTL model cannot satisfy its 90% production floor; Table S32 reports the partial-supply diagnostic and its fixed-production-asset alternative-week test."
+        },
+        {
+          "location": "P235",
+          "text": "Table S27 COPT 8.0.7 certificates for eighteen new solutions. A and B denote baseline and summer-inclusive weeks; the six by-product-hydrogen configurations have A solutions only. CTL† removes the original 90% output floor in both A and B. Seconds cover final dispatch only."
+        },
+        {
+          "location": "P255",
+          "text": "A: weeks 1, 5, 14 and 44. B: weeks 1, 14, 27 and 44. Utilization and premiums follow Section 7.3. Demand coverage is delivered fuel divided by selected demand. CTL† removes the original 90% minimum-production inequality in both sets; B fixes the production assets from diagnostic A."
+        },
+        {
+          "location": "P256",
+          "text": "Selected demand increases by 11.28%, from 51.051 to 56.807 million kg. Demand coverage in A/B is CCU-GH-FT: 47.02% / 47.21%; CCU-GH-MTJ: 31.26% / 31.54%; DAC-GH-FT: 47.02% / 47.09%; DAC-GH-MTJ: 31.26% / 31.41%; GTL-GH: 100.00% / 100.00%; CTL: 71.90% / 72.14%. Costs exclude shortage penalties and describe actual production."
+        },
+        {
+          "location": "P258",
+          "text": "CTL’s necessary renewable-energy-only production upper bounds are 78.6147% for A and 91.6590% for B, before synthesis electricity, logistics and installed-capacity restrictions. The A bound is below 90% and establishes infeasibility of the baseline formulation with that floor. The B bound exceeds 90% and does not establish infeasibility for its week set. Both CTL† results use the diagnostic formulation with the floor removed, with B fixing the production assets selected in diagnostic A."
+        },
+        {
+          "location": "T5/R1/C3",
+          "text": "The original 90% minimum-output case is infeasible. CTL† denotes the separately reported partial-supply diagnostic."
+        },
+        {
+          "location": "T10/R1/C3",
+          "text": "Original output ≥90% of demand is infeasible for baseline A; CTL† omits only this floor in A and B; LCO screen 50 CNY/kg"
+        },
+        {
+          "location": "T14/R1/C3",
+          "text": "Coal-linked FT production; H₂, carbon and SAF balances. Original 90% output floor infeasible; CTL† removes only this floor. Fossil-carbon accounting; no capture attribution."
+        },
+        {
+          "location": "T19/R5/C2",
+          "text": "Tables S6–S7 contain the CTL reference and its BH variant, without a full coal × hydrogen-source × synthesis-route matrix. Other variants require separate conversion yields, hydrogen requirements and process costs. No physical-infeasibility or cost-dominance claim is made for the omitted variants."
+        },
+        {
+          "location": "T28/R10/C1",
+          "text": "The original 90% minimum-service inequality is removed in A and B"
+        },
+        {
+          "location": "T28/R11/C1",
+          "text": "Necessary baseline supply upper bound: 78.6147% < 90%"
+        },
+        {
+          "location": "T28/R11/C2",
+          "text": "The bound establishes infeasibility of baseline A with the original service requirement. It does not establish infeasibility for the summer week set."
+        }
+      ],
+      "carbon_benchmark": [
+        {
+          "location": "P93",
+          "text": "The 13 pathway definitions form scenario-indexed instances of one mixed-integer linear framework. Each case activates cost, capacity, transport, demand and reporting blocks together with its specified hydrogen, carbon/feedstock, conversion and inventory modules. Resource units and temporal balances are consistent across the active blocks. Each instance uses one pathway configuration.89,90,91,92,94"
+        },
+        {
+          "location": "P103",
+          "text": "The model indexes hydrogen and carbon sources, synthesis locations and demand airports separately. Time indices include three-hour production and inventory periods, representative weeks for airport delivery and route-volume accounting, and days for GTL-GH and GTL-BH natural-gas allocation. Route and conversion families are selected by the scenario configuration.89,92"
+        },
+        {
+          "location": "P109",
+          "text": "Binary siting decisions activate continuous capacity. In Eq. (S4), q is fuel output during one three-hour period in kg, Q is hourly capacity in kg/h, and Δt = 3 h. Capacity bounds apply when the corresponding facility is built. Synthesis, hydrogen and DAC modules retain their scenario-specific activation rules.89,90"
+        },
+        {
+          "location": "P128",
+          "text": "Baseline carbon intensities cover configured upstream supply, production, storage, transport and facility contributions, with capture attribution where enabled, and exclude aircraft combustion. In Eq. (S11), the numerator terms are kg CO₂e over the reported horizon, the credited quantity is positive and subtracted, and the denominator is actual fuel energy in MJ; multiplication by 1,000 gives g CO₂e/MJ. Fuel energy content is 43.15 MJ/kg. In Eq. (S12), Q is annual supplied fuel energy in MJ and R is tonnes CO₂e/year, requiring the factor 10⁻⁶ when intensities are in g/MJ. Comparisons with the 89 g CO₂e/MJ conventional-jet benchmark require a common combustion-inclusive boundary. Captured fuel carbon does not constitute permanent removal.9,87,106 Storage electricity uses the mean of the opening and closing stocks in each three-hour interval, summed over the 224 represented intervals (672 h). SAF storage intensities expressed in kWh/(t·day) use inventory in tonnes and 3/24 day per period; hydrogen storage intensities expressed in kWh/(kg·day) use inventory in kilograms and the same duration. Storage electricity emissions use the configured electricity-emissions coefficients and wind–solar weighting rule. Storage-energy emissions include the saved hydrogen inventories at supply and receiving locations. By-product-hydrogen configurations use the configured industrial-grid coefficient; renewable-electrolysis configurations retain the configured wind–solar weighting rule."
+        },
+        {
+          "location": "P321",
+          "text": "61. Chen, M. The development of Chinese gas pricing: drivers, challenges and implications for demand. OIES Paper NG 89, Oxford Institute for Energy Studies https://doi.org/10.26889/9781784670078 (2014)."
+        },
+        {
+          "location": "P349",
+          "text": "89. Dal-Mas, M., Giarola, S., Zamboni, A. & Bezzo, F. Strategic design and investment capacity planning of the ethanol supply chain under price uncertainty. Biomass Bioenergy 35, 2059–2071 (2011)."
+        },
+        {
+          "location": "T11/R1/C1",
+          "text": "89 gCO2e/MJ"
+        },
+        {
+          "location": "T17/R7/C7",
+          "text": "66.89"
+        },
+        {
+          "location": "T22/R10/C5",
+          "text": "89.52"
+        },
+        {
+          "location": "T22/R12/C2",
+          "text": "79.89"
+        },
+        {
+          "location": "T24/R12/C1",
+          "text": "81.65–89.59"
+        },
+        {
+          "location": "T31/R7/C6",
+          "text": "89.52"
+        }
+      ]
+    },
+    "Supplementary_Figure_Archive.docx": {
+      "old_numeric_values": [],
+      "old_computation_scope": [],
+      "CTL_infeasibility": [
+        {
+          "location": "P44",
+          "text": "Figure S36. Fixed-design cost projection and positive supply-chain carbon composition for CTL. Polar bars show 2026–2036 category costs under the common learning assumptions; the outer ring and carbon donut show positive baseline emissions before credits, in g CO₂e/MJ. The cost donut partitions baseline expenditure excluding shortage penalties. Design, dispatch, output and service remain fixed; aircraft combustion is excluded. CTL uses the partial-supply diagnostic at 71.90% service. Table S21 reports service and carbon-accounting variants."
+        },
+        {
+          "location": "P74",
+          "text": "Figure S51. Selected facilities and positive-flow transport connections for CTL. The CTL partial-supply diagnostic achieves 71.90% demand fulfillment with the 90% minimum-production requirement omitted. Airport colour distinguishes the presence or absence of selected SAF conversion at that airport. Endpoint-only transport records are shown as schematic connections; distance metrics use the recorded model route distances."
+        }
+      ],
+      "carbon_benchmark": []
+    }
+  },
+  "all_prepared_replacements_present": true,
+  "all_prepared_tables_match": true
+}

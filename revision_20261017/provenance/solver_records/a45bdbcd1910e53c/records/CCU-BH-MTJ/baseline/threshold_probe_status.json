@@ -1,0 +1,102 @@
+[
+  {
+    "threshold": 0.01,
+    "status": 1,
+    "has_solution": true,
+    "selected_binary_count": 73,
+    "seconds": 11.745288610458374,
+    "bound_source": "root_lp_status.json",
+    "source_sha256": {
+      "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+      "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+      "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c",
+      "root_lp_values.npz": "28962bf48c4188d90ee8d6101bda983f67525c8e67ef553234868c557a484ca8"
+    },
+    "max_row_error": 2.4854671210050583e-08,
+    "max_bound_error": 1.0071939219155215e-08,
+    "max_integer_error": 0.0,
+    "objective": 72922052917.10443,
+    "lower_bound": 70940702913.18297,
+    "gap": 0.027170792985954487
+  },
+  {
+    "threshold": 0.03,
+    "status": 1,
+    "has_solution": true,
+    "selected_binary_count": 73,
+    "seconds": 11.653776168823242,
+    "bound_source": "root_lp_status.json",
+    "source_sha256": {
+      "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+      "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+      "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c",
+      "root_lp_values.npz": "28962bf48c4188d90ee8d6101bda983f67525c8e67ef553234868c557a484ca8"
+    },
+    "max_row_error": 2.4854671210050583e-08,
+    "max_bound_error": 1.0071939219155215e-08,
+    "max_integer_error": 0.0,
+    "objective": 72922052917.10443,
+    "lower_bound": 70940702913.18297,
+    "gap": 0.027170792985954487
+  },
+  {
+    "threshold": 0.05,
+    "status": 1,
+    "has_solution": true,
+    "selected_binary_count": 71,
+    "seconds": 9.482577562332153,
+    "bound_source": "root_lp_status.json",
+    "source_sha256": {
+      "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+      "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+      "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c",
+      "root_lp_values.npz": "28962bf48c4188d90ee8d6101bda983f67525c8e67ef553234868c557a484ca8"
+    },
+    "max_row_error": 1.5634725514246384e-08,
+    "max_bound_error": 1.4529632608173415e-08,
+    "max_integer_error": 0.0,
+    "objective": 72458145248.74257,
+    "lower_bound": 70940702913.18297,
+    "gap": 0.02094232926264331
+  },
+  {
+    "threshold": 0.1,
+    "status": 1,
+    "has_solution": true,
+    "selected_binary_count": 68,
+    "seconds": 21.22002148628235,
+    "bound_source": "root_lp_status.json",
+    "source_sha256": {
+      "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+      "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+      "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c",
+      "root_lp_values.npz": "28962bf48c4188d90ee8d6101bda983f67525c8e67ef553234868c557a484ca8"
+    },
+    "max_row_error": 1.7892120673934642e-08,
+    "max_bound_error": 2.404831800362217e-08,
+    "max_integer_error": 0.0,
+    "objective": 72528346600.32516,
+    "lower_bound": 70940702913.18297,
+    "gap": 0.02188997490720516
+  },
+  {
+    "threshold": 0.2,
+    "status": 1,
+    "has_solution": true,
+    "selected_binary_count": 64,
+    "seconds": 0.14579272270202637,
+    "bound_source": "root_lp_status.json",
+    "source_sha256": {
+      "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+      "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+      "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c",
+      "root_lp_values.npz": "28962bf48c4188d90ee8d6101bda983f67525c8e67ef553234868c557a484ca8"
+    },
+    "max_row_error": 0.0,
+    "max_bound_error": 0.0,
+    "max_integer_error": 0.0,
+    "objective": 16289829158248.908,
+    "lower_bound": 70940702913.18297,
+    "gap": 0.995645092270519
+  }
+]

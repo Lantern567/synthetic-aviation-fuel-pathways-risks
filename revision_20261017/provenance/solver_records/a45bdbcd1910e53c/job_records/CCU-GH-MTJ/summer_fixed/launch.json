@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_final_ccu",
+  "scenario": "CCU-GH-MTJ",
+  "label": "summer_fixed",
+  "pid": 1779317,
+  "launched_unix": 1792229567.9195416,
+  "from_stage": "model"
+}

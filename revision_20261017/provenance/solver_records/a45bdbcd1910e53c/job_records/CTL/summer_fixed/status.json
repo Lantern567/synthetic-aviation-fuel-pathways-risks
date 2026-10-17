@@ -1,0 +1,48 @@
+{
+  "scenario": "CTL",
+  "label": "summer_fixed",
+  "stage": "hydrogen_transport",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 0,
+      "seconds": 52.06916952133179
+    },
+    {
+      "stage": "projection",
+      "exit_code": 0,
+      "seconds": 27.577964305877686
+    },
+    {
+      "stage": "design",
+      "exit_code": 0,
+      "seconds": 45.96667504310608
+    },
+    {
+      "stage": "dispatch",
+      "exit_code": 0,
+      "seconds": 64.79455041885376
+    },
+    {
+      "stage": "certificate",
+      "exit_code": 0,
+      "seconds": 0.033241987228393555
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 75.07315158843994
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 4.188961744308472
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 3.9543919563293457
+    }
+  ]
+}

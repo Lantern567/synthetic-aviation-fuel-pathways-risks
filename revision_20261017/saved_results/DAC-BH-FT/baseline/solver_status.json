@@ -1,0 +1,21 @@
+{
+  "scenario": "DAC-BH-FT",
+  "label": "baseline",
+  "solver": "COPT",
+  "version": "8.0.7",
+  "status": "verified_decomposition_certificate",
+  "has_solution": true,
+  "seconds": 15.330928087234497,
+  "columns": 2064366,
+  "rows": 216580,
+  "route_calls": 132,
+  "electricity_scope": "Byproduct hydrogen is limited by the archived kg/h source availability and selected conditioning capacity in every three-hour interval; it provides no renewable electricity. DAC grid purchases cover DAC only. Hydrogen component costs include selected conditioning equipment and grid electricity; conditioning and synthesis use grid electricity, and hydrogen carbon includes the configured industrial-source upstream allocation plus conditioning electricity.",
+  "initial_solution_only": false,
+  "fixed_production_assets": false,
+  "fixed_asset_scope": "SAF and electrolyzer build/capacity; DAC build where present. Auxiliary inventory/transport use retains original optimization rules.",
+  "method": "Full original MPS dispatch with all design integers and H2/CO2 weekly contracts fixed; every original row and original bound independently evaluated.",
+  "model_scope": {
+    "original_minimum_service_constraints_retained": true
+  },
+  "seconds_scope": "Final full-model dispatch solve only"
+}

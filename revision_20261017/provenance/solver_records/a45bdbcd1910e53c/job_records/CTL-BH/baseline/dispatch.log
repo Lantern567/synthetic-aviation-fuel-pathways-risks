@@ -1,0 +1,149 @@
+Cardinal Optimizer v8.0.7. Build date Sep 20 2026
+Copyright Cardinal Operations 2026. All Rights Reserved
+
+Reading from '/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/runs/CTL-BH/baseline/model.mps.gz'
+Reading switch to free MPS format
+Reading finished (3.65s)
+Setting parameter 'LpMethod' to 2
+Setting parameter 'Crossover' to 1
+Setting parameter 'Threads' to 8
+Setting parameter 'TimeLimit' to 1200
+Setting parameter 'FeasTol' to 1e-07
+Setting parameter 'DualTol' to 1e-07
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/decomposed_runs/CTL-BH/baseline/repair_rounded.log
+Model fingerprint: 55068a30
+
+Using Cardinal Optimizer v8.0.7 (e9a62f7d0e) on Linux (Ubuntu 22.04.5 LTS - x86_64)
+The CPU model is AMD EPYC 9654 96-Core Processor
+Hardware has 192 physical cores and 384 logical cores. Using instruction set X86_NATIVE (1)
+Minimizing an LP problem (solving MIP as LP)
+
+The original problem has:
+    139625 rows, 1025262 columns and 3288920 non-zero elements
+The presolved problem has:
+    48685 rows, 33152 columns and 220382 non-zero elements
+
+Starting barrier solver using 8 CPU threads
+
+Problem info:
+    Dualized in presolve:            No
+    Range of matrix coefficients:    [3e-02,4e+02]
+    Range of rhs coefficients:       [6e+00,2e+08]
+    Range of bound coefficients:     [8e-02,2e+06]
+    Range of cost coefficients:      [9e-03,3e+02]
+
+Factor info:
+    Number of free columns:          0
+    Number of dense columns:         238
+    Number of matrix entries:        4.482e+05
+    Number of factor entries:        9.549e+05
+    Number of factor flops:          5.050e+07
+
+Iter       Primal.Obj         Dual.Obj      Compl  Primal.Inf  Dual.Inf    Time
+   0  +9.49432474e+06  -1.01524251e+07   1.30e+12    2.68e+10  3.31e+02   1.02s
+   1  +7.74280673e+06  -8.40033967e+06   9.82e+11    2.08e+10  2.45e+02   1.05s
+   2  +2.67941148e+06  -7.07769413e+06   3.29e+11    8.72e+09  5.73e+01   1.09s
+   3  +1.05309536e+06  -5.47954082e+06   1.37e+11    2.93e+09  3.17e+01   1.12s
+   4  +6.33227251e+05  -4.79526063e+06   8.89e+10    1.45e+09  2.58e+01   1.15s
+   5  +4.51567581e+05  -3.22016497e+06   5.04e+10    8.26e+08  1.49e+01   1.18s
+   6  +3.29054743e+05  -2.54550133e+06   3.29e+10    4.43e+08  1.12e+01   1.22s
+   7  +2.97318049e+05  -1.87882467e+06   2.41e+10    3.45e+08  8.10e+00   1.25s
+   8  +2.73373278e+05  -1.59014405e+06   1.99e+10    2.80e+08  6.86e+00   1.28s
+   9  +2.30059599e+05  -6.74682086e+05   8.89e+09    1.43e+08  2.91e+00   1.32s
+  10  +1.92803201e+05  -2.62221827e+05   3.33e+09    4.49e+07  1.16e+00   1.35s
+  11  +1.33194762e+05  -9.55994920e+04   1.31e+09    1.04e+07  5.32e-01   1.39s
+  12  +9.82391970e+04  -2.87214644e+04   6.39e+08    4.15e+06  2.78e-01   1.43s
+  13  +7.88807022e+04  +3.03911619e+03   3.46e+08    1.81e+06  1.63e-01   1.48s
+  14  +6.90188813e+04  +3.14990333e+04   1.43e+08    9.27e+05  6.37e-02   1.52s
+  15  +6.16955198e+04  +3.93073375e+04   7.74e+07    4.51e+05  3.72e-02   1.56s
+  16  +5.87646437e+04  +4.47433423e+04   4.32e+07    2.97e+05  1.96e-02   1.61s
+  17  +5.66068717e+04  +4.76021599e+04   2.49e+07    2.06e+05  1.01e-02   1.65s
+  18  +5.52478702e+04  +4.91064965e+04   1.56e+07    1.54e+05  5.18e-03   1.70s
+  19  +5.41808098e+04  +5.02404127e+04   8.99e+06    1.16e+05  1.62e-03   1.74s
+  20  +5.28030508e+04  +5.06866235e+04   4.60e+06    6.77e+04  4.77e-04   1.79s
+  21  +5.21283287e+04  +5.08215603e+04   2.80e+06    4.36e+04  1.85e-04   1.83s
+  22  +5.17540390e+04  +5.09005422e+04   1.81e+06    2.96e+04  8.13e-05   1.88s
+  23  +5.15240042e+04  +5.09451561e+04   1.22e+06    2.08e+04  3.77e-05   1.93s
+  24  +5.13585422e+04  +5.09836995e+04   7.90e+05    1.41e+04  1.35e-05   1.97s
+  25  +5.12569441e+04  +5.10021311e+04   5.36e+05    9.96e+03  5.56e-06   2.02s
+  26  +5.11872485e+04  +5.10145450e+04   3.63e+05    6.99e+03  2.37e-06   2.06s
+  27  +5.11555083e+04  +5.10202904e+04   2.84e+05    5.62e+03  1.09e-06   2.10s
+  28  +5.11353999e+04  +5.10235995e+04   2.35e+05    4.74e+03  4.89e-07   2.15s
+  29  +5.11195926e+04  +5.10253889e+04   1.98e+05    4.06e+03  1.92e-07   2.19s
+  30  +5.11056444e+04  +5.10267197e+04   1.66e+05    3.44e+03  4.89e-08   2.23s
+  31  +5.10963454e+04  +5.10271961e+04   1.45e+05    3.03e+03  1.33e-08   2.28s
+  32  +5.10865910e+04  +5.10273409e+04   1.25e+05    2.60e+03  6.68e-09   2.32s
+  33  +5.10732578e+04  +5.10277576e+04   9.57e+04    2.01e+03  3.72e-09   2.37s
+  34  +5.10636026e+04  +5.10281149e+04   7.46e+04    1.57e+03  2.14e-09   2.41s
+  35  +5.10513034e+04  +5.10283900e+04   4.82e+04    1.01e+03  1.47e-09   2.45s
+  36  +5.10454150e+04  +5.10287325e+04   3.51e+04    7.40e+02  1.03e-09   2.50s
+  37  +5.10395184e+04  +5.10290539e+04   2.20e+04    4.66e+02  5.86e-10   2.54s
+  38  +5.10356481e+04  +5.10292734e+04   1.34e+04    2.84e+02  3.58e-10   2.59s
+  39  +5.10329478e+04  +5.10297834e+04   6.66e+03    1.52e+02  3.43e-11   2.63s
+  40  +5.10305935e+04  +5.10298914e+04   1.48e+03    3.45e+01  3.01e-12   2.68s
+  41  +5.10300438e+04  +5.10299182e+04   2.65e+02    6.27e+00  3.98e-13   2.73s
+  42  +5.10299223e+04  +5.10299217e+04   1.16e+00    2.74e-02  9.72e-14   2.78s
+  43  +5.10299219e+04  +5.10299218e+04   3.46e-02    9.88e-04  1.28e-11   2.89s
+  44  +5.10299219e+04  +5.10299234e+04   3.43e-02    1.36e-03  1.00e-04   2.99s
+  45  +5.10299219e+04  +5.10299662e+04   9.40e-03    1.04e-03  1.27e-05   3.09s
+  46  +5.10299218e+04  +5.10299682e+04   8.50e-03    1.23e-03  1.13e-05   3.17s
+  47  +5.10299218e+04  +5.10299386e+04   8.48e-04    1.24e-03  2.09e-06   3.25s
+  48  +5.10299218e+04  +5.10299230e+04   2.16e-04    2.20e-04  1.56e-07   3.33s
+  49  +5.10299218e+04  +5.10299222e+04   5.23e-05    1.11e-04  2.82e-08   3.41s
+  50  +5.10299218e+04  +5.10301046e+04   5.23e-05    1.10e-04  1.00e-04   3.51s
+  51  +5.10299218e+04  +5.10301409e+04   5.22e-05    1.10e-04  1.24e-04   3.59s
+  52  +5.10299218e+04  +5.10299292e+04   3.06e-05    3.96e-05  3.79e-06   3.72s
+  53  +5.10299218e+04  +5.10299258e+04   8.96e-07    1.37e-04  1.22e-06   3.79s
+  54  +5.10299218e+04  +5.10299251e+04   3.91e-07    6.88e-05  9.84e-07   3.86s
+  55  +5.10299218e+04  +5.10299247e+04   2.44e-07    4.15e-05  8.64e-07   3.93s
+  56  +5.10299218e+04  +5.10299239e+04   1.77e-07    1.33e-05  6.23e-07   4.00s
+  57  +5.10299218e+04  +5.10299238e+04   1.69e-07    1.37e-05  6.00e-07   4.07s
+  58  +5.10299218e+04  +5.10299230e+04   9.15e-08    5.70e-06  3.62e-07   4.13s
+  59  +5.10299218e+04  +5.10299229e+04   7.86e-08    3.51e-06  3.11e-07   4.20s
+  60  +5.10299218e+04  +5.10299229e+04   7.61e-08    1.53e-05  3.11e-07   4.27s
+  61  +5.10299218e+04  +5.10299228e+04   6.38e-08    9.04e-06  2.80e-07   4.34s
+  62  +5.10299218e+04  +5.10299226e+04   4.51e-08    5.38e-06  2.19e-07   4.41s
+  63  +5.10299218e+04  +5.10299221e+04   1.50e-08    3.49e-06  6.47e-08   4.49s
+  64  +5.10299218e+04  +5.10299220e+04   1.13e-08    3.18e-06  4.80e-08   4.56s
+  65  +5.10299218e+04  +5.10299219e+04   6.35e-09    4.73e-06  2.97e-08   4.63s
+  66  +5.10299218e+04  +5.10299219e+04   4.92e-09    4.79e-06  2.15e-08   4.70s
+  67  +5.10299218e+04  +5.10299219e+04   4.84e-09    4.97e-06  2.12e-08   4.77s
+  68  +5.10299218e+04  +5.10299219e+04   2.41e-09    3.46e-06  8.83e-09   4.83s
+  69  +5.10299218e+04  +5.10299219e+04   2.02e-09    2.91e-06  6.86e-09   4.91s
+  70  +5.10299218e+04  +5.10299219e+04   1.90e-09    3.72e-06  6.49e-09   4.98s
+  71  +5.10299218e+04  +5.10299219e+04   1.43e-09    4.46e-06  5.43e-09   5.05s
+  72  +5.10299218e+04  +5.10299219e+04   1.07e-09    8.36e-06  4.03e-09   5.12s
+  73  +5.10299218e+04  +5.10299219e+04   7.81e-10    2.15e-06  3.16e-09   5.18s
+  74  +5.10299218e+04  +5.10299219e+04   5.81e-10    3.85e-06  2.21e-09   5.24s
+  75  +5.10299218e+04  +5.10299219e+04   3.55e-10    1.26e-06  1.25e-09   5.31s
+  76  +5.10299218e+04  +5.10299218e+04   2.53e-10    3.12e-07  9.53e-10   5.37s
+  77  +5.10299218e+04  +5.10299218e+04   1.46e-10    3.55e-06  5.64e-10   5.43s
+  78  +5.10299218e+04  +5.10299218e+04   9.63e-11    5.39e-06  3.46e-10   5.50s
+  79  +5.10299218e+04  +5.10299218e+04   6.61e-11    3.43e-06  1.93e-10   5.56s
+
+Barrier status:                  OPTIMAL
+Primal objective:                5.10299218e+04
+Dual objective:                  5.10299218e+04
+Duality gap (abs/rel):           6.40e-07 / 1.25e-11
+Primal infeasibility (abs/rel):  3.43e-06 / 2.33e-15
+Dual infeasibility (abs/rel):    1.93e-10 / 5.91e-13
+
+Starting crossover using up to 8 threads
+
+     737 primal pushes remaining      5.58s
+       0 primal pushes remaining      5.58s
+   32412 dual pushes remaining        5.58s
+   29980 dual pushes remaining        5.59s
+   25390 dual pushes remaining        5.65s
+   15659 dual pushes remaining        5.72s
+    2320 dual pushes remaining        5.86s
+       0 dual pushes remaining        5.90s
+
+Method   Iteration           Objective  Primal.NInf   Dual.NInf        Time
+Dual         10032    5.1029921847e+04            0           0       5.92s
+Postsolving
+Dual         10032    5.1029921847e+04            0           0       5.98s
+
+Solving finished
+Status: Optimal  Objective: 5.1029921847e+04  Iterations: 79(10032)  Time: 5.98s
+REPAIR_COMPLETE {"status": 1, "has_solution": true, "source_iteration": "rounded", "seconds": 5.982500076293945, "objective": 51029921846.571945, "lower_bound": 46499342595.37807, "max_constraint_residual": 1.862645149230957e-08, "max_bound_residual": 7.450580596923828e-09, "max_integer_violation": 0.0, "gap": 0.08878279815547534, "physically_feasible_algebraically": true, "source_sha256": "46f3272d4828a5b01993b1563e40d67fced4f0546c8d0bc82061490af9f8e397", "column_name_sha256": "9fd4b648da8d7783d79162187257c2ea3998efbdb5bb8d7fcdace76594a1125c", "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection"}

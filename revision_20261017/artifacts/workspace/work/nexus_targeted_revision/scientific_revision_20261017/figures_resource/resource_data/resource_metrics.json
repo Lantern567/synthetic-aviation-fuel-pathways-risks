@@ -1,0 +1,31 @@
+{
+  "wind": {
+    "candidate_plants": 44,
+    "capacity_mw": 3596.5,
+    "capacity_ac_mw": 3596.5,
+    "hours": 2016,
+    "energy_mwh": 2562637.1141867973,
+    "capacity_factor_median": 0.3492290869818019,
+    "full_load_hours_median": 704.0458393553126,
+    "availability_percentiles_5_95": [
+      32.636307251929395,
+      38.63124842587702
+    ]
+  },
+  "solar": {
+    "candidate_plants": 65,
+    "capacity_mw": 632.1666666666667,
+    "capacity_ac_mw": 632.1666666666667,
+    "hours": 2016,
+    "energy_mwh": 205397.7324038933,
+    "capacity_factor_median": 0.15782517968253967,
+    "full_load_hours_median": 318.17556224,
+    "availability_percentiles_5_95": [
+      15.626657301587302,
+      16.76569781587301
+    ]
+  },
+  "scope": "109 model candidate projects; twelve selected weeks (2016 h)",
+  "capacity_definition": "AC nominal power",
+  "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt\u7684\u6587\u7ae0\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\renewable_12weeks.csv"
+}

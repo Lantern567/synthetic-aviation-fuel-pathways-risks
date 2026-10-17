@@ -1,0 +1,21 @@
+{
+  "scenario": "GTL-BH",
+  "label": "baseline",
+  "solver": "COPT",
+  "version": "8.0.7",
+  "status": "verified_decomposition_certificate",
+  "has_solution": true,
+  "seconds": 2.3446359634399414,
+  "columns": 940476,
+  "rows": 734610,
+  "route_calls": 6002,
+  "electricity_scope": "Industrial byproduct supply is measured in kg H2/hour, with each interval limited by the selected conditioning capacity and the actual three-hour source availability. Conditioning and synthesis use grid electricity; no renewable power is assigned to industrial sources.",
+  "initial_solution_only": false,
+  "fixed_production_assets": false,
+  "fixed_asset_scope": "SAF and electrolyzer build/capacity; DAC build where present. Auxiliary inventory/transport use retains original optimization rules.",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection",
+  "model_scope": {
+    "original_minimum_service_constraints_retained": true
+  },
+  "seconds_scope": "Final full-model dispatch solve only"
+}

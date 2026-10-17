@@ -1,0 +1,4542 @@
+{
+  "scenario": "GTL-BH",
+  "passed": true,
+  "checks": {
+    "calendar_days": 28,
+    "periods_per_day": 8,
+    "complete_route_day_coverage": true,
+    "complete_technology_route_day_coverage": true,
+    "incompatible_technology_route_count": 0,
+    "route_technology_allocation_error_m3": 0.0,
+    "technology_daily_supply_error_m3": 0.0,
+    "unrouted_industrial_technology_demand_m3": 0.0,
+    "daily_truck_capacity_excess_m3": 0.0,
+    "lng_daily_source_capacity_excess_m3": 0
+  },
+  "ledger_checks": {
+    "ng_transport_operation": {
+      "reported": 0.0,
+      "independently_recomputed": 0.0,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    "ng_transport_carbon": {
+      "reported": 0.0,
+      "independently_recomputed": 0.0,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    "ng_upstream_carbon": {
+      "reported": 10210185.114581086,
+      "independently_recomputed": 10210185.114581017,
+      "absolute_error": 6.891787052154541e-08,
+      "passed": true
+    }
+  },
+  "incompatible_routes": [],
+  "ng_required_m3": 40840740.45832407,
+  "explicit_ng_transport_m3": 0.0,
+  "positive_explicit_ng_route_day_count": 0,
+  "airport_integrated_ng_m3": 40840740.45832407,
+  "airport_integrated_saf_kg": 51050925.57290508,
+  "lng_daily_accounts": [
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_1",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_2",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_3",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_4",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 20416.43835616438,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_5",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_6",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_8",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_9",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_53",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_56",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 3402.739726027397,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_60",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_61",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 6805.479452054795,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_63",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_64",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 8847.123287671233,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_68",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 22117.80821917808,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_69",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_70",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_79",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 7486.027397260275,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_80",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 10208.21917808219,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 0,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 1,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 2,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 3,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 4,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 5,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 6,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 7,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 8,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 9,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 10,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 11,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 12,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 13,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 14,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 15,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 16,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 17,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 18,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 19,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 20,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 21,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 22,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 23,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 24,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 25,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 26,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    },
+    {
+      "source": "lng_lng_terminal_81",
+      "day": 27,
+      "onsite_m3": 0.0,
+      "outbound_m3": 0.0,
+      "capacity_m3": 17013.69863013699,
+      "excess_m3": 0
+    }
+  ],
+  "ng_transport_cost_curve": {
+    "intercept_cny_per_m3": 0.927,
+    "slope_cny_per_m3_km": 0.000452,
+    "lifecycle_factor": 127.63591629684072,
+    "source": "Frozen corrected_model.py NG transport expression"
+  },
+  "scope": "Explicit NG route allocation uses all 28 days and separates the two industrial conversion technologies. Airport-integrated NG is procured within its original integrated-supply boundary; zero explicit flow is recorded directly.",
+  "validator_source_sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+  "solution_summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+  "input_sha256": {
+    "summary.json": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+    "model_parameters.json": "d7f107481b2cd1b94de145e1e1e71ae072dfbc1da7a6afb0bc4b7be80b9161b7",
+    "natural_gas_parameters.json": "1451b2b5f721204e895ead4b1ad773ed9e13a12efefa55d6aaa1f4f6b67d924e",
+    "config.yaml": "0c2d1948ee5ecfe278ab3738027d64884b7b4f056423e6c17e5c86892e253f7d",
+    "ng_flows.csv": "324c536e6792b648d87de3ccb1bcc2ca77d99f7534ca26bcd4d90fd1a57b006e",
+    "ng_technology_flows.csv": "6f64a19aadedeb4749c3786541e1ed6033333e987c34672124f3d7b72eae1a87",
+    "saf_production.csv": "514aa8b6e51bfe786b364ee677fd99c54863ae0d6db305734033c4b14db3072b"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_final_ccu",
+  "scenario": "CCU-GH-MTJ",
+  "label": "baseline",
+  "pid": 1749905,
+  "launched_unix": 1792229164.4530551,
+  "from_stage": "model"
+}

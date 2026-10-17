@@ -1,0 +1,193 @@
+{
+  "scenario": "DAC-BH-FT",
+  "label": "baseline",
+  "run": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline",
+  "independent_source_input": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/byproduct_hydrogen_periods.csv",
+  "periods": 224,
+  "weeks": 4,
+  "hours_per_period": 3.0,
+  "source_candidates": 64,
+  "source_input_unit": "kg hydrogen per hour; multiplied by three hours for each period",
+  "hydrogen_route_limit_kg_per_day": 50000.0,
+  "checks": {
+    "max_availability_export_error_kg": 7.275957614183426e-12,
+    "max_h2_source_supply_excess_kg": 1.8968648873851635e-10,
+    "max_h2_node_period_balance_error_kg": 7.9016899690032e-09,
+    "h2_global_balance_error_kg": -3.725290298461914e-09,
+    "max_h2_initial_inventory_kg": 0.0,
+    "max_h2_conditioning_capacity_excess_kg": 6.784262041037437e-11,
+    "max_h2_build_capacity_excess_kg_per_hour": 0.0,
+    "max_h2_period_route_capacity_excess_kg": 0.0,
+    "max_h2_week_contract_difference_kg": 1.6270860214717686e-09,
+    "max_fuel_node_period_balance_error_kg": 1.0477378964424133e-08,
+    "max_fuel_initial_inventory_kg": 0.0,
+    "max_fuel_capacity_excess_kg": 3.456079866737127e-11,
+    "max_fuel_build_capacity_excess_kg_per_hour": 0.0,
+    "max_airport_week_demand_balance_error_kg": 1.862645149230957e-09,
+    "minimum_material_kg": -2.073967664273368e-09
+  },
+  "summary_checks": {
+    "production_kg": {
+      "actual": 46200000.00000002,
+      "expected": 46200000.000000015,
+      "error": 7.450580596923828e-09,
+      "tolerance": 0.46200000000000013,
+      "passed": true
+    },
+    "demand_kg": {
+      "actual": 51050925.57290508,
+      "expected": 51050925.57290507,
+      "error": 7.450580596923828e-09,
+      "tolerance": 0.5105092557290507,
+      "passed": true
+    },
+    "shortage_kg": {
+      "actual": 4850925.572905049,
+      "expected": 4850925.572905049,
+      "error": 0.0,
+      "tolerance": 0.04850925572905049,
+      "passed": true
+    },
+    "demand_fulfillment_ratio": {
+      "actual": 0.9049786949312503,
+      "expected": 0.9049786949312503,
+      "error": 0.0,
+      "tolerance": 9.049786949312503e-09,
+      "passed": true
+    }
+  },
+  "cost_ledger_checks": {
+    "hydrogen_internal_cost_cny": {
+      "actual": 0.0,
+      "expected": 0.0,
+      "error": 0.0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "combined_hydrogen_and_synthesis_electricity_cny": {
+      "actual": 30869639807.80352,
+      "expected": 30869639807.80501,
+      "error": -0.001491546630859375,
+      "tolerance": 308.69639807805015,
+      "passed": true
+    },
+    "source_equipment_investment_cny": {
+      "actual": 7728174391.140011,
+      "expected": 7728174391.140012,
+      "error": -9.5367431640625e-07,
+      "tolerance": 77.28174391140011,
+      "passed": true
+    },
+    "investment_component_sum_cny": {
+      "actual": 17525458038.527493,
+      "expected": 17525458038.5275,
+      "error": -7.62939453125e-06,
+      "tolerance": 175.254580385275,
+      "passed": true
+    },
+    "operating_component_sum_cny": {
+      "actual": 135974851495.91641,
+      "expected": 135974851496.00458,
+      "error": -0.088165283203125,
+      "tolerance": 1359.748514960046,
+      "passed": true
+    },
+    "total_cost_excluding_shortage_cny": {
+      "actual": 153500309534.50226,
+      "expected": 153500309534.4439,
+      "error": 0.058349609375,
+      "tolerance": 1535.003095344439,
+      "passed": true
+    },
+    "reported_unit_cost_cny_per_kg": {
+      "actual": 26.031211423786832,
+      "expected": 26.031211423786853,
+      "error": -2.1316282072803006e-14,
+      "tolerance": 0.001,
+      "passed": true
+    }
+  },
+  "source_carbon_checks": {
+    "hydrogen_upstream_and_conditioning_kg_co2e": {
+      "actual": 469035469.3302399,
+      "expected": 469035469.330243,
+      "error": -3.0994415283203125e-06,
+      "tolerance": 4.69035469330243,
+      "passed": true
+    },
+    "fuel_synthesis_grid_energy_kg_co2e": {
+      "actual": 210672000.00000837,
+      "expected": 210672000.00000015,
+      "error": 8.225440979003906e-06,
+      "tolerance": 2.1067200000000015,
+      "passed": true
+    },
+    "conditioning_electricity_kwh": {
+      "actual": 51975000.00000045,
+      "expected": 51975000.00000001,
+      "error": 4.3958425521850586e-07,
+      "tolerance": 0.51975,
+      "passed": true
+    },
+    "source_synthesis_electricity_kwh": {
+      "actual": 346760354.51157457,
+      "expected": 346760354.5115733,
+      "error": 1.2516975402832031e-06,
+      "tolerance": 3.4676035451157334,
+      "passed": true
+    }
+  },
+  "accounting_mode": "component_cost",
+  "configuration_consistency": {
+    "h2_energy_kwh_per_kg": {
+      "actual": 2.5,
+      "expected": 2.5,
+      "error": 0.0,
+      "tolerance": 2.5e-08,
+      "passed": true
+    },
+    "hydrogen_internal_cny_per_kg": {
+      "actual": 0.0,
+      "expected": 0.0,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    "conditioning_electricity_cny_per_kwh": {
+      "actual": 0.6,
+      "expected": 0.6,
+      "error": 0.0,
+      "tolerance": 6e-09,
+      "passed": true
+    }
+  },
+  "physics_passed": true,
+  "co2_validation_passed": true,
+  "hydrogen_transport_validation_passed": true,
+  "cost_ledger_recalculation_passed": true,
+  "configured_component_costs_used": true,
+  "h2_upstream_carbon_validated_here": true,
+  "cost_scope": "Component-cost accounting of selected conditioning equipment, grid energy and any explicitly configured internal charge; no separate hydrogen feedstock price is added. Source-specific upstream allocation is checked numerically; its external validity is outside this check.",
+  "source_supply_provenance_scope": "Checks the full archived candidate input profile and its period expansion; raw industrial production observations are outside these supplied inputs.",
+  "passed": true,
+  "input_sha256": {
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/config.yaml": "54cd605086f73195467ca8a9574bf464bef2e9e6caf45f34bf30b3b020657557",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/model_parameters.json": "f9cc10aad66132e28822d48afa161c2d9f0c23fee2c78442c9f2d1cffc4f2c87",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/summary.json": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/byproduct_accounting_parameters.json": "26f81a12862e4960f80e7184052e484ae79a3d2866d7577f4674d74eaac85334",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/byproduct_hydrogen_availability.csv": "d508ca22fa85faab5abd04c7dca0a11c1087b56e286872cfbab18d112a577672",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/h2_production.csv": "aa11953b10c2c7b90b1c9ce048890832faf9d08eea429817a7980d954dc8fa78",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/h2_inventory.csv": "73945a0ac389f0da2ef50a36701fe60af3cbdf8a43eeab32a96d4afd492151c2",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/h2_flows.csv": "a4bc0690acd10330ddbfea711caee8daf10e60b2478a57ac254be670ecf48efb",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/h2_capacity.csv": "90aa5c2f8c4ee713514686dde00a48b4c9f3b00cbf9c4dd18f7e47a322fe76b3",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/h2_build.csv": "6d250efc205f61490b0adfd614da18c9b91397c666d78ba316ff192094bd6c4c",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/saf_production.csv": "86668c79df7ab5cbd622b7ca53bd831b381913cb765fa1e7ce2f475af792d76e",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/saf_inventory.csv": "e97db07f1e6b0adbf9f0cb312a2b87ffab1f4719fa9d7807efbb0e1557c58a2f",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/saf_capacity.csv": "40fba557c46e92d7200bb55bf191df06ee63643b2866b7cd2ef37c0cabfb9a39",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/saf_build.csv": "8d3136bb7846d80ed568e985b98112d49ad3ba9dfd62d3ced8de493e80843abd",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/deliveries.csv": "c151d963960c837e58f4805423a96b83f237c2156f36964bd18bf6b2323d595a",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/shortages.csv": "215d26dca26ded652ee3cbf87be5369a08a0cc402b25192b9ad5e4cd678251e7",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/byproduct_hydrogen_periods.csv": "d2ee22eb7a1ebc82e570929cdfe9ed6df0e8c94f0492d638041745f1756c8dc1"
+  }
+}

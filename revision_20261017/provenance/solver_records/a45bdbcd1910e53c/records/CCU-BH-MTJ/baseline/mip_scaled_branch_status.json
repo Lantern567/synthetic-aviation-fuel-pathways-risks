@@ -1,0 +1,19 @@
+{
+  "status": 8,
+  "has_solution": true,
+  "seed_name": "mip_greedy_1_1_values.npz",
+  "seconds": 600.179753780365,
+  "source_sha256": {
+    "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+    "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+    "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+  },
+  "max_constraint_residual": 1.0128132998943329e-08,
+  "max_bound_residual": 2.324782144569326e-09,
+  "max_integer_violation": 0.0,
+  "objective": 72010750102.42456,
+  "lower_bound": 70994141525.28737,
+  "gap": 0.014117455736695112,
+  "bound_source": "mip_scaled_branch_design.log",
+  "global_bound_method": "Valid integer master lower bound for an outer projection of the original full model"
+}

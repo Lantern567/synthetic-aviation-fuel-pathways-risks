@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_bh_final",
+  "scenario": "CCU-BH-FT",
+  "label": "baseline",
+  "pid": 1738189,
+  "launched_unix": 1792229057.6475518,
+  "from_stage": "model"
+}

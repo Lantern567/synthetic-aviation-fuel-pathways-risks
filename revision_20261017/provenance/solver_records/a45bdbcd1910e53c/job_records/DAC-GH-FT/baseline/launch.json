@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_dac_projected",
+  "scenario": "DAC-GH-FT",
+  "label": "baseline",
+  "pid": 1813596,
+  "launched_unix": 1792229979.722642,
+  "from_stage": "model"
+}

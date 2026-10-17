@@ -1,0 +1,65 @@
+{
+  "scenario": "CTL-BH",
+  "label": "baseline",
+  "state": "complete",
+  "stage": "export_and_validation",
+  "source_runtime": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final",
+  "attempt": "mip_partition",
+  "history": [
+    {
+      "stage": "binary_metadata",
+      "exit_code": 0,
+      "seconds": 7.1888511180877686
+    },
+    {
+      "stage": "threshold_designs",
+      "exit_code": 0,
+      "seconds": 36.738614082336426
+    },
+    {
+      "stage": "candidate_selection",
+      "exit_code": 0,
+      "seconds": 0.4818553924560547
+    },
+    {
+      "stage": "exhaustive_integer_bound",
+      "exit_code": 0,
+      "seconds": 0.273590087890625
+    },
+    {
+      "stage": "partition_validation",
+      "exit_code": 0,
+      "seconds": 0.5243144035339355
+    },
+    {
+      "stage": "full_dispatch",
+      "exit_code": 0,
+      "seconds": 13.939703226089478
+    },
+    {
+      "stage": "certificate",
+      "exit_code": 0,
+      "seconds": 0.029523372650146484
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 30.90716052055359
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 3.6474087238311768
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 1.8324637413024902
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.32961153984069824
+    }
+  ]
+}

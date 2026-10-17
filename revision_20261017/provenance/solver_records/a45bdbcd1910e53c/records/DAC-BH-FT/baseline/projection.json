@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source_mps": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/runs/DAC-BH-FT/baseline/model.mps.gz",
+  "source_sha256": "7f2d561a780755343ff512daf4c6a007233e710a58c9c30993907099516d3b8c",
+  "column_name_sha256": "3150b92fc4914723641e3885e671c773055aa6e367a101f22683abf0432f4beb",
+  "original_rows": 216580,
+  "original_columns": 2064366,
+  "projected_rows": 184020,
+  "projected_columns": 215918,
+  "retained_original_columns": 157230,
+  "objective_scale": 1000000.0,
+  "original_objective_constant": 0.0,
+  "seconds": 24.49578356742859,
+  "mps_derived_resource_activation_cuts": 0,
+  "global_bound_method": "LP relaxation of necessary node-period/weekly aggregate conditions for both H2 and CO2; original integer design variables relaxed only for the LP lower bound.",
+  "structural_checks": {
+    "projected_flows_have_zero_objective": true,
+    "flow_incidence_exactly_verified_against_original_mps": true,
+    "all_unprojected_original_constraints_retained": true,
+    "source_capture_and_inventory_constraints_retained": true
+  },
+  "families": {
+    "h2": {
+      "routes": 4224,
+      "sources": 64,
+      "destinations": 66,
+      "removed_zero_cost_period_variables": 946176,
+      "removed_contract_rows": 16896
+    },
+    "co2": {
+      "routes": 4290,
+      "sources": 66,
+      "destinations": 66,
+      "removed_zero_cost_period_variables": 960960,
+      "removed_contract_rows": 17160
+    }
+  },
+  "projection_files_sha256": {
+    "master_matrix.npz": "034ed242646389a350779466453c252742594af2efe585f6a4981fef1d910b65",
+    "master_data.npz": "c343530df3429c628f896654201a9c1088576e5a5842004d498ba7d5d8daa05c",
+    "original_mapping.npz": "446e78dfca180c0b6cbe86c3380b6883cab752aa67894566de33f7e3120c14fd"
+  }
+}

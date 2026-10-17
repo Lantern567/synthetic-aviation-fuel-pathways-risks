@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_configured_ctl",
+  "scenario": "CTL",
+  "label": "summer_fixed",
+  "pid": 1944243,
+  "launched_unix": 1792231450.514333,
+  "from_stage": "model"
+}

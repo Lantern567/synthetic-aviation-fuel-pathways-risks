@@ -1,0 +1,15 @@
+REVISION_STAGE_STARTED GTL-GH baseline model
+REVISION_STAGE_STARTED GTL-GH baseline projection
+REVISION_STAGE_STARTED GTL-GH baseline design
+REVISION_STAGE_STARTED GTL-GH baseline dispatch
+REVISION_STAGE_STARTED GTL-GH baseline certificate
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/execute_job.py", line 64, in <module>
+    main()
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/execute_job.py", line 54, in main
+    raise RuntimeError(f'{args.scenario}/{args.label}: {stage} failed; inspect {output / (stage + ".log")}')
+RuntimeError: GTL-GH/baseline: certificate failed; inspect /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/job_records/GTL-GH/baseline/certificate.log
+REVISION_STAGE_STARTED GTL-GH baseline export
+REVISION_STAGE_STARTED GTL-GH baseline physics
+REVISION_STAGE_STARTED GTL-GH baseline hydrogen_transport
+REVISION_JOB_COMPLETE GTL-GH baseline

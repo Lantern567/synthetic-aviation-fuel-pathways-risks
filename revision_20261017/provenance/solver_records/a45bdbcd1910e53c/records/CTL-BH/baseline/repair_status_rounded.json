@@ -1,0 +1,16 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "source_iteration": "rounded",
+  "seconds": 5.982500076293945,
+  "objective": 51029921846.571945,
+  "lower_bound": 46499342595.37807,
+  "max_constraint_residual": 1.862645149230957e-08,
+  "max_bound_residual": 7.450580596923828e-09,
+  "max_integer_violation": 0.0,
+  "gap": 0.08878279815547534,
+  "physically_feasible_algebraically": true,
+  "source_sha256": "46f3272d4828a5b01993b1563e40d67fced4f0546c8d0bc82061490af9f8e397",
+  "column_name_sha256": "9fd4b648da8d7783d79162187257c2ea3998efbdb5bb8d7fcdace76594a1125c",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection"
+}

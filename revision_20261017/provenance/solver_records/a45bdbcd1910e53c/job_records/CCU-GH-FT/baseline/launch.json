@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_final_ccu",
+  "scenario": "CCU-GH-FT",
+  "label": "baseline",
+  "pid": 1725919,
+  "launched_unix": 1792228935.6118693,
+  "from_stage": "model"
+}

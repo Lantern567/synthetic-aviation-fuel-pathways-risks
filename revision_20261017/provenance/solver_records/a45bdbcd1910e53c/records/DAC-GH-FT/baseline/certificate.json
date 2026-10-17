@@ -1,0 +1,23 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "seconds": 29.843740940093994,
+  "source_sha256": "61ff1c8a187571f9c3b7bb38eb772a67a2c88a44de2c687aa6a2d54119d72b81",
+  "column_name_sha256": "303d587ecd390c5bbfcc021057645198b287bfc4ad189e78c3c5ac98253daa93",
+  "fixed_integer_count": 331,
+  "fixed_h2_weekly_contract_count": 12099,
+  "fixed_co2_weekly_contract_count": 12210,
+  "objective": 8792937843764.821,
+  "lower_bound": 8767604639184.477,
+  "max_constraint_residual": 1.6370904631912708e-08,
+  "max_bound_residual": 8.732196252630704e-10,
+  "max_integer_violation": 0.0,
+  "max_fixed_candidate_difference": 0.0,
+  "bound_source": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/solver_probes/dual_projection/DAC-GH-FT_baseline_probe2/root_lp_status.json",
+  "global_bound_method": "LP relaxation of necessary node-period/weekly aggregate conditions for both H2 and CO2; original integer design variables relaxed only for the LP lower bound.",
+  "method": "Full original MPS dispatch with all design integers and H2/CO2 weekly contracts fixed; every original row and original bound independently evaluated.",
+  "gap": 0.002881085369926595,
+  "physically_feasible_algebraically": true,
+  "relative_gap_tolerance": 0.01,
+  "passed": true
+}

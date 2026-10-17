@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/validate_historical.py", line 190, in <module>
+    main()
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/validate_historical.py", line 82, in main
+    assert demand_residual.notna().all()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

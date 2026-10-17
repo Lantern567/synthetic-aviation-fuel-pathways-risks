@@ -1,0 +1,24 @@
+{
+  "source_image_sha256": "c58be7ab12e7ad334b754c5ee0f9f839426aa2068ac88fced4a739ea13b5131e",
+  "image_sha256": "52e9ef30d39247c305a93ca5211ed866ab04e73912e0e31a63825740ba851bd3",
+  "text_edits": 5,
+  "documents": [
+    {
+      "document": "Manuscript_Clean.docx",
+      "figure_replacements": 1
+    },
+    {
+      "document": "Manuscript_Marked_Changes.docx",
+      "figure_replacements": 1
+    },
+    {
+      "document": "作者审阅/Manuscript_Chinese.docx",
+      "figure_replacements": 1
+    },
+    {
+      "document": "作者审阅/Manuscript_Marked_Changes_Chinese.docx",
+      "figure_replacements": 1
+    }
+  ],
+  "layout_visual_review": "All original modules and connectors retained; SynAF labels fit the original figure."
+}

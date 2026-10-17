@@ -1,0 +1,30 @@
+{
+  "scenario": "CCU-BH-FT",
+  "label": "baseline",
+  "state": "complete",
+  "stage": "export_and_validation",
+  "source_runtime": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final",
+  "attempt": "verify_existing",
+  "history": [
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 2.6140427589416504
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 1.9216444492340088
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.3392753601074219
+    },
+    {
+      "stage": "ccu_accounting",
+      "exit_code": 0,
+      "seconds": 0.31774067878723145
+    }
+  ]
+}

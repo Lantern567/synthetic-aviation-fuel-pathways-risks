@@ -1,0 +1,74 @@
+{
+  "scenario": "CCU-GH-MTJ",
+  "label": "summer_fixed",
+  "passed": true,
+  "scope": "Actual weekly CO2 transport quantities, independent configured route price and per-100-km carbon factors; all-hour peak/2 stock operating cost and stock-capacity lower bound. Physical process balances are validated separately.",
+  "solution_summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+  "input_sha256": {
+    "summary.json": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+    "config.yaml": "cc15f81386e00f6d47d2ace621484e9d1f1e6dba89a643ed6848c4796e71cb2f",
+    "ccu_co2_transport_accounting.csv": "e79ea63b6490f6cd384761fd56a3569b7e6a192353f93da5930825dd35063a59",
+    "ccu_co2_inventory.csv": "24f4aa43d694085f1ecfc8167c70db2c0bf1c06b407afe6cc102be7441f161b2",
+    "ccu_co2_transport_parameters.json": "ea919e728b105421eeab7ec60505e0a42eb96f9f275f457843fc3892e22a9e9b"
+  },
+  "expected": {
+    "co2_pipeline_transport_cost_cny": 26941360.083597947,
+    "co2_pipeline_transport_kg_co2e": 211079.7717857163,
+    "co2_stock_operation_cost_cny": 0.0,
+    "represented_hours": 672.0,
+    "cost_charged_inventory_capacity_kg": 0.0,
+    "actual_stock_peak_sum_kg": 2.0029311542657524e-11
+  },
+  "checks": {
+    "four_week_mass_kg": {
+      "residual": 1.862645149230957e-09,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "self_supply_distance_km": {
+      "residual": 0.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "co2_transport_cost_cny": {
+      "residual": 0.0,
+      "tolerance": 0.26951360083597947,
+      "passed": true
+    },
+    "co2_transport_carbon_kg": {
+      "residual": 2.9103830456733704e-11,
+      "tolerance": 0.0022107977178571626,
+      "passed": true
+    },
+    "co2_transport_carbon_alias_kg": {
+      "residual": 2.9103830456733704e-11,
+      "tolerance": 0.0022107977178571626,
+      "passed": true
+    },
+    "co2_stock_operation_cost_cny": {
+      "residual": 0.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "co2_stock_capacity_shortfall_kg": {
+      "residual": 2.0029311542657524e-11,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "export_transport_price_cny_kg_km": {
+      "residual": 0.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "export_transport_carbon_kg_kg_100km": {
+      "residual": 0.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "export_represented_hours": {
+      "residual": 0.0,
+      "tolerance": 0.0001,
+      "passed": true
+    }
+  }
+}

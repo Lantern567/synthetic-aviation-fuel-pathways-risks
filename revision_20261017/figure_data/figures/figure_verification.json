@@ -1,0 +1,336 @@
+{
+  "passed": true,
+  "figure_count": 23,
+  "new_real_runs": 18,
+  "baseline_pathways": 13,
+  "input_manifest_sha256": "ecaa4cfb10b16e2f56f653a85db3f916687e41888fffe79731996752ae99766d",
+  "renderer_sha256": "175d18895c37da2cf31009d24fad6c409b43e67523a3397e27d113feeb0f23a8",
+  "validator_sha256": "a5f17f9d87caa9e0a7c860a1f423966741242b13bc4e35262f18940b832b1dfa",
+  "visual_record_sha256": "a053e5e90ab6edcddd148a0cdc7deb613e9811605ac2d968a082511b1f98edc4",
+  "figures": [
+    {
+      "name": "Figure_1",
+      "png_sha256": "d101c86caa69d9084c419f6330e253fb8d69b7236c66ba042518913d4faa8451",
+      "pdf_sha256": "a0d599db01ff8c375514c98806f28f2c522a944030fe212b90510ee1c0566574",
+      "pixels": [
+        4836,
+        3457
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_1b",
+      "png_sha256": "309f7f69503c65cdd45946ca42ebcff59ec7bdac9d9d1d4cf5abb4cf6988f85b",
+      "pdf_sha256": "4e71945f6a9560a0299a530c65d85348080ccd7aeafdaca834deec4bcf7d366e",
+      "pixels": [
+        5718,
+        5566
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S20",
+      "png_sha256": "f0be797024e004685ff77f7c7a167c9db20d36749d13a61423ae578d4cb9c529",
+      "pdf_sha256": "c3c13a65e519a772f25067b88bacc936dc57131537d90d9357b88606e479b72d",
+      "pixels": [
+        1819,
+        1402
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S21",
+      "png_sha256": "b919a0dbfbb0b78f873138d033caccb27b0fac89de1898fa8959d1328547cadf",
+      "pdf_sha256": "4f8a8cbb74c51cc8e5ecf714a033a9d996056a3ddf926a82a24353416fa1e424",
+      "pixels": [
+        1851,
+        1402
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S22",
+      "png_sha256": "e7f039e1ab36d8f65c84e9905bd57ce0aa19c4c98d83c27b51cf06c4c75b7c58",
+      "pdf_sha256": "384ec12c1d06f776462d90406a81e2aefcc7d741cb965b8a923ed1700aca5a65",
+      "pixels": [
+        2015,
+        1396
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S23",
+      "png_sha256": "22dc36f5b287e62ce1efb24c7f675710d727422923a731f5d7b78c4ab8af26c8",
+      "pdf_sha256": "2cd14eb9b0d27c83b10c5ab55dbe7515298b6bfb138a0c8ac13b3eb97eeadcb6",
+      "pixels": [
+        2051,
+        1402
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S24",
+      "png_sha256": "b6a9043284089d5443568a6b4e23aeb9acea370a1d45ee5211f50e6adc8b6469",
+      "pdf_sha256": "07dcd5e224243bff46d85fafecce7c0a4bff09540c6ac2d868890a30318a03e2",
+      "pixels": [
+        3287,
+        2464
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S25",
+      "png_sha256": "2cf016a91cc4bf0331e3868f1a3ce97ab3522d64a7ad8acd5ed70fa5d18ac723",
+      "pdf_sha256": "789b947aaf7fbb1a2b82d4ac05e96d1d25f5bee4dc67e73be23d17fd64866058",
+      "pixels": [
+        2129,
+        1442
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S28",
+      "png_sha256": "e2241d6e28bf0eb1133ac28d185061712ce20d4d8f25570e4a007fec627bf98a",
+      "pdf_sha256": "bb03ac80ff31927b9279a745c77a521e23f35466e98ffb577a14a008326caa6a",
+      "pixels": [
+        2293,
+        1129
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S29",
+      "png_sha256": "bcdf01a18fd1e871f400c4230525d3daa2245a612620cd4c884aee0c7c5f0c81",
+      "pdf_sha256": "f70e4e7e6cdff4be108f46bae7dcb16658ed80d62f7bc183c2f73092a32b5a60",
+      "pixels": [
+        2293,
+        1129
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S36",
+      "png_sha256": "9f45b75dd501749f4e2fe67e1c0d67a147c6e607d3ff9fd4342f489fe56c6986",
+      "pdf_sha256": "17937dc225120944a982b301138c7e5d1057ff12f8861599cb7e213ad40c5490",
+      "pixels": [
+        6455,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S37",
+      "png_sha256": "e42a7ca7833f56e8a5b43d5d6a8432bf1c98b84159f3e531d2452f816a15b6eb",
+      "pdf_sha256": "6225bd25172ac385d712db225f981fc9ec85e92af69cc2dcb8640dd415079317",
+      "pixels": [
+        6455,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S38",
+      "png_sha256": "13b5c94d231e8c7e71202e297f4ea95667b196756ce4655f4f3c4f1379764daa",
+      "pdf_sha256": "1ecc8bf0209842cf4c7a5ef25f8ae2bea1069d0d5e5ddf799f53f4b5f3cb2f3a",
+      "pixels": [
+        6455,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S39",
+      "png_sha256": "adc0fb357fbf343cafbe0b4bf6888b95e8f5770b99f20a50b6692aeac8e93df9",
+      "pdf_sha256": "969f69c6f6a9697b8d9607534a8aed80ee56191e3e8f77f7c9672fd1ce9e7ff1",
+      "pixels": [
+        6455,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S40",
+      "png_sha256": "4484062c8581a76d56645e001b20b3259b29e49bb3b7d398d0e7dce14f56b507",
+      "pdf_sha256": "36cf6c112043bd194df97aad2c5e63dfe942fd3d3a8e3153f6af0744b7b51752",
+      "pixels": [
+        6455,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S41",
+      "png_sha256": "a6743fedce14febe79c54a83e85f348c053715e60d6ef3e082a8e9a9684ce2ea",
+      "pdf_sha256": "30c402f07e5fa7301395e21cc7dfeb5e1694549c033f2b65a96d6c87554517f3",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S42",
+      "png_sha256": "3b6256de327557d0ea62ce2fe4055c5287de82b22d66ffa4e8290a3b87edbcec",
+      "pdf_sha256": "c5d0062d308b733790cd8f2b7410f64935c891a05b7c7184e1d9f337427f191b",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S43",
+      "png_sha256": "8171f7ce9a28aff9c98d5c76e24dfd35a641767f86a0fce5fbca2af6750d6030",
+      "pdf_sha256": "0500c272079fdfd18f642da0879415c9a379cfbd29c9f3f1f3d5ef104363bed5",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S44",
+      "png_sha256": "7295737c5b1ec9303b86bf8f618789e89f90aeea77c262dbe92cb4cc01e898c6",
+      "pdf_sha256": "a96e3a8b2b4930fd5288376889111ce069e458284e1a1c5da9cb30cd181b9520",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S45",
+      "png_sha256": "3e949e000f5159f723348207afdd32f7ac429403e8d1caf1164413b81e2b6248",
+      "pdf_sha256": "4c67284bcac4739bc116b8ecc37607a98385a4422a39d25857d50b79b724244a",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S46",
+      "png_sha256": "3c11229cc8c5866aeaed2e0d2b0b1db9b628982af6ab414c2fa357e395344a46",
+      "pdf_sha256": "fdf7314c7334c618968249ee61f47d52984c7109da371832fe2679c94b6525c9",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S47",
+      "png_sha256": "830b9a8e0aec073c64f766dd78a761b69147a97d1c4f9f73738e849ce8df9fa7",
+      "pdf_sha256": "d3c67fa7582b0b594f272f9aac61d7b081ee91956b8a4c93286484a3c6976a7f",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    },
+    {
+      "name": "Figure_S48",
+      "png_sha256": "b8bf12c5592d88d7765050e4b3f1d327ca6ee0de9662e27c492120a89f9d5156",
+      "pdf_sha256": "b279db5b33298b6b92fbd90891b699d9a0e525c4b3fd12736b4e3d7d4fa68e9e",
+      "pixels": [
+        6527,
+        3325
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "visual_inspection_passed": true
+    }
+  ],
+  "learning_baseline_closure_passed": true,
+  "scope": "Actual input hashes, 13 annual learning baselines, 23 PNG/PDF exports, final terminology and recorded visual inspection"
+}

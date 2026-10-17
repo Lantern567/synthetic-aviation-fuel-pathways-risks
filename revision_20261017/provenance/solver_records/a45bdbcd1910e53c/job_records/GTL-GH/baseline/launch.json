@@ -1,0 +1,33 @@
+{
+  "runtime": "compute_final",
+  "scenario": "GTL-GH",
+  "label": "baseline",
+  "pid": 1879113,
+  "launched_unix": 1792230815.5419705,
+  "from_stage": "export",
+  "attempt": "certified_threshold_025_resume",
+  "controller_pid": 1860162,
+  "formal_jobs_before_launch": [
+    {
+      "pid": 1813600,
+      "command": [
+        "/home/ljt/code_project/nexus_revision_20260929/copt_migration/venv/bin/python",
+        "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/execute_job.py",
+        "DAC-GH-MTJ",
+        "baseline"
+      ]
+    },
+    {
+      "pid": 1854227,
+      "command": [
+        "python3",
+        "/home/ljt/code_project/nexus_scientific_revision_20261017/tools/repair_mip/execute_job.py",
+        "CCU-BH-FT",
+        "baseline",
+        "--warm-probe-mip"
+      ]
+    }
+  ],
+  "certificate_sha256": "854c97a908f6ca4c3826b0d77d286bcfaece9fef7943fedb4a98a49d9c983ec6",
+  "values_sha256": "dbf309abdd2f5effbf01db6f0a9e249337b58367c488d6b7235019d642534240"
+}

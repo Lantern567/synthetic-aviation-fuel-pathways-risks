@@ -1,0 +1,22 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "source_iteration": "mip_partition",
+  "seconds": 5.128082990646362,
+  "objective": 63122019319.73616,
+  "lower_bound": 62505211062.19414,
+  "max_constraint_residual": 4.151095822635398e-08,
+  "max_bound_residual": 1.4028046280145645e-08,
+  "max_integer_violation": 0.0,
+  "gap": 0.009771681327520003,
+  "physically_feasible_algebraically": true,
+  "source_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+  "column_name_sha256": "54cab641d8a7ac377ec659ce66fe859f0e4a0456774a1c715270ae0a08a5671a",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection",
+  "bound_source": "partition_bound/proof.json",
+  "global_bound_method": "Minimum of exhaustive integer-design partition LP bounds; all leaf domains and original objective independently checked",
+  "scenario": "CCU-BH-FT",
+  "label": "baseline",
+  "relative_gap_tolerance": 0.01,
+  "passed": true
+}

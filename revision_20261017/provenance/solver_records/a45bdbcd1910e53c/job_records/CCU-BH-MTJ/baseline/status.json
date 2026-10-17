@@ -1,0 +1,50 @@
+{
+  "scenario": "CCU-BH-MTJ",
+  "label": "baseline",
+  "state": "complete",
+  "stage": "export_and_validation",
+  "source_runtime": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final",
+  "attempt": "mip_partition",
+  "history": [
+    {
+      "stage": "partition_validation",
+      "exit_code": 0,
+      "seconds": 2.7328941822052
+    },
+    {
+      "stage": "full_dispatch",
+      "exit_code": 0,
+      "seconds": 24.360734462738037
+    },
+    {
+      "stage": "certificate",
+      "exit_code": 0,
+      "seconds": 0.05367231369018555
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 50.62530875205994
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 3.154524087905884
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 2.0668625831604004
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.34178805351257324
+    },
+    {
+      "stage": "ccu_accounting",
+      "exit_code": 0,
+      "seconds": 0.32088208198547363
+    }
+  ]
+}

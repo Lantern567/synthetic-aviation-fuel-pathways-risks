@@ -1,0 +1,64 @@
+{
+  "weeks": 4,
+  "periods_per_week": 56,
+  "hours_per_period": 3,
+  "contract_rule": "Each representative week actual route flow equals its fixed weekly contract",
+  "transport_loss_fraction": 0.0,
+  "distance_scope": "Hydrogen pipeline route distance used for both cost and transport carbon",
+  "carbon_kg_co2e_per_kg_100km": 0.02,
+  "economic_parameters": {
+    "discount_rate": 0.08,
+    "project_lifespan": 20,
+    "mtj_plant_lifetime": 25,
+    "electrolyzer_lifetime": 20,
+    "pipeline_lifetime": 30,
+    "storage_lifetime": 25,
+    "transport_vehicle_lifetime": 20,
+    "mtj_plant_capacity_factor": 0.85,
+    "electrolyzer_capacity_factor": 0.9,
+    "pipeline_capacity_factor": 0.95,
+    "storage_capacity_factor": 0.9,
+    "transport_capacity_factor": 0.75,
+    "levelized_cost_threshold_yuan_per_kg": 1000
+  },
+  "cost_curve": {
+    "function_type": "piecewise_linear",
+    "unit": "yuan_per_kg_hydrogen_per_100km",
+    "description": "基于图表33管道输送氢气成本曲线",
+    "data_points": [
+      [
+        25,
+        1.91
+      ],
+      [
+        50,
+        1.04
+      ],
+      [
+        100,
+        0.56
+      ],
+      [
+        200,
+        0.3
+      ],
+      [
+        300,
+        0.21
+      ],
+      [
+        400,
+        0.16
+      ],
+      [
+        500,
+        0.13
+      ]
+    ],
+    "notes": "成本函数已包含以下所有费用：\n- 管道建设投资摊销 (Pipeline construction amortization)\n- 压缩机站投资和运营 (Compressor station CAPEX & OPEX)\n- 管道维护和检测 (Pipeline maintenance & inspection)\n- 能耗成本（压缩机电力） (Energy cost for compression)\n- 人工和管理成本 (Labor & management)\n\n单位转换说明：\n- 配置单位：元/(kg氢气·百公里)\n- 计算公式：总成本 = 单位成本 × (运输距离km ÷ 100)\n- 最终单位：元/kg氢气\n- 与罐车运输单位保持一致\n"
+  },
+  "ledger": {
+    "hydrogen_pipeline_operation": 30210753.991768617,
+    "h2_pipeline_transport": 19675.12085434407
+  }
+}

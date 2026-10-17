@@ -1,0 +1,41 @@
+{
+  "input_manifest_sha256": "ecaa4cfb10b16e2f56f653a85db3f916687e41888fffe79731996752ae99766d",
+  "renderer_sha256": "175d18895c37da2cf31009d24fad6c409b43e67523a3397e27d113feeb0f23a8",
+  "templates_sha256": {
+    "quadrant": "d392b9eca7c8241d095f7cc07345ed66d9cc0f28fe7d513b728cae361152f640",
+    "polar": "050faac4a9fe61086392d52113a61c667c81a0f0c522b5afb257325e471644f8",
+    "lollipop": "35a18e1ce5de3a918416da345556c5a5915269eb99efe9ca3b7f4a2804aa113c",
+    "breakdown": "53c93c3e42ffaac7693c8d821a4a16e863bc44895b17f837b5b21bf5c352eb86",
+    "sensitivity": "d7ee4a40737abee0f70419708f4958bd97b750fdcf5d012a5f2a7a7454a859c1",
+    "stitch": "fe89e1cde9b05d541fb4ecfca3ea1955b94a325a58f8c6ce2042fcd19dcd3986"
+  },
+  "figures": [
+    "Figure_1",
+    "Figure_1b",
+    "Figure_S20",
+    "Figure_S21",
+    "Figure_S22",
+    "Figure_S23",
+    "Figure_S24",
+    "Figure_S25",
+    "Figure_S28",
+    "Figure_S29",
+    "Figure_S36",
+    "Figure_S37",
+    "Figure_S38",
+    "Figure_S39",
+    "Figure_S40",
+    "Figure_S41",
+    "Figure_S42",
+    "Figure_S43",
+    "Figure_S44",
+    "Figure_S45",
+    "Figure_S46",
+    "Figure_S47",
+    "Figure_S48"
+  ],
+  "Figure1_x_coordinate": "Direct supply-chain carbon intensity, without reference subtraction or percentage-reduction lines",
+  "product_cost_label": "LCO-SynAF",
+  "visual_qa_completed": true,
+  "verification_report_sha256": "f1eeba7235564782e179351018ba13420f3096b211966f444d25b184fed4f679"
+}

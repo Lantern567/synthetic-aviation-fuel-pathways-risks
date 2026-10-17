@@ -1,0 +1,60 @@
+{
+  "raw_solar": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\solar_hdf5_extracted.csv.gz",
+    "sha256": "60bcada7c1ece8e9c557f084aaa03a56e185a659aed59523f973fe3e815f3924"
+  },
+  "solar_inventory_with_grid": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\solar_grid_mapping.csv",
+    "sha256": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6"
+  },
+  "source_twelve_weeks": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\source_renewable_12weeks.csv",
+    "sha256": "a4c19115b7e6d79bd88dc271c439b25a7b55e1c2790ccf66d5c26ddb8ba51d68"
+  },
+  "hdf5_provenance": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\solar_hdf5_provenance.json",
+    "sha256": "2cc2088902abecc6f6f6834b0017014e45b0121172526b670bba9898eae81d8e"
+  },
+  "original_factor_provenance": "The archived 0.1632 multiplier was hardcoded. No component decomposition was established; the new parameters do not assume it equals 0.20*0.85*0.96.",
+  "engineering_parameters": {
+    "model": "GHI-proportional AC electricity availability from DC nameplate capacity",
+    "reference_irradiance_wm2": 1000.0,
+    "system_loss_fraction": 0.14,
+    "inverter_efficiency": 0.96,
+    "dc_ac_ratio": 1.2,
+    "unknown_capacity_rating_assumption": "DC",
+    "power_formula": "P_ac_MW = min(C_ac_MW, C_dc_MW * GHI_Wm2 / 1000 * (1 - 0.14) * 0.96)",
+    "dc_capacity_mapping": "MWp/dc retains raw MW; MWac converts raw MW * 1.2; unknown is assumed DC and retains raw MW",
+    "ac_capacity_mapping": "C_ac_MW = C_dc_MW / 1.2; explicitly reported MWac is retained exactly",
+    "source_radiation_conversion": "GHI_Wm2 = radiation_raw / 36",
+    "aggregation": "AC clipping is applied to each phase-hour; phase powers are summed by project, then averaged over three-hour periods",
+    "model_capacity_mw": "Solar capacity_mw is the summed project AC power limit; the source values remain in capacity_raw_mw",
+    "scope": "Simplified GHI-proportional resource model using documented PVWatts default engineering parameters. No module efficiency multiplier, temperature model, transposition model, or full PVWatts simulation is applied.",
+    "primary_sources": [
+      {
+        "url": "https://pvwatts.nlr.gov/docs/help_system_sysloss.php",
+        "supports": "Default system losses 14%; inverter efficiency separately defaults to 96%; inverter losses are excluded from system losses",
+        "accessed_date": "2026-10-17"
+      },
+      {
+        "url": "https://developer.nlr.gov/docs/solar/pvwatts/v8/",
+        "supports": "PVWatts V8 dc_ac_ratio default 1.2 and inv_eff default 96",
+        "accessed_date": "2026-10-17"
+      },
+      {
+        "url": "https://samrepo.nlr.gov/help/pvwatts_system_design.html",
+        "supports": "DC nameplate power is electrical power at STC; AC inverter rating equals DC nameplate divided by DC/AC ratio; module efficiency defines area rather than another multiplier on nameplate power",
+        "accessed_date": "2026-10-17"
+      },
+      {
+        "url": "https://www.gem.wiki/Global_Solar_Power_Tracker_Methodology",
+        "supports": "GEM retains phase-specific AC/DC/unknown capacity ratings; the unknown-to-DC assignment here is a declared study assumption",
+        "accessed_date": "2026-10-17"
+      }
+    ]
+  },
+  "retained_source_files": {
+    "sources/solar_grid_mapping.csv": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6",
+    "sources/solar_hdf5_extracted.csv.gz": "60bcada7c1ece8e9c557f084aaa03a56e185a659aed59523f973fe3e815f3924"
+  }
+}

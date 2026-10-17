@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "full_integer_domain_covered": true,
+  "all_leaf_bounds_valid": true,
+  "original_objective_constant_cny": 0,
+  "global_lower_bound_cny": 46499342595.37807,
+  "proof_sha256": "66b24e023d77cfda3fa5d722eee53dead231f967cfbd1da80e905863a5b4c556",
+  "original_model_sha256": "46f3272d4828a5b01993b1563e40d67fced4f0546c8d0bc82061490af9f8e397",
+  "leaf_count": 6,
+  "node_count": 6,
+  "checked_optimal_lp_nodes": []
+}

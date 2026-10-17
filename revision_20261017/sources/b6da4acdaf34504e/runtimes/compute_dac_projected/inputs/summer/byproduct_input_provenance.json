@@ -1,0 +1,28 @@
+{
+  "source_kind": "Archived full candidate input-location table; not selected built facilities",
+  "source_files": [
+    {
+      "path": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\dac_hydrogen_saf_supply_chain_optimization\\results\\byproduct_hydrogen\\one_step\\renewable_energy_plants_20260201_205000.csv",
+      "sha256": "b31a345337dc234e62ce1a589527a95ef5d64a3a1e035f34ae1fdad1aaa48ba7"
+    },
+    {
+      "path": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\dac_hydrogen_saf_supply_chain_optimization\\results\\byproduct_hydrogen\\two_step\\renewable_energy_plants_20260201_204929.csv",
+      "sha256": "b31a345337dc234e62ce1a589527a95ef5d64a3a1e035f34ae1fdad1aaa48ba7"
+    }
+  ],
+  "source_export_function": "dac_hydrogen_optimization_model.py:_save_infrastructure_locations iterates all self.locations; no built-facility filter",
+  "unit_basis": "Original _process_byproduct_h2_source stores h2_daily_tonnes * available_rate * 1000 / 24 in power_output_mw and capacity_mw",
+  "constant_profile_verified": true,
+  "ft_mtj_all_candidate_tables_match": true,
+  "candidate_sites": 64,
+  "three_hour_periods": 224,
+  "source_types": {
+    "钢铁副产氢": 36,
+    "炼油副产氢": 28
+  },
+  "available_h2_kg_per_hour": 426282.8488104794,
+  "available_h2_kg_per_four_weeks": 286462074.40064216,
+  "raw_industrial_csv_scope": "Not present in the supplied historical archive; original constant model inputs reconstructed from the saved full input-location tables",
+  "output": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\model_patch\\byproduct_inputs\\byproduct_hydrogen_periods.csv",
+  "output_sha256": "d2ee22eb7a1ebc82e570929cdfe9ed6df0e8c94f0492d638041745f1756c8dc1"
+}

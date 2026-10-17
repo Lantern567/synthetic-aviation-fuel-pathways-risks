@@ -1,0 +1,918 @@
+{
+  "best_prefix": "mip_greedy_1_1",
+  "objective": 72010750102.42458,
+  "history": [
+    {
+      "prefix": "mip_swap_0",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 6.635324239730835,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.015156835317612e-08,
+      "max_bound_residual": 1.392663762089796e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72226160789.50415,
+      "gap": 0.017797676939627447
+    },
+    {
+      "prefix": "mip_swap_1",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 5.818437337875366,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.9569491744041443e-08,
+      "max_bound_residual": 1.320488163258915e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72242734561.42374,
+      "gap": 0.018023011672318796
+    },
+    {
+      "prefix": "mip_swap_2",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 5.593335866928101,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.2718373909592628e-08,
+      "max_bound_residual": 4.9077408803555045e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72237826325.17964,
+      "gap": 0.01795629074105377
+    },
+    {
+      "prefix": "mip_swap_3",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 5.826115608215332,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.0046870708465576e-08,
+      "max_bound_residual": 1.0082601420435822e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72242797476.90562,
+      "gap": 0.018023866865605614
+    },
+    {
+      "prefix": "mip_swap_4",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 6.9564313888549805,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.8260623114183545e-08,
+      "max_bound_residual": 2.5067947717616335e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72242549969.73227,
+      "gap": 0.018020502558322497
+    },
+    {
+      "prefix": "mip_swap_5",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 7.031334638595581,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.909211277961731e-08,
+      "max_bound_residual": 6.217248937900877e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72240755021.37267,
+      "gap": 0.017996103554082078
+    },
+    {
+      "prefix": "mip_swap_6",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 5.024638652801514,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.923196345567703e-08,
+      "max_bound_residual": 2.1232153812889013e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72231630140.98433,
+      "gap": 0.017872048924850267
+    },
+    {
+      "prefix": "mip_swap_7",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": null,
+      "seconds": 4.942010164260864,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.6891939342021942e-08,
+      "max_bound_residual": 3.395446886618921e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72243132991.79655,
+      "gap": 0.018028427404463226
+    },
+    {
+      "prefix": "mip_swap_8",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.194513559341431,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.238164936192334e-08,
+      "max_bound_residual": 2.2112089936854318e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72512806780.10141,
+      "gap": 0.021680361535113688
+    },
+    {
+      "prefix": "mip_swap_9",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.319001913070679,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.6763806343078613e-08,
+      "max_bound_residual": 2.2218671347218333e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72120457316.78995,
+      "gap": 0.016358110409989423
+    },
+    {
+      "prefix": "mip_swap_10",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.4277873039245605,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.6763806343078613e-08,
+      "max_bound_residual": 3.1228353236656403e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72289174740.34924,
+      "gap": 0.01865385560161342
+    },
+    {
+      "prefix": "mip_swap_11",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.0326828956604,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.190951585769653e-08,
+      "max_bound_residual": 1.978150976356119e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72165901743.10748,
+      "gap": 0.016977530943712384
+    },
+    {
+      "prefix": "mip_swap_12",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.454654216766357,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 6.426125764846802e-08,
+      "max_bound_residual": 1.028688245696685e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72148583910.74251,
+      "gap": 0.016741575954614035
+    },
+    {
+      "prefix": "mip_swap_13",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.1991400718688965,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.7241185307502747e-08,
+      "max_bound_residual": 1.3237411167210666e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72276398813.0008,
+      "gap": 0.018480388090082397
+    },
+    {
+      "prefix": "mip_swap_14",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.666004657745361,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.6566128730773926e-08,
+      "max_bound_residual": 9.322320693172514e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72019848433.88525,
+      "gap": 0.014984001551918693
+    },
+    {
+      "prefix": "mip_swap_15",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.81773829460144,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.7497451305389404e-08,
+      "max_bound_residual": 2.5304837590413498e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72087537549.47461,
+      "gap": 0.01590891678751759
+    },
+    {
+      "prefix": "mip_swap_16",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 4.835394382476807,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 5.029141902923584e-08,
+      "max_bound_residual": 4.709477252617944e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72036577508.79198,
+      "gap": 0.015212752097713951
+    },
+    {
+      "prefix": "mip_swap_17",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.494706392288208,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.7008354663848877e-08,
+      "max_bound_residual": 9.094947017729282e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72040520100.79697,
+      "gap": 0.015266646965834876
+    },
+    {
+      "prefix": "mip_swap_18",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.532764673233032,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.7444912120699883e-08,
+      "max_bound_residual": 7.666756118851481e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72667599296.70628,
+      "gap": 0.02376432413120311
+    },
+    {
+      "prefix": "mip_swap_19",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.717943429946899,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.735760062932968e-08,
+      "max_bound_residual": 9.094947017729282e-10,
+      "max_integer_violation": 0.0,
+      "objective": 72274729959.208,
+      "gap": 0.01845772439105552
+    },
+    {
+      "prefix": "mip_swap_20",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.888932228088379,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.5029294192790985e-08,
+      "max_bound_residual": 2.4229507289419416e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72413556272.62086,
+      "gap": 0.020339470055757692
+    },
+    {
+      "prefix": "mip_swap_21",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.3235650062561035,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.67872416973114e-08,
+      "max_bound_residual": 1.7621459846850485e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72318050897.40273,
+      "gap": 0.019045701137241574
+    },
+    {
+      "prefix": "mip_swap_22",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.357007265090942,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.2846506908535957e-08,
+      "max_bound_residual": 3.7214675785435247e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72283261091.35873,
+      "gap": 0.018573569563759832
+    },
+    {
+      "prefix": "mip_swap_23",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.8041911125183105,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.7229467630386353e-08,
+      "max_bound_residual": 8.79118999819184e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72394223528.61417,
+      "gap": 0.020077853516264142
+    },
+    {
+      "prefix": "mip_swap_24",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.81950569152832,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.236345946788788e-08,
+      "max_bound_residual": 1.6817658377021871e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72026253309.81184,
+      "gap": 0.015071593297509418
+    },
+    {
+      "prefix": "mip_swap_25",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.697218656539917,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.91155481338501e-08,
+      "max_bound_residual": 1.1795009413617663e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72179231869.84364,
+      "gap": 0.017159076434812133
+    },
+    {
+      "prefix": "mip_swap_26",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.6156837940216064,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.057640813291073e-08,
+      "max_bound_residual": 9.34866767332565e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72065389979.31902,
+      "gap": 0.015606479982399384
+    },
+    {
+      "prefix": "mip_swap_27",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 4.552414655685425,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.5222910810261965e-08,
+      "max_bound_residual": 3.072742060794553e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72057575759.02608,
+      "gap": 0.015499728294747793
+    },
+    {
+      "prefix": "mip_swap_28",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 7.416588544845581,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.9569491744041443e-08,
+      "max_bound_residual": 2.2737367544323206e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72755430299.26448,
+      "gap": 0.024942844521941593
+    },
+    {
+      "prefix": "mip_swap_29",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.696089029312134,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.477318048477173e-07,
+      "max_bound_residual": 1.0982148523908108e-07,
+      "max_integer_violation": 0.0,
+      "objective": 72358781339.59401,
+      "gap": 0.019597876030494763
+    },
+    {
+      "prefix": "mip_swap_30",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 4.764106512069702,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.5431567135237856e-07,
+      "max_bound_residual": 1.7711387911845122e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72517056950.40698,
+      "gap": 0.021737700115188795
+    },
+    {
+      "prefix": "mip_swap_31",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 7.212222576141357,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.6763806343078613e-08,
+      "max_bound_residual": 7.321254713588132e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72401862153.26254,
+      "gap": 0.02018123839116937
+    },
+    {
+      "prefix": "mip_swap_32",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.570143938064575,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 5.774199962615967e-08,
+      "max_bound_residual": 7.844391802791506e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72375201363.03668,
+      "gap": 0.019820303402794236
+    },
+    {
+      "prefix": "mip_swap_33",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.32300591468811,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.0582152754068375e-07,
+      "max_bound_residual": 6.555200826596774e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72758339832.52768,
+      "gap": 0.02498183608268794
+    },
+    {
+      "prefix": "mip_swap_34",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.974303722381592,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 1.862645149230957e-08,
+      "max_bound_residual": 3.865352482534945e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72359186333.51117,
+      "gap": 0.01960336333510248
+    },
+    {
+      "prefix": "mip_swap_35",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 7.373958110809326,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.60770320892334e-08,
+      "max_bound_residual": 1.7337242752546445e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72520609557.56905,
+      "gap": 0.021785622790882645
+    },
+    {
+      "prefix": "mip_swap_36",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.56575083732605,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.650792106986046e-08,
+      "max_bound_residual": 5.371703082346357e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72401047680.72105,
+      "gap": 0.020170215961211102
+    },
+    {
+      "prefix": "mip_swap_37",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.774038076400757,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 4.470348358154297e-08,
+      "max_bound_residual": 5.343281372915953e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72373513283.53659,
+      "gap": 0.01979744115420131
+    },
+    {
+      "prefix": "mip_swap_38",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.948641538619995,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.7939677238464355e-08,
+      "max_bound_residual": 4.828848432225641e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72643186753.86824,
+      "gap": 0.023436249382253527
+    },
+    {
+      "prefix": "mip_swap_39",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.807395696640015,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.8449798012152314e-08,
+      "max_bound_residual": 8.469669410260394e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72309852888.70662,
+      "gap": 0.01893448708339836
+    },
+    {
+      "prefix": "mip_swap_40",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.67045259475708,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.0983861759305e-08,
+      "max_bound_residual": 7.691625114603085e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72471149563.98026,
+      "gap": 0.021118012616125968
+    },
+    {
+      "prefix": "mip_swap_41",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.508818864822388,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.0954757928848267e-08,
+      "max_bound_residual": 1.9198864720237907e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72352304643.98814,
+      "gap": 0.019510114263132428
+    },
+    {
+      "prefix": "mip_swap_42",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.169271945953369,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.4251570468768484e-08,
+      "max_bound_residual": 1.5290879673557356e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72342767301.12434,
+      "gap": 0.019380850916378825
+    },
+    {
+      "prefix": "mip_swap_43",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.898267984390259,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.166496753692627e-08,
+      "max_bound_residual": 3.637978807091713e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72760663717.74841,
+      "gap": 0.025012976951741362
+    },
+    {
+      "prefix": "mip_swap_44",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.094281911849976,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 2.0256265997886658e-08,
+      "max_bound_residual": 6.190270518402485e-09,
+      "max_integer_violation": 0.0,
+      "objective": 72361524202.40892,
+      "gap": 0.019635038162707095
+    },
+    {
+      "prefix": "mip_swap_45",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 7.157504558563232,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.91155481338501e-08,
+      "max_bound_residual": 2.142996891052462e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72535206264.34715,
+      "gap": 0.02198247490126629
+    },
+    {
+      "prefix": "mip_swap_46",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 6.4195568561553955,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 5.681067705154419e-08,
+      "max_bound_residual": 1.270095140171179e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72403375736.16699,
+      "gap": 0.020201721371582243
+    },
+    {
+      "prefix": "mip_swap_47",
+      "status": 1,
+      "has_solution": true,
+      "opened_facility": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+      "closed_facility": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+      "seconds": 5.947200775146484,
+      "lower_bound": 70940702913.18297,
+      "source_sha256": {
+        "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+        "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+        "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+      },
+      "max_constraint_residual": 3.2619573175907135e-07,
+      "max_bound_residual": 8.077627455804759e-08,
+      "max_integer_violation": 0.0,
+      "objective": 72380056304.306,
+      "gap": 0.019886049619408798
+    }
+  ]
+}

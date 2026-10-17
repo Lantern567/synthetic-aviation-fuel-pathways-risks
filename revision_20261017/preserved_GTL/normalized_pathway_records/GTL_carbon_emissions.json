@@ -1,0 +1,57 @@
+{
+  "detailed": {
+    "ng_extraction": 0.0,
+    "saf_facility": 356153.45801516564,
+    "ft_production": 125074767.65361772,
+    "saf_storage": 0.0,
+    "saf_transport": 0.0,
+    "ng_transport": 0.0
+  },
+  "by_stage": {
+    "raw_material_emissions": 0.0,
+    "facility_emissions": 356153.45801516564,
+    "production_emissions": 125074767.65361772,
+    "storage_emissions": 0.0,
+    "transport_emissions": 0.0,
+    "total_emissions": 125430921.11163288,
+    "annual_emissions": 1630601974.4512305
+  },
+  "total_production_kg": 51050925.57290536,
+  "carbon_intensity_kg": 2.456976434883754,
+  "carbon_intensity_mj": 56.94035770298387,
+  "vs_traditional_jet": -36.022069996647346,
+  "traditional_jet_ci_gco2e_per_mj": 89,
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": -32.05964229701613,
+  "vs_corsia": 89.80119234327957,
+  "stage_contributions": {
+    "raw_material_emissions": {
+      "value": 0.0,
+      "percentage": 0.0
+    },
+    "facility_emissions": {
+      "value": 356153.45801516564,
+      "percentage": 0.283943907019698
+    },
+    "production_emissions": {
+      "value": 125074767.65361772,
+      "percentage": 99.71605609298031
+    },
+    "storage_emissions": {
+      "value": 0.0,
+      "percentage": 0.0
+    },
+    "transport_emissions": {
+      "value": 0.0,
+      "percentage": 0.0
+    }
+  },
+  "detailed_raw": {
+    "ng_extraction": 0.0,
+    "saf_facility": 356153.45801516564,
+    "ft_production": 125074767.65361772,
+    "saf_storage": 0.0,
+    "saf_transport": 0.0,
+    "ng_transport": 0.0
+  },
+  "revision_scope": "Archived control pathway; no new physical certification"
+}

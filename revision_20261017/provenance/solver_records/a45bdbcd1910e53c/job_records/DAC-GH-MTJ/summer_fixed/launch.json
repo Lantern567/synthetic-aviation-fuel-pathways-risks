@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_dac_projected",
+  "scenario": "DAC-GH-MTJ",
+  "label": "summer_fixed",
+  "pid": 1900673,
+  "launched_unix": 1792230920.3685067,
+  "from_stage": "model"
+}

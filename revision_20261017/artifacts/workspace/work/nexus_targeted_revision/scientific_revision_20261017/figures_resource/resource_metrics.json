@@ -1,0 +1,26 @@
+{
+  "solar_capacity_raw_mw": 748.6,
+  "solar_capacity_dc_mw": 758.6,
+  "solar_capacity_ac_mw": 632.1666666666667,
+  "wind_capacity_ac_mw": 3596.5,
+  "twelve_week_solar_mwh": 205397.73240389334,
+  "twelve_week_wind_mwh": 2562637.1141867973,
+  "baseline_solar_mwh": 55391.095862293325,
+  "baseline_wind_mwh": 606812.2106899396,
+  "summer_solar_mwh": 64880.976392586665,
+  "summer_wind_mwh": 794254.9484741553,
+  "solar_panel_b_fraction_at_900_wm2": 0.891648,
+  "maximum_solar_output_gw_in_baseline": 0.45716156499555555,
+  "figure_s9_solar_relationship": {
+    "sample_rows": 12000,
+    "displayed_rows": 11940,
+    "display_x_quantile_limit": 886.2302777777765,
+    "display_x_quantile": 0.995
+  },
+  "figure_s9_wind_relationship": {
+    "sample_rows": 9900,
+    "displayed_rows": 9850,
+    "display_x_quantile_limit": 27.529343145527452,
+    "display_x_quantile": 0.995
+  }
+}

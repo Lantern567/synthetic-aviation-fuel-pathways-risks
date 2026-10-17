@@ -1,0 +1,133 @@
+commodity,location,type,saved_peak_inventory_kg,charged_location,average_proxy_kg,represented_hours,independent_holding_cost_cny,independent_equipment_cost_cny
+saf,airport_北京,airport,0.0,True,0.0,672.0,0.0,0.0
+saf,airport_天津,airport,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Binyang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_CNOOC Dongying Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Fuyu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Guangyuan Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Haike Ruilin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Haiyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hebei Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hebei Qianhai Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Huabei Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hualian Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Huayu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Lianhe Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_PetroChina Qinhuangdao Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_PetroChina Rosneft Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Petrochina Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Qinhuangdao Far East Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Shenchi Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Beijing Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Cangzhou Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Shijiazhuang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Tianjin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Tianhong 1 Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Wudi Xinyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Xinhai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Yatong Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Zhonghai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Zhongjie Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Chengde Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Chengde Jianlong Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hbis Laoting Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Anfeng Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Donghai Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Huaxi Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Jinxi Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Rongxin Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Xinda Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Yanshan Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Jingye Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Lingyuan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qian an Jiujiang Wire Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qinhuangdao Baigong Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shanxi Tongde Xinghua Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shougang Jingtang United Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shougang Qian an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Donghai Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Ganglu Iron and Steel Co Ltd,byproduct_hydrogen_steel,5538722.495945208,True,2769361.247972604,672.0,242282449.68532726,55387224.95945208
+saf,steel_Tangshan Guotang Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Medium Thick Plate Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Songting Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Wenfeng Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,8996079.015518473,True,4498039.507759237,672.0,393518913.9802942,89960790.15518473
+saf,steel_Tianjin New Tiangang United Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Pipe Corporation,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Rockcheck Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Xinji Aosen Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,airport_北京,airport,0.0,True,0.0,672.0,0.0,0.0
+h2,airport_天津,airport,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Binyang Refinery,byproduct_hydrogen_refinery,1.4011902749189176e-11,True,7.005951374594588e-12,672.0,6.129280037610514e-10,2.802380549837835e-10
+h2,refinery_CNOOC Dongying Refinery,byproduct_hydrogen_refinery,1.0005820172409584e-08,True,5.002910086204792e-09,672.0,4.376884063530882e-07,2.0011640344819168e-07
+h2,refinery_Fuyu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Guangyuan Refinery,byproduct_hydrogen_refinery,3.2937474969685354e-10,True,1.6468737484842677e-10,672.0,1.4407965244596832e-08,6.587494993937071e-09
+h2,refinery_Haike Ruilin Refinery,byproduct_hydrogen_refinery,6.116351869422941e-11,True,3.0581759347114706e-11,672.0,2.6754991158088896e-09,1.2232703738845883e-09
+h2,refinery_Haiyue Refinery,byproduct_hydrogen_refinery,1.911359959194669e-12,True,9.556799795973345e-13,672.0,8.36093473690278e-11,3.8227199183893384e-11
+h2,refinery_Hebei Dagang Refinery,byproduct_hydrogen_refinery,1.4120047353571863e-09,True,7.060023676785931e-10,672.0,6.176586144188827e-08,2.8240094707143726e-08
+h2,refinery_Hebei Qianhai Refinery,byproduct_hydrogen_refinery,9.009909263113514e-09,True,4.504954631556757e-09,672.0,3.941238957733943e-07,1.8019818526227027e-07
+h2,refinery_Huabei Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Hualian Refinery,byproduct_hydrogen_refinery,3.910827217623592e-11,True,1.955413608811796e-11,672.0,1.7107280591789188e-09,7.821654435247184e-10
+h2,refinery_Huayu Refinery,byproduct_hydrogen_refinery,1.2192913345643319e-11,True,6.0964566728216596e-12,672.0,5.333592568224971e-10,2.438582669128664e-10
+h2,refinery_Lianhe Refinery,byproduct_hydrogen_refinery,1.9817321117443495e-08,True,9.908660558721747e-09,672.0,8.668766326621312e-07,3.963464223488699e-07
+h2,refinery_PetroChina Qinhuangdao Refinery,byproduct_hydrogen_refinery,4.253237761986384e-09,True,2.126618880993192e-09,672.0,1.8605100089823924e-07,8.506475523972767e-08
+h2,refinery_PetroChina Rosneft Tianjin  Refinery,byproduct_hydrogen_refinery,2.1248069970170039e-10,True,1.0624034985085019e-10,672.0,9.294624251759881e-09,4.249613994034008e-09
+h2,refinery_Petrochina Dagang Refinery,byproduct_hydrogen_refinery,1.417475914422539e-09,True,7.087379572112695e-10,672.0,6.20051893135394e-08,2.834951828845078e-08
+h2,refinery_Qinhuangdao Far East Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Shenchi Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Sinopec Beijing Refinery,byproduct_hydrogen_refinery,1.5006662579253316e-11,True,7.503331289626658e-12,672.0,6.564421622430734e-10,3.001332515850663e-10
+h2,refinery_Sinopec Cangzhou Refinery,byproduct_hydrogen_refinery,1.5604655345669014e-09,True,7.802327672834507e-10,672.0,6.826003877991229e-08,3.1209310691338026e-08
+h2,refinery_Sinopec Shijiazhuang Refinery,byproduct_hydrogen_refinery,1.136857008532388e-08,True,5.68428504266194e-09,672.0,4.972996953192809e-07,2.273714017064776e-07
+h2,refinery_Sinopec Tianjin Refinery,byproduct_hydrogen_refinery,2.8358044801279902e-09,True,1.4179022400639951e-09,672.0,1.2404767647720623e-07,5.6716089602559805e-08
+h2,refinery_Tianhong 1 Refinery,byproduct_hydrogen_refinery,1.280702122130606e-08,True,6.40351061065303e-09,672.0,5.602224117459557e-07,2.561404244261212e-07
+h2,refinery_Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Wudi Xinyue Refinery,byproduct_hydrogen_refinery,1.4180159269017167e-09,True,7.090079634508584e-10,672.0,6.202881128528678e-08,2.8360318538034335e-08
+h2,refinery_Xinhai  Refinery,byproduct_hydrogen_refinery,5.627498467219992e-10,True,2.813749233609996e-10,672.0,2.461658108411525e-08,1.1254996934439985e-08
+h2,refinery_Yatong Refinery,byproduct_hydrogen_refinery,1.8883255847867986e-08,True,9.441627923933993e-09,672.0,8.260174594783482e-07,3.776651169573597e-07
+h2,refinery_Zhonghai  Refinery,byproduct_hydrogen_refinery,2.322721570635622e-09,True,1.161360785317811e-09,672.0,1.0160369516301478e-07,4.645443141271244e-08
+h2,refinery_Zhongjie Refinery,byproduct_hydrogen_refinery,5.671140002050379e-09,True,2.8355700010251894e-09,672.0,2.480748391368424e-07,1.1342280004100758e-07
+h2,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Chengde Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Chengde Jianlong Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hbis Laoting Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Anfeng Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Donghai Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Huaxi Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Jinxi Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Rongxin Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Xinda Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Yanshan Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Jingye Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Lingyuan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qian an Jiujiang Wire Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qinhuangdao Baigong Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shanxi Tongde Xinghua Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shougang Jingtang United Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shougang Qian an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Donghai Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Ganglu Iron and Steel Co Ltd,byproduct_hydrogen_steel,2.182787284255028e-11,True,1.091393642127514e-11,672.0,9.548249632626522e-10,4.365574568510056e-10
+h2,steel_Tangshan Guotang Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Medium Thick Plate Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Songting Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Wenfeng Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,9.951008905773053e-09,True,4.975504452886526e-09,672.0,4.3529077622072894e-07,1.9902017811546105e-07
+h2,steel_Tianjin New Tiangang United Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin Pipe Corporation,byproduct_hydrogen_steel,1.2860255083069203e-09,True,6.430127541534602e-10,672.0,5.6255104085557914e-08,2.5720510166138407e-08
+h2,steel_Tianjin Rockcheck Steel Group Co Ltd,byproduct_hydrogen_steel,1.84020336746471e-08,True,9.20101683732355e-09,672.0,8.049671744972524e-07,3.68040673492942e-07
+h2,steel_Xinji Aosen Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0

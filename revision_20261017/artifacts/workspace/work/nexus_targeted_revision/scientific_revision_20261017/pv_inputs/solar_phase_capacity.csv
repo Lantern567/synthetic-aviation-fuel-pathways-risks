@@ -1,0 +1,67 @@
+phase_id,plant_name,capacity_raw_mw,capacity_rating_raw,Latitude,Longitude,longitude_index,latitude_index,grid_longitude,grid_latitude,capacity_rating_assumed,capacity_dc_mw,capacity_ac_mw,capacity_rule
+G100000803683,Beijing Miyun Xitiangezhuang Huadian solar farm,20.0,MWp/dc,40.444,116.746,914,391,116.72500000000001,40.425,MWp/dc,20.0,16.666666666666668,Reported DC retained; AC inferred using DC/AC = 1.2
+G100000803101,Beijing Yanqing Longqingxia solar farm,31.0,unknown,40.5275,116.0122,900,389,116.025,40.525,MWp/dc,31.0,25.833333333333336,Unknown source rating; assumed DC for this study
+G100000803129,Hebei Huai Tumuzhen CECEP solar farm,20.0,MWp/dc,40.3753,115.5967,891,392,115.57500000000002,40.375,MWp/dc,20.0,16.666666666666668,Reported DC retained; AC inferred using DC/AC = 1.2
+G100000812463,Hebei Laiyuan Shou'ao (Jiansheng) solar farm,80.0,unknown,39.3979,115.7125,894,412,115.72500000000001,39.375,MWp/dc,80.0,66.66666666666667,Unknown source rating; assumed DC for this study
+G100000830263,Hebei Olympic Photovoltaic Corridor Project solar farm,40.0,unknown,40.3083,115.5845,891,393,115.57500000000002,40.325,MWp/dc,40.0,33.333333333333336,Unknown source rating; assumed DC for this study
+G100001000517,Hebei Rongcheng- Wuhai Expressway Distributed solar farm,28.8,MWp/dc,39.0922,116.5566,911,418,116.57500000000002,39.075,MWp/dc,28.8,24.0,Reported DC retained; AC inferred using DC/AC = 1.2
+G100000830308,Hebei Zhangjiakou Huailai Yitai solar farm,70.0,unknown,40.3083,115.5845,891,393,115.57500000000002,40.325,MWp/dc,70.0,58.333333333333336,Unknown source rating; assumed DC for this study
+G100000830295,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,20.0,unknown,39.3255,116.4941,909,413,116.47500000000001,39.325,MWp/dc,20.0,16.666666666666668,Unknown source rating; assumed DC for this study
+G100000830296,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,20.0,unknown,39.3255,116.4941,909,413,116.47500000000001,39.325,MWp/dc,20.0,16.666666666666668,Unknown source rating; assumed DC for this study
+G100000814042,Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,50.0,MWac,39.5355,117.1976,923,409,117.17500000000001,39.525,MWac,60.0,50.0,Reported AC retained; DC inferred using DC/AC = 1.2
+G100000814043,Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,150.0,MWp/dc,39.5355,117.1976,923,409,117.17500000000001,39.525,MWp/dc,150.0,125.0,Reported DC retained; AC inferred using DC/AC = 1.2
+G100001012191,Beijing Jingxi Heavy Industry solar project,1.5,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.5,1.25,Unknown source rating; assumed DC for this study
+G100001012192,Beijing Jiulang Photovoltaic Technology solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012193,Beijing Lanjing Shengnuoer Energy Technology solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012194,Beijing Lvdong Future New Energy Development I solar project,1.3,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.3,1.0833333333333335,Unknown source rating; assumed DC for this study
+G100001012195,Beijing Lvdong Future New Energy Development II solar project,2.7,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.7,2.2500000000000004,Unknown source rating; assumed DC for this study
+G100001012196,Beijing Pushun New Energy solar project,1.6,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.6,1.3333333333333335,Unknown source rating; assumed DC for this study
+G100001012197,Beijing Qinghe Reclaimed Water Plant solar project,4.2,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,4.2,3.5000000000000004,Unknown source rating; assumed DC for this study
+G100001012198,Beijing Qingying Photovoltaic Technology solar project,1.2,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.2,1.0,Unknown source rating; assumed DC for this study
+G100001012199,Beijing Ruilian Xieyuan New Energy Technology solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012200,Beijing Runneng Energy Services solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012201,Beijing Shunyi Holdings I solar project,5.0,unknown,40.1488,116.6539,913,397,116.67500000000001,40.125,MWp/dc,5.0,4.166666666666667,Unknown source rating; assumed DC for this study
+G100001012202,Beijing Shunyi Holdings II solar project,1.1,unknown,40.1488,116.6539,913,397,116.67500000000001,40.125,MWp/dc,1.1,0.9166666666666667,Unknown source rating; assumed DC for this study
+G100001012204,Beijing Tiantuo New Energy I solar project,2.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.0,1.6666666666666667,Unknown source rating; assumed DC for this study
+G100001012205,Beijing Tiantuo New Energy II solar project,2.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.0,1.6666666666666667,Unknown source rating; assumed DC for this study
+G100001012206,Beijing Yadongda Zhenxing Energy Technology Development solar project,2.4,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.4,2.0,Unknown source rating; assumed DC for this study
+G100001012207,Beijing Yaorui Energy Technology solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012208,Beijing Yueyang Changsheng New Energy Technology solar project,2.1,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.1,1.7500000000000002,Unknown source rating; assumed DC for this study
+G100001012209,Beijing Zhongguanbao New Energy Investment solar project,9.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,9.0,7.5,Unknown source rating; assumed DC for this study
+G100001012210,Beijing Zhonghui Baoping solar project,1.7,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.7,1.4166666666666667,Unknown source rating; assumed DC for this study
+G100001012203,Beijing solar project,1.1,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.1,0.9166666666666667,Unknown source rating; assumed DC for this study
+G100001012644,CPI Tianjin Wuqing I solar project,2.3,unknown,39.3783,117.0358,920,412,117.025,39.375,MWp/dc,2.3,1.9166666666666665,Unknown source rating; assumed DC for this study
+G100001012645,CPI Tianjin Wuqing II solar project,1.8,unknown,39.3783,117.0358,920,412,117.025,39.375,MWp/dc,1.8,1.5,Unknown source rating; assumed DC for this study
+G100001012169,Beijing CGN Haifeng Agricultural Greenhouse solar project,5.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,5.0,4.166666666666667,Unknown source rating; assumed DC for this study
+G100001012179,Beijing Foton Cummins Engine ISF factory solar project,3.7,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.7,3.0833333333333335,Unknown source rating; assumed DC for this study
+G100001012180,Beijing Foton Cummins Engine solar project,3.8,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.8,3.1666666666666665,Unknown source rating; assumed DC for this study
+G100001012181,Beijing Fuyang New Energy Technology I solar project,1.2,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.2,1.0,Unknown source rating; assumed DC for this study
+G100001012182,Beijing Fuyang New Energy Technology II solar project,2.7,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.7,2.2500000000000004,Unknown source rating; assumed DC for this study
+G100001012183,Beijing Guangdong Jianlibao Beverage solar project,1.2,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.2,1.0,Unknown source rating; assumed DC for this study
+G100001012184,Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,3.2,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.2,2.666666666666667,Unknown source rating; assumed DC for this study
+G100001012185,Beijing Hanlong New Energy Technology Development solar project,1.1,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.1,0.9166666666666667,Unknown source rating; assumed DC for this study
+G100001012186,Beijing Hengan Green Valley Environmental Protection Technology solar project,5.5,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,5.5,4.583333333333334,Unknown source rating; assumed DC for this study
+G100001012187,Beijing Huadian solar project,3.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.0,2.5,Unknown source rating; assumed DC for this study
+G100001012188,Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,7.3,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,7.3,6.083333333333333,Unknown source rating; assumed DC for this study
+G100001012189,Beijing Jineng New Energy Technology solar project,1.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001012190,Beijing Jingfang Smart Energy Technology solar project,2.1,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.1,1.7500000000000002,Unknown source rating; assumed DC for this study
+G100001012706,Datang Tianjin Panshan Power Plant solar project,9.7,unknown,40.0439,117.4008,928,399,117.42500000000001,40.025,MWp/dc,9.7,8.083333333333334,Unknown source rating; assumed DC for this study
+G100001012768,Dingxing County Xinyang New Energy Technology solar project,4.2,unknown,39.2129,115.7492,894,415,115.72500000000001,39.225,MWp/dc,4.2,3.5000000000000004,Unknown source rating; assumed DC for this study
+G100001012869,Fangshan agricultural greenhouse solar project,6.0,unknown,39.7456,116.1371,902,405,116.125,39.725,MWp/dc,6.0,5.0,Unknown source rating; assumed DC for this study
+G100001012541,China New Energy solar project,5.0,unknown,39.5302,116.6926,913,409,116.67500000000001,39.525,MWp/dc,5.0,4.166666666666667,Unknown source rating; assumed DC for this study
+G100001012553,China Qingneng Oasis Technology solar project,8.3,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,8.3,6.916666666666668,Unknown source rating; assumed DC for this study
+G100001013711,Huitong Times Square solar project,2.6,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.6,2.166666666666667,Unknown source rating; assumed DC for this study
+G100001014404,Jiuxianqiao solar project,5.1,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,5.1,4.25,Unknown source rating; assumed DC for this study
+G100001014503,Langfang Fuyang New Energy Technology solar project,5.7,unknown,39.5302,116.6926,913,409,116.67500000000001,39.525,MWp/dc,5.7,4.75,Unknown source rating; assumed DC for this study
+G100000831396,Nankou solar project,12.8,MWp/dc,40.217,116.171,903,395,116.17500000000001,40.225,MWp/dc,12.8,10.666666666666668,Reported DC retained; AC inferred using DC/AC = 1.2
+G100001015216,Qinghe Reclaimed Water Plant solar project,3.3,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.3,2.75,Unknown source rating; assumed DC for this study
+G100001014361,Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,18.0,unknown,39.1403,117.003,920,417,117.025,39.125,MWp/dc,18.0,15.0,Unknown source rating; assumed DC for this study
+G100001014362,Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,12.0,unknown,39.1403,117.003,920,417,117.025,39.125,MWp/dc,12.0,10.0,Unknown source rating; assumed DC for this study
+G100001016150,Tianjin Qinghao Wuqing District solar project,1.0,unknown,39.3783,117.0358,920,412,117.025,39.375,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001015924,State Power Investment Supply and Cooperative Cotton Warehouse I solar project,1.0,unknown,39.1403,117.003,920,417,117.025,39.125,MWp/dc,1.0,0.8333333333333334,Unknown source rating; assumed DC for this study
+G100001015925,State Power Investment Supply and Cooperative Cotton Warehouse II solar project,3.3,unknown,39.1403,117.003,920,417,117.025,39.125,MWp/dc,3.3,2.75,Unknown source rating; assumed DC for this study
+G100001016610,Xiaohongmen Reclaimed Water Plant I solar project,2.8,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,2.8,2.3333333333333335,Unknown source rating; assumed DC for this study
+G100001016611,Xiaohongmen Reclaimed Water Plant II solar project,3.0,unknown,39.9057,116.3913,907,401,116.375,39.925,MWp/dc,3.0,2.5,Unknown source rating; assumed DC for this study
+G100001016724,Xiqing District fishing and photovoltaic complementary solar project,10.0,unknown,39.1403,117.003,920,417,117.025,39.125,MWp/dc,10.0,8.333333333333334,Unknown source rating; assumed DC for this study
+G100001017032,Yongqing Environmental Protection solar project,1.2,unknown,39.3208,116.4902,909,413,116.47500000000001,39.325,MWp/dc,1.2,1.0,Unknown source rating; assumed DC for this study
+G100001016696,Xinyi Glass Wuqing solar project,15.0,unknown,39.3783,117.0358,920,412,117.025,39.375,MWp/dc,15.0,12.5,Unknown source rating; assumed DC for this study

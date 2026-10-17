@@ -1,0 +1,4909 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.153107,
+            41.92724
+          ],
+          [
+            123.517239,
+            41.943666
+          ],
+          [
+            123.957208,
+            41.880872
+          ],
+          [
+            124.038685,
+            41.853191
+          ],
+          [
+            124.041405,
+            41.845577
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shenyang Oil Extraction Fushun Crude Pipeline",
+        "Capacity": 21,
+        "Capacity_int": 21,
+        "Product": "Crude",
+        "Length": 98.5,
+        "Operator": "PetroChina",
+        "YearOnline": 2001,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Liaohe oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 284 km",
+        "ObjectId": 1,
+        "Shape__Length": 101625.92178117322
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.523086,
+            36.293103
+          ],
+          [
+            107.63610569,
+            36.09956179
+          ],
+          [
+            107.611096,
+            35.90081
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Xi M aLine II Quzizhen Yimazhen Crude Pipeline",
+        "Capacity": 32,
+        "Capacity_int": 32,
+        "Product": "Crude",
+        "Length": 64.5,
+        "Operator": "PetroChina",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Changqing oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 64.5 km",
+        "ObjectId": 2,
+        "Shape__Length": 57002.96747203528
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.88427,
+            38.967697
+          ],
+          [
+            121.88846416,
+            38.99263364
+          ],
+          [
+            121.772634,
+            39.062169
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dalian New Port Chichang Crude Pipeline",
+        "Capacity": 347,
+        "Capacity_int": 347,
+        "Product": "Crude",
+        "Length": 24.4,
+        "Operator": "PetroChina",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 24.4 km",
+        "ObjectId": 3,
+        "Shape__Length": 19896.89149623187
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.771124,
+            37.173896
+          ],
+          [
+            109.849081,
+            37.080591
+          ],
+          [
+            109.829649,
+            37.010538
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zibei Yongping Crude Pipeline",
+        "Capacity": 12,
+        "Capacity_int": 12,
+        "Product": "Crude",
+        "Length": 23.7,
+        "Operator": "Yanchang Petroleum",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Yongping Refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 23.7 km",
+        "ObjectId": 4,
+        "Shape__Length": 25660.116030630295
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.312696,
+            39.105433
+          ],
+          [
+            116.136531,
+            38.733113
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Chahejixiang Renqiu Crude Pipeline",
+        "Capacity": 16,
+        "Capacity_int": 16,
+        "Product": "Crude",
+        "Length": 34.5,
+        "Operator": "PetroChina",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Huabei oilfield",
+        "DestType": "Refinery",
+        "Dest": "Huabei Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 34.5 km",
+        "ObjectId": 5,
+        "Shape__Length": 56766.09351932659
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.32959427,
+            46.99712152
+          ],
+          [
+            84.889207,
+            45.579888
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Fengcheng Karamay Heavy Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Heavy crude",
+        "Length": 102.6,
+        "Operator": "PetroChina",
+        "YearOnline": 2012,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Fengcheng oilfield",
+        "DestType": "Refinery",
+        "Dest": "Karamay refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 102.6 km",
+        "ObjectId": 6,
+        "Shape__Length": 233528.2155844992
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            118.309925,
+            36.821789
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongying Xindian Crude Pipeline",
+        "Capacity": 201,
+        "Capacity_int": 201,
+        "Product": "Crude",
+        "Length": 75.99,
+        "Operator": "SINOPEC",
+        "YearOnline": 1988,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 75.99 km",
+        "ObjectId": 7,
+        "Shape__Length": 94625.15568917841
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            118.30352049,
+            37.47765066
+          ],
+          [
+            117.60770493,
+            37.43580617
+          ],
+          [
+            116.877681,
+            37.185339
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongying Linyi Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 189,
+        "Operator": "SINOPEC",
+        "YearOnline": 1978,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Shengli oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 189 km",
+        "ObjectId": 8,
+        "Shape__Length": 207946.0318095985
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            118.790739,
+            36.85576
+          ],
+          [
+            119.161748,
+            36.706962
+          ],
+          [
+            119.508085,
+            36.531137
+          ],
+          [
+            120.006202,
+            36.285877
+          ],
+          [
+            120.04619,
+            35.872664
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongying Huangdao Crude Pipeline",
+        "Capacity": 301,
+        "Capacity_int": 301,
+        "Product": "Crude",
+        "Length": 245.32,
+        "Operator": "SINOPEC",
+        "YearOnline": 1974,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Shengli oilfield",
+        "DestType": "Export",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 245.32 km",
+        "ObjectId": 9,
+        "Shape__Length": 295678.45947566646
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.407107,
+            37.053555
+          ],
+          [
+            118.287549,
+            36.814845
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Guangrao Sinopec Qilu Petrochemical Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 46,
+        "Operator": "SINOPEC",
+        "YearOnline": 1998,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Qilu Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 46 km",
+        "ObjectId": 10,
+        "Shape__Length": 35809.54003706337
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.21211,
+            39.122665
+          ],
+          [
+            115.962579,
+            39.729487
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tanggu Yanshan Crude Pipeline",
+        "Capacity": 46,
+        "Capacity_int": 46,
+        "Product": "Crude",
+        "Length": 175.3,
+        "Operator": "SINOPEC",
+        "YearOnline": 2001,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Yanshan Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 175.3 km",
+        "ObjectId": 11,
+        "Shape__Length": 164304.22366217364
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.659841,
+            39.029711
+          ],
+          [
+            115.962579,
+            39.729487
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tanggu Yanshan Crude Pipeline II",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 225.3,
+        "Operator": "SINOPEC",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Yanshan Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 225.3 km",
+        "ObjectId": 12,
+        "Shape__Length": 214136.78269129206
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.082917,
+            38.683591
+          ],
+          [
+            116.838834,
+            38.304477
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Renqiu Cangzhou Crude Pipeline",
+        "Capacity": 178,
+        "Capacity_int": 178,
+        "Product": "Crude",
+        "Length": 109,
+        "Operator": "PetroChina",
+        "YearOnline": 1976,
+        "Status": "Retired",
+        "OriginType": "Oilfield",
+        "Origin": "Huabei oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 109 km",
+        "ObjectId": 13,
+        "Shape__Length": 99942.3375892336
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.877681,
+            37.185339
+          ],
+          [
+            117.120095,
+            36.6512
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Linyi Jinan Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 70.8,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 70.8 km",
+        "ObjectId": 14,
+        "Shape__Length": 79117.15581752606
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.877681,
+            37.185339
+          ],
+          [
+            117.120095,
+            36.6512
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Linyi Jinan Crude Pipeline II",
+        "Capacity": 76,
+        "Capacity_int": 76,
+        "Product": "Crude",
+        "Length": 76,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 76 km",
+        "ObjectId": 15,
+        "Shape__Length": 79117.15581752606
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.180515,
+            37.395321
+          ],
+          [
+            77.284031,
+            38.168682
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Kekeyaxiang Zepu Petroleum Crude Pipeline",
+        "Capacity": 2,
+        "Capacity_int": 2,
+        "Product": "Crude and condensate",
+        "Length": 76.5,
+        "Operator": "PetroChina",
+        "YearOnline": 1987,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Kekeya oilfield",
+        "DestType": "Refinery",
+        "Dest": "Zepu Petroleum",
+        "CapUnit": "KBD",
+        "Note": "Length: 76.5 km",
+        "ObjectId": 16,
+        "Shape__Length": 109536.60207006217
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.362824,
+            39.159148
+          ],
+          [
+            118.43574302,
+            39.20263464
+          ],
+          [
+            118.46473533,
+            39.25163556
+          ],
+          [
+            118.460379,
+            39.27307
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Laoyemiao Caofeidian Crude Pipeline",
+        "Capacity": 38,
+        "Capacity_int": 38,
+        "Product": "Crude",
+        "Length": 23,
+        "Operator": "PetroChina",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Jidong oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 23 km",
+        "ObjectId": 17,
+        "Shape__Length": 21107.356279924516
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.27906445,
+            29.58974879
+          ],
+          [
+            113.29356061,
+            29.58210873
+          ],
+          [
+            113.30673893,
+            29.58440081
+          ],
+          [
+            113.32035654,
+            29.58077166
+          ],
+          [
+            113.33485269,
+            29.56568065
+          ],
+          [
+            113.34868993,
+            29.54848561
+          ],
+          [
+            113.35549874,
+            29.54122461
+          ],
+          [
+            113.365013,
+            29.538048
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lucheng Port Sinopec Changling Lianhua Crude Pipeline",
+        "Capacity": 42,
+        "Capacity_int": 42,
+        "Product": "Crude",
+        "Length": 22.5,
+        "Operator": "SINOPEC",
+        "YearOnline": 1998,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Changling Refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 22.5 km",
+        "ObjectId": 18,
+        "Shape__Length": 12504.963370556972
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.821401,
+            32.322247
+          ],
+          [
+            118.79858,
+            32.246873
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lu Ning Crude Pipeline Yangzi Petrochemical Branch",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 13.8,
+        "Operator": "SINOPEC",
+        "YearOnline": 1987,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Yangzi Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 13.8 km",
+        "ObjectId": 19,
+        "Shape__Length": 10244.903639884335
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.959175,
+            37.41146
+          ],
+          [
+            119.95344678,
+            37.11141898
+          ],
+          [
+            119.73205092,
+            36.95993485
+          ],
+          [
+            119.353618,
+            36.827682
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Laizhou Harbor Changyi Petrochemical Crude Pipeline",
+        "Capacity": 301,
+        "Capacity_int": 301,
+        "Product": "Crude",
+        "Length": 106,
+        "Operator": "Shandong province",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Changyi Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 106 km",
+        "ObjectId": 20,
+        "Shape__Length": 120405.27266873563
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            122.070714,
+            41.119997
+          ],
+          [
+            121.35773,
+            41.1734
+          ],
+          [
+            121.156692,
+            41.030667
+          ],
+          [
+            120.986449,
+            40.889112
+          ],
+          [
+            120.841758,
+            40.752284
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Panjin Huludao Petroleum Wuchang Crude Pipeline",
+        "Capacity": 162,
+        "Capacity_int": 162,
+        "Product": "Crude",
+        "Length": 111,
+        "Operator": "PetroChina",
+        "YearOnline": 1979,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Liaohe oilfield",
+        "DestType": "Refinery",
+        "Dest": "Petroleum Wuchang",
+        "CapUnit": "KBD",
+        "Note": "Length: 111 km",
+        "ObjectId": 21,
+        "Shape__Length": 164475.79356696812
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.633461,
+            39.286803
+          ],
+          [
+            118.536345,
+            39.156158
+          ],
+          [
+            118.701144,
+            39.999174
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Nanpuzhen Gaoshangbao Qian'an Crude Pipeline",
+        "Capacity": 162,
+        "Capacity_int": 162,
+        "Product": "Crude",
+        "Length": 124,
+        "Operator": "PetroChina",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Nanpu oilfield and Gaoshangbao oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 124 km",
+        "ObjectId": 22,
+        "Shape__Length": 144795.02313162744
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.02697921,
+            39.83702828
+          ],
+          [
+            120.503308,
+            40.602053
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Suizhong Oilfield Nanlingcun Subsea Crude Pipeline",
+        "Capacity": 141,
+        "Capacity_int": 141,
+        "Product": "Crude",
+        "Length": 69.81,
+        "Operator": "CNOOC",
+        "YearOnline": 2000,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Bohai offshore oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 69.81 km",
+        "ObjectId": 23,
+        "Shape__Length": 125848.46165690773
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.45537027,
+            40.97295099
+          ],
+          [
+            84.537698,
+            41.961955
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tahe Oilfield Luntai Railway Crude Pipeline",
+        "Capacity": 46,
+        "Capacity_int": 46,
+        "Product": "Crude",
+        "Length": 68,
+        "Operator": "PetroChina",
+        "YearOnline": 2000,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Tahe oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 68 km",
+        "ObjectId": 24,
+        "Shape__Length": 147214.97562168774
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            85.07393476,
+            38.93986486
+          ],
+          [
+            84.419298,
+            41.201452
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tazhong Lunnan Crude Pipeline",
+        "Capacity": 139,
+        "Capacity_int": 139,
+        "Product": "Crude",
+        "Length": 302.15,
+        "Operator": "PetroChina",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Tazhong oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 302.15 km",
+        "ObjectId": 25,
+        "Shape__Length": 337013.1952218911
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.318928,
+            35.121884
+          ],
+          [
+            115.029215,
+            35.761829
+          ],
+          [
+            112.612547,
+            34.90055
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Rizhao Puyang Luoyang Crude Pipeline",
+        "Capacity": 417,
+        "Capacity_int": 417,
+        "Product": "Crude",
+        "Length": 768,
+        "Operator": "SINOPEC",
+        "YearOnline": 2021,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Luoyang Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 768 km",
+        "ObjectId": 26,
+        "Shape__Length": 779041.1773041884
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            125.16936603,
+            28.6091426
+          ],
+          [
+            122.226237,
+            30.264139
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Pinhu Oilfield Daishan Oil Duck Subsea Crude Pipeline",
+        "Capacity": 19,
+        "Capacity_int": 19,
+        "Product": "Crude",
+        "Length": 306,
+        "Operator": "CNOOC",
+        "YearOnline": 1998,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Pinhu oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 306 km",
+        "ObjectId": 27,
+        "Shape__Length": 389994.4837318589
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.23580998,
+            38.68611715
+          ],
+          [
+            117.566603,
+            38.601719
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "QK18 Tianjin Subsea Crude Pipeline",
+        "Capacity": 32,
+        "Capacity_int": 32,
+        "Product": "Crude",
+        "Length": 39.7,
+        "Operator": "CNOOC",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Bohai offshore oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 39.7 km",
+        "ObjectId": 28,
+        "Shape__Length": 75460.70730515222
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 29,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            124.720267,
+            46.301479
+          ],
+          [
+            125.184742,
+            44.432888
+          ],
+          [
+            125.453431,
+            43.803671
+          ],
+          [
+            124.768589,
+            43.057735
+          ],
+          [
+            123.726035,
+            42.223828
+          ],
+          [
+            123.996523,
+            41.900357
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Daqing Linyuanzhen Fushun Qiandianzhen Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 663.64,
+        "Operator": "PetroChina",
+        "YearOnline": 1971,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Daqing oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 663.64 km",
+        "ObjectId": 29,
+        "Shape__Length": 768613.1620807865
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.685285,
+            37.491505
+          ],
+          [
+            106.230908,
+            38.487193
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhongning Yinchuan Crude Pipeline",
+        "Capacity": 28,
+        "Capacity_int": 28,
+        "Product": "Crude",
+        "Length": 114,
+        "Operator": "PetroChina",
+        "YearOnline": 2001,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 114 km",
+        "ObjectId": 30,
+        "Shape__Length": 153195.96664450623
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            94.151772,
+            43.974735
+          ],
+          [
+            93.335141,
+            44.239989
+          ],
+          [
+            92.905849,
+            42.933928
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Santanghu Oilfield Crude Pipeline",
+        "Capacity": 23,
+        "Capacity_int": 23,
+        "Product": "Crude",
+        "Length": 189,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Santanghu oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 189 km",
+        "ObjectId": 31,
+        "Shape__Length": 306121.80720409687
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            97.910265,
+            23.993288
+          ],
+          [
+            97.85193,
+            24.012808
+          ],
+          [
+            98.588086,
+            24.43369
+          ],
+          [
+            99.161761,
+            25.112046
+          ],
+          [
+            100.267638,
+            25.606486
+          ],
+          [
+            101.528068,
+            25.045532
+          ],
+          [
+            102.832891,
+            24.880095
+          ],
+          [
+            103.796167,
+            25.489999
+          ],
+          [
+            105.947595,
+            26.253088
+          ],
+          [
+            106.927389,
+            27.725654
+          ],
+          [
+            106.912251,
+            29.431586
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Myanmar China Crude Pipeline",
+        "Capacity": 509,
+        "Capacity_int": 509,
+        "Product": "Crude",
+        "Length": 771,
+        "Operator": "PetroChina and MOGE",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "Middle East, Africa",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 771 km",
+        "ObjectId": 32,
+        "Shape__Length": 1467353.551983262
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            90.857308,
+            38.252178
+          ],
+          [
+            91.149022,
+            38.026776
+          ],
+          [
+            93.163273,
+            36.909074
+          ],
+          [
+            93.739356,
+            36.706956
+          ],
+          [
+            94.928484,
+            36.406404
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Huatugouzhen Golmud Crude Pipeline New",
+        "Capacity": 69,
+        "Capacity_int": 69,
+        "Product": "Crude",
+        "Length": 438.09,
+        "Operator": "PetroChina",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Huatugou",
+        "DestType": "Refinery",
+        "Dest": "Golmud refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 438.09 km",
+        "ObjectId": 33,
+        "Shape__Length": 527903.7018942065
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 34,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            124.35445,
+            40.000787
+          ],
+          [
+            124.448919,
+            40.082321
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "China DPRK Crude Pipeline",
+        "Capacity": 69,
+        "Capacity_int": 69,
+        "Product": "Crude",
+        "Length": 30.3,
+        "Operator": "PetroChina",
+        "YearOnline": 1975,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Export",
+        "Dest": "North Korea",
+        "CapUnit": "KBD",
+        "Note": "Length: 30.3 km",
+        "ObjectId": 34,
+        "Shape__Length": 15847.544137084291
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 35,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110.359368,
+            21.270702
+          ],
+          [
+            110.286152,
+            21.609672
+          ],
+          [
+            110.639569,
+            21.664044
+          ],
+          [
+            110.925439,
+            21.662991
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhanjiang Maoming Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 105,
+        "Operator": "SINOPEC",
+        "YearOnline": 1980,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 105 km",
+        "ObjectId": 35,
+        "Shape__Length": 113051.13454558232
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 36,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.120161,
+            21.481291
+          ],
+          [
+            109.25264689,
+            21.54251336
+          ],
+          [
+            109.55838403,
+            21.75645719
+          ],
+          [
+            109.6585393,
+            21.73687249
+          ],
+          [
+            110.359368,
+            21.270702
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhanjiang Beihai Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 202,
+        "Operator": "SINOPEC",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 202 km",
+        "ObjectId": 36,
+        "Shape__Length": 166366.45301259903
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 37,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.22649465,
+            20.1327465
+          ],
+          [
+            109.118014,
+            21.042256
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Weizhou Island Subsea Crude Pipeline",
+        "Capacity": 466,
+        "Capacity_int": 466,
+        "Product": "Crude",
+        "Length": null,
+        "Operator": "CNOOC",
+        "YearOnline": null,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Weizhou oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length:  km",
+        "ObjectId": 37,
+        "Shape__Length": 146787.93623885384
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 38,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.118014,
+            21.042256
+          ],
+          [
+            109.42158,
+            21.529127
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Weizhou Island Tieshangang Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 57,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Weizhou oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 57 km",
+        "ObjectId": 38,
+        "Shape__Length": 67270.27479976714
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 39,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.650727,
+            22.670407
+          ],
+          [
+            114.536864,
+            22.717915
+          ],
+          [
+            114.456539,
+            22.789101
+          ],
+          [
+            114.289528,
+            23.17277
+          ],
+          [
+            113.810859,
+            23.261141
+          ],
+          [
+            113.465007,
+            23.104708
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Mabianzhou Guangzhou Petrochemical Crude Pipeline",
+        "Capacity": 278,
+        "Capacity_int": 278,
+        "Product": "Crude",
+        "Length": 167,
+        "Operator": "SINOPEC",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 167 km",
+        "ObjectId": 39,
+        "Shape__Length": 173549.11162029096
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 40,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.128497,
+            36.660515
+          ],
+          [
+            108.768432,
+            36.822194
+          ],
+          [
+            109.493107,
+            36.591213
+          ],
+          [
+            109.379711,
+            35.98801
+          ],
+          [
+            109.432369,
+            35.761974
+          ],
+          [
+            109.361669,
+            35.65522
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Wuqi Baibao Ya'an Crude Pipeline",
+        "Capacity": 120,
+        "Capacity_int": 120,
+        "Product": "Crude",
+        "Length": 396.24,
+        "Operator": "Yanchang Petroleum",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Ya'an refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 396.24 km",
+        "ObjectId": 40,
+        "Shape__Length": 293983.5427821141
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 41,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.398858,
+            37.134273
+          ],
+          [
+            108.128497,
+            36.660515
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jiyuan Baibaozhen Crude Pipeline",
+        "Capacity": 30,
+        "Capacity_int": 30,
+        "Product": "Crude",
+        "Length": 103.9,
+        "Operator": "PetroChina",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Changqing oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 103.9 km",
+        "ObjectId": 41,
+        "Shape__Length": 104624.20666879663
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 42,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.398858,
+            37.134273
+          ],
+          [
+            109.781327,
+            39.608266
+          ],
+          [
+            111.760034,
+            40.741895
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Changqing Hohhot Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 578,
+        "Operator": "PetroChina",
+        "YearOnline": 2012,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Changqing oilfield",
+        "DestType": "Refinery",
+        "Dest": "Hohhot Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 578 km",
+        "ObjectId": 42,
+        "Shape__Length": 715517.8056913393
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 43,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.184766,
+            32.272258
+          ],
+          [
+            118.773483,
+            32.23786
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yizheng Yangzi Crude Pipeline",
+        "Capacity": 347,
+        "Capacity_int": 347,
+        "Product": "Crude",
+        "Length": 33.1,
+        "Operator": "SINOPEC",
+        "YearOnline": 2014,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Yangzi Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 33.1 km",
+        "ObjectId": 43,
+        "Shape__Length": 46007.169279666676
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 44,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            86.174633,
+            41.725891
+          ],
+          [
+            89.333333,
+            42.166667
+          ],
+          [
+            90.21333,
+            42.868744
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Korla Shanshan Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 476,
+        "Operator": "PetroChina",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 476 km",
+        "ObjectId": 44,
+        "Shape__Length": 502120.85661389434
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 45,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.224366,
+            41.180103
+          ],
+          [
+            84.252156,
+            41.777702
+          ],
+          [
+            84.897051,
+            41.986794
+          ],
+          [
+            85.465618,
+            41.932794
+          ],
+          [
+            86.174633,
+            41.725891
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lunnan Korla Crude Pipeline",
+        "Capacity": 69,
+        "Capacity_int": 69,
+        "Product": "Crude",
+        "Length": 191.79,
+        "Operator": "PetroChina",
+        "YearOnline": 1992,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Lunnan oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 191.79 km",
+        "ObjectId": 45,
+        "Shape__Length": 315721.08210894983
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 46,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.224366,
+            41.180103
+          ],
+          [
+            86.174633,
+            41.725891
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lunnan Korla Crude Pipeline II",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 161.53,
+        "Operator": "PetroChina",
+        "YearOnline": 1996,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Lunnan oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 161.53 km",
+        "ObjectId": 46,
+        "Shape__Length": 231743.34002157958
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 47,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            82.855919,
+            41.663894
+          ],
+          [
+            84.224366,
+            41.180103
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dong Lun Crude Pipeline",
+        "Capacity": 23,
+        "Capacity_int": 23,
+        "Product": "Crude",
+        "Length": 93.95,
+        "Operator": "PetroChina",
+        "YearOnline": 1994,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Donghetang oilfield and Yaha oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 93.95 km",
+        "ObjectId": 47,
+        "Shape__Length": 168416.7743652704
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 48,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            125.185689,
+            43.839499
+          ],
+          [
+            126.470111,
+            43.948444
+          ],
+          [
+            126.604685,
+            43.885312
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Changchun Jilin Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 156,
+        "Operator": "PetroChina",
+        "YearOnline": 1995,
+        "Status": "Operating",
+        "OriginType": "Import and oilfield",
+        "Origin": "Russia, Daqing, and Jilin",
+        "DestType": "Refinery",
+        "Dest": "Jilin refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 156 km",
+        "ObjectId": 48,
+        "Shape__Length": 161845.72601962142
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 49,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            124.720267,
+            46.301479
+          ],
+          [
+            123.726035,
+            42.223828
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qing Tie Crude Pipeline IV",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 553,
+        "Operator": "PetroChina",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Daqing oilfield and Jilin oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 553 km",
+        "ObjectId": 49,
+        "Shape__Length": 643811.3837958073
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 50,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            124.720267,
+            46.301479
+          ],
+          [
+            124.555021,
+            45.289077
+          ],
+          [
+            125.185689,
+            43.839499
+          ],
+          [
+            123.726035,
+            42.223828
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qing Tie Crude Pipeline III",
+        "Capacity": 625,
+        "Capacity_int": 625,
+        "Product": "Crude",
+        "Length": 590,
+        "Operator": "PetroChina",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "Russia",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 590 km",
+        "ObjectId": 50,
+        "Shape__Length": 694708.0656706576
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 51,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            124.720267,
+            46.301479
+          ],
+          [
+            126.534967,
+            45.803775
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Daqing Harbin Crude Pipeline",
+        "Capacity": 83,
+        "Capacity_int": 83,
+        "Product": "Crude",
+        "Length": 200,
+        "Operator": "PetroChina",
+        "YearOnline": 1999,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Daqing oilfield",
+        "DestType": "Refinery",
+        "Dest": "Harbin Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 200 km",
+        "ObjectId": 51,
+        "Shape__Length": 217214.48675870642
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 52,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.726035,
+            42.223828
+          ],
+          [
+            123.957208,
+            41.880872
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tieling Fushun Crude Pipeline",
+        "Capacity": 220,
+        "Capacity_int": 220,
+        "Product": "Crude",
+        "Length": 44,
+        "Operator": "PetroChina",
+        "YearOnline": 1971,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Fushun Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 44 km",
+        "ObjectId": 52,
+        "Shape__Length": 57496.1973672625
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 53,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.726035,
+            42.223828
+          ],
+          [
+            123.431472,
+            41.805699
+          ],
+          [
+            122.994329,
+            41.108647
+          ],
+          [
+            122.509131,
+            40.644621
+          ],
+          [
+            122.127757,
+            40.205942
+          ],
+          [
+            121.979603,
+            39.627114
+          ],
+          [
+            121.88427,
+            38.967697
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tieling Dalian Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 460.3,
+        "Operator": "PetroChina",
+        "YearOnline": 1975,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Dalian Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 460.3 km",
+        "ObjectId": 53,
+        "Shape__Length": 530193.0792269437
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 54,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.827183,
+            41.917084
+          ],
+          [
+            123.374483,
+            41.515552
+          ],
+          [
+            123.236944,
+            41.267244
+          ],
+          [
+            122.994329,
+            41.108647
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Fushun Anshan Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 116.58,
+        "Operator": "PetroChina",
+        "YearOnline": 1972,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Anshan refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 116.58 km",
+        "ObjectId": 54,
+        "Shape__Length": 153938.79075843096
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 55,
+      "geometry": null,
+      "properties": {
+        "id": null,
+        "Name": "Yantai Harbor Zibo Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 540,
+        "Operator": "Shandong province",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 540 km",
+        "ObjectId": 55,
+        "Shape__Length": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 56,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.391444,
+            37.547094
+          ],
+          [
+            119.161748,
+            36.706962
+          ],
+          [
+            118.055019,
+            36.813546
+          ],
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            117.970699,
+            37.38198
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yantai Harbor Zibo Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 540,
+        "Operator": "Shandong province",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 540 km",
+        "ObjectId": 56,
+        "Shape__Length": 588042.2939526091
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 57,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.16777193,
+            36.72812445
+          ],
+          [
+            120.382609,
+            36.067108
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yantai Harbor Zibo Crude Pipeline Weifang Qindao Branch",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 540,
+        "Operator": "Shandong province",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 540 km",
+        "ObjectId": 57,
+        "Shape__Length": 163235.89099078122
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 58,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.526925,
+            35.416734
+          ],
+          [
+            119.318928,
+            35.121884
+          ],
+          [
+            119.17333,
+            34.841348
+          ],
+          [
+            119.034725,
+            33.631893
+          ],
+          [
+            119.004816,
+            32.667571
+          ],
+          [
+            119.184766,
+            32.272258
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Rizhao Yizheng Crude Pipeline",
+        "Capacity": 926,
+        "Capacity_int": 926,
+        "Product": "Crude",
+        "Length": 390,
+        "Operator": "SINOPEC",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 390 km",
+        "ObjectId": 58,
+        "Shape__Length": 435537.6727619091
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 59,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.726035,
+            42.223828
+          ],
+          [
+            121.72202225,
+            41.97695232
+          ],
+          [
+            121.02216658,
+            41.33081324
+          ],
+          [
+            120.83694,
+            40.71104
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tieling Huludao Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 400.8,
+        "Operator": "PetroChina",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 400.8 km",
+        "ObjectId": 59,
+        "Shape__Length": 443725.09360295057
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 60,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.726035,
+            42.223828
+          ],
+          [
+            122.836723,
+            41.985186
+          ],
+          [
+            122.123443,
+            41.666028
+          ],
+          [
+            121.35773,
+            41.1734
+          ],
+          [
+            120.83694,
+            40.71104
+          ],
+          [
+            120.34431,
+            40.32558
+          ],
+          [
+            119.600523,
+            39.935361
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Tie Qin Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 454,
+        "Operator": "PetroChina",
+        "YearOnline": 1973,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 454 km",
+        "ObjectId": 60,
+        "Shape__Length": 578780.5736179035
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 61,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.600523,
+            39.935361
+          ],
+          [
+            119.162693,
+            39.712813
+          ],
+          [
+            118.701144,
+            39.999174
+          ],
+          [
+            118.162215,
+            39.832582
+          ],
+          [
+            117.309863,
+            39.717379
+          ],
+          [
+            116.435747,
+            39.729665
+          ],
+          [
+            116.407396,
+            39.9042
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qin Jing Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 324.6,
+        "Operator": "PetroChina",
+        "YearOnline": 1975,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Daqing oilfield",
+        "DestType": "Refinery",
+        "Dest": "Yanshan Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 324.6 km",
+        "ObjectId": 61,
+        "Shape__Length": 408344.75550397986
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 62,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.600523,
+            39.935361
+          ],
+          [
+            119.609907,
+            39.91916
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qinhuangdao Qinhuangdao Port Crude Pipeline III",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 12.82,
+        "Operator": "PetroChina",
+        "YearOnline": 1975,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 12.82 km",
+        "ObjectId": 62,
+        "Shape__Length": 2573.3466398583355
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 63,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.184766,
+            32.272258
+          ],
+          [
+            117.115101,
+            30.531919
+          ],
+          [
+            116.00193,
+            29.705077
+          ],
+          [
+            114.556222,
+            30.044704
+          ],
+          [
+            113.475801,
+            29.826916
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yizheng Changling Crude Pipeline",
+        "Capacity": 679,
+        "Capacity_int": 679,
+        "Product": "Crude",
+        "Length": 979,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 979 km",
+        "ObjectId": 63,
+        "Shape__Length": 776988.3707299138
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 64,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.556222,
+            30.044704
+          ],
+          [
+            114.305539,
+            30.592849
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "YiChang Crude Pipeline Dazhi Wuhan Branch",
+        "Capacity": 679,
+        "Capacity_int": 679,
+        "Product": "Crude",
+        "Length": 979,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 979 km",
+        "ObjectId": 64,
+        "Shape__Length": 75996.49565315915
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 65,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            114.556222,
+            30.044704
+          ],
+          [
+            113.365013,
+            29.538048
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "YiChang Crude Pipeline Dazhi Changling Branch",
+        "Capacity": 679,
+        "Capacity_int": 679,
+        "Product": "Crude",
+        "Length": 979,
+        "Operator": "SINOPEC",
+        "YearOnline": 2006,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Multiple refineries",
+        "CapUnit": "KBD",
+        "Note": "Length: 979 km",
+        "ObjectId": 65,
+        "Shape__Length": 147674.4248720406
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 66,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.475801,
+            29.826916
+          ],
+          [
+            113.50309598,
+            29.99079812
+          ],
+          [
+            112.899762,
+            30.402167
+          ],
+          [
+            112.223106,
+            31.02391
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Honghu Qianjiang Jingmen Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 222,
+        "Operator": "SINOPEC",
+        "YearOnline": 1995,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Jingmen Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 222 km",
+        "ObjectId": 66,
+        "Shape__Length": 217059.02746954793
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 67,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.641797,
+            30.522145
+          ],
+          [
+            112.223106,
+            31.02391
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Zhongshicun Jingmen Crude Pipeline",
+        "Capacity": 23,
+        "Capacity_int": 23,
+        "Product": "Crude",
+        "Length": 75,
+        "Operator": "SINOPEC",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Jianghan oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 75 km",
+        "ObjectId": 67,
+        "Shape__Length": 79991.44724002718
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 68,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            112.528308,
+            32.990664
+          ],
+          [
+            112.093323,
+            32.197776
+          ],
+          [
+            112.223106,
+            31.02391
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Wei Jing Second Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 226.4,
+        "Operator": "SINOPEC",
+        "YearOnline": 1978,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Jingmen refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 226.4 km",
+        "ObjectId": 68,
+        "Shape__Length": 269537.91536556487
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 69,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.460379,
+            39.27307
+          ],
+          [
+            117.94497901,
+            39.35490091
+          ],
+          [
+            117.69898361,
+            39.24884544
+          ],
+          [
+            117.53732949,
+            38.94884957
+          ],
+          [
+            117.508837,
+            38.699335
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Caofeidian Tianjin Dagang Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 190,
+        "Operator": "SINOPEC",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 190 km",
+        "ObjectId": 69,
+        "Shape__Length": 172353.58442765463
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 70,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.508837,
+            38.699335
+          ],
+          [
+            117.008927,
+            39.08291
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dagang Zhoulizhuang Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 70,
+        "Operator": "PetroChina",
+        "YearOnline": 1995,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Dagang oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 70 km",
+        "ObjectId": 70,
+        "Shape__Length": 78143.99272132607
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 71,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            117.742809,
+            38.983224
+          ],
+          [
+            117.710496,
+            39.00366
+          ],
+          [
+            116.97413,
+            38.947512
+          ],
+          [
+            116.653793,
+            38.705449
+          ],
+          [
+            116.082917,
+            38.683591
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Renqiu Tianjin Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 188,
+        "Operator": "PetroChina",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Huabei Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 188 km",
+        "ObjectId": 71,
+        "Shape__Length": 200307.79214317992
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 72,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.082917,
+            38.683591
+          ],
+          [
+            115.464589,
+            38.874434
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Renqiu Baoding Crude Pipeline",
+        "Capacity": 14,
+        "Capacity_int": 14,
+        "Product": "Crude",
+        "Length": 79,
+        "Operator": "SINOPEC",
+        "YearOnline": 1997,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 79 km",
+        "ObjectId": 72,
+        "Shape__Length": 74030.3702228386
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 73,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.082917,
+            38.683591
+          ],
+          [
+            116.407396,
+            39.9042
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Renqiu Beijing Crude Pipeline",
+        "Capacity": 12,
+        "Capacity_int": 12,
+        "Product": "Crude",
+        "Length": 114,
+        "Operator": "PetroChina",
+        "YearOnline": 2005,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 114 km",
+        "ObjectId": 73,
+        "Shape__Length": 179258.04526651162
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 74,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.374407,
+            35.102063
+          ],
+          [
+            118.356414,
+            35.104673
+          ],
+          [
+            116.587282,
+            35.414982
+          ],
+          [
+            115.480656,
+            35.23375
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Rizhao Dongming Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 446.23,
+        "Operator": "PetroChina",
+        "YearOnline": 2016,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "Dongming Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 446.23 km",
+        "ObjectId": 74,
+        "Shape__Length": 440400.61575810297
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 75,
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              120.758543,
+              30.753924
+            ],
+            [
+              118.796877,
+              32.060255
+            ],
+            [
+              118.773483,
+              32.23786
+            ]
+          ],
+          [
+            [
+              121.54399,
+              29.868336
+            ],
+            [
+              120.758543,
+              30.753924
+            ],
+            [
+              121.57722,
+              31.278387
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yong Hu Ning Crude Pipeline",
+        "Capacity": 1158,
+        "Capacity_int": 1158,
+        "Product": "Crude",
+        "Length": 645,
+        "Operator": "PetroChina",
+        "YearOnline": 2004,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "Refinery",
+        "Dest": "three different petrochemical companies",
+        "CapUnit": "KBD",
+        "Note": "Length: 645 km",
+        "ObjectId": 75,
+        "Shape__Length": 558085.1085331914
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 76,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.184766,
+            32.272258
+          ],
+          [
+            118.79957544,
+            32.060255
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yizheng Nanjing Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 29,
+        "Operator": "SINOPEC",
+        "YearOnline": 2002,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 29 km",
+        "ObjectId": 76,
+        "Shape__Length": 51145.746397857765
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 77,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.866799,
+            37.189797
+          ],
+          [
+            116.76281,
+            36.783414
+          ],
+          [
+            116.751986,
+            36.553769
+          ],
+          [
+            116.805796,
+            35.758786
+          ],
+          [
+            117.003743,
+            35.405184
+          ],
+          [
+            117.164388,
+            35.084021
+          ],
+          [
+            117.16946,
+            34.180779
+          ],
+          [
+            117.941563,
+            33.912597
+          ],
+          [
+            117.910629,
+            33.482982
+          ],
+          [
+            118.223591,
+            33.476051
+          ],
+          [
+            118.54436,
+            33.01197
+          ],
+          [
+            118.821401,
+            32.322247
+          ],
+          [
+            119.184766,
+            32.272258
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lu Ning Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 655.37,
+        "Operator": "SINOPEC",
+        "YearOnline": 1978,
+        "Status": "Operating",
+        "OriginType": "Oilfield and Import",
+        "Origin": "Shengli oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 655.37 km",
+        "ObjectId": 77,
+        "Shape__Length": 816388.6990606226
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 78,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.866799,
+            37.189797
+          ],
+          [
+            116.838834,
+            38.304477
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Linyi Cangzhou Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 178,
+        "Operator": "SINOPEC",
+        "YearOnline": null,
+        "Status": "Retired",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 178 km",
+        "ObjectId": 78,
+        "Shape__Length": 156963.65275514047
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 79,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.611096,
+            35.90081
+          ],
+          [
+            108.768438,
+            34.360599
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Qing Xian Crude Pipeline",
+        "Capacity": 69,
+        "Capacity_int": 69,
+        "Product": "Crude",
+        "Length": 260,
+        "Operator": "PetroChina",
+        "YearOnline": 2008,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Xifeng oilfield",
+        "DestType": "Refinery",
+        "Dest": "Changqing Petrochemical",
+        "CapUnit": "KBD",
+        "Note": "Length: 260 km",
+        "ObjectId": 79,
+        "Shape__Length": 246077.7002014717
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 80,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.523086,
+            36.293103
+          ],
+          [
+            107.611096,
+            35.90081
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Quzizhen Yimazhen Crude Pipeline",
+        "Capacity": 32,
+        "Capacity_int": 32,
+        "Product": "Crude",
+        "Length": 64.5,
+        "Operator": "SINOPEC",
+        "YearOnline": 2011,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Changqing oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 64.5 km",
+        "ObjectId": 80,
+        "Shape__Length": 54926.481607395
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 81,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.523086,
+            36.293103
+          ],
+          [
+            107.182317,
+            36.776266
+          ],
+          [
+            106.673931,
+            37.454298
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Ma Hui Crude Pipeline",
+        "Capacity": 69,
+        "Capacity_int": 69,
+        "Product": "Crude",
+        "Length": 187.54,
+        "Operator": "PetroChina",
+        "YearOnline": 2015,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 187.54 km",
+        "ObjectId": 81,
+        "Shape__Length": 187223.14188356628
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 82,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.029215,
+            35.761829
+          ],
+          [
+            116.866799,
+            37.189797
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lin Pu Crude Pipeline",
+        "Capacity": 139,
+        "Capacity_int": 139,
+        "Product": "Crude",
+        "Length": 242,
+        "Operator": "SINOPEC",
+        "YearOnline": 1979,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Zhongyuan oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 242 km",
+        "ObjectId": 82,
+        "Shape__Length": 284478.8918897912
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 83,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            116.866799,
+            37.189797
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongying Linyi Crude Pipeline II",
+        "Capacity": 370,
+        "Capacity_int": 370,
+        "Product": "Crude",
+        "Length": 159,
+        "Operator": "SINOPEC",
+        "YearOnline": 1994,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 159 km",
+        "ObjectId": 83,
+        "Shape__Length": 204126.0716211797
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 84,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.627951,
+            36.088553
+          ],
+          [
+            103.859565,
+            35.394988
+          ],
+          [
+            104.634983,
+            35.00394
+          ],
+          [
+            104.890587,
+            34.72139
+          ],
+          [
+            105.571002,
+            33.675586
+          ],
+          [
+            104.679004,
+            31.46746
+          ],
+          [
+            104.397894,
+            31.126855
+          ],
+          [
+            103.958014,
+            30.990108
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Lanzhou Chengdu Crude Pipeline",
+        "Capacity": 232,
+        "Capacity_int": 232,
+        "Product": "Crude",
+        "Length": 880,
+        "Operator": "PetroChina",
+        "YearOnline": 2013,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 880 km",
+        "ObjectId": 84,
+        "Shape__Length": 822117.0543382069
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 85,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.627951,
+            36.088553
+          ],
+          [
+            103.947377,
+            36.332663
+          ],
+          [
+            105.671375,
+            37.552927
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shikong Lanzhou Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 326.5,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 326.5 km",
+        "ObjectId": 85,
+        "Shape__Length": 305336.3311669833
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 86,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.671375,
+            37.552927
+          ],
+          [
+            106.673931,
+            37.454298
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Shikongzhen Huianbuzhen Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 106,
+        "Operator": "PetroChina",
+        "YearOnline": 1978,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 106 km",
+        "ObjectId": 86,
+        "Shape__Length": 112458.87491908083
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 87,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.673931,
+            37.454298
+          ],
+          [
+            106.230908,
+            38.487193
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Huianbuzhen Yinchuan Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 133.52,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Changching oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 133.52 km",
+        "ObjectId": 87,
+        "Shape__Length": 153971.4582210362
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 88,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.648606,
+            36.217755
+          ],
+          [
+            106.673931,
+            37.454298
+          ],
+          [
+            105.671375,
+            37.552927
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Ma Hui Ning Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 269,
+        "Operator": "PetroChina",
+        "YearOnline": 1979,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Maling oilfield",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 269 km",
+        "ObjectId": 88,
+        "Shape__Length": 315817.206701614
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 89,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            82.56680694,
+            45.17071576
+          ],
+          [
+            82.56680694,
+            45.17071576
+          ],
+          [
+            82.64779526,
+            44.94404732
+          ],
+          [
+            82.52923767,
+            44.89412197
+          ],
+          [
+            82.87868622,
+            44.58980096
+          ],
+          [
+            82.96590384,
+            44.64112162
+          ],
+          [
+            83.26301677,
+            44.5971201
+          ],
+          [
+            83.63037696,
+            44.4757021
+          ],
+          [
+            83.90758819,
+            44.46132149
+          ],
+          [
+            84.11943426,
+            44.35778541
+          ],
+          [
+            84.50148064,
+            44.3940434
+          ],
+          [
+            84.89004041,
+            44.29741316
+          ],
+          [
+            84.886974,
+            44.328095
+          ]
+        ]
+      },
+      "properties": {
+        "id": 0,
+        "Name": "Kazakhstan China Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 252.2,
+        "Operator": "SINOPEC and KTO",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "Kazakhstan",
+        "DestType": "Refinery",
+        "Dest": "Dushangzi refinery\n",
+        "CapUnit": "KBD",
+        "Note": "Length: 147 km",
+        "ObjectId": 89,
+        "Shape__Length": 358195.92006917123
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 90,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.02904048,
+            35.761829
+          ],
+          [
+            114.03165746,
+            35.34762632
+          ],
+          [
+            112.70134352,
+            35.07399742
+          ],
+          [
+            112.45843473,
+            34.58920982
+          ]
+        ]
+      },
+      "properties": {
+        "id": 0,
+        "Name": "Puyang Luoyang Crude Pipeline",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 284,
+        "Operator": "SINOPEC",
+        "YearOnline": 1992,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 295.6 km",
+        "ObjectId": 90,
+        "Shape__Length": 348457.2205914917
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 91,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.886974,
+            44.328095
+          ],
+          [
+            84.889207,
+            45.579888
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Ke Du Crude Pipeline",
+        "Capacity": 81,
+        "Capacity_int": 81,
+        "Product": "Crude",
+        "Length": 147,
+        "Operator": "PetroChina",
+        "YearOnline": 1991,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Karamay oilfield\n",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 1878 km",
+        "ObjectId": 91,
+        "Shape__Length": 196923.01417447484
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 92,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            84.889207,
+            45.579888
+          ],
+          [
+            87.616848,
+            43.825592
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Ke Wu Crude Pipeline",
+        "Capacity": 79,
+        "Capacity_int": 79,
+        "Product": "Crude",
+        "Length": 295.6,
+        "Operator": "PetroChina",
+        "YearOnline": 1973,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "Kazakhstan\n",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 82.1 km",
+        "ObjectId": 92,
+        "Shape__Length": 409518.55794259714
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 93,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.616848,
+            43.825592
+          ],
+          [
+            90.21333,
+            42.868744
+          ],
+          [
+            97.045678,
+            40.291843
+          ],
+          [
+            101.088574,
+            38.784758
+          ],
+          [
+            103.658063,
+            37.225483
+          ],
+          [
+            104.138586,
+            36.545015
+          ],
+          [
+            103.627951,
+            36.088553
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Western Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 1878,
+        "Operator": "PetroChina",
+        "YearOnline": 2007,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 87 km",
+        "ObjectId": 93,
+        "Shape__Length": 2230444.5973684792
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 94,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.838834,
+            38.304477
+          ],
+          [
+            117.361648,
+            39.343357
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Cangzhou Tianjin Crude Pipeline",
+        "Capacity": 185,
+        "Capacity_int": 185,
+        "Product": "Crude",
+        "Length": 82.1,
+        "Operator": "SINOPEC",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 146.5 km",
+        "ObjectId": 94,
+        "Shape__Length": 159447.6725238825
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 95,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.838834,
+            38.304477
+          ],
+          [
+            116.099517,
+            38.446624
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Cangzhou Hejian Crude Pipeline",
+        "Capacity": 185,
+        "Capacity_int": 185,
+        "Product": "Crude",
+        "Length": 87,
+        "Operator": "SINOPEC",
+        "YearOnline": 1999,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 176 km",
+        "ObjectId": 95,
+        "Shape__Length": 84739.394829575
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 96,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.099517,
+            38.446624
+          ],
+          [
+            114.514893,
+            38.042805
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Hejian Shijiazhuang Crude Pipeline II",
+        "Capacity": 116,
+        "Capacity_int": 116,
+        "Product": "Crude",
+        "Length": 146.5,
+        "Operator": "SINOPEC",
+        "YearOnline": 2009,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 248.52 km",
+        "ObjectId": 96,
+        "Shape__Length": 185453.41705434537
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 97,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.04619,
+            35.872664
+          ],
+          [
+            119.17416849,
+            36.71031212
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Huangdao Weifang Crude Pipeline",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 176,
+        "Operator": "SINOPEC",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 360.7 km",
+        "ObjectId": 97,
+        "Shape__Length": 151021.25517399865
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 98,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            118.674614,
+            37.433963
+          ],
+          [
+            120.04619,
+            35.872664
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongying Huangdao Crude Pipeline II",
+        "Capacity": 463,
+        "Capacity_int": 463,
+        "Product": "Crude",
+        "Length": 248.52,
+        "Operator": "SINOPEC",
+        "YearOnline": 1986,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 485 km",
+        "ObjectId": 98,
+        "Shape__Length": 265050.2526843913
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 99,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            115.812729,
+            44.755673
+          ],
+          [
+            114.950248,
+            44.022995
+          ],
+          [
+            113.667248,
+            43.85988
+          ],
+          [
+            112.655227,
+            42.752981
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Arshan Saihan Tara Crude Pipeline",
+        "Capacity": null,
+        "Capacity_int": 23,
+        "Product": "Crude",
+        "Length": 360.7,
+        "Operator": "PetroChina",
+        "YearOnline": 1989,
+        "Status": "Operating",
+        "OriginType": "Oilfield",
+        "Origin": "Erlian oilfield",
+        "DestType": "Refinery",
+        "Dest": "Hohhot Refinery",
+        "CapUnit": "KBD",
+        "Note": "Length: 965 km",
+        "ObjectId": 99,
+        "Shape__Length": 497568.2220684821
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 100,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.76233,
+            35.591601
+          ],
+          [
+            119.36525264,
+            36.37457114
+          ],
+          [
+            119.208454,
+            37.034886
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongjiakou Weifang Crude Pipeline",
+        "Capacity": 602.465,
+        "Capacity_int": 602465,
+        "Product": "Crude",
+        "Length": 485,
+        "Operator": "Qingdao Port Group",
+        "YearOnline": 2017,
+        "Status": "Operating phase III",
+        "OriginType": null,
+        "Origin": null,
+        "DestType": null,
+        "Dest": null,
+        "CapUnit": "KBD",
+        "Note": "Length: 485 km",
+        "ObjectId": 100,
+        "Shape__Length": 209763.34688708105
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 101,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.97408823,
+            53.37660192
+          ],
+          [
+            123.97085674,
+            53.36491809
+          ],
+          [
+            123.96969497,
+            53.36100843
+          ],
+          [
+            123.96612605,
+            53.35890648
+          ],
+          [
+            123.96419394,
+            53.35619032
+          ],
+          [
+            123.96094594,
+            53.35061861
+          ],
+          [
+            123.96082644,
+            53.34807943
+          ],
+          [
+            123.96915544,
+            53.3456456
+          ],
+          [
+            123.97245421,
+            53.34216435
+          ],
+          [
+            123.97491446,
+            53.33840535
+          ],
+          [
+            123.99080028,
+            53.32659943
+          ],
+          [
+            124.00598447,
+            53.32134748
+          ],
+          [
+            124.00830915,
+            53.32259753
+          ],
+          [
+            124.01022767,
+            53.32192477
+          ],
+          [
+            124.01003577,
+            53.31985735
+          ],
+          [
+            124.02326662,
+            53.31141578
+          ],
+          [
+            124.06581558,
+            53.2823931
+          ],
+          [
+            124.08756599,
+            53.25447844
+          ],
+          [
+            124.1234645,
+            53.24191401
+          ],
+          [
+            124.16483427,
+            53.22712096
+          ],
+          [
+            124.19956451,
+            53.18901038
+          ],
+          [
+            124.22000829,
+            53.17047407
+          ],
+          [
+            124.27139537,
+            53.15321007
+          ],
+          [
+            124.32266118,
+            53.14431899
+          ],
+          [
+            124.33633514,
+            53.13740746
+          ],
+          [
+            124.37185038,
+            53.12161965
+          ],
+          [
+            124.40818994,
+            53.11256352
+          ],
+          [
+            124.4364964,
+            53.08656079
+          ],
+          [
+            124.46616274,
+            53.06909485
+          ],
+          [
+            124.50045027,
+            53.04977204
+          ],
+          [
+            124.55676021,
+            53.02500796
+          ],
+          [
+            124.59028238,
+            52.99157015
+          ],
+          [
+            124.63428828,
+            52.97542124
+          ],
+          [
+            124.59277484,
+            52.94271967
+          ],
+          [
+            124.5691203,
+            52.89251214
+          ],
+          [
+            124.55658316,
+            52.86567313
+          ],
+          [
+            124.55393078,
+            52.84406616
+          ],
+          [
+            124.55247098,
+            52.82909372
+          ],
+          [
+            124.53134231,
+            52.80296065
+          ],
+          [
+            124.52520714,
+            52.77966594
+          ],
+          [
+            124.5220668,
+            52.76864674
+          ],
+          [
+            124.5239611,
+            52.7603033
+          ],
+          [
+            124.51209384,
+            52.73450774
+          ],
+          [
+            124.50413798,
+            52.71422221
+          ],
+          [
+            124.49251288,
+            52.69189505
+          ],
+          [
+            124.47761305,
+            52.65785298
+          ],
+          [
+            124.47701702,
+            52.63937698
+          ],
+          [
+            124.48298241,
+            52.63250629
+          ],
+          [
+            124.51867694,
+            52.58770327
+          ],
+          [
+            124.57551051,
+            52.53506232
+          ],
+          [
+            124.57468766,
+            52.50291512
+          ],
+          [
+            124.58010582,
+            52.49185649
+          ],
+          [
+            124.58892696,
+            52.47764298
+          ],
+          [
+            124.62789549,
+            52.46137015
+          ],
+          [
+            124.66564014,
+            52.45465233
+          ],
+          [
+            124.66808023,
+            52.45559947
+          ],
+          [
+            124.67982809,
+            52.44581065
+          ],
+          [
+            124.67072028,
+            52.44118058
+          ],
+          [
+            124.6680739,
+            52.42729044
+          ],
+          [
+            124.6753083,
+            52.39607528
+          ],
+          [
+            124.68881785,
+            52.3515775
+          ],
+          [
+            124.70628103,
+            52.25799987
+          ],
+          [
+            124.69272108,
+            52.23713838
+          ],
+          [
+            124.69099785,
+            52.22298884
+          ],
+          [
+            124.6660545,
+            52.08800839
+          ],
+          [
+            124.66324959,
+            52.04914984
+          ],
+          [
+            124.60736084,
+            51.92507436
+          ],
+          [
+            124.54357775,
+            51.84009859
+          ],
+          [
+            124.49051275,
+            51.71687317
+          ],
+          [
+            124.40866148,
+            51.68684295
+          ],
+          [
+            124.35934195,
+            51.59319675
+          ],
+          [
+            124.33505429,
+            51.57102312
+          ],
+          [
+            124.32960277,
+            51.52835619
+          ],
+          [
+            124.32351484,
+            51.48953801
+          ],
+          [
+            124.26535267,
+            51.44607681
+          ],
+          [
+            124.28864488,
+            51.3634947
+          ],
+          [
+            124.28107678,
+            51.30991334
+          ],
+          [
+            124.23195601,
+            51.28420059
+          ],
+          [
+            124.2084213,
+            51.25647238
+          ],
+          [
+            124.20883164,
+            51.21244585
+          ],
+          [
+            124.19249726,
+            51.15726732
+          ],
+          [
+            124.17988308,
+            51.09160958
+          ],
+          [
+            124.19159596,
+            51.0263353
+          ],
+          [
+            124.2234238,
+            50.98758214
+          ],
+          [
+            124.28507842,
+            50.9608491
+          ],
+          [
+            124.31703991,
+            50.90411626
+          ],
+          [
+            124.29967487,
+            50.75835616
+          ],
+          [
+            124.27841988,
+            50.62821311
+          ],
+          [
+            124.24798848,
+            50.51884236
+          ],
+          [
+            124.19028443,
+            50.43316817
+          ],
+          [
+            124.21940454,
+            50.23670545
+          ],
+          [
+            124.53324039,
+            49.79830084
+          ],
+          [
+            124.69497004,
+            49.7353051
+          ],
+          [
+            124.8935317,
+            49.62105889
+          ],
+          [
+            124.94267921,
+            49.56387568
+          ],
+          [
+            125.04715361,
+            49.4757069
+          ],
+          [
+            125.08618887,
+            49.33902259
+          ],
+          [
+            125.21095968,
+            49.18930535
+          ],
+          [
+            125.19030309,
+            48.89366703
+          ],
+          [
+            125.1551682,
+            46.65815351
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Mohe Daqing Crude Pipeline",
+        "Capacity": 695,
+        "Capacity_int": 695,
+        "Product": "Crude",
+        "Length": 965,
+        "Operator": "PetroChina",
+        "YearOnline": 2010,
+        "Status": "Operating",
+        "OriginType": "Import",
+        "Origin": "Russia",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 428 km",
+        "ObjectId": 101,
+        "Shape__Length": 1278102.7637691754
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 102,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            119.76233,
+            35.591601
+          ],
+          [
+            119.36525264,
+            36.37457114
+          ],
+          [
+            119.208454,
+            37.034886
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongjiakou Weifang Crude Pipeline",
+        "Capacity": 602.465,
+        "Capacity_int": 602465,
+        "Product": "Crude",
+        "Length": 485,
+        "Operator": "Qingdao Port Group",
+        "YearOnline": 2017,
+        "Status": "Operating",
+        "OriginType": null,
+        "Origin": null,
+        "DestType": null,
+        "Dest": null,
+        "CapUnit": "KBD",
+        "Note": "Length: 128 km",
+        "ObjectId": 102,
+        "Shape__Length": 209763.34688708105
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 103,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.0461623,
+            35.87285455
+          ],
+          [
+            119.21728996,
+            36.48643971
+          ],
+          [
+            118.43292518,
+            36.79697895
+          ],
+          [
+            118.67029873,
+            37.42658672
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongjiakou to Dongying Crude Pipeline",
+        "Capacity": 301.232,
+        "Capacity_int": null,
+        "Product": null,
+        "Length": 365,
+        "Operator": "SINOPEC",
+        "YearOnline": 2022,
+        "Status": "Operating",
+        "OriginType": null,
+        "Origin": null,
+        "DestType": null,
+        "Dest": null,
+        "CapUnit": "KBD",
+        "Note": "Length: 365 km",
+        "ObjectId": 103,
+        "Shape__Length": 314339.97280936345
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 104,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            113.203282,
+            29.549607
+          ],
+          [
+            112.879403,
+            30.459123
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Jianli Qianjiang Crude Pipeline",
+        "Capacity": 70.287,
+        "Capacity_int": 70287,
+        "Product": "Crude",
+        "Length": 128,
+        "Operator": "JinAo Chemical",
+        "YearOnline": null,
+        "Status": "Planned",
+        "OriginType": null,
+        "Origin": null,
+        "DestType": null,
+        "Dest": null,
+        "CapUnit": "KBD",
+        "Note": null,
+        "ObjectId": 104,
+        "Shape__Length": 122349.81343920367
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 105,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            120.05841799,
+            35.861616
+          ],
+          [
+            119.21728996,
+            36.48643971
+          ],
+          [
+            118.43292518,
+            36.79697895
+          ],
+          [
+            118.67029873,
+            37.42658672
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Dongjiakou to Dongying Crude Pipeline",
+        "Capacity": 301.232,
+        "Capacity_int": null,
+        "Product": null,
+        "Length": 365,
+        "Operator": "SINOPEC",
+        "YearOnline": 2022,
+        "Status": "Operating",
+        "OriginType": null,
+        "Origin": null,
+        "DestType": null,
+        "Dest": null,
+        "CapUnit": "KBD",
+        "Note": "Length: 365 km",
+        "ObjectId": 105,
+        "Shape__Length": 316389.0981131845
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 106,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.06596553,
+            37.7095769
+          ],
+          [
+            121.01049236,
+            37.65342238
+          ],
+          [
+            120.83375227,
+            37.60131386
+          ],
+          [
+            120.66217247,
+            37.60438007
+          ],
+          [
+            120.41189818,
+            37.59109221
+          ],
+          [
+            120.27128015,
+            37.59926964
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Yantai Port to Longkou Yulong Island Crude Pipeline",
+        "Capacity": 401.643,
+        "Capacity_int": 402,
+        "Product": "Crude",
+        "Length": 101,
+        "Operator": "Yantai Port Group\n",
+        "YearOnline": null,
+        "Status": "Under construction",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 101 km",
+        "ObjectId": 106,
+        "Shape__Length": 93743.22378304863
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 107,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            122.33797816,
+            30.51483054
+          ],
+          [
+            122.24831804,
+            30.49037676
+          ],
+          [
+            121.97159724,
+            30.31346008
+          ]
+        ]
+      },
+      "properties": {
+        "id": null,
+        "Name": "Huangzeshan to Yushan Crude Pipeline",
+        "Capacity": 401.463,
+        "Capacity_int": 402,
+        "Product": "Crude",
+        "Length": 47.6,
+        "Operator": "SINOPEC",
+        "YearOnline": 2023,
+        "Status": "Operating",
+        "OriginType": "N/A",
+        "Origin": "N/A",
+        "DestType": "N/A",
+        "Dest": "N/A",
+        "CapUnit": "KBD",
+        "Note": "Length: 47.6 km",
+        "ObjectId": 107,
+        "Shape__Length": 48813.60328110526
+      }
+    }
+  ],
+  "metadata": {
+    "dataset": "crude_pipelines",
+    "total_features": 107,
+    "source_url": "https://services.arcgis.com/lqRTrQp2HrfnJt8U/arcgis/rest/services/ChinaCrudePipelines_Mar2023/FeatureServer",
+    "layer_id": 0,
+    "extraction_time": "2025-08-03T13:48:51.778864",
+    "coordinate_system": "EPSG:4326",
+    "geometry_verified": true,
+    "geometry_stats": {
+      "total_features": 107,
+      "features_with_geometry": 106,
+      "features_without_geometry": 1,
+      "geometry_types": {
+        "LineString": 105,
+        "MultiLineString": 1
+      },
+      "coordinate_ranges": {
+        "longitude": {
+          "min": 77.180515,
+          "max": 126.604685
+        },
+        "latitude": {
+          "min": 20.1327465,
+          "max": 53.37660192
+        }
+      }
+    }
+  }
+}

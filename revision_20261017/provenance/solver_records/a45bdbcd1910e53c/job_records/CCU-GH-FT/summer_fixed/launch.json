@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_final_ccu",
+  "scenario": "CCU-GH-FT",
+  "label": "summer_fixed",
+  "pid": 1764006,
+  "launched_unix": 1792229347.631447,
+  "from_stage": "model"
+}

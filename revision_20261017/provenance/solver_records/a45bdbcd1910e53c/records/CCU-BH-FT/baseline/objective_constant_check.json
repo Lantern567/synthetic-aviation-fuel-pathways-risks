@@ -1,0 +1,6 @@
+{
+  "objective_constant_cny": 0.0,
+  "source_model_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+  "retained_coefficient_check": true,
+  "omitted_flow_zero_objective_check": true
+}

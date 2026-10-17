@@ -1,0 +1,10 @@
+{
+  "accounts.json": "582a0d3bd6be31e3c90f14e6abd1a2355647639f77aa7fc1a34baacf9d925f11",
+  "carbon_categories.csv": "a5537be3d4ae2b0f1faf2cc892dcece5b7fe01f2a1bf8b77a7f60a81796cb097",
+  "carbon_components.csv": "f825a2cad1d410a17e47bf2eee37d3d7b1ebf5456098048463038b5b0d0714b6",
+  "cost_components.csv": "a8dba79cd527a881d2f693978ddcb93cedfdaba2f4d2baefb65386007b364d12",
+  "inventory_site_accounts.csv": "441b29acb5f855e2c73d2689a68ecba54fde42654634c2a7fec8bc30432ff28f",
+  "normalized_carbon_emissions.json": "fceebdc02183cb14a8b022c9a115de3425734ee36143e73f5c651e798d56ef39",
+  "normalized_complete_solution.json": "20baebc9a2a1cae1ac04707373c533de5673df20794e6dc75c9e1e12eef82623",
+  "synthesis_energy_accounts.csv": "efd742935879138a57a5d2326109aed1011cf06b96d2416cfd1140be79f238a6"
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "scenario": "CCU-GH-FT",
+    "variant": "main",
+    "nodes": 71,
+    "routes": 450,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54; shared geographic range across the four main map panels",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "GTL",
+    "variant": "main",
+    "nodes": 2,
+    "routes": 8,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54; shared geographic range across the four main map panels",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "GTL-BH",
+    "variant": "main",
+    "nodes": 32,
+    "routes": 33,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54; shared geographic range across the four main map panels",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "DAC-BH-FT",
+    "variant": "main",
+    "nodes": 66,
+    "routes": 146,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54; shared geographic range across the four main map panels",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CTL",
+    "variant": "supplement",
+    "nodes": 59,
+    "routes": 360,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CTL-BH",
+    "variant": "supplement",
+    "nodes": 34,
+    "routes": 33,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "GTL-GH",
+    "variant": "supplement",
+    "nodes": 70,
+    "routes": 126,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "GTL",
+    "variant": "supplement",
+    "nodes": 2,
+    "routes": 8,
+    "retained_original_gtl_map": true,
+    "all_selected_sites_inside_frame": true
+  },
+  {
+    "scenario": "GTL-BH",
+    "variant": "supplement",
+    "nodes": 32,
+    "routes": 33,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CCU-GH-MTJ",
+    "variant": "supplement",
+    "nodes": 72,
+    "routes": 452,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CCU-GH-FT",
+    "variant": "supplement",
+    "nodes": 71,
+    "routes": 450,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "variant": "supplement",
+    "nodes": 31,
+    "routes": 38,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "CCU-BH-FT",
+    "variant": "supplement",
+    "nodes": 38,
+    "routes": 44,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "DAC-GH-MTJ",
+    "variant": "supplement",
+    "nodes": 59,
+    "routes": 371,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "DAC-GH-FT",
+    "variant": "supplement",
+    "nodes": 59,
+    "routes": 376,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "DAC-BH-MTJ",
+    "variant": "supplement",
+    "nodes": 66,
+    "routes": 141,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  },
+  {
+    "scenario": "DAC-BH-FT",
+    "variant": "supplement",
+    "nodes": 66,
+    "routes": 146,
+    "all_selected_sites_inside_frame": true,
+    "geometry_basis": "endpoint_schematic",
+    "background_source": "Original Supplementary Figure S54",
+    "registration_max_tick_error_pixels": 2.6866790226810053
+  }
+]

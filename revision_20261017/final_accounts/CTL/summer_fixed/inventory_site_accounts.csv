@@ -1,0 +1,223 @@
+commodity,location,location_type,charged_in_model_cost,source_scope_in_raw_carbon,peak_inventory_kg,state_sum_inventory_kg,trapezoidal_inventory_kg_hour,final_inventory_emissions_kg_co2e,initial_inventory_kg,terminal_inventory_kg
+saf,Beijing CGN Haifeng Agricultural Greenhouse solar project,solar_plant,True,True,4098.874532779796,300738.7713181111,902216.3139543333,5.638851962214582,0.0,0.0
+saf,Beijing Changping Qinghuiling wind/solar demonstration project,wind_farm,True,True,53123.58980311775,4362056.678386401,13086170.035159204,81.78856271974503,0.0,0.0
+saf,Beijing Foton Cummins Engine ISF factory solar project,solar_plant,True,True,3033.1671542570484,222546.6907754022,667640.0723262066,4.172750452038791,0.0,0.0
+saf,Beijing Foton Cummins Engine solar project,solar_plant,True,True,3115.144644912644,228561.46620176436,685684.3986052929,4.28552749128308,0.0,0.0
+saf,Beijing Fuyang New Energy Technology I solar project,solar_plant,True,True,983.729887867151,72142.373510493,216427.12053147898,1.3526695033217435,0.0,0.0
+saf,Beijing Fuyang New Energy Technology II solar project,solar_plant,True,True,2213.392247701089,162320.3403986092,486961.0211958277,3.043506382473923,0.0,0.0
+saf,Beijing Guangdong Jianlibao Beverage solar project,solar_plant,True,True,983.7298878671508,72177.30511634666,216531.91534903998,1.3533244709315,0.0,0.0
+saf,Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,solar_plant,True,True,2623.2797009790697,192439.26847258263,577317.8054177479,3.6082362838609248,0.0,0.0
+saf,Beijing Hanlong New Energy Technology Development solar project,solar_plant,True,True,901.7523972115556,66191.35343451315,198574.0603035395,1.2410878768971219,0.0,0.0
+saf,Beijing Hengan Green Valley Environmental Protection Technology solar project,solar_plant,True,True,4508.761986057766,332635.51031565317,997906.5309469595,6.236915818418496,0.0,0.0
+saf,Beijing Huadian solar project,solar_plant,True,True,2459.3247196678767,180443.26279086634,541329.788372599,3.383311177328744,0.0,0.0
+saf,Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,solar_plant,True,True,5984.356817858505,439078.6061244423,1317235.818373327,8.232723864833295,0.0,0.0
+saf,Beijing Jineng New Energy Technology solar project,solar_plant,True,True,819.7749065559605,59986.07426362243,179958.2227908673,1.1247388924429207,0.0,0.0
+saf,Beijing Jingfang Smart Energy Technology solar project,solar_plant,True,True,1721.527303767513,126310.2839536064,378930.8518608192,2.36831782413012,0.0,0.0
+saf,Beijing Jingxi Heavy Industry solar project,solar_plant,True,True,1229.6623598339386,90177.9668881162,270533.9006643487,1.6908368791521788,0.0,0.0
+saf,Beijing Jiulang Photovoltaic Technology solar project,solar_plant,True,True,819.7749065559597,60036.25239695558,180108.75719086675,1.125679732442917,0.0,0.0
+saf,Beijing Lanjing Shengnuoer Energy Technology solar project,solar_plant,True,True,819.7749065559597,60007.142725410864,180021.42817623256,1.1251339261014535,0.0,0.0
+saf,Beijing Lumingshan Guanting wind farm,wind_farm,True,True,74063.8236429353,6378244.614672873,19134733.84401862,119.59208652511637,0.0,0.0
+saf,Beijing Lvdong Future New Energy Development I solar project,solar_plant,True,True,1065.7073785227467,78291.33579753674,234874.00739261022,1.467962546203814,0.0,0.0
+saf,Beijing Lvdong Future New Energy Development II solar project,solar_plant,True,True,2213.392247701094,162320.34039860987,486961.0211958296,3.0435063824739355,0.0,0.0
+saf,Beijing Miyun Xitiangezhuang Huadian solar farm,solar_plant,True,True,16685.544919207317,1253316.0881239837,3759948.264371951,23.499676652324695,0.0,0.0
+saf,Beijing Pushun New Energy solar project,solar_plant,True,True,1311.6398504895335,96107.66243503877,288322.9873051163,1.802018670656977,0.0,0.0
+saf,Beijing Qinghe Reclaimed Water Plant solar project,solar_plant,True,True,3443.054607535028,252620.56790721306,757861.7037216391,4.736635648260244,0.0,0.0
+saf,Beijing Qingying Photovoltaic Technology solar project,solar_plant,True,True,983.7298878671533,72303.85695742643,216911.5708722793,1.3556973179517455,0.0,0.0
+saf,Beijing Ruilian Xieyuan New Energy Technology solar project,solar_plant,True,True,819.7749065559594,60165.7828894655,180497.34866839653,1.1281084291774783,0.0,0.0
+saf,Beijing Runneng Energy Services solar project,solar_plant,True,True,819.7749065559597,59782.404487666514,179347.21346299956,1.1209200841437472,0.0,0.0
+saf,Beijing Shunyi Holdings I solar project,solar_plant,True,True,4121.58286178862,308936.1226504067,926808.36795122,5.792552299695125,0.0,0.0
+saf,Beijing Shunyi Holdings II solar project,solar_plant,True,True,906.7482295934964,66918.40657333336,200755.21972000005,1.2547201232500003,0.0,0.0
+saf,Beijing Tiantuo New Energy I solar project,solar_plant,True,True,1639.549813111918,120237.289184155,360711.867552465,2.2544491722029067,0.0,0.0
+saf,Beijing Tiantuo New Energy II solar project,solar_plant,True,True,1639.5498131119184,120134.57804379867,360403.734131396,2.252523338321225,0.0,0.0
+saf,Beijing Yadongda Zhenxing Energy Technology Development solar project,solar_plant,True,True,1967.4597757343024,144284.74702098605,432854.24106295814,2.705339006643488,0.0,0.0
+saf,Beijing Yanqing Longqingxia solar farm,solar_plant,True,True,26323.56204380071,1969948.6101591708,5909845.830477513,36.93653644048445,0.0,0.0
+saf,Beijing Yanqing Lumingshang Guanting wind farm,wind_farm,True,True,225152.12934234948,18975407.130706094,56926221.39211828,355.7888837007393,0.0,0.0
+saf,Beijing Yaorui Energy Technology solar project,solar_plant,True,True,819.7749065559592,60165.78288946551,180497.34866839653,1.1281084291774783,0.0,0.0
+saf,Beijing Yueyang Changsheng New Energy Technology solar project,solar_plant,True,True,1721.527303767515,126310.28395360669,378930.8518608201,2.3683178241301253,0.0,0.0
+saf,Beijing Zhongguanbao New Energy Investment solar project,solar_plant,True,True,7377.974159003634,541067.8013286976,1623203.4039860927,10.145021274913079,0.0,0.0
+saf,Beijing Zhonghui Baoping solar project,solar_plant,True,True,1393.6173411451302,102279.66913986506,306839.0074195952,1.9177437963724702,0.0,0.0
+saf,Beijing solar project,solar_plant,True,True,901.7523972115556,66130.50905128526,198391.52715385583,1.2399470447115988,0.0,0.0
+saf,CPI Tianjin Wuqing I solar project,solar_plant,True,True,1940.5259189295407,137031.08469234424,411093.25407703273,2.569332837981454,0.0,0.0
+saf,CPI Tianjin Wuqing II solar project,solar_plant,True,True,1518.6724582926836,107240.70558463418,321722.1167539025,2.0107632297118903,0.0,0.0
+saf,China New Energy solar project,solar_plant,True,True,4009.714341463418,288854.8999221589,866564.6997664768,5.41602937354048,0.0,0.0
+saf,China Qingneng Oasis Technology solar project,solar_plant,True,True,6804.131724414459,499226.3603880643,1497679.0811641929,9.360494257276205,0.0,0.0
+saf,Datang Tianjin Panshan Power Plant solar project,solar_plant,True,True,8129.2516278125,607881.3711147689,1823644.113344307,11.39777570840192,0.0,0.0
+saf,Dingxing County Xinyang New Energy Technology solar project,solar_plant,True,True,3416.3985598754552,251034.2225306902,753102.6675920706,4.706891672450441,0.0,0.0
+saf,Fangshan agricultural greenhouse solar project,solar_plant,True,True,4906.915678775309,361185.23112672684,1083555.6933801805,6.772223083626128,0.0,0.0
+saf,Hebei Huai Tumuzhen CECEP solar farm,solar_plant,True,True,16921.63836382114,1257725.7358086903,3773177.207426071,23.582357546412947,0.0,0.0
+saf,Hebei Huailai (Jingneng) wind farm,wind_farm,True,True,201095.2216081833,16513873.709030354,49541621.127091065,309.6351320443191,0.0,0.0
+saf,Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm,wind_farm,True,True,179856.86874560252,14388765.043547537,43166295.13064261,269.78934456651626,0.0,0.0
+saf,Hebei Huailai (Shengshi New Energy) wind farm,wind_farm,True,True,219508.0552128772,17799794.249062005,53399382.747186005,333.7461421699125,0.0,0.0
+saf,Hebei Huailai (Shengyao) wind-solar hybrid wind farm,wind_farm,True,True,135431.4757769389,11121588.416285679,33364765.24885703,208.5297828053564,0.0,0.0
+saf,Hebei Huailai (Taihui) wind farm,wind_farm,True,True,206749.35570679937,18374952.309783474,55124856.929350406,344.53035580844,0.0,0.0
+saf,Hebei Huailai (Zhuofeng) wind farm,wind_farm,True,True,95133.11879749656,8109748.871971997,24329246.615915995,152.05779134947497,0.0,0.0
+saf,Hebei Huailai Qinghuiling wind farm,wind_farm,True,True,102346.08933700132,8360106.228555819,25080318.685667455,156.75199178542158,0.0,0.0
+saf,Hebei Huailai wind farm,wind_farm,True,True,178373.5155857096,14963467.353663929,44890402.06099179,280.5650128811987,0.0,0.0
+saf,Hebei Laiyuan Shou'ao (Jiansheng) solar farm,solar_plant,True,True,64885.23763224397,4830237.135438191,14490711.406314572,90.56694628946607,0.0,0.0
+saf,Hebei Langfang Dacheng wind farm,wind_farm,True,True,196107.1628630308,16291529.782767124,48874589.34830138,305.46618342688356,0.0,0.0
+saf,Hebei Olympic Photovoltaic Corridor Project solar farm,solar_plant,True,True,33824.76448475611,2528406.947733741,7585220.843201222,47.40763027000763,0.0,0.0
+saf,Hebei Rongcheng- Wuhai Expressway Distributed solar farm,solar_plant,True,True,23767.88905170738,2055123.7783200056,6165371.334960017,38.53357084350011,0.0,0.0
+saf,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,solar_plant,True,True,32344.949593496007,2323465.7441463433,6970397.23243903,43.56498270274393,0.0,0.0
+saf,Hebei Zhangjiakou Huailai Yitai solar farm,solar_plant,True,True,59193.33784832317,4385415.750267635,13156247.250802904,82.22654531751814,0.0,0.0
+saf,Hebei Zhuolu (Suntien) wind farm,wind_farm,True,True,150858.11982373698,12545057.346040847,37635172.038122535,235.21982523826583,0.0,0.0
+saf,Huitong Times Square solar project,solar_plant,True,True,2131.414757045504,156544.86531790477,469634.59595371434,2.935216224710714,0.0,0.0
+saf,Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,solar_plant,True,True,14797.43241515309,1281630.5292302025,3844891.5876906076,24.030572423066296,0.0,0.0
+saf,Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,solar_plant,True,True,9864.954943435394,854381.2320047745,2563143.696014323,16.019648100089515,0.0,0.0
+saf,Jiuxianqiao solar project,solar_plant,True,True,4180.852023435388,306732.43922758655,920197.3176827596,5.7512332355172475,0.0,0.0
+saf,Langfang Fuyang New Energy Technology solar project,solar_plant,True,True,4571.074349268296,329357.87470814754,988073.6241244427,6.175460150777766,0.0,0.0
+saf,Nankou solar project,solar_plant,True,True,10687.030562276424,796114.0024769648,2388342.0074308943,14.92713754644309,0.0,0.0
+saf,Qinghe Reclaimed Water Plant solar project,solar_plant,True,True,2705.2571916346706,198487.58906995412,595462.7672098624,3.7216422950616397,0.0,0.0
+saf,Shaanxi Longxian Hebeizhen wind farm,wind_farm,True,True,178433.49133414475,15170299.58326649,45510898.749799475,284.44311718624675,0.0,0.0
+saf,State Power Investment Supply and Cooperative Cotton Warehouse I solar project,solar_plant,True,True,822.0795786196169,58160.48524059855,174481.45572179565,1.0905090982612227,0.0,0.0
+saf,State Power Investment Supply and Cooperative Cotton Warehouse II solar project,solar_plant,True,True,2712.862609444729,234976.3552497609,704929.0657492828,4.405806660933018,0.0,0.0
+saf,Tianjin Baigutun Distributed wind farm,wind_farm,True,True,44456.06056422594,3512094.067486317,10536282.202458952,65.85176376536843,0.0,0.0
+saf,Tianjin Baodi Distributed wind farm,wind_farm,True,True,46782.81421273325,3791239.6272516674,11373718.881755002,71.08574301096877,0.0,0.0
+saf,Tianjin Baodi Wangbuzhuang wind farm,wind_farm,True,True,130244.89067954825,10343100.9552424,31029302.865727197,193.933142910795,0.0,0.0
+saf,Tianjin Beichen Shuangkouzhen wind farm,wind_farm,True,True,108171.60526881572,8815467.832683254,26446403.498049762,165.29002186281102,0.0,0.0
+saf,Tianjin Jizhou (China Power Construction) wind farm,wind_farm,True,True,179922.584140329,15490865.32266308,46472595.96798924,290.4537247999328,0.0,0.0
+saf,Tianjin Jizhou Baijian (Huadian) wind farm,wind_farm,True,True,96678.6796248993,8358780.027795579,25076340.083386738,156.7271255211671,0.0,0.0
+saf,Tianjin Jizhou Bangjunzhen wind farm,wind_farm,True,True,169573.52698112046,13040739.18905444,39122217.56716332,244.51385979477075,0.0,0.0
+saf,Tianjin Jizhou Dong'eryingzhen wind farm,wind_farm,True,True,132425.41081560848,11500926.520897044,34502779.56269113,215.64237226681954,0.0,0.0
+saf,Tianjin Jizhou Dongshigu (Huadian) wind farm,wind_farm,True,True,107407.01185763744,8587539.024251673,25762617.07275502,161.0163567047189,0.0,0.0
+saf,Tianjin Jizhou Houjiaying (Huadian) wind farm,wind_farm,True,True,94059.72227201558,7693281.018499376,23079843.055498134,144.24901909686335,0.0,0.0
+saf,Tianjin Jizhou Sangzi (Huadian) wind farm,wind_farm,True,True,96629.061490319,7736223.334726201,23208670.004178602,145.05418752611627,0.0,0.0
+saf,Tianjin Jizhou Xiacangzhen (Runchuang) wind farm,wind_farm,True,True,153980.37817069227,12562265.336829944,37686796.01048983,235.5424750655614,0.0,0.0
+saf,Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm,wind_farm,True,True,78088.06986441946,6390459.382270999,19171378.146812998,119.82111341758124,0.0,0.0
+saf,Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm,wind_farm,True,True,88926.43691470346,6969949.337883578,20909848.01365073,130.68655008531707,0.0,0.0
+saf,Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm,wind_farm,True,True,82540.21780754019,6437834.0963574005,19313502.289072204,120.70938930670128,0.0,0.0
+saf,Tianjin Qinghao Wuqing District solar project,solar_plant,True,True,843.7069212737132,59579.965281436336,178739.895844309,1.1171243490269314,0.0,0.0
+saf,Tianjin Wuqing Baigutunzhen (TBEA) wind farm,wind_farm,True,True,87021.45026314152,7007050.193928274,21021150.581784822,131.38219113615511,0.0,0.0
+saf,Tianjin Wuqing Chagugang Distributed wind farm,wind_farm,True,True,12716.412246820368,1009163.640260815,3027490.920782445,18.92181825489028,0.0,0.0
+saf,Tianjin Wuqing Chagugang wind farm,wind_farm,True,True,55104.4530695549,4373042.441130197,13119127.32339059,81.99454577119117,0.0,0.0
+saf,Tianjin Wuqing Chengguan (Sinohydro) wind farm,wind_farm,True,True,355546.22204899567,28255233.41300479,84765700.23901437,529.7856264938399,0.0,0.0
+saf,Tianjin Wuqing Chenzuizhen Distributed wind farm,wind_farm,True,True,10993.983298841898,929590.6102872663,2788771.830861799,17.429823942886244,0.0,0.0
+saf,Tianjin Wuqing Chenzuizhen wind farm,wind_farm,True,True,47640.59429498161,3857776.7510551955,11573330.253165586,72.3333140822849,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,solar_plant,True,True,49942.113002529,3613922.743051116,10841768.229153348,67.76105143220843,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,solar_plant,True,True,124415.9063414638,9021144.89486159,27063434.68458477,169.14646677865483,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm,wind_farm,True,True,77415.01267043337,6528237.164391205,19584711.49317362,122.40444683233514,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm,wind_farm,True,True,77415.01267043334,6528237.164391203,19584711.493173607,122.40444683233503,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm,wind_farm,True,True,48384.382919020856,4080148.227744504,12240444.68323351,76.50277927020946,0.0,0.0
+saf,Tianjin Wuqing Dabaizhuang (Huadian) wind farm,wind_farm,True,True,445936.78249184624,36115719.78945866,108347159.36837596,677.1697460523498,0.0,0.0
+saf,Tianjin Wuqing Dawangguzhuang (Huadian) wind farm,wind_farm,True,True,82200.54395675655,6810443.072805026,20431329.21841508,127.69580761509428,0.0,0.0
+saf,Tianjin Wuqing Gaocun (Huadian) wind farm,wind_farm,True,True,205827.4715353338,18368506.799455352,55105520.39836606,344.4095024897879,0.0,0.0
+saf,Tianjin Wuqing Hebeitun wind farm,wind_farm,True,True,62866.40803235949,5155773.750197675,15467321.250593029,96.67075781620643,0.0,0.0
+saf,Tianjin Wuqing Shangmataizhen wind farm,wind_farm,True,True,120210.95625501768,10254433.844955908,30763301.53486772,192.2706345929232,0.0,0.0
+saf,Tianjin Wuqing Sicundian wind farm,wind_farm,True,True,174652.53767528565,14135960.809501834,42407882.428505495,265.0492651781593,0.0,0.0
+saf,Xiaohongmen Reclaimed Water Plant I solar project,solar_plant,True,True,2295.369738356685,168332.20485781698,504996.6145734509,3.1562288410840673,0.0,0.0
+saf,Xiaohongmen Reclaimed Water Plant II solar project,solar_plant,True,True,2459.3247196678785,180443.26279086666,541329.7883726,3.3833111773287494,0.0,0.0
+saf,Xinyi Glass Wuqing solar project,solar_plant,True,True,12655.603819105694,893699.4792215449,2681098.4376646345,16.756865235403968,0.0,0.0
+saf,Xiqing District fishing and photovoltaic complementary solar project,solar_plant,True,True,8220.795786196162,581572.251726518,1744716.7551795542,10.904479719872214,0.0,0.0
+saf,Yongqing Environmental Protection solar project,solar_plant,True,True,970.348487804878,69675.1890613008,209025.5671839024,1.3064097948993898,0.0,0.0
+saf,airport_北京,airport,True,True,4784379.6221088,534926052.28060967,1604778156.8418288,10029.863480261429,0.0,0.0
+saf,airport_天津,airport,True,True,759243.1715298706,84821291.89023708,254463875.67071128,1590.3992229419455,0.0,0.0
+h2,Beijing CGN Haifeng Agricultural Greenhouse solar project,solar_plant,True,True,224.1238237266278,8687.66284964538,26062.988548936133,65.15747137234032,0.0,0.0
+h2,Beijing Changping Qinghuiling wind/solar demonstration project,wind_farm,True,True,16573.83333256589,1011611.7028577115,3034835.108573135,7587.087771432837,0.0,0.0
+h2,Beijing Foton Cummins Engine ISF factory solar project,solar_plant,True,True,165.85162955770448,6198.678794045118,18596.036382135353,46.49009095533838,0.0,0.0
+h2,Beijing Foton Cummins Engine solar project,solar_plant,True,True,170.33410603223723,7344.782663515145,22034.347990545433,55.085869976363576,0.0,0.0
+h2,Beijing Fuyang New Energy Technology I solar project,solar_plant,True,True,53.7897176943906,2304.2265766189485,6912.679729856845,17.281699324642112,0.0,0.0
+h2,Beijing Fuyang New Energy Technology II solar project,solar_plant,True,True,121.02686481237912,6277.024019767888,18831.072059303668,47.07768014825917,0.0,0.0
+h2,Beijing Guangdong Jianlibao Beverage solar project,solar_plant,True,True,53.78971769439059,1897.7946394119836,5693.383918235951,14.233459795589877,0.0,0.0
+h2,Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,solar_plant,True,True,143.4392471850419,6728.654130836878,20185.962392510635,50.46490598127659,0.0,0.0
+h2,Beijing Hanlong New Energy Technology Development solar project,solar_plant,True,True,49.30724121985791,2214.0589419857934,6642.17682595738,16.60544206489345,0.0,0.0
+h2,Beijing Hengan Green Valley Environmental Protection Technology solar project,solar_plant,True,True,246.5362060992926,14570.420414468132,43711.2612434044,109.27815310851099,0.0,0.0
+h2,Beijing Huadian solar project,solar_plant,True,True,134.4742942359776,6103.703221121901,18311.109663365703,45.77777415841426,0.0,0.0
+h2,Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,solar_plant,True,True,327.2207826408765,15375.835951644083,46127.50785493225,115.31876963733062,0.0,0.0
+h2,Beijing Jineng New Energy Technology solar project,solar_plant,True,True,44.82476474532514,1789.1695504835272,5367.508651450582,13.418771628626454,0.0,0.0
+h2,Beijing Jingfang Smart Energy Technology solar project,solar_plant,True,True,94.13200596518422,4116.011423675078,12348.03427102523,30.870085677563075,0.0,0.0
+h2,Beijing Jingxi Heavy Industry solar project,solar_plant,True,True,67.23714711798843,3097.4097030174053,9292.229109052216,23.230572772630538,0.0,0.0
+h2,Beijing Jiulang Photovoltaic Technology solar project,solar_plant,True,True,44.8247647453256,2051.1825843971606,6153.54775319148,15.3838693829787,0.0,0.0
+h2,Beijing Lanjing Shengnuoer Energy Technology solar project,solar_plant,True,True,44.82476474532561,1743.9983227337177,5231.994968201152,13.07998742050288,0.0,0.0
+h2,Beijing Lumingshan Guanting wind farm,wind_farm,True,True,16656.95146443332,1583806.8920768977,4751420.676230692,11878.55169057673,0.0,0.0
+h2,Beijing Lvdong Future New Energy Development I solar project,solar_plant,True,True,58.27219416892318,2165.51873260348,6496.55619781044,16.241390494526097,0.0,0.0
+h2,Beijing Lvdong Future New Energy Development II solar project,solar_plant,True,True,121.02686481237797,4709.148295613102,14127.444886839306,35.31861221709826,0.0,0.0
+h2,Beijing Miyun Xitiangezhuang Huadian solar farm,solar_plant,True,True,1361.9058297348483,62596.911814547624,187790.73544364283,469.47683860910706,0.0,0.0
+h2,Beijing Pushun New Energy solar project,solar_plant,True,True,71.71962359252112,2444.7725433810506,7334.317630143153,18.33579407535788,0.0,0.0
+h2,Beijing Qinghe Reclaimed Water Plant solar project,solar_plant,True,True,188.2640119303679,8073.700503597702,24221.1015107931,60.552753776982755,0.0,0.0
+h2,Beijing Qingying Photovoltaic Technology solar project,solar_plant,True,True,53.78971769439013,1805.3649600309514,5416.0948800928545,13.540237200232136,0.0,0.0
+h2,Beijing Ruilian Xieyuan New Energy Technology solar project,solar_plant,True,True,44.82476474532561,1417.5230256866535,4252.56907705996,10.6314226926499,0.0,0.0
+h2,Beijing Runneng Energy Services solar project,solar_plant,True,True,44.8247647453256,1575.2554294003867,4725.766288201161,11.814415720502902,0.0,0.0
+h2,Beijing Shunyi Holdings I solar project,solar_plant,True,True,282.9694484848483,12797.803593939392,38393.41078181818,95.98352695454545,0.0,0.0
+h2,Beijing Shunyi Holdings II solar project,solar_plant,True,True,62.25327866666662,2407.9486866666666,7223.84606,18.05961515,0.0,0.0
+h2,Beijing Tiantuo New Energy I solar project,solar_plant,True,True,89.64952949065105,3280.705079974202,9842.115239922605,24.60528809980651,0.0,0.0
+h2,Beijing Tiantuo New Energy II solar project,solar_plant,True,True,89.64952949065119,3528.0304051063786,10584.091215319135,26.460228038297835,0.0,0.0
+h2,Beijing Yadongda Zhenxing Energy Technology Development solar project,solar_plant,True,True,107.5794353887812,4016.78109517987,12050.343285539611,30.12585821384903,0.0,0.0
+h2,Beijing Yanqing Longqingxia solar farm,solar_plant,True,True,2157.8954922348444,111812.94973238099,335438.84919714293,838.5971229928573,0.0,0.0
+h2,Beijing Yanqing Lumingshang Guanting wind farm,wind_farm,True,True,40126.36118159454,2871661.85244576,8614985.557337279,21537.463893343196,0.0,0.0
+h2,Beijing Yaorui Energy Technology solar project,solar_plant,True,True,44.82476474532555,1600.1349255448088,4800.4047766344265,12.001011941586066,0.0,0.0
+h2,Beijing Yueyang Changsheng New Energy Technology solar project,solar_plant,True,True,94.13200596518364,3452.356251110245,10357.068753330735,25.892671883326837,0.0,0.0
+h2,Beijing Zhongguanbao New Energy Investment solar project,solar_plant,True,True,403.4228827079301,21294.495976943894,63883.48793083168,159.7087198270792,0.0,0.0
+h2,Beijing Zhonghui Baoping solar project,solar_plant,True,True,76.20210006705338,2933.9058446266854,8801.717533880055,22.004293834700135,0.0,0.0
+h2,Beijing solar project,solar_plant,True,True,49.30724121985813,1655.7114245957398,4967.134273787218,12.417835684468045,0.0,0.0
+h2,CPI Tianjin Wuqing I solar project,solar_plant,True,True,103.82841177272768,4384.214977267679,13152.64493180304,32.881612329507604,0.0,0.0
+h2,CPI Tianjin Wuqing II solar project,solar_plant,True,True,81.25701790909122,3428.411742363637,10285.235227090912,25.71308806772728,0.0,0.0
+h2,China New Energy solar project,solar_plant,True,True,182.7697506125084,8888.521056221798,26665.563168665394,66.66390792166348,0.0,0.0
+h2,China Qingneng Oasis Technology solar project,solar_plant,True,True,372.0455473862024,15189.504414385552,45568.51324315666,113.92128310789165,0.0,0.0
+h2,Datang Tianjin Panshan Power Plant solar project,solar_plant,True,True,658.6535351761357,32311.34756722346,96934.0427016704,242.335106754176,0.0,0.0
+h2,Dingxing County Xinyang New Energy Technology solar project,solar_plant,True,True,237.4046547930368,9350.792768701755,28052.37830610526,70.13094576526315,0.0,0.0
+h2,Fangshan agricultural greenhouse solar project,solar_plant,True,True,309.8327106769804,12111.726867775538,36335.18060332662,90.83795150831655,0.0,0.0
+h2,Hebei Huai Tumuzhen CECEP solar farm,solar_plant,True,True,1170.0936964646462,53197.75069375472,159593.25208126416,398.9831302031604,0.0,0.0
+h2,Hebei Huailai (Jingneng) wind farm,wind_farm,True,True,54975.455658980296,4121096.39601318,12363289.18803954,30908.222970098846,0.0,0.0
+h2,Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm,wind_farm,True,True,23008.66046117284,1452433.2262365315,4357299.6787095945,10893.249196773986,0.0,0.0
+h2,Hebei Huailai (Shengshi New Energy) wind farm,wind_farm,True,True,58995.13107651872,4522835.625951323,13568506.877853967,33921.26719463492,0.0,0.0
+h2,Hebei Huailai (Shengyao) wind-solar hybrid wind farm,wind_farm,True,True,37024.286464210905,2784936.795603682,8354810.386811046,20887.025967027614,0.0,0.0
+h2,Hebei Huailai (Taihui) wind farm,wind_farm,True,True,35888.936209658044,2862363.9283890775,8587091.785167232,21467.72946291808,0.0,0.0
+h2,Hebei Huailai (Zhuofeng) wind farm,wind_farm,True,True,14065.53300131622,894282.04335851,2682846.1300755297,6707.115325188824,0.0,0.0
+h2,Hebei Huailai Qinghuiling wind farm,wind_farm,True,True,16392.209523743753,981985.7120289481,2945957.1360868444,7364.8928402171105,0.0,0.0
+h2,Hebei Huailai wind farm,wind_farm,True,True,18348.344344447287,1126599.3828609195,3379798.1485827593,8449.495371456898,0.0,0.0
+h2,Hebei Laiyuan Shou'ao (Jiansheng) solar farm,solar_plant,True,True,4330.878823984519,230537.75688498435,691613.2706549531,1729.0331766373827,0.0,0.0
+h2,Hebei Langfang Dacheng wind farm,wind_farm,True,True,25783.20918490894,2407527.841017089,7222583.523051267,18056.458807628165,0.0,0.0
+h2,Hebei Olympic Photovoltaic Corridor Project solar farm,solar_plant,True,True,2356.069323484848,128732.89101812229,386198.67305436684,965.4966826359171,0.0,0.0
+h2,Hebei Rongcheng- Wuhai Expressway Distributed solar farm,solar_plant,True,True,1205.7998705454688,78630.85457671188,235892.5637301356,589.731409325339,0.0,0.0
+h2,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,solar_plant,True,True,1618.1185797979988,118271.20472239044,354813.61416717136,887.0340354179284,0.0,0.0
+h2,Hebei Zhangjiakou Huailai Yitai solar farm,solar_plant,True,True,4123.121316098485,200156.27717056507,600468.8315116952,1501.1720787792378,0.0,0.0
+h2,Hebei Zhuolu (Suntien) wind farm,wind_farm,True,True,29342.38745202985,2323064.1438460574,6969192.43153817,17422.981078845427,0.0,0.0
+h2,Huitong Times Square solar project,solar_plant,True,True,116.54438833784424,5510.527220126196,16531.581660378586,41.32895415094646,0.0,0.0
+h2,Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,solar_plant,True,True,767.4864681237913,47163.371736302295,141490.1152089069,353.72528802226725,0.0,0.0
+h2,Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,solar_plant,True,True,511.657645415861,27892.047304677093,83676.14191403128,209.1903547850782,0.0,0.0
+h2,Jiuxianqiao solar project,solar_plant,True,True,228.60630020116088,10602.952932936194,31808.858798808582,79.52214699702145,0.0,0.0
+h2,Langfang Fuyang New Energy Technology solar project,solar_plant,True,True,208.35751569825933,9548.314524487429,28644.943573462286,71.61235893365571,0.0,0.0
+h2,Nankou solar project,solar_plant,True,True,770.8233754343433,33337.19671458585,100011.59014375755,250.02897535939388,0.0,0.0
+h2,Qinghe Reclaimed Water Plant solar project,solar_plant,True,True,147.9217236595729,5658.078006212684,16974.234018638053,42.43558504659513,0.0,0.0
+h2,Shaanxi Longxian Hebeizhen wind farm,wind_farm,True,True,25206.32431033101,1882625.5327134407,5647876.598140321,14119.691495350802,0.0,0.0
+h2,State Power Investment Supply and Cooperative Cotton Warehouse I solar project,solar_plant,True,True,42.63813711798845,1942.7281912185706,5828.1845736557125,14.57046143413928,0.0,0.0
+h2,State Power Investment Supply and Cooperative Cotton Warehouse II solar project,solar_plant,True,True,140.70585248936138,7018.74147197508,21056.224415925237,52.640561039813086,0.0,0.0
+h2,Tianjin Baigutun Distributed wind farm,wind_farm,True,True,11254.192558016764,502952.29502987035,1508856.8850896112,3772.142212724028,0.0,0.0
+h2,Tianjin Baodi Distributed wind farm,wind_farm,True,True,12393.130441792926,1203298.0956168915,3609894.2868506745,9024.735717126687,0.0,0.0
+h2,Tianjin Baodi Wangbuzhuang wind farm,wind_farm,True,True,37621.53541302481,2968519.6934605557,8905559.080381667,22263.897700954167,0.0,0.0
+h2,Tianjin Beichen Shuangkouzhen wind farm,wind_farm,True,True,10122.233256993546,662751.5863537939,1988254.7590613817,4970.636897653454,0.0,0.0
+h2,Tianjin Jizhou (China Power Construction) wind farm,wind_farm,True,True,45722.31417317657,2831367.058871612,8494101.176614838,21235.252941537092,0.0,0.0
+h2,Tianjin Jizhou Baijian (Huadian) wind farm,wind_farm,True,True,30241.076073326647,2977588.1085301987,8932764.325590597,22331.910813976494,0.0,0.0
+h2,Tianjin Jizhou Bangjunzhen wind farm,wind_farm,True,True,30067.184116768545,3478698.628537353,10436095.88561206,26090.239714030147,0.0,0.0
+h2,Tianjin Jizhou Dong'eryingzhen wind farm,wind_farm,True,True,26397.336911109956,1576315.3473927681,4728946.042178305,11822.365105445762,0.0,0.0
+h2,Tianjin Jizhou Dongshigu (Huadian) wind farm,wind_farm,True,True,26925.81469247728,1965785.303574671,5897355.910724013,14743.389776810032,0.0,0.0
+h2,Tianjin Jizhou Houjiaying (Huadian) wind farm,wind_farm,True,True,21433.70995803556,1387428.6358859835,4162285.907657951,10405.714769144877,0.0,0.0
+h2,Tianjin Jizhou Sangzi (Huadian) wind farm,wind_farm,True,True,19225.038230511065,1250854.1599506848,3752562.4798520543,9381.406199630135,0.0,0.0
+h2,Tianjin Jizhou Xiacangzhen (Runchuang) wind farm,wind_farm,True,True,27173.80200440734,2017098.464144064,6051295.392432192,15128.23848108048,0.0,0.0
+h2,Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm,wind_farm,True,True,13418.03466077756,910098.5827452178,2730295.7482356536,6825.739370589134,0.0,0.0
+h2,Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm,wind_farm,True,True,17306.806738571384,926870.8132838532,2780612.4398515597,6951.531099628899,0.0,0.0
+h2,Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm,wind_farm,True,True,16246.539018371424,1058322.5672729402,3174967.7018188206,7937.419254547051,0.0,0.0
+h2,Tianjin Qinghao Wuqing District solar project,solar_plant,True,True,45.14278772727286,1786.7946103030288,5360.383830909087,13.400959577272717,0.0,0.0
+h2,Tianjin Wuqing Baigutunzhen (TBEA) wind farm,wind_farm,True,True,16979.73521852006,1481714.0861197289,4445142.258359187,11112.855645897967,0.0,0.0
+h2,Tianjin Wuqing Chagugang Distributed wind farm,wind_farm,True,True,2483.970701839707,87471.83384747761,262415.5015424328,656.038753856082,0.0,0.0
+h2,Tianjin Wuqing Chagugang wind farm,wind_farm,True,True,10321.154738815763,475541.4774164549,1426624.4322493647,3566.5610806234113,0.0,0.0
+h2,Tianjin Wuqing Chengguan (Sinohydro) wind farm,wind_farm,True,True,62866.21821212272,6005464.690599059,18016394.071797173,45040.985179492935,0.0,0.0
+h2,Tianjin Wuqing Chenzuizhen Distributed wind farm,wind_farm,True,True,2226.66083782556,76489.16885082977,229467.5065524893,573.6687663812232,0.0,0.0
+h2,Tianjin Wuqing Chenzuizhen wind farm,wind_farm,True,True,9144.707785046732,371467.69979480107,1114403.0993844033,2786.0077484610083,0.0,0.0
+h2,Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,solar_plant,True,True,3002.6959972839045,170807.1920203155,512421.5760609465,1281.0539401523663,0.0,0.0
+h2,Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,solar_plant,True,True,7452.150833333332,520823.6049388815,1562470.8148166446,3906.177037041611,0.0,0.0
+h2,Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm,wind_farm,True,True,15735.18836197098,996722.953076148,2990168.859228444,7475.422148071109,0.0,0.0
+h2,Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm,wind_farm,True,True,15735.188361970972,1302592.890490415,3907778.671471245,9769.446678678112,0.0,0.0
+h2,Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm,wind_farm,True,True,9834.492726231869,592223.1465430547,1776669.4396291645,4441.673599072911,0.0,0.0
+h2,Tianjin Wuqing Dabaizhuang (Huadian) wind farm,wind_farm,True,True,123561.39638391451,11785822.396574248,35357467.18972275,88393.66797430687,0.0,0.0
+h2,Tianjin Wuqing Dawangguzhuang (Huadian) wind farm,wind_farm,True,True,27316.678437357583,2610774.000772859,7832322.002318577,19580.805005796443,0.0,0.0
+h2,Tianjin Wuqing Gaocun (Huadian) wind farm,wind_farm,True,True,43741.60664410553,3428468.560969524,10285405.682908574,25713.514207271433,0.0,0.0
+h2,Tianjin Wuqing Hebeitun wind farm,wind_farm,True,True,14634.106576525308,1359138.6849354473,4077416.054806342,10193.540137015854,0.0,0.0
+h2,Tianjin Wuqing Shangmataizhen wind farm,wind_farm,True,True,25325.995554214507,2384358.5505216084,7153075.651564825,17882.68912891206,0.0,0.0
+h2,Tianjin Wuqing Sicundian wind farm,wind_farm,True,True,27902.280930753663,2643299.378707597,7929514.982257722,19823.787455644306,0.0,255.43591004498083
+h2,Xiaohongmen Reclaimed Water Plant I solar project,solar_plant,True,True,125.5093412869115,5090.205601794962,15270.616805384885,38.17654201346221,0.0,0.0
+h2,Xiaohongmen Reclaimed Water Plant II solar project,solar_plant,True,True,134.47429423597686,4890.707354970986,14672.122064912957,36.680305162282394,0.0,0.0
+h2,Xinyi Glass Wuqing solar project,solar_plant,True,True,677.1418159090914,37372.032075,112116.09622500002,280.2902405625,0.0,0.0
+h2,Xiqing District fishing and photovoltaic complementary solar project,solar_plant,True,True,426.3813711798839,24476.705097295217,73430.11529188562,183.57528822971406,0.0,0.0
+h2,Yongqing Environmental Protection solar project,solar_plant,True,True,48.54355739393926,1845.1394599999971,5535.41837999999,13.838545949999975,0.0,0.0
+h2,airport_北京,airport,True,False,7387.238726047308,707913.1466240988,2113131.745936891,5282.829364842227,0.0,7071.795956936712
+h2,airport_天津,airport,True,False,306.952403656951,12278.096146278065,36834.28843883419,92.08572109708547,0.0,0.0

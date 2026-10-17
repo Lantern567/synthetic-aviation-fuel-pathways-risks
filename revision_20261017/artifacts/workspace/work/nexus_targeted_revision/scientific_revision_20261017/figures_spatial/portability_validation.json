@@ -1,0 +1,551 @@
+{
+  "passed": true,
+  "restored_input_files": 264,
+  "rebuilt_pv_byte_identical": [
+    "renewable_12weeks.csv",
+    "solar_corrected_periods.csv",
+    "solar_phase_capacity.csv",
+    "inputs/baseline/renewable_periods.csv",
+    "inputs/summer/renewable_periods.csv",
+    "inputs/baseline/airport_input.csv",
+    "inputs/summer/airport_input.csv"
+  ],
+  "stages": [
+    {
+      "stage": "pv",
+      "passed": true,
+      "command": [
+        "C:\\Users\\Lantern567\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\build_pv_inputs.py",
+        "--source-compute",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\pv_source_compute",
+        "--raw-solar",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\pv_inputs\\sources\\solar_hdf5_extracted.csv.gz",
+        "--source-twelve-weeks",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\pv_inputs\\source_renewable_12weeks.csv",
+        "--parameters",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\pv_inputs\\pv_parameters.json",
+        "--output",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\rebuilt_pv"
+      ],
+      "log": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\pv.log",
+      "executed_this_invocation": false,
+      "previous_generation_output_verified": true
+    },
+    {
+      "stage": "resource_s9_s10",
+      "passed": true,
+      "command": [
+        "C:\\Users\\Lantern567\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\redraw_s9_s10.py",
+        "--workspace-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace",
+        "--pv-inputs",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\pv_inputs",
+        "--legacy-figures",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time",
+        "--external-project",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\external_project",
+        "--output-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\resource"
+      ],
+      "log": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\resource_s9_s10.log",
+      "executed_this_invocation": false,
+      "previous_generation_output_verified": true
+    },
+    {
+      "stage": "resource_s6_s7",
+      "passed": true,
+      "command": [
+        "C:\\Users\\Lantern567\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\update_resource_quality.py",
+        "--workspace-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace",
+        "--pv-inputs",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\pv_inputs",
+        "--legacy-figures",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time",
+        "--external-project",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\external_project",
+        "--output-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\resource"
+      ],
+      "log": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\resource_s6_s7.log",
+      "executed_this_invocation": false,
+      "previous_generation_output_verified": true
+    },
+    {
+      "stage": "spatial",
+      "passed": true,
+      "command": [
+        "C:\\Users\\Lantern567\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\render_spatial.py",
+        "--workspace-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace",
+        "--legacy-figures",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time",
+        "--external-project",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\runtime\\compute\\project",
+        "--accounting-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\postprocess\\accounts",
+        "--data",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\network_data",
+        "--templates",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\templates",
+        "--output",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\spatial",
+        "--temporal-data",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_temporal\\temporal_data",
+        "--temporal-inputs",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_temporal\\inputs"
+      ],
+      "log": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\spatial.log",
+      "executed_this_invocation": false,
+      "previous_generation_output_verified": true
+    },
+    {
+      "stage": "spatial_joint",
+      "passed": true,
+      "command": [
+        "C:\\Users\\Lantern567\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\reproducibility_source\\render_spatial.py",
+        "--workspace-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace",
+        "--legacy-figures",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time",
+        "--external-project",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\runtime\\compute\\project",
+        "--accounting-root",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\postprocess\\accounts",
+        "--data",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\network_data",
+        "--templates",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_spatial\\templates",
+        "--output",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\spatial",
+        "--temporal-data",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_temporal\\temporal_data",
+        "--temporal-inputs",
+        "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\workspace\\revision\\figures_temporal\\inputs",
+        "--joint-only"
+      ],
+      "log": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_portability_20261017\\spatial_joint.log"
+    }
+  ],
+  "figure_checks": [
+    {
+      "figure": "Figure_S10.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2132,
+        1551
+      ],
+      "restored_pixels": [
+        2132,
+        1551
+      ],
+      "original_sha256": "470c607634b2f8772dac8929c3974b5bf2568cc60076d3eb07771896c8073c86",
+      "restored_sha256": "470c607634b2f8772dac8929c3974b5bf2568cc60076d3eb07771896c8073c86"
+    },
+    {
+      "figure": "Figure_S6.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2143,
+        1502
+      ],
+      "restored_pixels": [
+        2143,
+        1502
+      ],
+      "original_sha256": "2bbb922644f9d59bcab642714eb291ac916440a839dc85b97b0f74aa377749c2",
+      "restored_sha256": "2bbb922644f9d59bcab642714eb291ac916440a839dc85b97b0f74aa377749c2"
+    },
+    {
+      "figure": "Figure_S7.png",
+      "pixels_identical": false,
+      "original_pixels": [
+        3143,
+        1135
+      ],
+      "restored_pixels": [
+        3143,
+        1136
+      ],
+      "original_sha256": "73f0ef6c7fe03b8c968422dc92aed32e8d26aa9c926831fcf74dfcf84d3e47f8",
+      "restored_sha256": "413c734ae4993f700373550ee9b0b5dc708e6a4ece5b8ae188a80de9b36fb3e7"
+    },
+    {
+      "figure": "Figure_S9.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2258,
+        1670
+      ],
+      "restored_pixels": [
+        2258,
+        1670
+      ],
+      "original_sha256": "982d95bc432f0d4b6f54e54254ed845473ae3b33de3e5c27c084c867171057b9",
+      "restored_sha256": "982d95bc432f0d4b6f54e54254ed845473ae3b33de3e5c27c084c867171057b9"
+    },
+    {
+      "figure": "Figure_2.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        4360,
+        3668
+      ],
+      "restored_pixels": [
+        4360,
+        3668
+      ],
+      "original_sha256": "0473dc2665cd1e1f4f5c31aa6df700638f1fff721927af2aecb7e4bd848429e4",
+      "restored_sha256": "0473dc2665cd1e1f4f5c31aa6df700638f1fff721927af2aecb7e4bd848429e4"
+    },
+    {
+      "figure": "Figure_S26.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2208,
+        1386
+      ],
+      "restored_pixels": [
+        2208,
+        1386
+      ],
+      "original_sha256": "1c7c1edfeaa42d5f67f4d59331053edaaf283da16570195fca6268185e22b5a5",
+      "restored_sha256": "1c7c1edfeaa42d5f67f4d59331053edaaf283da16570195fca6268185e22b5a5"
+    },
+    {
+      "figure": "Figure_S27.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2170,
+        1386
+      ],
+      "restored_pixels": [
+        2170,
+        1386
+      ],
+      "original_sha256": "a0f5586a1a9e33a70550be5617d6b9b479dedb59eaa9a41d0069fe7081430de8",
+      "restored_sha256": "a0f5586a1a9e33a70550be5617d6b9b479dedb59eaa9a41d0069fe7081430de8"
+    },
+    {
+      "figure": "Figure_S49.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        2160,
+        930
+      ],
+      "restored_pixels": [
+        2160,
+        930
+      ],
+      "original_sha256": "b1a32e36dfefcb05f0b586d19d0573c87590bbf6ef1098e83f93d71361d486e5",
+      "restored_sha256": "b1a32e36dfefcb05f0b586d19d0573c87590bbf6ef1098e83f93d71361d486e5"
+    },
+    {
+      "figure": "Figure_S50.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3750,
+        3021
+      ],
+      "restored_pixels": [
+        3750,
+        3021
+      ],
+      "original_sha256": "cb5caa0b5a2a43502464a205f6ad16476b812c34eb7646bfba6075f0e9b0d8bd",
+      "restored_sha256": "cb5caa0b5a2a43502464a205f6ad16476b812c34eb7646bfba6075f0e9b0d8bd"
+    },
+    {
+      "figure": "Figure_S51.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "60fed509de529b7dc1f0fffcd2b57e71bf79e6f1edbd9aee81a9098acec961de",
+      "restored_sha256": "60fed509de529b7dc1f0fffcd2b57e71bf79e6f1edbd9aee81a9098acec961de"
+    },
+    {
+      "figure": "Figure_S52.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "6907262a0f6e7267004d0e6e0cef80a9827b4ef3ace122b5e1d28f70f6c05999",
+      "restored_sha256": "6907262a0f6e7267004d0e6e0cef80a9827b4ef3ace122b5e1d28f70f6c05999"
+    },
+    {
+      "figure": "Figure_S53.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "8471fcd6dc532220d30c93bcc25079e16e8496a38b221290f7e3a1d471d5e313",
+      "restored_sha256": "8471fcd6dc532220d30c93bcc25079e16e8496a38b221290f7e3a1d471d5e313"
+    },
+    {
+      "figure": "Figure_S54.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "7f6adaf2caf38fc138a362a3a6d7a3207fb24576a2bb2f3434b727e7b8fddd24",
+      "restored_sha256": "7f6adaf2caf38fc138a362a3a6d7a3207fb24576a2bb2f3434b727e7b8fddd24"
+    },
+    {
+      "figure": "Figure_S55.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "916c1be12adaba3b221ae382ca2c7a47b4257127a9eaa188c8395626bc6cd858",
+      "restored_sha256": "916c1be12adaba3b221ae382ca2c7a47b4257127a9eaa188c8395626bc6cd858"
+    },
+    {
+      "figure": "Figure_S56.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "b74131186b1b22beff093469e3998ed830234580766c0222ec83f4fa56df514b",
+      "restored_sha256": "b74131186b1b22beff093469e3998ed830234580766c0222ec83f4fa56df514b"
+    },
+    {
+      "figure": "Figure_S57.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "e1f48d0c8949f649d64b827fa881047c4187e039b0d56b6d80d3a0108c4919ff",
+      "restored_sha256": "e1f48d0c8949f649d64b827fa881047c4187e039b0d56b6d80d3a0108c4919ff"
+    },
+    {
+      "figure": "Figure_S58.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "85cbec561fa09054c4d788e8aa445c9ef9047af061ed29d742f8a63c4309d964",
+      "restored_sha256": "85cbec561fa09054c4d788e8aa445c9ef9047af061ed29d742f8a63c4309d964"
+    },
+    {
+      "figure": "Figure_S59.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "9644b108d9fb84775ae8650d6c3f10e7d0b4518d793d2a1801f0f9c3b5217687",
+      "restored_sha256": "9644b108d9fb84775ae8650d6c3f10e7d0b4518d793d2a1801f0f9c3b5217687"
+    },
+    {
+      "figure": "Figure_S60.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "ac0c72e6bfc07c2ccf8a7f763c5c662486b5cfb0f6b04d1b4c8639343fd545fc",
+      "restored_sha256": "ac0c72e6bfc07c2ccf8a7f763c5c662486b5cfb0f6b04d1b4c8639343fd545fc"
+    },
+    {
+      "figure": "Figure_S61.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "fdbdbe43538c105d80030df5fee4811655f15a0aa83fd81cb85a922420e92032",
+      "restored_sha256": "fdbdbe43538c105d80030df5fee4811655f15a0aa83fd81cb85a922420e92032"
+    },
+    {
+      "figure": "Figure_S62.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "e15b4bcaef8f1399df4711e6001f70c85bc49a07bb48a60dcc3762f5d1df6285",
+      "restored_sha256": "e15b4bcaef8f1399df4711e6001f70c85bc49a07bb48a60dcc3762f5d1df6285"
+    },
+    {
+      "figure": "Figure_S63.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        3000,
+        2329
+      ],
+      "restored_pixels": [
+        3000,
+        2329
+      ],
+      "original_sha256": "9b96a7964a6da43e1f9abbd758f407ea38f3d6b166971f67b1f1ddcb080bee08",
+      "restored_sha256": "9b96a7964a6da43e1f9abbd758f407ea38f3d6b166971f67b1f1ddcb080bee08"
+    },
+    {
+      "figure": "Main_Map_CCU-GH-FT.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        1020,
+        840
+      ],
+      "restored_pixels": [
+        1020,
+        840
+      ],
+      "original_sha256": "c80297475f05d0a53cb3e739abaeff3928dd576a2f55621bb59ba4572adfd795",
+      "restored_sha256": "c80297475f05d0a53cb3e739abaeff3928dd576a2f55621bb59ba4572adfd795"
+    },
+    {
+      "figure": "Main_Map_DAC-BH-FT.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        1020,
+        840
+      ],
+      "restored_pixels": [
+        1020,
+        840
+      ],
+      "original_sha256": "148aae15e47d3bdd0ed56ad77dc05afc275d3dd4504eaccd39aaab59528ef0cf",
+      "restored_sha256": "148aae15e47d3bdd0ed56ad77dc05afc275d3dd4504eaccd39aaab59528ef0cf"
+    },
+    {
+      "figure": "Main_Map_GTL-BH.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        1020,
+        840
+      ],
+      "restored_pixels": [
+        1020,
+        840
+      ],
+      "original_sha256": "1256b375ee71f25486192067196c3b9ae7051f804332685dbdb991a7dd5d2991",
+      "restored_sha256": "1256b375ee71f25486192067196c3b9ae7051f804332685dbdb991a7dd5d2991"
+    },
+    {
+      "figure": "Main_Map_GTL.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        1020,
+        840
+      ],
+      "restored_pixels": [
+        1020,
+        840
+      ],
+      "original_sha256": "d268d5db423628fdf5c719e7a8ef2f54ff7d73ba8b6d7aa410f902ca44219e0e",
+      "restored_sha256": "d268d5db423628fdf5c719e7a8ef2f54ff7d73ba8b6d7aa410f902ca44219e0e"
+    },
+    {
+      "figure": "main_shared_legend.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        4360,
+        428
+      ],
+      "restored_pixels": [
+        4360,
+        428
+      ],
+      "original_sha256": "4bdc43491ad176b82d542b4e89363c8520bb0d6e43b39a61785292cedb342de8",
+      "restored_sha256": "4bdc43491ad176b82d542b4e89363c8520bb0d6e43b39a61785292cedb342de8"
+    },
+    {
+      "figure": "network_panels.png",
+      "pixels_identical": true,
+      "original_pixels": [
+        7200,
+        3600
+      ],
+      "restored_pixels": [
+        7200,
+        3600
+      ],
+      "original_sha256": "32a592ad1227f20cf000e46a4a068fb52fa3d95a82b8168d357fe87697c12793",
+      "restored_sha256": "32a592ad1227f20cf000e46a4a068fb52fa3d95a82b8168d357fe87697c12793"
+    }
+  ],
+  "resource_plot_data_byte_identical": [
+    "retained_diurnal_profiles.csv",
+    "retained_week_profiles.csv",
+    "selected_candidate_resource_metrics.csv",
+    "solar_12weeks.csv",
+    "solar_4weeks.csv",
+    "solar_relationship_points.csv",
+    "twelve_week_joint_relative_states.csv",
+    "twelve_week_profiles.csv",
+    "twelve_week_renewable_energy.csv",
+    "wind_12weeks.csv",
+    "wind_4weeks.csv",
+    "wind_relationship_points.csv"
+  ],
+  "joint_integrated_metrics_byte_identical": true,
+  "component_matplotlib_versions": {
+    "resource": "3.10.7",
+    "spatial": "3.11.2"
+  },
+  "exact_pixel_reproduction": false,
+  "pixel_comparison_scope": "Pixel identity is recorded independently of successful input execution and byte-identical scientific plot data; original publication figure bytes are retained unchanged.",
+  "scope": "Prepared-input execution in a copied workspace and separate copied external project; no optimization rerun"
+}

@@ -1,0 +1,397 @@
+commodity,location,type,saved_peak_inventory_kg,charged_location,average_proxy_kg,represented_hours,independent_holding_cost_cny,independent_equipment_cost_cny
+saf,Beijing CGN Haifeng Agricultural Greenhouse solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Changping Qinghuiling wind/solar demonstration project,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Foton Cummins Engine ISF factory solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Foton Cummins Engine solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Fuyang New Energy Technology I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Fuyang New Energy Technology II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Guangdong Jianlibao Beverage solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Hanlong New Energy Technology Development solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Hengan Green Valley Environmental Protection Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Huadian solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Jineng New Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Jingfang Smart Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Jingxi Heavy Industry solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Jiulang Photovoltaic Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Lanjing Shengnuoer Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Lumingshan Guanting wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Lvdong Future New Energy Development I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Lvdong Future New Energy Development II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Miyun Xitiangezhuang Huadian solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Pushun New Energy solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Qinghe Reclaimed Water Plant solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Qingying Photovoltaic Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Ruilian Xieyuan New Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Runneng Energy Services solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Shunyi Holdings I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Shunyi Holdings II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Tiantuo New Energy I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Tiantuo New Energy II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Yadongda Zhenxing Energy Technology Development solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Yanqing Longqingxia solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Yanqing Lumingshang Guanting wind farm,wind_farm,1036957.6164286043,True,518478.8082143022,672.0,45360032.33816204,10369576.164286043
+saf,Beijing Yaorui Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Yueyang Changsheng New Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Zhongguanbao New Energy Investment solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing Zhonghui Baoping solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Beijing solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,CPI Tianjin Wuqing I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,CPI Tianjin Wuqing II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,China New Energy solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,China Qingneng Oasis Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Datang Tianjin Panshan Power Plant solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Dingxing County Xinyang New Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Fangshan agricultural greenhouse solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huai Tumuzhen CECEP solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Jingneng) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Shengshi New Energy) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Shengyao) wind-solar hybrid wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Taihui) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai (Zhuofeng) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai Qinghuiling wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Huailai wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Laiyuan Shou'ao (Jiansheng) solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Langfang Dacheng wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Olympic Photovoltaic Corridor Project solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Rongcheng- Wuhai Expressway Distributed solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Zhangjiakou Huailai Yitai solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Hebei Zhuolu (Suntien) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Huitong Times Square solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Jiuxianqiao solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Langfang Fuyang New Energy Technology solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Nankou solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Qinghe Reclaimed Water Plant solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Shaanxi Longxian Hebeizhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,State Power Investment Supply and Cooperative Cotton Warehouse I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,State Power Investment Supply and Cooperative Cotton Warehouse II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Baigutun Distributed wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Baodi Distributed wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Baodi Wangbuzhuang wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Beichen Shuangkouzhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou (China Power Construction) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Baijian (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Bangjunzhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Dong'eryingzhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Dongshigu (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Houjiaying (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Sangzi (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Xiacangzhen (Runchuang) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Qinghao Wuqing District solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Baigutunzhen (TBEA) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Chagugang Distributed wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Chagugang wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Chengguan (Sinohydro) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Chenzuizhen Distributed wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Chenzuizhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Dabaizhuang (Huadian) wind farm,wind_farm,1628224.5974119524,True,814112.2987059762,672.0,71224049.29795134,16282245.974119525
+saf,Tianjin Wuqing Dawangguzhuang (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Gaocun (Huadian) wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Hebeitun wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Shangmataizhen wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Tianjin Wuqing Sicundian wind farm,wind_farm,0.0,True,0.0,672.0,0.0,0.0
+saf,Xiaohongmen Reclaimed Water Plant I solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Xiaohongmen Reclaimed Water Plant II solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Xinyi Glass Wuqing solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Xiqing District fishing and photovoltaic complementary solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,Yongqing Environmental Protection solar project,solar_plant,0.0,True,0.0,672.0,0.0,0.0
+saf,airport_北京,airport,11868166.796832267,True,5934083.398416134,672.0,519153744.733672,118681667.96832266
+saf,airport_天津,airport,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_1,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_2,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_3,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_4,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_5,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_53,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_56,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_6,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_60,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_61,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_63,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_64,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_68,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_69,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_70,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_79,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_8,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_80,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_81,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_9,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_0,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_1,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_10,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_11,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_12,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_13,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_14,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_15,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_16,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_17,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_18,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_19,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_2,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_20,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_21,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_22,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_23,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_24,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_25,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_26,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_27,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_28,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_29,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_3,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_30,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_31,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_32,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_33,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_34,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_35,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_36,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_37,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_38,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_39,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_4,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_40,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_41,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_42,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_43,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_44,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_45,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_46,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_47,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_48,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_49,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_5,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_50,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_51,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_52,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_53,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_54,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_55,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_56,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_57,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_58,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_59,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_6,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_60,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_61,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_62,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_63,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_64,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_65,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_66,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_7,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_8,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_9,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_149,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_15,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_150,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_151,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_152,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_153,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_154,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_155,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_156,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_157,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_158,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_159,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_160,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_161,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_162,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_163,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_164,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_165,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_166,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_167,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_168,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_169,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_171,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_172,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_173,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_174,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_175,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_176,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_177,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_178,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_179,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_18,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_180,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_181,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_183,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_187,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_188,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_189,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_19,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_190,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_191,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_196,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_198,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_199,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_20,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_201,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_202,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_21,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_213,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_22,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_25,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_26,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_405,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_406,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_62,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_63,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_68,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_70,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_71,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_76,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_77,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_84,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_85,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_86,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_94,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_95,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_99,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+h2,Beijing CGN Haifeng Agricultural Greenhouse solar project,solar_plant,15.319466666666631,True,7.659733333333316,672.0,670.1252706901139,306.3893333333326
+h2,Beijing Changping Qinghuiling wind/solar demonstration project,wind_farm,214.90999370340023,True,107.45499685170012,672.0,9400.889785403893,4298.199874068005
+h2,Beijing Foton Cummins Engine ISF factory solar project,solar_plant,12.095456969696922,True,6.047728484848461,672.0,529.0961854158626,241.90913939393846
+h2,Beijing Foton Cummins Engine solar project,solar_plant,11.64279466666663,True,5.821397333333315,672.0,509.2952057244861,232.8558933333326
+h2,Beijing Fuyang New Energy Technology I solar project,solar_plant,3.67667199999993,True,1.838335999999965,672.0,160.83006496562467,73.5334399999986
+h2,Beijing Fuyang New Energy Technology II solar project,solar_plant,8.272511999999997,True,4.136255999999999,672.0,361.8676461726622,165.45023999999995
+h2,Beijing Guangdong Jianlibao Beverage solar project,solar_plant,3.67667199999993,True,1.838335999999965,672.0,160.83006496562467,73.5334399999986
+h2,Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,solar_plant,9.804458666666632,True,4.902229333333316,672.0,428.88017324167237,196.08917333333264
+h2,Beijing Hanlong New Energy Technology Development solar project,solar_plant,3.370282666666636,True,1.685141333333318,672.0,147.42755955182406,67.40565333333272
+h2,Beijing Hengan Green Valley Environmental Protection Technology solar project,solar_plant,16.851413333333287,True,8.425706666666644,672.0,737.1377977591251,337.02826666666573
+h2,Beijing Huadian solar project,solar_plant,9.191679999999996,True,4.595839999999998,672.0,402.07516241406915,183.83359999999993
+h2,Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,solar_plant,16.376067878787847,True,8.188033939393923,672.0,716.3445803234497,327.52135757575695
+h2,Beijing Jineng New Energy Technology solar project,solar_plant,3.0638933333332865,True,1.5319466666666433,672.0,134.02505413802103,61.27786666666573
+h2,Beijing Jingfang Smart Energy Technology solar project,solar_plant,6.434175999999932,True,3.217087999999966,672.0,281.4526136898455,128.68351999999865
+h2,Beijing Jingxi Heavy Industry solar project,solar_plant,4.595839999999994,True,2.297919999999997,672.0,201.03758120703435,91.91679999999988
+h2,Beijing Jiulang Photovoltaic Technology solar project,solar_plant,3.0638933333332825,True,1.5319466666666413,672.0,134.02505413802083,61.27786666666565
+h2,Beijing Lanjing Shengnuoer Energy Technology solar project,solar_plant,3.0638933333332865,True,1.5319466666666433,672.0,134.02505413802103,61.27786666666573
+h2,Beijing Lumingshan Guanting wind farm,wind_farm,217.9455918163306,True,108.9727959081653,672.0,9533.677110928751,4358.911836326612
+h2,Beijing Lvdong Future New Energy Development I solar project,solar_plant,3.9830613333332847,True,1.9915306666666424,672.0,174.2325703794279,79.6612266666657
+h2,Beijing Lvdong Future New Energy Development II solar project,solar_plant,8.272512,True,4.136256,672.0,361.8676461726624,165.45024
+h2,Beijing Miyun Xitiangezhuang Huadian solar farm,solar_plant,57.79199999999996,True,28.89599999999998,672.0,2528.0174882321708,1155.8399999999992
+h2,Beijing Pushun New Energy solar project,solar_plant,4.902229333333282,True,2.451114666666641,672.0,214.4400866208347,98.04458666666564
+h2,Beijing Qinghe Reclaimed Water Plant solar project,solar_plant,12.868351999999929,True,6.434175999999964,672.0,562.9052273796939,257.36703999999855
+h2,Beijing Qingying Photovoltaic Technology solar project,solar_plant,3.67667199999993,True,1.838335999999965,672.0,160.83006496562467,73.5334399999986
+h2,Beijing Ruilian Xieyuan New Energy Technology solar project,solar_plant,3.0638933333332865,True,1.5319466666666433,672.0,134.02505413802103,61.27786666666573
+h2,Beijing Runneng Energy Services solar project,solar_plant,3.0638933333332865,True,1.5319466666666433,672.0,134.02505413802103,61.27786666666573
+h2,Beijing Shunyi Holdings I solar project,solar_plant,15.158933333333293,True,7.579466666666646,672.0,663.1029998894687,303.17866666666583
+h2,Beijing Shunyi Holdings II solar project,solar_plant,3.3349653333332765,True,1.6674826666666382,672.0,145.88265997568104,66.69930666666554
+h2,Beijing Tiantuo New Energy I solar project,solar_plant,6.127786666666633,True,3.0638933333333167,672.0,268.05010827604474,122.55573333333267
+h2,Beijing Tiantuo New Energy II solar project,solar_plant,5.717488484848454,True,2.858744242424227,672.0,250.10227848946144,114.34976969696908
+h2,Beijing Yadongda Zhenxing Energy Technology Development solar project,solar_plant,7.353343999999931,True,3.6766719999999653,672.0,321.66012993125236,147.0668799999986
+h2,Beijing Yanqing Longqingxia solar farm,solar_plant,84.48473212121215,True,42.242366060606074,672.0,3695.64784556746,1689.6946424242428
+h2,Beijing Yanqing Lumingshang Guanting wind farm,wind_farm,15906.665315537104,True,7953.332657768552,672.0,695811.3250473061,318133.3063107421
+h2,Beijing Yaorui Energy Technology solar project,solar_plant,3.0638933333332825,True,1.5319466666666413,672.0,134.02505413802083,61.27786666666565
+h2,Beijing Yueyang Changsheng New Energy Technology solar project,solar_plant,6.434175999999932,True,3.217087999999966,672.0,281.4526136898455,128.68351999999865
+h2,Beijing Zhongguanbao New Energy Investment solar project,solar_plant,29.42138181818181,True,14.710690909090905,672.0,1286.9907212818327,588.4276363636362
+h2,Beijing Zhonghui Baoping solar project,solar_plant,3.813604848484819,True,1.9068024242424095,672.0,166.81997076025448,76.27209696969638
+h2,Beijing solar project,solar_plant,3.370282666666636,True,1.685141333333318,672.0,147.42755955182406,67.40565333333272
+h2,CPI Tianjin Wuqing I solar project,solar_plant,5.244936727272691,True,2.6224683636363455,672.0,229.43126680538097,104.89873454545382
+h2,CPI Tianjin Wuqing II solar project,solar_plant,4.858280727272716,True,2.429140363636358,672.0,212.51762599125732,97.16561454545433
+h2,China New Energy solar project,solar_plant,15.4820848484848,True,7.7410424242424,672.0,677.2387398128444,309.641696969696
+h2,China Qingneng Oasis Technology solar project,solar_plant,22.02483975757573,True,11.012419878787865,672.0,963.4409621169483,440.4967951515146
+h2,Datang Tianjin Panshan Power Plant solar project,solar_plant,23.33333236363633,True,11.666666181818165,672.0,1020.6788530247502,466.6666472727266
+h2,Dingxing County Xinyang New Energy Technology solar project,solar_plant,10.737053090909082,True,5.368526545454541,672.0,469.6750066773162,214.74106181818166
+h2,Fangshan agricultural greenhouse solar project,solar_plant,13.36471272727272,True,6.68235636363636,672.0,584.6177239020024,267.2942545454544
+h2,Hebei Huai Tumuzhen CECEP solar farm,solar_plant,46.3336727272727,True,23.16683636363635,672.0,2026.7915100458786,926.673454545454
+h2,Hebei Huailai (Jingneng) wind farm,wind_farm,226.00931818540607,True,113.00465909270304,672.0,9886.411767651854,4520.1863637081215
+h2,Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm,wind_farm,213.52266970574843,True,106.76133485287421,672.0,9340.20354288057,4270.453394114968
+h2,Hebei Huailai (Shengshi New Energy) wind farm,wind_farm,221.11048086388723,True,110.55524043194362,672.0,9672.12005909697,4422.209617277745
+h2,Hebei Huailai (Shengyao) wind-solar hybrid wind farm,wind_farm,225.14853198647668,True,112.57426599323834,672.0,9848.758068791763,4502.970639729534
+h2,Hebei Huailai (Taihui) wind farm,wind_farm,219.5024323631153,True,109.75121618155765,672.0,9601.77858048614,4390.048647262306
+h2,Hebei Huailai (Zhuofeng) wind farm,wind_farm,220.06343887979875,True,110.03171943989938,672.0,9626.318902419764,4401.268777595975
+h2,Hebei Huailai Qinghuiling wind farm,wind_farm,221.5628746970744,True,110.7814373485372,672.0,9691.909295009647,4431.257493941488
+h2,Hebei Huailai wind farm,wind_farm,221.5996474524976,True,110.7998237262488,672.0,9693.517859669122,4431.992949049953
+h2,Hebei Laiyuan Shou'ao (Jiansheng) solar farm,solar_plant,207.28397575757583,True,103.64198787878792,672.0,9067.301975108066,4145.679515151516
+h2,Hebei Langfang Dacheng wind farm,wind_farm,219.56069770967247,True,109.78034885483623,672.0,9604.327303753276,4391.213954193449
+h2,Hebei Olympic Photovoltaic Corridor Project solar farm,solar_plant,72.56940606060601,True,36.28470303030301,672.0,3174.431195179848,1451.3881212121203
+h2,Hebei Rongcheng- Wuhai Expressway Distributed solar farm,solar_plant,88.62440727272718,True,44.31220363636359,672.0,3876.7312339020077,1772.4881454545437
+h2,Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,solar_plant,131.19534545454545,True,65.59767272727272,672.0,5738.928012246541,2623.906909090909
+h2,Hebei Zhangjiakou Huailai Yitai solar farm,solar_plant,128.0347658451681,True,64.01738292258405,672.0,5600.673573475501,2560.695316903362
+h2,Hebei Zhuolu (Suntien) wind farm,wind_farm,212.50479361430376,True,106.25239680715188,672.0,9295.67820096429,4250.095872286075
+h2,Huitong Times Square solar project,solar_plant,7.966122666666634,True,3.983061333333317,672.0,348.4651407588586,159.32245333333267
+h2,Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,solar_plant,56.91386181818182,True,28.45693090909091,672.0,2489.6047549694235,1138.2772363636363
+h2,Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,solar_plant,27.79519999999995,True,13.897599999999976,672.0,1215.856030054519,555.9039999999991
+h2,Jiuxianqiao solar project,solar_plant,15.625855999999922,True,7.812927999999961,672.0,683.5277761039144,312.51711999999844
+h2,Langfang Fuyang New Energy Technology solar project,solar_plant,17.649576727272716,True,8.824788363636358,672.0,772.0521633866447,352.99153454545433
+h2,Nankou solar project,solar_plant,20.8044528484848,True,10.4022264242424,672.0,910.0571123005122,416.089056969696
+h2,Qinghe Reclaimed Water Plant solar project,solar_plant,10.110847999999924,True,5.055423999999962,672.0,442.28267865547286,202.2169599999985
+h2,Shaanxi Longxian Hebeizhen wind farm,wind_farm,216.2060684097064,True,108.1030342048532,672.0,9457.584475388621,4324.121368194128
+h2,State Power Investment Supply and Cooperative Cotton Warehouse I solar project,solar_plant,3.161881212121181,True,1.5809406060605904,672.0,138.3113752760777,63.237624242423614
+h2,State Power Investment Supply and Cooperative Cotton Warehouse II solar project,solar_plant,10.434207999999996,True,5.217103999999998,672.0,456.42753841106077,208.68415999999993
+h2,Tianjin Baigutun Distributed wind farm,wind_farm,226.9265639214632,True,113.4632819607316,672.0,9926.535197568779,4538.531278429265
+h2,Tianjin Baodi Distributed wind farm,wind_farm,227.73150839650867,True,113.86575419825434,672.0,9961.746190612294,4554.630167930173
+h2,Tianjin Baodi Wangbuzhuang wind farm,wind_farm,2799.2105629602006,True,1399.6052814801003,672.0,122446.93480771752,55984.211259204014
+h2,Tianjin Beichen Shuangkouzhen wind farm,wind_farm,215.32766779913308,True,107.66383389956654,672.0,9419.160262604788,4306.553355982662
+h2,Tianjin Jizhou (China Power Construction) wind farm,wind_farm,197.9721060472692,True,98.9860530236346,672.0,8659.96930837574,3959.442120945384
+h2,Tianjin Jizhou Baijian (Huadian) wind farm,wind_farm,240.44360220753185,True,120.22180110376593,672.0,10517.81615646076,4808.8720441506375
+h2,Tianjin Jizhou Bangjunzhen wind farm,wind_farm,224.4069388046421,True,112.20346940232105,672.0,9816.318275518792,4488.138776092842
+h2,Tianjin Jizhou Dong'eryingzhen wind farm,wind_farm,223.653179735378,True,111.826589867689,672.0,9783.346305193953,4473.06359470756
+h2,Tianjin Jizhou Dongshigu (Huadian) wind farm,wind_farm,217.8906516824909,True,108.94532584124545,672.0,9531.273843709194,4357.813033649818
+h2,Tianjin Jizhou Houjiaying (Huadian) wind farm,wind_farm,225.16095962387857,True,112.58047981193928,672.0,9849.301695672464,4503.219192477572
+h2,Tianjin Jizhou Sangzi (Huadian) wind farm,wind_farm,215.63367183536525,True,107.81683591768262,672.0,9432.545913820606,4312.673436707305
+h2,Tianjin Jizhou Xiacangzhen (Runchuang) wind farm,wind_farm,221.20333293691675,True,110.60166646845838,672.0,9676.181722725796,4424.066658738335
+h2,Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm,wind_farm,224.46147803628617,True,112.23073901814308,672.0,9818.704005920767,4489.229560725724
+h2,Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm,wind_farm,215.28332056361145,True,107.64166028180573,672.0,9417.220364574727,4305.666411272229
+h2,Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm,wind_farm,228.4088233332357,True,114.20441166661784,672.0,9991.37423610452,4568.176466664714
+h2,Tianjin Qinghao Wuqing District solar project,solar_plant,2.280407272727258,True,1.140203636363629,672.0,99.75272469799178,45.60814545454516
+h2,Tianjin Wuqing Baigutunzhen (TBEA) wind farm,wind_farm,221.62672218039216,True,110.81336109019608,672.0,9694.7021998132,4432.534443607843
+h2,Tianjin Wuqing Chagugang Distributed wind farm,wind_farm,199.22555566811636,True,99.61277783405818,672.0,8714.799432997133,3984.5111133623273
+h2,Tianjin Wuqing Chagugang wind farm,wind_farm,219.21060003329464,True,109.60530001664732,672.0,9589.012847626605,4384.212000665892
+h2,Tianjin Wuqing Chengguan (Sinohydro) wind farm,wind_farm,235.82463795195224,True,117.91231897597612,672.0,10315.76704212617,4716.492759039045
+h2,Tianjin Wuqing Chenzuizhen Distributed wind farm,wind_farm,212.2978243094972,True,106.1489121547486,672.0,9286.624663760556,4245.956486189944
+h2,Tianjin Wuqing Chenzuizhen wind farm,wind_farm,224.35606011433484,True,112.17803005716742,672.0,9814.092669572035,4487.121202286697
+h2,Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,solar_plant,184.0587636363635,True,92.02938181818175,672.0,8051.3526670667,3681.1752727272697
+h2,Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,solar_plant,186.88581818181825,True,93.44290909090913,672.0,8175.017591815728,3737.716363636365
+h2,Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm,wind_farm,218.4410241773592,True,109.2205120886796,672.0,9555.348997572513,4368.820483547184
+h2,Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm,wind_farm,219.4725297425369,True,109.73626487126845,672.0,9600.470538754305,4389.450594850738
+h2,Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm,wind_farm,213.04669198527813,True,106.52334599263907,672.0,9319.382667995502,4260.933839705563
+h2,Tianjin Wuqing Dabaizhuang (Huadian) wind farm,wind_farm,18123.84669469933,True,9061.923347349664,672.0,792798.3353792697,362476.93389398657
+h2,Tianjin Wuqing Dawangguzhuang (Huadian) wind farm,wind_farm,225.31662512973296,True,112.65831256486648,672.0,9856.11103123992,4506.332502594659
+h2,Tianjin Wuqing Gaocun (Huadian) wind farm,wind_farm,223.5237845903212,True,111.7618922951606,672.0,9777.686124033999,4470.475691806424
+h2,Tianjin Wuqing Hebeitun wind farm,wind_farm,218.7777504988317,True,109.38887524941585,672.0,9570.078545423958,4375.555009976634
+h2,Tianjin Wuqing Shangmataizhen wind farm,wind_farm,218.89899990634137,True,109.44949995317069,672.0,9575.382404480959,4377.979998126828
+h2,Tianjin Wuqing Sicundian wind farm,wind_farm,221.83935569602835,True,110.91967784801417,672.0,9704.00350875064,4436.787113920567
+h2,Xiaohongmen Reclaimed Water Plant I solar project,solar_plant,9.153318787878732,True,4.576659393939366,672.0,400.3971132876789,183.06637575757463
+h2,Xiaohongmen Reclaimed Water Plant II solar project,solar_plant,6.729890909090906,True,3.364945454545453,672.0,294.3881836945688,134.59781818181813
+h2,Xinyi Glass Wuqing solar project,solar_plant,49.90501818181816,True,24.95250909090908,672.0,2183.0142357797067,998.1003636363631
+h2,Xiqing District fishing and photovoltaic complementary solar project,solar_plant,33.73284848484845,True,16.866424242424227,672.0,1475.5888513562954,674.6569696969691
+h2,Yongqing Environmental Protection solar project,solar_plant,3.688680727272669,True,1.8443403636363345,672.0,161.35536730084226,73.77361454545338
+h2,airport_北京,airport,216.62628461456464,True,108.31314230728232,672.0,9475.966153038125,4332.525692291293
+h2,airport_天津,airport,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_1,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_2,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_3,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_4,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_5,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_53,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_56,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_6,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_60,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_61,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_63,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_64,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_68,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_69,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_70,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_79,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_8,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_80,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_81,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_9,lng_terminal,0.0,True,0.0,672.0,0.0,0.0

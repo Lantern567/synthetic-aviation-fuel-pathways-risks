@@ -1,0 +1,1290 @@
+[
+  {
+    "column": 21728,
+    "name": "facility_refinery_Binyang_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0007213118888888889,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21729,
+    "name": "facility_refinery_CNOOC_Dongying_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0003414374444444445,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21730,
+    "name": "facility_refinery_Fuyu_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.00013520383333333333,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21731,
+    "name": "facility_refinery_Guangyuan_Refinery_green_h2_co2_to_saf",
+    "root_value": 4.5067944444444445e-05,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21732,
+    "name": "facility_refinery_Haike_Ruilin_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0006761315555555555,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21733,
+    "name": "facility_refinery_Haiyue_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.00022545211111111102,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21734,
+    "name": "facility_refinery_Hebei_Dagang_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0004162884444444445,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21735,
+    "name": "facility_refinery_Hebei_Qianhai_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0020295185555555557,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21736,
+    "name": "facility_refinery_Huabei_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.002253959166666667,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21737,
+    "name": "facility_refinery_Hualian_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0013974434444444443,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21738,
+    "name": "facility_refinery_Huayu_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0004162884444444445,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21739,
+    "name": "facility_refinery_Lianhe_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0009466516111111113,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21740,
+    "name": "facility_refinery_PetroChina_Qinhuangdao_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0001821823888888889,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21741,
+    "name": "facility_refinery_PetroChina_Rosneft_Tianjin__Refinery_green_h2_co2_to_saf",
+    "root_value": 0.002934136722222222,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21742,
+    "name": "facility_refinery_Petrochina_Dagang_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0011269233888888891,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21743,
+    "name": "facility_refinery_Qinhuangdao_Far_East_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.00028625450000000006,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21744,
+    "name": "facility_refinery_Shenchi_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0005859956666666666,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21745,
+    "name": "facility_refinery_Sinopec_Beijing_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.002482670555555556,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21746,
+    "name": "facility_refinery_Sinopec_Cangzhou_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0007888576111111113,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21747,
+    "name": "facility_refinery_Sinopec_Shijiazhuang_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.002256993666666667,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21748,
+    "name": "facility_refinery_Sinopec_Tianjin_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0031146332777777777,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21749,
+    "name": "facility_refinery_Tianhong_1_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0011269233888888891,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21750,
+    "name": "facility_refinery_Tianjin__Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0002929978333333333,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21751,
+    "name": "facility_refinery_Wudi_Xinyue_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0018094611111111108,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21752,
+    "name": "facility_refinery_Xinhai__Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0013523755,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21753,
+    "name": "facility_refinery_Yatong_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0009015836666666666,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21754,
+    "name": "facility_refinery_Zhonghai__Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0005184499444444445,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21755,
+    "name": "facility_refinery_Zhongjie_Refinery_green_h2_co2_to_saf",
+    "root_value": 0.0006505068888888891,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21756,
+    "name": "facility_steel_Cangzhou_China_Railway_Equipment_Manufacture_Material_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21757,
+    "name": "facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21758,
+    "name": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.113042408979452,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21759,
+    "name": "facility_steel_Hbis_Laoting_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21760,
+    "name": "facility_steel_Hebei_Anfeng_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21761,
+    "name": "facility_steel_Hebei_Donghai_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21762,
+    "name": "facility_steel_Hebei_Huaxi_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21763,
+    "name": "facility_steel_Hebei_Jinxi_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21764,
+    "name": "facility_steel_Hebei_Rongxin_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21765,
+    "name": "facility_steel_Hebei_Tangyin_Iron_and_Steel_Co_Ltd_Caofeidian_base_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21766,
+    "name": "facility_steel_Hebei_Tianzhu_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21767,
+    "name": "facility_steel_Hebei_Xinda_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21768,
+    "name": "facility_steel_Hebei_Yanshan_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21769,
+    "name": "facility_steel_Hebei_Zongheng_Group_Fengnan_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21770,
+    "name": "facility_steel_Jingye_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21771,
+    "name": "facility_steel_Lingyuan_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21772,
+    "name": "facility_steel_Qian_an_Jiujiang_Wire_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21773,
+    "name": "facility_steel_Qinhuangdao_Baigong_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21774,
+    "name": "facility_steel_Qinhuangdao_Hongxing_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21775,
+    "name": "facility_steel_Shanxi_Tongde_Xinghua_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21776,
+    "name": "facility_steel_Shougang_Jingtang_United_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21777,
+    "name": "facility_steel_Shougang_Qian_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21778,
+    "name": "facility_steel_Tangshan_Donghai_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21779,
+    "name": "facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21780,
+    "name": "facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21781,
+    "name": "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21782,
+    "name": "facility_steel_Tangshan_Guotang_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21783,
+    "name": "facility_steel_Tangshan_Medium_Thick_Plate_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21784,
+    "name": "facility_steel_Tangshan_Ruifeng_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21785,
+    "name": "facility_steel_Tangshan_Songting_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21786,
+    "name": "facility_steel_Tangshan_Wenfeng_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21787,
+    "name": "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.2837668869863013,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21788,
+    "name": "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.17959209409458793,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21789,
+    "name": "facility_steel_Tianjin_Pipe_Corporation_green_h2_co2_to_saf",
+    "root_value": 0.05159397945205477,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21790,
+    "name": "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.22288599123287672,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21791,
+    "name": "facility_steel_Xinji_Aosen_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21792,
+    "name": "facility_airport_\u5317\u4eac_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21793,
+    "name": "facility_airport_\u5929\u6d25_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21794,
+    "name": "facility_co2_source_1_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21795,
+    "name": "facility_co2_source_2_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21796,
+    "name": "facility_co2_source_3_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21797,
+    "name": "facility_co2_source_4_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21798,
+    "name": "facility_co2_source_5_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21799,
+    "name": "facility_co2_source_6_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21800,
+    "name": "facility_co2_source_7_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21801,
+    "name": "facility_co2_source_8_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21802,
+    "name": "facility_co2_source_9_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21803,
+    "name": "facility_co2_source_10_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21804,
+    "name": "facility_co2_source_11_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21805,
+    "name": "facility_co2_source_12_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21806,
+    "name": "facility_co2_source_13_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21807,
+    "name": "facility_co2_source_14_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21808,
+    "name": "facility_co2_source_15_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21809,
+    "name": "facility_co2_source_16_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21810,
+    "name": "facility_co2_source_17_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21811,
+    "name": "facility_co2_source_18_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21812,
+    "name": "facility_co2_source_19_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21813,
+    "name": "facility_co2_source_20_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21814,
+    "name": "facility_co2_source_21_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21815,
+    "name": "facility_co2_source_22_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21816,
+    "name": "facility_co2_source_23_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21817,
+    "name": "facility_co2_source_24_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21818,
+    "name": "facility_co2_source_25_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21819,
+    "name": "facility_co2_source_26_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21820,
+    "name": "facility_co2_source_27_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21821,
+    "name": "facility_co2_source_28_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21822,
+    "name": "facility_co2_source_29_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21823,
+    "name": "facility_co2_source_30_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 21824,
+    "name": "facility_co2_source_31_green_h2_co2_to_saf",
+    "root_value": 0.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 236726653.33408728
+  },
+  {
+    "column": 44523,
+    "name": "electrolyzer_facility_refinery_Binyang_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 44974,
+    "name": "electrolyzer_facility_refinery_CNOOC_Dongying_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 45425,
+    "name": "electrolyzer_facility_refinery_Fuyu_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 45876,
+    "name": "electrolyzer_facility_refinery_Guangyuan_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 46327,
+    "name": "electrolyzer_facility_refinery_Haike_Ruilin_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 46778,
+    "name": "electrolyzer_facility_refinery_Haiyue_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 47229,
+    "name": "electrolyzer_facility_refinery_Hebei_Dagang_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 47680,
+    "name": "electrolyzer_facility_refinery_Hebei_Qianhai_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 48131,
+    "name": "electrolyzer_facility_refinery_Huabei_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 48582,
+    "name": "electrolyzer_facility_refinery_Hualian_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 49033,
+    "name": "electrolyzer_facility_refinery_Huayu_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 49484,
+    "name": "electrolyzer_facility_refinery_Lianhe_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 49935,
+    "name": "electrolyzer_facility_refinery_PetroChina_Qinhuangdao_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 50386,
+    "name": "electrolyzer_facility_refinery_PetroChina_Rosneft_Tianjin__Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 50837,
+    "name": "electrolyzer_facility_refinery_Petrochina_Dagang_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 51288,
+    "name": "electrolyzer_facility_refinery_Qinhuangdao_Far_East_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 51739,
+    "name": "electrolyzer_facility_refinery_Shenchi_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 52190,
+    "name": "electrolyzer_facility_refinery_Sinopec_Beijing_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 52641,
+    "name": "electrolyzer_facility_refinery_Sinopec_Cangzhou_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 53092,
+    "name": "electrolyzer_facility_refinery_Sinopec_Shijiazhuang_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 53543,
+    "name": "electrolyzer_facility_refinery_Sinopec_Tianjin_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 53994,
+    "name": "electrolyzer_facility_refinery_Tianhong_1_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 54445,
+    "name": "electrolyzer_facility_refinery_Tianjin__Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 54896,
+    "name": "electrolyzer_facility_refinery_Wudi_Xinyue_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 55347,
+    "name": "electrolyzer_facility_refinery_Xinhai__Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 55798,
+    "name": "electrolyzer_facility_refinery_Yatong_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 56249,
+    "name": "electrolyzer_facility_refinery_Zhonghai__Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 56700,
+    "name": "electrolyzer_facility_refinery_Zhongjie_Refinery",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 57151,
+    "name": "electrolyzer_facility_steel_Cangzhou_China_Railway_Equipment_Manufacture_Material_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 57602,
+    "name": "electrolyzer_facility_steel_Chengde_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 58053,
+    "name": "electrolyzer_facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 58504,
+    "name": "electrolyzer_facility_steel_Hbis_Laoting_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 58955,
+    "name": "electrolyzer_facility_steel_Hebei_Anfeng_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 59406,
+    "name": "electrolyzer_facility_steel_Hebei_Donghai_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 59857,
+    "name": "electrolyzer_facility_steel_Hebei_Huaxi_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 60308,
+    "name": "electrolyzer_facility_steel_Hebei_Jinxi_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 60759,
+    "name": "electrolyzer_facility_steel_Hebei_Rongxin_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 61210,
+    "name": "electrolyzer_facility_steel_Hebei_Tangyin_Iron_and_Steel_Co_Ltd_Caofeidian_base",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 61661,
+    "name": "electrolyzer_facility_steel_Hebei_Tianzhu_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 62112,
+    "name": "electrolyzer_facility_steel_Hebei_Xinda_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 62563,
+    "name": "electrolyzer_facility_steel_Hebei_Yanshan_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 63014,
+    "name": "electrolyzer_facility_steel_Hebei_Zongheng_Group_Fengnan_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 63465,
+    "name": "electrolyzer_facility_steel_Jingye_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 63916,
+    "name": "electrolyzer_facility_steel_Lingyuan_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 64367,
+    "name": "electrolyzer_facility_steel_Qian_an_Jiujiang_Wire_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 64818,
+    "name": "electrolyzer_facility_steel_Qinhuangdao_Baigong_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 65269,
+    "name": "electrolyzer_facility_steel_Qinhuangdao_Hongxing_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 65720,
+    "name": "electrolyzer_facility_steel_Shanxi_Tongde_Xinghua_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 66171,
+    "name": "electrolyzer_facility_steel_Shougang_Jingtang_United_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 66622,
+    "name": "electrolyzer_facility_steel_Shougang_Qian_an_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 67073,
+    "name": "electrolyzer_facility_steel_Tangshan_Donghai_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 67524,
+    "name": "electrolyzer_facility_steel_Tangshan_Donghua_Iron_and_Steel_Enterprise_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 67975,
+    "name": "electrolyzer_facility_steel_Tangshan_Fengnan_District_Jing_an_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 68426,
+    "name": "electrolyzer_facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 68877,
+    "name": "electrolyzer_facility_steel_Tangshan_Guotang_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 69328,
+    "name": "electrolyzer_facility_steel_Tangshan_Medium_Thick_Plate_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 69779,
+    "name": "electrolyzer_facility_steel_Tangshan_Ruifeng_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 70230,
+    "name": "electrolyzer_facility_steel_Tangshan_Songting_Iron_and_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 70681,
+    "name": "electrolyzer_facility_steel_Tangshan_Wenfeng_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 71132,
+    "name": "electrolyzer_facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 71583,
+    "name": "electrolyzer_facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 72034,
+    "name": "electrolyzer_facility_steel_Tianjin_Pipe_Corporation",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 72485,
+    "name": "electrolyzer_facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  },
+  {
+    "column": 72936,
+    "name": "electrolyzer_facility_steel_Xinji_Aosen_Iron_and_Steel_Group_Co_Ltd",
+    "root_value": 1.0,
+    "lower": 0.0,
+    "upper": 1.0,
+    "cost_cny": 0.0
+  }
+]

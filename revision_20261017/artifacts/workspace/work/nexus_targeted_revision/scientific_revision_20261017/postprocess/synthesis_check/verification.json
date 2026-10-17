@@ -1,0 +1,186 @@
+{
+  "passed": true,
+  "processor_sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+  "checks": [
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 29.609485056968882,
+      "final_ci_g_mj": 15.035154855952008,
+      "separate_stage_raw_carbon_kg": 576077.3982714256,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 52.97323595718782,
+      "final_ci_g_mj": 34.11562437846707,
+      "separate_stage_raw_carbon_kg": 576077.3982714224,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "label": "baseline",
+      "summary_sha256": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 26.031211423786836,
+      "final_ci_g_mj": 296.74045009008057,
+      "separate_stage_raw_carbon_kg": 22176000.000000022,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "summary_sha256": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 9.687335991454404,
+      "final_ci_g_mj": 271.0634460155143,
+      "separate_stage_raw_carbon_kg": 24504444.274994627,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 41.92996725069813,
+      "final_ci_g_mj": 23.2184542561334,
+      "separate_stage_raw_carbon_kg": 383001.75285559014,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 71.64454568338765,
+      "final_ci_g_mj": 44.048134175725416,
+      "separate_stage_raw_carbon_kg": 383001.7528555741,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "cbf0c867890680b52e1b37c829b81a6ae6d87d009910b7c7f12e657ef2f4d5a8",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 28.55043689435715,
+      "final_ci_g_mj": 434.4801212000272,
+      "separate_stage_raw_carbon_kg": 20275199.99999854,
+      "passed": true
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "summary_sha256": "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 7.349851315340211,
+      "final_ci_g_mj": 91.21733084566756,
+      "separate_stage_raw_carbon_kg": 136535702.66550922,
+      "passed": true
+    },
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "summary_sha256": "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 20.207228214302326,
+      "final_ci_g_mj": 120.5252037185801,
+      "separate_stage_raw_carbon_kg": 0.0,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 27.91344728076633,
+      "final_ci_g_mj": 8.519327492010207,
+      "separate_stage_raw_carbon_kg": 643631.3108167783,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 39.35735705043303,
+      "final_ci_g_mj": 16.743726186804157,
+      "separate_stage_raw_carbon_kg": 429992.2840333693,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 49.85292942817014,
+      "final_ci_g_mj": 15.946920454097086,
+      "separate_stage_raw_carbon_kg": 642038.487123412,
+      "passed": true
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 67.04544077962983,
+      "final_ci_g_mj": 23.519265287251912,
+      "separate_stage_raw_carbon_kg": 428291.6920180321,
+      "passed": true
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 7.171356757306751,
+      "final_ci_g_mj": 85.3838153930351,
+      "separate_stage_raw_carbon_kg": 137312793.62404755,
+      "passed": true
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "summary_sha256": "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 19.110099612638198,
+      "final_ci_g_mj": 117.16277863385413,
+      "separate_stage_raw_carbon_kg": 0.0,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+      "route_energy_reconstructed": true,
+      "cost_cny_kg": 11.051489460495958,
+      "final_ci_g_mj": 410.4835170652791,
+      "separate_stage_raw_carbon_kg": 24504444.27499395,
+      "passed": true
+    },
+    {
+      "scenario": "CTL-BH",
+      "label": "baseline",
+      "summary_sha256": "d56adfe279c57047d5ec54ca992decd91b58cca652d607df3b6ce2926bad5165",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 7.20625620375103,
+      "final_ci_g_mj": 283.6793053522564,
+      "separate_stage_raw_carbon_kg": 0.0,
+      "passed": true
+    },
+    {
+      "scenario": "GTL-BH",
+      "label": "baseline",
+      "summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+      "route_energy_reconstructed": false,
+      "cost_cny_kg": 6.281085627773086,
+      "final_ci_g_mj": 113.22952605917968,
+      "separate_stage_raw_carbon_kg": 137837499.04684445,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "scenario": "DAC-BH-MTJ",
+  "label": "baseline",
+  "stage": "inventory_cost",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 0,
+      "seconds": 35.61958432197571,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "projection",
+      "exit_code": 0,
+      "seconds": 669.6850831508636,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 50.99214482307434,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 6.052308082580566,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "co2",
+      "exit_code": 0,
+      "seconds": 2.533663511276245,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 1.4674642086029053,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.34822773933410645,
+      "reused_verified_artifact": false
+    }
+  ]
+}

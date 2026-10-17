@@ -1,0 +1,20 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "source_iteration": "rounded",
+  "seconds": 39.64559602737427,
+  "objective": 9664788276098.994,
+  "lower_bound": 9650510632819.623,
+  "max_constraint_residual": 3.725290298461914e-09,
+  "max_bound_residual": 1.9031176634598523e-10,
+  "max_integer_violation": 0.0,
+  "gap": 0.0014772846410593063,
+  "physically_feasible_algebraically": true,
+  "source_sha256": "aebaa9fe2fd48782be4b213698e81bf39b3746d3aeb9608ca0b36a0dd435936a",
+  "column_name_sha256": "005f26a67a8004518cb1769a9ca029f695f802a210c5030c98ca5489c69cd4f5",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection",
+  "scenario": "CCU-GH-FT",
+  "label": "summer_fixed",
+  "relative_gap_tolerance": 0.01,
+  "passed": true
+}

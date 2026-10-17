@@ -1,0 +1,580 @@
+{
+  "total_clusters": 12,
+  "total_noise_points": 23,
+  "clustering_params": {
+    "enable_clustering": true,
+    "enable_pipeline_optimization": true,
+    "enable_clustering_visualization": false,
+    "export_clustering_results": true,
+    "clustering_output_path": "clustering_results.json",
+    "eps_distance_km": 15.0,
+    "min_samples": 2,
+    "max_clusters": 50,
+    "noise_plant_handling": "direct_connection",
+    "pipeline_weight": 0.3,
+    "shared_pipeline_discount_factor": 0.65,
+    "processing_cost_base": 10.0
+  },
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "member_locations": [
+        "refinery_CNOOC Dongying Refinery",
+        "refinery_Haike Ruilin Refinery",
+        "refinery_Lianhe Refinery",
+        "refinery_Shenchi Refinery",
+        "refinery_Tianhong 1 Refinery",
+        "refinery_Yatong Refinery"
+      ],
+      "member_coords": [
+        [
+          38.088644,
+          118.88525
+        ],
+        [
+          38.059069,
+          118.873916
+        ],
+        [
+          38.097408,
+          118.879765
+        ],
+        [
+          38.096965,
+          118.87927
+        ],
+        [
+          38.092496,
+          118.893292
+        ],
+        [
+          38.086922,
+          118.879533
+        ]
+      ],
+      "center_coord": [
+        38.08691749012795,
+        118.88183711318652
+      ],
+      "geo_center": [
+        38.08691749012795,
+        118.88183711318652
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 1,
+      "member_locations": [
+        "refinery_Fuyu Refinery",
+        "refinery_Haiyue Refinery",
+        "refinery_Hualian Refinery"
+      ],
+      "member_coords": [
+        [
+          37.888481,
+          118.403848
+        ],
+        [
+          37.979206,
+          118.455462
+        ],
+        [
+          37.887633,
+          118.414912
+        ]
+      ],
+      "center_coord": [
+        37.918442079138536,
+        118.42472799264078
+      ],
+      "geo_center": [
+        37.918442079138536,
+        118.42472799264078
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 2,
+      "member_locations": [
+        "refinery_Hebei Dagang Refinery",
+        "refinery_Hebei Qianhai Refinery",
+        "refinery_Huayu Refinery"
+      ],
+      "member_coords": [
+        [
+          38.435733,
+          117.378077
+        ],
+        [
+          38.360699,
+          117.405885
+        ],
+        [
+          38.490239,
+          117.268074
+        ]
+      ],
+      "center_coord": [
+        38.42890537490055,
+        117.35071857909486
+      ],
+      "geo_center": [
+        38.42890537490055,
+        117.35071857909486
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 3,
+      "member_locations": [
+        "refinery_PetroChina Rosneft Tianjin  Refinery",
+        "refinery_Petrochina Dagang Refinery"
+      ],
+      "member_coords": [
+        [
+          38.821201,
+          117.410056
+        ],
+        [
+          38.737926,
+          117.512307
+        ]
+      ],
+      "center_coord": [
+        38.779574637124384,
+        117.46121135037117
+      ],
+      "geo_center": [
+        38.779574637124384,
+        117.46121135037117
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 4,
+      "member_locations": [
+        "refinery_Xinhai  Refinery",
+        "steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd"
+      ],
+      "member_coords": [
+        [
+          38.296875,
+          117.701561
+        ],
+        [
+          38.289221,
+          117.814367
+        ]
+      ],
+      "center_coord": [
+        38.29306150235586,
+        117.75796697454672
+      ],
+      "geo_center": [
+        38.29306150235586,
+        117.75796697454672
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 5,
+      "member_locations": [
+        "steel_Hbis Laoting Steel Co Ltd",
+        "steel_Hebei Huaxi Special Steel Co Ltd",
+        "steel_Hebei Tianzhu Iron and Steel Group Co Ltd",
+        "steel_Tangshan Guotang Steel Co Ltd",
+        "steel_Tangshan Medium Thick Plate Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.257823,
+          119.033567
+        ],
+        [
+          39.260784,
+          119.005925
+        ],
+        [
+          39.270032,
+          119.01376
+        ],
+        [
+          39.293147,
+          119.046972
+        ],
+        [
+          39.268452,
+          119.024819
+        ]
+      ],
+      "center_coord": [
+        39.27004849475883,
+        119.02500694435
+      ],
+      "geo_center": [
+        39.27004849475883,
+        119.02500694435
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 6,
+      "member_locations": [
+        "steel_Hebei Anfeng Iron and Steel Co Ltd",
+        "steel_Qinhuangdao Baigong Steel Co Ltd",
+        "steel_Qinhuangdao Hongxing Iron and Steel Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.65849,
+          118.894804
+        ],
+        [
+          39.748773,
+          118.819472
+        ],
+        [
+          39.700721,
+          118.871477
+        ]
+      ],
+      "center_coord": [
+        39.70266558492441,
+        118.86193422951564
+      ],
+      "geo_center": [
+        39.70266558492441,
+        118.86193422951564
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 7,
+      "member_locations": [
+        "steel_Hebei Donghai Special Steel Co Ltd",
+        "steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd",
+        "steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd",
+        "steel_Tangshan Ruifeng Iron and Steel Group Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.610605,
+          118.474722
+        ],
+        [
+          39.468366,
+          118.256774
+        ],
+        [
+          39.600956,
+          118.358726
+        ],
+        [
+          39.497472,
+          118.272056
+        ]
+      ],
+      "center_coord": [
+        39.54438192245919,
+        118.34049924934949
+      ],
+      "geo_center": [
+        39.54438192245919,
+        118.34049924934949
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 8,
+      "member_locations": [
+        "steel_Hebei Jinxi Iron and Steel Group Co Ltd",
+        "steel_Tangshan Ganglu Iron and Steel Co Ltd"
+      ],
+      "member_coords": [
+        [
+          40.209844,
+          118.220547
+        ],
+        [
+          40.183913,
+          118.073913
+        ]
+      ],
+      "center_coord": [
+        40.19690162565507,
+        118.14721598109942
+      ],
+      "geo_center": [
+        40.19690162565507,
+        118.14721598109942
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 9,
+      "member_locations": [
+        "steel_Hebei Rongxin Steel Co Ltd",
+        "steel_Hebei Xinda Iron and Steel Group Co Ltd",
+        "steel_Hebei Yanshan Iron and Steel Group Co Ltd",
+        "steel_Qian an Jiujiang Wire Co Ltd",
+        "steel_Shougang Qian an Iron and Steel Co Ltd",
+        "steel_Tangshan Songting Iron and Steel Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.880661,
+          118.558755
+        ],
+        [
+          39.898362,
+          118.579364
+        ],
+        [
+          39.925508,
+          118.672757
+        ],
+        [
+          39.952209,
+          118.559444
+        ],
+        [
+          39.976702,
+          118.558788
+        ],
+        [
+          39.938866,
+          118.576678
+        ]
+      ],
+      "center_coord": [
+        39.92872503590575,
+        118.58429959270354
+      ],
+      "geo_center": [
+        39.92872503590575,
+        118.58429959270354
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 10,
+      "member_locations": [
+        "steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base",
+        "steel_Tangshan Wenfeng Special Steel Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.160401,
+          118.429806
+        ],
+        [
+          39.146541,
+          118.432261
+        ]
+      ],
+      "center_coord": [
+        39.153471006438025,
+        118.43103362088671
+      ],
+      "geo_center": [
+        39.153471006438025,
+        118.43103362088671
+      ],
+      "total_capacity_kg_per_hour": 0
+    },
+    {
+      "cluster_id": 11,
+      "member_locations": [
+        "steel_Tianjin Iron and Steel Group Co Ltd",
+        "steel_Tianjin Pipe Corporation",
+        "steel_Tianjin Rockcheck Steel Group Co Ltd"
+      ],
+      "member_coords": [
+        [
+          39.031083,
+          117.499246
+        ],
+        [
+          39.034002,
+          117.486798
+        ],
+        [
+          38.970638,
+          117.495794
+        ]
+      ],
+      "center_coord": [
+        39.01190778504416,
+        117.49394662472992
+      ],
+      "geo_center": [
+        39.01190778504416,
+        117.49394662472992
+      ],
+      "total_capacity_kg_per_hour": 0
+    }
+  ],
+  "noise_points": [
+    {
+      "location": "refinery_Binyang Refinery",
+      "coords": [
+        37.683837,
+        117.61415
+      ]
+    },
+    {
+      "location": "refinery_Guangyuan Refinery",
+      "coords": [
+        37.676005,
+        118.339336
+      ]
+    },
+    {
+      "location": "refinery_Huabei Refinery",
+      "coords": [
+        38.733113,
+        116.136531
+      ]
+    },
+    {
+      "location": "refinery_PetroChina Qinhuangdao Refinery",
+      "coords": [
+        39.990302,
+        119.640584
+      ]
+    },
+    {
+      "location": "refinery_Qinhuangdao Far East Refinery",
+      "coords": [
+        39.86328,
+        119.223595
+      ]
+    },
+    {
+      "location": "refinery_Sinopec Beijing Refinery",
+      "coords": [
+        39.72377,
+        116.083453
+      ]
+    },
+    {
+      "location": "refinery_Sinopec Cangzhou Refinery",
+      "coords": [
+        38.338765,
+        116.872577
+      ]
+    },
+    {
+      "location": "refinery_Sinopec Shijiazhuang Refinery",
+      "coords": [
+        37.978178,
+        114.67409
+      ]
+    },
+    {
+      "location": "refinery_Sinopec Tianjin Refinery",
+      "coords": [
+        38.972631,
+        117.741279
+      ]
+    },
+    {
+      "location": "refinery_Tianjin  Refinery",
+      "coords": [
+        39.075368,
+        117.002342
+      ]
+    },
+    {
+      "location": "refinery_Wudi Xinyue Refinery",
+      "coords": [
+        38.095197,
+        117.762038
+      ]
+    },
+    {
+      "location": "refinery_Zhonghai  Refinery",
+      "coords": [
+        37.712921,
+        118.171638
+      ]
+    },
+    {
+      "location": "refinery_Zhongjie Refinery",
+      "coords": [
+        38.465418,
+        117.611834
+      ]
+    },
+    {
+      "location": "steel_Chengde Iron and Steel Group Co Ltd",
+      "coords": [
+        40.947707,
+        117.719747
+      ]
+    },
+    {
+      "location": "steel_Chengde Jianlong Special Steel Co Ltd",
+      "coords": [
+        40.515035,
+        117.596071
+      ]
+    },
+    {
+      "location": "steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd",
+      "coords": [
+        39.222566,
+        118.094201
+      ]
+    },
+    {
+      "location": "steel_Jingye Iron and Steel Co Ltd",
+      "coords": [
+        38.391372,
+        114.139998
+      ]
+    },
+    {
+      "location": "steel_Lingyuan Iron and Steel Co Ltd",
+      "coords": [
+        41.271048,
+        119.41374
+      ]
+    },
+    {
+      "location": "steel_Shanxi Tongde Xinghua Special Steel Co Ltd",
+      "coords": [
+        40.183517,
+        113.305462
+      ]
+    },
+    {
+      "location": "steel_Shougang Jingtang United Iron and Steel Co Ltd",
+      "coords": [
+        38.953664,
+        118.50339
+      ]
+    },
+    {
+      "location": "steel_Tangshan Donghai Iron and Steel Group Co Ltd",
+      "coords": [
+        39.748373,
+        118.624794
+      ]
+    },
+    {
+      "location": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+      "coords": [
+        39.300258,
+        117.800231
+      ]
+    },
+    {
+      "location": "steel_Xinji Aosen Iron and Steel Group Co Ltd",
+      "coords": [
+        37.752351,
+        115.184798
+      ]
+    }
+  ]
+}

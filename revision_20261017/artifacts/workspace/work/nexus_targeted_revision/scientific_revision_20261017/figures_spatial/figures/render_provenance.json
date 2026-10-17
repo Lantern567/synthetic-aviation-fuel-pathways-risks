@@ -1,0 +1,19 @@
+{
+  "renderer_sha256": "43f980200ff9c16190d279e42f3684800bc5019fdcddfe6ee55c42b3dc94605e",
+  "network_provenance_sha256": "458dc71d40814a760fd2ea2ea2acea750c923115933a3b196f0252058671a1d5",
+  "map_calibration": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt\u7684\u6587\u7ae0\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\current_archive_registration.json",
+    "sha256": "b57a9d88a83d097cccb633873dcea21f3273b52f9c8d6669142d73040e149093"
+  },
+  "retained_template_provenance_sha256": "f6fac974fa7a77c6f2fa20c10d1923fdc2f10f40fb21ef8196203a44610c4605",
+  "output_manifest_sha256": "befc0007cce52613bae152792a61d4bf4b9a688c38dcc1ab39bdc65842ffea69",
+  "readable_s49": {
+    "renderer_sha256": "dd72a3f92ab239caf782a7e20871e9539f3f6b7774dd95292c3a04f8c54f5018",
+    "entry_sha256": "604ac5713866321fce915c40e87b916c9d7e5ed26f49dd42ee51ea9975a535ba",
+    "width_in": 7.2,
+    "height_in": 3.1,
+    "label_size_pt": 10,
+    "intended_word_width_pt": 452.88,
+    "effective_label_size_pt": 8.736111111111112
+  }
+}

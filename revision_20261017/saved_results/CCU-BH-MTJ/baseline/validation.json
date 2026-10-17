@@ -1,0 +1,13 @@
+{
+  "constraints_checked": 241974,
+  "variables_checked": 1546263,
+  "max_constraint_absolute_residual": 4.944013198837638e-08,
+  "max_constraint_relative_residual": 4.944013198837638e-08,
+  "max_variable_bound_violation": 3.976377627168404e-08,
+  "max_integer_violation": 0.0,
+  "electricity_constraints_checked": 0,
+  "max_electricity_violation_mwh": NaN,
+  "electricity_violations_over_1e_5_mwh": 0,
+  "scope": "Every exported linear constraint, variable bound and integer decision; input provenance and physical balance are checked separately",
+  "passed": true
+}

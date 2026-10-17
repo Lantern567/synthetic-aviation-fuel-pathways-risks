@@ -1,0 +1,4 @@
+scenario,label,cost_cny_kg,carbon_g_mj,fulfillment_ratio,production_kg,provenance,nondominated_baseline_envelope
+CCU-GH-FT,baseline,29.609485056968882,15.035154855952008,0.4701819733649485,24003224.927975636,New verified model and final accounts,True
+GTL,baseline,6.501554612497708,56.94035770298387,1.0,51050925.57290536,Preserved original GTL,True
+GTL-BH,baseline,6.281085627773086,113.22952605917968,1.0,51050925.57290508,New verified model and final accounts,True

@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "reviewed_figures": [
+    "Figure_1",
+    "Figure_1b",
+    "Figure_S20",
+    "Figure_S21",
+    "Figure_S22",
+    "Figure_S23",
+    "Figure_S24",
+    "Figure_S25",
+    "Figure_S28",
+    "Figure_S29",
+    "Figure_S36",
+    "Figure_S37",
+    "Figure_S38",
+    "Figure_S39",
+    "Figure_S40",
+    "Figure_S41",
+    "Figure_S42",
+    "Figure_S43",
+    "Figure_S44",
+    "Figure_S45",
+    "Figure_S46",
+    "Figure_S47",
+    "Figure_S48"
+  ],
+  "png_sha256": {
+    "Figure_1": "d101c86caa69d9084c419f6330e253fb8d69b7236c66ba042518913d4faa8451",
+    "Figure_1b": "309f7f69503c65cdd45946ca42ebcff59ec7bdac9d9d1d4cf5abb4cf6988f85b",
+    "Figure_S20": "f0be797024e004685ff77f7c7a167c9db20d36749d13a61423ae578d4cb9c529",
+    "Figure_S21": "b919a0dbfbb0b78f873138d033caccb27b0fac89de1898fa8959d1328547cadf",
+    "Figure_S22": "e7f039e1ab36d8f65c84e9905bd57ce0aa19c4c98d83c27b51cf06c4c75b7c58",
+    "Figure_S23": "22dc36f5b287e62ce1efb24c7f675710d727422923a731f5d7b78c4ab8af26c8",
+    "Figure_S24": "b6a9043284089d5443568a6b4e23aeb9acea370a1d45ee5211f50e6adc8b6469",
+    "Figure_S25": "2cf016a91cc4bf0331e3868f1a3ce97ab3522d64a7ad8acd5ed70fa5d18ac723",
+    "Figure_S28": "e2241d6e28bf0eb1133ac28d185061712ce20d4d8f25570e4a007fec627bf98a",
+    "Figure_S29": "bcdf01a18fd1e871f400c4230525d3daa2245a612620cd4c884aee0c7c5f0c81",
+    "Figure_S36": "9f45b75dd501749f4e2fe67e1c0d67a147c6e607d3ff9fd4342f489fe56c6986",
+    "Figure_S37": "e42a7ca7833f56e8a5b43d5d6a8432bf1c98b84159f3e531d2452f816a15b6eb",
+    "Figure_S38": "13b5c94d231e8c7e71202e297f4ea95667b196756ce4655f4f3c4f1379764daa",
+    "Figure_S39": "adc0fb357fbf343cafbe0b4bf6888b95e8f5770b99f20a50b6692aeac8e93df9",
+    "Figure_S40": "4484062c8581a76d56645e001b20b3259b29e49bb3b7d398d0e7dce14f56b507",
+    "Figure_S41": "a6743fedce14febe79c54a83e85f348c053715e60d6ef3e082a8e9a9684ce2ea",
+    "Figure_S42": "3b6256de327557d0ea62ce2fe4055c5287de82b22d66ffa4e8290a3b87edbcec",
+    "Figure_S43": "8171f7ce9a28aff9c98d5c76e24dfd35a641767f86a0fce5fbca2af6750d6030",
+    "Figure_S44": "7295737c5b1ec9303b86bf8f618789e89f90aeea77c262dbe92cb4cc01e898c6",
+    "Figure_S45": "3e949e000f5159f723348207afdd32f7ac429403e8d1caf1164413b81e2b6248",
+    "Figure_S46": "3c11229cc8c5866aeaed2e0d2b0b1db9b628982af6ab414c2fa357e395344a46",
+    "Figure_S47": "830b9a8e0aec073c64f766dd78a761b69147a97d1c4f9f73738e849ce8df9fa7",
+    "Figure_S48": "b8bf12c5592d88d7765050e4b3f1d327ca6ee0de9662e27c492120a89f9d5156"
+  },
+  "reviews": [
+    {
+      "reviewer": "dac_mass_audit",
+      "figures": [
+        "Figure_1",
+        "Figure_1b",
+        "Figure_S20",
+        "Figure_S21",
+        "Figure_S22",
+        "Figure_S23",
+        "Figure_S24",
+        "Figure_S25",
+        "Figure_S28",
+        "Figure_S29",
+        "Figure_S36",
+        "Figure_S37",
+        "Figure_S38",
+        "Figure_S39",
+        "Figure_S40",
+        "Figure_S41",
+        "Figure_S42",
+        "Figure_S43"
+      ],
+      "scope": "Panel placement, annotations, axes, legends, final terms, borders and readable labels"
+    },
+    {
+      "reviewer": "pv_efficiency_audit",
+      "figures": [
+        "Figure_S44",
+        "Figure_S45",
+        "Figure_S46",
+        "Figure_S47",
+        "Figure_S48"
+      ],
+      "scope": "Independent read-only inspection of circular boundaries, years, shares, legends and central labels"
+    }
+  ]
+}

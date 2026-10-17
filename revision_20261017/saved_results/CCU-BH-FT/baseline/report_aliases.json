@@ -1,0 +1,10 @@
+{
+  "aliases": [
+    {
+      "source": "physical_validation.json",
+      "alias": "byproduct_physical_validation.json",
+      "sha256": "4c48ec1b647e19bdb38cc5b68306a1c1417499c153b7773149bb83f696c24e6f",
+      "scope": "Byte-identical filename alias for the cross-scenario figure and table readers; original report retained."
+    }
+  ]
+}

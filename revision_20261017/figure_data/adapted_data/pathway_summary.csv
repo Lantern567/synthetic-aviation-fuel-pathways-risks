@@ -1,0 +1,14 @@
+scenario,label,cost_cny_kg,carbon_g_mj,fulfillment_ratio,production_kg,provenance,nondominated_baseline_envelope
+CTL,baseline,20.207228214302326,120.5252037185801,0.7189769109887785,36704436.77152533,New verified model and final accounts,False
+CTL-BH,baseline,7.20625620375103,283.6793053522564,1.0,51050925.57290506,New verified model and final accounts,False
+GTL-GH,baseline,7.349851315340211,91.21733084566756,1.0,51050925.572905116,New verified model and final accounts,False
+GTL-BH,baseline,6.281085627773086,113.22952605917968,1.0,51050925.57290508,New verified model and final accounts,True
+CCU-GH-MTJ,baseline,41.92996725069813,23.2184542561334,0.3125977872074521,15958406.368982445,New verified model and final accounts,False
+CCU-GH-FT,baseline,29.609485056968882,15.035154855952008,0.4701819733649485,24003224.927975636,New verified model and final accounts,True
+CCU-BH-MTJ,baseline,11.051489460495958,410.4835170652791,1.0,51050925.57290506,New verified model and final accounts,False
+CCU-BH-FT,baseline,9.687335991454404,271.0634460155143,1.0,51050925.57290508,New verified model and final accounts,False
+DAC-GH-MTJ,baseline,71.64454568338765,44.048134175725416,0.3125977872074519,15958406.368982444,New verified model and final accounts,False
+DAC-GH-FT,baseline,52.97323595718782,34.11562437846707,0.4701819733649488,24003224.927975643,New verified model and final accounts,False
+DAC-BH-MTJ,baseline,28.55043689435715,434.4801212000272,0.8274090925085709,42240000.00000001,New verified model and final accounts,False
+DAC-BH-FT,baseline,26.031211423786836,296.74045009008057,0.9049786949312503,46200000.000000015,New verified model and final accounts,False
+GTL,baseline,6.501554612497708,56.94035770298387,1.0,51050925.57290536,Preserved original GTL,True

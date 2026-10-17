@@ -1,0 +1,66 @@
+{
+  "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\figure4_ppt_20261010\\output\\Nexus_Figure4_simplified_01.pptx",
+  "sourceSha": "620b4d4a4b8b8947f060e22b877819b07d6d0b0c1157a789ca2290f9156002f7",
+  "edits": [
+    {
+      "name": "FT-product-label",
+      "before": "SAF",
+      "after": "SynAF",
+      "sourcePosition": {},
+      "finalPosition": {
+        "left": 1099,
+        "top": 273,
+        "width": 100,
+        "height": 31
+      }
+    },
+    {
+      "name": "MTJ-product-label",
+      "before": "SAF",
+      "after": "SynAF",
+      "sourcePosition": {},
+      "finalPosition": {
+        "left": 1174,
+        "top": 596,
+        "width": 100,
+        "height": 29
+      }
+    },
+    {
+      "name": "SAF-buffer-label",
+      "before": "SAF",
+      "after": "SynAF",
+      "sourcePosition": {},
+      "finalPosition": {
+        "left": 1334,
+        "top": 304.8700262467192,
+        "width": 100,
+        "height": 29.260052493438323
+      }
+    },
+    {
+      "name": "SAF-buffer-label",
+      "before": "SAF buffer",
+      "after": "SynAF buffer",
+      "sourcePosition": {},
+      "finalPosition": {
+        "left": 1280,
+        "top": 376,
+        "width": 210,
+        "height": 37
+      }
+    },
+    {
+      "name": "SAF product-legend-text",
+      "before": "SAF",
+      "after": "SynAF",
+      "sourcePosition": {},
+      "finalPosition": {
+        "left": 1136,
+        "top": 818,
+        "width": 230,
+        "height": 40
+      }
+    }
+  ]
+}

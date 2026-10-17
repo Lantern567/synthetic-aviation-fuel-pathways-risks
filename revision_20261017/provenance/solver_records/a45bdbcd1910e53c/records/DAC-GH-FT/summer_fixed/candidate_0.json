@@ -1,0 +1,12 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "seconds": 52.20931577682495,
+  "lower_bound": 9756267611095.127,
+  "binary_rounding_threshold": 0.001,
+  "source_sha256": "54f35c1dafb7b7023ea8a2c5bae75de3be838144fb37d3dfb4aece9b98b1a9e5",
+  "column_name_sha256": "c261448985aab1291d3b66fb154e3a70709f8081c4fa57b2a2e3865934f30f45",
+  "bound_source": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/decomposed_runs/DAC-GH-FT/summer_fixed/root_lp_status.json",
+  "global_bound_method": "LP relaxation of necessary node-period/weekly aggregate conditions for both H2 and CO2; original integer design variables relaxed only for the LP lower bound.",
+  "objective": 9756267611095.111
+}

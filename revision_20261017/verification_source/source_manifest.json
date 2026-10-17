@@ -1,0 +1,68 @@
+[
+  {
+    "name": "update_accounts.py",
+    "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_ccu_accounts.py",
+    "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_physics.py",
+    "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_historical.py",
+    "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_extended_natural_gas.py",
+    "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_partition.py",
+    "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "review_partition_domains.py",
+    "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_byproduct_physics.py",
+    "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_co2.py",
+    "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_hydrogen_transport.py",
+    "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  },
+  {
+    "name": "validate_inventory_cost.py",
+    "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+    "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+    "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+  }
+]

@@ -1,0 +1,1463 @@
+/home/ljt/miniconda3/envs/green_methanol_for_port_transportation/lib/python3.12/site-packages/pyproj/__init__.py:91: UserWarning: Valid PROJ data directory not found. Either set the path using the environmental variable PROJ_DATA (PROJ 9.1+) | PROJ_LIB (PROJ<9.1) or with `pyproj.datadir.set_data_dir`.
+  warnings.warn(str(err))
+INFO:cache.data_cache_manager:从配置文件读取缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/shared/data/cache
+INFO:cache.data_cache_manager:缓存管理器初始化完成，缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/shared/data/cache/filtered_500km_data
+INFO:cache.data_cache_manager:路径规划缓存结构已设置，目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/shared/data/cache/path_planning_cache
+WARNING:root:部分高级缓存组件不可用: No module named 'cache.cache_performance_monitor'
+WARNING: 氢气运输可视化器导入失败: attempted relative import beyond top-level package
+WARNING: 可视化功能将不可用，但不影响优化计算
+2026-10-17 17:39:41,283 - core.dac_hydrogen_optimization_model - INFO - 📝 日志已挂载: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/logs/one_step/dac_h2_supply_chain_one_step_{date}.log
+INFO:core.dac_hydrogen_optimization_model:📝 日志已挂载: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/results/logs/one_step/dac_h2_supply_chain_one_step_{date}.log
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/config.yaml
+INFO:core.dac_hydrogen_optimization_model:配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/config.yaml
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 🔧 工艺模式: ONE_STEP
+INFO:core.dac_hydrogen_optimization_model:🔧 工艺模式: ONE_STEP
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 📄 配置文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/config.yaml
+INFO:core.dac_hydrogen_optimization_model:📄 配置文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/config.yaml
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO -    H₂消耗: 0.45 kg/kg SAF | CO₂消耗: 3.2 kg/kg SAF | CAPEX: 160,000 元/(kg/h)
+INFO:core.dac_hydrogen_optimization_model:   H₂消耗: 0.45 kg/kg SAF | CO₂消耗: 3.2 kg/kg SAF | CAPEX: 160,000 元/(kg/h)
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 并行计算workers数量: 4 (最大限制: 128)
+INFO:core.dac_hydrogen_optimization_model:并行计算workers数量: 4 (最大限制: 128)
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 加载碳排放参数: 9 个类别
+INFO:core.dac_hydrogen_optimization_model:加载碳排放参数: 9 个类别
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/shared/data/cache/graphhopper_routes
+INFO:core.dac_hydrogen_optimization_model:GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/shared/data/cache/graphhopper_routes
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.dac_hydrogen_optimization_model:GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+INFO:core.dac_hydrogen_optimization_model:初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.dac_hydrogen_optimization_model:OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - GraphHopper服务: localhost:8989
+INFO:core.dac_hydrogen_optimization_model:GraphHopper服务: localhost:8989
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 最大运输距离限制: 1000.0 公里
+INFO:core.dac_hydrogen_optimization_model:最大运输距离限制: 1000.0 公里
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 短距离路径规划精确计算: True
+INFO:core.dac_hydrogen_optimization_model:短距离路径规划精确计算: True
+2026-10-17 17:39:41,313 - core.dac_hydrogen_optimization_model - INFO - 配置文件加载完成: 25 个配置段
+INFO:core.dac_hydrogen_optimization_model:配置文件加载完成: 25 个配置段
+2026-10-17 17:39:41,681 - core.dac_hydrogen_optimization_model - INFO - 从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/airport_input.xlsx
+INFO:core.dac_hydrogen_optimization_model:从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/airport_input.xlsx
+2026-10-17 17:39:41,681 - core.dac_hydrogen_optimization_model - INFO - 从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/airport_input.xlsx
+INFO:core.dac_hydrogen_optimization_model:从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/inputs/baseline/airport_input.xlsx
+2026-10-17 17:39:41,744 - core.dac_hydrogen_optimization_model - INFO - Excel文件读取成功(All_Airports)，包含 8 行数据
+INFO:core.dac_hydrogen_optimization_model:Excel文件读取成功(All_Airports)，包含 8 行数据
+2026-10-17 17:39:41,745 - core.dac_hydrogen_optimization_model - INFO - 处理京津冀五个机场Excel数据...
+INFO:core.dac_hydrogen_optimization_model:处理京津冀五个机场Excel数据...
+2026-10-17 17:39:41,745 - core.dac_hydrogen_optimization_model - INFO - Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+INFO:core.dac_hydrogen_optimization_model:Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+2026-10-17 17:39:41,746 - core.dac_hydrogen_optimization_model - INFO - 处理了 2 个京津冀机场的数据
+INFO:core.dac_hydrogen_optimization_model:处理了 2 个京津冀机场的数据
+2026-10-17 17:39:41,813 - core.dac_hydrogen_optimization_model - INFO - [内存监控] 释放excel_data后: 466.98 MB
+INFO:core.dac_hydrogen_optimization_model:[内存监控] 释放excel_data后: 466.98 MB
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   添加了 2 个机场位置到基础locations中
+INFO:core.dac_hydrogen_optimization_model:  添加了 2 个机场位置到基础locations中
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.dac_hydrogen_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+INFO:core.dac_hydrogen_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.dac_hydrogen_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+INFO:core.dac_hydrogen_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - MTJ变动运营成本参数读取: 0.8元/kg (配置文件中值: 0.8)
+INFO:core.dac_hydrogen_optimization_model:MTJ变动运营成本参数读取: 0.8元/kg (配置文件中值: 0.8)
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=18,000元/年, 变动OPEX=1元/kg
+INFO:core.dac_hydrogen_optimization_model:MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=18,000元/年, 变动OPEX=1元/kg
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - WARNING - 未提供实际产量，使用理论估算: 7446.00 kg/年
+WARNING:core.dac_hydrogen_optimization_model:未提供实际产量，使用理论估算: 7446.00 kg/年
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 基础平准化成本: 4 元/kg
+INFO:core.dac_hydrogen_optimization_model:基础平准化成本: 4 元/kg
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 使用优化模型内部成本计算，不依赖外部成本分析器
+INFO:core.dac_hydrogen_optimization_model:使用优化模型内部成本计算，不依赖外部成本分析器
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 定义了 1 种SAF生产技术（绿氢+CO₂两步法）
+INFO:core.dac_hydrogen_optimization_model:定义了 1 种SAF生产技术（绿氢+CO₂两步法）
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 基础平准化成本: 4 元/kg
+INFO:core.dac_hydrogen_optimization_model:基础平准化成本: 4 元/kg
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   绿氢+CO₂费托合成制SAF: 5 元/kg (复杂度因子: 1.20)
+INFO:core.dac_hydrogen_optimization_model:  绿氢+CO₂费托合成制SAF: 5 元/kg (复杂度因子: 1.20)
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 定义了运输位置映射:
+INFO:core.dac_hydrogen_optimization_model:定义了运输位置映射:
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   氢气生产位置: 64 个
+INFO:core.dac_hydrogen_optimization_model:  氢气生产位置: 64 个
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   机场位置: 2 个
+INFO:core.dac_hydrogen_optimization_model:  机场位置: 2 个
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   总位置数: 66 个
+INFO:core.dac_hydrogen_optimization_model:  总位置数: 66 个
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 【位置类型匹配诊断】
+INFO:core.dac_hydrogen_optimization_model:【位置类型匹配诊断】
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 实际位置类型分布: {'byproduct_hydrogen_refinery': 28, 'byproduct_hydrogen_steel': 36, 'airport': 2}
+INFO:core.dac_hydrogen_optimization_model:实际位置类型分布: {'byproduct_hydrogen_refinery': 28, 'byproduct_hydrogen_steel': 36, 'airport': 2}
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 总位置数: 66
+INFO:core.dac_hydrogen_optimization_model:总位置数: 66
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - 
+技术 [green_h2_co2_to_saf]:
+INFO:core.dac_hydrogen_optimization_model:
+技术 [green_h2_co2_to_saf]:
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   要求位置类型: ['solar_plant', 'wind_farm', 'airport', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
+INFO:core.dac_hydrogen_optimization_model:  要求位置类型: ['solar_plant', 'wind_farm', 'airport', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   匹配到的位置数: 66
+INFO:core.dac_hydrogen_optimization_model:  匹配到的位置数: 66
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO -   ✅ 匹配位置示例: ['refinery_Binyang Refinery', 'refinery_CNOOC Dongying Refinery', 'refinery_Fuyu Refinery']
+INFO:core.dac_hydrogen_optimization_model:  ✅ 匹配位置示例: ['refinery_Binyang Refinery', 'refinery_CNOOC Dongying Refinery', 'refinery_Fuyu Refinery']
+2026-10-17 17:39:41,835 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络构建完成: 376节点, 402边, 32个连通分量 (最大分量115节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络不连通! 分量大小: [115, 100, 46, 11, 9]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络构建完成: 401节点, 452边, 37个连通分量 (最大分量116节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络不连通! 分量大小: [116, 73, 36, 15, 13]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络构建完成: 1482节点, 1620边, 184个连通分量 (最大分量657节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络不连通! 分量大小: [657, 24, 20, 19, 18]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管网近邻接驳完成: 新增2419条接驳边 (<= 20.0km)
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管道网络构建完成: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 38.66km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.89km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 20.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 43.04km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.26km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 145.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 168.72km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 43.57km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（17节点），最近距离 38.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 39.20km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 34.25km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 28.31km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 30.41km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 42.27km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 85.76km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 25.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 22.80km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（6节点），最近距离 37.44km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 24.99km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（21节点），最近距离 72.38km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 28.49km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 23.55km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.69km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 40.88km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 24.40km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 47.35km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 31.56km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 41.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 66.87km 超过阈值 10.0km
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:连通分量桥接完成: 成功 0 个, 失败 30 个
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:桥接后mixed管道网络: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+2026-10-17 17:39:42,111 - core.dac_hydrogen_optimization_model - INFO - 氢气管道距离计算器初始化完成
+INFO:core.dac_hydrogen_optimization_model:氢气管道距离计算器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:初始化氢气聚类优化器: eps=15.0km, min_samples=2
+2026-10-17 17:39:42,112 - core.dac_hydrogen_optimization_model - INFO - 氢气聚类优化器初始化完成
+INFO:core.dac_hydrogen_optimization_model:氢气聚类优化器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:开始对64个氢气生产厂进行聚类...
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类完成: 12个聚类, 23个噪声点
+INFO:hydrogen.hydrogen_clustering_optimizer:最终聚类结果: 12个聚类, 23个独立点
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类结果已导出到: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/project/products/supply_chain_optimization/dac_hydrogen_saf_supply_chain_optimization/byproduct_clustering_results.json
+2026-10-17 17:39:42,119 - core.dac_hydrogen_optimization_model - INFO - 氢气聚类完成: 12个聚类, 23个独立点
+INFO:core.dac_hydrogen_optimization_model:氢气聚类完成: 12个聚类, 23个独立点
+2026-10-17 17:39:42,120 - core.dac_hydrogen_optimization_model - INFO - 管道路径将按需计算（延迟计算模式）
+INFO:core.dac_hydrogen_optimization_model:管道路径将按需计算（延迟计算模式）
+2026-10-17 17:39:42,120 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:42,120 - core.dac_hydrogen_optimization_model - INFO - 开始初始化氢气管道超图优化器...
+INFO:core.dac_hydrogen_optimization_model:开始初始化氢气管道超图优化器...
+2026-10-17 17:39:42,120 - core.dac_hydrogen_optimization_model - INFO - 氢气管道超图优化器对象创建成功
+INFO:core.dac_hydrogen_optimization_model:氢气管道超图优化器对象创建成功
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:🚀 开始构建超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:步骤1/3: 构建超级图...
+INFO:shared.optimizers.super_graph_optimizer:  加载原始管道网络...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ 管道网络: 1482节点, 1620边
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2聚类中心...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2聚类中心: 12个
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2独立点（噪声点）...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2独立点: 23个
+INFO:shared.optimizers.super_graph_optimizer:  添加SAF工厂...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ SAF工厂: 66个
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 超级图构建完成: 0.02秒
+INFO:shared.optimizers.super_graph_optimizer:步骤2/3: 预计算所有最短路径...
+INFO:shared.optimizers.super_graph_optimizer:  使用johnson算法...
+INFO:shared.optimizers.super_graph_optimizer:  图规模: 1583节点, 2630边
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 1.16秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 距离对数: 665,049
+INFO:shared.optimizers.super_graph_optimizer:步骤3/3: 预计算CO2源到聚类中心的距离...
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 0.00秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ CO2源数量: 64
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:✓ 超级图优化器初始化完成！
+INFO:shared.optimizers.super_graph_optimizer:  总耗时: 1.18秒
+INFO:shared.optimizers.super_graph_optimizer:  超级图节点数: 1583
+INFO:shared.optimizers.super_graph_optimizer:    - 管道节点: 1482
+INFO:shared.optimizers.super_graph_optimizer:    - CO2聚类中心: 12
+INFO:shared.optimizers.super_graph_optimizer:    - CO2独立点: 23
+INFO:shared.optimizers.super_graph_optimizer:    - SAF工厂: 66
+INFO:shared.optimizers.super_graph_optimizer:  超级图边数: 2630
+INFO:shared.optimizers.super_graph_optimizer:    - 新增边: 1010
+INFO:shared.optimizers.super_graph_optimizer:  预计算距离对数: 665049
+INFO:shared.optimizers.super_graph_optimizer:  预计算耗时: 1.16秒
+INFO:shared.optimizers.super_graph_optimizer:  查询性能: O(1)字典查找 (~0.001ms)
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - ✅ 氢气管道超图优化器初始化完成
+INFO:core.dac_hydrogen_optimization_model:✅ 氢气管道超图优化器初始化完成
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - 查询性能：40,000x 加速 (40ms -> 0.001ms)
+INFO:core.dac_hydrogen_optimization_model:查询性能：40,000x 加速 (40ms -> 0.001ms)
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - 开始初始化CO₂捕获聚类...
+INFO:core.dac_hydrogen_optimization_model:开始初始化CO₂捕获聚类...
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - DAC候选位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:DAC候选位置数量: 66
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - 复用氢气聚类结果作为CO₂聚类: 12个聚类, 23个独立点
+INFO:core.dac_hydrogen_optimization_model:复用氢气聚类结果作为CO₂聚类: 12个聚类, 23个独立点
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - 无需单独运行CO₂聚类优化器
+INFO:core.dac_hydrogen_optimization_model:无需单独运行CO₂聚类优化器
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - 开始初始化CO₂管道超图优化器...
+INFO:core.dac_hydrogen_optimization_model:开始初始化CO₂管道超图优化器...
+2026-10-17 17:39:43,303 - core.dac_hydrogen_optimization_model - INFO - CO₂管道超图优化器对象创建成功
+INFO:core.dac_hydrogen_optimization_model:CO₂管道超图优化器对象创建成功
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:🚀 开始构建超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:步骤1/3: 构建超级图...
+INFO:shared.optimizers.super_graph_optimizer:  加载原始管道网络...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ 管道网络: 1482节点, 1620边
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2聚类中心...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2聚类中心: 12个
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2独立点（噪声点）...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2独立点: 23个
+INFO:shared.optimizers.super_graph_optimizer:  添加SAF工厂...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ SAF工厂: 66个
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 超级图构建完成: 0.01秒
+INFO:shared.optimizers.super_graph_optimizer:步骤2/3: 预计算所有最短路径...
+INFO:shared.optimizers.super_graph_optimizer:  使用johnson算法...
+INFO:shared.optimizers.super_graph_optimizer:  图规模: 1583节点, 2630边
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 1.09秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 距离对数: 665,049
+INFO:shared.optimizers.super_graph_optimizer:步骤3/3: 预计算CO2源到聚类中心的距离...
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 0.00秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ CO2源数量: 64
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:✓ 超级图优化器初始化完成！
+INFO:shared.optimizers.super_graph_optimizer:  总耗时: 1.11秒
+INFO:shared.optimizers.super_graph_optimizer:  超级图节点数: 1583
+INFO:shared.optimizers.super_graph_optimizer:    - 管道节点: 1482
+INFO:shared.optimizers.super_graph_optimizer:    - CO2聚类中心: 12
+INFO:shared.optimizers.super_graph_optimizer:    - CO2独立点: 23
+INFO:shared.optimizers.super_graph_optimizer:    - SAF工厂: 66
+INFO:shared.optimizers.super_graph_optimizer:  超级图边数: 2630
+INFO:shared.optimizers.super_graph_optimizer:    - 新增边: 1010
+INFO:shared.optimizers.super_graph_optimizer:  预计算距离对数: 665049
+INFO:shared.optimizers.super_graph_optimizer:  预计算耗时: 1.09秒
+INFO:shared.optimizers.super_graph_optimizer:  查询性能: O(1)字典查找 (~0.001ms)
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+2026-10-17 17:39:44,417 - core.dac_hydrogen_optimization_model - INFO - ✅ CO₂管道超图优化器初始化完成
+INFO:core.dac_hydrogen_optimization_model:✅ CO₂管道超图优化器初始化完成
+2026-10-17 17:39:44,417 - core.dac_hydrogen_optimization_model - INFO - 查询性能：40,000x 加速 (40ms -> 0.001ms)
+INFO:core.dac_hydrogen_optimization_model:查询性能：40,000x 加速 (40ms -> 0.001ms)
+2026-10-17 17:39:44,417 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:44,417 - core.dac_hydrogen_optimization_model - INFO - 数据加载完成: 66个生产地点, 2个机场, 66个CO₂捕获源
+INFO:core.dac_hydrogen_optimization_model:数据加载完成: 66个生产地点, 2个机场, 66个CO₂捕获源
+警告：约束诊断工具不可用: No module named 'diagnose_constraints'
+DATA_READY DAC-BH-FT baseline 66
+Cardinal Optimizer v8.0.7. Build date Sep 20 2026
+Copyright Cardinal Operations 2026. All Rights Reserved
+
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'LpMethod' to 2
+Setting parameter 'RelGap' to 0.001
+Setting parameter 'FeasTol' to 1e-07
+Setting parameter 'IntTol' to 1e-07
+2026-10-17 17:39:44,445 - core.dac_hydrogen_optimization_model - INFO - 创建决策变量...
+INFO:core.dac_hydrogen_optimization_model:创建决策变量...
+2026-10-17 17:39:44,474 - core.dac_hydrogen_optimization_model - INFO - MTJ容量配置: 读取到的容量上限 = 10000 kg/h
+INFO:core.dac_hydrogen_optimization_model:MTJ容量配置: 读取到的容量上限 = 10000 kg/h
+2026-10-17 17:39:44,474 - core.dac_hydrogen_optimization_model - WARNING - MTJ容量配置异常: 期望100000，实际10000，强制使用100000
+WARNING:core.dac_hydrogen_optimization_model:MTJ容量配置异常: 期望100000，实际10000，强制使用100000
+2026-10-17 17:39:44,474 - core.dac_hydrogen_optimization_model - INFO - 最终使用的MTJ容量限制: 100000 kg/h
+INFO:core.dac_hydrogen_optimization_model:最终使用的MTJ容量限制: 100000 kg/h
+2026-10-17 17:39:44,799 - core.dac_hydrogen_optimization_model - INFO - 【禁用罐车运输】跳过氢气罐车运输变量创建，仅使用管道运输
+INFO:core.dac_hydrogen_optimization_model:【禁用罐车运输】跳过氢气罐车运输变量创建，仅使用管道运输
+2026-10-17 17:39:44,799 - core.dac_hydrogen_optimization_model - INFO - 创建氢能管道运输变量，作为罐车运输的替代选择
+INFO:core.dac_hydrogen_optimization_model:创建氢能管道运输变量，作为罐车运输的替代选择
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 4224 条氢能管道运输路线
+INFO:core.dac_hydrogen_optimization_model:创建了 4224 条氢能管道运输路线
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 14784 个生产变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14784 个生产变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 66 个设施变量
+INFO:core.dac_hydrogen_optimization_model:创建了 66 个设施变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 66 个设施产能变量
+INFO:core.dac_hydrogen_optimization_model:创建了 66 个设施产能变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 528 个运输变量
+INFO:core.dac_hydrogen_optimization_model:创建了 528 个运输变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 14850 个库存变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14850 个库存变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 14336 个制氢变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14336 个制氢变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 64 个电解槽容量变量
+INFO:core.dac_hydrogen_optimization_model:创建了 64 个电解槽容量变量
+2026-10-17 17:39:44,808 - core.dac_hydrogen_optimization_model - INFO - 创建了 14850 个氢气库存变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14850 个氢气库存变量
+2026-10-17 17:39:44,809 - core.dac_hydrogen_optimization_model - INFO - 创建了 8 个缺货惩罚变量
+INFO:core.dac_hydrogen_optimization_model:创建了 8 个缺货惩罚变量
+2026-10-17 17:39:44,809 - core.dac_hydrogen_optimization_model - INFO - 创建了 4224 个氢能管道运输变量
+INFO:core.dac_hydrogen_optimization_model:创建了 4224 个氢能管道运输变量
+2026-10-17 17:39:44,809 - core.dac_hydrogen_optimization_model - INFO - 创建甲醇生产和库存变量
+INFO:core.dac_hydrogen_optimization_model:创建甲醇生产和库存变量
+2026-10-17 17:39:44,946 - core.dac_hydrogen_optimization_model - INFO - 创建了 14784 个甲醇生产变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14784 个甲醇生产变量
+2026-10-17 17:39:44,946 - core.dac_hydrogen_optimization_model - INFO - 创建了 14850 个甲醇库存变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14850 个甲醇库存变量
+2026-10-17 17:39:44,946 - core.dac_hydrogen_optimization_model - INFO - 创建CO₂库存变量（时间尺度匹配：周级供应→小时级消耗）
+INFO:core.dac_hydrogen_optimization_model:创建CO₂库存变量（时间尺度匹配：周级供应→小时级消耗）
+2026-10-17 17:39:44,979 - core.dac_hydrogen_optimization_model - INFO - 创建了 14850 个CO₂库存变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14850 个CO₂库存变量
+2026-10-17 17:39:44,979 - core.dac_hydrogen_optimization_model - INFO - 创建统一的成本表达式对象...
+INFO:core.dac_hydrogen_optimization_model:创建统一的成本表达式对象...
+2026-10-17 17:39:44,979 - core.dac_hydrogen_optimization_model - INFO - 成本表达式中使用的MTJ变动运营成本: 0.8元/kg
+INFO:core.dac_hydrogen_optimization_model:成本表达式中使用的MTJ变动运营成本: 0.8元/kg
+2026-10-17 17:39:45,089 - core.dac_hydrogen_optimization_model - INFO - 计算电解槽/副产氢设备投资成本...
+INFO:core.dac_hydrogen_optimization_model:计算电解槽/副产氢设备投资成本...
+2026-10-17 17:39:45,282 - core.dac_hydrogen_optimization_model - INFO - 开始缓存氢气管道运输距离: 4160条路径...
+INFO:core.dac_hydrogen_optimization_model:开始缓存氢气管道运输距离: 4160条路径...
+2026-10-17 17:39:45,282 - core.dac_hydrogen_optimization_model - INFO - 使用4个并行workers进行批量计算
+INFO:core.dac_hydrogen_optimization_model:使用4个并行workers进行批量计算
+2026-10-17 17:39:45,333 - core.dac_hydrogen_optimization_model - INFO - 氢气距离缓存进度: 1000/4160 (24.0%), 预计剩余: 0.2秒
+INFO:core.dac_hydrogen_optimization_model:氢气距离缓存进度: 1000/4160 (24.0%), 预计剩余: 0.2秒
+2026-10-17 17:39:45,335 - core.dac_hydrogen_optimization_model - INFO - 氢气距离缓存进度: 2000/4160 (48.1%), 预计剩余: 0.1秒
+INFO:core.dac_hydrogen_optimization_model:氢气距离缓存进度: 2000/4160 (48.1%), 预计剩余: 0.1秒
+2026-10-17 17:39:45,336 - core.dac_hydrogen_optimization_model - INFO - 氢气距离缓存进度: 3000/4160 (72.1%), 预计剩余: 0.0秒
+INFO:core.dac_hydrogen_optimization_model:氢气距离缓存进度: 3000/4160 (72.1%), 预计剩余: 0.0秒
+2026-10-17 17:39:45,338 - core.dac_hydrogen_optimization_model - INFO - 氢气距离缓存进度: 4000/4160 (96.2%), 预计剩余: 0.0秒
+INFO:core.dac_hydrogen_optimization_model:氢气距离缓存进度: 4000/4160 (96.2%), 预计剩余: 0.0秒
+2026-10-17 17:39:45,338 - core.dac_hydrogen_optimization_model - INFO - 氢气距离缓存完成: 4160条路径, 耗时: 0.06秒, 平均速度: 74180.2条/秒
+INFO:core.dac_hydrogen_optimization_model:氢气距离缓存完成: 4160条路径, 耗时: 0.06秒, 平均速度: 74180.2条/秒
+2026-10-17 17:39:45,353 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - v4.1: 调用DAC供应定义方法
+INFO:core.dac_hydrogen_optimization_model:v4.1: 调用DAC供应定义方法
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - 定义DAC独立供应 (v4.1)
+INFO:core.dac_hydrogen_optimization_model:定义DAC独立供应 (v4.1)
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - DAC参数:
+INFO:core.dac_hydrogen_optimization_model:DAC参数:
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO -   - 能耗: 350.0 kWh/ton CO₂
+INFO:core.dac_hydrogen_optimization_model:  - 能耗: 350.0 kWh/ton CO₂
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO -   - 捕获成本: 4500.0 元/ton CO₂
+INFO:core.dac_hydrogen_optimization_model:  - 捕获成本: 4500.0 元/ton CO₂
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO -   - 设施建设成本: 50,000,000 元/设施
+INFO:core.dac_hydrogen_optimization_model:  - 设施建设成本: 50,000,000 元/设施
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO -   - 可部署位置类型: ['solar_plant', 'wind_farm', 'airport', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
+INFO:core.dac_hydrogen_optimization_model:  - 可部署位置类型: ['solar_plant', 'wind_farm', 'airport', 'byproduct_hydrogen_steel', 'byproduct_hydrogen_refinery']
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - DAC候选位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:DAC候选位置数量: 66
+2026-10-17 17:39:45,354 - core.dac_hydrogen_optimization_model - INFO - 创建了 66 个DAC设施建设决策变量
+INFO:core.dac_hydrogen_optimization_model:创建了 66 个DAC设施建设决策变量
+2026-10-17 17:39:45,498 - core.dac_hydrogen_optimization_model - INFO - 创建了 14784 个DAC CO₂捕获变量 (kg/h)
+INFO:core.dac_hydrogen_optimization_model:创建了 14784 个DAC CO₂捕获变量 (kg/h)
+2026-10-17 17:39:45,591 - core.dac_hydrogen_optimization_model - INFO - 添加了 14784 个DAC设施关联约束
+INFO:core.dac_hydrogen_optimization_model:添加了 14784 个DAC设施关联约束
+2026-10-17 17:39:45,637 - core.dac_hydrogen_optimization_model - INFO - 创建了 14784 个DAC市电购买变量 (kWh/h)
+INFO:core.dac_hydrogen_optimization_model:创建了 14784 个DAC市电购买变量 (kWh/h)
+2026-10-17 17:39:45,637 - core.dac_hydrogen_optimization_model - INFO - 添加DAC设施建设投资成本...
+INFO:core.dac_hydrogen_optimization_model:添加DAC设施建设投资成本...
+2026-10-17 17:39:45,637 - core.dac_hydrogen_optimization_model - INFO -   - DAC设施建设成本: 50,000,000 元/设施
+INFO:core.dac_hydrogen_optimization_model:  - DAC设施建设成本: 50,000,000 元/设施
+2026-10-17 17:39:45,637 - core.dac_hydrogen_optimization_model - INFO -   - DAC候选位置: 66 个
+INFO:core.dac_hydrogen_optimization_model:  - DAC候选位置: 66 个
+2026-10-17 17:39:45,637 - core.dac_hydrogen_optimization_model - INFO - 添加DAC捕获成本到目标函数...
+INFO:core.dac_hydrogen_optimization_model:添加DAC捕获成本到目标函数...
+2026-10-17 17:39:45,663 - core.dac_hydrogen_optimization_model - INFO -   - DAC捕获成本: 4500.0 元/ton CO₂
+INFO:core.dac_hydrogen_optimization_model:  - DAC捕获成本: 4500.0 元/ton CO₂
+2026-10-17 17:39:45,663 - core.dac_hydrogen_optimization_model - INFO -   - 生命周期系数: 127.64
+INFO:core.dac_hydrogen_optimization_model:  - 生命周期系数: 127.64
+2026-10-17 17:39:45,663 - core.dac_hydrogen_optimization_model - INFO -   - DAC决策变量数: 14784
+INFO:core.dac_hydrogen_optimization_model:  - DAC决策变量数: 14784
+2026-10-17 17:39:45,663 - core.dac_hydrogen_optimization_model - INFO - 添加DAC市电购买成本...
+INFO:core.dac_hydrogen_optimization_model:添加DAC市电购买成本...
+2026-10-17 17:39:45,688 - core.dac_hydrogen_optimization_model - INFO -   - 市电价格: 0.6 元/kWh
+INFO:core.dac_hydrogen_optimization_model:  - 市电价格: 0.6 元/kWh
+2026-10-17 17:39:45,688 - core.dac_hydrogen_optimization_model - INFO -   - 生命周期系数: 127.64
+INFO:core.dac_hydrogen_optimization_model:  - 生命周期系数: 127.64
+2026-10-17 17:39:45,688 - core.dac_hydrogen_optimization_model - INFO -   - 市电购买变量数: 14784
+INFO:core.dac_hydrogen_optimization_model:  - 市电购买变量数: 14784
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - DAC独立供应定义完成
+INFO:core.dac_hydrogen_optimization_model:DAC独立供应定义完成
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - 定义CO₂管道运输变量 (v4.2 周级)
+INFO:core.dac_hydrogen_optimization_model:定义CO₂管道运输变量 (v4.2 周级)
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - DAC位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:DAC位置数量: 66
+2026-10-17 17:39:45,689 - core.dac_hydrogen_optimization_model - INFO - SAF工厂位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:SAF工厂位置数量: 66
+2026-10-17 17:39:45,698 - core.dac_hydrogen_optimization_model - INFO - 创建了 4290 个CO₂管道运输变量（周级）
+INFO:core.dac_hydrogen_optimization_model:创建了 4290 个CO₂管道运输变量（周级）
+2026-10-17 17:39:45,698 - core.dac_hydrogen_optimization_model - INFO - v4.2优化：变量数从 66×66×224 减少到 4290
+INFO:core.dac_hydrogen_optimization_model:v4.2优化：变量数从 66×66×224 减少到 4290
+2026-10-17 17:39:45,698 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:48,623 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:48,623 - core.dac_hydrogen_optimization_model - INFO - 定义CO₂库存变量 (v4.1)
+INFO:core.dac_hydrogen_optimization_model:定义CO₂库存变量 (v4.1)
+2026-10-17 17:39:48,623 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:48,655 - core.dac_hydrogen_optimization_model - INFO - 创建了 14850 个CO₂库存变量
+INFO:core.dac_hydrogen_optimization_model:创建了 14850 个CO₂库存变量
+2026-10-17 17:39:48,655 - core.dac_hydrogen_optimization_model - INFO - SAF工厂位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:SAF工厂位置数量: 66
+2026-10-17 17:39:48,655 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:48,658 - core.dac_hydrogen_optimization_model - INFO - 开始计算CO2管道路线距离: 需要计算 4290 条路径
+INFO:core.dac_hydrogen_optimization_model:开始计算CO2管道路线距离: 需要计算 4290 条路径
+2026-10-17 17:39:48,658 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Songting Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Songting Iron and Steel Co Ltd
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 20/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 20/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 40/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 40/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 60/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 60/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 80/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 80/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Yanshan Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Yanshan Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Rockcheck Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Rockcheck Steel Group Co Ltd
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 100/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 100/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 120/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 120/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qinhuangdao Hongxing Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qinhuangdao Hongxing Iron and Steel Co Ltd
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 140/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 140/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 160/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 160/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shanxi Tongde Xinghua Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shanxi Tongde Xinghua Special Steel Co Ltd
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 180/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 180/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 200/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 200/4290 条
+2026-10-17 17:39:48,659 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 220/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 220/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 240/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 240/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Chengde Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Chengde Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 260/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 260/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 280/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 280/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Guangyuan Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Guangyuan Refinery
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 300/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 300/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hebei Qianhai Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hebei Qianhai Refinery
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Huabei Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Huabei Refinery
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 320/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 320/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 340/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 340/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 360/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 360/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 380/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 380/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 400/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 400/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Fuyu Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Fuyu Refinery
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 420/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 420/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 440/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 440/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 460/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 460/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 480/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 480/4290 条
+2026-10-17 17:39:48,660 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 500/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 500/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 520/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 520/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Rockcheck Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Rockcheck Steel Group Co Ltd
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Yanshan Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Yanshan Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 540/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 540/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qinhuangdao Hongxing Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qinhuangdao Hongxing Iron and Steel Co Ltd
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 560/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 560/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 580/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 580/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 600/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 600/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shougang Qian an Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shougang Qian an Iron and Steel Co Ltd
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 620/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 620/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 640/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 640/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 660/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 660/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Tianhong 1 Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Tianhong 1 Refinery
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 680/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 680/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 700/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 700/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 720/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 720/4290 条
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Ruifeng Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Ruifeng Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hebei Qianhai Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hebei Qianhai Refinery
+2026-10-17 17:39:48,661 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 740/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 740/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 760/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 760/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 780/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 780/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 800/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 800/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 820/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 820/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Shenchi Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Shenchi Refinery
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 840/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 840/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 860/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 860/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 880/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 880/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shougang Jingtang United Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shougang Jingtang United Iron and Steel Co Ltd
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 900/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 900/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Zhonghai  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Zhonghai  Refinery
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 920/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 920/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 940/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 940/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 960/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 960/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Jinxi Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Jinxi Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 980/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 980/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1000/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1000/4290 条
+2026-10-17 17:39:48,662 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Haike Ruilin Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Haike Ruilin Refinery
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1020/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1020/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shougang Qian an Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shougang Qian an Iron and Steel Co Ltd
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1040/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1040/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1060/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1060/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1080/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1080/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Jingye Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Jingye Iron and Steel Co Ltd
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1100/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1100/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Ruifeng Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Ruifeng Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1120/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1120/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1140/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1140/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Lingyuan Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Lingyuan Iron and Steel Co Ltd
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1160/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1160/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1180/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1180/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Wudi Xinyue Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Wudi Xinyue Refinery
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1200/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1200/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1220/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1220/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1240/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1240/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Shenchi Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Shenchi Refinery
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Guangyuan Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Guangyuan Refinery
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1260/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1260/4290 条
+2026-10-17 17:39:48,663 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1280/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1280/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Huabei Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Huabei Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Huayu Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Huayu Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1300/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1300/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shougang Jingtang United Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Shougang Jingtang United Iron and Steel Co Ltd
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Zhonghai  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Zhonghai  Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1320/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1320/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Tianjin Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Tianjin Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1340/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1340/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1360/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1360/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1380/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1380/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Lianhe Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Lianhe Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1400/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1400/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1420/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1420/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Jinxi Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Jinxi Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1440/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1440/4290 条
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Haike Ruilin Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Haike Ruilin Refinery
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qian an Jiujiang Wire Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qian an Jiujiang Wire Co Ltd
+2026-10-17 17:39:48,664 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1460/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1460/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1480/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1480/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1500/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1500/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1520/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1520/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Jingye Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Jingye Iron and Steel Co Ltd
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hualian Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hualian Refinery
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1540/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1540/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_CNOOC Dongying Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_CNOOC Dongying Refinery
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1560/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1560/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Lingyuan Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Lingyuan Iron and Steel Co Ltd
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1580/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1580/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Tianzhu Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Tianzhu Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1600/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1600/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1620/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1620/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Wudi Xinyue Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Wudi Xinyue Refinery
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1640/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1640/4290 条
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Rongxin Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Rongxin Steel Co Ltd
+2026-10-17 17:39:48,665 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1660/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1660/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Tianhong 1 Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Tianhong 1 Refinery
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Xinhai  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Xinhai  Refinery
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1680/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1680/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1700/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1700/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1720/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1720/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Huayu Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Huayu Refinery
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1740/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1740/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1760/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1760/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Huaxi Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Huaxi Special Steel Co Ltd
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1780/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1780/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Guotang Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Guotang Steel Co Ltd
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1800/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1800/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1820/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1820/4290 条
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Lianhe Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Lianhe Refinery
+2026-10-17 17:39:48,666 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1840/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1840/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1860/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1860/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qian an Jiujiang Wire Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qian an Jiujiang Wire Co Ltd
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1880/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1880/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1900/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1900/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1920/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1920/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1940/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1940/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1960/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1960/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hualian Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hualian Refinery
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 1980/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 1980/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_CNOOC Dongying Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_CNOOC Dongying Refinery
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2000/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2000/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2020/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2020/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Tianzhu Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Tianzhu Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2040/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2040/4290 条
+2026-10-17 17:39:48,667 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2060/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2060/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2080/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2080/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Qinhuangdao Far East Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Qinhuangdao Far East Refinery
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Rongxin Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Rongxin Steel Co Ltd
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2100/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2100/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Xinhai  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Xinhai  Refinery
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_PetroChina Rosneft Tianjin  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_PetroChina Rosneft Tianjin  Refinery
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2120/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2120/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2140/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2140/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2160/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2160/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2180/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2180/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2200/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2200/4290 条
+2026-10-17 17:39:48,668 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Huaxi Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Huaxi Special Steel Co Ltd
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2220/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2220/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Guotang Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Guotang Steel Co Ltd
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2240/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2240/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Ganglu Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Ganglu Iron and Steel Co Ltd
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2260/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2260/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Anfeng Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Anfeng Iron and Steel Co Ltd
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_PetroChina Qinhuangdao Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_PetroChina Qinhuangdao Refinery
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2280/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2280/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2300/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2300/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2320/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2320/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2340/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2340/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Cangzhou Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Cangzhou Refinery
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> airport_北京
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> airport_北京
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Binyang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Binyang Refinery
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2360/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2360/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Tianjin Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Tianjin Refinery
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2380/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2380/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2400/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2400/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2420/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2420/4290 条
+2026-10-17 17:39:48,669 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2440/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2440/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2460/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2460/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2480/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2480/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2500/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2500/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> airport_天津
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> airport_天津
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2520/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2520/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Qinhuangdao Far East Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Qinhuangdao Far East Refinery
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2540/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2540/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_PetroChina Rosneft Tianjin  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_PetroChina Rosneft Tianjin  Refinery
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2560/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2560/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2580/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2580/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2600/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2600/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2620/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2620/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2640/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2640/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2660/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2660/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Anfeng Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Anfeng Iron and Steel Co Ltd
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2680/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2680/4290 条
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_PetroChina Qinhuangdao Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_PetroChina Qinhuangdao Refinery
+2026-10-17 17:39:48,670 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2700/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2700/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Xinda Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Xinda Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Xinji Aosen Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Xinji Aosen Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Chengde Jianlong Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Chengde Jianlong Special Steel Co Ltd
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2720/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2720/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Cangzhou Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Cangzhou Refinery
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Donghai Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Donghai Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2740/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2740/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Binyang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Binyang Refinery
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2760/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2760/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Tianjin  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Tianjin  Refinery
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2780/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2780/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2800/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2800/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2820/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2820/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2840/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2840/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2860/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2860/4290 条
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd
+2026-10-17 17:39:48,671 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2880/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2880/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2900/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2900/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Zhongjie Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Zhongjie Refinery
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2920/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2920/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2940/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2940/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2960/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2960/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qinhuangdao Baigong Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Qinhuangdao Baigong Steel Co Ltd
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 2980/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 2980/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3000/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3000/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Yatong Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Yatong Refinery
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3020/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3020/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3040/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3040/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Petrochina Dagang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Petrochina Dagang Refinery
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3060/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3060/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3080/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3080/4290 条
+2026-10-17 17:39:48,672 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3100/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3100/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3120/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3120/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Xinji Aosen Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Xinji Aosen Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Xinda Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Xinda Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3140/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3140/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Shijiazhuang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Shijiazhuang Refinery
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Donghai Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Donghai Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3160/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3160/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3180/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3180/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3200/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3200/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Tianjin  Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Tianjin  Refinery
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3220/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3220/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hbis Laoting Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hbis Laoting Steel Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Haiyue Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Haiyue Refinery
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3240/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3240/4290 条
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Ganglu Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Ganglu Iron and Steel Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Medium Thick Plate Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Medium Thick Plate Co Ltd
+2026-10-17 17:39:48,673 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3260/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3260/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3280/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3280/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3300/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3300/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3320/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3320/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3340/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3340/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Beijing Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Sinopec Beijing Refinery
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3360/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3360/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Zhongjie Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Zhongjie Refinery
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3380/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3380/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Yatong Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Yatong Refinery
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qinhuangdao Baigong Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Qinhuangdao Baigong Steel Co Ltd
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3400/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3400/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3420/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3420/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3440/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3440/4290 条
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Pipe Corporation
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin Pipe Corporation
+2026-10-17 17:39:48,674 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3460/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3460/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3480/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3480/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Petrochina Dagang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Petrochina Dagang Refinery
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3500/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3500/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Fuyu Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Fuyu Refinery
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3520/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3520/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hebei Dagang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> refinery_Hebei Dagang Refinery
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin New Tiangang United Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tianjin New Tiangang United Special Steel Co Ltd
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3540/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3540/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3560/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3560/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Shijiazhuang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Shijiazhuang Refinery
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3580/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3580/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Wenfeng Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Wenfeng Special Steel Co Ltd
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3600/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3600/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3620/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3620/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hbis Laoting Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hbis Laoting Steel Co Ltd
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Haiyue Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Haiyue Refinery
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3640/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3640/4290 条
+2026-10-17 17:39:48,675 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Medium Thick Plate Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Medium Thick Plate Co Ltd
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3660/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3660/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3680/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3680/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3700/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3700/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3720/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3720/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Beijing Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Sinopec Beijing Refinery
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3740/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3740/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3760/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3760/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3780/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3780/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Donghai Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Hebei Donghai Special Steel Co Ltd
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3800/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3800/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3820/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3820/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3840/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3840/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3860/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3860/4290 条
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Pipe Corporation
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin Pipe Corporation
+2026-10-17 17:39:48,676 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Songting Iron and Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Tangshan Songting Iron and Steel Co Ltd
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3880/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3880/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3900/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3900/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3920/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3920/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hebei Dagang Refinery
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> refinery_Hebei Dagang Refinery
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin New Tiangang United Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tianjin New Tiangang United Special Steel Co Ltd
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3940/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3940/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Chengde Jianlong Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Chengde Jianlong Special Steel Co Ltd
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3960/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3960/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 3980/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 3980/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Wenfeng Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Tangshan Wenfeng Special Steel Co Ltd
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4000/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4000/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4020/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4020/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4040/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4040/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shanxi Tongde Xinghua Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Shanxi Tongde Xinghua Special Steel Co Ltd
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4060/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4060/4290 条
+2026-10-17 17:39:48,677 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4080/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4080/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4100/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4100/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4120/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4120/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Chengde Iron and Steel Group Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_天津 -> steel_Chengde Iron and Steel Group Co Ltd
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4140/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4140/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4160/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4160/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4180/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4180/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4200/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4200/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4220/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4220/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - WARNING - 超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Donghai Special Steel Co Ltd
+WARNING:core.dac_hydrogen_optimization_model:超图查询CO2路径不可达，使用直线距离: airport_北京 -> steel_Hebei Donghai Special Steel Co Ltd
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4240/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4240/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4260/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4260/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4280/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4280/4290 条
+2026-10-17 17:39:48,678 - core.dac_hydrogen_optimization_model - INFO - CO2管道距离缓存进度: 4290/4290 条
+INFO:core.dac_hydrogen_optimization_model:CO2管道距离缓存进度: 4290/4290 条
+2026-10-17 17:39:48,701 - core.dac_hydrogen_optimization_model - INFO - ⚠️  一步法：甲醇成本不再独立计算，已包含在SAF生产成本中
+INFO:core.dac_hydrogen_optimization_model:⚠️  一步法：甲醇成本不再独立计算，已包含在SAF生产成本中
+2026-10-17 17:39:48,702 - core.dac_hydrogen_optimization_model - INFO - ⚠️  一步法：甲醇不再储存，存储成本为0
+INFO:core.dac_hydrogen_optimization_model:⚠️  一步法：甲醇不再储存，存储成本为0
+2026-10-17 17:39:48,728 - core.dac_hydrogen_optimization_model - INFO - 统一成本表达式创建完成
+INFO:core.dac_hydrogen_optimization_model:统一成本表达式创建完成
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 项目期限: 20年，时间窗口: 4周
+INFO:core.dac_hydrogen_optimization_model:项目期限: 20年，时间窗口: 4周
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 运营成本年化系数: 13.0
+INFO:core.dac_hydrogen_optimization_model:运营成本年化系数: 13.0
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 20年运营成本现值系数: 9.82
+INFO:core.dac_hydrogen_optimization_model:20年运营成本现值系数: 9.82
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 生命周期运营成本系数: 127.64
+INFO:core.dac_hydrogen_optimization_model:生命周期运营成本系数: 127.64
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 所有运营成本已扩展至20年生命周期现值
+INFO:core.dac_hydrogen_optimization_model:所有运营成本已扩展至20年生命周期现值
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 
+【关键参数验证】
+INFO:core.dac_hydrogen_optimization_model:
+【关键参数验证】
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - MTJ变动运营成本参数: 0.8 元/kg
+INFO:core.dac_hydrogen_optimization_model:MTJ变动运营成本参数: 0.8 元/kg
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 电力成本参数: 350 元/MWh
+INFO:core.dac_hydrogen_optimization_model:电力成本参数: 350 元/MWh
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 电解制氢耗电: 55 kWh/kg H2
+INFO:core.dac_hydrogen_optimization_model:电解制氢耗电: 55 kWh/kg H2
+2026-10-17 17:39:48,729 - core.dac_hydrogen_optimization_model - INFO - 创建性能指标表达式...
+INFO:core.dac_hydrogen_optimization_model:创建性能指标表达式...
+2026-10-17 17:39:48,731 - core.dac_hydrogen_optimization_model - INFO - [调试] 创建总生产量表达式，包含 14784 个生产变量
+INFO:core.dac_hydrogen_optimization_model:[调试] 创建总生产量表达式，包含 14784 个生产变量
+2026-10-17 17:39:48,731 - core.dac_hydrogen_optimization_model - INFO - [调试] 创建缺货产量表达式，包含 8 个缺货变量
+INFO:core.dac_hydrogen_optimization_model:[调试] 创建缺货产量表达式，包含 8 个缺货变量
+2026-10-17 17:39:48,733 - core.dac_hydrogen_optimization_model - INFO - [调试] 创建氢气总产量表达式，包含 14336 个变量
+INFO:core.dac_hydrogen_optimization_model:[调试] 创建氢气总产量表达式，包含 14336 个变量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - [调试] 创建甲醇总产量表达式，包含 14784 个变量
+INFO:core.dac_hydrogen_optimization_model:[调试] 创建甲醇总产量表达式，包含 14784 个变量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - 性能指标表达式创建完成
+INFO:core.dac_hydrogen_optimization_model:性能指标表达式创建完成
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - 包含 7 个性能表达式
+INFO:core.dac_hydrogen_optimization_model:包含 7 个性能表达式
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - production_total: SAF总产量
+INFO:core.dac_hydrogen_optimization_model:  - production_total: SAF总产量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - shortage_total: 缺货总量
+INFO:core.dac_hydrogen_optimization_model:  - shortage_total: 缺货总量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - total_demand: 总需求量
+INFO:core.dac_hydrogen_optimization_model:  - total_demand: 总需求量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - hydrogen_total_production: 氢气总产量
+INFO:core.dac_hydrogen_optimization_model:  - hydrogen_total_production: 氢气总产量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - methanol_total_production: 甲醇总产量
+INFO:core.dac_hydrogen_optimization_model:  - methanol_total_production: 甲醇总产量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - facilities_count: MTJ设施数量
+INFO:core.dac_hydrogen_optimization_model:  - facilities_count: MTJ设施数量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO -   - hydrogen_facilities_count: 氢气设施数量
+INFO:core.dac_hydrogen_optimization_model:  - hydrogen_facilities_count: 氢气设施数量
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - 创建碳排放计算表达式...
+INFO:core.dac_hydrogen_optimization_model:创建碳排放计算表达式...
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.dac_hydrogen_optimization_model:================================================================================
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - 验证碳排放参数完整性...
+INFO:core.dac_hydrogen_optimization_model:验证碳排放参数完整性...
+2026-10-17 17:39:48,736 - core.dac_hydrogen_optimization_model - INFO - 碳排放参数完整性检查通过
+INFO:core.dac_hydrogen_optimization_model:碳排放参数完整性检查通过
+2026-10-17 17:39:48,762 - core.dac_hydrogen_optimization_model - INFO - DAC设备生命周期碳强度: 0.05 kgCO₂e/kg CO₂
+INFO:core.dac_hydrogen_optimization_model:DAC设备生命周期碳强度: 0.05 kgCO₂e/kg CO₂
+2026-10-17 17:39:48,762 - core.dac_hydrogen_optimization_model - INFO - [调试] DAC捕获变量数量: 14784
+INFO:core.dac_hydrogen_optimization_model:[调试] DAC捕获变量数量: 14784
+2026-10-17 17:39:48,763 - core.dac_hydrogen_optimization_model - INFO - SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+INFO:core.dac_hydrogen_optimization_model:SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+2026-10-17 17:39:48,763 - core.dac_hydrogen_optimization_model - INFO - 电解槽碳强度: 800 kg CO2eq/MW → 44.00 kg CO2eq/(kg H2/h), 寿命: 15年
+INFO:core.dac_hydrogen_optimization_model:电解槽碳强度: 800 kg CO2eq/MW → 44.00 kg CO2eq/(kg H2/h), 寿命: 15年
+2026-10-17 17:39:48,763 - core.dac_hydrogen_optimization_model - INFO - [调试] 设施容量变量数量: 66
+INFO:core.dac_hydrogen_optimization_model:[调试] 设施容量变量数量: 66
+2026-10-17 17:39:48,763 - core.dac_hydrogen_optimization_model - INFO - [调试] 电解槽容量变量数量: 64
+INFO:core.dac_hydrogen_optimization_model:[调试] 电解槽容量变量数量: 64
+2026-10-17 17:39:48,763 - core.dac_hydrogen_optimization_model - INFO - 预计算动态可再生能源碳强度...
+INFO:core.dac_hydrogen_optimization_model:预计算动态可再生能源碳强度...
+2026-10-17 17:39:48,831 - core.dac_hydrogen_optimization_model - INFO - 动态碳强度统计: 最小=0.6000, 最大=0.6000, 平均=0.6000 kgCO₂e/kWh
+INFO:core.dac_hydrogen_optimization_model:动态碳强度统计: 最小=0.6000, 最大=0.6000, 平均=0.6000 kgCO₂e/kWh
+2026-10-17 17:39:48,834 - core.dac_hydrogen_optimization_model - INFO - 动态氢气碳强度统计: 最小=33.0500, 最大=33.0500, 平均=33.0500 kgCO₂e/kg H₂
+INFO:core.dac_hydrogen_optimization_model:动态氢气碳强度统计: 最小=33.0500, 最大=33.0500, 平均=33.0500 kgCO₂e/kg H₂
+2026-10-17 17:39:48,921 - core.dac_hydrogen_optimization_model - INFO - SAF合成工艺能耗: 7.6 kWh/kg, 市电碳强度: 0.6 kgCO₂e/kWh
+INFO:core.dac_hydrogen_optimization_model:SAF合成工艺能耗: 7.6 kWh/kg, 市电碳强度: 0.6 kgCO₂e/kWh
+2026-10-17 17:39:48,921 - core.dac_hydrogen_optimization_model - INFO - ✨ SAF合成碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+INFO:core.dac_hydrogen_optimization_model:✨ SAF合成碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+2026-10-17 17:39:48,948 - core.dac_hydrogen_optimization_model - INFO - MTJ工艺能耗: 800 kWh/t
+INFO:core.dac_hydrogen_optimization_model:MTJ工艺能耗: 800 kWh/t
+2026-10-17 17:39:48,948 - core.dac_hydrogen_optimization_model - INFO - 电解制氢能耗: 55 kWh/kg H₂, 工艺排放: 0.05 kg CO2eq/kg H₂
+INFO:core.dac_hydrogen_optimization_model:电解制氢能耗: 55 kWh/kg H₂, 工艺排放: 0.05 kg CO2eq/kg H₂
+2026-10-17 17:39:48,948 - core.dac_hydrogen_optimization_model - INFO - ✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+INFO:core.dac_hydrogen_optimization_model:✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+2026-10-17 17:39:48,949 - core.dac_hydrogen_optimization_model - INFO - [调试] 生产变量数量: 14784
+INFO:core.dac_hydrogen_optimization_model:[调试] 生产变量数量: 14784
+2026-10-17 17:39:48,949 - core.dac_hydrogen_optimization_model - INFO - [调试] 氢气生产变量数量: 14336
+INFO:core.dac_hydrogen_optimization_model:[调试] 氢气生产变量数量: 14336
+2026-10-17 17:39:49,052 - core.dac_hydrogen_optimization_model - INFO - MTJ储存能耗: 5 kWh/t·天
+INFO:core.dac_hydrogen_optimization_model:MTJ储存能耗: 5 kWh/t·天
+2026-10-17 17:39:49,052 - core.dac_hydrogen_optimization_model - INFO - 氢气储存能耗: 2 kWh/kg·天
+INFO:core.dac_hydrogen_optimization_model:氢气储存能耗: 2 kWh/kg·天
+2026-10-17 17:39:49,052 - core.dac_hydrogen_optimization_model - INFO - [调试] MTJ存储变量数量: 14850
+INFO:core.dac_hydrogen_optimization_model:[调试] MTJ存储变量数量: 14850
+2026-10-17 17:39:49,052 - core.dac_hydrogen_optimization_model - INFO - [调试] 氢气存储变量数量: 14850
+INFO:core.dac_hydrogen_optimization_model:[调试] 氢气存储变量数量: 14850
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - 氢气管道运输: 0.02 kg CO2eq/kg·km
+INFO:core.dac_hydrogen_optimization_model:氢气管道运输: 0.02 kg CO2eq/kg·km
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - MTJ罐车运输: 0.12 kg CO2eq/t·km
+INFO:core.dac_hydrogen_optimization_model:MTJ罐车运输: 0.12 kg CO2eq/t·km
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - CO₂管道运输: 0.01 kg CO2eq/kg·100km
+INFO:core.dac_hydrogen_optimization_model:CO₂管道运输: 0.01 kg CO2eq/kg·100km
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - CO₂罐车运输: 0.08 kg CO2eq/kg·100km
+INFO:core.dac_hydrogen_optimization_model:CO₂罐车运输: 0.08 kg CO2eq/kg·100km
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - [调试] 氢气管道变量数量: 4224
+INFO:core.dac_hydrogen_optimization_model:[调试] 氢气管道变量数量: 4224
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - [调试] MTJ运输变量数量: 528
+INFO:core.dac_hydrogen_optimization_model:[调试] MTJ运输变量数量: 528
+2026-10-17 17:39:49,077 - core.dac_hydrogen_optimization_model - INFO - [调试] 距离计算测试 refinery_Binyang Refinery -> 北京: 335.75 km
+INFO:core.dac_hydrogen_optimization_model:[调试] 距离计算测试 refinery_Binyang Refinery -> 北京: 335.75 km
+2026-10-17 17:39:49,103 - core.dac_hydrogen_optimization_model - INFO - 市电碳强度: 0.6 kgCO₂e/kWh (vs 可再生: 0.02 kgCO₂e/kWh, 差距: 30.0x)
+INFO:core.dac_hydrogen_optimization_model:市电碳强度: 0.6 kgCO₂e/kWh (vs 可再生: 0.02 kgCO₂e/kWh, 差距: 30.0x)
+2026-10-17 17:39:49,104 - core.dac_hydrogen_optimization_model - INFO - [调试] DAC市电变量数量: 14784
+INFO:core.dac_hydrogen_optimization_model:[调试] DAC市电变量数量: 14784
+2026-10-17 17:39:49,104 - core.dac_hydrogen_optimization_model - INFO - CO₂源配置: scenario_type=dac, enable_credit=True
+INFO:core.dac_hydrogen_optimization_model:CO₂源配置: scenario_type=dac, enable_credit=True
+2026-10-17 17:39:49,150 - core.dac_hydrogen_optimization_model - INFO - ✨ CO₂利用负排放表达式已创建 (场景: dac)
+INFO:core.dac_hydrogen_optimization_model:✨ CO₂利用负排放表达式已创建 (场景: dac)
+2026-10-17 17:39:49,150 - core.dac_hydrogen_optimization_model - INFO -    计算公式: SAF产量 × 0.85 × 3.67 × -1.0
+INFO:core.dac_hydrogen_optimization_model:   计算公式: SAF产量 × 0.85 × 3.67 × -1.0
+2026-10-17 17:39:49,150 - core.dac_hydrogen_optimization_model - INFO -    每kg SAF固定碳排放: -3.12 kg CO₂e
+INFO:core.dac_hydrogen_optimization_model:   每kg SAF固定碳排放: -3.12 kg CO₂e
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - 碳排放表达式创建完成
+INFO:core.dac_hydrogen_optimization_model:碳排放表达式创建完成
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - 包含 17 个细分项，8 个汇总项
+INFO:core.dac_hydrogen_optimization_model:包含 17 个细分项，8 个汇总项
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - 碳强度计算组件已准备，将在求解后计算具体数值
+INFO:core.dac_hydrogen_optimization_model:碳强度计算组件已准备，将在求解后计算具体数值
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - [调试] 碳排放表达式详情:
+INFO:core.dac_hydrogen_optimization_model:[调试] 碳排放表达式详情:
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - dac_equipment: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - dac_equipment: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - saf_facility: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - saf_facility: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - electrolyzer_facility: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - electrolyzer_facility: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - methanol_to_saf: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - methanol_to_saf: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - saf_synthesis_energy: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - saf_synthesis_energy: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - h2_production: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - h2_production: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - mtj_storage: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - mtj_storage: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - h2_storage: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - h2_storage: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - h2_truck_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - h2_truck_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - h2_pipeline_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - h2_pipeline_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - co2_pipeline_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - co2_pipeline_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - co2_truck_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - co2_truck_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - h2_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - h2_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - co2_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - co2_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - mtj_transport: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - mtj_transport: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - dac_grid_electricity: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - dac_grid_electricity: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - [调试] 碳排放汇总项详情:
+INFO:core.dac_hydrogen_optimization_model:[调试] 碳排放汇总项详情:
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - raw_material_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - raw_material_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - facility_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - facility_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - production_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - production_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - storage_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - storage_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - transport_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - transport_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - total_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - total_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO -   - annual_emissions: LinExpr
+INFO:core.dac_hydrogen_optimization_model:  - annual_emissions: LinExpr
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - [调试] 优化时段: 4周, 总小时数: 224小时
+INFO:core.dac_hydrogen_optimization_model:[调试] 优化时段: 4周, 总小时数: 224小时
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - [调试] 年化系数: 13.000
+INFO:core.dac_hydrogen_optimization_model:[调试] 年化系数: 13.000
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:49,171 - core.dac_hydrogen_optimization_model - INFO - 时间尺度一致性验证:
+INFO:core.dac_hydrogen_optimization_model:时间尺度一致性验证:
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   原料获取: DAC设备生命周期排放（按小时累计，v4.0.1新增）
+INFO:core.dac_hydrogen_optimization_model:  原料获取: DAC设备生命周期排放（按小时累计，v4.0.1新增）
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   设施建设: 年产能摊销到优化时段
+INFO:core.dac_hydrogen_optimization_model:  设施建设: 年产能摊销到优化时段
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+INFO:core.dac_hydrogen_optimization_model:  生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+INFO:core.dac_hydrogen_optimization_model:  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   运输配送: MTJ按周, H₂按总量, CO₂按周
+INFO:core.dac_hydrogen_optimization_model:  运输配送: MTJ按周, H₂按总量, CO₂按周
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+INFO:core.dac_hydrogen_optimization_model:  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO - v4.0.1碳排放更新:
+INFO:core.dac_hydrogen_optimization_model:v4.0.1碳排放更新:
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   ✓ DAC市电购买碳排放: 0.6 kgCO₂e/kWh
+INFO:core.dac_hydrogen_optimization_model:  ✓ DAC市电购买碳排放: 0.6 kgCO₂e/kWh
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO -   ✓ DAC设备生命周期排放: 0.05 kgCO₂e/kg CO₂
+INFO:core.dac_hydrogen_optimization_model:  ✓ DAC设备生命周期排放: 0.05 kgCO₂e/kg CO₂
+2026-10-17 17:39:49,172 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:49,269 - core.dac_hydrogen_optimization_model - INFO - 创建约束条件...
+INFO:core.dac_hydrogen_optimization_model:创建约束条件...
+2026-10-17 17:39:49,269 - core.dac_hydrogen_optimization_model - INFO - 添加改进的时间尺度匹配约束...
+INFO:core.dac_hydrogen_optimization_model:添加改进的时间尺度匹配约束...
+2026-10-17 17:39:49,390 - core.dac_hydrogen_optimization_model - INFO - 开始添加严格的小时级原料供应约束，共有66个位置
+INFO:core.dac_hydrogen_optimization_model:开始添加严格的小时级原料供应约束，共有66个位置
+2026-10-17 17:39:49,530 - core.dac_hydrogen_optimization_model - INFO - 添加氢气运输能力限制约束...
+INFO:core.dac_hydrogen_optimization_model:添加氢气运输能力限制约束...
+2026-10-17 17:39:49,530 - core.dac_hydrogen_optimization_model - INFO - 【禁用罐车运输】跳过氢气罐车运输能力限制约束
+INFO:core.dac_hydrogen_optimization_model:【禁用罐车运输】跳过氢气罐车运输能力限制约束
+2026-10-17 17:39:49,530 - core.dac_hydrogen_optimization_model - INFO - 氢气运输能力限制约束添加完成
+INFO:core.dac_hydrogen_optimization_model:氢气运输能力限制约束添加完成
+2026-10-17 17:39:49,530 - core.dac_hydrogen_optimization_model - INFO - 严格的小时级原料供应约束添加完成（已移除维护停机约束）
+INFO:core.dac_hydrogen_optimization_model:严格的小时级原料供应约束添加完成（已移除维护停机约束）
+2026-10-17 17:39:49,530 - core.dac_hydrogen_optimization_model - INFO - 添加SAF库存平衡约束（每周第55期间统一出库）...
+INFO:core.dac_hydrogen_optimization_model:添加SAF库存平衡约束（每周第55期间统一出库）...
+2026-10-17 17:39:54,363 - core.dac_hydrogen_optimization_model - INFO - 跳过每日氢气产量与次日需求耦合约束（由库存与运输约束统一管理）
+INFO:core.dac_hydrogen_optimization_model:跳过每日氢气产量与次日需求耦合约束（由库存与运输约束统一管理）
+2026-10-17 17:39:54,364 - core.dac_hydrogen_optimization_model - INFO - 添加氢气运输约束...
+INFO:core.dac_hydrogen_optimization_model:添加氢气运输约束...
+2026-10-17 17:39:54,364 - core.dac_hydrogen_optimization_model - INFO - 添加氢气全局守恒约束（周级）...
+INFO:core.dac_hydrogen_optimization_model:添加氢气全局守恒约束（周级）...
+2026-10-17 17:39:54,370 - core.dac_hydrogen_optimization_model - INFO - 添加氢气全局守恒约束（周级）完成
+INFO:core.dac_hydrogen_optimization_model:添加氢气全局守恒约束（周级）完成
+2026-10-17 17:39:54,370 - core.dac_hydrogen_optimization_model - INFO - 添加氢气源地总出库约束（周级）...
+INFO:core.dac_hydrogen_optimization_model:添加氢气源地总出库约束（周级）...
+2026-10-17 17:39:54,376 - core.dac_hydrogen_optimization_model - INFO - 添加氢气供需平衡约束...
+INFO:core.dac_hydrogen_optimization_model:添加氢气供需平衡约束...
+2026-10-17 17:39:54,394 - core.dac_hydrogen_optimization_model - INFO - 氢气供需平衡约束添加完成
+INFO:core.dac_hydrogen_optimization_model:氢气供需平衡约束添加完成
+2026-10-17 17:39:54,394 - core.dac_hydrogen_optimization_model - INFO - 添加氢能管道运输约束...
+INFO:core.dac_hydrogen_optimization_model:添加氢能管道运输约束...
+2026-10-17 17:39:54,394 - core.dac_hydrogen_optimization_model - INFO - [修复] 检测到 4224 个管道运输变量（周级，索引为二元组）
+INFO:core.dac_hydrogen_optimization_model:[修复] 检测到 4224 个管道运输变量（周级，索引为二元组）
+2026-10-17 17:39:54,413 - core.dac_hydrogen_optimization_model - INFO - [修复] 添加了 4224 个管道容量约束（周级）
+INFO:core.dac_hydrogen_optimization_model:[修复] 添加了 4224 个管道容量约束（周级）
+2026-10-17 17:39:54,413 - core.dac_hydrogen_optimization_model - INFO - 氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+INFO:core.dac_hydrogen_optimization_model:氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+2026-10-17 17:39:55,805 - core.dac_hydrogen_optimization_model - INFO - 添加甲醇生产约束（H₂+CO₂→甲醇）...
+INFO:core.dac_hydrogen_optimization_model:添加甲醇生产约束（H₂+CO₂→甲醇）...
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO - [诊断] 检查技术 green_h2_co2_to_saf...
+INFO:core.dac_hydrogen_optimization_model:[诊断] 检查技术 green_h2_co2_to_saf...
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO - [诊断] 甲醇生产位置数量: 66
+INFO:core.dac_hydrogen_optimization_model:[诊断] 甲醇生产位置数量: 66
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO -    示例位置: ['steel_Hbis Laoting Steel Co Ltd', 'refinery_PetroChina Rosneft Tianjin  Refinery', 'steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd']
+INFO:core.dac_hydrogen_optimization_model:   示例位置: ['steel_Hbis Laoting Steel Co Ltd', 'refinery_PetroChina Rosneft Tianjin  Refinery', 'steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd']
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO - ⚠️  甲醇作为中间产物，不设置独立的H₂/CO₂供应约束
+INFO:core.dac_hydrogen_optimization_model:⚠️  甲醇作为中间产物，不设置独立的H₂/CO₂供应约束
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO -    参数: h2_ratio=0.45, co2_ratio=3.2, methanol_ratio=1.0776
+INFO:core.dac_hydrogen_optimization_model:   参数: h2_ratio=0.45, co2_ratio=3.2, methanol_ratio=1.0776
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO -    → H₂和CO₂供应由各自的库存平衡约束保证
+INFO:core.dac_hydrogen_optimization_model:   → H₂和CO₂供应由各自的库存平衡约束保证
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO - 添加SAF生产约束（甲醇→SAF）...
+INFO:core.dac_hydrogen_optimization_model:添加SAF生产约束（甲醇→SAF）...
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO -    methanol_to_saf_ratio = 0.64
+INFO:core.dac_hydrogen_optimization_model:   methanol_to_saf_ratio = 0.64
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO -    → 甲醇供应由甲醇库存平衡约束自动保证，不设置额外约束
+INFO:core.dac_hydrogen_optimization_model:   → 甲醇供应由甲醇库存平衡约束自动保证，不设置额外约束
+2026-10-17 17:39:55,806 - core.dac_hydrogen_optimization_model - INFO - 添加SAF周运输与小时生产关联约束...
+INFO:core.dac_hydrogen_optimization_model:添加SAF周运输与小时生产关联约束...
+2026-10-17 17:39:55,818 - core.dac_hydrogen_optimization_model - INFO - 添加了 264 个SAF周运输-小时生产关联约束
+INFO:core.dac_hydrogen_optimization_model:添加了 264 个SAF周运输-小时生产关联约束
+2026-10-17 17:39:55,818 - core.dac_hydrogen_optimization_model - INFO - 这是确保物料平衡的关键约束！
+INFO:core.dac_hydrogen_optimization_model:这是确保物料平衡的关键约束！
+2026-10-17 17:39:55,818 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:55,818 - core.dac_hydrogen_optimization_model - INFO - 添加甲醇库存平衡约束（两步法）
+INFO:core.dac_hydrogen_optimization_model:添加甲醇库存平衡约束（两步法）
+2026-10-17 17:39:55,818 - core.dac_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.dac_hydrogen_optimization_model:============================================================
+2026-10-17 17:39:55,965 - core.dac_hydrogen_optimization_model - INFO - 添加了 14850 个甲醇库存平衡约束
+INFO:core.dac_hydrogen_optimization_model:添加了 14850 个甲醇库存平衡约束
+2026-10-17 17:39:55,965 - core.dac_hydrogen_optimization_model - INFO - 【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现
+INFO:core.dac_hydrogen_optimization_model:【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现
+2026-10-17 17:39:56,456 - core.dac_hydrogen_optimization_model - INFO - 添加平准化成本约束...
+INFO:core.dac_hydrogen_optimization_model:添加平准化成本约束...
+2026-10-17 17:39:56,456 - core.dac_hydrogen_optimization_model - INFO - 平准化成本门槛值: 1000 元/kg
+INFO:core.dac_hydrogen_optimization_model:平准化成本门槛值: 1000 元/kg
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 平准化成本约束添加完成
+INFO:core.dac_hydrogen_optimization_model:平准化成本约束添加完成
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 约束形式: (总成本 - 短缺成本) - 1000 * 总产量现值 <= 0
+INFO:core.dac_hydrogen_optimization_model:约束形式: (总成本 - 短缺成本) - 1000 * 总产量现值 <= 0
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 现值系数: 9.8181
+INFO:core.dac_hydrogen_optimization_model:现值系数: 9.8181
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 年化系数: 13.0000
+INFO:core.dac_hydrogen_optimization_model:年化系数: 13.0000
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 产量现值化系数: 127.6359
+INFO:core.dac_hydrogen_optimization_model:产量现值化系数: 127.6359
+2026-10-17 17:39:56,473 - core.dac_hydrogen_optimization_model - INFO - 修正前的错误系数(lifecycle_operation_factor): 127.6359
+INFO:core.dac_hydrogen_optimization_model:修正前的错误系数(lifecycle_operation_factor): 127.6359
+2026-10-17 17:39:56,474 - core.dac_hydrogen_optimization_model - INFO - 添加SAF设施最小产量约束...
+INFO:core.dac_hydrogen_optimization_model:添加SAF设施最小产量约束...
+2026-10-17 17:39:56,474 - core.dac_hydrogen_optimization_model - INFO - SAF最小年产量配置: 100 kg/年
+INFO:core.dac_hydrogen_optimization_model:SAF最小年产量配置: 100 kg/年
+2026-10-17 17:39:56,479 - core.dac_hydrogen_optimization_model - INFO - 已添加 66 个最小产量约束
+INFO:core.dac_hydrogen_optimization_model:已添加 66 个最小产量约束
+2026-10-17 17:39:57,006 - core.dac_hydrogen_optimization_model - INFO - 设置目标函数（使用统一的成本表达式）...
+INFO:core.dac_hydrogen_optimization_model:设置目标函数（使用统一的成本表达式）...
+2026-10-17 17:39:57,014 - core.dac_hydrogen_optimization_model - INFO - 目标函数设置完成（使用统一成本表达式）
+INFO:core.dac_hydrogen_optimization_model:目标函数设置完成（使用统一成本表达式）
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'RelGap' to 0.005
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/verified_runs/DAC-BH-FT/baseline/copt.log
+MODEL_READY DAC-BH-FT baseline 2064366 216580
+Reading from '/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/runs/DAC-BH-FT/baseline/model.mps.gz'
+Reading switch to free MPS format
+Reading finished (6.45s)
+RUN_COMPLETE DAC-BH-FT baseline {"scenario": "DAC-BH-FT", "label": "baseline", "solver": "COPT", "version": "8.0.7", "status": "verified_decomposition_certificate", "has_solution": true, "seconds": 15.330928087234497, "columns": 2064366, "rows": 216580, "route_calls": 132, "electricity_scope": "Byproduct hydrogen is limited by the archived kg/h source availability and selected conditioning capacity in every three-hour interval; it provides no renewable electricity. DAC grid purchases cover DAC only. Hydrogen component costs include selected conditioning equipment and grid electricity; conditioning and synthesis use grid electricity, and hydrogen carbon includes the configured industrial-source upstream allocation plus conditioning electricity.", "initial_solution_only": false, "fixed_production_assets": false, "fixed_asset_scope": "SAF and electrolyzer build/capacity; DAC build where present. Auxiliary inventory/transport use retains original optimization rules.", "method": "Full original MPS dispatch with all design integers and H2/CO2 weekly contracts fixed; every original row and original bound independently evaluated.", "model_scope": {"original_minimum_service_constraints_retained": true}, "seconds_scope": "Final full-model dispatch solve only", "objective": 1701381135497.4553, "gap": 0.00657469541274198, "lower_bound": 1690195072750.5745, "production_kg": 46200000.00000002, "demand_kg": 51050925.57290508, "shortage_kg": 4850925.572905049, "demand_fulfillment_ratio": 0.9049786949312503, "saf_capacity_kg_h": 76211.78182336637, "h2_capacity_kg_h": 30937.50000000006, "cost_per_kg_excluding_shortage": 26.031211423786832, "objective_gap_relative_to_cost_excluding_shortage": 0.07287322599415716, "mean_utilization": 0.9020914923540264, "worst_week_retention": 0.7829299833202522, "carbon_aggregates": {"raw_material_emissions": 7392000.0, "facility_emissions": 315110.8655873955, "production_emissions": 732929869.3302715, "storage_emissions": 162528590.30190372, "transport_emissions": 1825122.3978318502, "co2_utilization_credit": -143989999.9999976, "total_emissions": 761000692.8957275, "annual_emissions": 9893009007.642042}, "algebraic_validation": {"constraints_checked": 216580, "variables_checked": 2064366, "max_constraint_absolute_residual": 1.831904228311032e-08, "max_constraint_relative_residual": 1.831904228311032e-08, "max_variable_bound_violation": 2.0739676642733684e-09, "max_integer_violation": 0.0, "electricity_constraints_checked": 29568, "max_electricity_violation_mwh": 0.0, "electricity_violations_over_1e_5_mwh": 0, "scope": "Every exported linear constraint, variable bound and integer decision; input provenance and physical balance are checked separately", "passed": true}}

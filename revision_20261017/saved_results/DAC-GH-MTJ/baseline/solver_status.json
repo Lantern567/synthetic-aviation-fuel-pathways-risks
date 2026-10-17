@@ -1,0 +1,21 @@
+{
+  "scenario": "DAC-GH-MTJ",
+  "label": "baseline",
+  "solver": "COPT",
+  "version": "8.0.7",
+  "status": "verified_decomposition_certificate",
+  "has_solution": true,
+  "seconds": 34.66666102409363,
+  "columns": 5719941,
+  "rows": 409810,
+  "route_calls": 222,
+  "electricity_scope": "Hydrogen uses renewable electricity only; co-located synthesis shares the same pool; DAC grid purchases cover DAC only; nonrenewable synthesis retains grid supply.",
+  "initial_solution_only": false,
+  "fixed_production_assets": false,
+  "fixed_asset_scope": "SAF and electrolyzer build/capacity; DAC build where present. Auxiliary inventory/transport use retains original optimization rules.",
+  "method": "Full original MPS dispatch with all design integers and H2/CO2 weekly contracts fixed; every original row and original bound independently evaluated.",
+  "model_scope": {
+    "original_minimum_service_constraints_retained": true
+  },
+  "seconds_scope": "Final full-model dispatch solve only"
+}

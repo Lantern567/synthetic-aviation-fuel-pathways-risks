@@ -1,0 +1,16 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "win32",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "PyYAML": "6.0.3",
+    "matplotlib": "3.11.2",
+    "Pillow": "12.3.0",
+    "PyMuPDF": "1.28.2",
+    "adjustText": "1.4.0"
+  },
+  "font_family": "Times New Roman",
+  "regular_font_sha256": "931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5",
+  "bold_font_sha256": "54fbe2c70af7c85a97bed0573227e3ccc4b2486012e3ca2a40c6bc77065846f5"
+}

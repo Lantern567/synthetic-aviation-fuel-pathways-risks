@@ -1,0 +1,1409 @@
+source,destination,weekly_contract_kg,representative_window_transport_kg,pipeline_distance_km,transport_cny_per_kg
+refinery_Binyang Refinery,airport_北京,5453.117879999995,21812.47151999998,283.58853954875974,0.6374228519634606
+refinery_Binyang Refinery,airport_天津,0.0,0.0,166.71482928285252,0.6444219082463135
+refinery_Binyang Refinery,lng_lng_terminal_1,0.0,0.0,563.3823231916615,0.73239702014916
+refinery_Binyang Refinery,lng_lng_terminal_2,0.0,0.0,589.1764554233388,0.7659293920503404
+refinery_Binyang Refinery,lng_lng_terminal_3,0.0,0.0,147.854825041269,0.644022283850815
+refinery_Binyang Refinery,lng_lng_terminal_4,0.0,0.0,123.62989865570145,0.6163720210946576
+refinery_Binyang Refinery,lng_lng_terminal_5,0.0,0.0,196.3504444801083,0.6076827215009497
+refinery_Binyang Refinery,lng_lng_terminal_6,0.0,0.0,71.56394113905276,0.5961177288636365
+refinery_Binyang Refinery,lng_lng_terminal_8,0.0,0.0,391.4024275303993,0.6430694377259902
+refinery_Binyang Refinery,lng_lng_terminal_9,0.0,0.0,354.5692802272091,0.6478525364137472
+refinery_Binyang Refinery,lng_lng_terminal_53,0.0,0.0,430.4345773929221,0.6493950404539115
+refinery_Binyang Refinery,lng_lng_terminal_56,0.0,0.0,119.3699832786057,0.6083548472782672
+refinery_Binyang Refinery,lng_lng_terminal_60,0.0,0.0,587.2012460901863,0.7633616199172422
+refinery_Binyang Refinery,lng_lng_terminal_61,0.0,0.0,91.05966064366535,0.5880881093159217
+refinery_Binyang Refinery,lng_lng_terminal_63,0.0,0.0,214.16980759771187,0.6151967180910487
+refinery_Binyang Refinery,lng_lng_terminal_64,0.0,0.0,384.6167896812145,0.6449700683289543
+refinery_Binyang Refinery,lng_lng_terminal_68,0.0,0.0,354.37573876898756,0.6478418384280267
+refinery_Binyang Refinery,lng_lng_terminal_69,0.0,0.0,122.30737871110676,0.6139840383643411
+refinery_Binyang Refinery,lng_lng_terminal_70,0.0,0.0,425.09792592509734,0.6481494527128139
+refinery_Binyang Refinery,lng_lng_terminal_79,0.0,0.0,147.8001949804443,0.6439942602969522
+refinery_Binyang Refinery,lng_lng_terminal_80,0.0,0.0,586.6220734310041,0.7626086954603053
+refinery_Binyang Refinery,lng_lng_terminal_81,0.0,0.0,197.4310516573205,0.6054800994686236
+refinery_CNOOC Dongying Refinery,airport_北京,2581.267080000001,10325.068320000004,331.97503815606973,0.6440730075682313
+refinery_CNOOC Dongying Refinery,airport_天津,0.0,0.0,199.38888300654193,0.6013347473221357
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_1,0.0,0.0,573.2900129974612,0.7452770168966997
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_2,0.0,0.0,614.1476965758653,0.798392005548625
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_3,0.0,0.0,172.82606619379558,0.6405836647325464
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_4,0.0,0.0,148.6193647471101,0.6443981859026044
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_5,0.0,0.0,221.3216856326349,0.6214944942552096
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_6,0.0,0.0,96.53518229157937,0.5727067945054344
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_8,0.0,0.0,401.310117336199,0.6405188977121758
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_9,0.0,0.0,364.47697003300885,0.6478997836966177
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_53,0.0,0.0,440.34226719872186,0.6512544113112896
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_56,0.0,0.0,81.255711568238,0.6012477122409917
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_60,0.0,0.0,612.1724872427128,0.7958242334155267
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_61,0.0,0.0,79.12128168739225,0.6016664689262177
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_63,0.0,0.0,239.14104875023847,0.6331810632248692
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_64,0.0,0.0,409.58803083374113,0.6435594213276901
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_68,0.0,0.0,364.28342857478737,0.6479082611982234
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_69,0.0,0.0,147.2968448025154,0.6437287546724423
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_70,0.0,0.0,435.0056157308971,0.6503260668942611
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_79,0.0,0.0,172.7714361329709,0.6406265785606811
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_80,0.0,0.0,611.5933145835306,0.7950713089585899
+refinery_CNOOC Dongying Refinery,lng_lng_terminal_81,0.0,0.0,222.40229280984707,0.6223659868635734
+refinery_Fuyu Refinery,airport_北京,1022.1409799999989,4088.5639199999955,303.9798750445265,0.6323087279998657
+refinery_Fuyu Refinery,airport_天津,0.0,0.0,171.39371989499878,0.6416575154334122
+refinery_Fuyu Refinery,lng_lng_terminal_1,0.0,0.0,555.9930868645,0.7227910129238501
+refinery_Fuyu Refinery,lng_lng_terminal_2,0.0,0.0,586.1525334643222,0.7619982935036189
+refinery_Fuyu Refinery,lng_lng_terminal_3,0.0,0.0,144.83090308225246,0.6422376525963294
+refinery_Fuyu Refinery,lng_lng_terminal_4,0.0,0.0,120.6059766966849,0.6107781669238224
+refinery_Fuyu Refinery,lng_lng_terminal_5,0.0,0.0,193.3265225210918,0.6135237326103992
+refinery_Fuyu Refinery,lng_lng_terminal_6,0.0,0.0,68.54001918003621,0.5908258055333763
+refinery_Fuyu Refinery,lng_lng_terminal_8,0.0,0.0,384.0131912032376,0.6451168332411837
+refinery_Fuyu Refinery,lng_lng_terminal_9,0.0,0.0,347.18004390004745,0.6471782436279765
+refinery_Fuyu Refinery,lng_lng_terminal_53,0.0,0.0,423.04534106576045,0.6476248731917926
+refinery_Fuyu Refinery,lng_lng_terminal_56,0.0,0.0,78.28062283060778,0.6015912995934426
+refinery_Fuyu Refinery,lng_lng_terminal_60,0.0,0.0,584.1773241311697,0.7594305213705206
+refinery_Fuyu Refinery,lng_lng_terminal_61,0.0,0.0,74.81101595572049,0.5998453841275532
+refinery_Fuyu Refinery,lng_lng_terminal_63,0.0,0.0,211.14588563869535,0.6122569858663965
+refinery_Fuyu Refinery,lng_lng_terminal_64,0.0,0.0,381.5928677221979,0.6456687403176583
+refinery_Fuyu Refinery,lng_lng_terminal_68,0.0,0.0,346.98650244182596,0.647153244406517
+refinery_Fuyu Refinery,lng_lng_terminal_69,0.0,0.0,119.28345675209023,0.6081822259442176
+refinery_Fuyu Refinery,lng_lng_terminal_70,0.0,0.0,417.7086895979357,0.6461426827773461
+refinery_Fuyu Refinery,lng_lng_terminal_79,0.0,0.0,144.77627302142778,0.6422010387963579
+refinery_Fuyu Refinery,lng_lng_terminal_80,0.0,0.0,583.5981514719875,0.7586775969135838
+refinery_Fuyu Refinery,lng_lng_terminal_81,0.0,0.0,194.40712969830398,0.6114910295102298
+refinery_Guangyuan Refinery,airport_北京,340.7136600000001,1362.8546400000005,350.16297179889955,0.6475161643808538
+refinery_Guangyuan Refinery,airport_天津,0.0,0.0,217.57681664937178,0.6183116796275153
+refinery_Guangyuan Refinery,lng_lng_terminal_1,0.0,0.0,525.8457953715731,0.6835995339830451
+refinery_Guangyuan Refinery,lng_lng_terminal_2,0.0,0.0,632.3356302186952,0.8220363192843039
+refinery_Guangyuan Refinery,lng_lng_terminal_3,0.0,0.0,191.01399983662543,0.6176697471870837
+refinery_Guangyuan Refinery,lng_lng_terminal_4,0.0,0.0,166.80729838993994,0.6443783020975956
+refinery_Guangyuan Refinery,lng_lng_terminal_5,0.0,0.0,239.50961927546476,0.633362452992928
+refinery_Guangyuan Refinery,lng_lng_terminal_6,0.0,0.0,114.72311593440921,0.5985333240899583
+refinery_Guangyuan Refinery,lng_lng_terminal_8,0.0,0.0,353.8658997103109,0.6478118640681801
+refinery_Guangyuan Refinery,lng_lng_terminal_9,0.0,0.0,317.0327524071207,0.638769078171461
+refinery_Guangyuan Refinery,lng_lng_terminal_53,0.0,0.0,392.8980495728337,0.6425885916715168
+refinery_Guangyuan Refinery,lng_lng_terminal_56,0.0,0.0,62.2614258136022,0.5742310985098552
+refinery_Guangyuan Refinery,lng_lng_terminal_60,0.0,0.0,630.3604208855427,0.8194685471512055
+refinery_Guangyuan Refinery,lng_lng_terminal_61,0.0,0.0,97.30921533022207,0.5700680677537571
+refinery_Guangyuan Refinery,lng_lng_terminal_63,0.0,0.0,257.3289823930683,0.6392152688716594
+refinery_Guangyuan Refinery,lng_lng_terminal_64,0.0,0.0,427.77596447657095,0.6487958731828172
+refinery_Guangyuan Refinery,lng_lng_terminal_68,0.0,0.0,316.8392109488992,0.6386857314424319
+refinery_Guangyuan Refinery,lng_lng_terminal_69,0.0,0.0,165.48477844534526,0.644959673927101
+refinery_Guangyuan Refinery,lng_lng_terminal_70,0.0,0.0,387.56139810500895,0.6442018466724861
+refinery_Guangyuan Refinery,lng_lng_terminal_79,0.0,0.0,190.95936977580075,0.6177643286271199
+refinery_Guangyuan Refinery,lng_lng_terminal_80,0.0,0.0,629.7812482263605,0.8187156226942688
+refinery_Guangyuan Refinery,lng_lng_terminal_81,0.0,0.0,240.59022645267692,0.633880173391896
+refinery_Haike Ruilin Refinery,airport_北京,5111.554559999998,20446.21823999999,334.79326422804985,0.6448231023586155
+refinery_Haike Ruilin Refinery,airport_天津,0.0,0.0,202.20710907852205,0.602604688919866
+refinery_Haike Ruilin Refinery,lng_lng_terminal_1,0.0,0.0,576.1082390694413,0.7489407107902737
+refinery_Haike Ruilin Refinery,lng_lng_terminal_2,0.0,0.0,616.9659226478454,0.8020556994421991
+refinery_Haike Ruilin Refinery,lng_lng_terminal_3,0.0,0.0,175.6442922657757,0.6381593440351847
+refinery_Haike Ruilin Refinery,lng_lng_terminal_4,0.0,0.0,151.43759081909022,0.6455213029761947
+refinery_Haike Ruilin Refinery,lng_lng_terminal_5,0.0,0.0,224.13991170461503,0.6237232760115786
+refinery_Haike Ruilin Refinery,lng_lng_terminal_6,0.0,0.0,99.35340836355948,0.5625462307943079
+refinery_Haike Ruilin Refinery,lng_lng_terminal_8,0.0,0.0,404.12834340817915,0.6416002077053842
+refinery_Haike Ruilin Refinery,lng_lng_terminal_9,0.0,0.0,367.295196104989,0.6477339005689488
+refinery_Haike Ruilin Refinery,lng_lng_terminal_53,0.0,0.0,443.160493270702,0.6516757127701699
+refinery_Haike Ruilin Refinery,lng_lng_terminal_56,0.0,0.0,84.0739376402181,0.5993548610595122
+refinery_Haike Ruilin Refinery,lng_lng_terminal_60,0.0,0.0,614.9907133146929,0.7994879273091008
+refinery_Haike Ruilin Refinery,lng_lng_terminal_61,0.0,0.0,81.93950775937236,0.6009285564850285
+refinery_Haike Ruilin Refinery,lng_lng_terminal_63,0.0,0.0,241.9592748222186,0.6345059030942041
+refinery_Haike Ruilin Refinery,lng_lng_terminal_64,0.0,0.0,412.40625690572125,0.6445007571310563
+refinery_Haike Ruilin Refinery,lng_lng_terminal_68,0.0,0.0,367.1016546467675,0.6477478325063902
+refinery_Haike Ruilin Refinery,lng_lng_terminal_69,0.0,0.0,150.11507087449553,0.6450456840758382
+refinery_Haike Ruilin Refinery,lng_lng_terminal_70,0.0,0.0,437.8238418028772,0.6508376076949637
+refinery_Haike Ruilin Refinery,lng_lng_terminal_79,0.0,0.0,175.58966220495103,0.6382102637761294
+refinery_Haike Ruilin Refinery,lng_lng_terminal_80,0.0,0.0,614.4115406555107,0.7987350028521639
+refinery_Haike Ruilin Refinery,lng_lng_terminal_81,0.0,0.0,225.2205188818272,0.6245399515041751
+refinery_Haiyue Refinery,airport_北京,1704.417959999998,6817.671839999992,307.4521223971456,0.6341936027971772
+refinery_Haiyue Refinery,airport_天津,0.0,0.0,174.86596724761782,0.6388701623928975
+refinery_Haiyue Refinery,lng_lng_terminal_1,0.0,0.0,559.465334217119,0.7273049344822548
+refinery_Haiyue Refinery,lng_lng_terminal_2,0.0,0.0,589.6247808169412,0.7665122150620236
+refinery_Haiyue Refinery,lng_lng_terminal_3,0.0,0.0,148.3031504348715,0.6442463984143351
+refinery_Haiyue Refinery,lng_lng_terminal_4,0.0,0.0,124.07822404930396,0.6171608894403314
+refinery_Haiyue Refinery,lng_lng_terminal_5,0.0,0.0,196.79876987371082,0.6067762615454783
+refinery_Haiyue Refinery,lng_lng_terminal_6,0.0,0.0,72.01226653265526,0.5967528643040226
+refinery_Haiyue Refinery,lng_lng_terminal_8,0.0,0.0,387.4854385558567,0.6442227533369611
+refinery_Haiyue Refinery,lng_lng_terminal_9,0.0,0.0,350.65229125266654,0.6475631017058752
+refinery_Haiyue Refinery,lng_lng_terminal_53,0.0,0.0,426.51758841837955,0.6484974878807721
+refinery_Haiyue Refinery,lng_lng_terminal_56,0.0,0.0,81.75287018322683,0.6010245755982763
+refinery_Haiyue Refinery,lng_lng_terminal_60,0.0,0.0,587.6495714837887,0.7639444429289253
+refinery_Haiyue Refinery,lng_lng_terminal_61,0.0,0.0,78.28326330833954,0.6015917481232904
+refinery_Haiyue Refinery,lng_lng_terminal_63,0.0,0.0,214.61813299131438,0.6156185512802115
+refinery_Haiyue Refinery,lng_lng_terminal_64,0.0,0.0,385.065115074817,0.6448587000314309
+refinery_Haiyue Refinery,lng_lng_terminal_68,0.0,0.0,350.45874979444505,0.647544822722575
+refinery_Haiyue Refinery,lng_lng_terminal_69,0.0,0.0,122.75570410470928,0.6148037385122999
+refinery_Haiyue Refinery,lng_lng_terminal_70,0.0,0.0,421.1809369505548,0.6471264785099117
+refinery_Haiyue Refinery,lng_lng_terminal_79,0.0,0.0,148.24852037404682,0.6442196484467354
+refinery_Haiyue Refinery,lng_lng_terminal_80,0.0,0.0,587.0703988246065,0.7631915184719885
+refinery_Haiyue Refinery,lng_lng_terminal_81,0.0,0.0,197.879377050923,0.6045484474039734
+refinery_Hebei Dagang Refinery,airport_北京,3147.140640000004,12588.562560000017,200.1756369015991,0.600210486647028
+refinery_Hebei Dagang Refinery,airport_天津,0.0,0.0,82.07950739833458,0.6008521411183726
+refinery_Hebei Dagang Refinery,lng_lng_terminal_1,0.0,0.0,651.8084548836695,0.8473509913487703
+refinery_Hebei Dagang Refinery,lng_lng_terminal_2,0.0,0.0,516.1574525542027,0.6710046883204634
+refinery_Hebei Dagang Refinery,lng_lng_terminal_3,0.0,0.0,74.83582217213296,0.5998660701192267
+refinery_Hebei Dagang Refinery,lng_lng_terminal_4,0.0,0.0,50.652692291026476,0.5236141801359788
+refinery_Hebei Dagang Refinery,lng_lng_terminal_5,0.0,0.0,123.33144161097228,0.6158410644741155
+refinery_Hebei Dagang Refinery,lng_lng_terminal_6,0.0,0.0,49.48886715864077,0.523487012529547
+refinery_Hebei Dagang Refinery,lng_lng_terminal_8,0.0,0.0,481.039817566123,0.6527135709329978
+refinery_Hebei Dagang Refinery,lng_lng_terminal_9,0.0,0.0,444.20667026293285,0.6518199790179662
+refinery_Hebei Dagang Refinery,lng_lng_terminal_53,0.0,0.0,520.0719674286458,0.6760935576572396
+refinery_Hebei Dagang Refinery,lng_lng_terminal_56,0.0,0.0,187.33254151696906,0.6236963315477659
+refinery_Hebei Dagang Refinery,lng_lng_terminal_60,0.0,0.0,514.1822432210502,0.6684369161873652
+refinery_Hebei Dagang Refinery,lng_lng_terminal_61,0.0,0.0,68.98458666325335,0.5917138903598594
+refinery_Hebei Dagang Refinery,lng_lng_terminal_63,0.0,0.0,141.15080472857585,0.6394243072106837
+refinery_Hebei Dagang Refinery,lng_lng_terminal_64,0.0,0.0,311.5977868120785,0.6362861287925551
+refinery_Hebei Dagang Refinery,lng_lng_terminal_68,0.0,0.0,444.01312880471136,0.6517937850003441
+refinery_Hebei Dagang Refinery,lng_lng_terminal_69,0.0,0.0,49.34190506049326,0.5244559496221545
+refinery_Hebei Dagang Refinery,lng_lng_terminal_70,0.0,0.0,514.735315960821,0.6691559107490673
+refinery_Hebei Dagang Refinery,lng_lng_terminal_79,0.0,0.0,74.78119211130827,0.5998203575073999
+refinery_Hebei Dagang Refinery,lng_lng_terminal_80,0.0,0.0,513.603070561868,0.6676839917304284
+refinery_Hebei Dagang Refinery,lng_lng_terminal_81,0.0,0.0,124.41204878818446,0.6177414950875992
+refinery_Hebei Qianhai Refinery,airport_北京,15343.160280000018,61372.64112000007,206.6542514527597,0.6075865901817427
+refinery_Hebei Qianhai Refinery,airport_天津,0.0,0.0,88.55812194949519,0.5931995211630474
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_1,0.0,0.0,658.2870694348301,0.8557731902652791
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_2,0.0,0.0,522.6360671053633,0.6794268872369723
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_3,0.0,0.0,81.31443672329357,0.601223826709917
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_4,0.0,0.0,57.13130684218709,0.555053186737615
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_5,0.0,0.0,129.8100561621329,0.6263255428282714
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_6,0.0,0.0,55.967481709801376,0.5499992571310336
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_8,0.0,0.0,487.5184321172836,0.6520289449661106
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_9,0.0,0.0,450.68528481409345,0.6525671196355801
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_53,0.0,0.0,526.5505819798065,0.6845157565737484
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_56,0.0,0.0,193.81115606812966,0.6126196101305754
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_60,0.0,0.0,520.6608577722108,0.676859115103874
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_61,0.0,0.0,75.46320121441396,0.6003499636564879
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_63,0.0,0.0,147.62941927973645,0.6439056567351612
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_64,0.0,0.0,318.0764013632391,0.6392120593867189
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_68,0.0,0.0,450.49174335587196,0.652548448901003
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_69,0.0,0.0,55.820519611653864,0.5493425787644954
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_70,0.0,0.0,521.2139305119816,0.6775781096655761
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_79,0.0,0.0,81.25980666246888,0.6012460681026323
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_80,0.0,0.0,520.0816851130286,0.6761061906469372
+refinery_Hebei Qianhai Refinery,lng_lng_terminal_81,0.0,0.0,130.89066333934508,0.6278619298978716
+refinery_Huabei Refinery,airport_北京,17039.931299999982,68159.72519999993,186.56353182569543,0.6248662243814934
+refinery_Huabei Refinery,airport_天津,0.0,0.0,140.76818978682832,0.6390913915996188
+refinery_Huabei Refinery,lng_lng_terminal_1,0.0,0.0,734.555622108537,0.9549223087410982
+refinery_Huabei Refinery,lng_lng_terminal_2,0.0,0.0,598.9046197790702,0.7785760057127913
+refinery_Huabei Refinery,lng_lng_terminal_3,0.0,0.0,179.79707163818026,0.6338343262217901
+refinery_Huabei Refinery,lng_lng_terminal_4,0.0,0.0,172.6265804666909,0.6407396164526697
+refinery_Huabei Refinery,lng_lng_terminal_5,0.0,0.0,235.1402945771818,0.631054790765878
+refinery_Huabei Refinery,lng_lng_terminal_6,0.0,0.0,209.14745730085156,0.6102238649853837
+refinery_Huabei Refinery,lng_lng_terminal_8,0.0,0.0,642.1698863905052,0.8348208523076569
+refinery_Huabei Refinery,lng_lng_terminal_9,0.0,0.0,605.3367390873151,0.7869377608135097
+refinery_Huabei Refinery,lng_lng_terminal_53,0.0,0.0,681.2020362530282,0.8855626471289366
+refinery_Huabei Refinery,lng_lng_terminal_56,0.0,0.0,346.8080767887536,0.6471298658099429
+refinery_Huabei Refinery,lng_lng_terminal_60,0.0,0.0,596.9294104459177,0.7760082335796931
+refinery_Huabei Refinery,lng_lng_terminal_61,0.0,0.0,228.46012193503796,0.6268623394570304
+refinery_Huabei Refinery,lng_lng_terminal_63,0.0,0.0,224.03129351776187,0.6236400246080829
+refinery_Huabei Refinery,lng_lng_terminal_64,0.0,0.0,394.3449540369459,0.6421021206610004
+refinery_Huabei Refinery,lng_lng_terminal_68,0.0,0.0,605.1431976290936,0.7866861569178217
+refinery_Huabei Refinery,lng_lng_terminal_69,0.0,0.0,171.39828339647167,0.6416542635183802
+refinery_Huabei Refinery,lng_lng_terminal_70,0.0,0.0,675.8653847852033,0.8786250002207644
+refinery_Huabei Refinery,lng_lng_terminal_79,0.0,0.0,180.00780836210546,0.6335909407147242
+refinery_Huabei Refinery,lng_lng_terminal_80,0.0,0.0,596.3502377867355,0.7752553091227562
+refinery_Huabei Refinery,lng_lng_terminal_81,0.0,0.0,235.95505679750602,0.6315111731732003
+refinery_Hualian Refinery,airport_北京,10564.672440000013,42258.68976000005,303.7102956042575,0.6321573458951997
+refinery_Hualian Refinery,airport_天津,0.0,0.0,171.12414045472974,0.6418476941231621
+refinery_Hualian Refinery,lng_lng_terminal_1,0.0,0.0,555.7235074242309,0.7224405596515001
+refinery_Hualian Refinery,lng_lng_terminal_2,0.0,0.0,585.8829540240531,0.7616478402312691
+refinery_Hualian Refinery,lng_lng_terminal_3,0.0,0.0,144.56132364198342,0.642055470243085
+refinery_Hualian Refinery,lng_lng_terminal_4,0.0,0.0,120.33639725641588,0.610256396381608
+refinery_Hualian Refinery,lng_lng_terminal_5,0.0,0.0,193.05694308082275,0.6140213681982336
+refinery_Hualian Refinery,lng_lng_terminal_6,0.0,0.0,68.27043973976718,0.5902688015873877
+refinery_Hualian Refinery,lng_lng_terminal_8,0.0,0.0,383.7436117629686,0.6451812045022471
+refinery_Hualian Refinery,lng_lng_terminal_9,0.0,0.0,346.91046445977844,0.6471433202967064
+refinery_Hualian Refinery,lng_lng_terminal_53,0.0,0.0,422.77576162549144,0.6475540986973329
+refinery_Hualian Refinery,lng_lng_terminal_56,0.0,0.0,78.01104339033876,0.6015384620116148
+refinery_Hualian Refinery,lng_lng_terminal_60,0.0,0.0,583.9077446909006,0.7590800680981707
+refinery_Hualian Refinery,lng_lng_terminal_61,0.0,0.0,74.54143651545147,0.5996129622873025
+refinery_Hualian Refinery,lng_lng_terminal_63,0.0,0.0,210.8763061984263,0.6119869211094143
+refinery_Hualian Refinery,lng_lng_terminal_64,0.0,0.0,381.3232882819289,0.6457265868842288
+refinery_Hualian Refinery,lng_lng_terminal_68,0.0,0.0,346.71692300155695,0.6471177993272671
+refinery_Hualian Refinery,lng_lng_terminal_69,0.0,0.0,119.0138773118212,0.60764191614431
+refinery_Hualian Refinery,lng_lng_terminal_70,0.0,0.0,417.4391101576667,0.646063276373793
+refinery_Hualian Refinery,lng_lng_terminal_79,0.0,0.0,144.50669358115874,0.6420180906317702
+refinery_Hualian Refinery,lng_lng_terminal_80,0.0,0.0,583.3285720317184,0.7583271436412339
+refinery_Hualian Refinery,lng_lng_terminal_81,0.0,0.0,194.13755025803493,0.6120038131909195
+refinery_Huayu Refinery,airport_北京,3147.140640000004,12588.562560000017,207.5889213683861,0.6085883800942433
+refinery_Huayu Refinery,airport_天津,0.0,0.0,89.49279186512162,0.5914302959517067
+refinery_Huayu Refinery,lng_lng_terminal_1,0.0,0.0,659.2217393504566,0.8569882611555936
+refinery_Huayu Refinery,lng_lng_terminal_2,0.0,0.0,523.5707370209898,0.6806419581272868
+refinery_Huayu Refinery,lng_lng_terminal_3,0.0,0.0,82.24910663892,0.6007545287931424
+refinery_Huayu Refinery,lng_lng_terminal_4,0.0,0.0,58.065976757813516,0.5589237116622273
+refinery_Huayu Refinery,lng_lng_terminal_5,0.0,0.0,130.7447260777593,0.6276579855117702
+refinery_Huayu Refinery,lng_lng_terminal_6,0.0,0.0,56.90215162542781,0.5540786381845978
+refinery_Huayu Refinery,lng_lng_terminal_8,0.0,0.0,488.45310203291007,0.6519093870354309
+refinery_Huayu Refinery,lng_lng_terminal_9,0.0,0.0,451.6199547297199,0.652654122712993
+refinery_Huayu Refinery,lng_lng_terminal_53,0.0,0.0,527.485251895433,0.6857308274640629
+refinery_Huayu Refinery,lng_lng_terminal_56,0.0,0.0,194.74582598375608,0.6108414178763193
+refinery_Huayu Refinery,lng_lng_terminal_60,0.0,0.0,521.5955276878373,0.6780741859941884
+refinery_Huayu Refinery,lng_lng_terminal_61,0.0,0.0,76.39787113004039,0.6009307087091971
+refinery_Huayu Refinery,lng_lng_terminal_63,0.0,0.0,148.56408919536287,0.6443720278423344
+refinery_Huayu Refinery,lng_lng_terminal_64,0.0,0.0,319.01107127886553,0.6395995386114688
+refinery_Huayu Refinery,lng_lng_terminal_68,0.0,0.0,451.4264132714984,0.6526365373626866
+refinery_Huayu Refinery,lng_lng_terminal_69,0.0,0.0,56.7551895272803,0.5534483331400198
+refinery_Huayu Refinery,lng_lng_terminal_70,0.0,0.0,522.1486004276081,0.6787931805558906
+refinery_Huayu Refinery,lng_lng_terminal_79,0.0,0.0,82.1944765780953,0.6007865739121312
+refinery_Huayu Refinery,lng_lng_terminal_80,0.0,0.0,521.0163550286551,0.6773212615372517
+refinery_Huayu Refinery,lng_lng_terminal_81,0.0,0.0,131.8253332549715,0.6291418520083747
+refinery_Lianhe Refinery,airport_北京,7156.686179999996,28626.744719999984,332.8004757838387,0.6443009294120724
+refinery_Lianhe Refinery,airport_天津,0.0,0.0,200.21432063431092,0.6002567713611644
+refinery_Lianhe Refinery,lng_lng_terminal_1,0.0,0.0,574.1154506252302,0.7463500858127993
+refinery_Lianhe Refinery,lng_lng_terminal_2,0.0,0.0,614.9731342036343,0.7994650744647247
+refinery_Lianhe Refinery,lng_lng_terminal_3,0.0,0.0,173.65150382156457,0.6399163670700673
+refinery_Lianhe Refinery,lng_lng_terminal_4,0.0,0.0,149.4448023748791,0.6447699065954753
+refinery_Lianhe Refinery,lng_lng_terminal_5,0.0,0.0,222.1471232604039,0.6221620922940809
+refinery_Lianhe Refinery,lng_lng_terminal_6,0.0,0.0,97.36061991934835,0.5698887529104332
+refinery_Lianhe Refinery,lng_lng_terminal_8,0.0,0.0,402.135554963968,0.6408405402005749
+refinery_Lianhe Refinery,lng_lng_terminal_9,0.0,0.0,365.3024076607778,0.6478594223649946
+refinery_Lianhe Refinery,lng_lng_terminal_53,0.0,0.0,441.1677048264908,0.6513827421685532
+refinery_Lianhe Refinery,lng_lng_terminal_56,0.0,0.0,82.08114919600698,0.6008512226589391
+refinery_Lianhe Refinery,lng_lng_terminal_60,0.0,0.0,612.9979248704818,0.7968973023316264
+refinery_Lianhe Refinery,lng_lng_terminal_61,0.0,0.0,79.94671931516123,0.6016082523817621
+refinery_Lianhe Refinery,lng_lng_terminal_63,0.0,0.0,239.96648637800746,0.6335839033529778
+refinery_Lianhe Refinery,lng_lng_terminal_64,0.0,0.0,410.4134684615101,0.6438400664084074
+refinery_Lianhe Refinery,lng_lng_terminal_68,0.0,0.0,365.1088662025563,0.6478694974306219
+refinery_Lianhe Refinery,lng_lng_terminal_69,0.0,0.0,148.1222824302844,0.6441572415670517
+refinery_Lianhe Refinery,lng_lng_terminal_70,0.0,0.0,435.83105335866605,0.6504808281890917
+refinery_Lianhe Refinery,lng_lng_terminal_79,0.0,0.0,173.5968737607399,0.6399616257710082
+refinery_Lianhe Refinery,lng_lng_terminal_80,0.0,0.0,612.4187522112996,0.7961443778746896
+refinery_Lianhe Refinery,lng_lng_terminal_81,0.0,0.0,223.22773043761606,0.6230175293735962
+refinery_PetroChina Qinhuangdao Refinery,airport_北京,1377.2988600000006,5509.195440000002,283.25209487925645,0.6375243121390453
+refinery_PetroChina Qinhuangdao Refinery,airport_天津,0.0,0.0,226.15970242896373,0.625232672634209
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_1,0.0,0.0,394.57847693460263,0.6420216446644158
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_2,0.0,0.0,258.9274746051359,0.6394609441561127
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_3,0.0,0.0,196.91600574899797,0.6065375008181588
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_4,0.0,0.0,223.786240543477,0.623451421499443
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_5,0.0,0.0,152.20399993376907,0.6457553019650982
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_6,0.0,0.0,273.08850450461256,0.6396288399890481
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_8,0.0,0.0,603.2973401794675,0.7842865422333077
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_9,0.0,0.0,608.8270176138266,0.7914751228979745
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_53,0.0,0.0,618.9782961646151,0.8046717850139997
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_56,0.0,0.0,409.2924973578345,0.6434579474216977
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_60,0.0,0.0,256.9522652719834,0.6391506736498868
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_61,0.0,0.0,290.94454250411883,0.6346952627033913
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_63,0.0,0.0,145.8943151120175,0.6429194531864224
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_64,0.0,0.0,54.36780886301161,0.54262826522354
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_68,0.0,0.0,603.5850613572766,0.7846605797644596
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_69,0.0,0.0,222.47545331294378,0.6224242299609316
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_70,0.0,0.0,623.7285846701171,0.8108471600711523
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_79,0.0,0.0,196.85225066322099,0.6066674320678469
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_80,0.0,0.0,256.3730926128012,0.6390463809987783
+refinery_PetroChina Qinhuangdao Refinery,lng_lng_terminal_81,0.0,0.0,151.09613970757206,0.6454072163043075
+refinery_PetroChina Rosneft Tianjin  Refinery,airport_北京,0.0,0.0,177.57346334942184,0.636261692431639
+refinery_PetroChina Rosneft Tianjin  Refinery,airport_天津,22182.073619999996,88728.29447999998,46.145078865126585,0.5418130228433934
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_1,0.0,0.0,625.2189390614012,0.8127846207798216
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_2,0.0,0.0,489.56793673193454,0.6517599288215263
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_3,0.0,0.0,51.1267867123114,0.5261881193526199
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_4,0.0,0.0,30.307558489267215,0.5228953866516657
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_5,0.0,0.0,102.98630780921303,0.5687270545350236
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_6,0.0,0.0,70.6844981756749,0.5947597371649477
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_8,0.0,0.0,503.7069272653288,0.6548190054449273
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_9,0.0,0.0,466.8737799621386,0.653333204645582
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_53,0.0,0.0,542.7390771278516,0.705560800266207
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_56,0.0,0.0,208.2550016999813,0.6092926965623773
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_60,0.0,0.0,487.59272739878196,0.6520196332800409
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_61,0.0,0.0,89.90704684626562,0.5905925130920437
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_63,0.0,0.0,104.5188572564125,0.5730256499257379
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_64,0.0,0.0,285.0082709898102,0.6369722699576791
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_68,0.0,0.0,466.6802385039171,0.653333332780749
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_69,0.0,0.0,28.996771258734007,0.5135074062786982
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_70,0.0,0.0,537.4024256600268,0.6986231533580348
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_79,0.0,0.0,51.2343848899661,0.5267662796023788
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_80,0.0,0.0,487.0135547395998,0.652091345770576
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_lng_terminal_81,0.0,0.0,104.06691498642519,0.5717707102240986
+refinery_Petrochina Dagang Refinery,airport_北京,0.0,0.0,177.57346334942193,0.6362616924316389
+refinery_Petrochina Dagang Refinery,airport_天津,8519.540819999998,34078.16327999999,46.14507886512666,0.541813022843393
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_1,0.0,0.0,625.2189390614013,0.8127846207798218
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_2,0.0,0.0,489.5679367319346,0.6517599288215264
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_3,0.0,0.0,51.12678671231148,0.5261881193526203
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_4,0.0,0.0,30.30755848926729,0.5228953866516661
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_5,0.0,0.0,102.98630780921312,0.5687270545350239
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_6,0.0,0.0,70.68449817567497,0.5947597371649477
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_8,0.0,0.0,503.70692726532883,0.6548190054449274
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_9,0.0,0.0,466.87377996213866,0.6533332046455819
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_53,0.0,0.0,542.7390771278517,0.7055608002662073
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_56,0.0,0.0,208.2550016999814,0.6092926965623774
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_60,0.0,0.0,487.592727398782,0.6520196332800409
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_61,0.0,0.0,89.9070468462657,0.5905925130920435
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_63,0.0,0.0,104.51885725641259,0.5730256499257381
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_64,0.0,0.0,285.0082709898103,0.6369722699576792
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_68,0.0,0.0,466.68023850391717,0.6533333327807491
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_69,0.0,0.0,28.996771258734082,0.5135074062786987
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_70,0.0,0.0,537.4024256600269,0.6986231533580349
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_79,0.0,0.0,51.23438488996618,0.5267662796023792
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_80,0.0,0.0,487.01355473959984,0.6520913457705759
+refinery_Petrochina Dagang Refinery,lng_lng_terminal_81,0.0,0.0,104.06691498642527,0.5717707102240989
+refinery_Qinhuangdao Far East Refinery,airport_北京,2164.0840200000025,8656.33608000001,245.12839001815345,0.635824923751109
+refinery_Qinhuangdao Far East Refinery,airport_天津,0.0,0.0,191.04727339309954,0.6176120643790355
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_1,0.0,0.0,420.48673659778825,0.6469355755098339
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_2,0.0,0.0,284.8357342683215,0.6370289648423784
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_3,0.0,0.0,158.6078432238694,0.6465166682004132
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_4,0.0,0.0,185.4780780183484,0.626465186690563
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_5,0.0,0.0,119.25344263374737,0.6081222565167163
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_6,0.0,0.0,234.78034197948398,0.630849360681492
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_8,0.0,0.0,629.2055998426531,0.817967279795449
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_9,0.0,0.0,630.9696237659475,0.8202605108957318
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_53,0.0,0.0,644.8865558278007,0.838352522576141
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_56,0.0,0.0,370.9843348327059,0.6473967219414151
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_60,0.0,0.0,282.860524935169,0.6376398305894169
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_61,0.0,0.0,252.63637997899025,0.6382283594991546
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_63,0.0,0.0,111.3874939608184,0.5907909313960557
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_64,0.0,0.0,80.27606852619724,0.6015485125080174
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_68,0.0,0.0,629.4933210204622,0.8183413173266009
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_69,0.0,0.0,184.1672907878152,0.6283144185608689
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_70,0.0,0.0,649.6368443333027,0.8445278976332936
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_79,0.0,0.0,158.5440881380924,0.6465195977603382
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_80,0.0,0.0,282.2813522759868,0.6378056343398988
+refinery_Qinhuangdao Far East Refinery,lng_lng_terminal_81,0.0,0.0,118.14558240755038,0.6058759310390118
+refinery_Shenchi Refinery,airport_北京,4430.127239999996,17720.508959999985,332.7595691196756,0.6442897946272713
+refinery_Shenchi Refinery,airport_天津,0.0,0.0,200.1734139701478,0.6002078261125319
+refinery_Shenchi Refinery,lng_lng_terminal_1,0.0,0.0,574.0745439610671,0.7462969071493872
+refinery_Shenchi Refinery,lng_lng_terminal_2,0.0,0.0,614.9322275394712,0.7994118958013126
+refinery_Shenchi Refinery,lng_lng_terminal_3,0.0,0.0,173.61059715740146,0.6399502711116042
+refinery_Shenchi Refinery,lng_lng_terminal_4,0.0,0.0,149.40389571071597,0.6447523194358702
+refinery_Shenchi Refinery,lng_lng_terminal_5,0.0,0.0,222.10621659624078,0.6221292966056897
+refinery_Shenchi Refinery,lng_lng_terminal_6,0.0,0.0,97.31971325518523,0.5700314890239538
+refinery_Shenchi Refinery,lng_lng_terminal_8,0.0,0.0,402.0946482998049,0.6408246966654224
+refinery_Shenchi Refinery,lng_lng_terminal_9,0.0,0.0,365.2615009966147,0.647861583036313
+refinery_Shenchi Refinery,lng_lng_terminal_53,0.0,0.0,441.1267981623277,0.6513764786836767
+refinery_Shenchi Refinery,lng_lng_terminal_56,0.0,0.0,82.04024253184386,0.6008739525943856
+refinery_Shenchi Refinery,lng_lng_terminal_60,0.0,0.0,612.9570182063187,0.7968441236682143
+refinery_Shenchi Refinery,lng_lng_terminal_61,0.0,0.0,79.90581265099812,0.601614218335196
+refinery_Shenchi Refinery,lng_lng_terminal_63,0.0,0.0,239.92557971384434,0.6335642284172344
+refinery_Shenchi Refinery,lng_lng_terminal_64,0.0,0.0,410.372561797347,0.6438262546042195
+refinery_Shenchi Refinery,lng_lng_terminal_68,0.0,0.0,365.0679595383932,0.647871578930586
+refinery_Shenchi Refinery,lng_lng_terminal_69,0.0,0.0,148.08137576612128,0.644136841213727
+refinery_Shenchi Refinery,lng_lng_terminal_70,0.0,0.0,435.79014669450294,0.650473254876559
+refinery_Shenchi Refinery,lng_lng_terminal_79,0.0,0.0,173.55596709657678,0.6399954136064004
+refinery_Shenchi Refinery,lng_lng_terminal_80,0.0,0.0,612.3778455471365,0.7960911992112775
+refinery_Shenchi Refinery,lng_lng_terminal_81,0.0,0.0,223.18682377345294,0.622985529357833
+refinery_Sinopec Beijing Refinery,airport_北京,18768.98939999966,75075.95759999864,58.33907314185444,0.5600229560713259
+refinery_Sinopec Beijing Refinery,airport_天津,0.0,0.0,148.7564283966522,0.6444623631300119
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_1,0.0,0.0,720.0240919623859,0.9360313195511016
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_2,0.0,0.0,584.3730896329191,0.7596850165227949
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_3,0.0,0.0,186.93438707077766,0.6243058821726662
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_4,0.0,0.0,180.74516692790607,0.6327211692461174
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_5,0.0,0.0,242.2776100097792,0.6346465652384841
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_6,0.0,0.0,225.32885858996937,0.6246206706107271
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_8,0.0,0.0,658.351287679623,0.8558566739835101
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_9,0.0,0.0,621.5181403764329,0.8079735824893629
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_53,0.0,0.0,697.383437542146,0.9065984688047899
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_56,0.0,0.0,362.89936211427573,0.6479579684966514
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_60,0.0,0.0,582.3978802997666,0.7571172443896966
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_61,0.0,0.0,244.55140726056007,0.6355982377126056
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_63,0.0,0.0,231.16860895035927,0.6286589910853274
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_64,0.0,0.0,379.8134238907948,0.6460371411686184
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_68,0.0,0.0,621.3245989182114,0.8077219785936749
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_69,0.0,0.0,181.2820599304551,0.6320700748613749
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_70,0.0,0.0,692.0467860743212,0.8996608218966177
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_79,0.0,0.0,187.14512379470287,0.6239842837530623
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_80,0.0,0.0,581.8187076405844,0.7563643199327598
+refinery_Sinopec Beijing Refinery,lng_lng_terminal_81,0.0,0.0,243.09237223010342,0.634998273776364
+refinery_Sinopec Cangzhou Refinery,airport_北京,5963.76354000001,23855.05416000004,202.057247987649,0.6024306071616347
+refinery_Sinopec Cangzhou Refinery,airport_天津,0.0,0.0,101.121816120808,0.5633327281057926
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_1,0.0,0.0,660.974423677407,0.8592667507806291
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_2,0.0,0.0,551.0662859534766,0.7163861717395196
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_3,0.0,0.0,109.17848793197572,0.5853451031372743
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_4,0.0,0.0,86.90411570858404,0.595919327369745
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_5,0.0,0.0,160.45409346502987,0.646340147561447
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_6,0.0,0.0,87.22855317190927,0.5954272413204192
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_8,0.0,0.0,488.9945280161448,0.6518377331560088
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_9,0.0,0.0,452.1613807129546,0.6527021233715364
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_53,0.0,0.0,528.0266778786677,0.686434681242268
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_56,0.0,0.0,214.98618981150696,0.6159621548082096
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_60,0.0,0.0,549.0910766203241,0.7138183996064213
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_61,0.0,0.0,103.86153269032658,0.5711969007682998
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_63,0.0,0.0,170.10502573810027,0.6425324967370686
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_64,0.0,0.0,346.50662021135236,0.6470896435093966
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_68,0.0,0.0,451.9678392547331,0.6526851667514759
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_69,0.0,0.0,86.28064131564307,0.596808237677264
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_70,0.0,0.0,522.6900264108428,0.6794970343340957
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_79,0.0,0.0,109.20399698043582,0.5854094383704948
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_80,0.0,0.0,548.5119039611419,0.7130654751494845
+refinery_Sinopec Cangzhou Refinery,lng_lng_terminal_81,0.0,0.0,161.53470064224206,0.6461545979653373
+refinery_Sinopec Shijiazhuang Refinery,airport_北京,17062.872119999993,68251.48847999997,307.5947650148543,0.6342684567307584
+refinery_Sinopec Shijiazhuang Refinery,airport_天津,0.0,0.0,314.17556160397,0.6375006042284422
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_1,0.0,0.0,864.6031184740552,1.1239840540162718
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_2,0.0,0.0,772.3119915962118,1.0040055890750754
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_3,0.0,0.0,332.784131580885,0.644296482530967
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_4,0.0,0.0,310.5097593574933,0.6357535804057339
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_5,0.0,0.0,383.2110445787241,0.6453062370478223
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_6,0.0,0.0,309.072856498763,0.635032130274022
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_8,0.0,0.0,692.623222812793,0.9004101896566309
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_9,0.0,0.0,655.7900755096028,0.8525270981624837
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_53,0.0,0.0,731.6553726753159,0.9511519844779107
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_56,0.0,0.0,420.5907785609995,0.6469643709391555
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_60,0.0,0.0,770.3367822630593,1.001437816941977
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_61,0.0,0.0,327.46717633923583,0.642708076923288
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_63,0.0,0.0,393.7106693870095,0.6423179538473986
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_64,0.0,0.0,567.7523258540875,0.7380780236103138
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_68,0.0,0.0,655.5965340513814,0.8522754942667957
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_69,0.0,0.0,309.2215080282451,0.6351077237653722
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_70,0.0,0.0,726.3187212074911,0.9442143375697384
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_79,0.0,0.0,332.8096406293451,0.6443034217864732
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_80,0.0,0.0,769.7576096038771,1.0006848924850402
+refinery_Sinopec Shijiazhuang Refinery,lng_lng_terminal_81,0.0,0.0,384.2916517559363,0.6450495782748417
+refinery_Sinopec Tianjin Refinery,airport_北京,0.0,0.0,184.87003402822828,0.6273341125099166
+refinery_Sinopec Tianjin Refinery,airport_天津,23546.627580000015,94186.51032000006,38.067000064392715,0.5539770219120561
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_1,0.0,0.0,591.3209929010495,0.7687172907713644
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_2,0.0,0.0,455.66999057158273,0.6529705526779128
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_3,0.0,0.0,30.894471612920963,0.5267113159071333
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_4,0.0,0.0,27.57882241172179,0.5020054399710495
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_5,0.0,0.0,85.25139946317354,0.5981123652389976
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_6,0.0,0.0,76.88108637285734,0.6011651744478396
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_8,0.0,0.0,509.90351546251117,0.6628745701012645
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_9,0.0,0.0,473.070368159321,0.6532103111549122
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_53,0.0,0.0,548.935665325034,0.7136163649225443
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_56,0.0,0.0,213.0850792260793,0.6141611213861202
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_60,0.0,0.0,453.6947812384302,0.6528285238986434
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_61,0.0,0.0,94.73712437236361,0.5783925079628366
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_63,0.0,0.0,73.17176083808741,0.5982165326608875
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_64,0.0,0.0,251.11032482945842,0.6378220020577954
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_68,0.0,0.0,472.8768267010995,0.6532176350703736
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_69,0.0,0.0,26.268035181188583,0.49012801208354645
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_70,0.0,0.0,543.5990138572092,0.706678718014372
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_79,0.0,0.0,31.11493618048217,0.5280827655940178
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_80,0.0,0.0,453.115608579248,0.6527824398074675
+refinery_Sinopec Tianjin Refinery,lng_lng_terminal_81,0.0,0.0,85.9792915269714,0.5972111283478915
+refinery_Tianhong 1 Refinery,airport_北京,8519.540819999998,34078.16327999999,332.79884657070613,0.64430048626058
+refinery_Tianhong 1 Refinery,airport_天津,0.0,0.0,200.21269142117836,0.6002548225666482
+refinery_Tianhong 1 Refinery,lng_lng_terminal_1,0.0,0.0,574.1138214120976,0.746347967835727
+refinery_Tianhong 1 Refinery,lng_lng_terminal_2,0.0,0.0,614.9715049905018,0.7994629564876523
+refinery_Tianhong 1 Refinery,lng_lng_terminal_3,0.0,0.0,173.64987460843201,0.6399177190495143
+refinery_Tianhong 1 Refinery,lng_lng_terminal_4,0.0,0.0,149.44317316174653,0.6447692078053758
+refinery_Tianhong 1 Refinery,lng_lng_terminal_5,0.0,0.0,222.14549404727134,0.6221607866973461
+refinery_Tianhong 1 Refinery,lng_lng_terminal_6,0.0,0.0,97.35899070621579,0.5698944438865109
+refinery_Tianhong 1 Refinery,lng_lng_terminal_8,0.0,0.0,402.13392575083543,0.640839909383004
+refinery_Tianhong 1 Refinery,lng_lng_terminal_9,0.0,0.0,365.30077844764526,0.6478595087392448
+refinery_Tianhong 1 Refinery,lng_lng_terminal_53,0.0,0.0,441.16607561335826,0.6513824929011292
+refinery_Tianhong 1 Refinery,lng_lng_terminal_56,0.0,0.0,82.07951998287442,0.6008521340802594
+refinery_Tianhong 1 Refinery,lng_lng_terminal_60,0.0,0.0,612.9962956573493,0.796895184354554
+refinery_Tianhong 1 Refinery,lng_lng_terminal_61,0.0,0.0,79.94509010202867,0.6016084961343735
+refinery_Tianhong 1 Refinery,lng_lng_terminal_63,0.0,0.0,239.9648571648749,0.63358312032397
+refinery_Tianhong 1 Refinery,lng_lng_terminal_64,0.0,0.0,410.41183924837753,0.6438395165097488
+refinery_Tianhong 1 Refinery,lng_lng_terminal_68,0.0,0.0,365.10723698942377,0.6478695806516693
+refinery_Tianhong 1 Refinery,lng_lng_terminal_69,0.0,0.0,148.12065321715184,0.6441564307342755
+refinery_Tianhong 1 Refinery,lng_lng_terminal_70,0.0,0.0,435.8294241455335,0.6504805267544117
+refinery_Tianhong 1 Refinery,lng_lng_terminal_79,0.0,0.0,173.59524454760734,0.6399629731222467
+refinery_Tianhong 1 Refinery,lng_lng_terminal_80,0.0,0.0,612.4171229981671,0.7961422598976172
+refinery_Tianhong 1 Refinery,lng_lng_terminal_81,0.0,0.0,223.2261012244835,0.6230162554665707
+refinery_Tianjin  Refinery,airport_北京,2215.063619999998,8860.254479999992,119.33165701012896,0.6082784339986979
+refinery_Tianjin  Refinery,airport_天津,0.0,0.0,39.67369987100056,0.5551759998277436
+refinery_Tianjin  Refinery,lng_lng_terminal_1,0.0,0.0,642.7859622296965,0.8356217508986055
+refinery_Tianjin  Refinery,lng_lng_terminal_2,0.0,0.0,507.13495990022966,0.6592754478702986
+refinery_Tianjin  Refinery,lng_lng_terminal_3,0.0,0.0,77.85165854512601,0.6015006590161338
+refinery_Tianjin  Refinery,lng_lng_terminal_4,0.0,0.0,71.66243840225442,0.596260576249604
+refinery_Tianjin  Refinery,lng_lng_terminal_5,0.0,0.0,133.19488148412754,0.6309352403770054
+refinery_Tianjin  Refinery,lng_lng_terminal_6,0.0,0.0,116.24613006431771,0.6018760348992184
+refinery_Tianjin  Refinery,lng_lng_terminal_8,0.0,0.0,549.2685591539714,0.7140491269001629
+refinery_Tianjin  Refinery,lng_lng_terminal_9,0.0,0.0,512.4354118507813,0.6661660354060157
+refinery_Tianjin  Refinery,lng_lng_terminal_53,0.0,0.0,588.3007090164944,0.7647909217214426
+refinery_Tianjin  Refinery,lng_lng_terminal_56,0.0,0.0,253.8166335886241,0.6385138898490389
+refinery_Tianjin  Refinery,lng_lng_terminal_60,0.0,0.0,505.15975056707714,0.6567076757372002
+refinery_Tianjin  Refinery,lng_lng_terminal_61,0.0,0.0,135.46867873490842,0.6336973297535214
+refinery_Tianjin  Refinery,lng_lng_terminal_63,0.0,0.0,122.08588042470763,0.6135752023066263
+refinery_Tianjin  Refinery,lng_lng_terminal_64,0.0,0.0,302.57529415810535,0.6315120157948593
+refinery_Tianjin  Refinery,lng_lng_terminal_68,0.0,0.0,512.2418703925598,0.6659144315103278
+refinery_Tianjin  Refinery,lng_lng_terminal_69,0.0,0.0,72.19933140480346,0.5970064656441513
+refinery_Tianjin  Refinery,lng_lng_terminal_70,0.0,0.0,582.9640575486695,0.7578532748132704
+refinery_Tianjin  Refinery,lng_lng_terminal_79,0.0,0.0,78.06239526905121,0.6015496027959859
+refinery_Tianjin  Refinery,lng_lng_terminal_80,0.0,0.0,504.5805779078949,0.6559547512802635
+refinery_Tianjin  Refinery,lng_lng_terminal_81,0.0,0.0,134.00964370445178,0.6319558786258578
+refinery_Wudi Xinyue Refinery,airport_北京,13679.525999999983,54718.103999999934,251.5432240022669,0.6379415333377896
+refinery_Wudi Xinyue Refinery,airport_天津,0.0,0.0,120.01652654282371,0.6096323849226425
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_1,0.0,0.0,624.7659288978357,0.8121957075671865
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_2,0.0,0.0,538.512293084098,0.7000659810093275
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_3,0.0,0.0,97.19066270202828,0.5704796810907246
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_4,0.0,0.0,73.00753282092178,0.5980249134126059
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_5,0.0,0.0,145.6862821408676,0.6427907006503739
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_6,0.0,0.0,24.09033389751998,0.4601253774426316
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_8,0.0,0.0,452.7860332365735,0.6527553173800715
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_9,0.0,0.0,415.9528859333833,0.6456176706645428
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_53,0.0,0.0,491.8181830990963,0.6514355369967809
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_56,0.0,0.0,129.89340808018414,0.6264462122276936
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_60,0.0,0.0,536.5370837509455,0.6974982088762292
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_61,0.0,0.0,43.58605340213256,0.5505813547708893
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_63,0.0,0.0,163.50564525847116,0.6456597943033492
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_64,0.0,0.0,333.95262734197377,0.6446076718880696
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_68,0.0,0.0,415.7593444751618,0.6455586669752043
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_69,0.0,0.0,71.69674559038857,0.5963098934616277
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_70,0.0,0.0,486.48153163127154,0.6521554467126368
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_79,0.0,0.0,97.13603264120358,0.5706684477680896
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_80,0.0,0.0,535.9579110917633,0.6967452844192924
+refinery_Wudi Xinyue Refinery,lng_lng_terminal_81,0.0,0.0,146.76688931807976,0.6434349776055116
+refinery_Xinhai  Refinery,airport_北京,0.0,0.0,236.66040935507039,0.6318966206993525
+refinery_Xinhai  Refinery,airport_天津,10223.958780000004,40895.83512000002,104.07425420554256,0.5717911743860117
+refinery_Xinhai  Refinery,lng_lng_terminal_1,0.0,0.0,619.0701005520385,0.8047911307176501
+refinery_Xinhai  Refinery,lng_lng_terminal_2,0.0,0.0,521.4749054227532,0.6779173770495792
+refinery_Xinhai  Refinery,lng_lng_terminal_3,0.0,0.0,80.15327504068338,0.6015732206426334
+refinery_Xinhai  Refinery,lng_lng_terminal_4,0.0,0.0,55.97014515957689,0.5500111201038944
+refinery_Xinhai  Refinery,lng_lng_terminal_5,0.0,0.0,128.6488944795227,0.6246069454111987
+refinery_Xinhai  Refinery,lng_lng_terminal_6,0.0,0.0,14.086000740004582,0.2690426141340875
+refinery_Xinhai  Refinery,lng_lng_terminal_8,0.0,0.0,447.09020489077636,0.6521836197663446
+refinery_Xinhai  Refinery,lng_lng_terminal_9,0.0,0.0,410.2570575875862,0.6437872013439693
+refinery_Xinhai  Refinery,lng_lng_terminal_53,0.0,0.0,486.1223547532992,0.6521977619365603
+refinery_Xinhai  Refinery,lng_lng_terminal_56,0.0,0.0,151.92967509833286,0.6456750552437199
+refinery_Xinhai  Refinery,lng_lng_terminal_60,0.0,0.0,519.4996960896007,0.6753496049164809
+refinery_Xinhai  Refinery,lng_lng_terminal_61,0.0,0.0,33.58172024461717,0.5411211095638271
+refinery_Xinhai  Refinery,lng_lng_terminal_63,0.0,0.0,146.46825759712627,0.6432629997244439
+refinery_Xinhai  Refinery,lng_lng_terminal_64,0.0,0.0,316.91523968062893,0.6387185171411117
+refinery_Xinhai  Refinery,lng_lng_terminal_68,0.0,0.0,410.0635161293647,0.643721583381088
+refinery_Xinhai  Refinery,lng_lng_terminal_69,0.0,0.0,54.65935792904367,0.5440082812367941
+refinery_Xinhai  Refinery,lng_lng_terminal_70,0.0,0.0,480.7857032854744,0.6527352917482035
+refinery_Xinhai  Refinery,lng_lng_terminal_79,0.0,0.0,80.09864497985869,0.6015832826433457
+refinery_Xinhai  Refinery,lng_lng_terminal_80,0.0,0.0,518.9205234304185,0.6745966804595441
+refinery_Xinhai  Refinery,lng_lng_terminal_81,0.0,0.0,129.72950165673487,0.6262085799825018
+refinery_Yatong Refinery,airport_北京,6815.972520000184,27263.890080000736,331.82162767965076,0.6440298966668788
+refinery_Yatong Refinery,airport_天津,0.0,0.0,199.235472530123,0.6016667633751723
+refinery_Yatong Refinery,lng_lng_terminal_1,0.0,0.0,573.1366025210423,0.745077583277355
+refinery_Yatong Refinery,lng_lng_terminal_2,0.0,0.0,613.9942860994464,0.7981925719292803
+refinery_Yatong Refinery,lng_lng_terminal_3,0.0,0.0,172.67265571737664,0.6407037800377048
+refinery_Yatong Refinery,lng_lng_terminal_4,0.0,0.0,148.46595427069116,0.6443251960044867
+refinery_Yatong Refinery,lng_lng_terminal_5,0.0,0.0,221.16827515621597,0.6213690673296558
+refinery_Yatong Refinery,lng_lng_terminal_6,0.0,0.0,96.3817718151604,0.5732161215203919
+refinery_Yatong Refinery,lng_lng_terminal_8,0.0,0.0,401.15670685978006,0.6404586688316336
+refinery_Yatong Refinery,lng_lng_terminal_9,0.0,0.0,364.3235595565899,0.6479065341638032
+refinery_Yatong Refinery,lng_lng_terminal_53,0.0,0.0,440.1888567223029,0.6512301100749838
+refinery_Yatong Refinery,lng_lng_terminal_56,0.0,0.0,81.10230109181903,0.6013069853263946
+refinery_Yatong Refinery,lng_lng_terminal_60,0.0,0.0,612.0190767662939,0.7956247997961821
+refinery_Yatong Refinery,lng_lng_terminal_61,0.0,0.0,78.96787121097329,0.601662872781879
+refinery_Yatong Refinery,lng_lng_terminal_63,0.0,0.0,238.98763827381953,0.6331048424850517
+refinery_Yatong Refinery,lng_lng_terminal_64,0.0,0.0,409.43462035732216,0.6435068119590683
+refinery_Yatong Refinery,lng_lng_terminal_68,0.0,0.0,364.1300180983684,0.6479147147525357
+refinery_Yatong Refinery,lng_lng_terminal_69,0.0,0.0,147.14343432609647,0.6436452145767562
+refinery_Yatong Refinery,lng_lng_terminal_70,0.0,0.0,434.8522052544781,0.6502968534684903
+refinery_Yatong Refinery,lng_lng_terminal_79,0.0,0.0,172.61802565655196,0.6407462580630092
+refinery_Yatong Refinery,lng_lng_terminal_80,0.0,0.0,611.4399041071117,0.7948718753392452
+refinery_Yatong Refinery,lng_lng_terminal_81,0.0,0.0,222.24888233342813,0.6222435439143332
+refinery_Zhonghai  Refinery,airport_北京,3919.4815800000015,15677.926320000006,305.79984017664844,0.6333117133756158
+refinery_Zhonghai  Refinery,airport_天津,0.0,0.0,173.21368502712062,0.6402747195248508
+refinery_Zhonghai  Refinery,lng_lng_terminal_1,0.0,0.0,534.6423404387581,0.6950350425703855
+refinery_Zhonghai  Refinery,lng_lng_terminal_2,0.0,0.0,587.9724985964441,0.7643642481753774
+refinery_Zhonghai  Refinery,lng_lng_terminal_3,0.0,0.0,146.65086821437433,0.6433687135090951
+refinery_Zhonghai  Refinery,lng_lng_terminal_4,0.0,0.0,122.42594182880678,0.6142018309467857
+refinery_Zhonghai  Refinery,lng_lng_terminal_5,0.0,0.0,195.14648765321365,0.6100652560283193
+refinery_Zhonghai  Refinery,lng_lng_terminal_6,0.0,0.0,70.35998431215809,0.5942211318737183
+refinery_Zhonghai  Refinery,lng_lng_terminal_8,0.0,0.0,362.66244477749575,0.647964556939034
+refinery_Zhonghai  Refinery,lng_lng_terminal_9,0.0,0.0,325.8292974743056,0.6421618154445025
+refinery_Zhonghai  Refinery,lng_lng_terminal_53,0.0,0.0,401.6945946400186,0.6406692229030255
+refinery_Zhonghai  Refinery,lng_lng_terminal_56,0.0,0.0,76.11004523037057,0.6007697449446036
+refinery_Zhonghai  Refinery,lng_lng_terminal_60,0.0,0.0,585.9972892632916,0.7617964760422791
+refinery_Zhonghai  Refinery,lng_lng_terminal_61,0.0,0.0,89.85570381677067,0.5906981372078216
+refinery_Zhonghai  Refinery,lng_lng_terminal_63,0.0,0.0,212.9658507708172,0.6140460013490807
+refinery_Zhonghai  Refinery,lng_lng_terminal_64,0.0,0.0,383.41283285431984,0.6452591962886784
+refinery_Zhonghai  Refinery,lng_lng_terminal_68,0.0,0.0,325.63575601608403,0.6420954936770694
+refinery_Zhonghai  Refinery,lng_lng_terminal_69,0.0,0.0,121.10342188421211,0.6117310508568373
+refinery_Zhonghai  Refinery,lng_lng_terminal_70,0.0,0.0,396.3579431721938,0.6413904998414377
+refinery_Zhonghai  Refinery,lng_lng_terminal_79,0.0,0.0,146.59623815354965,0.6433372697990287
+refinery_Zhonghai  Refinery,lng_lng_terminal_80,0.0,0.0,585.4181166041094,0.7610435515853423
+refinery_Zhonghai  Refinery,lng_lng_terminal_81,0.0,0.0,196.2270948304258,0.6079302862241797
+refinery_Zhongjie Refinery,airport_北京,4917.832079999998,19671.328319999993,209.48444973924072,0.6105717466053832
+refinery_Zhongjie Refinery,airport_天津,0.0,0.0,76.81273221465347,0.6011347299558467
+refinery_Zhongjie Refinery,lng_lng_terminal_1,0.0,0.0,633.7841518344126,0.8239193973847364
+refinery_Zhongjie Refinery,lng_lng_terminal_2,0.0,0.0,498.5300529723566,0.6502875071727364
+refinery_Zhongjie Refinery,lng_lng_terminal_3,0.0,0.0,57.208422590286816,0.555378876306551
+refinery_Zhongjie Refinery,lng_lng_terminal_4,0.0,0.0,33.02529270918032,0.5385499917478034
+refinery_Zhongjie Refinery,lng_lng_terminal_5,0.0,0.0,105.70404202912613,0.5762661876051575
+refinery_Zhongjie Refinery,lng_lng_terminal_6,0.0,0.0,28.80005202237856,0.5119952834430084
+refinery_Zhongjie Refinery,lng_lng_terminal_8,0.0,0.0,461.80425617315035,0.653262404225911
+refinery_Zhongjie Refinery,lng_lng_terminal_9,0.0,0.0,424.9711088699602,0.6481177747133978
+refinery_Zhongjie Refinery,lng_lng_terminal_53,0.0,0.0,500.8364060356732,0.6510873278463751
+refinery_Zhongjie Refinery,lng_lng_terminal_56,0.0,0.0,166.64372638070682,0.644455136228551
+refinery_Zhongjie Refinery,lng_lng_terminal_60,0.0,0.0,496.554843639204,0.6506534239651082
+refinery_Zhongjie Refinery,lng_lng_terminal_61,0.0,0.0,48.295771526991146,0.5309188699595634
+refinery_Zhongjie Refinery,lng_lng_terminal_63,0.0,0.0,123.52340514672969,0.6161831001080622
+refinery_Zhongjie Refinery,lng_lng_terminal_64,0.0,0.0,293.9703872302323,0.6332905615904806
+refinery_Zhongjie Refinery,lng_lng_terminal_68,0.0,0.0,424.77756741173863,0.6480692434241658
+refinery_Zhongjie Refinery,lng_lng_terminal_69,0.0,0.0,31.714505478647112,0.5316414218076019
+refinery_Zhongjie Refinery,lng_lng_terminal_70,0.0,0.0,495.4997545678484,0.6508392924595816
+refinery_Zhongjie Refinery,lng_lng_terminal_79,0.0,0.0,57.15379252946212,0.5551482703997475
+refinery_Zhongjie Refinery,lng_lng_terminal_80,0.0,0.0,495.97567098002185,0.6507562801318125
+refinery_Zhongjie Refinery,lng_lng_terminal_81,0.0,0.0,106.7846492063383,0.5791571295328353
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,airport_北京,0.0,0.0,236.66040935507078,0.6318966206993526
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,airport_天津,2.546585164964199e-11,1.0186340659856796e-10,104.07425420554294,0.5717911743860129
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_1,0.0,0.0,619.070100552039,0.8047911307176507
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_2,0.0,0.0,521.4749054227536,0.6779173770495798
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_3,0.0,0.0,80.15327504068377,0.6015732206426334
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_4,0.0,0.0,55.97014515957728,0.5500111201038961
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_5,0.0,0.0,128.64889447952308,0.6246069454111992
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_6,0.0,0.0,14.08600074000497,0.2690426141340949
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_8,0.0,0.0,447.0902048907767,0.6521836197663448
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_9,0.0,0.0,410.25705758758653,0.6437872013439694
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_53,0.0,0.0,486.12235475329953,0.6521977619365603
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_56,0.0,0.0,151.92967509833326,0.64567505524372
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_60,0.0,0.0,519.4996960896011,0.6753496049164815
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_61,0.0,0.0,33.581720244617564,0.5411211095638288
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_63,0.0,0.0,146.46825759712667,0.6432629997244441
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_64,0.0,0.0,316.91523968062927,0.6387185171411119
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_68,0.0,0.0,410.06351612936504,0.643721583381088
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_69,0.0,0.0,54.65935792904406,0.544008281236796
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_70,0.0,0.0,480.78570328547477,0.6527352917482037
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_79,0.0,0.0,80.09864497985907,0.6015832826433457
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_80,0.0,0.0,518.9205234304189,0.6745966804595447
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_lng_terminal_81,0.0,0.0,129.72950165673527,0.6262085799825023
+steel_Chengde Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,136.20702953718668,0.6345364149259857
+steel_Chengde Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,295.0744552083599,0.632736977951534
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,579.771381789361,0.7537027963261694
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,444.1203794598943,0.6518083281329025
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,296.93265758489025,0.631755728143642
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,312.8604408049302,0.6368893097944726
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,285.1025957687561,0.6369410486632845
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,364.9446232604609,0.6478777535040606
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,788.4902450342258,1.0250373185444936
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,761.1156801080425,0.9894503841404554
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,804.1712010193735,1.0454225613251855
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,501.17218767926187,0.6515238439830404
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,442.14517012674173,0.6515294219556607
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,382.82423282554623,0.6453952719796262
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,265.3525804675552,0.6399844585971516
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,326.98061392916844,0.6425486007175268
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,760.922138649821,0.9891987802447674
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,314.24754324720107,0.6375335635054163
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,808.9214895248755,1.0515979363823382
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,297.1575357378379,0.6316327621295621
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,441.56599746755955,0.6514432025506043
+steel_Chengde Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,284.5998927445058,0.63710559462197
+steel_Chengde Jianlong Special Steel Co Ltd,airport_北京,350000.0,1400000.0,104.5192763061155,0.57302680860174
+steel_Chengde Jianlong Special Steel Co Ltd,airport_天津,0.0,0.0,214.07719965968587,0.6151091316392951
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,618.4251300568877,0.803952669073954
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,482.774127727421,0.6525549824278624
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,205.6708412995932,0.6065155835901053
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,221.59862451963315,0.621719844193299
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,193.84077948345907,0.6125639492047342
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,273.6828069751639,0.6395569639765433
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,706.6870111259356,0.9186931144637163
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,669.8538638227454,0.8708100229695691
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,745.7191609884585,0.9694349092849961
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,409.9103713939648,0.643669502174087
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,480.7989183942684,0.6527341717166565
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,291.56241654024916,0.6344218147440881
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,174.09076418225817,0.6395468177818888
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,282.88751919198074,0.6376319554901682
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,669.660322364524,0.8705584190738812
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,222.98572696190402,0.62282777955858
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,740.3825095206337,0.9624972623768238
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,205.89571945254085,0.6067620277722814
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,480.21974573508624,0.6527822754766288
+steel_Chengde Jianlong Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,193.33807645920876,0.6135023199328937
+steel_Hbis Laoting Steel Co Ltd,airport_北京,0.0,0.0,236.38594014424174,0.6317476984114669
+steel_Hbis Laoting Steel Co Ltd,airport_天津,0.0,0.0,148.12841316864882,0.6441602914985101
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,477.8605279447572,0.6529574257423939
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,342.2095256152905,0.646417495105835
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,108.3332884103886,0.5831943291421673
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,135.20352320486762,0.6333890804176758
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,77.56156848803994,0.6014193380110157
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,184.5057871660032,0.627845431819818
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,617.5282162556568,0.802786681132354
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,580.6950689524667,0.7549035896382068
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,656.5603661181798,0.8535284759536337
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,320.70978001922515,0.6402813930693116
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,340.23431628213797,0.6460465887358272
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,202.36182516550946,0.6027839862355994
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,61.112939147337606,0.5703767072418175
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,137.6498598731662,0.6360942689593033
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,580.5015274942452,0.7546519857425188
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,133.8927359743344,0.6318115515755288
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,651.223714650355,0.8465908290454615
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,108.26953332461161,0.5830305852572565
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,339.6551436229558,0.6459304340949872
+steel_Hbis Laoting Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,77.05886546378963,0.6012401553792251
+steel_Hebei Anfeng Iron and Steel Co Ltd,airport_北京,0.0,0.0,216.75575060016934,0.6175801041166276
+steel_Hebei Anfeng Iron and Steel Co Ltd,airport_天津,0.0,0.0,162.2981112867363,0.6459869124429497
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,461.2970785999597,0.6532468359053148
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,325.6460762704929,0.642099039621936
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,136.24398606029268,0.6345776685168723
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,163.1142208547717,0.6457741358375878
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,97.62595766872123,0.5689551059340076
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,212.41648481590727,0.6135122599224359
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,645.438913905561,0.8390705880772292
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,608.6057666023709,0.7911874965830821
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,684.4710637680839,0.8898123828985091
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,348.6204776691292,0.647352532357606
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,323.6708669373404,0.6414009704545779
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,230.27252281541354,0.6280791966400086
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,84.85979573847338,0.5985551416783546
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,121.08641052836865,0.6116986771518627
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,608.4122251441494,0.7909358926873943
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,161.8034336242385,0.6460990262713285
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,679.1344123002591,0.8828747359903368
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,136.1802309745157,0.6345064559759452
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,323.09169427815823,0.6411888848437153
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,96.7196821243223,0.5720882649076238
+steel_Hebei Donghai Special Steel Co Ltd,airport_北京,0.0,0.0,182.3377821328438,0.6307460768680845
+steel_Hebei Donghai Special Steel Co Ltd,airport_天津,0.0,0.0,118.11013142044844,0.6058029958996316
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,518.3991736173373,0.6739189257025385
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,382.7481712878706,0.6454126035152885
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,109.70377306035577,0.5866630756792883
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,125.63155628039573,0.6198132752299548
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,83.59577355470411,0.5997834358354033
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,177.71573873592644,0.6361140789787391
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,610.719942886698,0.7939359257527075
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,573.8867955835079,0.7460528342585604
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,649.752092749221,0.8446777205739873
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,313.94330315472746,0.6373939033785132
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,380.772961954718,0.6458424202581392
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,195.59534830101177,0.6091858088664498
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,67.14714421400178,0.5877976503476157
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,178.1885055457463,0.6356160142508318
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,573.6932541252864,0.7458012303628724
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,127.01865872266661,0.6220757702695298
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,644.4154412813962,0.837740073665815
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,109.92865121330344,0.5872229226521092
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,380.19378929553585,0.6459610543694375
+steel_Hebei Donghai Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,83.0930705304538,0.6001866685257167
+steel_Hebei Huaxi Special Steel Co Ltd,airport_北京,0.0,0.0,236.77866710489627,0.6319603673397605
+steel_Hebei Huaxi Special Steel Co Ltd,airport_天津,0.0,0.0,148.52114012930335,0.6443515933622753
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,478.2532549054117,0.6529305862522906
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,342.602252575945,0.646486591922844
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,108.72601537104313,0.5841983191624818
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,135.59625016552215,0.6338443318245592
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,77.95429544869447,0.6015255616455306
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,184.89851412665772,0.6272938421562013
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,617.9209432163115,0.8032972261812049
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,581.0877959131213,0.7554141346870578
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,656.9530930788344,0.8540390210024847
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,321.10250697987965,0.6404349251837483
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,340.62704324279247,0.6461234427324168
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,202.754552126164,0.603237174534655
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,61.505666107992134,0.5717232163562505
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,138.04258683382074,0.6364995617632337
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,580.8942544548999,0.7551625307913699
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,134.28546293498894,0.632293571619638
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,651.6164416110096,0.8471013740943124
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,108.66226028526614,0.5840358772713063
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,340.0478705836103,0.6460095626587581
+steel_Hebei Huaxi Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,77.45159242444416,0.6013842846196585
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,160.9234200545487,0.6462670192739285
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,169.3668253185276,0.6429948081315336
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,524.7445625241206,0.6821679312813569
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,389.09356019465383,0.6437678237760003
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,160.96046695843492,0.6462607590487534
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,176.88825017847486,0.6369578721322234
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,152.2184079938992,0.6457594085128475
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,228.9724326340056,0.6272123024862187
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,661.9766367847773,0.8605696278202105
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,625.1434894815872,0.8126865363260634
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,701.0087866473002,0.9113114226414903
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,365.1999970528065,0.647864800153254
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,387.1183508615013,0.6443229752327626
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,246.85204219909087,0.6364664259148805
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,132.78542781224328,0.6304092922391028
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,184.53389445252952,0.6278062212634921
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,624.9499480233657,0.8124349324303753
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,178.27535262074574,0.635523256336783
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,695.6721351794754,0.9043737757333181
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,161.18534511138256,0.6462212274677741
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,386.5391782023191,0.6444783601017278
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,151.7157049696489,0.6456097472557448
+steel_Hebei Rongxin Steel Co Ltd,airport_北京,0.0,0.0,206.03528007449364,0.6069145146391942
+steel_Hebei Rongxin Steel Co Ltd,airport_天津,0.0,0.0,157.43116511613508,0.6465366884568893
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,477.75943676537133,0.6529641846879453
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,342.10843443590466,0.6463994594083283
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,148.58571762487932,0.6443822819894008
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,164.95258997608235,0.6451679573686192
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,117.81399770253066,0.6051911917398021
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,217.0367724316131,0.6178318623839565
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,650.0409765823847,0.8450532695571001
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,613.2078292791946,0.797170178062953
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,689.0731264449076,0.89579506437838
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,353.2643368504141,0.6477731542096765
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,340.1332251027521,0.6460265562759103
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,234.9163819966984,0.6309272748103838
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,101.36536836182833,0.5640476350856345
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,137.54876869378032,0.6359886452904466
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,613.0142878209731,0.7969185741672651
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,166.33969241835322,0.6445942527108551
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,683.7364749770828,0.8888574174702077
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,148.52196253910233,0.6443519855525096
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,339.5540524435699,0.6459098161425985
+steel_Hebei Rongxin Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,117.31129467828035,0.6041421800254464
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,airport_北京,0.0,0.0,209.82743724499343,0.6109237179887536
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,airport_天津,0.0,0.0,94.6295007411623,0.5787131398555899
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_1,0.0,0.0,519.0842487458497,0.6748095233696045
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_2,0.0,0.0,383.433246416383,0.6452544148119453
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_3,0.0,0.0,60.43932521780597,0.567998188163414
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_4,0.0,0.0,87.309560012285,0.5953012223110076
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_5,0.0,0.0,29.66760529545731,0.518461379433181
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_6,0.0,0.0,136.61182397342054,0.6349844048990826
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_8,0.0,0.0,569.6342530630742,0.7405245289819964
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_9,0.0,0.0,532.8011057598841,0.6926414374878492
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_53,0.0,0.0,608.6664029255971,0.7912663238032763
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_56,0.0,0.0,272.8158168266425,0.6396596915707905
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_60,0.0,0.0,381.4580370832304,0.6456977632226737
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_61,0.0,0.0,154.4678619729268,0.6462681382333335
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_63,0.0,0.0,13.218975954754985,0.2524824407358202
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_64,0.0,0.0,178.87358067425868,0.6348736570849274
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_68,0.0,0.0,532.6075643016626,0.6923898335921614
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_69,0.0,0.0,85.9987727817518,0.5971856099657595
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_70,0.0,0.0,603.3297514577723,0.784328676895104
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_79,0.0,0.0,60.37557013202899,0.5677685570051558
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_80,0.0,0.0,380.87886442404823,0.6458203651018111
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_lng_terminal_81,0.0,0.0,29.164902271207005,0.5147784326173634
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,235.80780633495772,0.6314295766512527
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,147.5502793593648,0.6438640823320999
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,477.2823941354732,0.6529952523242575
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,341.6313918060065,0.6463129711650778
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,107.75515460110459,0.581701760808251
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,134.6253893955836,0.6327043108260602
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,76.98343467875593,0.6012090824830152
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,183.92765335671916,0.6286428341230516
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,616.9500824463729,0.8020351071802847
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,580.1169351431828,0.7541520156861375
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,655.9822323088958,0.8527769020015646
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,320.13164620994115,0.6400525718303535
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,339.65618247285397,0.645930645442111
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,201.78369135622543,0.602111795633782
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,60.534805338053594,0.5683406260360747
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,137.07172606388218,0.635483043484403
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,579.9233936849613,0.7539004117904498
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,133.3146021650504,0.6310873758423461
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,650.645580841071,0.8458392550933923
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,107.6913995153276,0.581536100256869
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,339.0770098136718,0.645811142408314
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,76.48073165450562,0.6009740989652697
+steel_Hebei Xinda Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,203.6660537811376,0.6042783049844295
+steel_Hebei Xinda Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,155.06193882277904,0.6463585716883271
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,475.39021047201527,0.6531050326837619
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,339.7392081425486,0.6459475015665452
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,146.2164913315233,0.643114408148654
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,162.58336368272631,0.645916478392225
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,115.44477140917463,0.6001322491666009
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,214.66754613825705,0.6156648231784474
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,647.6717502890288,0.8419732753757374
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,610.8386029858386,0.7940901838815903
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,686.7039001515517,0.8927150701970172
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,350.89511055705805,0.647585504941159
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,337.763998809396,0.6455278012552573
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,232.54715570334236,0.6295227307446123
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,98.99614206847231,0.5639186895744286
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,135.17954240042428,0.6333610219101884
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,610.6450615276171,0.7938385799859022
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,163.9704661249972,0.6455136644325069
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,681.3672486837269,0.885777423288845
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,146.1527362457463,0.6430762571000339
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,337.18482615021384,0.6453973392110202
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,114.94206838492433,0.5990213045566595
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,207.81503585502622,0.6088283699572934
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,159.21092089666766,0.6464785007007857
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,479.53919254590386,0.6528362275657984
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,343.8881902164372,0.6467020479274915
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,150.3654734054119,0.6451427165211032
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,166.73234575661493,0.6444136820451544
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,119.59375348306324,0.6087994658847584
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,218.81652821214567,0.6193932782489485
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,651.8207323629173,0.8473669520717925
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,614.9875850597272,0.7994838605776453
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,690.8528822254402,0.8981087468930723
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,355.04409263094664,0.6478771949107468
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,341.9129808832846,0.6463642986973578
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,236.69613777723097,0.6319159065827874
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,103.14512414236091,0.5691781854744404
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,139.3285244743129,0.6377705196524464
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,614.7940436015057,0.7992322566819574
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,168.1194481988858,0.6437116048007197
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,685.5162307576154,0.8911710999849001
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,150.30171831963492,0.6451183204452996
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,341.3338082241024,0.646257866422927
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,119.09105045881293,0.6077969779782942
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,airport_北京,0.0,0.0,197.71804890603445,0.6048849025860477
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,airport_天津,0.0,0.0,67.01241640106596,0.5874849899128567
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,553.2060911397393,0.7191679184816612
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,417.5550888102726,0.6460974920946994
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,58.606058040973295,0.5610837584690088
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,73.759527258932,0.5988598996354977
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,58.511041795201606,0.5607078021389208
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,125.84370971446273,0.6201657985164474
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,558.8479138652344,0.7265022880248048
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,522.0147665620443,0.6786191965306576
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,597.8800637277574,0.7772440828460846
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,262.0712741332637,0.6398099413071755
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,415.57987947712,0.6455037538572832
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,143.72331927954804,0.6414650129692905
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,42.06241245449928,0.5536372697957191
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,212.99542306814826,0.6140745784952965
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,521.8212251038228,0.6783675926349696
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,75.14136523214549,0.600111173709346
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,592.5434122599326,0.7703064359379124
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,58.830936193920955,0.5619666410160915
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,415.00070681793784,0.645325219112062
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,58.0083387709513,0.5586898820897763
+steel_Jingye Iron and Steel Co Ltd,airport_北京,0.0,0.0,300.07265931610345,0.630043569192781
+steel_Jingye Iron and Steel Co Ltd,airport_天津,0.0,0.0,321.1149984246404,0.6404397832624213
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,909.8122717006318,1.1827559532108214
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,779.2514284168823,1.013026856941947
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,358.0163359552004,0.6479803253847869
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,335.7419637318087,0.6450577383820555
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,408.44324895303953,0.6431634342225668
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,334.3050608730784,0.6446988505163189
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,737.8323760393694,0.9591820888511802
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,700.9992287361792,0.911298997357033
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,776.8645259018923,1.00992388367246
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,463.8240378347316,0.6533090917173049
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,777.2762190837298,1.0104590848088486
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,352.69938071355125,0.6477335047901717
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,404.37810215557397,0.6416937375267756
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,574.691762674758,0.7470992914771855
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,700.8056872779578,0.9110473934613451
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,334.45371240256054,0.6447369359499445
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,771.5278744340675,1.0029862367642879
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,358.0418450036605,0.6479808281450515
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,776.6970464245476,1.009706160351912
+steel_Jingye Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,409.5238561302517,0.6435374309453316
+steel_Lingyuan Iron and Steel Co Ltd,airport_北京,0.0,0.0,303.3073705173503,0.6319297288117149
+steel_Lingyuan Iron and Steel Co Ltd,airport_天津,0.0,0.0,346.10004830223346,0.6470339567139988
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,384.5482837517573,0.6449869088242159
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,248.89728142229052,0.6371582405323325
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,316.85635162226765,0.6386931280232929
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,343.72658641674667,0.6466758800517419
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,277.5019510321456,0.6389433695144728
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,393.02885037788224,0.6425454752135773
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,593.2671469966222,0.7712472910956089
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,598.7968244309812,0.7784358717602757
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,608.9481029817698,0.7916325338763007
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,529.2328432311042,0.6880026962004354
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,246.922072089138,0.6364913588647212
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,410.8848883773885,0.6439985129659909
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,269.63600235921666,0.6399206474099045
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,190.12573053053137,0.6191883616963832
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,593.5548681744312,0.7716213286267606
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,342.41579918621346,0.6464539794087021
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,613.6983914872718,0.7978079089334533
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,316.7925965364907,0.6386656014297076
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,246.34289942995582,0.6362825003677719
+steel_Lingyuan Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,276.3940908059486,0.6391483949765305
+steel_Qian an Jiujiang Wire Co Ltd,airport_北京,0.0,0.0,203.6266204689505,0.6042335731785083
+steel_Qian an Jiujiang Wire Co Ltd,airport_天津,0.0,0.0,155.02250551059194,0.6463531376025347
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_1,0.0,0.0,475.35077715982817,0.6531070920081611
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_2,0.0,0.0,339.6997748303615,0.6459395042903099
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_3,0.0,0.0,146.1770580193362,0.6430908361876589
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_4,0.0,0.0,162.54393037053921,0.6459264672305514
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_5,0.0,0.0,115.4053380969875,0.6000455788020177
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_6,0.0,0.0,214.62811282606995,0.6156279002276138
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_8,0.0,0.0,647.6323169768416,0.8419220120698941
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_9,0.0,0.0,610.7991696736515,0.794038920575747
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_53,0.0,0.0,686.6644668393645,0.892663806891174
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_56,0.0,0.0,350.85567724487095,0.6475819068067501
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_60,0.0,0.0,337.7245654972089,0.6455190250885593
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_61,0.0,0.0,232.50772239115526,0.6294984987338426
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_63,0.0,0.0,98.95670875628518,0.564068673139415
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_64,0.0,0.0,135.14010908823718,0.6333148183296482
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_68,0.0,0.0,610.60562821543,0.793787316680059
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_69,0.0,0.0,163.9310328128101,0.6455264975691027
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_70,0.0,0.0,681.3278153715397,0.8857261599830016
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_79,0.0,0.0,146.1133029335592,0.6430525544071805
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_80,0.0,0.0,337.14539283802674,0.6453883346573595
+steel_Qian an Jiujiang Wire Co Ltd,lng_lng_terminal_81,0.0,0.0,114.9026350727372,0.598933603383321
+steel_Qinhuangdao Baigong Steel Co Ltd,airport_北京,0.0,0.0,217.37797083703774,0.6181356201707288
+steel_Qinhuangdao Baigong Steel Co Ltd,airport_天津,0.0,0.0,162.9203315236047,0.6458278234757656
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,461.91929883682815,0.6532657208293979
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,326.26829650736136,0.6423108608974236
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,136.86620629716109,0.6352615725561175
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,163.7364410916401,0.6455886412761894
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,98.24817790558964,0.5667126758351969
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,213.03870505277567,0.6141163755982514
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,646.0611341424293,0.8398794743851582
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,609.2279868392392,0.791996382891011
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,685.0932840049522,0.890621269206438
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,349.2426979059976,0.6474214022582918
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,324.29308717420884,0.6416250818822568
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,230.89474305228194,0.6284833253283396
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,85.4820159753418,0.5978378375251706
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,121.70863076523706,0.6128730114034748
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,609.0344453810177,0.791744778995323
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,162.4256538611069,0.6459559428236658
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,679.7566325371274,0.8836836222982657
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,136.8024512113841,0.6351924228398284
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,323.71391451502666,0.6414166000008861
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,97.34190236119072,0.5699541041817225
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,airport_北京,0.0,0.0,211.93980162195433,0.6130447321814007
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,airport_天津,0.0,0.0,157.48216230852128,0.646537313350321
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,456.48112962174474,0.653022097838653
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,320.83012729227795,0.6403286053603042
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,131.42803708207768,0.6286033518605895
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,158.2982718765567,0.6465289145310542
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,92.81000869050622,0.5837971516350379
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,207.60053583769226,0.6086007297000503
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,640.622964927346,0.8328098544055498
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,603.7898176241558,0.7849267629114026
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,679.6551147898689,0.8835516492268296
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,343.8045286909142,0.6466885335453829
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,318.85491795912543,0.6395354111192485
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,225.45657383719853,0.6247155542408794
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,80.04384676025838,0.6015927999546736
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,116.27046155015364,0.6019284587550302
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,603.5962761659343,0.7846751590157146
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,156.9874846460235,0.6465255453747707
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,674.3184633220441,0.8766140023186574
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,131.3642819963007,0.6285161731751718
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,318.27574529994325,0.639295432848624
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,91.9037331461073,0.5860923118665045
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,airport_北京,0.0,0.0,315.88298658990686,0.6382684456388683
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,airport_天津,0.0,0.0,442.74773075440237,0.6516169868478083
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,977.805863474046,1.2711476225162597
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,842.1548611445792,1.094801319487953
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,481.77661260575434,0.6526484019344869
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,474.60612143426494,0.6531442285073131
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,537.1198355447558,0.6982557862081826
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,511.1269982684256,0.6644650977489532
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,922.2503116226678,1.1989254051094682
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,885.4171643194777,1.151042313615321
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,961.2824614851908,1.249667199930748
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,648.2419734180302,0.8427145654434393
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,840.1796518114267,1.0922335473548548
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,530.439662902612,0.6895715617733956
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,526.0108344853359,0.6838140848309366
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,637.5951954024549,0.8288737540231914
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,885.2236228612562,1.150790709719633
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,473.3778243640457,0.6531982144204161
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,955.945810017366,1.2427295530225757
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,481.98734932967955,0.6526291633815511
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,839.6004791522445,1.091480622897918
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,537.9345977650801,0.6993149770946041
+steel_Shougang Jingtang United Iron and Steel Co Ltd,airport_北京,0.0,0.0,232.73463040358226,0.6296375522353665
+steel_Shougang Jingtang United Iron and Steel Co Ltd,airport_天津,0.0,0.0,101.73675242642715,0.5651318332455233
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,530.2089008868415,0.6892715711528941
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,394.55789855737476,0.6420287582364911
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,80.16940271973768,0.6015701406258223
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,73.75235176577576,0.5988524453054498
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,49.39768279738902,0.5240899708859056
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,123.05461572691131,0.6153444492165298
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,556.077044816565,0.7229001582615345
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,519.2438975133749,0.6750170667673874
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,595.109194679088,0.7736419530828144
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,259.2586085801333,0.6395060860784789
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,392.58268922422224,0.6426918418145887
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,140.9106537264176,0.6392162398828589
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,32.94905345668669,0.5381809230512141
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,189.99823281525045,0.6194029687891828
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,519.0503560551534,0.6747654628716995
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,72.44156453524255,0.5973248747935705
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,589.7725432112632,0.7667043061746421
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,80.1056476339607,0.6015820248820004
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,392.00351656504,0.642878874637356
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,48.894979773138715,0.5273102093318122
+steel_Shougang Qian an Iron and Steel Co Ltd,airport_北京,0.0,0.0,206.02467583234164,0.6069029405288466
+steel_Shougang Qian an Iron and Steel Co Ltd,airport_天津,0.0,0.0,157.42056087398308,0.6465365415337966
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,477.74883252321933,0.6529648901331169
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,342.09783019375266,0.6463975615811414
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,148.57511338272732,0.6443772575044169
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,164.94198573393035,0.6451719579140748
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,117.80339346037866,0.6051691990948045
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,217.0261681894611,0.617822388198411
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,650.0303723402327,0.8450394840423026
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,613.1972250370426,0.7971563925481554
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,689.0625222027556,0.8957812788635824
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,353.2537326082621,0.6477724393813958
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,340.1226208606001,0.6460244489927427
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,234.9057777545464,0.6309212134196075
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,101.35476411967633,0.56401657232771
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,137.53816445162832,0.6359775348045502
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,613.0036835788211,0.7969047886524674
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,166.32908817620122,0.6445990181331606
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,683.7258707349308,0.8888436319554102
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,148.51135829695033,0.6443469259116587
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,339.5434482014179,0.6459076474425596
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,117.30069043612835,0.6041199101796497
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,192.4975935782978,0.6150418554727185
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,142.23339181615424,0.6403250314567459
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,473.0829188535984,0.6532098284569544
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,337.43191652413174,0.6454534080411312
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,123.59441145251121,0.6163091318109835
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,149.7548166761015,0.6449003636840204
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,92.13803185321969,0.5855140604455864
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,199.7669102081258,0.6005113849399952
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,632.7893392977795,0.8226261410871134
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,595.9561919945894,0.7747430495929664
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,671.8214891603025,0.8733679359083932
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,335.97090306134777,0.6451130125015643
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,335.45670719097916,0.6449881338904534
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,217.62294820763208,0.6183524231173986
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,76.37406218946022,0.6009179972491199
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,132.87225078200743,0.6305215456876674
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,595.7626505363679,0.7744914456972783
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,149.15385901645703,0.6446429287879181
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,666.4848376924776,0.866430289000221
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,123.53065636673423,0.6161959825849201
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,334.877534531797,0.6448443086439947
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,91.23175630882076,0.5876922934116382
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,airport_北京,0.0,0.0,179.77168411170703,0.6338634910986538
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,airport_天津,0.0,0.0,115.54403339931169,0.6003500588656433
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_1,0.0,0.0,515.8330755962005,0.6705829982750607
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_2,0.0,0.0,380.1820732667338,0.6459634195932809
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_3,0.0,0.0,107.13767503921902,0.5800884185885544
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_4,0.0,0.0,123.06545825925897,0.6153639752953268
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_5,0.0,0.0,81.02967553356736,0.6013334696710042
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_6,0.0,0.0,175.14964071478968,0.6386147411557577
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_8,0.0,0.0,608.1538448655614,0.7905999983252299
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_9,0.0,0.0,571.3206975623713,0.7427169068310827
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_53,0.0,0.0,647.1859947280843,0.8413417931465097
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_56,0.0,0.0,311.3772051335907,0.6361791190968953
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_60,0.0,0.0,378.20686393358125,0.6463425505285203
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_61,0.0,0.0,193.029250279875,0.6140722742410988
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_63,0.0,0.0,64.58104619286503,0.5812435955045117
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_64,0.0,0.0,175.62240752460954,0.6381797610585576
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_68,0.0,0.0,571.1271561041498,0.7424653029353947
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_69,0.0,0.0,124.45256070152986,0.6178115612581776
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_70,0.0,0.0,641.8493432602595,0.8344041462383374
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_79,0.0,0.0,107.36255319216669,0.5806782726493055
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_80,0.0,0.0,377.62769127439907,0.6464463225016723
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_lng_terminal_81,0.0,0.0,80.52697250931705,0.6014890251960541
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,airport_北京,0.0,0.0,175.1610800013491,0.6386043533828482
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,airport_天津,0.0,0.0,110.93342928895375,0.589692251090431
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,511.22247148584256,0.6645892129315953
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,375.5714691563759,0.6467876467415602
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,102.52707092886108,0.5674151745121165
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,118.45485414890103,0.6065094397636158
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,76.41907142320942,0.6009419358229673
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,170.53903660443174,0.6422474620011799
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,603.5432407552034,0.7846062129817645
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,566.7100934520133,0.7367231214876173
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,642.5753906177264,0.8353480078030444
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,306.76660102323274,0.6338310261669016
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,373.5962598232233,0.6470757085940969
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,188.41864616951705,0.6219916567568446
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,59.970442082507084,0.5662911429912594
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,171.0118034142516,0.6419258284150026
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,566.5165519937918,0.7364715175919294
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,119.84195659117192,0.609289585498001
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,637.2387391499016,0.828410360894872
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,102.75194908180875,0.5680589434279556
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,373.01708716404113,0.6471527772088187
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,75.91636839895911,0.6006524805390767
+steel_Tangshan Ganglu Iron and Steel Co Ltd,airport_北京,0.0,0.0,160.92342005454972,0.6462670192739283
+steel_Tangshan Ganglu Iron and Steel Co Ltd,airport_天津,0.0,0.0,169.3668253185286,0.642994808131533
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,524.7445625241216,0.6821679312813581
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,389.09356019465486,0.6437678237760001
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,160.96046695843594,0.6462607590487532
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,176.8882501784759,0.6369578721322223
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,152.21840799390023,0.6457594085128477
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,228.97243263400662,0.6272123024862194
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,661.9766367847783,0.8605696278202117
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,625.1434894815882,0.8126865363260646
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,701.0087866473012,0.9113114226414916
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,365.19999705280753,0.647864800153254
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,387.11835086150234,0.6443229752327623
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,246.8520421990919,0.6364664259148809
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,132.7854278122443,0.6304092922391041
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,184.53389445253055,0.6278062212634907
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,624.9499480233667,0.8124349324303768
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,178.27535262074676,0.6355232563367819
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,695.6721351794764,0.9043737757333193
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,161.18534511138358,0.646221227467774
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,386.5391782023201,0.6444783601017274
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,151.71570496964992,0.6456097472557452
+steel_Tangshan Guotang Steel Co Ltd,airport_北京,0.0,0.0,238.02881712534526,0.6326188621628377
+steel_Tangshan Guotang Steel Co Ltd,airport_天津,0.0,0.0,149.77129014975233,0.6449071560468154
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,479.5034049258607,0.6528389877859282
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,343.852402596394,0.6466962754904553
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,109.97616539149212,0.5873408754005978
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,136.84640018597113,0.6352401131846304
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,79.20444546914345,0.6016665296518267
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,186.1486641471067,0.6254845917487145
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,619.1710932367604,0.8049224212077886
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,582.3379459335703,0.7570393297136414
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,658.2032430992833,0.8556642160290684
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,322.35265700032863,0.6409133878253255
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,341.87719326324145,0.6463578193799104
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,204.00470214661297,0.6046613038223877
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,62.75581612844112,0.5758123291894209
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,139.29273685426972,0.6377363121558381
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,582.1444044753488,0.7567877258179534
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,135.53561295543793,0.6337745643752278
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,652.8665916314585,0.8487265691208962
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,109.91241030571513,0.5871825780873554
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,341.2980206040593,0.6462511798333691
+steel_Tangshan Guotang Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,78.70174244489314,0.6016459158315955
+steel_Tangshan Medium Thick Plate Co Ltd,airport_北京,0.0,0.0,235.01788140343896,0.6309851895222589
+steel_Tangshan Medium Thick Plate Co Ltd,airport_天津,0.0,0.0,146.76035442784604,0.6434312638818758
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_1,0.0,0.0,476.49246920395444,0.6530436941468281
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_2,0.0,0.0,340.8414668744877,0.6461647530423932
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_3,0.0,0.0,106.96522966958584,0.5796343139756555
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_4,0.0,0.0,133.83546446406484,0.6317405883492208
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_5,0.0,0.0,76.19350974723717,0.6008180591081818
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_6,0.0,0.0,183.1377284252004,0.6297042561953394
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_8,0.0,0.0,616.1601575148542,0.8010082047693105
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_9,0.0,0.0,579.3270102116641,0.7531251132751633
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_53,0.0,0.0,655.1923073773771,0.8517499995905903
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_56,0.0,0.0,319.34172127842237,0.6397345218569925
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_60,0.0,0.0,338.8662575413352,0.6457668246484541
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_61,0.0,0.0,200.99376642470668,0.6011836315642862
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_63,0.0,0.0,59.74488040653484,0.5654549116393791
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_64,0.0,0.0,136.28180113236343,0.6346198069684728
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_68,0.0,0.0,579.1334687534426,0.7528735093794754
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_69,0.0,0.0,132.52467723353163,0.6300698113428143
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_70,0.0,0.0,649.8556559095523,0.8448123526824179
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_79,0.0,0.0,106.90147458380885,0.5794660346142216
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_80,0.0,0.0,338.287084882153,0.6456427465854259
+steel_Tangshan Medium Thick Plate Co Ltd,lng_lng_terminal_81,0.0,0.0,75.69080672298686,0.6005068328412513
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,176.5324943672095,0.6373096930558878
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,112.30484365481414,0.5929778923528377
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,512.593885851703,0.666372051607214
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,376.9428835222363,0.6465646934897596
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,103.89848529472147,0.5713003030067424
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,119.82626851476142,0.6092587015405794
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,77.7904857890698,0.6014848547811118
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,171.91045097029215,0.6412824159833559
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,604.9146551210638,0.7863890516573829
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,568.0815078178737,0.7385059601632358
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,643.9468049835867,0.8371308464786629
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,308.13801538909314,0.6345516727610903
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,374.9676741890837,0.6468798436468473
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,189.79006053537745,0.619751552361517
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,61.34185644836748,0.5711651761721019
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,172.383217780112,0.6409270677190548
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,567.8879663596522,0.7382543562675479
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,121.21337095703231,0.6119399280797198
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,638.6101535157619,0.8301931995704904
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,104.12336344766913,0.5719280350638465
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,374.38850152990153,0.6469648551186201
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,77.2877827648195,0.6013277670138711
+steel_Tangshan Songting Iron and Steel Co Ltd,airport_北京,0.0,0.0,201.56516793024252,0.6018561537604422
+steel_Tangshan Songting Iron and Steel Co Ltd,airport_天津,0.0,0.0,152.96105297188396,0.6459564574864938
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,473.2893246211202,0.6532017545381883
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,337.63832229165354,0.6454997768503402
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,144.1156054806282,0.6417459636219014
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,160.48247783183123,0.6463360502538669
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,113.34388555827954,0.5954021153482347
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,212.56666028736197,0.6136587037878327
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,645.5708644381336,0.8392421237695737
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,608.7377171349435,0.7913590322754266
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,684.6030143006566,0.8899839185908536
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,348.794224706163,0.6473721530003202
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,335.66311295850096,0.6450385796456466
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,230.44626985244727,0.6281927456915845
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,96.89525621757721,0.5714935894700598
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,133.0786565495292,0.6307868341514231
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,608.544175676722,0.7911074283797387
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,161.8695802741021,0.6460847717766736
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,679.2663628328318,0.8830462716826813
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,144.05185039485121,0.6417008475810845
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,335.0839402993188,0.6448959498449605
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,112.84118253402923,0.5942362524114091
+steel_Tangshan Wenfeng Special Steel Co Ltd,airport_北京,0.0,0.0,209.8274372449927,0.6109237179887528
+steel_Tangshan Wenfeng Special Steel Co Ltd,airport_天津,0.0,0.0,94.62950074116155,0.5787131398555921
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,519.084248745849,0.6748095233696036
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,383.43324641638225,0.6452544148119456
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,60.43932521780523,0.5679981881634113
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,87.30956001228425,0.5953012223110088
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,29.667605295456564,0.5184613794331756
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,136.6118239734198,0.6349844048990818
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,569.6342530630735,0.7405245289819956
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,532.8011057598834,0.6926414374878485
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,608.6664029255965,0.7912663238032754
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,272.81581682664176,0.6396596915707906
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,381.45803708322967,0.6456977632226737
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,154.46786197292607,0.6462681382333334
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,13.218975954754239,0.25248244073580595
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,178.87358067425794,0.6348736570849284
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,532.6075643016619,0.6923898335921604
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,85.99877278175104,0.5971856099657604
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,603.3297514577716,0.7843286768951032
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,60.375570132028244,0.567768557005153
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,380.8788644240475,0.6458203651018113
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,29.16490227120626,0.5147784326173578
+steel_Tianjin Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,168.97540075210745,0.643228448624563
+steel_Tianjin Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,38.23761321116346,0.5541896049682274
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,600.442238714967,0.780574910329457
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,464.79123638550016,0.6533227816171149
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,37.37840519961691,0.5529131435565215
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,39.5499645123903,0.5551475203043468
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,92.72162813861843,0.5840279165380815
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,88.85222847352584,0.5926608963452757
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,521.8746575631795,0.6784370548321333
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,485.0415102599894,0.6523204287020961
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,560.9068074257025,0.7291788496534133
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,225.05622132674782,0.6244171375475226
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,462.81602705234764,0.6532888510570153
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,106.70826647303211,0.578954777603193
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,81.87480384245079,0.6009626019982317
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,260.23157064337585,0.6396273058525392
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,484.84796880176793,0.6523416540913499
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,38.23917728185708,0.5541914600763603
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,555.5701559578777,0.722241202745241
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,37.58914192354211,0.5532737759637001
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,462.2368543931654,0.6532744636229979
+steel_Tianjin Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,93.79504970626543,0.5811236659927576
+steel_Tianjin New Tiangang United Special Steel Co Ltd,airport_北京,63176.43685049914,252705.74740199657,200.9530074885991,0.601135434976859
+steel_Tianjin New Tiangang United Special Steel Co Ltd,airport_天津,99858.39844219682,399433.5937687873,54.73063741521918,0.5443431922112173
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_1,0.0,0.0,560.2055841929632,0.7282672594508521
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_2,0.0,0.0,424.5545818634965,0.6480130502739252
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_3,0.0,0.0,46.32427905512651,0.54102824490044
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_4,0.0,0.0,62.25206227516645,0.5742006978614547
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_5,0.0,0.0,95.64285506863459,0.5756060473779812
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_6,0.0,0.0,114.33624473069719,0.5976650084546521
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_8,0.0,0.0,547.3404488814689,0.7115425835459096
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_9,0.0,0.0,510.50730157827877,0.6636594920517624
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_53,0.0,0.0,586.3725987439918,0.7622843783671893
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_56,0.0,0.0,250.56380914949818,0.6376662818180359
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_60,0.0,0.0,422.5793725303439,0.6475022648205455
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_61,0.0,0.0,132.2158542957825,0.6296631699191633
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_63,0.0,0.0,82.54970006568458,0.6005679548286952
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_64,0.0,0.0,219.99491612137217,0.6203957293093402
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_68,0.0,0.0,510.3137601200573,0.6634078881560745
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_69,0.0,0.0,63.63916471743734,0.5785207482554678
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_70,0.0,0.0,581.035947276167,0.7553467314590171
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_79,0.0,0.0,46.54915720807416,0.5400118055843248
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_80,0.0,0.0,422.0001998711617,0.6473480535653515
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_lng_terminal_81,0.0,0.0,96.31244932447225,0.5734447918235908
+steel_Tianjin Pipe Corporation,airport_北京,0.0,0.0,169.3278106306927,0.6430184533941034
+steel_Tianjin Pipe Corporation,airport_天津,0.0,0.0,38.59002308974874,0.5545645629355804
+steel_Tianjin Pipe Corporation,lng_lng_terminal_1,0.0,0.0,600.7946485935522,0.7810330431716179
+steel_Tianjin Pipe Corporation,lng_lng_terminal_2,0.0,0.0,465.1436462640854,0.6533263745598933
+steel_Tianjin Pipe Corporation,lng_lng_terminal_3,0.0,0.0,37.730815078202184,0.5534988457240304
+steel_Tianjin Pipe Corporation,lng_lng_terminal_4,0.0,0.0,39.902374390975574,0.555200588320042
+steel_Tianjin Pipe Corporation,lng_lng_terminal_5,0.0,0.0,93.0740380172037,0.58309882879002
+steel_Tianjin Pipe Corporation,lng_lng_terminal_6,0.0,0.0,89.20463835211112,0.5919936226131195
+steel_Tianjin Pipe Corporation,lng_lng_terminal_8,0.0,0.0,522.2270674417648,0.6788951876742942
+steel_Tianjin Pipe Corporation,lng_lng_terminal_9,0.0,0.0,485.3939201385747,0.6522812032655301
+steel_Tianjin Pipe Corporation,lng_lng_terminal_53,0.0,0.0,561.2592173042877,0.7296369824955741
+steel_Tianjin Pipe Corporation,lng_lng_terminal_56,0.0,0.0,225.40863120533308,0.624679970588842
+steel_Tianjin Pipe Corporation,lng_lng_terminal_60,0.0,0.0,463.1684369309329,0.6532966204994813
+steel_Tianjin Pipe Corporation,lng_lng_terminal_61,0.0,0.0,107.06067635161739,0.5798858471407526
+steel_Tianjin Pipe Corporation,lng_lng_terminal_63,0.0,0.0,82.22721372103607,0.6007674396325539
+steel_Tianjin Pipe Corporation,lng_lng_terminal_64,0.0,0.0,260.5839805219611,0.639667008363385
+steel_Tianjin Pipe Corporation,lng_lng_terminal_68,0.0,0.0,485.2003786803532,0.6523028378903146
+steel_Tianjin Pipe Corporation,lng_lng_terminal_69,0.0,0.0,38.59158716044236,0.5545660344127148
+steel_Tianjin Pipe Corporation,lng_lng_terminal_70,0.0,0.0,555.9225658364629,0.7226993355874018
+steel_Tianjin Pipe Corporation,lng_lng_terminal_79,0.0,0.0,37.941551802127385,0.5538077892017178
+steel_Tianjin Pipe Corporation,lng_lng_terminal_80,0.0,0.0,462.58926427175066,0.6532834577024631
+steel_Tianjin Pipe Corporation,lng_lng_terminal_81,0.0,0.0,94.14745958485071,0.5801219476467455
+steel_Tianjin Rockcheck Steel Group Co Ltd,airport_北京,0.0,0.0,171.38638727000074,0.6416627383359765
+steel_Tianjin Rockcheck Steel Group Co Ltd,airport_天津,0.0,0.0,40.64859972905678,0.5550276588110684
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,602.8532252328603,0.7837091928027183
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,467.2022229033935,0.6533324728718852
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,39.78939171751022,0.5551929884959682
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,41.96095103028361,0.5537833874865654
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,95.13261465651173,0.5771951631260808
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,91.26321499141915,0.5876193244548518
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,524.2856440810729,0.6815713373053948
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,487.45249677788274,0.6520371811330964
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,563.3177939435958,0.7323131321266746
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,227.4672078446411,0.6261706218525429
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,465.22701357024096,0.6533271155302193
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,109.11925299092542,0.5851955788198512
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,84.2857903603441,0.5991509456371145
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,262.64255716126917,0.6398542588841971
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,487.25895531966125,0.6520612062774286
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,40.650163799750395,0.5550268893356659
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,557.981142475771,0.7253754852185024
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,40.00012844143542,0.5551999948566015
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,464.6478409110587,0.6533211063610388
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,96.20603622415874,0.573794015634655
+steel_Xinji Aosen Iron and Steel Group Co Ltd,airport_北京,0.0,0.0,327.83694843777204,0.6428276905710273
+steel_Xinji Aosen Iron and Steel Group Co Ltd,airport_天津,0.0,0.0,290.3753531675281,0.6349410836596349
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_1,0.0,0.0,806.2541271493324,1.048130365294132
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_2,0.0,0.0,738.607886645487,0.9601902526391332
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_3,0.0,0.0,297.16133504749075,0.631630676803092
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_4,0.0,0.0,273.10312638231073,0.63962714787696
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_5,0.0,0.0,345.78187570225657,0.6469892247072696
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_6,0.0,0.0,262.206526971578,0.6398209643851026
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_8,0.0,0.0,634.27423148807,0.824556500934491
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_9,0.0,0.0,597.4410841848799,0.7766734094403438
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_53,0.0,0.0,673.3063813505929,0.8752982957557708
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_56,0.0,0.0,362.2417872362765,0.6479748719499363
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_60,0.0,0.0,736.6326773123345,0.9576224805060348
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_61,0.0,0.0,275.1613558855132,0.6393505622956769
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_63,0.0,0.0,359.1893033765499,0.6479967138549236
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_64,0.0,0.0,534.0482209033628,0.6942626871743716
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_68,0.0,0.0,597.2475427266584,0.776421805544656
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_69,0.0,0.0,271.7923391517775,0.6397635473341784
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_70,0.0,0.0,667.9697298827681,0.8683606488475986
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_79,0.0,0.0,297.18847857312284,0.6316157709815222
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_80,0.0,0.0,736.0535046531523,0.9568695560490981
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_lng_terminal_81,0.0,0.0,346.8624828794687,0.6471370282195387

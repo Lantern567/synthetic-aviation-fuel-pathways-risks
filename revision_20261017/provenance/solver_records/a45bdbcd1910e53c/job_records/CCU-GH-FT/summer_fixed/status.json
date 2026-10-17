@@ -1,0 +1,48 @@
+{
+  "scenario": "CCU-GH-FT",
+  "label": "summer_fixed",
+  "stage": "hydrogen_transport",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 0,
+      "seconds": 70.11570167541504
+    },
+    {
+      "stage": "projection",
+      "exit_code": 0,
+      "seconds": 35.60943031311035
+    },
+    {
+      "stage": "design",
+      "exit_code": 0,
+      "seconds": 54.03341007232666
+    },
+    {
+      "stage": "dispatch",
+      "exit_code": 0,
+      "seconds": 77.19103336334229
+    },
+    {
+      "stage": "certificate",
+      "exit_code": 0,
+      "seconds": 0.03273177146911621
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 102.14718580245972
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 5.414995193481445
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 5.078853368759155
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "mode": "independent_period_node_co2_accounting",
+  "scenario": "DAC-GH-FT",
+  "label": "baseline",
+  "run": "\\\\?\\E:\\nexus_scientific_revision_20261017\\archive_checks\\final_verification18\\runtimes\\compute_dac_projected\\verified_runs\\DAC-GH-FT\\baseline",
+  "nodes": 111,
+  "periods": 224,
+  "weeks": 4,
+  "period_hours": 3.0,
+  "node_period_balances": 24864,
+  "transport_loss_fraction": 0.0,
+  "initial_inventory_rule": "zero",
+  "terminal_inventory_rule": "nonnegative, unrestricted",
+  "captured_kg": 76810319.76952207,
+  "consumed_kg": 76810319.76952206,
+  "initial_inventory_kg": 0.0,
+  "terminal_inventory_kg": 0.0,
+  "actual_period_transport_kg": 43646745.207485676,
+  "dac_required_electricity_kwh": 26883611.919332728,
+  "dac_grid_electricity_kwh": 26883611.91933346,
+  "dac_renewable_requirement_kwh": -7.361810259900591e-07,
+  "joint_renewable_budget_verified_here": false,
+  "energy_scope": "Capture electricity requirement, grid-only DAC allocation bound, exact grid equality at nonrenewable nodes and grid cost. The independent shared renewable-energy budget must additionally pass validate_physics.py.",
+  "coefficient_basis": {
+    "weeks": 4,
+    "discount_rate": 0.08,
+    "years": 20,
+    "annualization_factor": 13.0,
+    "present_value_factor": 9.818147407449286,
+    "lifecycle_operation_factor": 127.63591629684072,
+    "capture_cny_per_kg": 4.5,
+    "equipment_kg_co2e_per_kg": 0.05,
+    "dac_kwh_per_kg": 0.35,
+    "grid_cny_per_kwh": 0.6,
+    "pipeline_cost_configuration": {
+      "transport_cost_yuan_per_kg_km": 0.0001,
+      "transport_cost_function": {
+        "function_type": "piecewise_linear",
+        "unit": "yuan_per_ton_co2_per_100km",
+        "description": "\u57fa\u4e8eCO\u2082\u7ba1\u9053\u8f93\u9001\u6210\u672c\u66f2\u7ebf",
+        "data_points": [
+          [
+            25,
+            150
+          ],
+          [
+            50,
+            80
+          ],
+          [
+            100,
+            45
+          ],
+          [
+            200,
+            25
+          ],
+          [
+            300,
+            18
+          ]
+        ],
+        "notes": "\u6210\u672c\u51fd\u6570\u5df2\u5305\u542b\u4ee5\u4e0b\u6240\u6709\u8d39\u7528\uff1a\n- \u7ba1\u9053\u5efa\u8bbe\u6295\u8d44\u644a\u9500 (Pipeline construction amortization)\n- \u538b\u7f29\u673a\u7ad9\u6295\u8d44\u548c\u8fd0\u8425 (Compressor station CAPEX & OPEX)\n- \u7ba1\u9053\u7ef4\u62a4\u548c\u68c0\u6d4b (Pipeline maintenance & inspection)\n- \u80fd\u8017\u6210\u672c\uff08\u538b\u7f29\u673a\u7535\u529b\uff09 (Energy cost for compression)\n- \u4eba\u5de5\u548c\u7ba1\u7406\u6210\u672c (Labor & management)\n"
+      }
+    },
+    "pipeline_kg_co2e_per_kg_100km": 0.01
+  },
+  "checks": {
+    "max_node_period_balance_residual_kg": 1.6327248886227608e-08,
+    "max_node_horizon_balance_residual_kg": 2.0037987269461155e-08,
+    "max_week_global_balance_residual_kg": 1.6191887309240917e-08,
+    "global_balance_residual_kg": 1.4842953532934189e-08,
+    "max_weekly_contract_residual_kg": 6.606569513678551e-09,
+    "max_exported_consumption_error_kg": 5.820766091346741e-11,
+    "max_week_source_export_over_local_capture_kg": 5.180481821298599e-09,
+    "max_initial_inventory_kg": 0.0,
+    "minimum_material_kg": -2.7943028008418252e-09,
+    "max_dac_grid_excess_kwh": 1.4376655599335209e-07,
+    "max_nonrenewable_dac_energy_error_kwh": 0.0
+  },
+  "ledger_cross_checks": {
+    "capture_cost_cny": {
+      "actual": 44116899951.76394,
+      "expected": 44116899951.7633,
+      "error": 0.000640869140625,
+      "tolerance": 441.168999517633,
+      "passed": true
+    },
+    "equipment_carbon_kg_co2e": {
+      "actual": 3840515.9884761055,
+      "expected": 3840515.9884761036,
+      "error": 1.862645149230957e-09,
+      "tolerance": 0.038405159884761036,
+      "passed": true
+    },
+    "grid_cost_cny": {
+      "actual": 2058788664.4159918,
+      "expected": 2058788664.415677,
+      "error": 0.0003147125244140625,
+      "tolerance": 20.58788664415677,
+      "passed": true
+    },
+    "production_total_kg": {
+      "actual": 24003224.927975643,
+      "expected": 24003224.927975643,
+      "error": 0.0,
+      "tolerance": 0.24003224927975644,
+      "passed": true
+    },
+    "co2_pipeline_transport_cost_cny": {
+      "actual": 229862089.76589978,
+      "expected": 229862089.7658996,
+      "error": 1.7881393432617188e-07,
+      "tolerance": 2.298620897658996,
+      "passed": true
+    },
+    "co2_pipeline_transport_carbon_kg": {
+      "actual": 165861.0460093063,
+      "expected": 165861.04600930627,
+      "error": 2.9103830456733704e-11,
+      "tolerance": 0.0016586104600930629,
+      "passed": true
+    },
+    "co2_pipeline_unit_cost_max_error_cny_per_kg": {
+      "actual": 2.0816681711721685e-17,
+      "expected": 0.0,
+      "error": 2.0816681711721685e-17,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    "co2_pipeline_carbon_factor": {
+      "actual": 0.01,
+      "expected": 0.01,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "passed": true
+    }
+  },
+  "mass_absolute_tolerance_kg": 0.001,
+  "passed": true,
+  "input_sha256": {
+    "config.yaml": "4185de534dae6382b3e1b4ea5f4fb73047b9e6ccf6df3fcbe77980f226b1c1a5",
+    "model_parameters.json": "59e4f68f1887f6ec51f76bb33e22b992982bb6d43b93bfb6c13ba745a3b8bade",
+    "summary.json": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+    "saf_production.csv": "55ad1a9593f2cd12a587a9e12fdc93a09359e3e24608d70994398324f3d16d14",
+    "dac_co2_supply.csv": "1aa75874b11c7e1d0cd8c81003b3a0fe2ab9c85d827c83f39a67407bc94185a3",
+    "co2_flows.csv": "0279e56897cc849d655a2cc2075aaea70e91be1ba0a914ae97f1a144e708f9c4",
+    "co2_weekly_contracts.csv": "b0f4e3d620457bc4c151317a65fb5cf3db4a4c3cc054b3026c125120a20da4d1",
+    "co2_inventory_vars.csv": "b40f4b930a923e96759ea5749d459eddce2634c8af0d0c70d0fcbd8cb6df6267",
+    "co2_consumption.csv": "a5105b1a3e176053e6d08df1b18bd99eedf9956322ac2b77bb7bf3b1e203def5",
+    "dac_grid_electricity_vars.csv": "988617cac315233d28a667f6ac94b9e1998b92df65ef6f443fb2a463701ca724",
+    "co2_balance_parameters.json": "272fa174edb2db827ee66657a03b9c9c8bc89fc5ddfb66cef1e8a018533cd0a1"
+  }
+}

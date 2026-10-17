@@ -1,0 +1,3047 @@
+{
+  "schema_version": 1,
+  "mode": "table_bindings_only",
+  "snapshot": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\document_plan\\current_text\\Supplementary_Information.docx.json",
+  "snapshot_sha256": "55d4d7fb4a8b7afa1bf36ab8e24555f65e9a7c29c59a6cf7398905217a9c242a",
+  "snapshot_docx_sha256": "5942c739a62525d0c710d573379617e324dcc64a119cf03174561f5cdd8bcfc5",
+  "required_new_runs": 18,
+  "required_new_baselines": 12,
+  "preserved_baseline": "GTL",
+  "documents": {
+    "Supplementary_Information.docx": {
+      "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_重算更新20261017\\Supplementary_Information.docx",
+      "source_sha256": "5942c739a62525d0c710d573379617e324dcc64a119cf03174561f5cdd8bcfc5",
+      "tables": {
+        "5": {
+          "rows": [
+            [
+              "Module",
+              "Active scenarios",
+              "Modeled state",
+              "Key parameterization and role"
+            ],
+            [
+              "Direct FT / RWGS-FT",
+              "GTL, CCU-GH-FT, CCU-BH-FT, DAC-GH-FT, DAC-BH-FT",
+              "Direct SAF output; no methanol inventory.",
+              "RWGS energy coefficient = 2.5; FT energy coefficient = 3.5 for CCU-GH-FT; GTL FT energy coefficient = 5. Represents one-step/direct SAF synthesis scenarios."
+            ],
+            [
+              "MTJ",
+              "GTL-GH, GTL-BH, CCU-GH-MTJ, CCU-BH-MTJ, DAC-GH-MTJ, DAC-BH-MTJ",
+              "Methanol intermediate and methanol inventory active.",
+              "MTJ process-energy coefficient = 800 for CCU/DAC-style MTJ configs; 4,500 for natural-gas MTJ configs. Separates methanol production from final jet-fuel synthesis."
+            ],
+            [
+              "CTL / coal gasification",
+              "CTL, CTL-BH",
+              "Coal-derived carbon with the configured FT/SAF synthesis block; no methanol inventory.",
+              "Coal price 525 CNY/t; carbon content 0.75; gasification efficiency 0.75. CTL uses modelled electrolysis; CTL-BH uses industrial by-product H₂."
+            ],
+            [
+              "Industrial point-source CO₂",
+              "CCU-GH-MTJ, CCU-GH-FT, CCU-BH-MTJ, CCU-BH-FT",
+              "Industrial capture-source layer active.",
+              "scenario_type = industrial_capture; utilization credit factor = -1.0. Credits captured industrial CO₂ fixed into SAF under the archived accounting convention."
+            ],
+            [
+              "DAC CO₂",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "DAC module and DAC siting logic active.",
+              "Capture efficiency 0.95; capture energy 350 kWh/t CO₂. Atmospheric uptake attribution is reported separately from process burdens and fuel combustion."
+            ],
+            [
+              "By-product H₂",
+              "CTL-BH, CCU-BH-MTJ, CCU-BH-FT, DAC-BH-MTJ, DAC-BH-FT, GTL-BH",
+              "Industrial by-product H₂ source layer active.",
+              "H₂ equipment lifetime convention = 20 yr; capacity factor = 0.9. Defines blue variants that replace green electrolysis with by-product H₂ supply."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "8": {
+          "rows": [
+            [
+              "Parameter",
+              "Baseline value and unit",
+              "Scenario scope",
+              "Model role"
+            ],
+            [
+              "Project evaluation life",
+              "20 yr",
+              "All scenarios",
+              "Defines the present-value horizon for cost and levelized-cost calculations."
+            ],
+            [
+              "Discount rate",
+              "8% annual fraction",
+              "All scenarios",
+              "Annualizes and discounts capital and operating cost streams."
+            ],
+            [
+              "Unserved-demand penalty",
+              "2,500 yuan/kg SAF",
+              "All scenarios",
+              "Discourages unmet airport demand while preserving model feasibility."
+            ],
+            [
+              "LCO-SAF screening threshold",
+              "20 for GTL/GTL-GH/GTL-BH; 50 for CTL/CTL-BH; 1000 for most CCU/DAC cases; 1200 for CCU-GH-FT yuan/kg SAF",
+              "Scenario-specific",
+              "Used as a configuration-level filter and plausibility screen, not as an endogenous policy target."
+            ],
+            [
+              "Electrolyzer lifetime",
+              "15 for green-H₂ cases; 20 for by-product-H₂ and CTL-BH cases yr",
+              "H₂-supply scenarios with an H₂ capacity block",
+              "Sets capital recovery for the H₂ supply block."
+            ],
+            [
+              "Synthesis and logistics lifetimes",
+              "MTJ/RWGS 20; FT/SAF reactor 25; pipeline 30; storage 25; transport vehicle 20 yr",
+              "Route-specific",
+              "Sets annualized capital recovery for route and transport assets."
+            ],
+            [
+              "Capacity factors",
+              "Electrolyzer 0.75 for green-H₂ cases and 0.90 for by-product-H₂/CTL-BH cases; synthesis 0.85; pipeline 0.95; storage 0.90; transport 0.75 fraction",
+              "Scenario-family-specific",
+              "Translates installed capacity into available production, storage, and transport service."
+            ],
+            [
+              "Electricity prices",
+              "Wind 0.35; solar 0.4; grid 0.6 yuan/kWh",
+              "Pathways using renewable or grid electricity",
+              "Exogenous operating-cost inputs for electricity-consuming steps."
+            ],
+            [
+              "Natural-gas price",
+              "4.2 yuan/m3",
+              "GTL, GTL-GH, GTL-BH",
+              "Feedstock price for natural-gas-based SAF pathways."
+            ],
+            [
+              "Coal price",
+              "525 yuan/t",
+              "CTL, CTL-BH",
+              "Feedstock price for coal-linked CTL pathways."
+            ],
+            [
+              "DAC capture cost",
+              "4,500 CNY/t CO₂ (baseline)",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "Exogenous cost for atmospheric CO₂ capture."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "9": {
+          "rows": [
+            [
+              "Parameter block",
+              "Baseline value and unit",
+              "Scenario scope",
+              "Model role"
+            ],
+            [
+              "Electrolysis efficiency",
+              "0.7 fraction",
+              "CCU/DAC/CTL-style configs with electrolysis blocks",
+              "Configuration metadata; the six electricity-dependent configurations use the explicit 55 kWh/kg intensity below."
+            ],
+            [
+              "Electrolysis efficiency, natural-gas MTJ",
+              "0.8 fraction",
+              "GTL-GH, GTL-BH",
+              "Configuration metadata; the six electricity-dependent configurations use the explicit 55 kWh/kg intensity below."
+            ],
+            [
+              "Electrolysis electricity intensity",
+              "55 kWh/kg H₂ in all six electricity-dependent configurations",
+              "H₂-producing pathway blocks",
+              "Electricity input per kilogram of hydrogen, including electrolysis conversion losses."
+            ],
+            [
+              "Additional internal hydrogen charge",
+              "0 CNY/kg H₂",
+              "By-product hydrogen configurations",
+              "Component costs comprise selected source-conditioning equipment, conditioning electricity and logistics."
+            ],
+            [
+              "Natural-gas feedstock",
+              "Price 4.2; extraction intensity 0.25; pipeline-transport coefficient 0.01 (mixed)",
+              "GTL, GTL-GH, GTL-BH",
+              "Defines natural-gas feedstock cost and upstream-emissions coefficients."
+            ],
+            [
+              "Coal feedstock",
+              "Bituminous; carbon content 0.75; CO₂ yield 2.44 kg CO₂/kg coal",
+              "CTL, CTL-BH",
+              "Actual location-week coal purchases supply the configured CO₂ balance and determine coal-related costs and emissions."
+            ],
+            [
+              "Coal gasification",
+              "Efficiency 0.75; energy 8 MJ/kg (2.22 kWh/kg); energy cost 0.05 fraction; MJ/kg; kWh/kg; yuan/MJ",
+              "CTL, CTL-BH",
+              "Defines gasification energy use before CTL/SAF conversion."
+            ],
+            [
+              "DAC capture module",
+              "Capture efficiency 0.95; CO₂ purity 0.995; energy 350; module capacity 2,000; availability 0.9 fraction; kWh/t CO₂; t/yr",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "Defines the DAC supply block and modular deployment constraint."
+            ],
+            [
+              "GTL direct FT process",
+              "NG upstream emission 0.5; NG process emission 0.8; FT process emission 1.5; FT process-energy coefficient 5 (configuration coefficients)",
+              "GTL",
+              "Provides process-emissions and energy coefficients for the direct gas-to-liquids route."
+            ],
+            [
+              "Natural-gas MTJ process",
+              "NG-to-methanol rate 1.2; H₂ addition rate 40; MTJ process-energy coefficient 4,500 (configuration coefficients)",
+              "GTL-GH, GTL-BH",
+              "Defines the methanol-intermediate step for natural-gas MTJ routes."
+            ],
+            [
+              "By-product hydrogen conditioning",
+              "2.5 kWh/kg H₂",
+              "By-product hydrogen configurations",
+              "Grid electricity for source conditioning; source availability in kg/h is converted to each three-hour period."
+            ],
+            [
+              "Industrial-source electricity",
+              "0.6 CNY/kWh; 0.6 kg CO₂e/kWh",
+              "By-product hydrogen source, synthesis and inventory electricity",
+              "Grid electricity price and emissions coefficient."
+            ],
+            [
+              "Upstream by-product hydrogen allocation",
+              "Steel: 22; refinery: 0.484 kg CO₂e/kg H₂",
+              "By-product hydrogen configurations",
+              "Source-specific allocation plus conditioning electricity, giving 23.5 and 1.984 kg CO₂e/kg H₂."
+            ],
+            [
+              "Coal-linked one-step synthesis",
+              "4.0 kWh/kg SynAF",
+              "CTL, CTL-BH",
+              "Synthesis electricity in the resource balance, cost and emissions accounts."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "18": {
+          "rows": [
+            [
+              "Pathway",
+              "Network\nIDs",
+              "H₂ facility records",
+              "SAF modules / sites",
+              "H₂ distance (km)",
+              "SAF distance (km)",
+              "Top-node share (%)",
+              "Top-route share (%)",
+              "Flow\n>100 km\n(%)",
+              "Largest-source share (%)"
+            ],
+            [
+              "GTL-BH*",
+              "4",
+              "0",
+              "3 / 2",
+              "—",
+              "135.25",
+              "98.32",
+              "100.00",
+              "77.47",
+              "98.32"
+            ],
+            [
+              "GTL*",
+              "4",
+              "0",
+              "2 / 2",
+              "—",
+              "0.00",
+              "77.47",
+              "100.00",
+              "0.00",
+              "77.47"
+            ],
+            [
+              "CTL-BH*",
+              "35",
+              "0",
+              "3 / 3",
+              "156.93",
+              "62.37",
+              "94.10",
+              "88.08",
+              "40.30",
+              "39.73"
+            ],
+            [
+              "CTL†",
+              "113",
+              "109",
+              "111 / 59",
+              "84.31",
+              "30.26",
+              "72.78",
+              "55.57",
+              "12.72",
+              "48.54"
+            ],
+            [
+              "GTL-GH",
+              "112",
+              "109",
+              "3 / 3",
+              "97.02",
+              "32.63",
+              "97.40",
+              "93.08",
+              "19.50",
+              "89.36"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "62",
+              "55",
+              "4 / 4",
+              "199.22",
+              "20.41",
+              "87.97",
+              "61.75",
+              "18.22",
+              "38.30"
+            ],
+            [
+              "CCU-BH-FT*",
+              "51",
+              "45",
+              "3 / 3",
+              "196.78",
+              "45.52",
+              "91.56",
+              "76.63",
+              "9.69",
+              "67.65"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "130",
+              "109",
+              "111 / 59",
+              "67.28",
+              "34.02",
+              "83.04",
+              "43.38",
+              "3.59",
+              "41.26"
+            ],
+            [
+              "CCU-GH-FT",
+              "129",
+              "109",
+              "71 / 57",
+              "63.51",
+              "32.22",
+              "83.43",
+              "44.59",
+              "3.23",
+              "40.67"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "32",
+              "30",
+              "28 / 28",
+              "—",
+              "165.66",
+              "21.88",
+              "13.75",
+              "41.01",
+              "7.66"
+            ],
+            [
+              "DAC-BH-FT*",
+              "28",
+              "26",
+              "26 / 26",
+              "—",
+              "150.85",
+              "24.29",
+              "14.84",
+              "56.94",
+              "8.40"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "113",
+              "109",
+              "111 / 59",
+              "72.92",
+              "34.02",
+              "64.90",
+              "41.26",
+              "14.20",
+              "34.80"
+            ],
+            [
+              "DAC-GH-FT",
+              "113",
+              "109",
+              "111 / 59",
+              "60.14",
+              "32.22",
+              "66.87",
+              "45.21",
+              "12.94",
+              "39.86"
+            ]
+          ],
+          "columns": 10,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "19": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean SAF util. (%)",
+              "Worst-week util. (%)",
+              "Chronic penalty (%)",
+              "Robustness penalty (%)",
+              "Total penalty (%)"
+            ],
+            [
+              "GTL-BH*",
+              "84.68",
+              "75.46",
+              "18.10",
+              "14.43",
+              "32.53"
+            ],
+            [
+              "GTL*",
+              "86.24",
+              "61.10",
+              "15.96",
+              "47.70",
+              "63.66"
+            ],
+            [
+              "CCU-GH-FT",
+              "75.78",
+              "47.36",
+              "31.95",
+              "79.21",
+              "111.17"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "21": {
+          "rows": [
+            [
+              "Pathway",
+              "Demand met (%)",
+              "CNY/kg",
+              "Baseline CI",
+              "With combustion",
+              "With combustion; no capture attribution"
+            ],
+            [
+              "CTL†",
+              "63.24",
+              "20.76",
+              "173.402",
+              "245.631",
+              "245.631"
+            ],
+            [
+              "CTL-BH*",
+              "100.00",
+              "12.46",
+              "491.952",
+              "564.180",
+              "564.180"
+            ],
+            [
+              "GTL-GH",
+              "100.00",
+              "7.24",
+              "90.605",
+              "162.833",
+              "162.833"
+            ],
+            [
+              "GTL*",
+              "100.00",
+              "6.50",
+              "56.940",
+              "129.169",
+              "129.169"
+            ],
+            [
+              "GTL-BH*",
+              "100.00",
+              "5.29",
+              "87.342",
+              "159.570",
+              "159.570"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "29.17",
+              "41.51",
+              "29.282",
+              "101.510",
+              "173.739"
+            ],
+            [
+              "CCU-GH-FT",
+              "43.84",
+              "26.06",
+              "19.436",
+              "91.665",
+              "163.894"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "100.00",
+              "10.96",
+              "509.656",
+              "581.884",
+              "654.113"
+            ],
+            [
+              "CCU-BH-FT*",
+              "100.00",
+              "9.58",
+              "338.753",
+              "410.981",
+              "483.210"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "29.17",
+              "56.64",
+              "33.240",
+              "105.468",
+              "177.697"
+            ],
+            [
+              "DAC-GH-FT",
+              "43.88",
+              "39.97",
+              "23.411",
+              "95.640",
+              "167.869"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "100.00",
+              "24.78",
+              "691.299",
+              "763.527",
+              "835.756"
+            ],
+            [
+              "DAC-BH-FT*",
+              "100.00",
+              "18.72",
+              "467.826",
+              "540.055",
+              "612.283"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "22": {
+          "rows": [
+            [
+              "Comparison",
+              "Service level",
+              "Interpretation"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "100% → 100%",
+              "Archived configurations: 5.291 → 6.502 CNY/kg; conversion and hydrogen-source modules differ."
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "100% → 43.84%",
+              "6.502 → 26.064 CNY/kg of actual output; not a full-demand marginal-cost comparison."
+            ],
+            [
+              "Equal-service interpretation",
+              "Unequal service levels",
+              "These configurations describe their achieved supply quantities; an equal-service comparison requires a common-demand constraint."
+            ],
+            [
+              "Uniform combustion addition",
+              "Same output as each baseline",
+              "Adds 72.229 g CO₂/MJ; preserves pairwise differences but changes absolute intensities."
+            ],
+            [
+              "Capture-attribution sensitivity",
+              "Same output as each baseline",
+              "Removing capture attribution adds a further 72.229 g CO₂/MJ to the CCU/DAC cases."
+            ]
+          ],
+          "columns": 3,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "23": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean utilization",
+              "Worst-week utilization",
+              "Retained (%)",
+              "Mean premium",
+              "Additional premium"
+            ],
+            [
+              "CTL†",
+              "76.05",
+              "49.47",
+              "65.05",
+              "31.50",
+              "70.64"
+            ],
+            [
+              "CTL-BH*",
+              "86.24",
+              "77.35",
+              "89.70",
+              "15.96",
+              "13.32"
+            ],
+            [
+              "GTL-GH",
+              "85.68",
+              "81.00",
+              "94.54",
+              "16.71",
+              "6.74"
+            ],
+            [
+              "GTL*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ],
+            [
+              "GTL-BH*",
+              "84.68",
+              "75.46",
+              "89.11",
+              "18.10",
+              "14.43"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "75.55",
+              "45.62",
+              "60.38",
+              "32.37",
+              "86.84"
+            ],
+            [
+              "CCU-GH-FT",
+              "75.78",
+              "47.36",
+              "62.49",
+              "31.95",
+              "79.21"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "86.24",
+              "79.54",
+              "92.23",
+              "15.96",
+              "9.77"
+            ],
+            [
+              "CCU-BH-FT*",
+              "86.24",
+              "79.43",
+              "92.10",
+              "15.96",
+              "9.95"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "75.55",
+              "45.62",
+              "60.38",
+              "32.36",
+              "86.84"
+            ],
+            [
+              "DAC-GH-FT",
+              "75.71",
+              "47.37",
+              "62.56",
+              "32.08",
+              "79.03"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ],
+            [
+              "DAC-BH-FT*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "24": {
+          "rows": [
+            [
+              "Source → target",
+              "Radius\n(km)",
+              "Source capacity %",
+              "Target capacity %"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "1",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "10",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "25",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "50",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "100",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "1",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "10",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "25",
+              "2.55",
+              "5.21"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "50",
+              "4.49",
+              "9.17"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "100",
+              "4.49",
+              "9.17"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "1",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "10",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "25",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "50",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "100",
+              "23.83",
+              "47.77"
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "25": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean utilization",
+              "Mean premium",
+              "Additional premium",
+              "Retention"
+            ],
+            [
+              "CCU-BH-FT*",
+              "81.65–88.51",
+              "12.98–22.47",
+              "3.43–12.74",
+              "89.88–97.27"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "81.65–88.47",
+              "13.03–22.47",
+              "3.26–11.45",
+              "90.89–97.41"
+            ],
+            [
+              "CCU-GH-FT",
+              "68.35–85.26",
+              "17.29–46.31",
+              "37.89–85.48",
+              "59.52–75.58"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "67.92–85.52",
+              "16.93–47.23",
+              "40.34–93.48",
+              "57.36–74.35"
+            ],
+            [
+              "CTL†",
+              "68.89–84.91",
+              "17.78–45.16",
+              "35.07–76.49",
+              "62.16–77.06"
+            ],
+            [
+              "CTL-BH*",
+              "81.65–89.20",
+              "12.10–22.47",
+              "6.81–16.48",
+              "87.25–94.73"
+            ],
+            [
+              "DAC-BH-FT*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "DAC-GH-FT",
+              "68.28–85.16",
+              "17.42–46.45",
+              "38.01–85.33",
+              "59.58–75.54"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "67.93–85.53",
+              "16.92–47.22",
+              "40.34–93.47",
+              "57.36–74.35"
+            ],
+            [
+              "GTL*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "GTL-BH*",
+              "80.17–87.75",
+              "13.96–24.73",
+              "7.80–18.22",
+              "86.25–94.12"
+            ],
+            [
+              "GTL-GH",
+              "81.13–87.24",
+              "14.62–23.26",
+              "0.19–8.82",
+              "92.86–99.85"
+            ]
+          ],
+          "columns": 5,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "26": {
+          "rows": [
+            [
+              "Calendar week",
+              "Demand",
+              "Solar",
+              "Wind",
+              "Selected",
+              "Inside all ranges"
+            ],
+            [
+              "1",
+              "1.080",
+              "0.432",
+              "0.402",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "5",
+              "0.660",
+              "0.632",
+              "0.584",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "9",
+              "1.080",
+              "0.722",
+              "0.847",
+              "No",
+              "Yes"
+            ],
+            [
+              "14",
+              "0.960",
+              "1.262",
+              "1.248",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "18",
+              "1.080",
+              "1.251",
+              "1.383",
+              "No",
+              "No"
+            ],
+            [
+              "22",
+              "1.080",
+              "1.534",
+              "1.467",
+              "No",
+              "No"
+            ],
+            [
+              "27",
+              "1.080",
+              "1.185",
+              "1.461",
+              "No",
+              "No"
+            ],
+            [
+              "31",
+              "1.080",
+              "1.297",
+              "1.357",
+              "No",
+              "No"
+            ],
+            [
+              "35",
+              "1.080",
+              "1.044",
+              "1.292",
+              "No",
+              "No"
+            ],
+            [
+              "40",
+              "1.080",
+              "1.093",
+              "0.931",
+              "No",
+              "Yes"
+            ],
+            [
+              "44",
+              "1.026",
+              "0.911",
+              "0.608",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "48",
+              "0.714",
+              "0.637",
+              "0.420",
+              "No",
+              "Yes"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "27": {
+          "rows": [
+            [
+              "Pathway / set",
+              "Rows",
+              "Columns",
+              "Final dispatch (s)",
+              "Certified gap (%)",
+              "Result scope"
+            ],
+            [
+              "CCU-GH-FT / A",
+              "375508",
+              "3704823",
+              "92.46",
+              "0.2008",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-FT / B",
+              "376010",
+              "3704823",
+              "35.37",
+              "0.0690",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-MTJ / A",
+              "375508",
+              "3704823",
+              "76.90",
+              "0.2027",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-MTJ / B",
+              "376010",
+              "3704823",
+              "39.21",
+              "0.0341",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-FT / A",
+              "385612",
+              "2984901",
+              "61.70",
+              "0.2633",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-FT / B",
+              "386163",
+              "2984901",
+              "49.57",
+              "0.0427",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-MTJ / A",
+              "385612",
+              "2984901",
+              "28.01",
+              "0.2103",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-MTJ / B",
+              "386163",
+              "2984901",
+              "27.83",
+              "0.0340",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "GTL-GH / A",
+              "1094075",
+              "1474176",
+              "15.90",
+              "0.7284",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "GTL-GH / B",
+              "1096413",
+              "1474176",
+              "9.59",
+              "0.0000",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CTL† / A",
+              "260404",
+              "2848482",
+              "72.46",
+              "0.3461",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CTL† / B",
+              "260844",
+              "2848482",
+              "26.91",
+              "0.0955",
+              "Full-model feasible; global bound certificate"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "28": {
+          "rows": [
+            [
+              "Pathway / set",
+              "Max row residual",
+              "Max bound residual",
+              "Max electricity deficit (MWh)",
+              "Max H₂ balance residual (kg)",
+              "Checks"
+            ],
+            [
+              "CCU-GH-FT / A",
+              "4.95e-09",
+              "3.78e-10",
+              "1.14e-13",
+              "4.95e-09",
+              "Passed"
+            ],
+            [
+              "CCU-GH-FT / B",
+              "3.73e-09",
+              "1.31e-11",
+              "1.14e-13",
+              "7.64e-11",
+              "Passed"
+            ],
+            [
+              "CCU-GH-MTJ / A",
+              "5.59e-09",
+              "5.24e-10",
+              "1.14e-13",
+              "1.66e-09",
+              "Passed"
+            ],
+            [
+              "CCU-GH-MTJ / B",
+              "9.31e-09",
+              "3.21e-11",
+              "1.14e-13",
+              "1.53e-10",
+              "Passed"
+            ],
+            [
+              "DAC-GH-FT / A",
+              "5.11e-08",
+              "3.13e-10",
+              "2.27e-13",
+              "5.11e-08",
+              "Passed"
+            ],
+            [
+              "DAC-GH-FT / B",
+              "3.35e-08",
+              "7.86e-10",
+              "2.27e-13",
+              "1.31e-09",
+              "Passed"
+            ],
+            [
+              "DAC-GH-MTJ / A",
+              "1.86e-09",
+              "1.37e-11",
+              "1.14e-13",
+              "3.77e-11",
+              "Passed"
+            ],
+            [
+              "DAC-GH-MTJ / B",
+              "2.14e-08",
+              "2.33e-09",
+              "2.27e-13",
+              "8.48e-10",
+              "Passed"
+            ],
+            [
+              "GTL-GH / A",
+              "6.34e-08",
+              "3.17e-08",
+              "1.10e-12",
+              "3.15e-10",
+              "Passed"
+            ],
+            [
+              "GTL-GH / B",
+              "1.49e-08",
+              "4.89e-09",
+              "3.41e-13",
+              "1.64e-11",
+              "Passed"
+            ],
+            [
+              "CTL† / A",
+              "9.78e-09",
+              "9.43e-09",
+              "1.14e-13",
+              "4.28e-09",
+              "Passed"
+            ],
+            [
+              "CTL† / B",
+              "7.45e-09",
+              "1.86e-09",
+              "5.80e-12",
+              "1.68e-10",
+              "Passed"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "29": {
+          "rows": [
+            [
+              "Check",
+              "Recorded outcome",
+              "Validation scope"
+            ],
+            [
+              "Solar source reconstruction",
+              "2,016 HDF5 files; 66 phases; 43,680 project-period records checked",
+              "Source grid, coordinates, raw units, deduplicated capacities and UTC+8 alignment; retained effective PV factor 0.1632."
+            ],
+            [
+              "Wind aggregation",
+              "48 phases; 29,568 project-period records; 0.0 MWh maximum aggregation error",
+              "Mean MW and three-hour energy; cyclic 8,760-hour source sequence."
+            ],
+            [
+              "Selected profiles and demand",
+              "A: weeks 1, 5, 14, 44; B: weeks 1, 14, 27, 44; 224 periods each",
+              "Inputs selected together; source files and solution summaries linked by hashes."
+            ],
+            [
+              "Full-model and physical checks",
+              "Twelve accepted solutions pass; CTL† is a diagnostic variant",
+              "All algebraic rows, bounds and integers; independent supply, stock, capacity, transport and demand checks."
+            ],
+            [
+              "Fixed production assets",
+              "Six A/B pathway pairs pass",
+              "SAF and electrolyzer build/capacity; DAC build where present. Inventory and routes reoptimized."
+            ],
+            [
+              "GTL-GH natural-gas checks",
+              "28 days × 8 periods; daily technology allocation, source types and capacities pass",
+              "Single allocation and charging of delivery flows; extraction emissions include all consumed natural gas."
+            ],
+            [
+              "CTL with a 90% minimum-output requirement",
+              "Infeasible in A and B; renewable-energy upper bounds 73.32% and 86.09%",
+              "Both upper bounds are below the required 90%, even without other operating restrictions."
+            ]
+          ],
+          "columns": 3,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "32": {
+          "rows": [
+            [
+              "Pathway",
+              "Week\nset",
+              "Demand\nmet (%)",
+              "Mean\nutil. (%)",
+              "Worst-week\nretention (%)",
+              "Mean\npremium (%)",
+              "Additional\npremium (%)"
+            ],
+            [
+              "CCU-GH-FT",
+              "A",
+              "43.84",
+              "75.78",
+              "62.49",
+              "31.95",
+              "79.21"
+            ],
+            [
+              "CCU-GH-FT",
+              "B",
+              "43.81",
+              "84.27",
+              "56.29",
+              "18.67",
+              "92.16"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "A",
+              "29.17",
+              "75.55",
+              "60.38",
+              "32.37",
+              "86.84"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "B",
+              "29.25",
+              "84.30",
+              "54.21",
+              "18.62",
+              "100.21"
+            ],
+            [
+              "DAC-GH-FT",
+              "A",
+              "43.88",
+              "75.71",
+              "62.56",
+              "32.08",
+              "79.03"
+            ],
+            [
+              "DAC-GH-FT",
+              "B",
+              "43.86",
+              "84.21",
+              "56.34",
+              "18.75",
+              "92.01"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "A",
+              "29.17",
+              "75.55",
+              "60.38",
+              "32.36",
+              "86.84"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "B",
+              "29.25",
+              "84.30",
+              "54.22",
+              "18.62",
+              "100.17"
+            ],
+            [
+              "GTL-GH",
+              "A",
+              "100.00",
+              "85.68",
+              "94.54",
+              "16.71",
+              "6.74"
+            ],
+            [
+              "GTL-GH",
+              "B",
+              "100.00",
+              "95.34",
+              "97.58",
+              "4.88",
+              "2.60"
+            ],
+            [
+              "CTL†",
+              "A",
+              "63.24",
+              "76.05",
+              "65.05",
+              "31.50",
+              "70.64"
+            ],
+            [
+              "CTL†",
+              "B",
+              "62.93",
+              "84.21",
+              "58.88",
+              "18.75",
+              "82.94"
+            ]
+          ],
+          "columns": 7,
+          "cell_paragraph_counts": [
+            1
+          ]
+        }
+      }
+    },
+    "Supplementary_Information_Marked_Changes.docx": {
+      "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_重算更新20261017\\Supplementary_Information_Marked_Changes.docx",
+      "source_sha256": "aab3eaa2d671bc6fcdc36c5ce442e915387281698c4b4707e93728ca3360712f",
+      "tables": {
+        "5": {
+          "rows": [
+            [
+              "Module",
+              "Active scenarios",
+              "Modeled state",
+              "Key parameterization and role"
+            ],
+            [
+              "Direct FT / RWGS-FT",
+              "GTL, CCU-GH-FT, CCU-BH-FT, DAC-GH-FT, DAC-BH-FT",
+              "Direct SAF output; no methanol inventory.",
+              "RWGS energy coefficient = 2.5; FT energy coefficient = 3.5 for CCU-GH-FT; GTL FT energy coefficient = 5. Represents one-step/direct SAF synthesis scenarios."
+            ],
+            [
+              "MTJ",
+              "GTL-GH, GTL-BH, CCU-GH-MTJ, CCU-BH-MTJ, DAC-GH-MTJ, DAC-BH-MTJ",
+              "Methanol intermediate and methanol inventory active.",
+              "MTJ process-energy coefficient = 800 for CCU/DAC-style MTJ configs; 4,500 for natural-gas MTJ configs. Separates methanol production from final jet-fuel synthesis."
+            ],
+            [
+              "CTL / coal gasification",
+              "CTL, CTL-BH",
+              "Coal-derived carbon with the configured FT/SAF synthesis block; no methanol inventory.",
+              "Coal price 525 CNY/t; carbon content 0.75; gasification efficiency 0.75. CTL uses modelled electrolysis; CTL-BH uses industrial by-product H₂."
+            ],
+            [
+              "Industrial point-source CO₂",
+              "CCU-GH-MTJ, CCU-GH-FT, CCU-BH-MTJ, CCU-BH-FT",
+              "Industrial capture-source layer active.",
+              "scenario_type = industrial_capture; utilization credit factor = -1.0. Credits captured industrial CO₂ fixed into SAF under the archived accounting convention."
+            ],
+            [
+              "DAC CO₂",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "DAC module and DAC siting logic active.",
+              "Capture efficiency 0.95; capture energy 350 kWh/t CO₂. Atmospheric uptake attribution is reported separately from process burdens and fuel combustion."
+            ],
+            [
+              "By-product H₂",
+              "CTL-BH, CCU-BH-MTJ, CCU-BH-FT, DAC-BH-MTJ, DAC-BH-FT, GTL-BH",
+              "Industrial by-product H₂ source layer active.",
+              "H₂ equipment lifetime convention = 20 yr; capacity factor = 0.9. Defines blue variants that replace green electrolysis with by-product H₂ supply."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "8": {
+          "rows": [
+            [
+              "Parameter",
+              "Baseline value and unit",
+              "Scenario scope",
+              "Model role"
+            ],
+            [
+              "Project evaluation life",
+              "20 yr",
+              "All scenarios",
+              "Defines the present-value horizon for cost and levelized-cost calculations."
+            ],
+            [
+              "Discount rate",
+              "8% annual fraction",
+              "All scenarios",
+              "Annualizes and discounts capital and operating cost streams."
+            ],
+            [
+              "Unserved-demand penalty",
+              "2,500 yuan/kg SAF",
+              "All scenarios",
+              "Discourages unmet airport demand while preserving model feasibility."
+            ],
+            [
+              "LCO-SAF screening threshold",
+              "20 for GTL/GTL-GH/GTL-BH; 50 for CTL/CTL-BH; 1000 for most CCU/DAC cases; 1200 for CCU-GH-FT yuan/kg SAF",
+              "Scenario-specific",
+              "Used as a configuration-level filter and plausibility screen, not as an endogenous policy target."
+            ],
+            [
+              "Electrolyzer lifetime",
+              "15 for green-H₂ cases; 20 for by-product-H₂ and CTL-BH cases yr",
+              "H₂-supply scenarios with an H₂ capacity block",
+              "Sets capital recovery for the H₂ supply block."
+            ],
+            [
+              "Synthesis and logistics lifetimes",
+              "MTJ/RWGS 20; FT/SAF reactor 25; pipeline 30; storage 25; transport vehicle 20 yr",
+              "Route-specific",
+              "Sets annualized capital recovery for route and transport assets."
+            ],
+            [
+              "Capacity factors",
+              "Electrolyzer 0.75 for green-H₂ cases and 0.90 for by-product-H₂/CTL-BH cases; synthesis 0.85; pipeline 0.95; storage 0.90; transport 0.75 fraction",
+              "Scenario-family-specific",
+              "Translates installed capacity into available production, storage, and transport service."
+            ],
+            [
+              "Electricity prices",
+              "Wind 0.35; solar 0.4; grid 0.6 yuan/kWh",
+              "Pathways using renewable or grid electricity",
+              "Exogenous operating-cost inputs for electricity-consuming steps."
+            ],
+            [
+              "Natural-gas price",
+              "4.2 yuan/m3",
+              "GTL, GTL-GH, GTL-BH",
+              "Feedstock price for natural-gas-based SAF pathways."
+            ],
+            [
+              "Coal price",
+              "525 yuan/t",
+              "CTL, CTL-BH",
+              "Feedstock price for coal-linked CTL pathways."
+            ],
+            [
+              "DAC capture cost",
+              "4,500 CNY/t CO₂ (baseline)",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "Exogenous cost for atmospheric CO₂ capture."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "9": {
+          "rows": [
+            [
+              "Parameter block",
+              "Baseline value and unit",
+              "Scenario scope",
+              "Model role"
+            ],
+            [
+              "Electrolysis efficiency",
+              "0.7 fraction",
+              "CCU/DAC/CTL-style configs with electrolysis blocks",
+              "Configuration metadata; the six electricity-dependent configurations use the explicit 55 kWh/kg intensity below."
+            ],
+            [
+              "Electrolysis efficiency, natural-gas MTJ",
+              "0.8 fraction",
+              "GTL-GH, GTL-BH",
+              "Configuration metadata; the six electricity-dependent configurations use the explicit 55 kWh/kg intensity below."
+            ],
+            [
+              "Electrolysis electricity intensity",
+              "55 kWh/kg H₂ in all six electricity-dependent configurations",
+              "H₂-producing pathway blocks",
+              "Electricity input per kilogram of hydrogen, including electrolysis conversion losses."
+            ],
+            [
+              "Additional internal hydrogen charge",
+              "0 CNY/kg H₂",
+              "By-product hydrogen configurations",
+              "Component costs comprise selected source-conditioning equipment, conditioning electricity and logistics."
+            ],
+            [
+              "Natural-gas feedstock",
+              "Price 4.2; extraction intensity 0.25; pipeline-transport coefficient 0.01 (mixed)",
+              "GTL, GTL-GH, GTL-BH",
+              "Defines natural-gas feedstock cost and upstream-emissions coefficients."
+            ],
+            [
+              "Coal feedstock",
+              "Bituminous; carbon content 0.75; CO₂ yield 2.44 kg CO₂/kg coal",
+              "CTL, CTL-BH",
+              "Actual location-week coal purchases supply the configured CO₂ balance and determine coal-related costs and emissions."
+            ],
+            [
+              "Coal gasification",
+              "Efficiency 0.75; energy 8 MJ/kg (2.22 kWh/kg); energy cost 0.05 fraction; MJ/kg; kWh/kg; yuan/MJ",
+              "CTL, CTL-BH",
+              "Defines gasification energy use before CTL/SAF conversion."
+            ],
+            [
+              "DAC capture module",
+              "Capture efficiency 0.95; CO₂ purity 0.995; energy 350; module capacity 2,000; availability 0.9 fraction; kWh/t CO₂; t/yr",
+              "DAC-GH-MTJ, DAC-GH-FT, DAC-BH-MTJ, DAC-BH-FT",
+              "Defines the DAC supply block and modular deployment constraint."
+            ],
+            [
+              "GTL direct FT process",
+              "NG upstream emission 0.5; NG process emission 0.8; FT process emission 1.5; FT process-energy coefficient 5 (configuration coefficients)",
+              "GTL",
+              "Provides process-emissions and energy coefficients for the direct gas-to-liquids route."
+            ],
+            [
+              "Natural-gas MTJ process",
+              "NG-to-methanol rate 1.2; H₂ addition rate 40; MTJ process-energy coefficient 4,500 (configuration coefficients)",
+              "GTL-GH, GTL-BH",
+              "Defines the methanol-intermediate step for natural-gas MTJ routes."
+            ],
+            [
+              "By-product hydrogen conditioning",
+              "2.5 kWh/kg H₂",
+              "By-product hydrogen configurations",
+              "Grid electricity for source conditioning; source availability in kg/h is converted to each three-hour period."
+            ],
+            [
+              "Industrial-source electricity",
+              "0.6 CNY/kWh; 0.6 kg CO₂e/kWh",
+              "By-product hydrogen source, synthesis and inventory electricity",
+              "Grid electricity price and emissions coefficient."
+            ],
+            [
+              "Upstream by-product hydrogen allocation",
+              "Steel: 22; refinery: 0.484 kg CO₂e/kg H₂",
+              "By-product hydrogen configurations",
+              "Source-specific allocation plus conditioning electricity, giving 23.5 and 1.984 kg CO₂e/kg H₂."
+            ],
+            [
+              "Coal-linked one-step synthesis",
+              "4.0 kWh/kg SynAF",
+              "CTL, CTL-BH",
+              "Synthesis electricity in the resource balance, cost and emissions accounts."
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "18": {
+          "rows": [
+            [
+              "Pathway",
+              "Network\nIDs",
+              "H₂ facility records",
+              "SAF modules / sites",
+              "H₂ distance (km)",
+              "SAF distance (km)",
+              "Top-node share (%)",
+              "Top-route share (%)",
+              "Flow\n>100 km\n(%)",
+              "Largest-source share (%)"
+            ],
+            [
+              "GTL-BH*",
+              "4",
+              "0",
+              "3 / 2",
+              "—",
+              "135.25",
+              "98.32",
+              "100.00",
+              "77.47",
+              "98.32"
+            ],
+            [
+              "GTL*",
+              "4",
+              "0",
+              "2 / 2",
+              "—",
+              "0.00",
+              "77.47",
+              "100.00",
+              "0.00",
+              "77.47"
+            ],
+            [
+              "CTL-BH*",
+              "35",
+              "0",
+              "3 / 3",
+              "156.93",
+              "62.37",
+              "94.10",
+              "88.08",
+              "40.30",
+              "39.73"
+            ],
+            [
+              "CTL†",
+              "113",
+              "109",
+              "111 / 59",
+              "84.31",
+              "30.26",
+              "72.78",
+              "55.57",
+              "12.72",
+              "48.54"
+            ],
+            [
+              "GTL-GH",
+              "112",
+              "109",
+              "3 / 3",
+              "97.02",
+              "32.63",
+              "97.40",
+              "93.08",
+              "19.50",
+              "89.36"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "62",
+              "55",
+              "4 / 4",
+              "199.22",
+              "20.41",
+              "87.97",
+              "61.75",
+              "18.22",
+              "38.30"
+            ],
+            [
+              "CCU-BH-FT*",
+              "51",
+              "45",
+              "3 / 3",
+              "196.78",
+              "45.52",
+              "91.56",
+              "76.63",
+              "9.69",
+              "67.65"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "130",
+              "109",
+              "111 / 59",
+              "67.28",
+              "34.02",
+              "83.04",
+              "43.38",
+              "3.59",
+              "41.26"
+            ],
+            [
+              "CCU-GH-FT",
+              "129",
+              "109",
+              "71 / 57",
+              "63.51",
+              "32.22",
+              "83.43",
+              "44.59",
+              "3.23",
+              "40.67"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "32",
+              "30",
+              "28 / 28",
+              "—",
+              "165.66",
+              "21.88",
+              "13.75",
+              "41.01",
+              "7.66"
+            ],
+            [
+              "DAC-BH-FT*",
+              "28",
+              "26",
+              "26 / 26",
+              "—",
+              "150.85",
+              "24.29",
+              "14.84",
+              "56.94",
+              "8.40"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "113",
+              "109",
+              "111 / 59",
+              "72.92",
+              "34.02",
+              "64.90",
+              "41.26",
+              "14.20",
+              "34.80"
+            ],
+            [
+              "DAC-GH-FT",
+              "113",
+              "109",
+              "111 / 59",
+              "60.14",
+              "32.22",
+              "66.87",
+              "45.21",
+              "12.94",
+              "39.86"
+            ]
+          ],
+          "columns": 10,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "19": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean SAF util. (%)",
+              "Worst-week util. (%)",
+              "Chronic penalty (%)",
+              "Robustness penalty (%)",
+              "Total penalty (%)"
+            ],
+            [
+              "GTL-BH*",
+              "84.68",
+              "75.46",
+              "18.10",
+              "14.43",
+              "32.53"
+            ],
+            [
+              "GTL*",
+              "86.24",
+              "61.10",
+              "15.96",
+              "47.70",
+              "63.66"
+            ],
+            [
+              "CCU-GH-FT",
+              "75.78",
+              "47.36",
+              "31.95",
+              "79.21",
+              "111.17"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "21": {
+          "rows": [
+            [
+              "Pathway",
+              "Demand met (%)",
+              "CNY/kg",
+              "Baseline CI",
+              "With combustion",
+              "With combustion; no capture attribution"
+            ],
+            [
+              "CTL†",
+              "63.24",
+              "20.76",
+              "173.402",
+              "245.631",
+              "245.631"
+            ],
+            [
+              "CTL-BH*",
+              "100.00",
+              "12.46",
+              "491.952",
+              "564.180",
+              "564.180"
+            ],
+            [
+              "GTL-GH",
+              "100.00",
+              "7.24",
+              "90.605",
+              "162.833",
+              "162.833"
+            ],
+            [
+              "GTL*",
+              "100.00",
+              "6.50",
+              "56.940",
+              "129.169",
+              "129.169"
+            ],
+            [
+              "GTL-BH*",
+              "100.00",
+              "5.29",
+              "87.342",
+              "159.570",
+              "159.570"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "29.17",
+              "41.51",
+              "29.282",
+              "101.510",
+              "173.739"
+            ],
+            [
+              "CCU-GH-FT",
+              "43.84",
+              "26.06",
+              "19.436",
+              "91.665",
+              "163.894"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "100.00",
+              "10.96",
+              "509.656",
+              "581.884",
+              "654.113"
+            ],
+            [
+              "CCU-BH-FT*",
+              "100.00",
+              "9.58",
+              "338.753",
+              "410.981",
+              "483.210"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "29.17",
+              "56.64",
+              "33.240",
+              "105.468",
+              "177.697"
+            ],
+            [
+              "DAC-GH-FT",
+              "43.88",
+              "39.97",
+              "23.411",
+              "95.640",
+              "167.869"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "100.00",
+              "24.78",
+              "691.299",
+              "763.527",
+              "835.756"
+            ],
+            [
+              "DAC-BH-FT*",
+              "100.00",
+              "18.72",
+              "467.826",
+              "540.055",
+              "612.283"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "22": {
+          "rows": [
+            [
+              "Comparison",
+              "Service level",
+              "Interpretation"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "100% → 100%",
+              "Archived configurations: 5.291 → 6.502 CNY/kg; conversion and hydrogen-source modules differ."
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "100% → 43.84%",
+              "6.502 → 26.064 CNY/kg of actual output; not a full-demand marginal-cost comparison."
+            ],
+            [
+              "Equal-service interpretation",
+              "Unequal service levels",
+              "These configurations describe their achieved supply quantities; an equal-service comparison requires a common-demand constraint."
+            ],
+            [
+              "Uniform combustion addition",
+              "Same output as each baseline",
+              "Adds 72.229 g CO₂/MJ; preserves pairwise differences but changes absolute intensities."
+            ],
+            [
+              "Capture-attribution sensitivity",
+              "Same output as each baseline",
+              "Removing capture attribution adds a further 72.229 g CO₂/MJ to the CCU/DAC cases."
+            ]
+          ],
+          "columns": 3,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "23": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean utilization",
+              "Worst-week utilization",
+              "Retained (%)",
+              "Mean premium",
+              "Additional premium"
+            ],
+            [
+              "CTL†",
+              "76.05",
+              "49.47",
+              "65.05",
+              "31.50",
+              "70.64"
+            ],
+            [
+              "CTL-BH*",
+              "86.24",
+              "77.35",
+              "89.70",
+              "15.96",
+              "13.32"
+            ],
+            [
+              "GTL-GH",
+              "85.68",
+              "81.00",
+              "94.54",
+              "16.71",
+              "6.74"
+            ],
+            [
+              "GTL*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ],
+            [
+              "GTL-BH*",
+              "84.68",
+              "75.46",
+              "89.11",
+              "18.10",
+              "14.43"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "75.55",
+              "45.62",
+              "60.38",
+              "32.37",
+              "86.84"
+            ],
+            [
+              "CCU-GH-FT",
+              "75.78",
+              "47.36",
+              "62.49",
+              "31.95",
+              "79.21"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "86.24",
+              "79.54",
+              "92.23",
+              "15.96",
+              "9.77"
+            ],
+            [
+              "CCU-BH-FT*",
+              "86.24",
+              "79.43",
+              "92.10",
+              "15.96",
+              "9.95"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "75.55",
+              "45.62",
+              "60.38",
+              "32.36",
+              "86.84"
+            ],
+            [
+              "DAC-GH-FT",
+              "75.71",
+              "47.37",
+              "62.56",
+              "32.08",
+              "79.03"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ],
+            [
+              "DAC-BH-FT*",
+              "86.24",
+              "61.10",
+              "70.85",
+              "15.96",
+              "47.70"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "24": {
+          "rows": [
+            [
+              "Source → target",
+              "Radius\n(km)",
+              "Source capacity %",
+              "Target capacity %"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "1",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "10",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "25",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "50",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → GTL*",
+              "100",
+              "21.81",
+              "22.21"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "1",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "10",
+              "0.00",
+              "0.00"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "25",
+              "2.55",
+              "5.21"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "50",
+              "4.49",
+              "9.17"
+            ],
+            [
+              "GTL-BH* → CCU-GH-FT",
+              "100",
+              "4.49",
+              "9.17"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "1",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "10",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "25",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "50",
+              "23.83",
+              "47.77"
+            ],
+            [
+              "GTL* → CCU-GH-FT",
+              "100",
+              "23.83",
+              "47.77"
+            ]
+          ],
+          "columns": 4,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "25": {
+          "rows": [
+            [
+              "Pathway",
+              "Mean utilization",
+              "Mean premium",
+              "Additional premium",
+              "Retention"
+            ],
+            [
+              "CCU-BH-FT*",
+              "81.65–88.51",
+              "12.98–22.47",
+              "3.43–12.74",
+              "89.88–97.27"
+            ],
+            [
+              "CCU-BH-MTJ*",
+              "81.65–88.47",
+              "13.03–22.47",
+              "3.26–11.45",
+              "90.89–97.41"
+            ],
+            [
+              "CCU-GH-FT",
+              "68.35–85.26",
+              "17.29–46.31",
+              "37.89–85.48",
+              "59.52–75.58"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "67.92–85.52",
+              "16.93–47.23",
+              "40.34–93.48",
+              "57.36–74.35"
+            ],
+            [
+              "CTL†",
+              "68.89–84.91",
+              "17.78–45.16",
+              "35.07–76.49",
+              "62.16–77.06"
+            ],
+            [
+              "CTL-BH*",
+              "81.65–89.20",
+              "12.10–22.47",
+              "6.81–16.48",
+              "87.25–94.73"
+            ],
+            [
+              "DAC-BH-FT*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "DAC-BH-MTJ*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "DAC-GH-FT",
+              "68.28–85.16",
+              "17.42–46.45",
+              "38.01–85.33",
+              "59.58–75.54"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "67.93–85.53",
+              "16.92–47.22",
+              "40.34–93.47",
+              "57.36–74.35"
+            ],
+            [
+              "GTL*",
+              "81.65–94.62",
+              "5.69–22.47",
+              "6.80–46.50",
+              "71.59–93.95"
+            ],
+            [
+              "GTL-BH*",
+              "80.17–87.75",
+              "13.96–24.73",
+              "7.80–18.22",
+              "86.25–94.12"
+            ],
+            [
+              "GTL-GH",
+              "81.13–87.24",
+              "14.62–23.26",
+              "0.19–8.82",
+              "92.86–99.85"
+            ]
+          ],
+          "columns": 5,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "26": {
+          "rows": [
+            [
+              "Calendar week",
+              "Demand",
+              "Solar",
+              "Wind",
+              "Selected",
+              "Inside all ranges"
+            ],
+            [
+              "1",
+              "1.080",
+              "0.432",
+              "0.402",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "5",
+              "0.660",
+              "0.632",
+              "0.584",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "9",
+              "1.080",
+              "0.722",
+              "0.847",
+              "No",
+              "Yes"
+            ],
+            [
+              "14",
+              "0.960",
+              "1.262",
+              "1.248",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "18",
+              "1.080",
+              "1.251",
+              "1.383",
+              "No",
+              "No"
+            ],
+            [
+              "22",
+              "1.080",
+              "1.534",
+              "1.467",
+              "No",
+              "No"
+            ],
+            [
+              "27",
+              "1.080",
+              "1.185",
+              "1.461",
+              "No",
+              "No"
+            ],
+            [
+              "31",
+              "1.080",
+              "1.297",
+              "1.357",
+              "No",
+              "No"
+            ],
+            [
+              "35",
+              "1.080",
+              "1.044",
+              "1.292",
+              "No",
+              "No"
+            ],
+            [
+              "40",
+              "1.080",
+              "1.093",
+              "0.931",
+              "No",
+              "Yes"
+            ],
+            [
+              "44",
+              "1.026",
+              "0.911",
+              "0.608",
+              "Yes",
+              "Yes"
+            ],
+            [
+              "48",
+              "0.714",
+              "0.637",
+              "0.420",
+              "No",
+              "Yes"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "27": {
+          "rows": [
+            [
+              "Pathway / set",
+              "Rows",
+              "Columns",
+              "Final dispatch (s)",
+              "Certified gap (%)",
+              "Result scope"
+            ],
+            [
+              "CCU-GH-FT / A",
+              "375508",
+              "3704823",
+              "92.46",
+              "0.2008",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-FT / B",
+              "376010",
+              "3704823",
+              "35.37",
+              "0.0690",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-MTJ / A",
+              "375508",
+              "3704823",
+              "76.90",
+              "0.2027",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CCU-GH-MTJ / B",
+              "376010",
+              "3704823",
+              "39.21",
+              "0.0341",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-FT / A",
+              "385612",
+              "2984901",
+              "61.70",
+              "0.2633",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-FT / B",
+              "386163",
+              "2984901",
+              "49.57",
+              "0.0427",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-MTJ / A",
+              "385612",
+              "2984901",
+              "28.01",
+              "0.2103",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "DAC-GH-MTJ / B",
+              "386163",
+              "2984901",
+              "27.83",
+              "0.0340",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "GTL-GH / A",
+              "1094075",
+              "1474176",
+              "15.90",
+              "0.7284",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "GTL-GH / B",
+              "1096413",
+              "1474176",
+              "9.59",
+              "0.0000",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CTL† / A",
+              "260404",
+              "2848482",
+              "72.46",
+              "0.3461",
+              "Full-model feasible; global bound certificate"
+            ],
+            [
+              "CTL† / B",
+              "260844",
+              "2848482",
+              "26.91",
+              "0.0955",
+              "Full-model feasible; global bound certificate"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "28": {
+          "rows": [
+            [
+              "Pathway / set",
+              "Max row residual",
+              "Max bound residual",
+              "Max electricity deficit (MWh)",
+              "Max H₂ balance residual (kg)",
+              "Checks"
+            ],
+            [
+              "CCU-GH-FT / A",
+              "4.95e-09",
+              "3.78e-10",
+              "1.14e-13",
+              "4.95e-09",
+              "Passed"
+            ],
+            [
+              "CCU-GH-FT / B",
+              "3.73e-09",
+              "1.31e-11",
+              "1.14e-13",
+              "7.64e-11",
+              "Passed"
+            ],
+            [
+              "CCU-GH-MTJ / A",
+              "5.59e-09",
+              "5.24e-10",
+              "1.14e-13",
+              "1.66e-09",
+              "Passed"
+            ],
+            [
+              "CCU-GH-MTJ / B",
+              "9.31e-09",
+              "3.21e-11",
+              "1.14e-13",
+              "1.53e-10",
+              "Passed"
+            ],
+            [
+              "DAC-GH-FT / A",
+              "5.11e-08",
+              "3.13e-10",
+              "2.27e-13",
+              "5.11e-08",
+              "Passed"
+            ],
+            [
+              "DAC-GH-FT / B",
+              "3.35e-08",
+              "7.86e-10",
+              "2.27e-13",
+              "1.31e-09",
+              "Passed"
+            ],
+            [
+              "DAC-GH-MTJ / A",
+              "1.86e-09",
+              "1.37e-11",
+              "1.14e-13",
+              "3.77e-11",
+              "Passed"
+            ],
+            [
+              "DAC-GH-MTJ / B",
+              "2.14e-08",
+              "2.33e-09",
+              "2.27e-13",
+              "8.48e-10",
+              "Passed"
+            ],
+            [
+              "GTL-GH / A",
+              "6.34e-08",
+              "3.17e-08",
+              "1.10e-12",
+              "3.15e-10",
+              "Passed"
+            ],
+            [
+              "GTL-GH / B",
+              "1.49e-08",
+              "4.89e-09",
+              "3.41e-13",
+              "1.64e-11",
+              "Passed"
+            ],
+            [
+              "CTL† / A",
+              "9.78e-09",
+              "9.43e-09",
+              "1.14e-13",
+              "4.28e-09",
+              "Passed"
+            ],
+            [
+              "CTL† / B",
+              "7.45e-09",
+              "1.86e-09",
+              "5.80e-12",
+              "1.68e-10",
+              "Passed"
+            ]
+          ],
+          "columns": 6,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "29": {
+          "rows": [
+            [
+              "Check",
+              "Recorded outcome",
+              "Validation scope"
+            ],
+            [
+              "Solar source reconstruction",
+              "2,016 HDF5 files; 66 phases; 43,680 project-period records checked",
+              "Source grid, coordinates, raw units, deduplicated capacities and UTC+8 alignment; retained effective PV factor 0.1632."
+            ],
+            [
+              "Wind aggregation",
+              "48 phases; 29,568 project-period records; 0.0 MWh maximum aggregation error",
+              "Mean MW and three-hour energy; cyclic 8,760-hour source sequence."
+            ],
+            [
+              "Selected profiles and demand",
+              "A: weeks 1, 5, 14, 44; B: weeks 1, 14, 27, 44; 224 periods each",
+              "Inputs selected together; source files and solution summaries linked by hashes."
+            ],
+            [
+              "Full-model and physical checks",
+              "Twelve accepted solutions pass; CTL† is a diagnostic variant",
+              "All algebraic rows, bounds and integers; independent supply, stock, capacity, transport and demand checks."
+            ],
+            [
+              "Fixed production assets",
+              "Six A/B pathway pairs pass",
+              "SAF and electrolyzer build/capacity; DAC build where present. Inventory and routes reoptimized."
+            ],
+            [
+              "GTL-GH natural-gas checks",
+              "28 days × 8 periods; daily technology allocation, source types and capacities pass",
+              "Single allocation and charging of delivery flows; extraction emissions include all consumed natural gas."
+            ],
+            [
+              "CTL with a 90% minimum-output requirement",
+              "Infeasible in A and B; renewable-energy upper bounds 73.32% and 86.09%",
+              "Both upper bounds are below the required 90%, even without other operating restrictions."
+            ]
+          ],
+          "columns": 3,
+          "cell_paragraph_counts": [
+            1
+          ]
+        },
+        "32": {
+          "rows": [
+            [
+              "Pathway",
+              "Week\nset",
+              "Demand\nmet (%)",
+              "Mean\nutil. (%)",
+              "Worst-week\nretention (%)",
+              "Mean\npremium (%)",
+              "Additional\npremium (%)"
+            ],
+            [
+              "CCU-GH-FT",
+              "A",
+              "43.84",
+              "75.78",
+              "62.49",
+              "31.95",
+              "79.21"
+            ],
+            [
+              "CCU-GH-FT",
+              "B",
+              "43.81",
+              "84.27",
+              "56.29",
+              "18.67",
+              "92.16"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "A",
+              "29.17",
+              "75.55",
+              "60.38",
+              "32.37",
+              "86.84"
+            ],
+            [
+              "CCU-GH-MTJ",
+              "B",
+              "29.25",
+              "84.30",
+              "54.21",
+              "18.62",
+              "100.21"
+            ],
+            [
+              "DAC-GH-FT",
+              "A",
+              "43.88",
+              "75.71",
+              "62.56",
+              "32.08",
+              "79.03"
+            ],
+            [
+              "DAC-GH-FT",
+              "B",
+              "43.86",
+              "84.21",
+              "56.34",
+              "18.75",
+              "92.01"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "A",
+              "29.17",
+              "75.55",
+              "60.38",
+              "32.36",
+              "86.84"
+            ],
+            [
+              "DAC-GH-MTJ",
+              "B",
+              "29.25",
+              "84.30",
+              "54.22",
+              "18.62",
+              "100.17"
+            ],
+            [
+              "GTL-GH",
+              "A",
+              "100.00",
+              "85.68",
+              "94.54",
+              "16.71",
+              "6.74"
+            ],
+            [
+              "GTL-GH",
+              "B",
+              "100.00",
+              "95.34",
+              "97.58",
+              "4.88",
+              "2.60"
+            ],
+            [
+              "CTL†",
+              "A",
+              "63.24",
+              "76.05",
+              "65.05",
+              "31.50",
+              "70.64"
+            ],
+            [
+              "CTL†",
+              "B",
+              "62.93",
+              "84.21",
+              "58.88",
+              "18.75",
+              "82.94"
+            ]
+          ],
+          "columns": 7,
+          "cell_paragraph_counts": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "tables": {
+    "5": {
+      "file": "results/{scenario}/baseline/model_parameters.json",
+      "fields": [
+        "Captured-CO2 route-level synthesis electricity"
+      ],
+      "additional": "Final accounts apply the common 7.6 kWh/kg FT/MTJ aggregate input"
+    },
+    "8": {
+      "file": "results/{scenario}/baseline/model_parameters.json",
+      "fields": [
+        "costs.renewable_electricity_cost_yuan_per_mwh"
+      ],
+      "additional": "Applied renewable and grid electricity prices"
+    },
+    "9": {
+      "file": "postprocess/accounts/{scenario}/baseline/accounts.json",
+      "fields": [
+        "conversion_energy_reconciliation"
+      ],
+      "additional": "Common aggregate captured-CO2 FT/MTJ synthesis-electricity assumption"
+    },
+    "18": {
+      "file": "figures_spatial/network_data/network_metrics.csv",
+      "fields": [
+        "节点数量",
+        "h2_supply_module_count",
+        "saf_module_count",
+        "saf_physical_sites",
+        "H2_distance_km",
+        "SAF_distance_km",
+        "关键节点集中度",
+        "关键通道集中度",
+        "跨区域物流比例",
+        "单点失效影响"
+      ]
+    },
+    "19": {
+      "file": "figures_temporal/temporal_data/all_pathway_temporal_metrics.csv",
+      "fields": [
+        "SAFMean",
+        "WorstWeekMean",
+        "ChronicPenaltyPct",
+        "RobustnessPenaltyPct",
+        "TotalPenaltyPct"
+      ]
+    },
+    "21": {
+      "file": "figures_cost/adapted_data/S21_carbon_sensitivity.csv",
+      "fields": [
+        "baseline_g_mj",
+        "with_combustion_g_mj",
+        "with_combustion_without_capture_attribution_g_mj"
+      ],
+      "additional": "figures_cost/adapted_data/pathway_summary.csv"
+    },
+    "22": {
+      "file": "figures_cost/adapted_data/pathway_summary.csv",
+      "fields": [
+        "cost_cny_kg",
+        "fulfillment_ratio"
+      ],
+      "additional": "figures_cost/adapted_data/S21_carbon_sensitivity.csv"
+    },
+    "23": {
+      "file": "figures_temporal/temporal_data/all_pathway_temporal_metrics.csv",
+      "fields": [
+        "SAFMean",
+        "WorstWeekMean",
+        "WorstWeekRetention",
+        "ChronicPenaltyPct",
+        "RobustnessPenaltyPct"
+      ]
+    },
+    "24": {
+      "file": "figures_spatial/network_data/Table_S24_matching.csv",
+      "fields": [
+        "source",
+        "target",
+        "threshold_km",
+        "source_share_percent",
+        "target_share_percent"
+      ]
+    },
+    "25": {
+      "file": "figures_temporal/temporal_data/week_omission_ranges.csv",
+      "fields": [
+        "mean_utilization_pct_min/max",
+        "mean_premium_pct_min/max",
+        "additional_premium_pct_min/max",
+        "retention_pct_min/max"
+      ]
+    },
+    "26": {
+      "file": "figures_resource/updated_joint_week_ranges.json",
+      "fields": [
+        "week",
+        "demand",
+        "solar",
+        "wind",
+        "selected",
+        "inside"
+      ]
+    },
+    "27": {
+      "file": "result_tables/output/solver_certificates.csv",
+      "fields": [
+        "scenario",
+        "label",
+        "rows",
+        "columns",
+        "seconds",
+        "gap"
+      ]
+    },
+    "28": {
+      "file": "results/{scenario}/{label}/summary.json",
+      "fields": [
+        "algebraic_validation"
+      ],
+      "additional": "physical_validation.json or byproduct_physical_validation.json"
+    },
+    "29": {
+      "file": "result_tables/output/collection_report.json",
+      "fields": [
+        "collected_runs",
+        "collected_fixed_asset_pairs",
+        "passed"
+      ],
+      "additional": "Independent input, CO2, H2, inventory and physical reports bound to all eighteen summaries"
+    },
+    "32": {
+      "file": "result_tables/output/new_summary_raw.csv",
+      "fields": [
+        "demand_fulfillment_ratio",
+        "mean_utilization",
+        "worst_week_retention"
+      ],
+      "additional": "new_weekly_metrics.csv and fixed_asset_validation.csv"
+    }
+  }
+}

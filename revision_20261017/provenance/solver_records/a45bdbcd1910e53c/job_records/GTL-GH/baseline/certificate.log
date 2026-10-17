@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final/accept_repaired.py", line 11, in <module>
+    assert report['passed'],report
+           ~~~~~~^^^^^^^^^^
+AssertionError: {'status': 1, 'has_solution': True, 'source_iteration': 'rounded', 'seconds': 12.906383037567139, 'objective': 49053798612.98307, 'lower_bound': 47427094750.53323, 'max_constraint_residual': 2.3283064365386963e-08, 'max_bound_residual': 2.0605511963367462e-08, 'max_integer_violation': 0.0, 'gap': 0.033161628832946224, 'physically_feasible_algebraically': True, 'source_sha256': '2eb5249db7262e10def750568fde8a54d3b794c8b3c37dba93960140a779b349', 'column_name_sha256': 'ab52b1cf452b4b736e9733eb8edc334c1b8252675e54c189a052158c9a7cc8eb', 'method': 'Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection', 'scenario': 'GTL-GH', 'label': 'baseline', 'relative_gap_tolerance': 0.01, 'passed': False}

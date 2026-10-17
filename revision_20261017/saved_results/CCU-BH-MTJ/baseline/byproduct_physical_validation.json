@@ -1,0 +1,90 @@
+{
+  "scenario": "CCU-BH-MTJ",
+  "label": "baseline",
+  "checks": {
+    "h2_source_availability_excess_kg": 4.944013198837638e-08,
+    "h2_conditioning_capacity_excess_kg": 4.944013198837638e-08,
+    "h2_build_capacity_excess_kg_h": 0.0,
+    "h2_node_period_balance_error_kg": 2.852175384759903e-09,
+    "h2_initial_inventory_kg": 0.0,
+    "fuel_node_period_balance_error_kg": 8.64383764564991e-09,
+    "fuel_initial_inventory_kg": 0.0,
+    "fuel_capacity_excess_kg": 8.94215190783143e-09,
+    "fuel_build_capacity_excess_kg_h": 0.0,
+    "demand_shortage_accounting_error_kg": 1.862645149230957e-09,
+    "reported_fuel_production_error_kg": 7.450580596923828e-09
+  },
+  "ledger_checks": {
+    "h2_upstream_and_conditioning_carbon": {
+      "actual": 826759092.9191897,
+      "expected": 826759092.9191837,
+      "error": 5.9604644775390625e-06,
+      "tolerance": 8.267590929191838,
+      "passed": true
+    },
+    "conditioning_and_synthesis_grid_electricity_cost": {
+      "actual": 36554376631.109856,
+      "expected": 36554376631.110504,
+      "error": -0.00064849853515625,
+      "tolerance": 365.54376631110506,
+      "passed": true
+    },
+    "hydrogen_internal_component_cost": {
+      "actual": 0.0,
+      "expected": 0.0,
+      "error": 0.0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "reported_levelized_fuel_cost": {
+      "actual": 11.051489460495961,
+      "expected": 11.051489460495967,
+      "error": -5.329070518200751e-15,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "conditioning_electricity_kwh": {
+      "actual": 89339119.7525838,
+      "expected": 89339119.75258383,
+      "error": -2.9802322387695312e-08,
+      "tolerance": 0.8933911975258383,
+      "passed": true
+    }
+  },
+  "demand_week_mapping": {
+    "1": 0,
+    "2": 1,
+    "3": 2,
+    "4": 3
+  },
+  "validator_source_sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+  "validator_source_path": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/tools/repair_mip/validate_historical.py",
+  "physical_checks_passed": true,
+  "ledger_checks_passed": true,
+  "h2_total_production_kg": 35735647.901033536,
+  "fuel_total_production_kg": 51050925.57290506,
+  "solution_summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+  "input_sha256": {
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/CCU-BH-MTJ/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/CCU-BH-MTJ/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/CCU-BH-MTJ/baseline/byproduct_hydrogen_periods.csv": "959312f7c4ad302db9951f1cde82584b326dd6accd475c4a47430d086609f935",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/CCU-BH-MTJ/baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/summary.json": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/config.yaml": "bbb347ac829348dfff01812d2d57508ec482d6db6dcdfb294f2eddc76d1d78a6",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/model_parameters.json": "a8132570ea540e70ca6ff715fd3f780d8c1933d1107b85182e890e1c870ffffd",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/byproduct_accounting_parameters.json": "337e94b25012ff7392387b5cf010c7dc49b9f06b3e56201825073a46c9273aff",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/saf_production.csv": "795c8ae850c616ed202753c1f071d711037a0b720b8f642917d642887b6e5aae",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/h2_production.csv": "f1af6f43548999050459dced5244a64c8add87e20fc17fb41bfe867befde9eb4",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/h2_inventory.csv": "cfda98942de358538eca42f17dc68ee75a05e11d9ee0ff90056841c303bd441b",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/h2_flows.csv": "7fd174a1ff9a10cfb9f14026bade6dfc8e64916a99757d77862ef3b25c79c2ec",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/saf_inventory.csv": "9a70d15a27d944183fb1d76d3c7137eef3c98770e1664cdc369986595c49be93",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/deliveries.csv": "9d0629e9adb8c37324f2817800b3034d2857dd6adb9d220afc5dccf3569932c6",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/shortages.csv": "c98ff47ca2f1ae51be7e4f68a9f1ee40f90fa3945d6dfc6b66ae70749e47dcf5",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/saf_capacity.csv": "b7aeca03b4e03790c2803e0c7d4b454c55af29599dbb5561a38165bfc2642ed2",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/saf_build.csv": "8d23c9f16a9395060df397abe0f48d0c54c9a129962f90bf3c82c4b756772988",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/h2_capacity.csv": "ebf317d8507c20d9744cdc0dd153a346a4564dc1801b577799a580a8347bdeeb",
+    "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/verified_runs/CCU-BH-MTJ/baseline/h2_build.csv": "6d250efc205f61490b0adfd614da18c9b91397c666d78ba316ff192094bd6c4c"
+  },
+  "scope": "Independent material balances, source/capacity limits, industrial conditioning costs and carbon, fuel output cost; separate route and inventory validators check their full ledgers.",
+  "passed": true
+}

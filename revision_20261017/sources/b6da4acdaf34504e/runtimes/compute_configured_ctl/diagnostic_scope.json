@@ -1,0 +1,6 @@
+{
+  "allow_ctl_shortage": true,
+  "description": "CTL diagnostic with its original 90% minimum-service inequality removed; all other constraints retained.",
+  "baseline_necessary_resource_upper_bound": 0.786147,
+  "summer_resource_bound_is_not_an_infeasibility_proof": true
+}

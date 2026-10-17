@@ -1,0 +1,19 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "closed_facility": "facility_steel_Chengde_Jianlong_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+  "seconds": 9.151108026504517,
+  "lower_bound": 71297854012.57652,
+  "source_sha256": {
+    "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+    "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+    "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+  },
+  "max_constraint_residual": 1.0128132998943329e-08,
+  "max_bound_residual": 2.324782144569326e-09,
+  "max_integer_violation": 0.0,
+  "objective": 72010750102.42458,
+  "gap": 0.00989985646357057,
+  "bound_source": "partition_bound/proof.json",
+  "global_bound_method": "Minimum of exhaustive integer-design partition LP bounds; all leaf domains and original objective independently checked"
+}

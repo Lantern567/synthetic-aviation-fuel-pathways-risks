@@ -1,0 +1,277 @@
+[
+  {
+    "latitude": 38.088644,
+    "longitude": 118.88525,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.031083,
+    "longitude": 117.499246,
+    "raw": [
+      "H2"
+    ],
+    "saf": true,
+    "airport": false
+  },
+  {
+    "latitude": 37.676005,
+    "longitude": 118.339336,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.059069,
+    "longitude": 118.873916,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.435733,
+    "longitude": 117.378077,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.970638,
+    "longitude": 117.495794,
+    "raw": [
+      "H2"
+    ],
+    "saf": true,
+    "airport": false
+  },
+  {
+    "latitude": 38.360699,
+    "longitude": 117.405885,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.490239,
+    "longitude": 117.268074,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.097408,
+    "longitude": 118.879765,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.990302,
+    "longitude": 119.640584,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.821201,
+    "longitude": 117.410056,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.737926,
+    "longitude": 117.512307,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.86328,
+    "longitude": 119.223595,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 40.183913,
+    "longitude": 118.073913,
+    "raw": [
+      "H2"
+    ],
+    "saf": true,
+    "airport": false
+  },
+  {
+    "latitude": 38.096965,
+    "longitude": 118.87927,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.338765,
+    "longitude": 116.872577,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.972631,
+    "longitude": 117.741279,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.092496,
+    "longitude": 118.893292,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.075368,
+    "longitude": 117.002342,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.095197,
+    "longitude": 117.762038,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.296875,
+    "longitude": 117.701561,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.086922,
+    "longitude": 118.879533,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 38.465418,
+    "longitude": 117.611834,
+    "raw": [
+      "H2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 40.947707,
+    "longitude": 117.719747,
+    "raw": [
+      "H2"
+    ],
+    "saf": true,
+    "airport": false
+  },
+  {
+    "latitude": 39.300258,
+    "longitude": 117.800231,
+    "raw": [
+      "H2"
+    ],
+    "saf": true,
+    "airport": false
+  },
+  {
+    "latitude": 40.0801,
+    "longitude": 116.5846,
+    "raw": [],
+    "saf": false,
+    "airport": true
+  },
+  {
+    "latitude": 39.1244,
+    "longitude": 117.3462,
+    "raw": [],
+    "saf": false,
+    "airport": true
+  },
+  {
+    "latitude": 39.980138,
+    "longitude": 117.46307,
+    "raw": [
+      "CO2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.952755,
+    "longitude": 116.848741,
+    "raw": [
+      "CO2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.151217,
+    "longitude": 117.038257,
+    "raw": [
+      "CO2"
+    ],
+    "saf": false,
+    "airport": false
+  },
+  {
+    "latitude": 39.300551,
+    "longitude": 117.190744,
+    "raw": [
+      "CO2"
+    ],
+    "saf": false,
+    "airport": false
+  }
+]

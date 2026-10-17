@@ -1,0 +1,529 @@
+location,airport,week,value
+refinery_Binyang Refinery,北京,0,12118.039733333499
+refinery_Binyang Refinery,北京,1,11811.253917299598
+refinery_Binyang Refinery,北京,2,12271.4326413503
+refinery_Binyang Refinery,北京,3,12271.432641350299
+refinery_Binyang Refinery,天津,0,-1.8189894035458565e-12
+refinery_Binyang Refinery,天津,1,1.8189894035458565e-12
+refinery_Binyang Refinery,天津,2,0.0
+refinery_Binyang Refinery,天津,3,0.0
+refinery_CNOOC Dongying Refinery,北京,0,0.0
+refinery_CNOOC Dongying Refinery,北京,1,0.0
+refinery_CNOOC Dongying Refinery,北京,2,0.0
+refinery_CNOOC Dongying Refinery,北京,3,0.0
+refinery_CNOOC Dongying Refinery,天津,0,0.0
+refinery_CNOOC Dongying Refinery,天津,1,0.0
+refinery_CNOOC Dongying Refinery,天津,2,0.0
+refinery_CNOOC Dongying Refinery,天津,3,0.0
+refinery_Fuyu Refinery,北京,0,0.0
+refinery_Fuyu Refinery,北京,1,0.0
+refinery_Fuyu Refinery,北京,2,0.0
+refinery_Fuyu Refinery,北京,3,0.0
+refinery_Fuyu Refinery,天津,0,0.0
+refinery_Fuyu Refinery,天津,1,0.0
+refinery_Fuyu Refinery,天津,2,0.0
+refinery_Fuyu Refinery,天津,3,0.0
+refinery_Guangyuan Refinery,北京,0,0.0
+refinery_Guangyuan Refinery,北京,1,0.0
+refinery_Guangyuan Refinery,北京,2,0.0
+refinery_Guangyuan Refinery,北京,3,0.0
+refinery_Guangyuan Refinery,天津,0,0.0
+refinery_Guangyuan Refinery,天津,1,0.0
+refinery_Guangyuan Refinery,天津,2,0.0
+refinery_Guangyuan Refinery,天津,3,0.0
+refinery_Haike Ruilin Refinery,北京,0,0.0
+refinery_Haike Ruilin Refinery,北京,1,0.0
+refinery_Haike Ruilin Refinery,北京,2,0.0
+refinery_Haike Ruilin Refinery,北京,3,0.0
+refinery_Haike Ruilin Refinery,天津,0,0.0
+refinery_Haike Ruilin Refinery,天津,1,0.0
+refinery_Haike Ruilin Refinery,天津,2,0.0
+refinery_Haike Ruilin Refinery,天津,3,0.0
+refinery_Haiyue Refinery,北京,0,0.0
+refinery_Haiyue Refinery,北京,1,0.0
+refinery_Haiyue Refinery,北京,2,0.0
+refinery_Haiyue Refinery,北京,3,0.0
+refinery_Haiyue Refinery,天津,0,0.0
+refinery_Haiyue Refinery,天津,1,0.0
+refinery_Haiyue Refinery,天津,2,0.0
+refinery_Haiyue Refinery,天津,3,0.0
+refinery_Hebei Dagang Refinery,北京,0,0.0
+refinery_Hebei Dagang Refinery,北京,1,0.0
+refinery_Hebei Dagang Refinery,北京,2,0.0
+refinery_Hebei Dagang Refinery,北京,3,0.0
+refinery_Hebei Dagang Refinery,天津,0,0.0
+refinery_Hebei Dagang Refinery,天津,1,0.0
+refinery_Hebei Dagang Refinery,天津,2,0.0
+refinery_Hebei Dagang Refinery,天津,3,0.0
+refinery_Hebei Qianhai Refinery,北京,0,34095.91173333335
+refinery_Hebei Qianhai Refinery,北京,1,11329.029894736828
+refinery_Hebei Qianhai Refinery,北京,2,45479.35265263155
+refinery_Hebei Qianhai Refinery,北京,3,45479.35265263155
+refinery_Hebei Qianhai Refinery,天津,0,-2.9103830456733704e-11
+refinery_Hebei Qianhai Refinery,天津,1,-1.8189894035458565e-12
+refinery_Hebei Qianhai Refinery,天津,2,0.0
+refinery_Hebei Qianhai Refinery,天津,3,0.0
+refinery_Huabei Refinery,北京,0,37866.514
+refinery_Huabei Refinery,北京,1,14791.60703124997
+refinery_Huabei Refinery,北京,2,49403.96748437504
+refinery_Huabei Refinery,北京,3,49403.96748437504
+refinery_Huabei Refinery,天津,0,0.0
+refinery_Huabei Refinery,天津,1,0.0
+refinery_Huabei Refinery,天津,2,0.0
+refinery_Huabei Refinery,天津,3,0.0
+refinery_Hualian Refinery,北京,0,23477.049866666748
+refinery_Hualian Refinery,北京,1,5103.706492753629
+refinery_Hualian Refinery,北京,2,32663.721553623393
+refinery_Hualian Refinery,北京,3,32663.721553623393
+refinery_Hualian Refinery,天津,0,0.0
+refinery_Hualian Refinery,天津,1,9.094947017729282e-13
+refinery_Hualian Refinery,天津,2,0.0
+refinery_Hualian Refinery,天津,3,0.0
+refinery_Huayu Refinery,北京,0,0.0
+refinery_Huayu Refinery,北京,1,0.0
+refinery_Huayu Refinery,北京,2,0.0
+refinery_Huayu Refinery,北京,3,0.0
+refinery_Huayu Refinery,天津,0,0.0
+refinery_Huayu Refinery,天津,1,0.0
+refinery_Huayu Refinery,天津,2,0.0
+refinery_Huayu Refinery,天津,3,0.0
+refinery_Lianhe Refinery,北京,0,0.0
+refinery_Lianhe Refinery,北京,1,0.0
+refinery_Lianhe Refinery,北京,2,0.0
+refinery_Lianhe Refinery,北京,3,0.0
+refinery_Lianhe Refinery,天津,0,0.0
+refinery_Lianhe Refinery,天津,1,0.0
+refinery_Lianhe Refinery,天津,2,0.0
+refinery_Lianhe Refinery,天津,3,0.0
+refinery_PetroChina Qinhuangdao Refinery,北京,0,0.0
+refinery_PetroChina Qinhuangdao Refinery,北京,1,0.0
+refinery_PetroChina Qinhuangdao Refinery,北京,2,0.0
+refinery_PetroChina Qinhuangdao Refinery,北京,3,0.0
+refinery_PetroChina Qinhuangdao Refinery,天津,0,0.0
+refinery_PetroChina Qinhuangdao Refinery,天津,1,0.0
+refinery_PetroChina Qinhuangdao Refinery,天津,2,0.0
+refinery_PetroChina Qinhuangdao Refinery,天津,3,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,北京,0,49293.49693333354
+refinery_PetroChina Rosneft Tianjin  Refinery,北京,1,30553.7809384552
+refinery_PetroChina Rosneft Tianjin  Refinery,北京,2,58663.35493077234
+refinery_PetroChina Rosneft Tianjin  Refinery,北京,3,58663.35493077234
+refinery_PetroChina Rosneft Tianjin  Refinery,天津,0,1.4551915228366852e-11
+refinery_PetroChina Rosneft Tianjin  Refinery,天津,1,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,天津,2,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,天津,3,0.0
+refinery_Petrochina Dagang Refinery,北京,0,0.0
+refinery_Petrochina Dagang Refinery,北京,1,0.0
+refinery_Petrochina Dagang Refinery,北京,2,-3.637978807091713e-12
+refinery_Petrochina Dagang Refinery,北京,3,1.0550138540565968e-10
+refinery_Petrochina Dagang Refinery,天津,0,18932.31293333331
+refinery_Petrochina Dagang Refinery,天津,1,13020.389949999944
+refinery_Petrochina Dagang Refinery,天津,2,21888.274424999963
+refinery_Petrochina Dagang Refinery,天津,3,21888.274424999854
+refinery_Qinhuangdao Far East Refinery,北京,0,0.0
+refinery_Qinhuangdao Far East Refinery,北京,1,0.0
+refinery_Qinhuangdao Far East Refinery,北京,2,0.0
+refinery_Qinhuangdao Far East Refinery,北京,3,0.0
+refinery_Qinhuangdao Far East Refinery,天津,0,0.0
+refinery_Qinhuangdao Far East Refinery,天津,1,0.0
+refinery_Qinhuangdao Far East Refinery,天津,2,0.0
+refinery_Qinhuangdao Far East Refinery,天津,3,0.0
+refinery_Shenchi Refinery,北京,0,0.0
+refinery_Shenchi Refinery,北京,1,0.0
+refinery_Shenchi Refinery,北京,2,0.0
+refinery_Shenchi Refinery,北京,3,0.0
+refinery_Shenchi Refinery,天津,0,0.0
+refinery_Shenchi Refinery,天津,1,0.0
+refinery_Shenchi Refinery,天津,2,0.0
+refinery_Shenchi Refinery,天津,3,0.0
+refinery_Sinopec Beijing Refinery,北京,0,41708.865333333364
+refinery_Sinopec Beijing Refinery,北京,1,25002.102444171214
+refinery_Sinopec Beijing Refinery,北京,2,50062.24677791445
+refinery_Sinopec Beijing Refinery,北京,3,50062.246777914304
+refinery_Sinopec Beijing Refinery,天津,0,0.0
+refinery_Sinopec Beijing Refinery,天津,1,0.0
+refinery_Sinopec Beijing Refinery,天津,2,0.0
+refinery_Sinopec Beijing Refinery,天津,3,0.0
+refinery_Sinopec Cangzhou Refinery,北京,0,0.0
+refinery_Sinopec Cangzhou Refinery,北京,1,0.0
+refinery_Sinopec Cangzhou Refinery,北京,2,0.0
+refinery_Sinopec Cangzhou Refinery,北京,3,0.0
+refinery_Sinopec Cangzhou Refinery,天津,0,0.0
+refinery_Sinopec Cangzhou Refinery,天津,1,0.0
+refinery_Sinopec Cangzhou Refinery,天津,2,0.0
+refinery_Sinopec Cangzhou Refinery,天津,3,0.0
+refinery_Sinopec Shijiazhuang Refinery,北京,0,37917.49359999994
+refinery_Sinopec Shijiazhuang Refinery,北京,1,18976.584201264326
+refinery_Sinopec Shijiazhuang Refinery,北京,2,47387.94829936798
+refinery_Sinopec Shijiazhuang Refinery,北京,3,47387.94829936797
+refinery_Sinopec Shijiazhuang Refinery,天津,0,0.0
+refinery_Sinopec Shijiazhuang Refinery,天津,1,0.0
+refinery_Sinopec Shijiazhuang Refinery,天津,2,0.0
+refinery_Sinopec Shijiazhuang Refinery,天津,3,0.0
+refinery_Sinopec Tianjin Refinery,北京,0,1.1641532182693481e-10
+refinery_Sinopec Tianjin Refinery,北京,1,0.0
+refinery_Sinopec Tianjin Refinery,北京,2,2.8812792152166367e-09
+refinery_Sinopec Tianjin Refinery,北京,3,0.0
+refinery_Sinopec Tianjin Refinery,天津,0,52325.83906666667
+refinery_Sinopec Tianjin Refinery,天津,1,37765.23444837768
+refinery_Sinopec Tianjin Refinery,天津,2,59606.141375808395
+refinery_Sinopec Tianjin Refinery,天津,3,59606.14137581503
+refinery_Tianhong 1 Refinery,北京,0,0.0
+refinery_Tianhong 1 Refinery,北京,1,0.0
+refinery_Tianhong 1 Refinery,北京,2,0.0
+refinery_Tianhong 1 Refinery,北京,3,0.0
+refinery_Tianhong 1 Refinery,天津,0,0.0
+refinery_Tianhong 1 Refinery,天津,1,0.0
+refinery_Tianhong 1 Refinery,天津,2,0.0
+refinery_Tianhong 1 Refinery,天津,3,0.0
+refinery_Tianjin  Refinery,北京,0,0.0
+refinery_Tianjin  Refinery,北京,1,0.0
+refinery_Tianjin  Refinery,北京,2,0.0
+refinery_Tianjin  Refinery,北京,3,0.0
+refinery_Tianjin  Refinery,天津,0,0.0
+refinery_Tianjin  Refinery,天津,1,0.0
+refinery_Tianjin  Refinery,天津,2,0.0
+refinery_Tianjin  Refinery,天津,3,0.0
+refinery_Wudi Xinyue Refinery,北京,0,30398.94666666681
+refinery_Wudi Xinyue Refinery,北京,1,19805.374343434145
+refinery_Wudi Xinyue Refinery,北京,2,35695.73282828282
+refinery_Wudi Xinyue Refinery,北京,3,35695.73282828282
+refinery_Wudi Xinyue Refinery,天津,0,7.275957614183426e-12
+refinery_Wudi Xinyue Refinery,天津,1,0.0
+refinery_Wudi Xinyue Refinery,天津,2,0.0
+refinery_Wudi Xinyue Refinery,天津,3,0.0
+refinery_Xinhai  Refinery,北京,0,22719.908400000186
+refinery_Xinhai  Refinery,北京,1,7500.621050000122
+refinery_Xinhai  Refinery,北京,2,30329.552075000065
+refinery_Xinhai  Refinery,北京,3,30329.552075000065
+refinery_Xinhai  Refinery,天津,0,3.637978807091713e-12
+refinery_Xinhai  Refinery,天津,1,0.0
+refinery_Xinhai  Refinery,天津,2,0.0
+refinery_Xinhai  Refinery,天津,3,0.0
+refinery_Yatong Refinery,北京,0,0.0
+refinery_Yatong Refinery,北京,1,0.0
+refinery_Yatong Refinery,北京,2,0.0
+refinery_Yatong Refinery,北京,3,0.0
+refinery_Yatong Refinery,天津,0,0.0
+refinery_Yatong Refinery,天津,1,0.0
+refinery_Yatong Refinery,天津,2,0.0
+refinery_Yatong Refinery,天津,3,0.0
+refinery_Zhonghai  Refinery,北京,0,0.0
+refinery_Zhonghai  Refinery,北京,1,0.0
+refinery_Zhonghai  Refinery,北京,2,0.0
+refinery_Zhonghai  Refinery,北京,3,0.0
+refinery_Zhonghai  Refinery,天津,0,0.0
+refinery_Zhonghai  Refinery,天津,1,0.0
+refinery_Zhonghai  Refinery,天津,2,0.0
+refinery_Zhonghai  Refinery,天津,3,0.0
+refinery_Zhongjie Refinery,北京,0,0.0
+refinery_Zhongjie Refinery,北京,1,0.0
+refinery_Zhongjie Refinery,北京,2,0.0
+refinery_Zhongjie Refinery,北京,3,0.0
+refinery_Zhongjie Refinery,天津,0,0.0
+refinery_Zhongjie Refinery,天津,1,0.0
+refinery_Zhongjie Refinery,天津,2,0.0
+refinery_Zhongjie Refinery,天津,3,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,北京,0,175000.00000000006
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,北京,1,168750.00000000064
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,北京,2,178124.9999999999
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,北京,3,178124.9999999999
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,1,-7.275957614183426e-10
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,2,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,天津,3,0.0
+steel_Chengde Iron and Steel Group Co Ltd,北京,0,174999.9999999999
+steel_Chengde Iron and Steel Group Co Ltd,北京,1,122260.27397260281
+steel_Chengde Iron and Steel Group Co Ltd,北京,2,201369.86301369875
+steel_Chengde Iron and Steel Group Co Ltd,北京,3,201369.86301369875
+steel_Chengde Iron and Steel Group Co Ltd,天津,0,-5.820766091346741e-11
+steel_Chengde Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Chengde Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Chengde Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,北京,0,827015.2295999909
+steel_Chengde Jianlong Special Steel Co Ltd,北京,1,796264.6800671257
+steel_Chengde Jianlong Special Steel Co Ltd,北京,2,842390.5043664236
+steel_Chengde Jianlong Special Steel Co Ltd,北京,3,842390.5043664236
+steel_Chengde Jianlong Special Steel Co Ltd,天津,0,9.313225746154785e-10
+steel_Chengde Jianlong Special Steel Co Ltd,天津,1,-1.1059455573558807e-09
+steel_Chengde Jianlong Special Steel Co Ltd,天津,2,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,天津,3,0.0
+steel_Hbis Laoting Steel Co Ltd,北京,0,174999.99999999997
+steel_Hbis Laoting Steel Co Ltd,北京,1,125000.00000000023
+steel_Hbis Laoting Steel Co Ltd,北京,2,200000.00000000044
+steel_Hbis Laoting Steel Co Ltd,北京,3,200000.00000000044
+steel_Hbis Laoting Steel Co Ltd,天津,0,0.0
+steel_Hbis Laoting Steel Co Ltd,天津,1,0.0
+steel_Hbis Laoting Steel Co Ltd,天津,2,0.0
+steel_Hbis Laoting Steel Co Ltd,天津,3,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,北京,0,175000.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,北京,1,119482.75862069009
+steel_Hebei Anfeng Iron and Steel Co Ltd,北京,2,202758.62068965548
+steel_Hebei Anfeng Iron and Steel Co Ltd,北京,3,202758.62068965525
+steel_Hebei Anfeng Iron and Steel Co Ltd,天津,0,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,天津,1,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,天津,2,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,天津,3,0.0
+steel_Hebei Donghai Special Steel Co Ltd,北京,0,174999.9999999999
+steel_Hebei Donghai Special Steel Co Ltd,北京,1,122260.27397260291
+steel_Hebei Donghai Special Steel Co Ltd,北京,2,201369.86301369878
+steel_Hebei Donghai Special Steel Co Ltd,北京,3,201369.86301369875
+steel_Hebei Donghai Special Steel Co Ltd,天津,0,0.0
+steel_Hebei Donghai Special Steel Co Ltd,天津,1,0.0
+steel_Hebei Donghai Special Steel Co Ltd,天津,2,0.0
+steel_Hebei Donghai Special Steel Co Ltd,天津,3,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,北京,0,174999.99999999994
+steel_Hebei Huaxi Special Steel Co Ltd,北京,1,122260.27397260281
+steel_Hebei Huaxi Special Steel Co Ltd,北京,2,201369.86301369875
+steel_Hebei Huaxi Special Steel Co Ltd,北京,3,201369.86301369875
+steel_Hebei Huaxi Special Steel Co Ltd,天津,0,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,天津,1,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,天津,2,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,天津,3,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,0,175000.0000000001
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,1,116666.66666666688
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,2,204166.6666666671
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,北京,3,204166.6666666671
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,天津,0,5.820766091346741e-11
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Hebei Rongxin Steel Co Ltd,北京,0,175000.0
+steel_Hebei Rongxin Steel Co Ltd,北京,1,107978.72340425543
+steel_Hebei Rongxin Steel Co Ltd,北京,2,208510.6382978726
+steel_Hebei Rongxin Steel Co Ltd,北京,3,208510.6382978726
+steel_Hebei Rongxin Steel Co Ltd,天津,0,0.0
+steel_Hebei Rongxin Steel Co Ltd,天津,1,0.0
+steel_Hebei Rongxin Steel Co Ltd,天津,2,0.0
+steel_Hebei Rongxin Steel Co Ltd,天津,3,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,北京,0,175000.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,北京,1,119482.7586206898
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,北京,2,202758.62068965522
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,北京,3,202758.62068965522
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,天津,0,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,天津,1,-2.9103830456733704e-11
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,天津,2,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,天津,3,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,0,174999.99999999988
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,1,110915.49295774658
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,2,207042.25352112687
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,北京,3,207042.25352112687
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,天津,0,5.820766091346741e-11
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,0,175000.0000000005
+steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,1,119482.75862068983
+steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,2,202758.62068965525
+steel_Hebei Xinda Iron and Steel Group Co Ltd,北京,3,202758.62068965525
+steel_Hebei Xinda Iron and Steel Group Co Ltd,天津,0,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,0,175000.00000000006
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,1,127380.95238095253
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,2,198809.52380952408
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,北京,3,198809.5238095242
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,天津,0,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,0,174999.99999999997
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,1,113811.18881118891
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,2,205594.40559440566
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,北京,3,205594.4055944058
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,0,5.820766091346741e-11
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,1,1.4551915228366852e-11
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,2,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,天津,3,0.0
+steel_Jingye Iron and Steel Co Ltd,北京,0,175000.00000000012
+steel_Jingye Iron and Steel Co Ltd,北京,1,116258.74125874144
+steel_Jingye Iron and Steel Co Ltd,北京,2,204370.62937062987
+steel_Jingye Iron and Steel Co Ltd,北京,3,204370.62937062987
+steel_Jingye Iron and Steel Co Ltd,天津,0,1.1641532182693481e-10
+steel_Jingye Iron and Steel Co Ltd,天津,1,0.0
+steel_Jingye Iron and Steel Co Ltd,天津,2,0.0
+steel_Jingye Iron and Steel Co Ltd,天津,3,0.0
+steel_Lingyuan Iron and Steel Co Ltd,北京,0,175000.00000000017
+steel_Lingyuan Iron and Steel Co Ltd,北京,1,122260.27397260281
+steel_Lingyuan Iron and Steel Co Ltd,北京,2,201369.86301369875
+steel_Lingyuan Iron and Steel Co Ltd,北京,3,201369.86301369875
+steel_Lingyuan Iron and Steel Co Ltd,天津,0,-2.9103830456733704e-10
+steel_Lingyuan Iron and Steel Co Ltd,天津,1,0.0
+steel_Lingyuan Iron and Steel Co Ltd,天津,2,0.0
+steel_Lingyuan Iron and Steel Co Ltd,天津,3,0.0
+steel_Qian an Jiujiang Wire Co Ltd,北京,0,175000.0
+steel_Qian an Jiujiang Wire Co Ltd,北京,1,144444.44444444438
+steel_Qian an Jiujiang Wire Co Ltd,北京,2,190277.77777777766
+steel_Qian an Jiujiang Wire Co Ltd,北京,3,190277.77777777766
+steel_Qian an Jiujiang Wire Co Ltd,天津,0,0.0
+steel_Qian an Jiujiang Wire Co Ltd,天津,1,0.0
+steel_Qian an Jiujiang Wire Co Ltd,天津,2,0.0
+steel_Qian an Jiujiang Wire Co Ltd,天津,3,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,北京,0,175000.00000000023
+steel_Qinhuangdao Baigong Steel Co Ltd,北京,1,122260.27397260281
+steel_Qinhuangdao Baigong Steel Co Ltd,北京,2,201369.86301369875
+steel_Qinhuangdao Baigong Steel Co Ltd,北京,3,201369.86301369875
+steel_Qinhuangdao Baigong Steel Co Ltd,天津,0,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,天津,1,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,天津,2,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,天津,3,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,0,175000.00000000006
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,1,107978.7234042554
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,2,208510.6382978726
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,北京,3,208510.6382978726
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,天津,0,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,天津,1,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,天津,2,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,天津,3,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,北京,0,175000.00000000003
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,北京,1,125000.00000000023
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,北京,2,200000.00000000044
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,北京,3,200000.00000000044
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,天津,0,5.820766091346741e-11
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,天津,1,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,天津,2,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,天津,3,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,北京,0,175000.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,北京,1,160169.49152542368
+steel_Shougang Jingtang United Iron and Steel Co Ltd,北京,2,182415.2542372886
+steel_Shougang Jingtang United Iron and Steel Co Ltd,北京,3,182415.2542372886
+steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,0,-2.9103830456733704e-11
+steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,1,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,2,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,天津,3,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,北京,0,175000.00000000003
+steel_Shougang Qian an Iron and Steel Co Ltd,北京,1,122260.27397260281
+steel_Shougang Qian an Iron and Steel Co Ltd,北京,2,201369.86301369875
+steel_Shougang Qian an Iron and Steel Co Ltd,北京,3,201369.86301369875
+steel_Shougang Qian an Iron and Steel Co Ltd,天津,0,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,天津,1,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,天津,2,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,天津,3,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,0,174999.99999999994
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,1,122260.27397260281
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,2,201369.86301369875
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,北京,3,201369.86301369875
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,天津,0,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,0,174999.99999999988
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,1,133000.00000000128
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,2,195999.99999999997
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,北京,3,195999.99999999997
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,天津,0,-1.1641532182693481e-10
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,天津,1,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,天津,2,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,天津,3,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,0,175000.00000000003
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,1,127702.70270270298
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,2,198648.64864864908
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,北京,3,198648.64864864908
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,天津,0,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,天津,1,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,天津,2,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,天津,3,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,0,174999.9999999999
+steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,1,122260.27397260281
+steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,2,201369.86301369875
+steel_Tangshan Ganglu Iron and Steel Co Ltd,北京,3,201369.86301369875
+steel_Tangshan Ganglu Iron and Steel Co Ltd,天津,0,-5.820766091346741e-11
+steel_Tangshan Ganglu Iron and Steel Co Ltd,天津,1,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,天津,2,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,天津,3,0.0
+steel_Tangshan Guotang Steel Co Ltd,北京,0,175000.00000000006
+steel_Tangshan Guotang Steel Co Ltd,北京,1,119097.22222222245
+steel_Tangshan Guotang Steel Co Ltd,北京,2,202951.38888888902
+steel_Tangshan Guotang Steel Co Ltd,北京,3,202951.38888888902
+steel_Tangshan Guotang Steel Co Ltd,天津,0,2.9103830456733704e-11
+steel_Tangshan Guotang Steel Co Ltd,天津,1,0.0
+steel_Tangshan Guotang Steel Co Ltd,天津,2,0.0
+steel_Tangshan Guotang Steel Co Ltd,天津,3,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,北京,0,175000.00000000003
+steel_Tangshan Medium Thick Plate Co Ltd,北京,1,125000.00000000023
+steel_Tangshan Medium Thick Plate Co Ltd,北京,2,200000.00000000044
+steel_Tangshan Medium Thick Plate Co Ltd,北京,3,200000.00000000044
+steel_Tangshan Medium Thick Plate Co Ltd,天津,0,-8.731149137020111e-11
+steel_Tangshan Medium Thick Plate Co Ltd,天津,1,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,天津,2,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,天津,3,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,0,174999.9999999998
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,1,116666.66666666688
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,2,204166.6666666671
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,北京,3,204166.6666666671
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,天津,0,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,天津,3,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,北京,0,174999.99999999997
+steel_Tangshan Songting Iron and Steel Co Ltd,北京,1,119482.75862068983
+steel_Tangshan Songting Iron and Steel Co Ltd,北京,2,202758.62068965525
+steel_Tangshan Songting Iron and Steel Co Ltd,北京,3,202758.62068965525
+steel_Tangshan Songting Iron and Steel Co Ltd,天津,0,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,天津,1,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,天津,2,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,天津,3,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,北京,0,175000.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,北京,1,95802.91970802925
+steel_Tangshan Wenfeng Special Steel Co Ltd,北京,2,214598.54014598567
+steel_Tangshan Wenfeng Special Steel Co Ltd,北京,3,214598.54014598567
+steel_Tangshan Wenfeng Special Steel Co Ltd,天津,0,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,天津,1,1.4551915228366852e-11
+steel_Tangshan Wenfeng Special Steel Co Ltd,天津,2,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,天津,3,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,北京,0,1.0710209608078003e-08
+steel_Tianjin Iron and Steel Group Co Ltd,北京,1,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,北京,2,1848423.9408611283
+steel_Tianjin Iron and Steel Group Co Ltd,北京,3,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,天津,0,2280763.0457388014
+steel_Tianjin Iron and Steel Group Co Ltd,天津,1,1789991.206057047
+steel_Tianjin Iron and Steel Group Co Ltd,天津,2,677725.0247185729
+steel_Tianjin Iron and Steel Group Co Ltd,天津,3,2526148.965579701
+steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,0,1014404.910399997
+steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,1,925290.5778011315
+steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,2,1058962.0766994343
+steel_Tianjin New Tiangang United Special Steel Co Ltd,北京,3,1058962.0766994343
+steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,0,1.0477378964424133e-09
+steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,1,-1.1641532182693481e-10
+steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,2,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,天津,3,0.0
+steel_Tianjin Pipe Corporation,北京,0,-1.7462298274040222e-10
+steel_Tianjin Pipe Corporation,北京,1,0.0
+steel_Tianjin Pipe Corporation,北京,2,-1.1641532182693481e-10
+steel_Tianjin Pipe Corporation,北京,3,845943.3867341037
+steel_Tianjin Pipe Corporation,天津,0,866778.8547945201
+steel_Tianjin Pipe Corporation,天津,1,832163.4605783866
+steel_Tianjin Pipe Corporation,天津,2,884086.5519025867
+steel_Tianjin Pipe Corporation,天津,3,38143.16516848303
+steel_Tianjin Rockcheck Steel Group Co Ltd,北京,0,563962.2578227243
+steel_Tianjin Rockcheck Steel Group Co Ltd,北京,1,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,北京,2,640825.4382949367
+steel_Tianjin Rockcheck Steel Group Co Ltd,北京,3,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,天津,0,67811.93231061377
+steel_Tianjin Rockcheck Steel Group Co Ltd,天津,1,613671.6938101267
+steel_Tianjin Rockcheck Steel Group Co Ltd,天津,2,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,天津,3,640825.4382949367
+steel_Xinji Aosen Iron and Steel Group Co Ltd,北京,0,174999.99999999997
+steel_Xinji Aosen Iron and Steel Group Co Ltd,北京,1,119482.75862068983
+steel_Xinji Aosen Iron and Steel Group Co Ltd,北京,2,202758.62068965525
+steel_Xinji Aosen Iron and Steel Group Co Ltd,北京,3,202758.62068965525
+steel_Xinji Aosen Iron and Steel Group Co Ltd,天津,0,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,天津,1,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,天津,2,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,天津,3,0.0
+airport_北京,北京,0,143409.391066675
+airport_北京,北京,1,72680.08328579828
+airport_北京,北京,2,178774.04495711313
+airport_北京,北京,3,178774.04495711313
+airport_北京,天津,0,-3.2014213502407074e-10
+airport_北京,天津,1,0.0
+airport_北京,天津,2,0.0
+airport_北京,天津,3,0.0
+airport_天津,北京,0,0.0
+airport_天津,北京,1,0.0
+airport_天津,北京,2,0.0
+airport_天津,北京,3,0.0
+airport_天津,天津,0,0.0
+airport_天津,天津,1,0.0
+airport_天津,天津,2,0.0
+airport_天津,天津,3,0.0

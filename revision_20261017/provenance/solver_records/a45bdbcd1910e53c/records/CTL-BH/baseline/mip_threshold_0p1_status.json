@@ -1,0 +1,20 @@
+{
+  "threshold": 0.1,
+  "status": 1,
+  "has_solution": true,
+  "selected_binary_count": 67,
+  "seconds": 6.81858229637146,
+  "bound_source": "root_lp_status.json",
+  "source_sha256": {
+    "master_data.npz": "7b931c1e6c5babc8e6b84e688e96558d7e9b3f1fd4ea9923ab19f46b1acd1386",
+    "master_matrix.npz": "e0fa6d0043b5952469f31d492e4467b7ec8d5e2988aa84a41893c1e04a70e939",
+    "root_lp_status.json": "01990ddb774f0fc46abf8d27fb66b29c063a5ec5f77c3026e884f084959edcfe",
+    "root_lp_values.npz": "245349eefec5f10175d1249786e27a70e0b4cf36da69e9eb12330a8af8b23b0c"
+  },
+  "max_row_error": 2.2351741790771484e-08,
+  "max_bound_error": 9.805418699215807e-09,
+  "max_integer_error": 0.0,
+  "objective": 47060830033.56782,
+  "lower_bound": 46499342595.37807,
+  "gap": 0.011931099340773414
+}

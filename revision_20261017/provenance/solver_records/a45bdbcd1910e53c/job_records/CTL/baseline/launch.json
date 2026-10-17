@@ -1,0 +1,32 @@
+{
+  "runtime": "compute_configured_ctl",
+  "scenario": "CTL",
+  "label": "baseline",
+  "pid": 1899083,
+  "from_stage": "physics",
+  "launched_unix": 1792230903.8040044,
+  "attempt": "validation_initialization_resume",
+  "controller_pid": 1877975,
+  "formal_jobs_before_launch": [
+    {
+      "pid": 1854227,
+      "command": [
+        "python3",
+        "/home/ljt/code_project/nexus_scientific_revision_20261017/tools/repair_mip/execute_job.py",
+        "CCU-BH-FT",
+        "baseline",
+        "--warm-probe-mip"
+      ]
+    },
+    {
+      "pid": 1894770,
+      "command": [
+        "/home/ljt/code_project/nexus_revision_20260929/copt_migration/venv/bin/python",
+        "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_dac_projected/execute_job.py",
+        "DAC-GH-FT",
+        "summer_fixed"
+      ]
+    }
+  ],
+  "optimization_reused": true
+}

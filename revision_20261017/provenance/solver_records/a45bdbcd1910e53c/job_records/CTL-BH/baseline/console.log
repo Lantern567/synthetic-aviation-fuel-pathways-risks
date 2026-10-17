@@ -1,0 +1,9 @@
+REVISION_STAGE_STARTED CTL-BH baseline model
+REVISION_STAGE_STARTED CTL-BH baseline projection
+REVISION_STAGE_STARTED CTL-BH baseline design
+REVISION_STAGE_STARTED CTL-BH baseline dispatch
+REVISION_STAGE_STARTED CTL-BH baseline certificate
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/execute_job.py", line 49, in <module>
+    raise RuntimeError(f'{scenario}/{label}: {stage} failed; inspect {output / (stage + ".log")}')
+RuntimeError: CTL-BH/baseline: certificate failed; inspect /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/job_records/CTL-BH/baseline/certificate.log

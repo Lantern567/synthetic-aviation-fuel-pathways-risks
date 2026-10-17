@@ -1,0 +1,2444 @@
+{
+  "schema_version": 1,
+  "scope": "Final PV generation inputs and prepared resource/spatial figure inputs",
+  "final_accounting_assumption": "CCU/DAC FT and MTJ use the shared configured route-level 7.6 kWh/kg final fuel input",
+  "excludes": [
+    "QA/contact previews",
+    "Superseded plot outputs",
+    "__pycache__",
+    "matplotlib font caches",
+    "Installed environment trees"
+  ],
+  "input_levels": {
+    "pv_rebuild": "build_pv_inputs.py consumes the original source-compute selected inputs, phase mapping, retained HDF5 coordinate extract and original twelve-week resource table; final frozen inputs are separately retained.",
+    "resource_replot": "The reproducibility_source entries accept explicit workspace, external-project, PV, legacy-template and output paths. The original executed sources and their hashes are separately retained. The selected genuine wind files retain their original names and lexicographic sampling order.",
+    "spatial_replot": "The final network_data, templates and final temporal/CI records are the complete prepared rendering inputs. Mass-flow metric CSVs retain genuine model distances; route geometry is explicitly endpoint-only.",
+    "upstream_network_rebuild": "Original verified model exports, final accounts and authentic routing cache are retained by the main execution archive; build_inputs.py records that upstream interface."
+  },
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "3.0.1",
+      "scipy": "1.18.1",
+      "matplotlib": "3.11.2",
+      "PyMuPDF": "1.28.2",
+      "Pillow": "12.3.0",
+      "python-docx": "1.2.0",
+      "openpyxl": "3.1.5",
+      "frykit": "0.7.5.post1",
+      "frykit_data": "0.0.1",
+      "Cartopy": "0.25.0",
+      "pyproj": "3.8.0",
+      "shapely": "2.2.0",
+      "requests": "2.34.2",
+      "svgpath2mpl": "1.0.0"
+    },
+    "component_overrides": {
+      "resource_figures": {
+        "matplotlib": "3.10.7"
+      }
+    },
+    "fonts": [
+      "Times New Roman",
+      "Arial"
+    ],
+    "cartographic_data": "frykit_data package 0.0.1 for resource maps; spatial maps retain the original raster basemap"
+  },
+  "portable_entries": {
+    "pv": "reproducibility_source/build_pv_inputs.py --source-compute OLD_COMPUTE --raw-solar RAW_EXTRACT --source-twelve-weeks OLD_12W --parameters PV_PARAMETERS --output NEW_PV",
+    "resource_s9_s10": "reproducibility_source/redraw_s9_s10.py --workspace-root WORKSPACE --pv-inputs PV --legacy-figures LEGACY --external-project EXTERNAL_PROJECT --output-root OUTPUT",
+    "resource_s6_s7": "reproducibility_source/update_resource_quality.py --workspace-root WORKSPACE --pv-inputs PV --legacy-figures LEGACY --external-project EXTERNAL_PROJECT --output-root OUTPUT",
+    "spatial": "reproducibility_source/render_spatial.py --workspace-root WORKSPACE --legacy-figures LEGACY --external-project MODEL_PROJECT --accounting-root ACCOUNTS --data NETWORK_DATA --templates TEMPLATES --output OUTPUT --temporal-data TEMPORAL_DATA --temporal-inputs TEMPORAL_INPUTS; reproduce the final standalone S26 invocation in a fresh process by adding --joint-only after the full render"
+  },
+  "files": [
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_代码归档同步20261015\\Supplementary_Information.docx",
+      "bytes": 10504815,
+      "sha256": "0f1a59dbfcd4e7dd0385541b65eb52e65e2d977a550c81a423b83d7850493ddb",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Original S9/S10 embedded-image provenance check"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\outputs\\Figure_S10.png",
+      "bytes": 353762,
+      "sha256": "7b7675e22ce1778af96cb80ae998a2142b1e053e94916cbfd4ddab4c819c0069",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Original scientific plot used for source-image integrity checks"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\outputs\\Figure_S9.png",
+      "bytes": 452433,
+      "sha256": "90da147ec24101c22c581c726f9345a8f84d6b38cffa43b24810e3c81b15fde3",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Original scientific plot used for source-image integrity checks"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\source\\generate_appendix_docx.py",
+      "bytes": 431536,
+      "sha256": "830be0a0504e4fcc783c760facff6657b9de578e25b2e7e06ab0487f8f153232",
+      "consumers": [
+        "resource",
+        "spatial"
+      ],
+      "role": "Actual inherited scientific plotting or network-metric implementation"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\source\\network_classification_metrics_builder.py",
+      "bytes": 11977,
+      "sha256": "cccce7b79241d48bc50cd770a5000fb9c1a7887c01bcc25fd8d51a7b3f77a9a6",
+      "consumers": [
+        "resource",
+        "spatial"
+      ],
+      "role": "Actual inherited scientific plotting or network-metric implementation"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\source\\pareto_three_breakdown_visualization.py",
+      "bytes": 38983,
+      "sha256": "53c93c3e42ffaac7693c8d821a4a16e863bc44895b17f837b5b21bf5c352eb86",
+      "consumers": [
+        "resource",
+        "spatial"
+      ],
+      "role": "Actual inherited scientific plotting or network-metric implementation"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figure_manifest.json",
+      "bytes": 9489,
+      "sha256": "79c3d0d7820a09f4a02d73c274009ce04a828f17bcbf828d792a7487a2699a3c",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S10.pdf",
+      "bytes": 48809,
+      "sha256": "e4848a2feaacf7f7cc42cc4b0dea933447c7c982a3788716e681bd15fc73b13c",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S10.png",
+      "bytes": 340100,
+      "sha256": "470c607634b2f8772dac8929c3974b5bf2568cc60076d3eb07771896c8073c86",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S6.pdf",
+      "bytes": 45347,
+      "sha256": "98df31872ecebdf45119d35886ad5d0791d6c2386251fc06663b193608e5f10e",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S6.png",
+      "bytes": 173647,
+      "sha256": "2bbb922644f9d59bcab642714eb291ac916440a839dc85b97b0f74aa377749c2",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S7.pdf",
+      "bytes": 43187678,
+      "sha256": "8a966363c2457869219ea9be33d78299915fa7631200dd605d45a27bd2c57a57",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S7.png",
+      "bytes": 950684,
+      "sha256": "73f0ef6c7fe03b8c968422dc92aed32e8d26aa9c926831fcf74dfcf84d3e47f8",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S9.pdf",
+      "bytes": 93841,
+      "sha256": "b999a028276c4ba9a1f6d6676f86a698f4298fda47ccb06f8a0cdf1cdfdac439",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\figures\\Figure_S9.png",
+      "bytes": 496625,
+      "sha256": "982d95bc432f0d4b6f54e54254ed845473ae3b33de3e5c27c084c867171057b9",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Final publication figure"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\redraw_s9_s10.py",
+      "bytes": 15722,
+      "sha256": "95fe634efd624078aa7107fda6510682954f3aa319fb8408f165a760b8cbe0dc",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\resource_metrics.json",
+      "bytes": 1051,
+      "sha256": "d825babff24ab47f0c18e343568cee0dad0691b9aa7e91b8745212e52cd57e90",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\retained_diurnal_profiles.csv",
+      "bytes": 3625,
+      "sha256": "e495866498b6c923f83d7ffb77b93dd7dd06215d5d7751dc2ed055ce5739917e",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\retained_week_profiles.csv",
+      "bytes": 27457,
+      "sha256": "d0c07cfd7c75dc02cb61e73783b0ba59520ba0f6711ffe0af9b8238c768ccec2",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\selected_candidate_resource_metrics.csv",
+      "bytes": 24716,
+      "sha256": "3c0fd218b9f842802cd555841fe57dc6fb842e578e2f69bbea8949fe47684692",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\solar_12weeks.csv",
+      "bytes": 18599847,
+      "sha256": "f95ceb2396bc021c03f01a33356652f0c7491a190f0f307fd52c7c7ff5f86924",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\solar_4weeks.csv",
+      "bytes": 6146825,
+      "sha256": "1ab0769edd20cd435d1cc21e43a299cf0196920c49b421c4d545ff6a3747af05",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\solar_relationship_points.csv",
+      "bytes": 1580994,
+      "sha256": "8ebf16034cc18c57915a5d845af68e13c2c847bc43babfc5a94cdb2d3eb13cf3",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\twelve_week_joint_relative_states.csv",
+      "bytes": 1640,
+      "sha256": "b45c463106b778cc0715a9f0d65d8742bc56e9c2f561bb161dba04666cb28476",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\twelve_week_profiles.csv",
+      "bytes": 264692,
+      "sha256": "81ae4d247f17b15033da7a23d1d988b799c3bd3289108e319c7fe97bc4d395ae",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\twelve_week_renewable_energy.csv",
+      "bytes": 748,
+      "sha256": "489b9004a2f8b146d59d779d329ab681b6c9f2dd3b518f02a7cf91807817e346",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\wind_12weeks.csv",
+      "bytes": 10558533,
+      "sha256": "ac454d941504f59e2351c9dd6064cce62c03aa55ea507c1e32751ea5ed20507b",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\wind_4weeks.csv",
+      "bytes": 3506324,
+      "sha256": "21372aa5e9862b40841ec26071de61b04171b3f5ac6bf90e62f63c5d93649013",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\wind_relationship_points.csv",
+      "bytes": 401198,
+      "sha256": "306486e17824b41bee60eab0b88f7da21bd60c8d0e185a798fc91bf8e74e4152",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Prepared final plot data or representative-week diagnostic"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_metrics.json",
+      "bytes": 900,
+      "sha256": "72035856c6390b649921cdbd81b4b410b1c9b0133043fc8160cb4cfaeaf5e38b",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_quality_manifest.json",
+      "bytes": 3268,
+      "sha256": "f0c3f770f9f7847f969a7535be37e812170df220f6ecefe02896558d7a758b3b",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\update_resource_quality.py",
+      "bytes": 8318,
+      "sha256": "9633896941d8b5aa137fa39c1e18ebe6c7c5466a9b58e54b7dacbb4a1be5b333",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\updated_joint_week_ranges.json",
+      "bytes": 2084,
+      "sha256": "75054187f869af8e06aee76154e77beef0cb3b756a935af8b99bd1fb06b24a06",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\verify_figure_outputs.py",
+      "bytes": 3215,
+      "sha256": "7ee65aa886b93cba2f0f104847b11be2fee0f902f39083447a9972f19231b743",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Executed source or final data provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\build_input_contract.py",
+      "bytes": 11046,
+      "sha256": "5ea57afb0f146bbdfea608fb9db9e5a2e564ca073ec169a0da6adf58bc81b8dc",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Executed data, renderer, calibration or verification source"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\build_inputs.py",
+      "bytes": 20575,
+      "sha256": "93b0b57e6055460b62045112f88cf1bc3a7d60d01fa6b63f2418a23aef10c2c1",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Executed data, renderer, calibration or verification source"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\check_registration.py",
+      "bytes": 3192,
+      "sha256": "b3cab013ebe2f372d65a85f7c10a8ec8564844f286fa3b6b5d0b620f04a046e3",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Executed data, renderer, calibration or verification source"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\dependencies\\svgpath2mpl-1.0.0.dist-info\\LICENSE",
+      "bytes": 1484,
+      "sha256": "4cc0a3d138f06d610b4b9a73d057f982a9482e3ab4353e6e4125dfd1fde5320e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "SVG parser source or distribution metadata/license"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\dependencies\\svgpath2mpl-1.0.0.dist-info\\METADATA",
+      "bytes": 2284,
+      "sha256": "ef1e35da9c10d8aa8ed0b5e6ba4a0d66206cc3e2637eb42203ff223f2ca7acf8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "SVG parser source or distribution metadata/license"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\dependencies\\svgpath2mpl-1.0.0.dist-info\\WHEEL",
+      "bytes": 110,
+      "sha256": "67e9f2629c2b712ab17ddbb1e4c6e7fc3439db988fec9d831b72601af398c934",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "SVG parser source or distribution metadata/license"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\dependencies\\svgpath2mpl-1.0.0.dist-info\\top_level.txt",
+      "bytes": 12,
+      "sha256": "32cde1bba508c125fef02f8a6f0e7d35bcbdd0a264d44a47a6132ba60ff59139",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "SVG parser source or distribution metadata/license"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\dependencies\\svgpath2mpl.py",
+      "bytes": 16697,
+      "sha256": "472dc9edfea036336e9f458edbfd5c67bb68ab74ac13a2032ccc738aacb2ab53",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "SVG parser source or distribution metadata/license"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_2.pdf",
+      "bytes": 3149327,
+      "sha256": "87960c2699f7ab592be8186c9a2dd6ea14f290d6d194334252add4f324df7e5e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_2.png",
+      "bytes": 1797716,
+      "sha256": "0473dc2665cd1e1f4f5c31aa6df700638f1fff721927af2aecb7e4bd848429e4",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S26.pdf",
+      "bytes": 54007,
+      "sha256": "89a3087de1a3d458792438e278268ad598063b205efe6901910f73e42734983c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S26.png",
+      "bytes": 230097,
+      "sha256": "1c7c1edfeaa42d5f67f4d59331053edaaf283da16570195fca6268185e22b5a5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S27.pdf",
+      "bytes": 52342,
+      "sha256": "bb028184b5f02032c1538af032bb9409f5737bf25d8f3230863ae1545ed26e48",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S27.png",
+      "bytes": 246925,
+      "sha256": "a0f5586a1a9e33a70550be5617d6b9b479dedb59eaa9a41d0069fe7081430de8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S49.pdf",
+      "bytes": 27695,
+      "sha256": "0a2a94f3eee80d2fd4735ff8d90083ab8373b50cdd7444a7ff3b388a552e0d0f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S49.png",
+      "bytes": 133094,
+      "sha256": "b1a32e36dfefcb05f0b586d19d0573c87590bbf6ef1098e83f93d71361d486e5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S50.pdf",
+      "bytes": 5705617,
+      "sha256": "dafaa4fc39d1871359ae17817d4e7912f9082512a738c01627fadaa4ab51c6f6",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S50.png",
+      "bytes": 2484288,
+      "sha256": "cb5caa0b5a2a43502464a205f6ad16476b812c34eb7646bfba6075f0e9b0d8bd",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S51.pdf",
+      "bytes": 1372652,
+      "sha256": "fd2e617eb36d352c5b4220257ffe2159eb213b4ddfd53126e3e6ff6745ac980c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S51.png",
+      "bytes": 1719837,
+      "sha256": "60fed509de529b7dc1f0fffcd2b57e71bf79e6f1edbd9aee81a9098acec961de",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S52.pdf",
+      "bytes": 1380269,
+      "sha256": "0edd80182ca42d8e2a84016451a32f158a6c35cdc962c37ddeca8a2d3b35de28",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S52.png",
+      "bytes": 1729097,
+      "sha256": "6907262a0f6e7267004d0e6e0cef80a9827b4ef3ace122b5e1d28f70f6c05999",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S53.pdf",
+      "bytes": 1380804,
+      "sha256": "5244bc005f3028d55900647b98f4d80b0641cdd513c658b24f17376ccbdd1805",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S53.png",
+      "bytes": 1742435,
+      "sha256": "8471fcd6dc532220d30c93bcc25079e16e8496a38b221290f7e3a1d471d5e313",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S54.pdf",
+      "bytes": 1261666,
+      "sha256": "a94f9b105f3f42ccb17191a81e0b69596f0cadc7959d769474cd12ea49df271b",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S54.png",
+      "bytes": 1507094,
+      "sha256": "7f6adaf2caf38fc138a362a3a6d7a3207fb24576a2bb2f3434b727e7b8fddd24",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S55.pdf",
+      "bytes": 1411386,
+      "sha256": "392be4fcc2c8cf3163a939d4f44f4430ec153812ff016b2c8f6a797470d5be61",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S55.png",
+      "bytes": 1777896,
+      "sha256": "916c1be12adaba3b221ae382ca2c7a47b4257127a9eaa188c8395626bc6cd858",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S56.pdf",
+      "bytes": 1408392,
+      "sha256": "a7f3705845bf2da31c3771652a82930879ae8636882ca17c1b0c285f35d97153",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S56.png",
+      "bytes": 1759198,
+      "sha256": "b74131186b1b22beff093469e3998ed830234580766c0222ec83f4fa56df514b",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S57.pdf",
+      "bytes": 1408952,
+      "sha256": "cded01618386aa0de4f1c250d0e1a1262f325d2c3a35890ecdac9dd4d3e8d873",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S57.png",
+      "bytes": 1762623,
+      "sha256": "e1f48d0c8949f649d64b827fa881047c4187e039b0d56b6d80d3a0108c4919ff",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S58.pdf",
+      "bytes": 1342603,
+      "sha256": "1bfcba5dd193113eec1fc4dd15b6ca82ed6436f6f14f05dc6bc367c0030e4c5d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S58.png",
+      "bytes": 1688671,
+      "sha256": "85cbec561fa09054c4d788e8aa445c9ef9047af061ed29d742f8a63c4309d964",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S59.pdf",
+      "bytes": 1373284,
+      "sha256": "a7382fe3eef834e7aae4d144225fd1fff84f621da93923ef3a15a6210715285d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S59.png",
+      "bytes": 1734625,
+      "sha256": "9644b108d9fb84775ae8650d6c3f10e7d0b4518d793d2a1801f0f9c3b5217687",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S60.pdf",
+      "bytes": 1360419,
+      "sha256": "c5f366cad9aa22afb3a417b1814fef900e12c4b108d883ef675cf30ea9c2b72c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S60.png",
+      "bytes": 1707822,
+      "sha256": "ac0c72e6bfc07c2ccf8a7f763c5c662486b5cfb0f6b04d1b4c8639343fd545fc",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S61.pdf",
+      "bytes": 1360988,
+      "sha256": "b8715e095b9f4b86cf043030fcc3d0bebe2db5e61cd8da849d19e623b149b11d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S61.png",
+      "bytes": 1708368,
+      "sha256": "fdbdbe43538c105d80030df5fee4811655f15a0aa83fd81cb85a922420e92032",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S62.pdf",
+      "bytes": 1636616,
+      "sha256": "43c8e2542db23d764c59e6c5036d90ccb08c35bb2d000f542c0f3f64c6832e0f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S62.png",
+      "bytes": 2063176,
+      "sha256": "e15b4bcaef8f1399df4711e6001f70c85bc49a07bb48a60dcc3762f5d1df6285",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S63.pdf",
+      "bytes": 1632884,
+      "sha256": "fef60a61d39a1443f2aa255909f726aa45c74fdd5145b88aef0c57d3077316ac",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Figure_S63.png",
+      "bytes": 2045952,
+      "sha256": "9b96a7964a6da43e1f9abbd758f407ea38f3d6b166971f67b1f1ddcb080bee08",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_CCU-GH-FT.pdf",
+      "bytes": 300252,
+      "sha256": "fad0b4ff549129daff54a20d45c52fc632decacccdbf186ce5ee237439033bdd",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_CCU-GH-FT.png",
+      "bytes": 373367,
+      "sha256": "c80297475f05d0a53cb3e739abaeff3928dd576a2f55621bb59ba4572adfd795",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_DAC-BH-FT.pdf",
+      "bytes": 357854,
+      "sha256": "2cc25d26f8a4e9e0c8482173a077801850a7f01eaf6cb73c13d9cf23ec7b661e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_DAC-BH-FT.png",
+      "bytes": 442090,
+      "sha256": "148aae15e47d3bdd0ed56ad77dc05afc275d3dd4504eaccd39aaab59528ef0cf",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_GTL-BH.pdf",
+      "bytes": 303509,
+      "sha256": "7c0d7bb07f0d07645ff1032d450c5b605a8ad87a40d3e7ebb1676f65f3c03c16",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_GTL-BH.png",
+      "bytes": 381787,
+      "sha256": "1256b375ee71f25486192067196c3b9ae7051f804332685dbdb991a7dd5d2991",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_GTL.pdf",
+      "bytes": 268450,
+      "sha256": "cd1698e41efcdea31b59f74daa3aa1c66f5d48425a13e1eba29584d83cc5baa5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\Main_Map_GTL.png",
+      "bytes": 338454,
+      "sha256": "d268d5db423628fdf5c719e7a8ef2f54ff7d73ba8b6d7aa410f902ca44219e0e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\main_shared_legend.pdf",
+      "bytes": 30253,
+      "sha256": "201e28b79e0f48ca09995466ee8f358a6a3425389b0972694302b106bc132fa2",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\main_shared_legend.png",
+      "bytes": 106037,
+      "sha256": "4bdc43491ad176b82d542b4e89363c8520bb0d6e43b39a61785292cedb342de8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\network_panels.pdf",
+      "bytes": 97111,
+      "sha256": "ff2e6c5f154109beca1fc99edb755c9c26a50ef940aa11f53d778c68ba2bf7aa",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\network_panels.png",
+      "bytes": 1981568,
+      "sha256": "32a592ad1227f20cf000e46a4a068fb52fa3d95a82b8168d357fe87697c12793",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\render_manifest.json",
+      "bytes": 6479,
+      "sha256": "befc0007cce52613bae152792a61d4bf4b9a688c38dcc1ab39bdc65842ffea69",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\render_provenance.json",
+      "bytes": 1085,
+      "sha256": "f473239ac20e37b89bfc9e620392a8cdf1d870d7cb40c09a27eb681a8c1f1c75",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\figures\\validation.json",
+      "bytes": 12651,
+      "sha256": "03eb41974e647596eaaed21cc27cc8d8b694f1206d26d3c12589fd3c554505b0",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final publication or required composition component with final integrity records"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-FT_mass_transport.csv",
+      "bytes": 12375,
+      "sha256": "0f73e656a65712434c88b9fcceb5ccc6b907bc8c7bd1932cb8437c716356f7fc",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-FT_nodes.json",
+      "bytes": 5422,
+      "sha256": "cef62e7134e1aa022b31b32157bf65968db025bca69efccd389400fd87eebc2e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-FT_routes.json",
+      "bytes": 35770,
+      "sha256": "fae54a82c307c80224569dadb733bf8a7a7126d17fca9d1d167c11b024abc252",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-FT_transport_summary.csv",
+      "bytes": 12375,
+      "sha256": "0f73e656a65712434c88b9fcceb5ccc6b907bc8c7bd1932cb8437c716356f7fc",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-MTJ_mass_transport.csv",
+      "bytes": 10377,
+      "sha256": "24a648fbc48579787f014672bddc630e0fae64ade44596787b3d5cd202c6edac",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-MTJ_nodes.json",
+      "bytes": 4416,
+      "sha256": "c0e3e39de7bc835651856e5521f5abc152de69aaf5305ef4a537152951c04665",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-MTJ_routes.json",
+      "bytes": 30626,
+      "sha256": "fbdad5a00f8c689eddba0810e69567165265e7f01d49db5f8d41ac1dc6c9b92b",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-BH-MTJ_transport_summary.csv",
+      "bytes": 10377,
+      "sha256": "24a648fbc48579787f014672bddc630e0fae64ade44596787b3d5cd202c6edac",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-FT_mass_transport.csv",
+      "bytes": 103257,
+      "sha256": "172395204df93770b1d6f0ffe6c4b8fe9eec4f87701261f6fecb6cb28eb0a426",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-FT_nodes.json",
+      "bytes": 9879,
+      "sha256": "e12afb322a7655a1a19a70ae2376f2af72d11f63b1bf304c2aa6f4d9147d2d0d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-FT_routes.json",
+      "bytes": 344569,
+      "sha256": "bbeb0f22d0edcfd491c245a51a6ad9c5298cb42b5cf0c2824eb9932cb2ec1345",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-FT_transport_summary.csv",
+      "bytes": 103257,
+      "sha256": "172395204df93770b1d6f0ffe6c4b8fe9eec4f87701261f6fecb6cb28eb0a426",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-MTJ_mass_transport.csv",
+      "bytes": 103710,
+      "sha256": "b3019d579d1ce64a8ff8bbab185a1cd3e6598433eb7f302165455e09ed74be6f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-MTJ_nodes.json",
+      "bytes": 10022,
+      "sha256": "97f5b6389e78658d71264be212dc4621b787667d0cd3101f4679e3dc49a367b6",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-MTJ_routes.json",
+      "bytes": 346552,
+      "sha256": "88dae787847fa7bcee650814e9a84325fc2aef95f8a3cbe366e8e47bf68f15ab",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CCU-GH-MTJ_transport_summary.csv",
+      "bytes": 103710,
+      "sha256": "b3019d579d1ce64a8ff8bbab185a1cd3e6598433eb7f302165455e09ed74be6f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL-BH_mass_transport.csv",
+      "bytes": 9396,
+      "sha256": "4cf1d80c86c88b9d0ff58b1e77a2b2ba646f6b8af04bdac814ca3dd61ef4e8fb",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL-BH_nodes.json",
+      "bytes": 4845,
+      "sha256": "fbd6a942459dccf951d3656c2edf05f416acdbcdad9c3d30a107e33778951e1c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL-BH_routes.json",
+      "bytes": 26792,
+      "sha256": "81b54f5eb6ead1c0f7186024321ecc09d0927f4fb888881701a5747192ca70a6",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL-BH_transport_summary.csv",
+      "bytes": 9396,
+      "sha256": "4cf1d80c86c88b9d0ff58b1e77a2b2ba646f6b8af04bdac814ca3dd61ef4e8fb",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL_mass_transport.csv",
+      "bytes": 80886,
+      "sha256": "27bd8c92eb51806922a57bd3a5006959aa1e5ddb488befdaefb85ff17374353b",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL_nodes.json",
+      "bytes": 8150,
+      "sha256": "977393d9e0ca8b3832cab29ebccd080df4ba3b6003d49d0ba2fd74242907db1d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL_routes.json",
+      "bytes": 271805,
+      "sha256": "b2be0a2a3eea582e3e8414e20b639d09c65be1a77543215edb21fb33fb657739",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\CTL_transport_summary.csv",
+      "bytes": 80886,
+      "sha256": "27bd8c92eb51806922a57bd3a5006959aa1e5ddb488befdaefb85ff17374353b",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-FT_mass_transport.csv",
+      "bytes": 37103,
+      "sha256": "86b977983ebafe657bd00bf010c12a9e9d195d67a1bb39e12b397cb28f6ebd41",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-FT_nodes.json",
+      "bytes": 9833,
+      "sha256": "8df52a7ba940226487ec0545db61f4224b1776dc7c288ff24fee1d901294af1f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-FT_routes.json",
+      "bytes": 115214,
+      "sha256": "fd108b5a3b09622f3b302e00550a092b8224ccf305d33975f3cad5ec3206d926",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-FT_transport_summary.csv",
+      "bytes": 37103,
+      "sha256": "86b977983ebafe657bd00bf010c12a9e9d195d67a1bb39e12b397cb28f6ebd41",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-MTJ_mass_transport.csv",
+      "bytes": 36800,
+      "sha256": "3e1b244d2708016e8571063161e113e79c41d62cbf0cfaf0ac8e02cb8c47b419",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-MTJ_nodes.json",
+      "bytes": 9838,
+      "sha256": "3b683e4f831e086f8ed5fa32f426a9bc316cef57054c303e586317213fcab4ed",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-MTJ_routes.json",
+      "bytes": 112347,
+      "sha256": "ddfab127de00771ddfbc410305175d87e65ba41ff982407408f5abb3929b79bf",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-BH-MTJ_transport_summary.csv",
+      "bytes": 36800,
+      "sha256": "3e1b244d2708016e8571063161e113e79c41d62cbf0cfaf0ac8e02cb8c47b419",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-FT_mass_transport.csv",
+      "bytes": 85149,
+      "sha256": "e296ee94093ffeb434ccc4f7c1548c56de3e896637c7838c6a6b5590f4a9a91c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-FT_nodes.json",
+      "bytes": 8220,
+      "sha256": "e9c70c2239b5facede600d9c8a77ac9a707c60fb7ae8b6820bf417c42cf51bc9",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-FT_routes.json",
+      "bytes": 286513,
+      "sha256": "2142bedb696632e5ca98f2079160cc67fe1ab22d221b2a6f779761b775f76d4d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-FT_transport_summary.csv",
+      "bytes": 85149,
+      "sha256": "e296ee94093ffeb434ccc4f7c1548c56de3e896637c7838c6a6b5590f4a9a91c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-MTJ_mass_transport.csv",
+      "bytes": 84113,
+      "sha256": "2ec4b26aa0a9dbfb1c383d5c27a1254dd624c8e3e12944a80ad8364bda428b01",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-MTJ_nodes.json",
+      "bytes": 8220,
+      "sha256": "e9c70c2239b5facede600d9c8a77ac9a707c60fb7ae8b6820bf417c42cf51bc9",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-MTJ_routes.json",
+      "bytes": 283143,
+      "sha256": "2c289603ce9a7f099f986050849af997046e2dc5b7b552d58d203132089b5bfa",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\DAC-GH-MTJ_transport_summary.csv",
+      "bytes": 84113,
+      "sha256": "2ec4b26aa0a9dbfb1c383d5c27a1254dd624c8e3e12944a80ad8364bda428b01",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-BH_mass_transport.csv",
+      "bytes": 7759,
+      "sha256": "bd727cc24b44926bc5c0e6705483c566ce65f6e68c0097ab71cc152c91e076bf",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-BH_nodes.json",
+      "bytes": 4557,
+      "sha256": "ce905e51906df199d27e48677fdc7bbe689dd657e39d0490ee6236a47738e63e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-BH_routes.json",
+      "bytes": 25148,
+      "sha256": "5c9e024461653a160da817cc8c4599210db805ccbc96a8f1b57fdb9740cebc81",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-BH_transport_summary.csv",
+      "bytes": 7759,
+      "sha256": "bd727cc24b44926bc5c0e6705483c566ce65f6e68c0097ab71cc152c91e076bf",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-GH_mass_transport.csv",
+      "bytes": 25359,
+      "sha256": "a17415e768889843a1d034c682a390ab425b4fbea7ffc483c363683a64487798",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-GH_nodes.json",
+      "bytes": 9786,
+      "sha256": "c75e952eceec1b969753e6454449770832ce0917fdc95da1e2aa9ef7cde7e6c8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-GH_routes.json",
+      "bytes": 95349,
+      "sha256": "aaf4b12f19957d4176a43393fa287d01b2cd174b6bfb350fc1de85f9a65c8328",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL-GH_transport_summary.csv",
+      "bytes": 28950,
+      "sha256": "4afd8324af7660954ed63bf20867802d83528b55cb5ae2bbce5aa690dceb923a",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL_mass_transport.csv",
+      "bytes": 1453,
+      "sha256": "77cc8dcd1471cc7ee27f23fbafb1e04fe0a5af7cbef16ea4848b9e6ab1a82be4",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL_nodes.json",
+      "bytes": 243,
+      "sha256": "8ada8890b0aaa2a208d718cfdfca86328cd4a2424c588f49d3281b898be39c79",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL_routes.json",
+      "bytes": 5609,
+      "sha256": "92d3c121097c113f4b81cf222c64b991836a72027a13094ee106a0d992ca8ccf",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\GTL_transport_summary.csv",
+      "bytes": 1453,
+      "sha256": "77cc8dcd1471cc7ee27f23fbafb1e04fe0a5af7cbef16ea4848b9e6ab1a82be4",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\Table_S24_matching.csv",
+      "bytes": 1056,
+      "sha256": "00b607cfe0a84cae8b1a03b5c15a5d4071e961c40fe322cc0c7b0156cf9fff95",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\decision_classification.csv",
+      "bytes": 2375,
+      "sha256": "46a620c9b4795e4d4c2cd731bd3a46717154b9c22fcd8227ff554c9573310492",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\joint_metrics_provenance.json",
+      "bytes": 1870,
+      "sha256": "e544a75f92f05868bebae50fc4c9a6980ff3fa9ee29faa11eebe5a8ca4c9efd5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\map_checks.json",
+      "bytes": 5564,
+      "sha256": "d89c0d63c0115b3da8db0cd4307b383f639ec92d40ed43d3bf27c020463de4f8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\network_metrics.csv",
+      "bytes": 4031,
+      "sha256": "2465e42eab30877c63e7fdde05cd8df0224b41bdd0fa31756e8e93172ddacac4",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\provenance.json",
+      "bytes": 14272,
+      "sha256": "458dc71d40814a760fd2ea2ea2acea750c923115933a3b196f0252058671a1d5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\scenario_integrated_metrics.csv",
+      "bytes": 15575,
+      "sha256": "3aa1d3550b3043d4663c85954bbf25906e40e0cc579b839983620bb6a4c79cd8",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\siting_metrics.csv",
+      "bytes": 1208,
+      "sha256": "072fe759fabcb06b030a0cdde845ec3e8fe17d1a5be04dfd9825515e58fc1e42",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\synthesis_modules.csv",
+      "bytes": 75641,
+      "sha256": "8526606d2e1374085c667ec307b79a0611f1a0aedf240139c9e1a9e87744b26f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\network_data\\synthesis_sites.csv",
+      "bytes": 19342,
+      "sha256": "4b0b4555e6464286037fd4b9474f59cbba97c58b19316edfbeefcb4231783d04",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline metric, matching, endpoint geometry or joint-plot data"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\portability_validation.json",
+      "bytes": 21342,
+      "sha256": "b96a7b736720058a6869a9b9c802cf65c152c80ea9f3297f5d0b95e3c04fe4ee",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Real copied-workspace PV/resource/spatial reproduction verification"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\render_spatial.py",
+      "bytes": 27207,
+      "sha256": "43f980200ff9c16190d279e42f3684800bc5019fdcddfe6ee55c42b3dc94605e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Executed data, renderer, calibration or verification source"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\build_pv_inputs.py",
+      "bytes": 13523,
+      "sha256": "314c60ec4aaf283c3d7bde5624976cd2d2351fbc2731d8d2927deb7f6458f8b1",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Explicit path parameters for restored-workspace execution; original executed source retained separately"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\baseline\\airport_input.csv",
+      "bytes": 24336,
+      "sha256": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\baseline\\airport_input.xlsx",
+      "bytes": 17323,
+      "sha256": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\baseline\\manifest.json",
+      "bytes": 1022,
+      "sha256": "c424a452cd84ee6a7a51858c5e9bae85c96797a4b57e9c8e44ab8bc89bc15637",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\baseline\\renewable_periods.csv",
+      "bytes": 2636693,
+      "sha256": "4ca3e99522f17692aa11793d68e3b17e8c6f09324605dc3d5a9f08edd110225f",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\summer\\airport_input.csv",
+      "bytes": 24379,
+      "sha256": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\summer\\airport_input.xlsx",
+      "bytes": 17108,
+      "sha256": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\summer\\manifest.json",
+      "bytes": 1026,
+      "sha256": "8afece6cc578d3f8c3c6f39bac46b07c1e7e95dffa8ba48fce7099652fa0f094",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\inputs\\summer\\renewable_periods.csv",
+      "bytes": 2645183,
+      "sha256": "9f82438468e527fbaf910b9eedca5758edaf8bcb7a7c9a06a2933889497e4690",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original selected schedule or demand used by the PV input builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\raw_profile_validation.json",
+      "bytes": 872,
+      "sha256": "0b29f423a1e72c8dd5185dd010f42d015144d9bdfb7a73203b7e122786a7ab68",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original source-compute provenance consumed by the PV builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\solar_grid_mapping.csv",
+      "bytes": 25628,
+      "sha256": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original source-compute provenance consumed by the PV builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\solar_hdf5_provenance.json",
+      "bytes": 753541,
+      "sha256": "2cc2088902abecc6f6f6834b0017014e45b0121172526b670bba9898eae81d8e",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Original source-compute provenance consumed by the PV builder"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\pv_source_compute\\source_origins.json",
+      "bytes": 3540,
+      "sha256": "a89d7b48797178fc8c420b7dc4369599382fc9d549e47f3a753bd7766031f4d7",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Verified original-input locations and byte hashes before collection"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\redraw_s49.py",
+      "bytes": 1604,
+      "sha256": "604ac5713866321fce915c40e87b916c9d7e5ed26f49dd42ee51ea9975a535ba",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Explicit path parameters for restored-workspace execution; original executed source retained separately"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\redraw_s9_s10.py",
+      "bytes": 16473,
+      "sha256": "6af8ffc2ec4d6b79c1459c930c096f1362d8e562e904f9c54e6e2d184df9dc29",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Explicit path parameters for restored-workspace execution; original executed source retained separately"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\render_spatial.py",
+      "bytes": 30741,
+      "sha256": "dd72a3f92ab239caf782a7e20871e9539f3f6b7774dd95292c3a04f8c54f5018",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Explicit path parameters for restored-workspace execution; original executed source retained separately"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\reproducibility_source\\update_resource_quality.py",
+      "bytes": 9070,
+      "sha256": "f509cc3340e3f49d43c27d9b485dea87a40d98e29f29e57a495ecfb413a65361",
+      "consumers": [
+        "portable_entry"
+      ],
+      "role": "Explicit path parameters for restored-workspace execution; original executed source retained separately"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\archive_registration.json",
+      "bytes": 1825,
+      "sha256": "ed235875d59cdbad9198552fe0f4a6212c04df347889ce6d1c071927d21b38b9",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Original map or composite template, registration or template provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\current_archive_registration.json",
+      "bytes": 2194,
+      "sha256": "b57a9d88a83d097cccb633873dcea21f3273b52f9c8d6669142d73040e149093",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Original map or composite template, registration or template provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\main_composite_template.png",
+      "bytes": 1753340,
+      "sha256": "6fee96468859d7b24f56d9679f0935801c7819af8477eaef962e47e1c6bcefae",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Original map or composite template, registration or template provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\original_S54.png",
+      "bytes": 1507094,
+      "sha256": "7f6adaf2caf38fc138a362a3a6d7a3207fb24576a2bb2f3434b727e7b8fddd24",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Original map or composite template, registration or template provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\templates\\provenance.json",
+      "bytes": 2525,
+      "sha256": "f6fac974fa7a77c6f2fa20c10d1923fdc2f10f40fb21ef8196203a44610c4605",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Original map or composite template, registration or template provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_spatial\\verify_outputs.py",
+      "bytes": 3161,
+      "sha256": "595e863c6934b97508b9ecbd04220be4c0576cca45a1c42e0129e777de473445",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Executed data, renderer, calibration or verification source"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CCU-BH-FT_carbon.json",
+      "bytes": 3108,
+      "sha256": "19d9d57a05ba24a318f6c74acd373cb0034d3bf70e9777fa051c9f9a1775f2f6",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CCU-BH-MTJ_carbon.json",
+      "bytes": 3108,
+      "sha256": "f57049b664d74c57cd1279b3e49e8dbc41aea2d626d8b1f093648d4a69d3064c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CCU-GH-FT_carbon.json",
+      "bytes": 3052,
+      "sha256": "a39bf15007ed9cb93ccaa9818b1de3bd553a6be5b025cf860f805ac5e6650451",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CCU-GH-MTJ_carbon.json",
+      "bytes": 3043,
+      "sha256": "f9f7bfdddd60852f560e2fd21cfc24aa6f0617950ebdba517ff23e8e5774c957",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CTL-BH_carbon.json",
+      "bytes": 3483,
+      "sha256": "a90bcbad1c0691be1fa35cec83aab9037d21fcbe79d7e15900232f6147995b0d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\CTL_carbon.json",
+      "bytes": 3404,
+      "sha256": "3f76793c17811eb4c5b68901148f12294f7779660539cc320dbaa18cb3bcae46",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\DAC-BH-FT_carbon.json",
+      "bytes": 3280,
+      "sha256": "63ac03faecc87bf375f7159da6fffbdc1b5fbbef147401d5fa1b3ee9a8669d39",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\DAC-BH-MTJ_carbon.json",
+      "bytes": 3270,
+      "sha256": "2e4d250f441163abaee001c65052db4cc18a6e9b116baf601bc5fd8fcc6d65ac",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\DAC-GH-FT_carbon.json",
+      "bytes": 3303,
+      "sha256": "f95eb6837645fcff49276fd225cd94199bb6f1efa9250b3fe3dc1dce551884b0",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\DAC-GH-MTJ_carbon.json",
+      "bytes": 3303,
+      "sha256": "ccef15c677ae5026578d9bd4300eb312c5674c66c169439f4b55e16a239bed7c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\GTL-BH_carbon.json",
+      "bytes": 3087,
+      "sha256": "17352b185bf9a295a8561e3a51e4d1f7be8b2396ebe95e7e49517aeb1bd84d32",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\GTL-GH_carbon.json",
+      "bytes": 3041,
+      "sha256": "898ad01de530ed29b506edc055d4d490adbdb7897ec6504fe79f93c27432f2b0",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\GTL_carbon.json",
+      "bytes": 1651,
+      "sha256": "c8bb841a3daa8f16d8325b8f70b4e520856629c88110b1c4577b6569979e6a16",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final direct supply-chain CI input"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\inputs\\manifest.json",
+      "bytes": 100328,
+      "sha256": "40cd4a30039652d1904bfbe95e6206b5fe4f709bbc0ea744d14e0fa68953d563",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final temporal-source and carbon-input hash binding"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\temporal_data\\all_pathway_temporal_metrics.csv",
+      "bytes": 14353,
+      "sha256": "dbea16d5f9c6a78a60a59c7c795e4f5ed8a6f6262f19cd90eaee728bf4edbffe",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final thirteen-baseline independent temporal metrics"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-BH-FT\\baseline\\accounts.json",
+      "bytes": 15666,
+      "sha256": "120768396740c250b1b287ca37adc8e5fb526a51e0662ce86dce06359df2d618",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-BH-FT\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3110,
+      "sha256": "1078ff0cec2ed3be05311676b0fd88b7e19a03f115c3d2eb8764197fcc6ef376",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-BH-MTJ\\baseline\\accounts.json",
+      "bytes": 15814,
+      "sha256": "411b18588b8fb773c938f77e4f03d023dba087760f2acef1d6e60dc08d7b7052",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-BH-MTJ\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3110,
+      "sha256": "fe3b4395c8e7dba078f27428daa73e27f5a0596630d03edbf36049c82cbb3dc7",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-GH-FT\\baseline\\accounts.json",
+      "bytes": 15436,
+      "sha256": "613909305584ecabf5b38495bc7ed1135a8e26bd4e31587a5489d79b1460bf0d",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-GH-FT\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3054,
+      "sha256": "d056128cc9f0af189241a09837b23706ff5a06a4e46bf1084bd37a07ecc6ec9c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-GH-MTJ\\baseline\\accounts.json",
+      "bytes": 15474,
+      "sha256": "2ba64dbd37520bd3c1e6dc3e9eaf954e622b6f0e491ea2f14d392407f664d18c",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CCU-GH-MTJ\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3045,
+      "sha256": "e47a369873a3206468c37827c639a595d017a0b69d94e328382ef97494ff2e3e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CTL-BH\\baseline\\accounts.json",
+      "bytes": 16712,
+      "sha256": "168748b1d675c037d86eee3283a434a71e262e135fbf4e41a3997d6456128cf5",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CTL-BH\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3485,
+      "sha256": "29d12b03c3b02723882e18960d09716b9b7fd85b7f9caece81b1026d0ab26105",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CTL\\baseline\\accounts.json",
+      "bytes": 16511,
+      "sha256": "ab3dffec10452b66eff7b273b6d10a03f2114f5b34af0f0330b47d185e612110",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\CTL\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3406,
+      "sha256": "54ac8c8c220897a93f5ead185d1c8625514cba47798a9ad6258131179975f45f",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-BH-FT\\baseline\\accounts.json",
+      "bytes": 15767,
+      "sha256": "94ab31bb59ae9c43f97831e206461f69dbfbd57e9ad7a3e4b026e645d4cf3743",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-BH-FT\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3282,
+      "sha256": "9bb3a1c29c7a4c97bddcbb0fba2d45661095b184129f7bf91f2d146bb442bd66",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-BH-MTJ\\baseline\\accounts.json",
+      "bytes": 15782,
+      "sha256": "53ce17be5a29ce5c7bf4c9ca6c56a6b7b23688fe6117d6914713128cc78e0992",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-BH-MTJ\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3272,
+      "sha256": "4d85241d43b031c417ddffc2f01650f46a9fe079bb53b87e3e5421d006958cbb",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-GH-FT\\baseline\\accounts.json",
+      "bytes": 15571,
+      "sha256": "2ce525d60fd0173aa463e5189db30ff2c28b365635f3b3beb401b0072c2aa870",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-GH-FT\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3305,
+      "sha256": "26740a5e232544b25282e599c0140ef8202ff6f8854b036beb44a5aa9d785e94",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-GH-MTJ\\baseline\\accounts.json",
+      "bytes": 15582,
+      "sha256": "582a0d3bd6be31e3c90f14e6abd1a2355647639f77aa7fc1a34baacf9d925f11",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\DAC-GH-MTJ\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3305,
+      "sha256": "fceebdc02183cb14a8b022c9a115de3425734ee36143e73f5c651e798d56ef39",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\GTL-BH\\baseline\\accounts.json",
+      "bytes": 13733,
+      "sha256": "d323132063291f298ddd9efb48026a11817f911fed7d547fadc11737875e7746",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\GTL-BH\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3089,
+      "sha256": "e3ed95c19d5ec30e1f96da74f658e1e084c275c4b4b7f3a46afafd7dfdc87306",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\GTL-GH\\baseline\\accounts.json",
+      "bytes": 13255,
+      "sha256": "2ff22c22bc06f367582c3a75bfa2e5fe6599255ea8a4cfa4ebf7dba6b396f394",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\accounts\\GTL-GH\\baseline\\normalized_carbon_emissions.json",
+      "bytes": 3043,
+      "sha256": "6c58712c2c175f9a16a3456880cefec6a2e5e35703af9c1e62ea97038b525b0e",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Final accounting provenance checked before S26 rendering"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\build_pv_inputs.py",
+      "bytes": 13199,
+      "sha256": "5a59c5edb8c4f8ff27b853ef9be224068cc52e456c58d66872bfdddf39a02fb5",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\input_sha256.json",
+      "bytes": 2234,
+      "sha256": "cfa318145b0078dc04885fe4c979beb786683f7daf6d7e0413963d255994614d",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\baseline\\airport_input.csv",
+      "bytes": 24336,
+      "sha256": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\baseline\\airport_input.xlsx",
+      "bytes": 17323,
+      "sha256": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\baseline\\manifest.json",
+      "bytes": 2916,
+      "sha256": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\baseline\\renewable_periods.csv",
+      "bytes": 3295451,
+      "sha256": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\summer\\airport_input.csv",
+      "bytes": 24379,
+      "sha256": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\summer\\airport_input.xlsx",
+      "bytes": 17108,
+      "sha256": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\summer\\manifest.json",
+      "bytes": 2917,
+      "sha256": "5a303c6bcc52edd13a120f986377119698c75462c353f897a6e8b57f1e786589",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\summer\\renewable_periods.csv",
+      "bytes": 3303601,
+      "sha256": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Frozen model-ready inputs"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\pv_parameters.json",
+      "bytes": 2206,
+      "sha256": "e561e162f6c15abcbc4adc95c3b4725dcdcc9c1b2b65aa91b9f98cd5c9ca6254",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\raw_profile_validation.json",
+      "bytes": 1396,
+      "sha256": "3847b9043f5153560295375a253f1c633ae5470b8a1267277f86a62ef4961b42",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\renewable_12weeks.csv",
+      "bytes": 9393592,
+      "sha256": "08f5feb41b945abdf097d0f8762ee9169849440456e60f176cc044d1f8fa25f7",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\solar_corrected_periods.csv",
+      "bytes": 4744992,
+      "sha256": "2fdd1786a8d11617a2d0bbb9a4a416cab911c3ea4d7f11aec7434246f867310e",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\solar_hdf5_provenance.json",
+      "bytes": 753541,
+      "sha256": "2cc2088902abecc6f6f6834b0017014e45b0121172526b670bba9898eae81d8e",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\solar_hdf5_validation.json",
+      "bytes": 871,
+      "sha256": "6e01f20518e76c672690243e7e491103c964880ad6e916d215bab95e906bb8de",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\solar_phase_capacity.csv",
+      "bytes": 13173,
+      "sha256": "f77cb5bba5e1778eaef2463e6266a23e6376b8184c5b41093926a29d117ebdf2",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\source_records.json",
+      "bytes": 3927,
+      "sha256": "a966a174c28c3a8af29dc06dbf9bab66f4819f4e7879ee2feb23cfd6dec13e37",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\source_renewable_12weeks.csv",
+      "bytes": 7416276,
+      "sha256": "a4c19115b7e6d79bd88dc271c439b25a7b55e1c2790ccf66d5c26ddb8ba51d68",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\sources\\solar_grid_mapping.csv",
+      "bytes": 25628,
+      "sha256": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Retained raw HDF5 coordinate extract or phase inventory"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\sources\\solar_hdf5_extracted.csv.gz",
+      "bytes": 1406094,
+      "sha256": "60bcada7c1ece8e9c557f084aaa03a56e185a659aed59523f973fe3e815f3924",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Retained raw HDF5 coordinate extract or phase inventory"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\validation.json",
+      "bytes": 2762,
+      "sha256": "0607ab62125df348b5be5d4377607b2c084331227c682d17ce3ecf750a968512",
+      "consumers": [
+        "pv"
+      ],
+      "role": "Source, parameters, retained raw extract, final input or scientific provenance"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\project\\products\\supply_chain_optimization\\coal_hydrogen_saf_optimization\\src\\routing\\graphhopper_routing_engine.py",
+      "bytes": 107212,
+      "sha256": "6690bee9edb4ae5d2d14c92a47cd787c260166a6bca5f23238a82fd2c482df39",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Import dependency of the original symbol module; rendering uses recorded endpoint geometry"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\project\\products\\supply_chain_optimization\\visualization\\network_structure_and_siting_visualization.py",
+      "bytes": 51702,
+      "sha256": "253c7f35a4a65f3e45a5921133f39c39e472f7d4ced43d3a9e7c9fddf0ba9259",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Actual original panel styles and original SVG marker definitions"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\project\\products\\supply_chain_optimization\\visualization\\thirteen_scenarios_clustered_map_visualization.py",
+      "bytes": 168777,
+      "sha256": "09cd56941510489e0b3f67a1fcc7389d719a3e809b31babf6a65f9d166bcd0ca",
+      "consumers": [
+        "spatial"
+      ],
+      "role": "Actual original panel styles and original SVG marker definitions"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\static_supplement\\twelve_week_joint_relative_states.csv",
+      "bytes": 1617,
+      "sha256": "c3759d64b7a7a8c8a4717fa717dca2acc074c859659604e360a83a77773ea458",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Original twelve-week airport demand diagnostic"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part01_20250720_113922.csv",
+      "bytes": 7902128,
+      "sha256": "f568843b1889f328dda55ffcf0c26191d22319d30b2bd48b3ddc514f4f745702",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part115_20250720_113922.csv",
+      "bytes": 8379999,
+      "sha256": "211cbc0bbf6471581e9aa025fbb153dd5ae8efc289e1a8a2f8e835aaa7fcd94d",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part139_20250720_113922.csv",
+      "bytes": 8570721,
+      "sha256": "ae8e61e81ade6ccfdc09709646fc5b6f18c6ab147d34e2d140be6232c48071ea",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part162_20250720_113922.csv",
+      "bytes": 8075815,
+      "sha256": "409a91d4852ade773870299f0ac35d5b61ea98eb67dc205a18e7ce0b25b851cc",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part186_20250720_113922.csv",
+      "bytes": 8319504,
+      "sha256": "344039f10da3f498925fe0c7982e522d239897a4cbe036c0dc06ec48a30d2ad1",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part20_20250720_113922.csv",
+      "bytes": 7895102,
+      "sha256": "1d6018af40717acc9fe0c53f77b9cee3aa184b2a0dbbb3af38d6652aa5af22ef",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part233_20250720_113922.csv",
+      "bytes": 9416622,
+      "sha256": "3e84c2506b3bc12538cc0b635ac53940d09b9a9583ab8de5ac8b29f1230b9f09",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part257_20250720_113922.csv",
+      "bytes": 9700269,
+      "sha256": "169afc387ffc5ee9ed8c4cfd444f95548e3393ca3c7df10694c705cddb38d47d",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part280_20250720_113922.csv",
+      "bytes": 8600620,
+      "sha256": "5348d26cc4514ae9cc9955537f6663118c9ec9bc842c749440a70cd9658f4ded",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part303_20250720_113922.csv",
+      "bytes": 8504865,
+      "sha256": "690a16b4cc83c54da7a06b36c2d65dbab5d6b10a0dce4262d7683c97f8e7332a",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part327_20250720_113922.csv",
+      "bytes": 8426254,
+      "sha256": "9e9ff83d4aceaa6fa684273db7a8d58f49ec4e5f4a1967923c1ef2d1f8334cf4",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part350_20250720_113922.csv",
+      "bytes": 8255560,
+      "sha256": "802b813f39186e0c8442dae3a575301ad671536ff5774fb1a2555dc89393d458",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part374_20250720_113922.csv",
+      "bytes": 8354959,
+      "sha256": "809e78b943b7205ebb838f3b64696abded9115295449040f0166c8908bd2eb4a",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part398_20250720_113922.csv",
+      "bytes": 8698841,
+      "sha256": "f084f45d4ee09f3399d1fe2441adbd66f6ff5d96d3930fb292a55f7f4566e19b",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part421_20250720_113922.csv",
+      "bytes": 8516007,
+      "sha256": "a98107382b7df82f921542ae184321abe98c07c93707ed395d9c1e5b9bb54ec0",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part47_20250720_113922.csv",
+      "bytes": 8161516,
+      "sha256": "67ca1ed1e5b3f4dba86500bd46115a9f96264a13b565e719ec976ac7c89b1a4c",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part73_20250720_113922.csv",
+      "bytes": 8306282,
+      "sha256": "9aee686c15383c111664a191f9a1e6debdca32f40ca0bcfce877c07543480a71",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part99_20250720_113922.csv",
+      "bytes": 8091361,
+      "sha256": "61c7a32485a29153fd22b24eeb500e298a18b42b0847b3a20927dc78b53b4e59",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Selected genuine wind source; 550-row sample and seed recorded in figure_manifest"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\solar_power_plants.csv",
+      "bytes": 5283420,
+      "sha256": "e961d5591de1aa2a56934d303eb7055b55a0f07ebae336a0d55750946b1caf9b",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Unchanged national inventory supplying the background panels"
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\wind_power_plants.csv",
+      "bytes": 3274066,
+      "sha256": "a43da410def6565abdcc3d7a73943fac0ac428044b01d8a22a4e541fcf1aabae",
+      "consumers": [
+        "resource"
+      ],
+      "role": "Unchanged national inventory supplying the background panels"
+    }
+  ]
+}

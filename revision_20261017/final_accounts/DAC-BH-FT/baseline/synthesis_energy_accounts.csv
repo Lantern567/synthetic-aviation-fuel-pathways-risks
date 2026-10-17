@@ -1,0 +1,67 @@
+location,technology,location_type,production_kg,energy_kwh_per_kg,electricity_ci_kg_co2e_kwh,electricity_price_cny_per_kwh,electricity_kwh,emissions_kg_co2e,discounted_electricity_cost_cny
+airport_北京,green_h2_co2_to_saf,airport,573637.5642666991,7.6,0.6,0.6,4359645.4884269135,2615787.293056148,333868407.9868543
+airport_天津,green_h2_co2_to_saf,airport,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Binyang Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,48472.158933333696,7.6,0.6,0.6,368388.4078933361,221033.04473600164,28211755.196760178
+refinery_CNOOC Dongying Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Fuyu Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Guangyuan Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Haike Ruilin Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Haiyue Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Hebei Dagang Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Hebei Qianhai Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,136383.64693333325,7.6,0.6,0.6,1036515.7166933327,621909.4300159996,79377979.95373811
+refinery_Huabei Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,151466.05600000007,7.6,0.6,0.6,1151142.0256000005,690685.2153600003,88156240.33515447
+refinery_Hualian Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,93908.19946666705,7.6,0.6,0.6,713702.3159466696,428221.38956800173,54656429.43541833
+refinery_Huayu Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Lianhe Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_PetroChina Qinhuangdao Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,197173.98773333343,7.6,0.6,0.6,1498522.306773334,899113.3840640004,114759160.62976205
+refinery_Petrochina Dagang Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,75729.25173333319,7.6,0.6,0.6,575542.3131733323,345325.38790399936,44075922.30568895
+refinery_Qinhuangdao Far East Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Shenchi Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Sinopec Beijing Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,166835.4613333333,7.6,0.6,0.6,1267949.506133333,760769.7036799998,97101538.22007285
+refinery_Sinopec Cangzhou Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Sinopec Shijiazhuang Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,151669.97440000024,7.6,0.6,0.6,1152691.8054400017,691615.083264001,88274924.87711662
+refinery_Sinopec Tianjin Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,209303.35626666708,7.6,0.6,0.6,1590705.5076266697,954423.3045760018,121818693.01461677
+refinery_Tianhong 1 Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Tianjin  Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Wudi Xinyue Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,121595.7866666666,7.6,0.6,0.6,924127.9786666661,554476.7871999997,70771152.79960038
+refinery_Xinhai  Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,90879.63360000044,7.6,0.6,0.6,690685.2153600033,414411.12921600195,52893744.20109291
+refinery_Yatong Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Zhonghai  Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+refinery_Zhongjie Refinery,green_h2_co2_to_saf,byproduct_hydrogen_refinery,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,699999.9999999995,7.6,0.6,0.6,5319999.999999996,3191999.9999999977,407413844.8195156
+steel_Chengde Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Chengde Jianlong Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,3308060.918399967,7.6,0.6,0.6,25141262.979839746,15084757.787903847,1925356882.375013
+steel_Hbis Laoting Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000008,7.6,0.6,0.6,5320000.000000006,3192000.0000000033,407413844.8195163
+steel_Hebei Anfeng Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000009,7.6,0.6,0.6,5320000.0000000065,3192000.0000000037,407413844.81951636
+steel_Hebei Donghai Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Huaxi Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Rongxin Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000006,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Hebei Xinda Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000009,7.6,0.6,0.6,5320000.0000000065,3192000.0000000037,407413844.81951636
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000007,7.6,0.6,0.6,5320000.000000005,3192000.000000003,407413844.81951624
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Jingye Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000006,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Lingyuan Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Qian an Jiujiang Wire Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000002,7.6,0.6,0.6,5320000.000000002,3192000.000000001,407413844.819516
+steel_Qinhuangdao Baigong Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000006,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000009,7.6,0.6,0.6,5320000.0000000065,3192000.0000000037,407413844.81951636
+steel_Shougang Jingtang United Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000007,7.6,0.6,0.6,5320000.000000005,3192000.000000003,407413844.81951624
+steel_Shougang Qian an Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000008,7.6,0.6,0.6,5320000.000000006,3192000.0000000033,407413844.8195163
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Tangshan Ganglu Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000005,7.6,0.6,0.6,5320000.000000004,3192000.0000000023,407413844.8195162
+steel_Tangshan Guotang Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000007,7.6,0.6,0.6,5320000.000000005,3192000.000000003,407413844.81951624
+steel_Tangshan Medium Thick Plate Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000008,7.6,0.6,0.6,5320000.000000006,3192000.0000000033,407413844.8195163
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000003,7.6,0.6,0.6,5320000.000000003,3192000.0000000014,407413844.81951606
+steel_Tangshan Songting Iron and Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000009,7.6,0.6,0.6,5320000.0000000065,3192000.0000000037,407413844.81951636
+steel_Tangshan Wenfeng Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000002,7.6,0.6,0.6,5320000.000000002,3192000.000000001,407413844.819516
+steel_Tianjin Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,9123052.18295525,7.6,0.6,0.6,69335196.5904599,41601117.954275936,5309796809.066965
+steel_Tianjin New Tiangang United Special Steel Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,4057619.6416,7.6,0.6,0.6,30837909.27616,18502745.565696,2361614884.2849174
+steel_Tianjin Pipe Corporation,green_h2_co2_to_saf,byproduct_hydrogen_steel,3467115.41917808,7.6,0.6,0.6,26350077.185753405,15810046.311452042,2017929747.6576698
+steel_Tianjin Rockcheck Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,2527096.7605333384,7.6,0.6,0.6,19205935.38005337,11523561.228032023,1470820296.3426154
+steel_Xinji Aosen Iron and Steel Group Co Ltd,green_h2_co2_to_saf,byproduct_hydrogen_steel,700000.0000000009,7.6,0.6,0.6,5320000.0000000065,3192000.0000000037,407413844.81951636

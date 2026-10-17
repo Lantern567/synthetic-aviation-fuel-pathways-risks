@@ -1,0 +1,147 @@
+{
+  "source_plotting_script": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\source\\generate_appendix_docx.py",
+    "sha256": "830be0a0504e4fcc783c760facff6657b9de578e25b2e7e06ab0487f8f153232",
+    "adapted_functions": [
+      "create_renewable_processing_figure",
+      "create_representative_renewable_profiles",
+      "draw_processing_workflow_panel",
+      "draw_raw_relationship_panel"
+    ]
+  },
+  "original_figure_hashes_verified_against_latest_docx": {
+    "Figure_S9": "90da147ec24101c22c581c726f9345a8f84d6b38cffa43b24810e3c81b15fde3",
+    "Figure_S10": "7b7675e22ce1778af96cb80ae998a2142b1e053e94916cbfd4ddab4c819c0069"
+  },
+  "frozen_pv_inputs": {
+    "renewable_12weeks.csv": "08f5feb41b945abdf097d0f8762ee9169849440456e60f176cc044d1f8fa25f7",
+    "solar_phase_capacity.csv": "f77cb5bba5e1778eaef2463e6266a23e6376b8184c5b41093926a29d117ebdf2",
+    "pv_parameters.json": "e561e162f6c15abcbc4adc95c3b4725dcdcc9c1b2b65aa91b9f98cd5c9ca6254",
+    "sources/solar_hdf5_extracted.csv.gz": "60bcada7c1ece8e9c557f084aaa03a56e185a659aed59523f973fe3e815f3924",
+    "inputs/baseline/renewable_periods.csv": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510",
+    "inputs/summer/renewable_periods.csv": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495"
+  },
+  "wind_relationship_sources": [
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part01_20250720_113922.csv",
+      "sha256": "f568843b1889f328dda55ffcf0c26191d22319d30b2bd48b3ddc514f4f745702",
+      "sample_rows": 550,
+      "random_state": 100
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part115_20250720_113922.csv",
+      "sha256": "211cbc0bbf6471581e9aa025fbb153dd5ae8efc289e1a8a2f8e835aaa7fcd94d",
+      "sample_rows": 550,
+      "random_state": 101
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part139_20250720_113922.csv",
+      "sha256": "ae8e61e81ade6ccfdc09709646fc5b6f18c6ab147d34e2d140be6232c48071ea",
+      "sample_rows": 550,
+      "random_state": 102
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part162_20250720_113922.csv",
+      "sha256": "409a91d4852ade773870299f0ac35d5b61ea98eb67dc205a18e7ce0b25b851cc",
+      "sample_rows": 550,
+      "random_state": 103
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part186_20250720_113922.csv",
+      "sha256": "344039f10da3f498925fe0c7982e522d239897a4cbe036c0dc06ec48a30d2ad1",
+      "sample_rows": 550,
+      "random_state": 104
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part20_20250720_113922.csv",
+      "sha256": "1d6018af40717acc9fe0c53f77b9cee3aa184b2a0dbbb3af38d6652aa5af22ef",
+      "sample_rows": 550,
+      "random_state": 105
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part233_20250720_113922.csv",
+      "sha256": "3e84c2506b3bc12538cc0b635ac53940d09b9a9583ab8de5ac8b29f1230b9f09",
+      "sample_rows": 550,
+      "random_state": 106
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part257_20250720_113922.csv",
+      "sha256": "169afc387ffc5ee9ed8c4cfd444f95548e3393ca3c7df10694c705cddb38d47d",
+      "sample_rows": 550,
+      "random_state": 107
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part280_20250720_113922.csv",
+      "sha256": "5348d26cc4514ae9cc9955537f6663118c9ec9bc842c749440a70cd9658f4ded",
+      "sample_rows": 550,
+      "random_state": 108
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part303_20250720_113922.csv",
+      "sha256": "690a16b4cc83c54da7a06b36c2d65dbab5d6b10a0dce4262d7683c97f8e7332a",
+      "sample_rows": 550,
+      "random_state": 109
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part327_20250720_113922.csv",
+      "sha256": "9e9ff83d4aceaa6fa684273db7a8d58f49ec4e5f4a1967923c1ef2d1f8334cf4",
+      "sample_rows": 550,
+      "random_state": 110
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part350_20250720_113922.csv",
+      "sha256": "802b813f39186e0c8442dae3a575301ad671536ff5774fb1a2555dc89393d458",
+      "sample_rows": 550,
+      "random_state": 111
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part374_20250720_113922.csv",
+      "sha256": "809e78b943b7205ebb838f3b64696abded9115295449040f0166c8908bd2eb4a",
+      "sample_rows": 550,
+      "random_state": 112
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part398_20250720_113922.csv",
+      "sha256": "f084f45d4ee09f3399d1fe2441adbd66f6ff5d96d3930fb292a55f7f4566e19b",
+      "sample_rows": 550,
+      "random_state": 113
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part421_20250720_113922.csv",
+      "sha256": "a98107382b7df82f921542ae184321abe98c07c93707ed395d9c1e5b9bb54ec0",
+      "sample_rows": 550,
+      "random_state": 114
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part47_20250720_113922.csv",
+      "sha256": "67ca1ed1e5b3f4dba86500bd46115a9f96264a13b565e719ec976ac7c89b1a4c",
+      "sample_rows": 550,
+      "random_state": 115
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part73_20250720_113922.csv",
+      "sha256": "9aee686c15383c111664a191f9a1e6debdca32f40ca0bcfce877c07543480a71",
+      "sample_rows": 550,
+      "random_state": 116
+    },
+    {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\aviation_fuel_analysis\\resource_flight_data_process\\results\\3hourly_generation\\wind_farms_3hourly_generation_part99_20250720_113922.csv",
+      "sha256": "61c7a32485a29153fd22b24eeb500e298a18b42b0847b3a20927dc78b53b4e59",
+      "sample_rows": 550,
+      "random_state": 117
+    }
+  ],
+  "plot_method": "Original palette, figure dimensions, grids, panel labels, random sampling, quantile display and median-curve layout retained; AC power and capacity definitions follow the frozen inputs",
+  "data_and_figure_sha256": {
+    "resource_data/retained_diurnal_profiles.csv": "e495866498b6c923f83d7ffb77b93dd7dd06215d5d7751dc2ed055ce5739917e",
+    "resource_data/retained_week_profiles.csv": "d0c07cfd7c75dc02cb61e73783b0ba59520ba0f6711ffe0af9b8238c768ccec2",
+    "resource_data/solar_relationship_points.csv": "8ebf16034cc18c57915a5d845af68e13c2c847bc43babfc5a94cdb2d3eb13cf3",
+    "resource_data/twelve_week_profiles.csv": "81ae4d247f17b15033da7a23d1d988b799c3bd3289108e319c7fe97bc4d395ae",
+    "resource_data/twelve_week_renewable_energy.csv": "489b9004a2f8b146d59d779d329ab681b6c9f2dd3b518f02a7cf91807817e346",
+    "resource_data/wind_relationship_points.csv": "306486e17824b41bee60eab0b88f7da21bd60c8d0e185a798fc91bf8e74e4152",
+    "figures/Figure_S10.pdf": "e4848a2feaacf7f7cc42cc4b0dea933447c7c982a3788716e681bd15fc73b13c",
+    "figures/Figure_S10.png": "470c607634b2f8772dac8929c3974b5bf2568cc60076d3eb07771896c8073c86",
+    "figures/Figure_S9.pdf": "b999a028276c4ba9a1f6d6676f86a698f4298fda47ccb06f8a0cdf1cdfdac439",
+    "figures/Figure_S9.png": "982d95bc432f0d4b6f54e54254ed845473ae3b33de3e5c27c084c867171057b9"
+  }
+}

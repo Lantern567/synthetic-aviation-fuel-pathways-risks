@@ -1,0 +1,3299 @@
+{
+  "passed": true,
+  "optimization_executed": false,
+  "solver_license_required": false,
+  "integrity": {
+    "passed": true,
+    "files": 3550,
+    "packed_records": 2215,
+    "python_source_syntax_checked": true,
+    "sqlite_integrity_checked": true,
+    "supporting_scientific_sources": 394
+  },
+  "verified_actual_runs": 18,
+  "fixed_production_asset_pairs": [
+    {
+      "scenario": "CTL",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 5.684341886080802e-14,
+        "h2_build": 0.0,
+        "h2_capacity": 0.0
+      },
+      "summary_sha256": [
+        "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+        "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50"
+      ]
+    },
+    {
+      "scenario": "GTL-GH",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 0.0,
+        "h2_build": 0.0,
+        "h2_capacity": 0.0
+      },
+      "summary_sha256": [
+        "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+        "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624"
+      ]
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 2.842170943040401e-14,
+        "h2_build": 0.0,
+        "h2_capacity": 4.547473508864641e-13
+      },
+      "summary_sha256": [
+        "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+        "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35"
+      ]
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 5.684341886080802e-14,
+        "h2_build": 0.0,
+        "h2_capacity": 2.2737367544323206e-13
+      },
+      "summary_sha256": [
+        "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+        "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03"
+      ]
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 2.842170943040401e-14,
+        "h2_build": 0.0,
+        "h2_capacity": 0.0,
+        "dac_build": 0.0
+      },
+      "summary_sha256": [
+        "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+        "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd"
+      ]
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "passed": true,
+      "maximum_differences": {
+        "saf_build": 0.0,
+        "saf_capacity": 2.842170943040401e-14,
+        "h2_build": 0.0,
+        "h2_capacity": 2.2737367544323206e-13,
+        "dac_build": 0.0
+      },
+      "summary_sha256": [
+        "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+        "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 20.207228214302326,
+      "final_carbon_g_mj": 120.5252037185801,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CTL/baseline/physics.json",
+          "sha256": "aa179857554bee2a18e884f9dbc200ef6a88291a900aa1309d88251157c59df5",
+          "passed": true,
+          "executed_log_sha256": "f67ea1721a3cd68dbf4ddfd7e450ea436a52c7fbddb66b48d129568d332b7fee"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CTL/baseline/hydrogen_transport.json",
+          "sha256": "05d9ab5336e52c30e51ceb59cad27ec73ea81274af6089c6c8f16b9310e86a4a",
+          "passed": true,
+          "executed_log_sha256": "465089aba022abf16c061a1f7deea79e0087f1a4fb20cf9ab34d00c650cff999"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CTL/baseline/inventory_cost.json",
+          "sha256": "1c70d24f4bd531945de3fd6ecd663d7c8129dd2f7bddc18da6e9ea725bee4bac",
+          "passed": true,
+          "executed_log_sha256": "a31328b3daa8fda1a11c3eeb1c787aef38c404f5bf98c0c87bf383130179fa09"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "202a7e6cb6bef8ce0de1b1f4827e2c0d8244591ae3efcea9c2751bb64421f6de",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "62a49c5adff9d1f5d4df97081068c91ea5b7278a512b2c1221cbf00de985db35",
+        "independent_inventory_cost/inventory_cost_validation.json": "d4395f746a6c0d39891c264ff66ca0e1bee334407097a33bfe193ee91087f928"
+      },
+      "recomputed_account_sha256": "3b2363f912bc30c631a334720d57528e4cfc8a68cf03318c1c7a59e934aac7e0"
+    },
+    {
+      "scenario": "CTL-BH",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "d56adfe279c57047d5ec54ca992decd91b58cca652d607df3b6ce2926bad5165",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 7.20625620375103,
+      "final_carbon_g_mj": 283.6793053522564,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CTL-BH/baseline/physics.json",
+          "sha256": "665b068de106bbcb1355df998e86cdd2f4245ffbd061e6275f6b6d6ddbd81ea5",
+          "passed": true,
+          "executed_log_sha256": "f03813f31020bd26610f2d772c5322bd6c2cf29c618179149be2371ce269ac15"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CTL-BH/baseline/hydrogen_transport.json",
+          "sha256": "2abe568fb20523b89e0c4c194019af9ae870a66d5793ee3fa09ef026656e684b",
+          "passed": true,
+          "executed_log_sha256": "ad6bedd51d8e9f6315def5b96c46804b92b2afbfdeaf282d4bf6497608a09e16"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CTL-BH/baseline/inventory_cost.json",
+          "sha256": "0e282fca39e2279bef468776a1d7452b079bbd0a90f3d316a2c284ebc87647cd",
+          "passed": true,
+          "executed_log_sha256": "954dbf8616700ed32343f89f096f1ef53db3aacdafb69767cab4d50d29c351b8"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "28850cbc54b31f932caeb16e4d763bc6d8e4e6d4de26c85b72bf18b56de9d3c7",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "2650bff84aad9bc0ac47c4d95226045acc266894686435802e0dcb7eeb6ff775",
+        "independent_inventory_cost/inventory_cost_validation.json": "316879b59cc7e635ac1ffe58d413aff140bdcda623ee478471febd73ba4a9285"
+      },
+      "recomputed_account_sha256": "ba4a64c43c3aca4fcf2fbf943758e69427a30d3d24237f8ca629f3cf2512f13f"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 7.349851315340211,
+      "final_carbon_g_mj": 91.21733084566756,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/GTL-GH/baseline/physics.json",
+          "sha256": "c09423a81e9be97f51b3a4725976e3f9e39babc0361d32dc6aa614ec1cd5dcac",
+          "passed": true,
+          "executed_log_sha256": "7226207c2b38e65d70ff66551872dd95a4fb6b3299da241e3ed246329ec9046e"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/GTL-GH/baseline/hydrogen_transport.json",
+          "sha256": "459bd3696eace4105b4c272fb09b56a92971e5d61ad1f19eff79a4d4983e93a0",
+          "passed": true,
+          "executed_log_sha256": "1bfc791baa6b4e354194b296bb460b12d47ae7e351134fdd8f500861c93e7424"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/GTL-GH/baseline/inventory_cost.json",
+          "sha256": "b0c5a3081b8d05f66dfc1cb3283d00bf1d61fec83324812a2df90e8ac9081224",
+          "passed": true,
+          "executed_log_sha256": "9b208358c4feb073086bafe702e4bd0ad957efd1d59fcd1a9ac2af530fa52c0b"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "9eb4bd5aef0d71e91b3a0532eb4ee117761208b23ea5065c4b3067b8fb6243cd",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "d87ea4072ec13c5224dd7f1388783ac20fecfcaa38ac2c7dc0bfd91b1737e58e",
+        "independent_inventory_cost/inventory_cost_validation.json": "d86ea1e9c5bc3d7a8a8214622794a81c6d01c93973beb9df2cf5cf445ce2224e"
+      },
+      "recomputed_account_sha256": "13209a81d0436bd4e15914ac1f8efbf0b2a228d341d6a769040c8629ff768e34"
+    },
+    {
+      "scenario": "GTL-BH",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 6.281085627773086,
+      "final_carbon_g_mj": 113.22952605917968,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/GTL-BH/baseline/physics.json",
+          "sha256": "c5e240cd0a714f9c2399e891970ab2092281dfb2dfadfb803951ec8d7c45a770",
+          "passed": true,
+          "executed_log_sha256": "0a3810c199618b27afb0c506579a69bc7be5923cc8b974f8128de9fe1c123885"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/GTL-BH/baseline/hydrogen_transport.json",
+          "sha256": "e09af39ed981bac44fcdf3c86e4edba99675f3d5421bbe496a4e43dd07e1993d",
+          "passed": true,
+          "executed_log_sha256": "b012e6597754ef7db6cfc1c179ec7c0c5ae895f9fcfe21767e77215795c1ee53"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/GTL-BH/baseline/inventory_cost.json",
+          "sha256": "5ab2f660df8ed6b67828d9f9ad259dfa785e1901cb90ff8c1c6af45cc9d3932d",
+          "passed": true,
+          "executed_log_sha256": "427861ef12bfab1f21049a961815801e268b400bad1759207e25af7a691285b3"
+        },
+        "extended_natural_gas": {
+          "report": "provenance/verification_replay/GTL-BH/baseline/extended_natural_gas.json",
+          "sha256": "2239f0ba0bfda604f02864066ab423d4e90a20a84666e4f444ca6d859d9580e0",
+          "passed": true,
+          "executed_log_sha256": "19e6d04e0723a2a826db3361f5b6f80b5df98119acbc7f51beb94d35c22d2202"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "6c48f0b2bdd1df274a61bac0306390bd0cce1cf8bf302809be9cf0d4e762bf3f",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "a24f731979bce48d3849d51f8b57f520d95ab5f9849f8138a4f454f1177bacb4",
+        "independent_inventory_cost/inventory_cost_validation.json": "1ab05cb189f7118cecb9f6ea67f18429313d504507699c4b9ac370522e5539b0",
+        "extended_natural_gas_validation.json": "2239f0ba0bfda604f02864066ab423d4e90a20a84666e4f444ca6d859d9580e0"
+      },
+      "recomputed_account_sha256": "9798db673aaa2a8a61c6924d0cee3ff58725388bfc640f3f7863e7a429188586"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 29.609485056968882,
+      "final_carbon_g_mj": 15.035154855952008,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-GH-FT/baseline/physics.json",
+          "sha256": "bd2e51736a8f52cc25e7d4697781396df1df2b86996056c1c799438f6274fd0f",
+          "passed": true,
+          "executed_log_sha256": "f6b82db30b6e42e223f50c872f2a6d82314259d2970c60132bc9655d916db597"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-GH-FT/baseline/hydrogen_transport.json",
+          "sha256": "e8ae3ff6d18ba89356f213a07f423174815b1ab836ca81e8ad8f8a7e023b42d9",
+          "passed": true,
+          "executed_log_sha256": "44e87057859c4dcd5bd4355e6eb1dbeccc8547efdb7142ee3a74df13d01125b9"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-GH-FT/baseline/inventory_cost.json",
+          "sha256": "0295c7cd3f484683364f7578b16f06f057a10b7752aafbf143dcbaea8dfe7f42",
+          "passed": true,
+          "executed_log_sha256": "74d7bff85e29ed858deaae0615a94737aa66b838396f6539d04afc46f14000b2"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-GH-FT/baseline/ccu_co2.json",
+          "sha256": "b11101800e0d829cd76a88b1673013739a2e629f241c3c7c0508afe752a6a377",
+          "passed": true,
+          "executed_log_sha256": "6bf6613cfdfb0533763c3c9843f647a5d1631d76d99a0a5b9962d1f6d4ba0351"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "47298993f4315ef0dd42f7a32ac48a1a0fb50fd033eb52708f0da127e1570614",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "8b5e1e8bff042a0acc9ff27a33d0ff424238750a5e32b0611e649d223630e3a7",
+        "independent_inventory_cost/inventory_cost_validation.json": "76ce2e92fe2c25adbdc89d29f1ac8070d456a9858546cf1416b67492e2b789ac",
+        "ccu_co2_accounting_validation.json": "b11101800e0d829cd76a88b1673013739a2e629f241c3c7c0508afe752a6a377"
+      },
+      "recomputed_account_sha256": "63003a62c9fe407de09c92234590954d1072221198671023d894485114e10359"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 41.92996725069813,
+      "final_carbon_g_mj": 23.2184542561334,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/baseline/physics.json",
+          "sha256": "8c2881f48521f9da8bf80c291cbf404b77aac23a33814626bdff296a9f4a5e61",
+          "passed": true,
+          "executed_log_sha256": "332568aaac703ed9344b5f258b0be28e87a068d85517351f3382e5dfa1ade310"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/baseline/hydrogen_transport.json",
+          "sha256": "7a83b8c9d164b40d18a07daee75043754ebc724d47d9f5b3df095c25dda1c7cd",
+          "passed": true,
+          "executed_log_sha256": "4d3b4abc8a4c4a9058483181a8b8e59c62d3f06e5f1532055c5919fcdc74e511"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/baseline/inventory_cost.json",
+          "sha256": "b32cc82ded4de2133b910b627772004fa6f2f00fce4a62f867c368c0faa16d6e",
+          "passed": true,
+          "executed_log_sha256": "c1d1e2ebefebf38904616bdf21a3bb5d2ba78a20d2140030da5ee0337c4a0ae7"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/baseline/ccu_co2.json",
+          "sha256": "44dcf5cf6d461a3583c13d7ba1a5dfaa5623c723e5fc1c960321421bad85c9b6",
+          "passed": true,
+          "executed_log_sha256": "5269834346dac95b380b9b35d21b1ea4cdc080a9470cf274dd3d77e8e9381ddb"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "ab6014bd7a6dbf5a645c4d15f4963c8756da35cc34f3abfd6f3a08c614f2f80c",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "18eac4eed1c5c9bd742ab98d7a08ad55c67f6e7fa971cfe1b952b2be043e70f2",
+        "independent_inventory_cost/inventory_cost_validation.json": "c91bf9b54765e3b5b622a0144578605741c94404e33b91a695fbe055032711fb",
+        "ccu_co2_accounting_validation.json": "44dcf5cf6d461a3583c13d7ba1a5dfaa5623c723e5fc1c960321421bad85c9b6"
+      },
+      "recomputed_account_sha256": "7fd868e0d472bafe6731f8912aaf877998d478d770fc5f897fe2298f04e46339"
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 9.687335991454404,
+      "final_carbon_g_mj": 271.0634460155143,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-BH-FT/baseline/physics.json",
+          "sha256": "e5196012e7e14031d99dabbe768acd2460e05a63e4578ad0929f7bbf45e91b09",
+          "passed": true,
+          "executed_log_sha256": "58a1c3d711ffab52911fae143b23a8d04ce622c46b7e09809eed92cf7cca2af2"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-BH-FT/baseline/hydrogen_transport.json",
+          "sha256": "5f9623dd3b2526969f51e3de9868f2872d71cf3a40fb8945e0a9de34334eae60",
+          "passed": true,
+          "executed_log_sha256": "d3467277da6764286cdf21f6ecf5c3a8f629ab57a8786b19e42d25ba4b4e96b9"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-BH-FT/baseline/inventory_cost.json",
+          "sha256": "9a75a177856efd39648207908fde7a9e4b99ac78582f991fc2ef4a6ddbae4bc8",
+          "passed": true,
+          "executed_log_sha256": "1b58774efcfc478335940cef41742c8ff5b9269eb213dbb0354fa07b7b4a9a0e"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-BH-FT/baseline/ccu_co2.json",
+          "sha256": "d5fc58a6f0cb6cde888e7639c6d7ce98e584d7c00990f3bf7e1d167bf604f6e2",
+          "passed": true,
+          "executed_log_sha256": "7e0ab64c7929cf3bb7cfda94c1fd1b0f82c3c8814ce9b44d7ae71d88923c1236"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "4c48ec1b647e19bdb38cc5b68306a1c1417499c153b7773149bb83f696c24e6f",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "341da9570d6181abfe3281fa9779cdcecfea1b5e414ed62493547841068aa51e",
+        "independent_inventory_cost/inventory_cost_validation.json": "535275a8b53b723a75e8a9a5400c0789f56724f37fa97cc8afe68d3bc51582b2",
+        "ccu_co2_accounting_validation.json": "5128e0db4134e64af4d7fe02518244fef4b5d20a8b0d63c7aa63dbc0e4860b75"
+      },
+      "recomputed_account_sha256": "ac7883b525842751d5bb07ee68386fda6448f83c06cb263db6c95647eefdba3a"
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 11.051489460495958,
+      "final_carbon_g_mj": 410.4835170652791,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-BH-MTJ/baseline/physics.json",
+          "sha256": "d79627fa206893ff71065228b4503e87eecf8fb239f5976e44d02787c741df61",
+          "passed": true,
+          "executed_log_sha256": "58ed7bac1efc345dbc2c9eb04c8ab6c35159cd9b750e8e2066ee0e56186d62c5"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-BH-MTJ/baseline/hydrogen_transport.json",
+          "sha256": "0a92087c91d47f2b9db8c43def3d42277fd5b46d03373e80db2a2160d803e79f",
+          "passed": true,
+          "executed_log_sha256": "0030e722d5559014332d422ba14216177fd2d448c87588be15fd76bf80abb4f6"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-BH-MTJ/baseline/inventory_cost.json",
+          "sha256": "cd709f0014e58f4a22f4ddf204d3e146537b5a5acc5c23f48da32bcc82b20ffd",
+          "passed": true,
+          "executed_log_sha256": "4ff4356d4ddb29461831db2d2c9b51a14de9d987349852cdd98272173390b3bb"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-BH-MTJ/baseline/ccu_co2.json",
+          "sha256": "6f76c6eb84023b467c7c9a7b63d8747d4be4f53ebe0387e22ccffe4a98246e67",
+          "passed": true,
+          "executed_log_sha256": "0b065b5130708aaec3f85e2e9c6f52ed365964f8a2a6b94f997c61b60455e11e"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "306c0911c868df3994e7eb4644b2a1e8a97c2f4c378e7518d0b2d2c5d689aec1",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "7f2354be1c6c19587779faa67c498a6303d14ffd297e25ae5e8f97efeca54c77",
+        "independent_inventory_cost/inventory_cost_validation.json": "5c2dfde99e99d4b1969c88827cd07b6d0f1111a14af85dc8e7503830d2ffcdff",
+        "ccu_co2_accounting_validation.json": "16f689209c718a1977f0cfe73ba353c48616697c215a9d245b426468bfefbdb0"
+      },
+      "recomputed_account_sha256": "913f64c3703c5b26236a7caf2ae211a6a53be758a8497d02bfd58ea086e2c062"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 52.97323595718782,
+      "final_carbon_g_mj": 34.11562437846707,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-GH-FT/baseline/physics.json",
+          "sha256": "ab795e2f3287d53091137cf99622ba1b15d5d527b19a17b917ef9708f3d87056",
+          "passed": true,
+          "executed_log_sha256": "565c10979754d2eb4011f5fd3e766aaaae4efd8e579ca5e171d7353d51700f18"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-GH-FT/baseline/hydrogen_transport.json",
+          "sha256": "bded0ea820faace438ed7c5e28dbae517aae21b3ee43d2dc66f33722f8a4384c",
+          "passed": true,
+          "executed_log_sha256": "6cdf53975b9ed9eb613b1a125c7c4847f03175eabe7cdad9ac2957bbadf9eaab"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-GH-FT/baseline/inventory_cost.json",
+          "sha256": "c209a9df868eaf1061a6532cd37d051a5305d7a95fb4e83cc9bc5861332b4030",
+          "passed": true,
+          "executed_log_sha256": "1071e630ddae9ec6bf77ceb3b1f41eee68c94178876c2eed72dfe0b9e47d74e7"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-GH-FT/baseline/co2.json",
+          "sha256": "5b31f3e88fe36738f6a65c8450b2e22d8a6ab3b06bec181a19d44fc1f0dc2da8",
+          "passed": true,
+          "executed_log_sha256": "d9413aac58cfe1a3fc20f709a289d23300f9e7810fcf6234a50ff487737e6be5"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "4f3c354eb03c4281ee00b26721e74f512327d30e9bc4d8e7ce57fc63e0a2cbae",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "a48889428c80ac3780c77759ff336b9f979380190f224df75ed99a0601608c5d",
+        "independent_inventory_cost/inventory_cost_validation.json": "c3bd8ed7c92f4d945b6313d5a8b19ee008f3ef160a28c24c3c2c7af5f2dda668",
+        "independent_co2/co2_validation.json": "a8f0b35befce9745caa7438f6bd8a0b93569ad94f929e082131b3258a0bbcf17"
+      },
+      "recomputed_account_sha256": "ab924b3bd89c5fde8010bdef1502c9ad11f556807c40e6efabfa15b7d6364761"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 71.64454568338765,
+      "final_carbon_g_mj": 44.048134175725416,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/baseline/physics.json",
+          "sha256": "4cc7b5cb1efaefc04eeec61260e9a78ac59113bb6844a1fd280f532f31c8cf27",
+          "passed": true,
+          "executed_log_sha256": "cbc75b7349d759cfb1a5f41d9c9a60a98fde3e78c479eda54192533452f3179b"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/baseline/hydrogen_transport.json",
+          "sha256": "a973ab1ba30d5fdc3e4079abfc5feb4c705c3e4c521f3e79d74099de33f596a4",
+          "passed": true,
+          "executed_log_sha256": "f54d82493d85e541645d2146311376170aeb4c27f1d374a1422bac3a5994d748"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/baseline/inventory_cost.json",
+          "sha256": "d654e5eb251b21d6e6847e2f058671e9394d8c2032fd0c45b3f6d4ada7b65232",
+          "passed": true,
+          "executed_log_sha256": "09d12866c01555ebf5775d9350d5b87d492970206da8ec1a867dd1d50560069b"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/baseline/co2.json",
+          "sha256": "057f6c345f2f9d1c6db2f5d08c5f53668d0861cb52c08fe2ab22a05621ceae6e",
+          "passed": true,
+          "executed_log_sha256": "7fc9c354b5e7ec5316e63b4fe9bfda9be012669ac49d0ccd350358d482892bc3"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "32b51108df57be6f066c075a34000461f7d4e8ac67730e3b17402811335cb434",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "ba5fd400a3fcd0f303d5997780cf5e23e4fdc33bccd5333fca5b5132407cd397",
+        "independent_inventory_cost/inventory_cost_validation.json": "42677ef14d6dbd9947fae683399717e0e96f28beea4a86669fa02ca0e2b85962",
+        "independent_co2/co2_validation.json": "88c37b48b3dd1017c4ffcfab36a3194a4da3abd8573c64f1c6e44270a1a52e78"
+      },
+      "recomputed_account_sha256": "580e2a61d1b29aca869eb2d094b1825f22af50e50828557323fb72f598f7e798"
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+      "physical_report": "byproduct_physical_validation.json",
+      "final_cost_cny_kg": 26.031211423786836,
+      "final_carbon_g_mj": 296.74045009008057,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-BH-FT/baseline/physics.json",
+          "sha256": "7b2a332069af093a6d8b0fb7c3370e41d8fdf297607f9c9299c8ac01fc88f5d1",
+          "passed": true,
+          "executed_log_sha256": "9131fa1e1d76e565925ad2b7920a14ee143b47900c6a2c4f2d5436c78413cbdb"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-BH-FT/baseline/hydrogen_transport.json",
+          "sha256": "3cc6e4b612e069bab0f834f3f708e87e233ab07e76d67617cd19e5e91b8d58d6",
+          "passed": true,
+          "executed_log_sha256": "4fe064f4a83544c27e9f743be917d20d8fd374af33c90f0ab5a01bd49dc598ec"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-BH-FT/baseline/inventory_cost.json",
+          "sha256": "17b611734e3a76d10e3096b340469540e25a1df88b7c0fb73efdf1663823a351",
+          "passed": true,
+          "executed_log_sha256": "4f0a9d61c429c6e3ae343034c87b30bca47510567f2842cbad20b58ad6934cb7"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-BH-FT/baseline/co2.json",
+          "sha256": "087a2a42bf56cd4cac345cf1218a1128e9810cec30f1b65501aa0c0fa9ecbf37",
+          "passed": true,
+          "executed_log_sha256": "34b3b99d22cc2980e15334e18cc2d1d05d3564a1b9fca545be0c552674d3a1c0"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "4d81b4f474a113cecb3bb94ef0801ff3c47a33793a1a00f29b7f011edb9d4880",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "456297fdc41e6d2765490c7af497e21799ab13770525a82eca2809248b721740",
+        "independent_inventory_cost/inventory_cost_validation.json": "58540fbcbff9f6913621f9d434eb6a9b26e1893e503a5b7a6cb72480a2f26904",
+        "independent_co2/co2_validation.json": "e1d42557f33e349cfba99292c54319c36b8492eb4c6b0c31b5656d05fa35ce98"
+      },
+      "recomputed_account_sha256": "45108e589e74c68c054b37173c289770e38b30f3ebb4e59d3d63aa3767ad511f"
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "source_summary_sha256": "cbf0c867890680b52e1b37c829b81a6ae6d87d009910b7c7f12e657ef2f4d5a8",
+      "physical_report": "byproduct_physical_validation.json",
+      "final_cost_cny_kg": 28.55043689435715,
+      "final_carbon_g_mj": 434.4801212000272,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-BH-MTJ/baseline/physics.json",
+          "sha256": "0b4ca6a460fcbdc7215625124211d31e30576775e1701f3418e2ecbb7e66d971",
+          "passed": true,
+          "executed_log_sha256": "722208bc8ed106744adab1a17f8b572daae42cdd5bd9f0b0faf7cfdcc89c8d14"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-BH-MTJ/baseline/hydrogen_transport.json",
+          "sha256": "f69622ae36c328fa3c00fc668e8018ab64bbb9b89ad3556c504d99e7278b7df1",
+          "passed": true,
+          "executed_log_sha256": "3cbc537e1ef1278d00e43b70ffaa5c56ebbe43898115262b10d75f4553f396ec"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-BH-MTJ/baseline/inventory_cost.json",
+          "sha256": "55b31216501840baa71bc52f0db0c1c262c4092e19908261deb4da15e7ae143f",
+          "passed": true,
+          "executed_log_sha256": "ae5d38822a4322b0e9b10b263395603429b435088be28d665b4ce7851c3d2cbe"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-BH-MTJ/baseline/co2.json",
+          "sha256": "207dd750e6182df4274c5fbd92a6b20d63d221e02deb70c7c4d5150f16fa1363",
+          "passed": true,
+          "executed_log_sha256": "28e49da04dbc9e317cd7df2593bd07fdad211dc194c66de1f594f42da9c644c4"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "byproduct_physical_validation.json": "fea69b32ffbd0f5eeafc48b2c6d5a43e729530cd6249321d90b127396c3768c0",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "e9219039c24d99794d82420fb0b60b4680a161f4447cf7ae0f965e5bfccf6666",
+        "independent_inventory_cost/inventory_cost_validation.json": "32477335bdddfb9e87da68da9485a34eba3a9291464b418a12be118c7135ee30",
+        "independent_co2/co2_validation.json": "0c46945666671ce89448160ee0b972bbdff7adcf1f799339219d8608153dc4cd"
+      },
+      "recomputed_account_sha256": "2487a5f61b45e1664ed16415ee7fcf8cd543491ae67424cd83b057d89bbaf74d"
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 19.110099612638198,
+      "final_carbon_g_mj": 117.16277863385413,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CTL/summer_fixed/physics.json",
+          "sha256": "cf13b607e4e508588faaf743113451dcd736457268a6eccf7d45ac763f892962",
+          "passed": true,
+          "executed_log_sha256": "7c15f15871fce6c426963db44e36983c30dc9fcedc184f454964e658346bc2bd"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CTL/summer_fixed/hydrogen_transport.json",
+          "sha256": "dbf8c4f96fa8d31d56218f9b00344ac84c3a46d205915eeab927b848cd8b5b65",
+          "passed": true,
+          "executed_log_sha256": "f0bd4f7889f20063bb602676983ed9f4d46203042d62c1c83c3ccd7b586b59c0"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CTL/summer_fixed/inventory_cost.json",
+          "sha256": "fe684ad78198a4fad576554308bfd247c424e3e8013bee70877c401d9ac5548f",
+          "passed": true,
+          "executed_log_sha256": "3bf1a8d9f3d7823f56003ae8fed26903c63f15995eff49d848371b31e12d0251"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "f0e4e3e034a54ff9b188f7e63c1feb6cd554b4af54a9861802e364dd1f9ebc7e",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "e90d9aa9894b0435536386a1f3b76025834ac5d787d846f43bb0a0fd6901f28b",
+        "independent_inventory_cost/inventory_cost_validation.json": "998c70093ee89b4367ec90ff02c9c3ff80444acced5f8c5ad1088c7c1d0326ee"
+      },
+      "recomputed_account_sha256": "fc61f0d5e9abffdaea92561ecc4f22c746b327ac686a03407031f02036ae29a9"
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 7.171356757306751,
+      "final_carbon_g_mj": 85.3838153930351,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/GTL-GH/summer_fixed/physics.json",
+          "sha256": "39a586cef9c1a965187c08a80d6e063e0a696ce65041c61b93a7fd4dd78c722e",
+          "passed": true,
+          "executed_log_sha256": "16394cbd0df1a6ad843703f03c7c2195675ccc663de6f7f5ff0cfde3cbee8c4d"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/GTL-GH/summer_fixed/hydrogen_transport.json",
+          "sha256": "272c2ddd8638d6a2faa39180515f3235e59de5fa8c00a11db1f86b454d1047ad",
+          "passed": true,
+          "executed_log_sha256": "a5dce0a612528e09a687557be025ae6ef51645b7be9e48eccbb1f2cc6b304102"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/GTL-GH/summer_fixed/inventory_cost.json",
+          "sha256": "4c8eda1a547c48484f77ab7c2699d67d8d0480bb5b2fd9ae654d2417ae74f948",
+          "passed": true,
+          "executed_log_sha256": "2bfe618f085f089374ae3714c72d934ea35ba10e6070480df2552061a112f12f"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "a831dd486178298f2be34fcf3f0e8cfb8ca9870628289e160852f9c640e8ce4b",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "c5de1f381c20947c80bab788ea40b5b49502453878de591718c19c7e2e0be61a",
+        "independent_inventory_cost/inventory_cost_validation.json": "585945ee5087894b262eb65d44d275b8890a4d06e6a85e03b70bc895c865f9b5"
+      },
+      "recomputed_account_sha256": "a71a8a8ebe20df12d2a529e5500efba756bf07ca2989edf4d16369657819ff63"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 27.91344728076633,
+      "final_carbon_g_mj": 8.519327492010207,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-GH-FT/summer_fixed/physics.json",
+          "sha256": "1cdc83277cc7b62666fffce359c261cbebe4af43d5397997c9d8e830a4e55aef",
+          "passed": true,
+          "executed_log_sha256": "759a9dd2281989770d6ea486657d248884b612323540411b6b2f563fb1c002b9"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-GH-FT/summer_fixed/hydrogen_transport.json",
+          "sha256": "9d262a18319fcc5efc8a60ed941dadc7f98d8a7d0f8ab450accd58c0c5a9ba3e",
+          "passed": true,
+          "executed_log_sha256": "6b45ed7b295707c1bd3b488a27beae511288d6ed8c9729f059e6fd3c2803596f"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-GH-FT/summer_fixed/inventory_cost.json",
+          "sha256": "ed2dfa8f98c524f353e647f7362b6d6752aecaf6eeb50b75c6614ec279c41ff6",
+          "passed": true,
+          "executed_log_sha256": "f80f052ac54c3abdece6908cb9d87c61745ba19c816a9311d863fdd1b49c48a4"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-GH-FT/summer_fixed/ccu_co2.json",
+          "sha256": "3711b30f81e1c0f845f169ab3ec2898197528e4c5c0647ddbce9ff8212d7cca7",
+          "passed": true,
+          "executed_log_sha256": "51a61d1c6151851f891c7bc52d0a715997ef0809a71ebff3a54881aa3fae12ff"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "09b27f034c25de21f33f344668a7ce12f661a773b90457a511ce6e15553ba45a",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "d80eafc4323cb080bcd25297bf0c8ed9fb68d98987f4efe0775cd9c9a1e95f3c",
+        "independent_inventory_cost/inventory_cost_validation.json": "407614e0cb7d0b5064ea8d51badb216f743ef6b849a5e21d94f6c52e8f46e48b",
+        "ccu_co2_accounting_validation.json": "3711b30f81e1c0f845f169ab3ec2898197528e4c5c0647ddbce9ff8212d7cca7"
+      },
+      "recomputed_account_sha256": "95cc157f0c0f38101cb8b031bb0ed0e5adf444be9e8b74e551997d6d7f34de48"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 39.35735705043303,
+      "final_carbon_g_mj": 16.743726186804157,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/summer_fixed/physics.json",
+          "sha256": "04c111262d5fb19f6f5d31b9c744f81a0660df9eaa6707c6bff92b4825479ab3",
+          "passed": true,
+          "executed_log_sha256": "43a7286fe1e7237560af0acb27204da7df68c6c3f5b78ef90db25817ac1ae5cf"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/summer_fixed/hydrogen_transport.json",
+          "sha256": "71d99745ddd6fff9ea7a33ef1b2f9f4f863ce489eb9096e22e6c73621b9eb9bf",
+          "passed": true,
+          "executed_log_sha256": "62cd760b31b8857156752c9f97f7bfed2d3d8891ffa1309aef82e838cce8df3d"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/summer_fixed/inventory_cost.json",
+          "sha256": "b40177d78b08e55843ba2d333586f279acdb54604194f67482409a157af50f92",
+          "passed": true,
+          "executed_log_sha256": "49e7d07c1e54da2afd24aa1ae195b74b26ee4f3920c7c2a56cfe31eca4bb8b93"
+        },
+        "ccu_co2": {
+          "report": "provenance/verification_replay/CCU-GH-MTJ/summer_fixed/ccu_co2.json",
+          "sha256": "34181b166818c956ccb11208f629dbb8beb869cee6085d63591802b399e3e521",
+          "passed": true,
+          "executed_log_sha256": "229b71dd70309a9c293144ca9362bc02890ee0dad14e687e85a4996c98557652"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "7febf40911bf35327947307dc2430b82fc3abf9714f442213fb432c89c0c8a79",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "b085e82e5a436a4b43ac2dea25a249d349a4b67029c2f3fdf5da539175924232",
+        "independent_inventory_cost/inventory_cost_validation.json": "dfee87f9f746df66d8060b3903d368986d02fdab530383882f8c07f9b6de72ea",
+        "ccu_co2_accounting_validation.json": "34181b166818c956ccb11208f629dbb8beb869cee6085d63591802b399e3e521"
+      },
+      "recomputed_account_sha256": "ecd4bfca0edee4a0ec2e9bc3f31b01392525e362aa33ca35676da96f864698ef"
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 49.85292942817014,
+      "final_carbon_g_mj": 15.946920454097086,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-GH-FT/summer_fixed/physics.json",
+          "sha256": "7bb2775e4d82f571a0d67763499f1b4c0859dac9689f3b9cda2acc65eed0c06b",
+          "passed": true,
+          "executed_log_sha256": "42da7a8112ae368344fa82e16cb9a121fe2aa9067b566b063938252aeb05faf2"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-GH-FT/summer_fixed/hydrogen_transport.json",
+          "sha256": "4cc03db61ec54bbb0013effe94b137766d27c1248d07ef56dcb05463e268172d",
+          "passed": true,
+          "executed_log_sha256": "832fdb0870a2d97199157056be539cae6b8d4a4ab773303453a285fbdc335ddb"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-GH-FT/summer_fixed/inventory_cost.json",
+          "sha256": "21fe359c3cd9b6a8ce70681ed3f611349e76b470f65a833d6df13e448bc9cc6c",
+          "passed": true,
+          "executed_log_sha256": "f9207cf97fa6cd4d750286380f8507557291b2420311f20c64fe34649635ec9f"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-GH-FT/summer_fixed/co2.json",
+          "sha256": "f289fdb92823e6a9481effd2d5d132e40e037fafb7bc9c323da97df55f4617d6",
+          "passed": true,
+          "executed_log_sha256": "be7f59d007b7442a1d6f0c6ae0290c36392febcaf417f036b2cd8a43bac5ae66"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "e95fdf0adc456135cdb4f40ec156cb2ff23ead888c1c2bb287f719eb6b042dfa",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "fe44d6d67027b147b7c2cdbb677555cf46a1177e15b343eaac330c92370037bb",
+        "independent_inventory_cost/inventory_cost_validation.json": "f8f413326935839eb376429558ffe534d0c7e6b4c03bf3ac511563bccc4c5bea",
+        "independent_co2/co2_validation.json": "b8464c046df4ffd850c7541d4668f44349582ce1d75ed3f1885e4e59217cfb99"
+      },
+      "recomputed_account_sha256": "671b972054c11f300f5972b1d63401d18508a8f6c59e3e3e696b2557b6e9283f"
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "passed": true,
+      "source_summary_sha256": "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b",
+      "physical_report": "physical_validation.json",
+      "final_cost_cny_kg": 67.04544077962983,
+      "final_carbon_g_mj": 23.519265287251912,
+      "current_independent_verifier_sources": [
+        {
+          "name": "update_accounts.py",
+          "sha256": "a85cfcccc0147521fa3635875d68c13a98787c9509d5c9289431085e4c145e7c",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\update_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_ccu_accounts.py",
+          "sha256": "b8955252bc186b965bbb0ed71141a9e94b383bbf89ef71ffe1fc7bdfe50b7be3",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\postprocess\\validate_ccu_accounts.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_physics.py",
+          "sha256": "18e278cd3197bdce4efda534f814e9b6c5580c41a962e60a88c9bdb94c4b9e64",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\execution\\validate_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_historical.py",
+          "sha256": "5eed0d36b098880747f32d09db6ec863f022d803b996c5cac473e492c33ce30f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\validate_historical.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_extended_natural_gas.py",
+          "sha256": "5cedd111eb6ce5e928f684def7f8bd68371f8f1560dde802fabe94c465fafc2f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_extended_natural_gas.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_partition.py",
+          "sha256": "8f4adba2f5a1e1d6c9723b399ddfbcadf1c53a41c7adcc4a448948984bdc2197",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\repair_mip\\validate_partition.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "review_partition_domains.py",
+          "sha256": "708c16b49f2f6cad2857344e29e71a8147c52a26db06432d5b0898f3ace77859",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\archive_build\\review_partition_domains.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_byproduct_physics.py",
+          "sha256": "ecb84614c34e1404b431c1b971db1c87065db11a9af1eaab6c1253f97ff2f74f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_byproduct_physics.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_co2.py",
+          "sha256": "451af420c3d5dd3782eff8e55890b66d9fabad844298ddc375fcce7529ced7db",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_co2.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_hydrogen_transport.py",
+          "sha256": "b111274e6a188eb35e2a8c058ff5c9f34c498f31490c2d2c9c72fa79a4504a8f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_hydrogen_transport.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        },
+        {
+          "name": "validate_inventory_cost.py",
+          "sha256": "32cbf74bae74c0a0d6ed14264693ecaea17042163da451df141dbbdfc46b7b6f",
+          "source_path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\validation\\validate_inventory_cost.py",
+          "scope": "Current independent saved-data verification; original execution tools remain in their actual source snapshots"
+        }
+      ],
+      "fresh_independent_reports": {
+        "physics": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/summer_fixed/physics.json",
+          "sha256": "6457ce17fbe712ef3c10c870968aa7be186f53344eb44085c1b85e82aa2b430b",
+          "passed": true,
+          "executed_log_sha256": "27216f96ad9f2e2b29b6d17647db1606f7bb07ea176797bd3eb198b3dddae4c0"
+        },
+        "hydrogen_transport": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/summer_fixed/hydrogen_transport.json",
+          "sha256": "03c05da3e21d2ceac9241adca99ae0e9090ebde7369dab60196a61743b7fc86b",
+          "passed": true,
+          "executed_log_sha256": "6f41588554b3b228430768ef79de616c930cc7b1a87502ea1583efb6749592df"
+        },
+        "inventory_cost": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/summer_fixed/inventory_cost.json",
+          "sha256": "144e2cf091b169eb94fc2fd3716779271a66ef31327f9921ead702ed9905ec9d",
+          "passed": true,
+          "executed_log_sha256": "abec3a1d7c7d99a5f1a1fa63976c9cd712aaadaa633a7de12c8a6ee77548cbd8"
+        },
+        "co2": {
+          "report": "provenance/verification_replay/DAC-GH-MTJ/summer_fixed/co2.json",
+          "sha256": "664b62b9eab69ca400163e4e41685325afa8c4fa91abca7f04a218716ee65f6f",
+          "passed": true,
+          "executed_log_sha256": "4189d7d8f7c3285b0c4a597ee4db8f9bc26711a7f788964fc2a374f1f19f88e1"
+        }
+      },
+      "saved_execution_report_sha256": {
+        "physical_validation.json": "1a262ba3d49da93af6dd1434491a943c7ba3ca816a04b189096bfe518faa5083",
+        "independent_hydrogen_transport/hydrogen_transport_validation.json": "3a59d40c7a33a16935b2c609ba13ca801a5a7be444e412e71fc4672069aceed3",
+        "independent_inventory_cost/inventory_cost_validation.json": "b577a5a4b5e35ba94968b0b653b7d3f2d17cc205b3bd52d146c8a018e7617a0f",
+        "independent_co2/co2_validation.json": "0887ea8c2407561b8bc3ef7201e5eaeaf4261a42255b0bd9f5fb22857958e657"
+      },
+      "recomputed_account_sha256": "b74c4825e350c4eea07b132da471ef32d3577fdb0c97a5bc3f0a19f1aebe4cd4"
+    }
+  ],
+  "saved_solver_proof_checks": {
+    "passed": true,
+    "optimization_executed": false,
+    "solver_license_required": false,
+    "verified_actual_certificates": 18,
+    "checks": [
+      {
+        "scenario": "CCU-GH-FT",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+        "certificate_sha256": "23cdd45c23dee53b151fe4ca868f5ca61414c2117130b92eaa1285120d3062e9",
+        "root_lp_primal_max_row_error": 2.3283064365386963e-09,
+        "root_lp_primal_max_bound_error": 9.030182873739894e-11,
+        "root_lp_objective_error_cny": 0.013671875,
+        "full_model_relative_gap": 0.0026967966836518066,
+        "root_lp_objective_relative_error": 1.5718702861629675e-15,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-GH-FT",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+        "certificate_sha256": "ecd487637f5fc27c4fe8d3eca2bdc52b4c0530c2a0c24f450fa711c627014e9d",
+        "root_lp_primal_max_row_error": 7.0140231400728226e-09,
+        "root_lp_primal_max_bound_error": 2.6645352591003757e-15,
+        "root_lp_objective_error_cny": 2.041015625,
+        "full_model_relative_gap": 0.002881085369926595,
+        "root_lp_objective_relative_error": 2.3279056355691764e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-BH-FT",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+        "certificate_sha256": "fdf6cb53bd269ef89597cc7ceb7b86d0da79338c69155200b0cc09e3580c6fb8",
+        "root_lp_primal_max_row_error": 7.246853783726692e-09,
+        "root_lp_primal_max_bound_error": 4.0389678347315804e-28,
+        "root_lp_objective_error_cny": 0.862548828125,
+        "full_model_relative_gap": 0.00657469541274198,
+        "root_lp_objective_relative_error": 5.103250163434171e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CCU-BH-FT",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+        "certificate_sha256": "889159b17dfe23c38ee8b9524ae3c410edb0717641ded2bf08788a667fe082a5",
+        "root_lp_primal_max_row_error": 1.1175870895385742e-08,
+        "root_lp_primal_max_bound_error": 6.462348535570529e-27,
+        "root_lp_objective_error_cny": 0.00063323974609375,
+        "full_model_relative_gap": 0.009771681327520003,
+        "root_lp_objective_relative_error": 1.015891645203306e-14,
+        "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+        "partition_validation": {
+          "passed": true,
+          "full_integer_domain_covered": true,
+          "all_leaf_bounds_valid": true,
+          "original_objective_constant_cny": 0,
+          "global_lower_bound_cny": 62505211062.19414,
+          "proof_sha256": "871ae618a5b488278f3b2b97dfa9cbdb0103eef5b109cc398e39f0eeb378beee",
+          "original_model_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+          "leaf_count": 8,
+          "node_count": 10,
+          "checked_optimal_lp_nodes": [
+            {
+              "id": 0,
+              "objective_cny": 16289829158248.904,
+              "constraint_residual": 0.0,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 1,
+              "objective_cny": 62361589261.001144,
+              "constraint_residual": 1.1175870895385742e-08,
+              "bound_residual": 1.3844730390749993e-11,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 2,
+              "objective_cny": 62598315914.49254,
+              "constraint_residual": 1.1175870895385742e-08,
+              "bound_residual": 8.968028994929349e-11,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 3,
+              "objective_cny": 62835042667.755325,
+              "constraint_residual": 1.5157873311582246e-08,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 4,
+              "objective_cny": 63071769362.01018,
+              "constraint_residual": 1.0120927387178896e-08,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 5,
+              "objective_cny": 63308496018.22384,
+              "constraint_residual": 1.4434348480487804e-08,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 6,
+              "objective_cny": 62450503366.26858,
+              "constraint_residual": 1.5859259965197174e-07,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 7,
+              "objective_cny": 63023391494.38682,
+              "constraint_residual": 2.1513571389264593e-05,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 8,
+              "objective_cny": 62505211062.19666,
+              "constraint_residual": 5.587935447692871e-09,
+              "bound_residual": 5.198234770713546e-10,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 9,
+              "objective_cny": 62636129981.91564,
+              "constraint_residual": 3.725290298461914e-09,
+              "bound_residual": 3.6125184202401304e-10,
+              "solver_optimality_record": true
+            }
+          ],
+          "independent_domain_audit": {
+            "passed": true,
+            "optimization_executed": false,
+            "proof_sha256": "871ae618a5b488278f3b2b97dfa9cbdb0103eef5b109cc398e39f0eeb378beee",
+            "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+            "nodes": 10,
+            "roots": 6,
+            "leaves": 8,
+            "remaining_site_splits": [],
+            "reported_gap": 0.009771681320127098
+          }
+        }
+      },
+      {
+        "scenario": "CCU-GH-MTJ",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+        "certificate_sha256": "f249de5ac7ab81ef0663cd9d1f836179bd59dd40cf62ad06310ebb13c3ff9fa9",
+        "root_lp_primal_max_row_error": 4.656612873077393e-10,
+        "root_lp_primal_max_bound_error": 2.582964953035116e-10,
+        "root_lp_objective_error_cny": 0.00390625,
+        "full_model_relative_gap": 0.0022107657085066687,
+        "root_lp_objective_relative_error": 3.46971597650439e-16,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-GH-MTJ",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+        "certificate_sha256": "8e09902f7924e18b30b24297c77dceabc58fd6dac4d7a48a4336c63f285a35c9",
+        "root_lp_primal_max_row_error": 3.5390257835388184e-08,
+        "root_lp_primal_max_bound_error": 2.614462515147638e-12,
+        "root_lp_objective_error_cny": 1.728515625,
+        "full_model_relative_gap": 0.002347584935090857,
+        "root_lp_objective_relative_error": 1.5273667832845123e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-BH-MTJ",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "cbf0c867890680b52e1b37c829b81a6ae6d87d009910b7c7f12e657ef2f4d5a8",
+        "certificate_sha256": "53c244674531dffd17668ba6f221a4ed6fbca19c4104f30a09b7734d68b41046",
+        "root_lp_primal_max_row_error": 5.209585651755333e-09,
+        "root_lp_primal_max_bound_error": 2.908056841006738e-26,
+        "root_lp_objective_error_cny": 6.00634765625,
+        "full_model_relative_gap": 0.003384627806037339,
+        "root_lp_objective_relative_error": 2.032354089070443e-12,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "GTL-GH",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+        "certificate_sha256": "854c97a908f6ca4c3826b0d77d286bcfaece9fef7943fedb4a98a49d9c983ec6",
+        "root_lp_primal_max_row_error": 1.7695128917694092e-08,
+        "root_lp_primal_max_bound_error": 6.194574886557676e-13,
+        "root_lp_objective_error_cny": 0.00211334228515625,
+        "full_model_relative_gap": 0.009689355131859019,
+        "root_lp_objective_relative_error": 4.455980903473935e-14,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CTL",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+        "certificate_sha256": "2b44af3472a8dea2dd0ef743ed71e424b15713768592d98edd78f49baf862041",
+        "root_lp_primal_max_row_error": 8.009374141693115e-08,
+        "root_lp_primal_max_bound_error": 1.2116903504194741e-27,
+        "root_lp_objective_error_cny": 0.0,
+        "full_model_relative_gap": 0.004773372489028523,
+        "root_lp_objective_relative_error": 0.0,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CCU-GH-FT",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35",
+        "certificate_sha256": "f94b112be50c35a9d370820234f2bcebd7dbe16c2ccdf81dc6892f5b508fc803",
+        "root_lp_primal_max_row_error": 3.725290298461914e-09,
+        "root_lp_primal_max_bound_error": 8.08597633294994e-11,
+        "root_lp_objective_error_cny": 0.009765625,
+        "full_model_relative_gap": 0.0014772846410593063,
+        "root_lp_objective_relative_error": 1.011928318776096e-15,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CCU-GH-MTJ",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+        "certificate_sha256": "349a7e8d24c3808d466dd5c06767b34861cf4d8c066b51b45433a80e16dd73ca",
+        "root_lp_primal_max_row_error": 7.683411240577698e-09,
+        "root_lp_primal_max_bound_error": 3.6197889130562544e-10,
+        "root_lp_objective_error_cny": 0.001953125,
+        "full_model_relative_gap": 0.0006845161317157672,
+        "root_lp_objective_relative_error": 1.5636126283484602e-16,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-GH-FT",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd",
+        "certificate_sha256": "95e94563fa75586526a624d0c82f73715842816df49fe8024be3a3a3ef80cee8",
+        "root_lp_primal_max_row_error": 9.313225746154785e-09,
+        "root_lp_primal_max_bound_error": 7.8580342233181e-10,
+        "root_lp_objective_error_cny": 4.703125,
+        "full_model_relative_gap": 0.000448029757859677,
+        "root_lp_objective_relative_error": 4.820619100947438e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "DAC-GH-MTJ",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b",
+        "certificate_sha256": "7cbe96ee8587c1599a0b7d5c333e27e7ad14c04b05ff0ba4fb4df0555c8af05f",
+        "root_lp_primal_max_row_error": 8.767528925091028e-09,
+        "root_lp_primal_max_bound_error": 8.431925380136818e-09,
+        "root_lp_objective_error_cny": 3.720703125,
+        "full_model_relative_gap": 0.0002577574056972903,
+        "root_lp_objective_relative_error": 2.9572251776319697e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_0.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "GTL-GH",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+        "certificate_sha256": "3e74e04a2e7b40bccadcc33c52bf61fa503ab6facb9d2472f5f3f70b1de724b4",
+        "root_lp_primal_max_row_error": 7.741618901491165e-09,
+        "root_lp_primal_max_bound_error": 6.51925802230835e-09,
+        "root_lp_objective_error_cny": 0.00091552734375,
+        "full_model_relative_gap": 0,
+        "root_lp_objective_relative_error": 1.760735223239075e-14,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CTL",
+        "label": "summer_fixed",
+        "passed": true,
+        "summary_sha256": "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50",
+        "certificate_sha256": "9d8dc1b5c25a3c678882328d84d49efeefb9017b37eec763b2be9c5a46c0aeee",
+        "root_lp_primal_max_row_error": 4.470348358154297e-08,
+        "root_lp_primal_max_bound_error": 1.8699211068451405e-09,
+        "root_lp_objective_error_cny": 0.0048828125,
+        "full_model_relative_gap": 0.001973442576682076,
+        "root_lp_objective_relative_error": 9.498403650678292e-16,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      },
+      {
+        "scenario": "CCU-BH-MTJ",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+        "certificate_sha256": "90cf13619255540b12cf4d2bf0da8ae69452b417cac617f43cf609e032c69469",
+        "root_lp_primal_max_row_error": 1.4901161193847656e-08,
+        "root_lp_primal_max_bound_error": 1.6685226000845438e-08,
+        "root_lp_objective_error_cny": 0.0003662109375,
+        "full_model_relative_gap": 0.009899856461398737,
+        "root_lp_objective_relative_error": 5.1622118538657265e-15,
+        "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+        "partition_validation": {
+          "passed": true,
+          "full_integer_domain_covered": true,
+          "all_leaf_bounds_valid": true,
+          "original_objective_constant_cny": 0,
+          "global_lower_bound_cny": 71297854012.57652,
+          "proof_sha256": "b5b43bdf2f0f31a2b50e3adae2456a1c38938db8c70a092cfb6d9cd5112d3bdc",
+          "original_model_sha256": "0df6c606b0ad9bf444538f5c56a1ed642cacc068f25e913c7ca93d313a392be8",
+          "leaf_count": 50,
+          "node_count": 94,
+          "checked_optimal_lp_nodes": [
+            {
+              "id": 0,
+              "objective_cny": 16289829158248.904,
+              "constraint_residual": 0.0,
+              "bound_residual": 0.0,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 1,
+              "objective_cny": 70968897753.31648,
+              "constraint_residual": 8.94525325769618e-09,
+              "bound_residual": 1.1175870895385742e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 2,
+              "objective_cny": 71205624406.82767,
+              "constraint_residual": 4.934154276270419e-07,
+              "bound_residual": 1.3171153057101037e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 3,
+              "objective_cny": 71442351059.6001,
+              "constraint_residual": 6.328627932816744e-08,
+              "bound_residual": 2.820462117826748e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 4,
+              "objective_cny": 71679077713.01837,
+              "constraint_residual": 4.520829544052418e-08,
+              "bound_residual": 5.711339734482124e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 5,
+              "objective_cny": 71915804366.91327,
+              "constraint_residual": 1.6536632749516437e-07,
+              "bound_residual": 2.349443391159132e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 6,
+              "objective_cny": 71042356492.51482,
+              "constraint_residual": 1.30385160446167e-08,
+              "bound_residual": 7.747295860394132e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 7,
+              "objective_cny": 71991451510.3421,
+              "constraint_residual": 3.073364496231079e-08,
+              "bound_residual": 2.050448699719709e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 8,
+              "objective_cny": 71205884257.56154,
+              "constraint_residual": 4.5942943735425034e-06,
+              "bound_residual": 2.221074955348603e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 9,
+              "objective_cny": 71205624406.26602,
+              "constraint_residual": 4.530920705292374e-08,
+              "bound_residual": 6.333955582249473e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 10,
+              "objective_cny": 71219145913.50044,
+              "constraint_residual": 5.960464477539063e-08,
+              "bound_residual": 5.942032051583127e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 11,
+              "objective_cny": 71171247436.28905,
+              "constraint_residual": 4.0046870708465576e-08,
+              "bound_residual": 3.523581426634337e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 12,
+              "objective_cny": 71896955720.39932,
+              "constraint_residual": 4.244793672114611e-08,
+              "bound_residual": 1.6299850358336698e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 13,
+              "objective_cny": 71337585957.14586,
+              "constraint_residual": 1.503140083514154e-07,
+              "bound_residual": 2.983413516233213e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 14,
+              "objective_cny": 72067406766.00864,
+              "constraint_residual": 1.2526288628578186e-07,
+              "bound_residual": 5.8605564845493063e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 15,
+              "objective_cny": 73014880088.50027,
+              "constraint_residual": 1.4901161193847656e-08,
+              "bound_residual": 8.409711398933342e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 16,
+              "objective_cny": 71259331714.33636,
+              "constraint_residual": 6.007030606269836e-07,
+              "bound_residual": 3.3970746007860875e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 17,
+              "objective_cny": 71205884257.18971,
+              "constraint_residual": 2.7821442927233878e-08,
+              "bound_residual": 2.0874926787151082e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 18,
+              "objective_cny": 71259063018.75533,
+              "constraint_residual": 3.725290298461914e-08,
+              "bound_residual": 1.709902061211973e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 19,
+              "objective_cny": 73610053819.53015,
+              "constraint_residual": 8.628456282799846e-08,
+              "bound_residual": 9.453493741587551e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 20,
+              "objective_cny": 71263183748.56874,
+              "constraint_residual": 9.390532795805484e-08,
+              "bound_residual": 8.384404281969182e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 21,
+              "objective_cny": 73943442438.26552,
+              "constraint_residual": 7.674502811028105e-08,
+              "bound_residual": 8.222608705032997e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 22,
+              "objective_cny": 71263449953.58005,
+              "constraint_residual": 7.096932331030904e-08,
+              "bound_residual": 4.170891514620312e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 23,
+              "objective_cny": 71259331714.44179,
+              "constraint_residual": 1.210719347000122e-08,
+              "bound_residual": 8.375877769140061e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 24,
+              "objective_cny": 71206790416.79509,
+              "constraint_residual": 1.8990999249370226e-08,
+              "bound_residual": 2.0485845163088947e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 25,
+              "objective_cny": 73608991082.97229,
+              "constraint_residual": 2.57161271122186e-06,
+              "bound_residual": 2.2625938345122165e-06,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 26,
+              "objective_cny": 71206805554.64883,
+              "constraint_residual": 1.3573738563970698e-07,
+              "bound_residual": 6.167914300700018e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 27,
+              "objective_cny": 73122126149.34383,
+              "constraint_residual": 2.501765266060829e-07,
+              "bound_residual": 1.294826329489851e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 28,
+              "objective_cny": 71206963682.93922,
+              "constraint_residual": 1.4202669262886047e-08,
+              "bound_residual": 1.2952749983696776e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 29,
+              "objective_cny": 73610232103.79433,
+              "constraint_residual": 8.195638656616211e-08,
+              "bound_residual": 4.2311594840831606e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 30,
+              "objective_cny": 71206963682.71573,
+              "constraint_residual": 1.6763806343078613e-08,
+              "bound_residual": 2.0118022803217173e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 31,
+              "objective_cny": 73040377604.6058,
+              "constraint_residual": 8.64383764564991e-09,
+              "bound_residual": 5.309530592967349e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 32,
+              "objective_cny": 71207332321.44496,
+              "constraint_residual": 2.042354894953636e-08,
+              "bound_residual": 4.712472978438392e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 33,
+              "objective_cny": 73609889187.64166,
+              "constraint_residual": 3.3760443329811096e-08,
+              "bound_residual": 1.6592870600378165e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 34,
+              "objective_cny": 71207332321.395,
+              "constraint_residual": 1.0550047222700939e-06,
+              "bound_residual": 4.7098425101343475e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 35,
+              "objective_cny": 73086068563.11157,
+              "constraint_residual": 3.30823240801692e-07,
+              "bound_residual": 2.2083668227423914e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 36,
+              "objective_cny": 71208302382.9779,
+              "constraint_residual": 2.5644701410307107e-08,
+              "bound_residual": 2.229450821014218e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 37,
+              "objective_cny": 72655541328.28633,
+              "constraint_residual": 4.5346808974500163e-08,
+              "bound_residual": 5.03503072568634e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 38,
+              "objective_cny": 71208302382.17426,
+              "constraint_residual": 1.3487472472206719e-08,
+              "bound_residual": 1.3389692132825814e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 39,
+              "objective_cny": 73100935830.70906,
+              "constraint_residual": 1.043081283569336e-07,
+              "bound_residual": 7.719336281297728e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 40,
+              "objective_cny": 71208353440.93929,
+              "constraint_residual": 3.5390257835388184e-08,
+              "bound_residual": 2.091837814077735e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 41,
+              "objective_cny": 73610423310.02054,
+              "constraint_residual": 3.4313416108489037e-08,
+              "bound_residual": 2.076607046042066e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 42,
+              "objective_cny": 71208578391.2964,
+              "constraint_residual": 1.5681729388644012e-07,
+              "bound_residual": 1.0438719666053239e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 43,
+              "objective_cny": 73610148811.0094,
+              "constraint_residual": 5.960464477539063e-08,
+              "bound_residual": 1.7721771762487205e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 44,
+              "objective_cny": 71211146108.14532,
+              "constraint_residual": 8.443530326106902e-08,
+              "bound_residual": 4.4829330334719426e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 45,
+              "objective_cny": 73606053639.2969,
+              "constraint_residual": 6.888046545454981e-08,
+              "bound_residual": 5.908221280636038e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 46,
+              "objective_cny": 71211876149.44261,
+              "constraint_residual": 1.4285650166583178e-07,
+              "bound_residual": 6.320066279392817e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 47,
+              "objective_cny": 73609294512.94559,
+              "constraint_residual": 5.8668498630660247e-08,
+              "bound_residual": 6.818368092353917e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 48,
+              "objective_cny": 71212415754.41096,
+              "constraint_residual": 1.2097020294915587e-07,
+              "bound_residual": 7.200608557536298e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 49,
+              "objective_cny": 73603470504.006,
+              "constraint_residual": 5.500129796054409e-07,
+              "bound_residual": 7.196994111779986e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 50,
+              "objective_cny": 71213428473.6969,
+              "constraint_residual": 1.283595452150621e-07,
+              "bound_residual": 8.595505259937196e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 51,
+              "objective_cny": 73608804952.88202,
+              "constraint_residual": 3.311230456493064e-07,
+              "bound_residual": 5.201599151405389e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 52,
+              "objective_cny": 71315876007.13707,
+              "constraint_residual": 3.934673831196278e-08,
+              "bound_residual": 3.934553551021569e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 53,
+              "objective_cny": 71591770949.2835,
+              "constraint_residual": 1.73225998878479e-07,
+              "bound_residual": 5.0818016461562365e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 54,
+              "objective_cny": 71395265551.9469,
+              "constraint_residual": 1.2029358913423494e-06,
+              "bound_residual": 1.1638448538242585e-06,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 55,
+              "objective_cny": 72470695230.40865,
+              "constraint_residual": 4.0978193283081055e-08,
+              "bound_residual": 2.3238355684185308e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 56,
+              "objective_cny": 71265810263.30882,
+              "constraint_residual": 3.575451046344824e-08,
+              "bound_residual": 1.5961835028325104e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 57,
+              "objective_cny": 71263449953.7433,
+              "constraint_residual": 1.30385160446167e-08,
+              "bound_residual": 1.6144327937997867e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 58,
+              "objective_cny": 71708734645.44109,
+              "constraint_residual": 1.364387571811676e-07,
+              "bound_residual": 1.0324185950594256e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 59,
+              "objective_cny": 71297854012.57542,
+              "constraint_residual": 3.269137391348487e-08,
+              "bound_residual": 2.920436635578394e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 60,
+              "objective_cny": 72125035056.9863,
+              "constraint_residual": 2.0302832126617432e-07,
+              "bound_residual": 9.184475402435055e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 61,
+              "objective_cny": 71309030894.60608,
+              "constraint_residual": 1.3060857950719651e-08,
+              "bound_residual": 1.2896350654045818e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 62,
+              "objective_cny": 71267462291.27234,
+              "constraint_residual": 1.3637091456075723e-07,
+              "bound_residual": 9.131980885764993e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 63,
+              "objective_cny": 71265810263.30882,
+              "constraint_residual": 1.8209017627057733e-08,
+              "bound_residual": 2.5425594169752634e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 64,
+              "objective_cny": 71269016264.10461,
+              "constraint_residual": 6.111804395914078e-09,
+              "bound_residual": 2.8370956377849713e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 65,
+              "objective_cny": 71267462291.1925,
+              "constraint_residual": 9.782397114577179e-08,
+              "bound_residual": 6.550712353511504e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 66,
+              "objective_cny": 72324548533.58406,
+              "constraint_residual": 3.3620744943618774e-07,
+              "bound_residual": 4.117087623204238e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 67,
+              "objective_cny": 71322339109.38358,
+              "constraint_residual": 6.869336743875465e-08,
+              "bound_residual": 2.0077377962415792e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 68,
+              "objective_cny": 71412353912.06345,
+              "constraint_residual": 5.452943652173303e-08,
+              "bound_residual": 5.245212597593252e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 69,
+              "objective_cny": 72233656181.1035,
+              "constraint_residual": 8.838469511829317e-08,
+              "bound_residual": 3.005387293197881e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 70,
+              "objective_cny": 71270836787.0774,
+              "constraint_residual": 1.304911734223424e-08,
+              "bound_residual": 1.304911734223424e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 71,
+              "objective_cny": 71269016264.02498,
+              "constraint_residual": 4.315945616768196e-07,
+              "bound_residual": 5.338000111376751e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 72,
+              "objective_cny": 71277537890.40578,
+              "constraint_residual": 3.243485341419827e-07,
+              "bound_residual": 9.267100975485221e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 73,
+              "objective_cny": 71270836786.82086,
+              "constraint_residual": 1.3027801060161437e-07,
+              "bound_residual": 8.723973924215248e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 74,
+              "objective_cny": 72252052508.70287,
+              "constraint_residual": 2.6775524020195007e-08,
+              "bound_residual": 1.3038459201197838e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 75,
+              "objective_cny": 71325551867.12402,
+              "constraint_residual": 1.0962598930498908e-07,
+              "bound_residual": 5.330983217159081e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 76,
+              "objective_cny": 71464477217.91809,
+              "constraint_residual": 1.1478657589050473e-07,
+              "bound_residual": 6.771528335678048e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 77,
+              "objective_cny": 71604874255.28981,
+              "constraint_residual": 1.6763806343078613e-08,
+              "bound_residual": 1.4903633882568101e-09,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 78,
+              "objective_cny": 71288374041.9105,
+              "constraint_residual": 2.261458575958386e-08,
+              "bound_residual": 1.9535738896972325e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 79,
+              "objective_cny": 71277537890.41669,
+              "constraint_residual": 7.84885991139531e-08,
+              "bound_residual": 4.885515326870278e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 80,
+              "objective_cny": 71515637132.81285,
+              "constraint_residual": 1.7390311413123527e-08,
+              "bound_residual": 1.65815139396841e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 81,
+              "objective_cny": 71677938251.1983,
+              "constraint_residual": 2.310844138264656e-07,
+              "bound_residual": 3.5861091873812256e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 82,
+              "objective_cny": 71289019016.07295,
+              "constraint_residual": 1.896407069736355e-07,
+              "bound_residual": 1.2481969977241543e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 83,
+              "objective_cny": 71288374042.08789,
+              "constraint_residual": 7.503719867685277e-08,
+              "bound_residual": 4.0198499291171126e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 84,
+              "objective_cny": 71802335743.5571,
+              "constraint_residual": 9.035284165292978e-08,
+              "bound_residual": 4.0318359761926104e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 85,
+              "objective_cny": 71370697249.04454,
+              "constraint_residual": 1.7417872699709847e-07,
+              "bound_residual": 1.4865086939153116e-07,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 86,
+              "objective_cny": 71294544834.02647,
+              "constraint_residual": 2.6963237198529555e-08,
+              "bound_residual": 3.693226236563019e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 87,
+              "objective_cny": 71289019016.11147,
+              "constraint_residual": 1.5832483768463135e-08,
+              "bound_residual": 1.0459189070388675e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 88,
+              "objective_cny": 71358849870.87212,
+              "constraint_residual": 2.1420419216156006e-08,
+              "bound_residual": 1.5091927707544528e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 89,
+              "objective_cny": 71294544833.98024,
+              "constraint_residual": 2.5589784197893595e-06,
+              "bound_residual": 4.314415491535328e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 90,
+              "objective_cny": 72346409132.91524,
+              "constraint_residual": 1.5148543752729893e-08,
+              "bound_residual": 1.2893859591134316e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 91,
+              "objective_cny": 71371123290.5571,
+              "constraint_residual": 1.3999522279304861e-07,
+              "bound_residual": 6.305296300934132e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 92,
+              "objective_cny": 72495636125.59395,
+              "constraint_residual": 2.457363734720275e-07,
+              "bound_residual": 9.612222129362635e-08,
+              "solver_optimality_record": true
+            },
+            {
+              "id": 93,
+              "objective_cny": 71356079634.79482,
+              "constraint_residual": 2.514570951461792e-08,
+              "bound_residual": 1.9973278929141842e-08,
+              "solver_optimality_record": true
+            }
+          ],
+          "independent_domain_audit": {
+            "passed": true,
+            "optimization_executed": false,
+            "proof_sha256": "b5b43bdf2f0f31a2b50e3adae2456a1c38938db8c70a092cfb6d9cd5112d3bdc",
+            "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+            "nodes": 94,
+            "roots": 6,
+            "leaves": 50,
+            "remaining_site_splits": [
+              {
+                "node": 89,
+                "fixed_factories": 1,
+                "free_candidates": 85,
+                "subset_sizes": [
+                  4,
+                  81
+                ]
+              },
+              {
+                "node": 87,
+                "fixed_factories": 1,
+                "free_candidates": 86,
+                "subset_sizes": [
+                  23,
+                  63
+                ]
+              },
+              {
+                "node": 83,
+                "fixed_factories": 1,
+                "free_candidates": 87,
+                "subset_sizes": [
+                  23,
+                  64
+                ]
+              },
+              {
+                "node": 79,
+                "fixed_factories": 1,
+                "free_candidates": 88,
+                "subset_sizes": [
+                  84,
+                  4
+                ]
+              },
+              {
+                "node": 73,
+                "fixed_factories": 1,
+                "free_candidates": 89,
+                "subset_sizes": [
+                  85,
+                  4
+                ]
+              },
+              {
+                "node": 71,
+                "fixed_factories": 1,
+                "free_candidates": 90,
+                "subset_sizes": [
+                  4,
+                  86
+                ]
+              },
+              {
+                "node": 65,
+                "fixed_factories": 1,
+                "free_candidates": 91,
+                "subset_sizes": [
+                  15,
+                  76
+                ]
+              },
+              {
+                "node": 63,
+                "fixed_factories": 1,
+                "free_candidates": 92,
+                "subset_sizes": [
+                  76,
+                  16
+                ]
+              },
+              {
+                "node": 57,
+                "fixed_factories": 1,
+                "free_candidates": 93,
+                "subset_sizes": [
+                  12,
+                  81
+                ]
+              },
+              {
+                "node": 23,
+                "fixed_factories": 1,
+                "free_candidates": 94,
+                "subset_sizes": [
+                  4,
+                  90
+                ]
+              },
+              {
+                "node": 50,
+                "fixed_factories": 1,
+                "free_candidates": 81,
+                "subset_sizes": [
+                  76,
+                  5
+                ]
+              },
+              {
+                "node": 20,
+                "fixed_factories": 1,
+                "free_candidates": 94,
+                "subset_sizes": [
+                  80,
+                  14
+                ]
+              }
+            ],
+            "reported_gap": 0.00989985646357057
+          }
+        }
+      },
+      {
+        "scenario": "CTL-BH",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "d56adfe279c57047d5ec54ca992decd91b58cca652d607df3b6ce2926bad5165",
+        "certificate_sha256": "465c30bd2cc6a05a4c9230f900635cf17d83c27b6aa0b22017e11ac533197501",
+        "root_lp_primal_max_row_error": 3.725290298461914e-09,
+        "root_lp_primal_max_bound_error": 1.7367561689345796e-26,
+        "root_lp_objective_error_cny": 0.0015869140625,
+        "full_model_relative_gap": 0.009714104610778394,
+        "root_lp_objective_relative_error": 3.4127666627651114e-14,
+        "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+        "partition_validation": {
+          "passed": true,
+          "full_integer_domain_covered": true,
+          "all_leaf_bounds_valid": true,
+          "original_objective_constant_cny": 0,
+          "global_lower_bound_cny": 46499342595.37807,
+          "proof_sha256": "66b24e023d77cfda3fa5d722eee53dead231f967cfbd1da80e905863a5b4c556",
+          "original_model_sha256": "46f3272d4828a5b01993b1563e40d67fced4f0546c8d0bc82061490af9f8e397",
+          "leaf_count": 6,
+          "node_count": 6,
+          "checked_optimal_lp_nodes": [],
+          "independent_domain_audit": {
+            "passed": true,
+            "optimization_executed": false,
+            "proof_sha256": "66b24e023d77cfda3fa5d722eee53dead231f967cfbd1da80e905863a5b4c556",
+            "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+            "nodes": 6,
+            "roots": 6,
+            "leaves": 6,
+            "remaining_site_splits": [],
+            "reported_gap": 0.009714104610755385
+          }
+        }
+      },
+      {
+        "scenario": "GTL-BH",
+        "label": "baseline",
+        "passed": true,
+        "summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+        "certificate_sha256": "f7ec90583c5b989ee3b85095104fc946d371c397d2c4ec8a5317c2dc40e32bcb",
+        "root_lp_primal_max_row_error": 6.05359673500061e-08,
+        "root_lp_primal_max_bound_error": 6.984919309616089e-09,
+        "root_lp_objective_error_cny": 0.00411224365234375,
+        "full_model_relative_gap": 0.0032315300875705682,
+        "root_lp_objective_relative_error": 1.0080296629613995e-13,
+        "bound_status_sources": [
+          "root_lp_status.json",
+          "repair_status_rounded.json",
+          "rounded_lp_status.json"
+        ],
+        "partition_validation": null
+      }
+    ],
+    "scope": "Replay saved LP primal constraints and objectives, recorded optimal-LP/global-bound statuses, original full-model certificate gaps and exhaustive integer-partition coverage where used. Independent dual vectors were not saved."
+  },
+  "revision_manifest_sha256": "cda84ff3fbd73a55430b00d421b34fe89925f32435aa44a3c58b98420bb23578",
+  "physics_data_manifest_sha256": "0ac0feb1e69aa3a22c877045e1fc5f13e8b676d90d50636bee2bfe45484532b4",
+  "distribution_verification_binding": {
+    "physics_data_manifest_sha256": "0ac0feb1e69aa3a22c877045e1fc5f13e8b676d90d50636bee2bfe45484532b4",
+    "final_revision_manifest_sha256": "cda84ff3fbd73a55430b00d421b34fe89925f32435aa44a3c58b98420bb23578",
+    "scientific_sources_records_and_accounts_unchanged": true,
+    "changed_archive_tools": {
+      "archive_tools/requirements_revision_20261017_figures.txt": {
+        "previous_sha256": "4b89d4b25d14a817ed50caa4813125c657b3b3db38c0fabe516d44f76c0039bf",
+        "final_sha256": "0ac593c108aaf876abcd47582f2831a14f7f802d97e42cf2008b6e35e1c5c0cf"
+      },
+      "archive_tools/verify_revision_20261017.py": {
+        "previous_sha256": "b41e7dc6961e73e791e30ef71fd184f8c390ce78823b140a9a7d9156ac547bfa",
+        "final_sha256": "346740305a657efaa61ed28aa7df93d255fdf7c6f9ded7be501c85c074777186"
+      }
+    },
+    "completed_case_check_scope_unchanged": true,
+    "figure_dependency_import": {
+      "passed": true,
+      "module": "seaborn",
+      "version": "0.13.2"
+    }
+  },
+  "completion_scope": "All eighteen independent case calculations completed in this workspace; their current report/input hashes and recomputed accounts are rechecked, followed by the six asset comparisons, all solver proofs and final distribution integrity."
+}

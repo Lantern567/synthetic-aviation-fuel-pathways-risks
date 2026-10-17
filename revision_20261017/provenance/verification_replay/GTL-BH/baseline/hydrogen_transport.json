@@ -1,0 +1,64 @@
+{
+  "scenario": "GTL-BH",
+  "label": "baseline",
+  "run": "\\\\?\\E:\\nexus_scientific_revision_20261017\\archive_checks\\final_verification18\\runtimes\\compute_bh_final\\verified_runs\\GTL-BH\\baseline",
+  "weeks": 4,
+  "actual_representative_window_transport_kg": 2959814.1259707836,
+  "carbon_coefficient_unit": "kg CO2e / (kg H2 * 100 km)",
+  "distance_scope": "Exported pipeline routes used jointly for cost and emissions; independent route geometry reconstruction is outside this check.",
+  "independent_transport_cost_cny": 219195638.50494266,
+  "independent_transport_carbon_kg_co2e": 19477.218048541872,
+  "checks": {
+    "max_week_contract_error_kg": {
+      "actual": 1.3096723705530167e-10,
+      "expected": 0.0,
+      "error": 1.3096723705530167e-10,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "max_window_transport_export_error_kg": {
+      "actual": 1.0186340659856795e-10,
+      "expected": 0.0,
+      "error": 1.0186340659856795e-10,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "max_route_unit_cost_error_cny_per_kg": {
+      "actual": 4.440892098500626e-16,
+      "expected": 0.0,
+      "error": 4.440892098500626e-16,
+      "tolerance": 1e-10,
+      "passed": true
+    },
+    "pipeline_cost_cny": {
+      "actual": 219195638.5049428,
+      "expected": 219195638.50494266,
+      "error": 1.4901161193847656e-07,
+      "tolerance": 2.191956385049427,
+      "passed": true
+    },
+    "pipeline_carbon_kg_co2e": {
+      "actual": 19477.218048541872,
+      "expected": 19477.218048541872,
+      "error": 0.0,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "declared_carbon_coefficient": {
+      "actual": 0.005,
+      "expected": 0.005,
+      "error": 0.0,
+      "tolerance": 5e-11,
+      "passed": true
+    }
+  },
+  "passed": true,
+  "input_sha256": {
+    "config.yaml": "0c2d1948ee5ecfe278ab3738027d64884b7b4f056423e6c17e5c86892e253f7d",
+    "model_parameters.json": "d7f107481b2cd1b94de145e1e1e71ae072dfbc1da7a6afb0bc4b7be80b9161b7",
+    "summary.json": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+    "h2_flows.csv": "ec6ea4fdfd8b4891beb9c49f473dd5f26bda7f96e48ac5c5d845735a43793c8f",
+    "hydrogen_transport_accounting.csv": "82ed0019168130b9a7bf7b231153daa14d7bb5683bc3490c7b01d5948ea9d313",
+    "hydrogen_transport_parameters.json": "71a0b6878d242ff95a01e0fe5c825ebf6d7f1413c642c8f38c5e719f8c7ec2e8"
+  }
+}

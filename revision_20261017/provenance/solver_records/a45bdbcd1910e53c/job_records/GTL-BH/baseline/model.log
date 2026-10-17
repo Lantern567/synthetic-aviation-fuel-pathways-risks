@@ -1,0 +1,691 @@
+/home/ljt/miniconda3/envs/green_methanol_for_port_transportation/lib/python3.12/site-packages/pyproj/__init__.py:91: UserWarning: Valid PROJ data directory not found. Either set the path using the environmental variable PROJ_DATA (PROJ 9.1+) | PROJ_LIB (PROJ<9.1) or with `pyproj.datadir.set_data_dir`.
+  warnings.warn(str(err))
+WARNING: 氢气运输可视化器导入失败: attempted relative import beyond top-level package
+WARNING: 可视化功能将不可用，但不影响优化计算
+2026-10-17 18:04:42,804 - core.natural_gas_optimization_model - INFO - 配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/runs/GTL-BH/baseline/config.yaml
+INFO:core.natural_gas_optimization_model:配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/runs/GTL-BH/baseline/config.yaml
+2026-10-17 18:04:42,804 - core.natural_gas_optimization_model - INFO - 日志文件路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/logs/default/ng_supply_chain_default_*.log
+INFO:core.natural_gas_optimization_model:日志文件路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/results/logs/default/ng_supply_chain_default_*.log
+2026-10-17 18:04:42,804 - core.natural_gas_optimization_model - INFO - 加载碳排放参数: 9 个类别
+INFO:core.natural_gas_optimization_model:加载碳排放参数: 9 个类别
+2026-10-17 18:04:42,804 - core.natural_gas_optimization_model - INFO - GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/shared/data/cache/graphhopper_routes
+INFO:core.natural_gas_optimization_model:GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/shared/data/cache/graphhopper_routes
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.natural_gas_optimization_model:GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - 初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+INFO:core.natural_gas_optimization_model:初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.natural_gas_optimization_model:OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - GraphHopper服务: localhost:8989
+INFO:core.natural_gas_optimization_model:GraphHopper服务: localhost:8989
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - 最大运输距离限制: 1000.0 公里
+INFO:core.natural_gas_optimization_model:最大运输距离限制: 1000.0 公里
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - 短距离路径规划精确计算: True
+INFO:core.natural_gas_optimization_model:短距离路径规划精确计算: True
+2026-10-17 18:04:42,805 - core.natural_gas_optimization_model - INFO - 配置文件加载完成: 24 个配置段
+INFO:core.natural_gas_optimization_model:配置文件加载完成: 24 个配置段
+2026-10-17 18:04:43,158 - core.natural_gas_optimization_model - INFO - 从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/GTL-BH/baseline/airport_input.xlsx
+INFO:core.natural_gas_optimization_model:从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/GTL-BH/baseline/airport_input.xlsx
+2026-10-17 18:04:43,158 - core.natural_gas_optimization_model - INFO - 从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/GTL-BH/baseline/airport_input.xlsx
+INFO:core.natural_gas_optimization_model:从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/inputs/GTL-BH/baseline/airport_input.xlsx
+2026-10-17 18:04:43,222 - core.natural_gas_optimization_model - INFO - Excel文件读取成功(All_Airports)，包含 8 行数据
+INFO:core.natural_gas_optimization_model:Excel文件读取成功(All_Airports)，包含 8 行数据
+2026-10-17 18:04:43,223 - core.natural_gas_optimization_model - INFO - 处理京津冀五个机场Excel数据...
+INFO:core.natural_gas_optimization_model:处理京津冀五个机场Excel数据...
+2026-10-17 18:04:43,223 - core.natural_gas_optimization_model - INFO - Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+INFO:core.natural_gas_optimization_model:Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+2026-10-17 18:04:43,224 - core.natural_gas_optimization_model - INFO - 处理了 2 个京津冀机场的数据
+INFO:core.natural_gas_optimization_model:处理了 2 个京津冀机场的数据
+2026-10-17 18:04:43,285 - core.natural_gas_optimization_model - INFO - [内存监控] 释放excel_data后: 466.52 MB
+INFO:core.natural_gas_optimization_model:[内存监控] 释放excel_data后: 466.52 MB
+INFO:cache.data_cache_manager:从配置文件读取缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/shared/data/cache
+INFO:cache.data_cache_manager:缓存管理器初始化完成，缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/shared/data/cache/filtered_500km_data
+2026-10-17 18:04:43,343 - core.natural_gas_optimization_model - INFO - 从配置文件获取预处理管道数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/natural_gas_pipelines_with_capacity.xlsx
+INFO:core.natural_gas_optimization_model:从配置文件获取预处理管道数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/gis_energy_mapping/gis_data_scraper/scraped_gis_data/natural_gas_pipelines_with_capacity.xlsx
+2026-10-17 18:04:43,344 - core.natural_gas_optimization_model - INFO - 使用预处理的天然气管道容量数据
+INFO:core.natural_gas_optimization_model:使用预处理的天然气管道容量数据
+2026-10-17 18:04:43,414 - core.natural_gas_optimization_model - INFO - 预处理数据过滤后: 103 条管道记录
+INFO:core.natural_gas_optimization_model:预处理数据过滤后: 103 条管道记录
+2026-10-17 18:04:43,420 - core.natural_gas_optimization_model - INFO - 成功加载 67 条天然气管段数据（含价格和坐标信息）
+INFO:core.natural_gas_optimization_model:成功加载 67 条天然气管段数据（含价格和坐标信息）
+2026-10-17 18:04:43,420 - core.natural_gas_optimization_model - INFO - 平均天然气价格: 2.89 元/万立方米
+INFO:core.natural_gas_optimization_model:平均天然气价格: 2.89 元/万立方米
+2026-10-17 18:04:43,420 - core.natural_gas_optimization_model - INFO - 管道坐标范围: 纬度 35.45-41.81, 经度 112.55-121.73
+INFO:core.natural_gas_optimization_model:管道坐标范围: 纬度 35.45-41.81, 经度 112.55-121.73
+2026-10-17 18:04:43,420 - core.natural_gas_optimization_model - INFO - 使用预处理的LNG接收站容量数据
+INFO:core.natural_gas_optimization_model:使用预处理的LNG接收站容量数据
+2026-10-17 18:04:43,441 - core.natural_gas_optimization_model - INFO - 预处理数据过滤后: 20 条LNG接收站记录
+INFO:core.natural_gas_optimization_model:预处理数据过滤后: 20 条LNG接收站记录
+2026-10-17 18:04:43,441 - core.natural_gas_optimization_model - INFO - 成功加载 20 条LNG接收站数据
+INFO:core.natural_gas_optimization_model:成功加载 20 条LNG接收站数据
+2026-10-17 18:04:43,441 - core.natural_gas_optimization_model - INFO - 计算得出LNG接收站容量平均值: 518.9 万立方米/年
+INFO:core.natural_gas_optimization_model:计算得出LNG接收站容量平均值: 518.9 万立方米/年
+2026-10-17 18:04:43,441 - core.natural_gas_optimization_model - INFO - 基于 20 个有效数据计算
+INFO:core.natural_gas_optimization_model:基于 20 个有效数据计算
+2026-10-17 18:04:43,585 - core.natural_gas_optimization_model - INFO -   添加了 2 个机场位置到基础locations中
+INFO:core.natural_gas_optimization_model:  添加了 2 个机场位置到基础locations中
+2026-10-17 18:04:43,585 - core.natural_gas_optimization_model - INFO -   添加了 20 个LNG接收站位置到基础locations中
+INFO:core.natural_gas_optimization_model:  添加了 20 个LNG接收站位置到基础locations中
+2026-10-17 18:04:43,585 - core.natural_gas_optimization_model - INFO -   添加了 67 个天然气管道位置到基础locations中
+INFO:core.natural_gas_optimization_model:  添加了 67 个天然气管道位置到基础locations中
+2026-10-17 18:04:43,585 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.natural_gas_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 20 元/kg
+INFO:core.natural_gas_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 20 元/kg
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.natural_gas_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 20 元/kg
+INFO:core.natural_gas_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 20 元/kg
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - MTJ变动运营成本参数读取: 0.3元/kg (配置文件中值: 0.3)
+INFO:core.natural_gas_optimization_model:MTJ变动运营成本参数读取: 0.3元/kg (配置文件中值: 0.3)
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=10,000元/年, 变动OPEX=0元/kg
+INFO:core.natural_gas_optimization_model:MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=10,000元/年, 变动OPEX=0元/kg
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - WARNING - 未提供实际产量，使用理论估算: 7446.00 kg/年
+WARNING:core.natural_gas_optimization_model:未提供实际产量，使用理论估算: 7446.00 kg/年
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - 基础平准化成本: 2 元/kg
+INFO:core.natural_gas_optimization_model:基础平准化成本: 2 元/kg
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - 使用优化模型内部成本计算，不依赖外部成本分析器
+INFO:core.natural_gas_optimization_model:使用优化模型内部成本计算，不依赖外部成本分析器
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - 定义了 4 种MTJ航煤生产技术
+INFO:core.natural_gas_optimization_model:定义了 4 种MTJ航煤生产技术
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - 基础平准化成本: 2 元/kg
+INFO:core.natural_gas_optimization_model:基础平准化成本: 2 元/kg
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   E-CRM+TRM MTJ航煤生产（在可再生能源站）: 2 元/kg (复杂度因子: 1.00)
+INFO:core.natural_gas_optimization_model:  E-CRM+TRM MTJ航煤生产（在可再生能源站）: 2 元/kg (复杂度因子: 1.00)
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   E-CRM+TRM MTJ航煤生产（机场集成）: 2 元/kg (复杂度因子: 1.00)
+INFO:core.natural_gas_optimization_model:  E-CRM+TRM MTJ航煤生产（机场集成）: 2 元/kg (复杂度因子: 1.00)
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   E-CRM+TRM MTJ航煤生产（LNG接收站）: 2 元/kg (复杂度因子: 1.00)
+INFO:core.natural_gas_optimization_model:  E-CRM+TRM MTJ航煤生产（LNG接收站）: 2 元/kg (复杂度因子: 1.00)
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   E-CRM+TRM MTJ航煤生产（LNG转运+可再生能源站）: 2 元/kg (复杂度因子: 1.00)
+INFO:core.natural_gas_optimization_model:  E-CRM+TRM MTJ航煤生产（LNG转运+可再生能源站）: 2 元/kg (复杂度因子: 1.00)
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO - 定义了运输位置映射:
+INFO:core.natural_gas_optimization_model:定义了运输位置映射:
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   氢气生产位置: 64 个
+INFO:core.natural_gas_optimization_model:  氢气生产位置: 64 个
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   机场位置: 2 个
+INFO:core.natural_gas_optimization_model:  机场位置: 2 个
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   LNG接收站位置: 20 个
+INFO:core.natural_gas_optimization_model:  LNG接收站位置: 20 个
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   天然气管道位置: 67 个
+INFO:core.natural_gas_optimization_model:  天然气管道位置: 67 个
+2026-10-17 18:04:43,586 - core.natural_gas_optimization_model - INFO -   总位置数: 220 个
+INFO:core.natural_gas_optimization_model:  总位置数: 220 个
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络构建完成: 376节点, 402边, 32个连通分量 (最大分量115节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络不连通! 分量大小: [115, 100, 46, 11, 9]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络构建完成: 401节点, 452边, 37个连通分量 (最大分量116节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络不连通! 分量大小: [116, 73, 36, 15, 13]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络构建完成: 1482节点, 1620边, 184个连通分量 (最大分量657节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络不连通! 分量大小: [657, 24, 20, 19, 18]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管网近邻接驳完成: 新增2419条接驳边 (<= 20.0km)
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管道网络构建完成: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 38.66km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.89km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 20.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 43.04km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.26km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 145.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 168.72km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 43.57km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（17节点），最近距离 38.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 39.20km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 34.25km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 28.31km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 30.41km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 42.27km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 85.76km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 25.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 22.80km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（6节点），最近距离 37.44km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 24.99km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（21节点），最近距离 72.38km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 28.49km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 23.55km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.69km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 40.88km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 24.40km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 47.35km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 31.56km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 41.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 66.87km 超过阈值 10.0km
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:连通分量桥接完成: 成功 0 个, 失败 30 个
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:桥接后mixed管道网络: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+2026-10-17 18:04:43,849 - core.natural_gas_optimization_model - INFO - 氢气管道距离计算器初始化完成
+INFO:core.natural_gas_optimization_model:氢气管道距离计算器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:初始化氢气聚类优化器: eps=15.0km, min_samples=2
+2026-10-17 18:04:43,849 - core.natural_gas_optimization_model - INFO - 氢气聚类优化器初始化完成
+INFO:core.natural_gas_optimization_model:氢气聚类优化器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:开始对64个氢气生产厂进行聚类...
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类完成: 12个聚类, 23个噪声点
+INFO:hydrogen.hydrogen_clustering_optimizer:最终聚类结果: 12个聚类, 23个独立点
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类结果已导出到: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/project/products/supply_chain_optimization/natural_gas_supply_chain_optimization/byproduct_clustering_results.json
+2026-10-17 18:04:43,852 - core.natural_gas_optimization_model - INFO - 氢气聚类完成: 12个聚类, 23个独立点
+INFO:core.natural_gas_optimization_model:氢气聚类完成: 12个聚类, 23个独立点
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO - ======================================================================
+INFO:core.natural_gas_optimization_model:======================================================================
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO - 🚀 启用超图优化器，开始构建超级图...
+INFO:core.natural_gas_optimization_model:🚀 启用超图优化器，开始构建超级图...
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO - ======================================================================
+INFO:core.natural_gas_optimization_model:======================================================================
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO - 超图优化器配置:
+INFO:core.natural_gas_optimization_model:超图优化器配置:
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO -   氢气源节点: 64 个（风电/光伏站点）
+INFO:core.natural_gas_optimization_model:  氢气源节点: 64 个（风电/光伏站点）
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO -   目标节点: 86 个（排除天然气管道）
+INFO:core.natural_gas_optimization_model:  目标节点: 86 个（排除天然气管道）
+2026-10-17 18:04:54,829 - core.natural_gas_optimization_model - INFO -   已排除: 134 个天然气管道位置
+INFO:core.natural_gas_optimization_model:  已排除: 134 个天然气管道位置
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:🚀 开始构建超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:步骤1/3: 构建超级图...
+INFO:shared.optimizers.super_graph_optimizer:  加载原始管道网络...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ 管道网络: 1482节点, 1620边
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2聚类中心...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2聚类中心: 12个
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2独立点（噪声点）...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2独立点: 23个
+INFO:shared.optimizers.super_graph_optimizer:  添加SAF工厂...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ SAF工厂: 86个
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 超级图构建完成: 0.02秒
+INFO:shared.optimizers.super_graph_optimizer:步骤2/3: 预计算所有最短路径...
+INFO:shared.optimizers.super_graph_optimizer:  使用johnson算法...
+INFO:shared.optimizers.super_graph_optimizer:  图规模: 1603节点, 2830边
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 1.26秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 距离对数: 712,933
+INFO:shared.optimizers.super_graph_optimizer:步骤3/3: 预计算CO2源到聚类中心的距离...
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 0.00秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ CO2源数量: 64
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:✓ 超级图优化器初始化完成！
+INFO:shared.optimizers.super_graph_optimizer:  总耗时: 1.28秒
+INFO:shared.optimizers.super_graph_optimizer:  超级图节点数: 1603
+INFO:shared.optimizers.super_graph_optimizer:    - 管道节点: 1482
+INFO:shared.optimizers.super_graph_optimizer:    - CO2聚类中心: 12
+INFO:shared.optimizers.super_graph_optimizer:    - CO2独立点: 23
+INFO:shared.optimizers.super_graph_optimizer:    - SAF工厂: 86
+INFO:shared.optimizers.super_graph_optimizer:  超级图边数: 2830
+INFO:shared.optimizers.super_graph_optimizer:    - 新增边: 1210
+INFO:shared.optimizers.super_graph_optimizer:  预计算距离对数: 712933
+INFO:shared.optimizers.super_graph_optimizer:  预计算耗时: 1.26秒
+INFO:shared.optimizers.super_graph_optimizer:  查询性能: O(1)字典查找 (~0.001ms)
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+2026-10-17 18:04:56,112 - core.natural_gas_optimization_model - INFO - ✓ 超图优化器初始化完成！后续距离查询将使用O(1)超图查找
+INFO:core.natural_gas_optimization_model:✓ 超图优化器初始化完成！后续距离查询将使用O(1)超图查找
+2026-10-17 18:04:56,112 - core.natural_gas_optimization_model - INFO - 数据加载完成: 220个生产地点, 2个机场, 67条天然气管段, 20个LNG接收站
+INFO:core.natural_gas_optimization_model:数据加载完成: 220个生产地点, 2个机场, 67条天然气管段, 20个LNG接收站
+DATA_READY GTL-BH baseline 220
+Cardinal Optimizer v8.0.7. Build date Sep 20 2026
+Copyright Cardinal Operations 2026. All Rights Reserved
+
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'LpMethod' to 2
+Setting parameter 'RelGap' to 0.001
+Setting parameter 'FeasTol' to 1e-07
+Setting parameter 'IntTol' to 1e-07
+2026-10-17 18:04:56,132 - core.natural_gas_optimization_model - INFO - 创建决策变量...
+INFO:core.natural_gas_optimization_model:创建决策变量...
+2026-10-17 18:04:56,859 - core.natural_gas_optimization_model - INFO - MTJ容量配置: 读取到的容量上限 = 100000 kg/h
+INFO:core.natural_gas_optimization_model:MTJ容量配置: 读取到的容量上限 = 100000 kg/h
+2026-10-17 18:04:56,859 - core.natural_gas_optimization_model - INFO - 最终使用的MTJ容量限制: 100000 kg/h
+INFO:core.natural_gas_optimization_model:最终使用的MTJ容量限制: 100000 kg/h
+2026-10-17 18:04:57,210 - core.natural_gas_optimization_model - INFO - 创建MTJ混合电力变量: 14336 可再生电变量 + 14336 市电变量
+INFO:core.natural_gas_optimization_model:创建MTJ混合电力变量: 14336 可再生电变量 + 14336 市电变量
+2026-10-17 18:04:57,210 - core.natural_gas_optimization_model - INFO - 氢气罐车运输已禁用，仅使用管道运输
+INFO:core.natural_gas_optimization_model:氢气罐车运输已禁用，仅使用管道运输
+2026-10-17 18:04:57,210 - core.natural_gas_optimization_model - INFO - 创建天然气罐车运输变量，无距离限制
+INFO:core.natural_gas_optimization_model:创建天然气罐车运输变量，无距离限制
+2026-10-17 18:04:57,212 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,213 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,214 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,216 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,217 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,218 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,219 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,221 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,222 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,223 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,225 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,226 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,227 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,229 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,230 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,231 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,233 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,234 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,235 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,237 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,238 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,249 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,251 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,252 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,253 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,254 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,256 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,257 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,258 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,259 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,261 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,262 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,263 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,264 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,266 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,267 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,268 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,270 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,271 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,273 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,274 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,275 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,276 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,278 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,279 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,280 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,281 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,283 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,284 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,285 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,286 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,288 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,289 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,290 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,298 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,299 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,300 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,301 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,303 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,304 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,305 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,306 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,308 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,309 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,310 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,311 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,312 - core.natural_gas_optimization_model - INFO - 技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+INFO:core.natural_gas_optimization_model:技术 lng_to_hplant_conversion 的运输模式 lng_transfer 不支持天然气管道，跳过管道运输变量创建
+2026-10-17 18:04:57,312 - core.natural_gas_optimization_model - INFO - 创建了 4288 条天然气运输路线（无距离限制）
+INFO:core.natural_gas_optimization_model:创建了 4288 条天然气运输路线（无距离限制）
+2026-10-17 18:04:57,313 - core.natural_gas_optimization_model - INFO - 创建氢能管道运输变量，作为罐车运输的替代选择
+INFO:core.natural_gas_optimization_model:创建氢能管道运输变量，作为罐车运输的替代选择
+2026-10-17 18:04:57,315 - core.natural_gas_optimization_model - INFO - 创建了 1408 条氢能管道运输路线
+INFO:core.natural_gas_optimization_model:创建了 1408 条氢能管道运输路线
+2026-10-17 18:04:57,315 - core.natural_gas_optimization_model - INFO - 创建了 197120 个生产变量
+INFO:core.natural_gas_optimization_model:创建了 197120 个生产变量
+2026-10-17 18:04:57,315 - core.natural_gas_optimization_model - INFO - 创建了 880 个设施变量
+INFO:core.natural_gas_optimization_model:创建了 880 个设施变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 880 个设施产能变量
+INFO:core.natural_gas_optimization_model:创建了 880 个设施产能变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 688 个运输变量
+INFO:core.natural_gas_optimization_model:创建了 688 个运输变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 49500 个库存变量
+INFO:core.natural_gas_optimization_model:创建了 49500 个库存变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 14336 个制氢变量
+INFO:core.natural_gas_optimization_model:创建了 14336 个制氢变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 64 个电解槽容量变量
+INFO:core.natural_gas_optimization_model:创建了 64 个电解槽容量变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 19350 个氢气库存变量
+INFO:core.natural_gas_optimization_model:创建了 19350 个氢气库存变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 8 个缺货惩罚变量
+INFO:core.natural_gas_optimization_model:创建了 8 个缺货惩罚变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 0 个氢气罐车运输变量
+INFO:core.natural_gas_optimization_model:创建了 0 个氢气罐车运输变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 1408 个氢能管道运输变量
+INFO:core.natural_gas_optimization_model:创建了 1408 个氢能管道运输变量
+2026-10-17 18:04:57,316 - core.natural_gas_optimization_model - INFO - 创建了 38592 个天然气运输变量
+INFO:core.natural_gas_optimization_model:创建了 38592 个天然气运输变量
+2026-10-17 18:05:31,706 - core.natural_gas_optimization_model - INFO - 创建统一的成本表达式对象...
+INFO:core.natural_gas_optimization_model:创建统一的成本表达式对象...
+2026-10-17 18:05:31,720 - core.natural_gas_optimization_model - INFO - 成本表达式中使用的MTJ变动运营成本: 0.3元/kg
+INFO:core.natural_gas_optimization_model:成本表达式中使用的MTJ变动运营成本: 0.3元/kg
+2026-10-17 18:05:33,226 - core.natural_gas_optimization_model - INFO - MTJ催化剂成本已添加（默认0.10元/kg SAF）
+INFO:core.natural_gas_optimization_model:MTJ催化剂成本已添加（默认0.10元/kg SAF）
+2026-10-17 18:05:33,516 - core.natural_gas_optimization_model - INFO - 天然气日处理能力约束已移除，允许无限制处理
+INFO:core.natural_gas_optimization_model:天然气日处理能力约束已移除，允许无限制处理
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 统一成本表达式创建完成
+INFO:core.natural_gas_optimization_model:统一成本表达式创建完成
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 项目期限: 20年，时间窗口: 4周
+INFO:core.natural_gas_optimization_model:项目期限: 20年，时间窗口: 4周
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 运营成本年化系数: 13.0
+INFO:core.natural_gas_optimization_model:运营成本年化系数: 13.0
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 20年运营成本现值系数: 9.82
+INFO:core.natural_gas_optimization_model:20年运营成本现值系数: 9.82
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 生命周期运营成本系数: 127.64
+INFO:core.natural_gas_optimization_model:生命周期运营成本系数: 127.64
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 所有运营成本已扩展至20年生命周期现值
+INFO:core.natural_gas_optimization_model:所有运营成本已扩展至20年生命周期现值
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 
+【关键参数验证】
+INFO:core.natural_gas_optimization_model:
+【关键参数验证】
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - MTJ变动运营成本参数: 0.3 元/kg
+INFO:core.natural_gas_optimization_model:MTJ变动运营成本参数: 0.3 元/kg
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 电力成本参数: 350 元/MWh
+INFO:core.natural_gas_optimization_model:电力成本参数: 350 元/MWh
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 电解制氢耗电: 55 kWh/kg H2
+INFO:core.natural_gas_optimization_model:电解制氢耗电: 55 kWh/kg H2
+2026-10-17 18:05:34,314 - core.natural_gas_optimization_model - INFO - 创建性能指标表达式...
+INFO:core.natural_gas_optimization_model:创建性能指标表达式...
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO - 性能指标表达式创建完成，共 7 个指标
+INFO:core.natural_gas_optimization_model:性能指标表达式创建完成，共 7 个指标
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO - [调试] 性能表达式详情:
+INFO:core.natural_gas_optimization_model:[调试] 性能表达式详情:
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - production_total
+INFO:core.natural_gas_optimization_model:  - production_total
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - shortage_total
+INFO:core.natural_gas_optimization_model:  - shortage_total
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - total_demand
+INFO:core.natural_gas_optimization_model:  - total_demand
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - hydrogen_total_production
+INFO:core.natural_gas_optimization_model:  - hydrogen_total_production
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - methanol_total_production
+INFO:core.natural_gas_optimization_model:  - methanol_total_production
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - facilities_count
+INFO:core.natural_gas_optimization_model:  - facilities_count
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO -   - hydrogen_facilities_count
+INFO:core.natural_gas_optimization_model:  - hydrogen_facilities_count
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO - 创建碳排放计算表达式...
+INFO:core.natural_gas_optimization_model:创建碳排放计算表达式...
+2026-10-17 18:05:34,356 - core.natural_gas_optimization_model - INFO - ================================================================================
+INFO:core.natural_gas_optimization_model:================================================================================
+2026-10-17 18:05:34,357 - core.natural_gas_optimization_model - INFO - 验证碳排放参数完整性...
+INFO:core.natural_gas_optimization_model:验证碳排放参数完整性...
+2026-10-17 18:05:34,357 - core.natural_gas_optimization_model - INFO - 碳排放参数完整性检查通过
+INFO:core.natural_gas_optimization_model:碳排放参数完整性检查通过
+2026-10-17 18:05:34,444 - core.natural_gas_optimization_model - INFO - 天然气开采碳强度: 0.25 kg CO2eq/m³
+INFO:core.natural_gas_optimization_model:天然气开采碳强度: 0.25 kg CO2eq/m³
+2026-10-17 18:05:34,466 - core.natural_gas_optimization_model - INFO - [调试] 天然气运输变量数量: 155904
+INFO:core.natural_gas_optimization_model:[调试] 天然气运输变量数量: 155904
+2026-10-17 18:05:34,471 - core.natural_gas_optimization_model - INFO - SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+INFO:core.natural_gas_optimization_model:SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+2026-10-17 18:05:34,471 - core.natural_gas_optimization_model - INFO - 电解槽碳强度: 800 kg CO2eq/MW → 44.00 kg CO2eq/(kg H2/h), 寿命: 20年
+INFO:core.natural_gas_optimization_model:电解槽碳强度: 800 kg CO2eq/MW → 44.00 kg CO2eq/(kg H2/h), 寿命: 20年
+2026-10-17 18:05:34,471 - core.natural_gas_optimization_model - INFO - [调试] 设施容量变量数量: 880
+INFO:core.natural_gas_optimization_model:[调试] 设施容量变量数量: 880
+2026-10-17 18:05:34,471 - core.natural_gas_optimization_model - INFO - [调试] 电解槽容量变量数量: 64
+INFO:core.natural_gas_optimization_model:[调试] 电解槽容量变量数量: 64
+2026-10-17 18:05:34,471 - core.natural_gas_optimization_model - INFO - 预计算动态可再生能源碳强度...
+INFO:core.natural_gas_optimization_model:预计算动态可再生能源碳强度...
+2026-10-17 18:05:34,485 - core.natural_gas_optimization_model - INFO - 动态碳强度统计: 最小=0.6000, 最大=0.6000, 平均=0.6000 kgCO₂e/kWh
+INFO:core.natural_gas_optimization_model:动态碳强度统计: 最小=0.6000, 最大=0.6000, 平均=0.6000 kgCO₂e/kWh
+2026-10-17 18:05:34,485 - core.natural_gas_optimization_model - INFO - 对比固定值: 0.02 kgCO₂e/kWh (已废弃)
+INFO:core.natural_gas_optimization_model:对比固定值: 0.02 kgCO₂e/kWh (已废弃)
+2026-10-17 18:05:34,489 - core.natural_gas_optimization_model - INFO - 绿氢动态碳强度计算完成 (基于电解能耗55 kWh/kg + 过程排放0.05)
+INFO:core.natural_gas_optimization_model:绿氢动态碳强度计算完成 (基于电解能耗55 kWh/kg + 过程排放0.05)
+2026-10-17 18:05:35,609 - core.natural_gas_optimization_model - INFO - MTJ工艺能耗: 4500 kWh/t, 市电碳强度: 0.6 kgCO₂e/kWh
+INFO:core.natural_gas_optimization_model:MTJ工艺能耗: 4500 kWh/t, 市电碳强度: 0.6 kgCO₂e/kWh
+2026-10-17 18:05:35,609 - core.natural_gas_optimization_model - INFO - ✨ MTJ碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+INFO:core.natural_gas_optimization_model:✨ MTJ碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+2026-10-17 18:05:35,640 - core.natural_gas_optimization_model - INFO - 天然气消耗率: 1.2 m³/kg甲醇, 工艺排放: 0.8 kg CO2eq/m³
+INFO:core.natural_gas_optimization_model:天然气消耗率: 1.2 m³/kg甲醇, 工艺排放: 0.8 kg CO2eq/m³
+2026-10-17 18:05:35,640 - core.natural_gas_optimization_model - INFO - MTJ工艺能耗: 4500 kWh/t
+INFO:core.natural_gas_optimization_model:MTJ工艺能耗: 4500 kWh/t
+2026-10-17 18:05:35,640 - core.natural_gas_optimization_model - INFO - ✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+INFO:core.natural_gas_optimization_model:✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+2026-10-17 18:05:35,647 - core.natural_gas_optimization_model - INFO - [调试] 生产变量数量: 197120
+INFO:core.natural_gas_optimization_model:[调试] 生产变量数量: 197120
+2026-10-17 18:05:35,648 - core.natural_gas_optimization_model - INFO - [调试] 氢气生产变量数量: 14336
+INFO:core.natural_gas_optimization_model:[调试] 氢气生产变量数量: 14336
+2026-10-17 18:05:35,880 - core.natural_gas_optimization_model - INFO - MTJ储存能耗: 5 kWh/t·天
+INFO:core.natural_gas_optimization_model:MTJ储存能耗: 5 kWh/t·天
+2026-10-17 18:05:35,880 - core.natural_gas_optimization_model - INFO - 氢气储存能耗: 0.5 kWh/kg·天
+INFO:core.natural_gas_optimization_model:氢气储存能耗: 0.5 kWh/kg·天
+2026-10-17 18:05:35,881 - core.natural_gas_optimization_model - INFO - [调试] MTJ存储变量数量: 49500
+INFO:core.natural_gas_optimization_model:[调试] MTJ存储变量数量: 49500
+2026-10-17 18:05:35,882 - core.natural_gas_optimization_model - INFO - [调试] 氢气存储变量数量: 19350
+INFO:core.natural_gas_optimization_model:[调试] 氢气存储变量数量: 19350
+2026-10-17 18:05:36,019 - core.natural_gas_optimization_model - INFO - 氢气罐车运输: 0.15 kg CO2eq/kg·km
+INFO:core.natural_gas_optimization_model:氢气罐车运输: 0.15 kg CO2eq/kg·km
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - 氢气管道运输: 0.005 kg CO2eq/kg·km
+INFO:core.natural_gas_optimization_model:氢气管道运输: 0.005 kg CO2eq/kg·km
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - MTJ罐车运输: 0.12 kg CO2eq/t·km
+INFO:core.natural_gas_optimization_model:MTJ罐车运输: 0.12 kg CO2eq/t·km
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - 天然气罐车运输: 0.1 kg CO2eq/m³·km
+INFO:core.natural_gas_optimization_model:天然气罐车运输: 0.1 kg CO2eq/m³·km
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - [调试] 氢气罐车变量数量: 0
+INFO:core.natural_gas_optimization_model:[调试] 氢气罐车变量数量: 0
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - [调试] 氢气管道变量数量: 1408
+INFO:core.natural_gas_optimization_model:[调试] 氢气管道变量数量: 1408
+2026-10-17 18:05:36,020 - core.natural_gas_optimization_model - INFO - [调试] MTJ运输变量数量: 688
+INFO:core.natural_gas_optimization_model:[调试] MTJ运输变量数量: 688
+2026-10-17 18:05:36,027 - core.natural_gas_optimization_model - INFO - [调试] 天然气运输变量数量: 155904
+INFO:core.natural_gas_optimization_model:[调试] 天然气运输变量数量: 155904
+2026-10-17 18:05:36,027 - core.natural_gas_optimization_model - INFO - [调试] 距离计算测试 refinery_Binyang Refinery -> 北京: 335.75 km
+INFO:core.natural_gas_optimization_model:[调试] 距离计算测试 refinery_Binyang Refinery -> 北京: 335.75 km
+2026-10-17 18:05:36,027 - core.natural_gas_optimization_model - INFO - CO₂源配置: scenario_type=fossil_feedstock, enable_credit=False
+INFO:core.natural_gas_optimization_model:CO₂源配置: scenario_type=fossil_feedstock, enable_credit=False
+2026-10-17 18:05:36,027 - core.natural_gas_optimization_model - INFO - ⚠️ CO₂利用负排放已禁用 (场景: fossil_feedstock)
+INFO:core.natural_gas_optimization_model:⚠️ CO₂利用负排放已禁用 (场景: fossil_feedstock)
+2026-10-17 18:05:36,027 - core.natural_gas_optimization_model - INFO -    原因: CO₂来源：天然气重整副产CO₂（化石燃料碳转化）
+碳汇计算：副产CO₂循环利用不属于碳移除，不计入负排放
+Carbon sink: Byproduct CO₂ from natural gas reforming is not carbon removal
+
+INFO:core.natural_gas_optimization_model:   原因: CO₂来源：天然气重整副产CO₂（化石燃料碳转化）
+碳汇计算：副产CO₂循环利用不属于碳移除，不计入负排放
+Carbon sink: Byproduct CO₂ from natural gas reforming is not carbon removal
+
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO - 碳强度计算组件准备完成
+INFO:core.natural_gas_optimization_model:碳强度计算组件准备完成
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO -   SAF能量含量: 43.15 MJ/kg
+INFO:core.natural_gas_optimization_model:  SAF能量含量: 43.15 MJ/kg
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO -   传统航油碳强度基准: 89 g CO2eq/MJ
+INFO:core.natural_gas_optimization_model:  传统航油碳强度基准: 89 g CO2eq/MJ
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO -   CORSIA碳强度限值: 30 g CO2eq/MJ
+INFO:core.natural_gas_optimization_model:  CORSIA碳强度限值: 30 g CO2eq/MJ
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO - 碳排放表达式创建完成
+INFO:core.natural_gas_optimization_model:碳排放表达式创建完成
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO - 包含 14 个细分项，8 个汇总项
+INFO:core.natural_gas_optimization_model:包含 14 个细分项，8 个汇总项
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO - [调试] 碳排放表达式详情:
+INFO:core.natural_gas_optimization_model:[调试] 碳排放表达式详情:
+2026-10-17 18:05:36,143 - core.natural_gas_optimization_model - INFO -   - ng_extraction: LinExpr
+INFO:core.natural_gas_optimization_model:  - ng_extraction: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - saf_facility: LinExpr
+INFO:core.natural_gas_optimization_model:  - saf_facility: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - electrolyzer_facility: LinExpr
+INFO:core.natural_gas_optimization_model:  - electrolyzer_facility: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - ng_to_methanol: LinExpr
+INFO:core.natural_gas_optimization_model:  - ng_to_methanol: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - methanol_to_saf: LinExpr
+INFO:core.natural_gas_optimization_model:  - methanol_to_saf: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - h2_production: LinExpr
+INFO:core.natural_gas_optimization_model:  - h2_production: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - mtj_storage: LinExpr
+INFO:core.natural_gas_optimization_model:  - mtj_storage: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - h2_storage: LinExpr
+INFO:core.natural_gas_optimization_model:  - h2_storage: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - h2_truck_transport: LinExpr
+INFO:core.natural_gas_optimization_model:  - h2_truck_transport: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - h2_pipeline_transport: LinExpr
+INFO:core.natural_gas_optimization_model:  - h2_pipeline_transport: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - h2_transport: LinExpr
+INFO:core.natural_gas_optimization_model:  - h2_transport: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - mtj_transport: LinExpr
+INFO:core.natural_gas_optimization_model:  - mtj_transport: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - ng_transport: LinExpr
+INFO:core.natural_gas_optimization_model:  - ng_transport: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.natural_gas_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - [调试] 碳排放汇总项详情:
+INFO:core.natural_gas_optimization_model:[调试] 碳排放汇总项详情:
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - raw_material_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - raw_material_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - facility_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - facility_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - production_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - production_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - storage_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - storage_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - transport_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - transport_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.natural_gas_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - total_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - total_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   - annual_emissions: LinExpr
+INFO:core.natural_gas_optimization_model:  - annual_emissions: LinExpr
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - [调试] 优化时段: 4周, 总小时数: 224小时
+INFO:core.natural_gas_optimization_model:[调试] 优化时段: 4周, 总小时数: 224小时
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - [调试] 年化系数: 13.000
+INFO:core.natural_gas_optimization_model:[调试] 年化系数: 13.000
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - ============================================================
+INFO:core.natural_gas_optimization_model:============================================================
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - 时间尺度一致性验证:
+INFO:core.natural_gas_optimization_model:时间尺度一致性验证:
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   原料获取: 按天计算(ng_transport_vars)
+INFO:core.natural_gas_optimization_model:  原料获取: 按天计算(ng_transport_vars)
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   设施建设碳排放: 按使用寿命年化后，再按优化时段比例摊销
+INFO:core.natural_gas_optimization_model:  设施建设碳排放: 按使用寿命年化后，再按优化时段比例摊销
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   设施产能: 决策变量(kg/h)，通过产能约束限制小时生产量
+INFO:core.natural_gas_optimization_model:  设施产能: 决策变量(kg/h)，通过产能约束限制小时生产量
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+INFO:core.natural_gas_optimization_model:  生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+INFO:core.natural_gas_optimization_model:  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   运输配送: MTJ按周, NG按天, H2按周(第0h入库)
+INFO:core.natural_gas_optimization_model:  运输配送: MTJ按周, NG按天, H2按周(第0h入库)
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO -   最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+INFO:core.natural_gas_optimization_model:  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+2026-10-17 18:05:36,144 - core.natural_gas_optimization_model - INFO - ============================================================
+INFO:core.natural_gas_optimization_model:============================================================
+2026-10-17 18:05:37,370 - core.natural_gas_optimization_model - INFO - 创建约束条件...
+INFO:core.natural_gas_optimization_model:创建约束条件...
+2026-10-17 18:05:37,370 - core.natural_gas_optimization_model - INFO - 添加改进的时间尺度匹配约束...
+INFO:core.natural_gas_optimization_model:添加改进的时间尺度匹配约束...
+2026-10-17 18:05:38,947 - core.natural_gas_optimization_model - INFO - 开始添加严格的小时级原料供应约束，共有220个位置
+INFO:core.natural_gas_optimization_model:开始添加严格的小时级原料供应约束，共有220个位置
+2026-10-17 18:05:39,509 - core.natural_gas_optimization_model - INFO - 氢气罐车运输已禁用，跳过运输能力约束
+INFO:core.natural_gas_optimization_model:氢气罐车运输已禁用，跳过运输能力约束
+2026-10-17 18:05:39,510 - core.natural_gas_optimization_model - INFO - 严格的小时级原料供应约束添加完成（已移除维护停机约束）
+INFO:core.natural_gas_optimization_model:严格的小时级原料供应约束添加完成（已移除维护停机约束）
+2026-10-17 18:05:42,920 - core.natural_gas_optimization_model - INFO - 跳过每日氢气产量与次日需求耦合约束（由周级运输与库存约束统一管理）
+INFO:core.natural_gas_optimization_model:跳过每日氢气产量与次日需求耦合约束（由周级运输与库存约束统一管理）
+2026-10-17 18:05:42,920 - core.natural_gas_optimization_model - INFO - 添加氢气运输约束...
+INFO:core.natural_gas_optimization_model:添加氢气运输约束...
+2026-10-17 18:05:42,920 - core.natural_gas_optimization_model - INFO - 添加氢气全局守恒约束（周级）...
+INFO:core.natural_gas_optimization_model:添加氢气全局守恒约束（周级）...
+2026-10-17 18:05:42,926 - core.natural_gas_optimization_model - INFO - 添加氢气全局守恒约束（周级）完成
+INFO:core.natural_gas_optimization_model:添加氢气全局守恒约束（周级）完成
+2026-10-17 18:05:42,926 - core.natural_gas_optimization_model - WARNING - 技术 integrated_supply_conversion 不在 technologies 中，跳过
+WARNING:core.natural_gas_optimization_model:技术 integrated_supply_conversion 不在 technologies 中，跳过
+2026-10-17 18:05:42,926 - core.natural_gas_optimization_model - INFO - 添加氢气源地总出库约束（周级）...
+INFO:core.natural_gas_optimization_model:添加氢气源地总出库约束（周级）...
+2026-10-17 18:05:42,933 - core.natural_gas_optimization_model - INFO - 氢气运输约束添加完成（供需平衡通过库存机制处理）
+INFO:core.natural_gas_optimization_model:氢气运输约束添加完成（供需平衡通过库存机制处理）
+2026-10-17 18:05:42,933 - core.natural_gas_optimization_model - INFO - 添加氢能管道运输约束...
+INFO:core.natural_gas_optimization_model:添加氢能管道运输约束...
+2026-10-17 18:05:42,938 - core.natural_gas_optimization_model - INFO - 添加了 1408 个管道容量约束
+INFO:core.natural_gas_optimization_model:添加了 1408 个管道容量约束
+2026-10-17 18:05:42,938 - core.natural_gas_optimization_model - INFO - 【已优化】管道生产限制约束已被源地总出库约束覆盖，已删除冗余约束
+INFO:core.natural_gas_optimization_model:【已优化】管道生产限制约束已被源地总出库约束覆盖，已删除冗余约束
+2026-10-17 18:05:42,939 - core.natural_gas_optimization_model - INFO - 氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+INFO:core.natural_gas_optimization_model:氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+2026-10-17 18:05:45,313 - core.natural_gas_optimization_model - INFO - 添加平准化成本约束...
+INFO:core.natural_gas_optimization_model:添加平准化成本约束...
+2026-10-17 18:05:45,313 - core.natural_gas_optimization_model - INFO - 平准化成本门槛值: 20 元/kg
+INFO:core.natural_gas_optimization_model:平准化成本门槛值: 20 元/kg
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 平准化成本约束添加完成
+INFO:core.natural_gas_optimization_model:平准化成本约束添加完成
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 约束形式: (总成本 - 短缺成本) - 20 * 总产量现值 <= 0
+INFO:core.natural_gas_optimization_model:约束形式: (总成本 - 短缺成本) - 20 * 总产量现值 <= 0
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 现值系数: 9.8181
+INFO:core.natural_gas_optimization_model:现值系数: 9.8181
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 年化系数: 13.0000
+INFO:core.natural_gas_optimization_model:年化系数: 13.0000
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 产量现值化系数: 127.6359
+INFO:core.natural_gas_optimization_model:产量现值化系数: 127.6359
+2026-10-17 18:05:45,536 - core.natural_gas_optimization_model - INFO - 修正前的错误系数(lifecycle_operation_factor): 127.6359
+INFO:core.natural_gas_optimization_model:修正前的错误系数(lifecycle_operation_factor): 127.6359
+2026-10-17 18:05:45,552 - core.natural_gas_optimization_model - INFO - 添加MTJ设施最小产量约束...
+INFO:core.natural_gas_optimization_model:添加MTJ设施最小产量约束...
+2026-10-17 18:05:45,552 - core.natural_gas_optimization_model - INFO - MTJ最小年产量配置: 100 kg/年
+INFO:core.natural_gas_optimization_model:MTJ最小年产量配置: 100 kg/年
+2026-10-17 18:05:45,639 - core.natural_gas_optimization_model - INFO - 已添加 880 个最小产量约束
+INFO:core.natural_gas_optimization_model:已添加 880 个最小产量约束
+2026-10-17 18:05:45,897 - core.natural_gas_optimization_model - INFO - 设置目标函数（使用统一的成本表达式）...
+INFO:core.natural_gas_optimization_model:设置目标函数（使用统一的成本表达式）...
+2026-10-17 18:05:45,982 - core.natural_gas_optimization_model - INFO - 目标函数设置完成（使用统一成本表达式）
+INFO:core.natural_gas_optimization_model:目标函数设置完成（使用统一成本表达式）
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'RelGap' to 0.005
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/runs/GTL-BH/baseline/copt.log
+MODEL_READY GTL-BH baseline 940476 734610
+Writing problem to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/runs/GTL-BH/baseline/model.mps
+MODEL_EXPORTED GTL-BH baseline

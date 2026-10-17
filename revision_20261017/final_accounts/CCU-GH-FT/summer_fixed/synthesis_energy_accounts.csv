@@ -1,0 +1,143 @@
+location,technology,location_type,production_kg,energy_kwh_per_kg,electricity_ci_kg_co2e_kwh,electricity_price_cny_per_kwh,electricity_kwh,emissions_kg_co2e,discounted_electricity_cost_cny
+Beijing CGN Haifeng Agricultural Greenhouse solar project,green_h2_co2_to_saf,solar_plant,7121.902359608451,7.6,0.03,0.35,54126.45793302423,1623.7937379907266,2417968.018964384
+Beijing Changping Qinghuiling wind/solar demonstration project,green_h2_co2_to_saf,wind_farm,100108.07756870805,7.6,0.03,0.35,760821.3895221811,22824.641685665432,33987847.31646473
+Beijing Foton Cummins Engine ISF factory solar project,green_h2_co2_to_saf,solar_plant,5270.207746110253,7.6,0.03,0.35,40053.578870437916,1201.6073661131375,1789296.3340336438
+Beijing Foton Cummins Engine solar project,green_h2_co2_to_saf,solar_plant,5412.645793302423,7.6,0.03,0.35,41136.10802909841,1234.0832408729523,1837655.694412932
+Beijing Fuyang New Energy Technology I solar project,green_h2_co2_to_saf,solar_plant,1709.2565663060282,7.6,0.03,0.35,12990.349903925813,389.71049711777437,580312.3245514522
+Beijing Fuyang New Energy Technology II solar project,green_h2_co2_to_saf,solar_plant,3845.827274188563,7.6,0.03,0.35,29228.287283833077,876.8486185149923,1305702.7302407674
+Beijing Guangdong Jianlibao Beverage solar project,green_h2_co2_to_saf,solar_plant,1709.2565663060282,7.6,0.03,0.35,12990.349903925813,389.71049711777437,580312.3245514522
+Beijing Hainachuan Auto Benz supporting industrial park user-side solar project,green_h2_co2_to_saf,solar_plant,4558.017510149406,7.6,0.03,0.35,34640.93307713549,1039.2279923140645,1547499.5321372054
+Beijing Hanlong New Energy Technology Development solar project,green_h2_co2_to_saf,solar_plant,1566.818519113859,7.6,0.03,0.35,11907.820745265328,357.23462235795984,531952.9641721644
+Beijing Hengan Green Valley Environmental Protection Technology solar project,green_h2_co2_to_saf,solar_plant,7834.092595569296,7.6,0.03,0.35,59539.10372632664,1786.1731117897991,2659764.8208608227
+Beijing Huadian solar project,green_h2_co2_to_saf,solar_plant,4273.14141576507,7.6,0.03,0.35,32475.874759814527,974.2762427944358,1450780.8113786303
+Beijing Huiyuan Off-Road Vehicle New Energy Technology Development solar project,green_h2_co2_to_saf,solar_plant,10397.977445028333,7.6,0.03,0.35,79024.62858221533,2370.7388574664596,3530233.307687999
+Beijing Jineng New Energy Technology solar project,green_h2_co2_to_saf,solar_plant,1424.3804719217865,7.6,0.03,0.35,10825.291586605577,324.7587475981673,483593.6037929096
+Beijing Jingfang Smart Energy Technology solar project,green_h2_co2_to_saf,solar_plant,2991.1989910355487,7.6,0.03,0.35,22733.11233187017,681.993369956105,1015546.5679650411
+Beijing Jingxi Heavy Industry solar project,green_h2_co2_to_saf,solar_plant,2136.5707078825353,7.6,0.03,0.35,16237.937379907267,487.138121397218,725390.4056893153
+Beijing Jiulang Photovoltaic Technology solar project,green_h2_co2_to_saf,solar_plant,1424.3804719216896,7.6,0.03,0.35,10825.29158660484,324.7587475981452,483593.6037928767
+Beijing Lanjing Shengnuoer Energy Technology solar project,green_h2_co2_to_saf,solar_plant,1424.3804719216896,7.6,0.03,0.35,10825.29158660484,324.7587475981452,483593.6037928767
+Beijing Lumingshan Guanting wind farm,green_h2_co2_to_saf,wind_farm,139976.62649749548,7.6,0.03,0.35,1063822.3613809657,31914.670841428968,47523679.65517496
+Beijing Lvdong Future New Energy Development I solar project,green_h2_co2_to_saf,solar_plant,1851.6946134981968,7.6,0.03,0.35,14072.879062586295,422.18637187758884,628671.6849307398
+Beijing Lvdong Future New Energy Development II solar project,green_h2_co2_to_saf,solar_plant,3845.827274188564,7.6,0.03,0.35,29228.287283833084,876.8486185149925,1305702.7302407676
+Beijing Miyun Xitiangezhuang Huadian solar farm,green_h2_co2_to_saf,solar_plant,27373.05652756311,7.6,0.03,0.35,208035.2296094796,6241.056888284388,9293468.503630359
+Beijing Pushun New Energy solar project,green_h2_co2_to_saf,solar_plant,2279.008755074703,7.6,0.03,0.35,17320.466538567744,519.6139961570323,773749.7660686027
+Beijing Qinghe Reclaimed Water Plant solar project,green_h2_co2_to_saf,solar_plant,5982.397982071098,7.6,0.03,0.35,45466.224663740344,1363.9867399122102,2031093.1359300828
+Beijing Qingying Photovoltaic Technology solar project,green_h2_co2_to_saf,solar_plant,1709.2565663060282,7.6,0.03,0.35,12990.349903925813,389.71049711777437,580312.3245514522
+Beijing Ruilian Xieyuan New Energy Technology solar project,green_h2_co2_to_saf,solar_plant,1424.3804719216898,7.6,0.03,0.35,10825.291586604842,324.75874759814525,483593.60379287676
+Beijing Runneng Energy Services solar project,green_h2_co2_to_saf,solar_plant,1424.3804719216896,7.6,0.03,0.35,10825.29158660484,324.7587475981452,483593.6037928767
+Beijing Shunyi Holdings I solar project,green_h2_co2_to_saf,solar_plant,7032.784914992273,7.6,0.03,0.35,53449.16535394127,1603.4749606182381,2387711.6183380783
+Beijing Shunyi Holdings II solar project,green_h2_co2_to_saf,solar_plant,1547.2126812983001,7.6,0.03,0.35,11758.81637786708,352.7644913360124,525296.5560343772
+Beijing Tiantuo New Energy I solar project,green_h2_co2_to_saf,solar_plant,2848.7609438433806,7.6,0.03,0.35,21650.583173209692,649.5174951962907,967187.2075857539
+Beijing Tiantuo New Energy II solar project,green_h2_co2_to_saf,solar_plant,2848.76094384338,7.6,0.03,0.35,21650.58317320969,649.5174951962906,967187.2075857536
+Beijing Yadongda Zhenxing Energy Technology Development solar project,green_h2_co2_to_saf,solar_plant,3418.513132612055,7.6,0.03,0.35,25980.699807851615,779.4209942355484,1160624.649102904
+Beijing Yanqing Longqingxia solar farm,green_h2_co2_to_saf,solar_plant,43321.06879340547,7.6,0.03,0.35,329240.12282988155,9877.203684896447,14708002.665676722
+Beijing Yanqing Lumingshang Guanting wind farm,green_h2_co2_to_saf,wind_farm,435090.64656393783,7.6,0.03,0.35,3306688.9138859273,99200.66741657781,147718294.30135247
+Beijing Yaorui Energy Technology solar project,green_h2_co2_to_saf,solar_plant,1424.3804719216896,7.6,0.03,0.35,10825.29158660484,324.7587475981452,483593.6037928767
+Beijing Yueyang Changsheng New Energy Technology solar project,green_h2_co2_to_saf,solar_plant,2991.1989910355487,7.6,0.03,0.35,22733.11233187017,681.993369956105,1015546.5679650411
+Beijing Zhongguanbao New Energy Investment solar project,green_h2_co2_to_saf,solar_plant,12819.42424729521,7.6,0.03,0.35,97427.6242794436,2922.828728383308,4352342.4341358915
+Beijing Zhonghui Baoping solar project,green_h2_co2_to_saf,solar_plant,2421.4468022668734,7.6,0.03,0.35,18402.995697228238,552.0898709168471,822109.1264478908
+Beijing solar project,green_h2_co2_to_saf,solar_plant,1566.818519113859,7.6,0.03,0.35,11907.820745265328,357.23462235795984,531952.9641721644
+CPI Tianjin Wuqing I solar project,green_h2_co2_to_saf,solar_plant,3215.5411519835134,7.6,0.03,0.35,24438.1127550747,733.143382652241,1091713.3199208153
+CPI Tianjin Wuqing II solar project,green_h2_co2_to_saf,solar_plant,2516.5104667697065,7.6,0.03,0.35,19125.47954744977,573.7643864234931,854384.3373293339
+China New Energy solar project,green_h2_co2_to_saf,solar_plant,6868.568778977958,7.6,0.03,0.35,52201.12272023247,1566.0336816069741,2331958.3455422474
+China Qingneng Oasis Technology solar project,green_h2_co2_to_saf,solar_plant,11822.357916950026,7.6,0.03,0.35,89849.9201688202,2695.497605064606,4013826.9114808775
+Datang Tianjin Panshan Power Plant solar project,green_h2_co2_to_saf,solar_plant,13453.48937166409,7.6,0.03,0.35,102246.51922464708,3067.3955767394123,4567614.859290133
+Dingxing County Xinyang New Energy Technology solar project,green_h2_co2_to_saf,solar_plant,5884.11883029317,7.6,0.03,0.35,44719.30311022809,1341.5790933068427,1997726.2300205438
+Fangshan agricultural greenhouse solar project,green_h2_co2_to_saf,solar_plant,8421.1582812983,7.6,0.03,0.35,64000.802937867076,1920.0240881360123,2859080.3943478717
+Hebei Huai Tumuzhen CECEP solar farm,green_h2_co2_to_saf,solar_plant,28927.433199381758,7.6,0.03,0.35,219848.49231530135,6595.45476945904,9821197.31709986
+Hebei Huailai (Jingneng) wind farm,green_h2_co2_to_saf,wind_farm,383145.82556284283,7.6,0.03,0.35,2911908.2742776056,87357.24822832816,130082428.26592112
+Hebei Huailai (Lanneng) grid forming wind-solar hybrid wind farm,green_h2_co2_to_saf,wind_farm,415776.5025640866,7.6,0.03,0.35,3159901.4194870577,94797.04258461173,141160919.57937148
+Hebei Huailai (Shengshi New Energy) wind farm,green_h2_co2_to_saf,wind_farm,420977.59473219817,7.6,0.03,0.35,3199429.719964706,95982.89159894118,142926750.377264
+Hebei Huailai (Shengyao) wind-solar hybrid wind farm,green_h2_co2_to_saf,wind_farm,258036.98456273082,7.6,0.03,0.35,1961081.082676754,58832.43248030262,87606533.32194684
+Hebei Huailai (Taihui) wind farm,green_h2_co2_to_saf,wind_farm,381252.3201753298,7.6,0.03,0.35,2897517.6333325063,86925.52899997518,129439561.34082681
+Hebei Huailai (Zhuofeng) wind farm,green_h2_co2_to_saf,wind_farm,174874.93268299414,7.6,0.03,0.35,1329049.4883907554,39871.48465172266,59372057.239110544
+Hebei Huailai Qinghuiling wind farm,green_h2_co2_to_saf,wind_farm,193227.29976202315,7.6,0.03,0.35,1468527.478191376,44055.824345741275,65602897.60011581
+Hebei Huailai wind farm,green_h2_co2_to_saf,wind_farm,345118.61288758845,7.6,0.03,0.35,2622901.457945672,78687.04373837015,117171750.82942542
+Hebei Laiyuan Shou'ao (Jiansheng) solar farm,green_h2_co2_to_saf,solar_plant,111246.7572591448,7.6,0.03,0.35,845475.3551695005,25364.260655085014,37769557.58220964
+Hebei Langfang Dacheng wind farm,green_h2_co2_to_saf,wind_farm,372089.1458483303,7.6,0.03,0.35,2827877.50844731,84836.3252534193,126328557.93806486
+Hebei Olympic Photovoltaic Corridor Project solar farm,green_h2_co2_to_saf,solar_plant,58014.99565172591,7.6,0.03,0.35,440913.96695311693,13227.419008593508,19696760.363047622
+Hebei Rongcheng- Wuhai Expressway Distributed solar farm,green_h2_co2_to_saf,solar_plant,39884.17294590417,7.6,0.03,0.35,303119.7143888717,9093.59143166615,13541136.872781113
+Hebei Yongqing High-tech Agricultural Industry Demonstration Zone solar farm,green_h2_co2_to_saf,solar_plant,55104.567789799075,7.6,0.03,0.35,418794.71520247293,12563.841456074188,18708636.52529974
+Hebei Zhangjiakou Huailai Yitai solar farm,green_h2_co2_to_saf,solar_plant,101526.24239052036,7.6,0.03,0.35,771599.4421679548,23147.98326503864,34469330.635333344
+Hebei Zhuolu (Suntien) wind farm,green_h2_co2_to_saf,wind_farm,286147.2937067144,7.6,0.03,0.35,2174719.4321710295,65241.58296513088,97150307.59479314
+Huitong Times Square solar project,green_h2_co2_to_saf,solar_plant,3703.389226996394,7.6,0.03,0.35,28145.758125172593,844.3727437551778,1257343.3698614796
+Jinyuan Xinde West Qingxinkou Town Fishing and Light I solar project,green_h2_co2_to_saf,solar_plant,24796.430244204028,7.6,0.03,0.35,188452.86985595062,5653.586095678518,8418674.152991742
+Jinyuan Xinde West Qingxinkou Town Fishing and Light II solar project,green_h2_co2_to_saf,solar_plant,16530.95349613602,7.6,0.03,0.35,125635.24657063374,3769.057397119012,5612449.435327828
+Jiuxianqiao solar project,green_h2_co2_to_saf,solar_plant,7264.340406800617,7.6,0.03,0.35,55208.987091684685,1656.2696127505405,2466327.3793436713
+Langfang Fuyang New Energy Technology solar project,green_h2_co2_to_saf,solar_plant,7830.168408037096,7.6,0.03,0.35,59509.27990108193,1785.2783970324579,2658432.513918917
+Nankou solar project,green_h2_co2_to_saf,solar_plant,18144.078633281813,7.6,0.03,0.35,137894.99761294178,4136.849928388253,6160124.030577475
+Qinghe Reclaimed Water Plant solar project,green_h2_co2_to_saf,solar_plant,4700.455557341576,7.6,0.03,0.35,35723.46223579598,1071.7038670738793,1595858.8925164933
+Shaanxi Longxian Hebeizhen wind farm,green_h2_co2_to_saf,wind_farm,340176.97421729215,7.6,0.03,0.35,2585345.0040514204,77560.35012154261,115494007.48744693
+State Power Investment Supply and Cooperative Cotton Warehouse I solar project,green_h2_co2_to_saf,solar_plant,1377.5794580113343,7.6,0.03,0.35,10469.60388088614,314.0881164265842,467704.1196106521
+State Power Investment Supply and Cooperative Cotton Warehouse II solar project,green_h2_co2_to_saf,solar_plant,4546.0122114374035,7.6,0.03,0.35,34549.692806924264,1036.490784207728,1543423.594715152
+Tianjin Baigutun Distributed wind farm,green_h2_co2_to_saf,wind_farm,82274.26671511123,7.6,0.03,0.35,625284.4270348452,18758.532811045356,27933062.77675815
+Tianjin Baodi Distributed wind farm,green_h2_co2_to_saf,wind_farm,87626.15341199716,7.6,0.03,0.35,665958.7659311784,19978.76297793535,29750090.056938745
+Tianjin Baodi Wangbuzhuang wind farm,green_h2_co2_to_saf,wind_farm,238906.5752216084,7.6,0.03,0.35,1815689.9716842237,54470.69915052671,81111538.6364153
+Tianjin Beichen Shuangkouzhen wind farm,green_h2_co2_to_saf,wind_farm,201278.47594631318,7.6,0.03,0.35,1529716.4171919802,45891.492515759404,68336364.80391659
+Tianjin Jizhou (China Power Construction) wind farm,green_h2_co2_to_saf,wind_farm,340655.29219668783,7.6,0.03,0.35,2588980.2206948274,77669.40662084482,115656401.95997351
+Tianjin Jizhou Baijian (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,180321.7711114439,7.6,0.03,0.35,1370445.4604469736,41113.3638134092,61221321.727648385
+Tianjin Jizhou Bangjunzhen wind farm,green_h2_co2_to_saf,wind_farm,305135.26697369304,7.6,0.03,0.35,2319028.029000067,69570.84087000201,103596943.5898181
+Tianjin Jizhou Dong'eryingzhen wind farm,green_h2_co2_to_saf,wind_farm,246967.00445246877,7.6,0.03,0.35,1876949.2338387626,56308.477015162876,83848147.35628232
+Tianjin Jizhou Dongshigu (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,200233.2193328355,7.6,0.03,0.35,1521772.4669295496,45653.17400788648,67981488.12414993
+Tianjin Jizhou Houjiaying (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,176942.95899006867,7.6,0.03,0.35,1344766.4883245218,40342.99464973565,60074176.02990483
+Tianjin Jizhou Sangzi (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,179845.67415556527,7.6,0.03,0.35,1366827.123582296,41004.81370746888,61059681.31823057
+Tianjin Jizhou Xiacangzhen (Runchuang) wind farm,green_h2_co2_to_saf,wind_farm,289484.5957688971,7.6,0.03,0.35,2200082.9278436177,66002.48783530854,98283360.14852476
+Tianjin Jizhou Xiawotouzhen (Goldwind) wind farm,green_h2_co2_to_saf,wind_farm,146746.5127219981,7.6,0.03,0.35,1115273.4966871855,33458.204900615565,49822134.1349377
+Tianjin Jizhou Yangjinzhuangzhen (Goldwind) wind farm,green_h2_co2_to_saf,wind_farm,165096.83531973153,7.6,0.03,0.35,1254735.9484299596,37642.078452898786,56052280.37095522
+Tianjin Jizhou Youguzhuangzhen (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,150559.05127908872,7.6,0.03,0.35,1144248.7897210743,34327.46369163223,51116534.961660154
+Tianjin Qinghao Wuqing District solar project,green_h2_co2_to_saf,solar_plant,1398.061370427615,7.6,0.03,0.35,10625.266415249873,318.7579924574962,474657.9651829633
+Tianjin Wuqing Baigutunzhen (TBEA) wind farm,green_h2_co2_to_saf,wind_farm,159984.25047445134,7.6,0.03,0.35,1215880.30360583,36476.4091081749,54316498.83030389
+Tianjin Wuqing Chagugang Distributed wind farm,green_h2_co2_to_saf,wind_farm,23461.310039187134,7.6,0.03,0.35,178305.9562978222,5349.178688934666,7965385.439639947
+Tianjin Wuqing Chagugang wind farm,green_h2_co2_to_saf,wind_farm,101665.67683647765,7.6,0.03,0.35,772659.1439572301,23179.774318716904,34516670.2384398
+Tianjin Wuqing Chengguan (Sinohydro) wind farm,green_h2_co2_to_saf,wind_farm,662313.631678069,7.6,0.03,0.35,5033583.600753324,151007.5080225997,224863119.29861563
+Tianjin Wuqing Chenzuizhen Distributed wind farm,green_h2_co2_to_saf,wind_farm,20813.558320158332,7.6,0.03,0.35,158183.04323320332,4745.4912969961,7066443.182992442
+Tianjin Wuqing Chenzuizhen wind farm,green_h2_co2_to_saf,wind_farm,90192.08605401943,7.6,0.03,0.35,685459.8540105476,20563.79562031643,30621253.792967245
+Tianjin Wuqing Cuihuangkou (Huaxin) Fishery solar farm,green_h2_co2_to_saf,solar_plant,85410.29786707883,7.6,0.03,0.35,649118.2637897991,19473.547913693972,28997781.5343389
+Tianjin Wuqing Cuihuangkou (Yinghua) Fishery solar farm,green_h2_co2_to_saf,solar_plant,213525.7446676971,7.6,0.03,0.35,1622795.659474498,48683.869784234936,72494453.83584726
+Tianjin Wuqing Cuihuangkouzhen (Guoneng) wind farm,green_h2_co2_to_saf,wind_farm,149030.67670870904,7.6,0.03,0.35,1132633.1429861886,33978.99428958566,50597634.16162451
+Tianjin Wuqing Cuihuangkouzhen (Jingguang) wind farm,green_h2_co2_to_saf,wind_farm,149030.6767087091,7.6,0.03,0.35,1132633.142986189,33978.99428958567,50597634.161624536
+Tianjin Wuqing Cuihuangkouzhen (TBEA) wind farm,green_h2_co2_to_saf,wind_farm,93144.17294294311,7.6,0.03,0.35,707895.7143663677,21236.87143099103,31623521.351015314
+Tianjin Wuqing Dabaizhuang (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,817097.1019195437,7.6,0.03,0.35,6209937.974588532,186298.13923765597,277413893.2366043
+Tianjin Wuqing Dawangguzhuang (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,157238.65938785905,7.6,0.03,0.35,1195013.8113477288,35850.41434043186,53384338.9795616
+Tianjin Wuqing Gaocun (Huadian) wind farm,green_h2_co2_to_saf,wind_farm,370495.5715414379,7.6,0.03,0.35,2815766.343714928,84472.99031144784,125787521.075251
+Tianjin Wuqing Hebeitun wind farm,green_h2_co2_to_saf,wind_farm,118391.94521381427,7.6,0.03,0.35,899778.7836249884,26993.36350874965,40195431.32935129
+Tianjin Wuqing Shangmataizhen wind farm,green_h2_co2_to_saf,wind_farm,225871.08197513004,7.6,0.03,0.35,1716620.2230109882,51498.606690329645,76685838.28419314
+Tianjin Wuqing Sicundian wind farm,green_h2_co2_to_saf,wind_farm,326017.7807936429,7.6,0.03,0.35,2477735.134031686,74332.05402095057,110686797.96055347
+Xiaohongmen Reclaimed Water Plant I solar project,green_h2_co2_to_saf,solar_plant,3988.265321380731,7.6,0.03,0.35,30310.816442493557,909.3244932748066,1354062.0906200549
+Xiaohongmen Reclaimed Water Plant II solar project,green_h2_co2_to_saf,solar_plant,4273.141415765069,7.6,0.03,0.35,32475.87475981452,974.2762427944356,1450780.8113786299
+Xinyi Glass Wuqing solar project,green_h2_co2_to_saf,solar_plant,20970.920556414232,7.6,0.03,0.35,159378.99622874815,4781.369886862444,7119869.477744453
+Xiqing District fishing and photovoltaic complementary solar project,green_h2_co2_to_saf,solar_plant,13775.794580113346,7.6,0.03,0.35,104696.03880886143,3140.881164265843,4677041.196106522
+Yongqing Environmental Protection solar project,green_h2_co2_to_saf,solar_plant,1653.1370336939713,7.6,0.03,0.35,12563.84145607418,376.9152436822254,561259.0957589919
+airport_北京,green_h2_co2_to_saf,airport,2752358.6729603605,7.6,0.6,0.6,20917925.91449874,12550755.548699243,1601927184.675887
+airport_天津,green_h2_co2_to_saf,airport,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_1,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_10,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_11,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_12,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_13,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_14,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_15,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_16,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_17,green_h2_co2_to_saf,co2_capture,388537.7524321718,7.6,0.6,0.6,2952886.9184845053,1771732.1510907032,226136656.53703472
+co2_source_18,green_h2_co2_to_saf,co2_capture,3866781.401755864,7.6,0.6,0.6,29387538.653344564,17632523.192006737,2250543254.2370763
+co2_source_19,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_2,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_20,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_21,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_22,green_h2_co2_to_saf,co2_capture,4932094.352457097,7.6,0.6,0.6,37483917.07867394,22490350.24720436,2870576461.6388087
+co2_source_23,green_h2_co2_to_saf,co2_capture,310805.430380271,7.6,0.6,0.6,2362121.2708900594,1417272.7625340356,180894907.68858653
+co2_source_24,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_25,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_26,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_27,green_h2_co2_to_saf,co2_capture,2500348.8903342932,7.6,0.6,0.6,19002651.56654063,11401590.939924376,1455252506.8590064
+co2_source_28,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_29,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_3,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_30,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_31,green_h2_co2_to_saf,co2_capture,292218.99968824163,7.6,0.6,0.6,2220864.397630636,1332518.6385783816,170077237.4175706
+co2_source_4,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_5,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_6,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_7,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_8,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0
+co2_source_9,green_h2_co2_to_saf,co2_capture,0.0,7.6,0.6,0.6,0.0,0.0,0.0

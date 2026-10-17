@@ -1,0 +1,13 @@
+{
+  "scenario": "CTL",
+  "label": "baseline",
+  "stage": "model",
+  "state": "failed",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 1,
+      "seconds": 24.29269027709961
+    }
+  ]
+}

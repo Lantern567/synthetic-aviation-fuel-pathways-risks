@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "full_integer_domain_covered": true,
+  "all_leaf_bounds_valid": true,
+  "original_objective_constant_cny": 0,
+  "global_lower_bound_cny": 62333394420.92,
+  "proof_sha256": "06a5f3082039528830f2647cd41a1920e61771486cc8e9ca0166c2725e5603dc",
+  "original_model_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+  "leaf_count": 7,
+  "node_count": 8,
+  "checked_optimal_lp_nodes": [
+    {
+      "id": 0,
+      "objective_cny": 16289829158248.904,
+      "constraint_residual": 0.0,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 1,
+      "objective_cny": 62361589261.001114,
+      "constraint_residual": 1.1175870895385742e-08,
+      "bound_residual": 1.3844730390749993e-11,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 2,
+      "objective_cny": 62598315914.49251,
+      "constraint_residual": 1.1175870895385742e-08,
+      "bound_residual": 8.968028994929349e-11,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 3,
+      "objective_cny": 62835042667.755394,
+      "constraint_residual": 1.5157873311582246e-08,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 4,
+      "objective_cny": 63071769362.00999,
+      "constraint_residual": 1.0120927387178896e-08,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    }
+  ]
+}

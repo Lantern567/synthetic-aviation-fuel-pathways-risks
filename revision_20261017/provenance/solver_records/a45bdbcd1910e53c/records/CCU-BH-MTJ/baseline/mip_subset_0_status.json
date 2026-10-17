@@ -1,0 +1,20 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "selected_facilities": [
+    "facility_steel_Tangshan_Ganglu_Iron_and_Steel_Co_Ltd_green_h2_co2_to_saf"
+  ],
+  "seconds": 6.265209436416626,
+  "bound_source": "root_lp_status.json",
+  "source_sha256": {
+    "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+    "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+    "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+  },
+  "max_row_error": 3.725290298461914e-08,
+  "max_bound_error": 2.3065716447945306e-08,
+  "max_integer_error": 0.0,
+  "objective": 74127127529.9973,
+  "lower_bound": 70940702913.18297,
+  "gap": 0.042985944862423936
+}

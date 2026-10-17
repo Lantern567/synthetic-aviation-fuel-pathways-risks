@@ -1,0 +1,119 @@
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/decomposed_runs/CCU-BH-MTJ/baseline/partition_bound/leaf_81.log
+Model fingerprint: 4eab5da2
+
+Using Cardinal Optimizer v8.0.7 (e9a62f7d0e) on Linux (Ubuntu 22.04.5 LTS - x86_64)
+The CPU model is AMD EPYC 9654 96-Core Processor
+Hardware has 192 physical cores and 384 logical cores. Using instruction set X86_NATIVE (1)
+Minimizing an LP problem
+
+The original problem has:
+    218011 rows, 191735 columns and 839189 non-zero elements
+The presolved problem has:
+    65138 rows, 91392 columns and 439755 non-zero elements
+
+Starting barrier solver using 4 CPU threads
+
+Problem info:
+    Dualized in presolve:            No
+    Range of matrix coefficients:    [2e-03,5e+02]
+    Range of rhs coefficients:       [1e-01,9e+04]
+    Range of bound coefficients:     [6e-03,3e+03]
+    Range of cost coefficients:      [3e-03,8e+01]
+
+Factor info:
+    Number of free columns:          0
+    Number of dense columns:         235
+    Number of matrix entries:        5.914e+05
+    Number of factor entries:        1.714e+06
+    Number of factor flops:          4.673e+08
+
+Iter       Primal.Obj         Dual.Obj      Compl  Primal.Inf  Dual.Inf    Time
+   0  +1.28539605e+07  -2.57444660e+07   3.25e+08    2.67e+07  8.03e+01   0.91s
+   1  +1.07715230e+07  -1.90450274e+07   2.08e+08    1.55e+07  6.31e+01   0.98s
+   2  +1.14267237e+07  -1.08404900e+07   1.44e+08    9.75e+06  4.86e+01   1.04s
+   3  +1.42647178e+07  -7.61139398e+06   9.47e+07    3.55e+06  4.29e+01   1.09s
+   4  +1.41843987e+07  -1.06001796e+06   6.09e+07    1.51e+06  3.05e+01   1.15s
+   5  +1.33155663e+07  +3.46146130e+06   4.40e+07    1.19e+06  2.18e+01   1.21s
+   6  +1.08003717e+07  +4.56181482e+06   3.79e+07    9.74e+05  1.88e+01   1.27s
+   7  +5.40632186e+06  +4.55358464e+06   3.24e+07    7.64e+05  1.60e+01   1.33s
+   8  +4.43348363e+06  +3.37933626e+06   2.90e+07    6.85e+05  1.37e+01   1.39s
+   9  +4.40473116e+06  +3.27149033e+06   2.77e+07    6.67e+05  1.28e+01   1.45s
+  10  +2.11147200e+06  +1.95461533e+06   2.10e+07    3.99e+05  9.73e+00   1.52s
+  11  +1.47108469e+06  +1.46210587e+06   1.62e+07    2.62e+05  7.59e+00   1.58s
+  12  +6.33018083e+05  +8.07379569e+05   8.94e+06    8.37e+04  4.34e+00   1.66s
+  13  +2.79981892e+05  +3.60752957e+05   2.80e+06    1.35e+04  1.40e+00   1.72s
+  14  +2.33078093e+05  +2.44710699e+05   1.55e+06    8.79e+03  7.63e-01   1.78s
+  15  +1.89398502e+05  +1.45961315e+05   6.00e+05    5.21e+03  2.73e-01   1.85s
+  16  +1.49883629e+05  +1.18553055e+05   3.57e+05    2.97e+03  1.68e-01   1.91s
+  17  +1.24778780e+05  +1.01734528e+05   2.15e+05    1.76e+03  1.04e-01   1.96s
+  18  +1.18609555e+05  +9.28585359e+04   1.54e+05    1.51e+03  6.99e-02   2.02s
+  19  +1.11526846e+05  +8.56544781e+04   1.08e+05    1.24e+03  4.56e-02   2.08s
+  20  +9.44058969e+04  +8.07906946e+04   6.25e+04    6.42e+02  2.96e-02   2.13s
+  21  +8.53164765e+04  +7.75752190e+04   3.64e+04    3.53e+02  1.85e-02   2.19s
+  22  +7.93631599e+04  +7.51084580e+04   1.91e+04    1.83e+02  1.02e-02   2.25s
+  23  +7.78652001e+04  +7.41420035e+04   1.39e+04    1.45e+02  7.01e-03   2.31s
+  24  +7.71156831e+04  +7.38438059e+04   1.21e+04    1.28e+02  6.10e-03   2.37s
+  25  +7.65413840e+04  +7.36003082e+04   1.08e+04    1.15e+02  5.40e-03   2.44s
+  26  +7.59450487e+04  +7.29377503e+04   8.21e+03    1.01e+02  3.60e-03   2.50s
+  27  +7.49546374e+04  +7.26781034e+04   6.37e+03    7.73e+01  2.87e-03   2.56s
+  28  +7.45032619e+04  +7.22469641e+04   4.54e+03    6.64e+01  1.61e-03   2.62s
+  29  +7.41758763e+04  +7.20994719e+04   3.78e+03    5.87e+01  1.20e-03   2.68s
+  30  +7.30903445e+04  +7.19663113e+04   2.34e+03    3.38e+01  8.70e-04   2.73s
+  31  +7.30113805e+04  +7.18132119e+04   1.89e+03    3.20e+01  4.90e-04   2.79s
+  32  +7.26683566e+04  +7.17591987e+04   1.39e+03    2.40e+01  3.42e-04   2.84s
+  33  +7.26509835e+04  +7.17469634e+04   1.35e+03    2.36e+01  3.17e-04   2.89s
+  34  +7.25811195e+04  +7.17347730e+04   1.23e+03    2.19e+01  2.71e-04   2.95s
+  35  +7.22154122e+04  +7.17033192e+04   7.19e+02    1.31e+01  1.48e-04   3.00s
+  36  +7.19443588e+04  +7.16915681e+04   4.17e+02    6.90e+00  1.19e-04   3.05s
+  37  +7.18425776e+04  +7.16904149e+04   2.93e+02    4.24e+00  1.03e-04   3.11s
+  38  +7.17825809e+04  +7.16882731e+04   2.00e+02    2.64e+00  7.75e-05   3.16s
+  39  +7.17486456e+04  +7.16838625e+04   1.30e+02    1.80e+00  4.80e-05   3.21s
+  40  +7.17450493e+04  +7.16824710e+04   1.08e+02    1.70e+00  3.31e-05   3.28s
+  41  +7.17303716e+04  +7.16815448e+04   7.93e+01    1.28e+00  2.21e-05   3.34s
+  42  +7.17067175e+04  +7.16790708e+04   3.92e+01    5.62e-01  8.35e-06   3.39s
+  43  +7.16865232e+04  +7.16782588e+04   1.24e+01    9.98e-02  2.97e-06   3.44s
+  44  +7.16799462e+04  +7.16780267e+04   3.16e+00    6.34e-02  9.03e-07   3.49s
+  45  +7.16786785e+04  +7.16779709e+04   1.18e+00    8.21e-03  3.43e-07   3.55s
+  46  +7.16781930e+04  +7.16779493e+04   4.04e-01    4.53e-01  1.17e-07   3.59s
+  47  +7.16779954e+04  +7.16779401e+04   8.18e-02    1.63e-01  1.93e-08   3.65s
+  48  +7.16779418e+04  +7.16779383e+04   4.63e-03    4.96e-02  7.64e-10   3.71s
+  49  +7.16779383e+04  +7.16779383e+04   2.87e-06    3.21e-03  1.85e-13   3.77s
+  50  +7.16779383e+04  +7.16779383e+04   1.58e-09    5.22e-07  1.20e-13   3.98s
+  51  +7.16779383e+04  +7.16779383e+04   3.19e-10    8.37e-07  3.27e-13   4.16s
+  52  +7.16779383e+04  +7.16779383e+04   2.08e-11    1.99e-06  6.43e-12   4.31s
+
+Barrier status:                  OPTIMAL
+Primal objective:                7.16779383e+04
+Dual objective:                  7.16779383e+04
+Duality gap (abs/rel):           3.66e-07 / 5.11e-12
+Primal infeasibility (abs/rel):  1.99e-06 / 2.16e-11
+Dual infeasibility (abs/rel):    6.43e-12 / 8.06e-14
+
+Starting crossover using up to 4 threads
+
+    1932 primal pushes remaining      4.34s
+       0 primal pushes remaining      4.43s
+   52262 dual pushes remaining        4.43s
+   52233 dual pushes remaining        4.46s
+   48095 dual pushes remaining        4.48s
+   46723 dual pushes remaining        4.51s
+   42856 dual pushes remaining        4.54s
+   42015 dual pushes remaining        4.59s
+   40735 dual pushes remaining        4.65s
+   39135 dual pushes remaining        4.72s
+   38255 dual pushes remaining        4.78s
+   37158 dual pushes remaining        4.85s
+   36501 dual pushes remaining        4.91s
+   35522 dual pushes remaining        4.97s
+   35091 dual pushes remaining        5.03s
+   29666 dual pushes remaining        5.17s
+    6956 dual pushes remaining        5.25s
+       0 dual pushes remaining        5.33s
+
+Method   Iteration           Objective  Primal.NInf   Dual.NInf        Time
+Dual         23573    7.1677938251e+04            0           0       5.35s
+Postsolving
+Dual         23573    7.1677938251e+04            0           0       5.38s
+
+Solving finished
+Status: Optimal  Objective: 7.1677938251e+04  Iterations: 52(23573)  Time: 5.38s

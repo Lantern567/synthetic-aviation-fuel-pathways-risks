@@ -1,0 +1,47 @@
+Scenario,OfficialName,Cluster,MaterialLabel,SAF_Production,Consumption,Count
+CTL,CTL,2,H2 production,yes,no,57
+CTL,CTL,2,No raw material production,yes,yes,2
+CTL-BH,CTL-BH,2,H2 production,no,no,30
+CTL-BH,CTL-BH,2,H2 production,yes,no,2
+CTL-BH,CTL-BH,2,No raw material production,no,yes,2
+GTL-GH,GTL-GH,2,H2 production,no,no,55
+GTL-GH,GTL-GH,2,No raw material production,yes,yes,1
+GTL-GH,GTL-GH,2,H2 production,yes,no,2
+GTL-GH,GTL-GH,2,No raw material production,no,yes,1
+GTL-GH,GTL-GH,2,NG source,no,no,11
+GTL,GTL,2,No raw material production,yes,yes,2
+GTL-BH,GTL-BH,0,H2 production,no,no,30
+GTL-BH,GTL-BH,0,No raw material production,yes,yes,2
+CCU-GH-MTJ,CCU-GH-MTJ,3,H2 production,yes,no,57
+CCU-GH-MTJ,CCU-GH-MTJ,3,CO2 capture,yes,no,7
+CCU-GH-MTJ,CCU-GH-MTJ,3,No raw material production,yes,yes,1
+CCU-GH-MTJ,CCU-GH-MTJ,3,No raw material production,no,yes,1
+CCU-GH-MTJ,CCU-GH-MTJ,3,CO2 capture,no,no,6
+CCU-GH-FT,CCU-GH-FT,3,H2 production,yes,no,57
+CCU-GH-FT,CCU-GH-FT,3,CO2 capture,yes,no,6
+CCU-GH-FT,CCU-GH-FT,3,No raw material production,yes,yes,1
+CCU-GH-FT,CCU-GH-FT,3,No raw material production,no,yes,1
+CCU-GH-FT,CCU-GH-FT,3,CO2 capture,no,no,6
+CCU-BH-MTJ,CCU-BH-MTJ,3,H2 production,no,no,20
+CCU-BH-MTJ,CCU-BH-MTJ,3,H2 production,yes,no,5
+CCU-BH-MTJ,CCU-BH-MTJ,3,No raw material production,no,yes,2
+CCU-BH-MTJ,CCU-BH-MTJ,3,CO2 capture,no,no,4
+CCU-BH-FT,CCU-BH-FT,2,H2 production,no,no,31
+CCU-BH-FT,CCU-BH-FT,2,H2 production,yes,no,3
+CCU-BH-FT,CCU-BH-FT,2,No raw material production,no,yes,2
+CCU-BH-FT,CCU-BH-FT,2,CO2 capture,no,no,2
+DAC-GH-MTJ,DAC-GH-MTJ,3,CO2 capture+H2 production,yes,no,5
+DAC-GH-MTJ,DAC-GH-MTJ,3,No raw material production,yes,yes,2
+DAC-GH-MTJ,DAC-GH-MTJ,3,H2 production,yes,no,52
+DAC-GH-FT,DAC-GH-FT,3,CO2 capture+H2 production,yes,no,5
+DAC-GH-FT,DAC-GH-FT,3,No raw material production,yes,yes,2
+DAC-GH-FT,DAC-GH-FT,3,H2 production,yes,no,52
+DAC-BH-MTJ,DAC-BH-MTJ,1,CO2 capture+H2 production,no,no,21
+DAC-BH-MTJ,DAC-BH-MTJ,1,CO2 capture+H2 production,yes,no,7
+DAC-BH-MTJ,DAC-BH-MTJ,1,H2 production,yes,no,36
+DAC-BH-MTJ,DAC-BH-MTJ,1,CO2 capture,no,yes,2
+DAC-BH-FT,DAC-BH-FT,1,CO2 capture+H2 production,yes,no,11
+DAC-BH-FT,DAC-BH-FT,1,CO2 capture+H2 production,no,no,17
+DAC-BH-FT,DAC-BH-FT,1,CO2 capture,yes,yes,1
+DAC-BH-FT,DAC-BH-FT,1,H2 production,yes,no,36
+DAC-BH-FT,DAC-BH-FT,1,CO2 capture,no,yes,1

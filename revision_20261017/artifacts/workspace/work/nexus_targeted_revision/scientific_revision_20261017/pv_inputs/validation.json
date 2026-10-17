@@ -1,0 +1,83 @@
+{
+  "solar": {
+    "periods": 43680,
+    "hdf5_files": 2016,
+    "phases": 66,
+    "projects": 65,
+    "capacity_raw_mw": 748.6,
+    "capacity_dc_mw": 758.6,
+    "capacity_ac_mw": 632.1666666666667,
+    "maximum_ac_capacity_factor": 0.9455505066666667,
+    "unit": "raw*0.0001 MJ/m2/hour; raw/36 W/m2; resulting power in MWac",
+    "formula": "P_ac_MW = min(C_ac_MW, C_dc_MW * GHI_Wm2 / 1000 * (1 - 0.14) * 0.96)",
+    "system_loss_fraction": 0.14,
+    "inverter_efficiency": 0.96,
+    "dc_ac_ratio": 1.2,
+    "unknown_capacity_rating_assumption": "DC",
+    "clipped_phase_hours": 0,
+    "clipping_loss_mwh": 0.0,
+    "time": "UTC+8 local weeks; cyclic source weather year for the first eight hours",
+    "coordinate_mapping": "native HDF5 array[longitude_index,latitude_index]; 71.025+0.05*x,59.975-0.05*y",
+    "source_raw_sha256": "60bcada7c1ece8e9c557f084aaa03a56e185a659aed59523f973fe3e815f3924"
+  },
+  "schedules": {
+    "baseline": {
+      "weeks": [
+        1,
+        5,
+        14,
+        44
+      ],
+      "periods": 224,
+      "hours": 672,
+      "solar_energy_mwh": 55391.09586229333,
+      "solar_energy_before_mwh": 10806.16089712,
+      "wind_energy_mwh": 606812.2106899396,
+      "solar_capacity_factor_ac": 0.13038844078917303,
+      "solar_capacity_factor_dc": 0.10865703399097752,
+      "renewable_periods_sha256": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510",
+      "demand_preserved_byte_for_byte": true,
+      "wind_values_preserved_exactly": true
+    },
+    "summer": {
+      "weeks": [
+        1,
+        14,
+        27,
+        44
+      ],
+      "periods": 224,
+      "hours": 672,
+      "solar_energy_mwh": 64880.976392586665,
+      "solar_energy_before_mwh": 12654.216345573333,
+      "wind_energy_mwh": 794254.948474155,
+      "solar_capacity_factor_ac": 0.15272724283592579,
+      "solar_capacity_factor_dc": 0.1272727023632715,
+      "renewable_periods_sha256": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495",
+      "demand_preserved_byte_for_byte": true,
+      "wind_values_preserved_exactly": true
+    }
+  },
+  "capacity_rating_counts": [
+    {
+      "capacity_rating_raw": "MWac",
+      "phases": 1,
+      "capacity_raw_mw": 50.0
+    },
+    {
+      "capacity_rating_raw": "MWp/dc",
+      "phases": 5,
+      "capacity_raw_mw": 231.60000000000002
+    },
+    {
+      "capacity_rating_raw": "unknown",
+      "phases": 60,
+      "capacity_raw_mw": 467.0
+    }
+  ],
+  "upstream_reconstruction_verified_against_original_solar_periods": true,
+  "wind_and_demand_preserved": true,
+  "all_output_power_finite_nonnegative_and_at_most_ac_capacity": true,
+  "twelve_week_rows": 73248,
+  "twelve_week_projects": 109
+}

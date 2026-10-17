@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_configured_ctl",
+  "scenario": "CTL",
+  "label": "baseline",
+  "pid": 1761579,
+  "launched_unix": 1792229317.0699534,
+  "from_stage": "model"
+}

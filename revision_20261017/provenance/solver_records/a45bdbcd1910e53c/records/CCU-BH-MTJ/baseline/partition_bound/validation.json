@@ -1,0 +1,671 @@
+{
+  "passed": true,
+  "full_integer_domain_covered": true,
+  "all_leaf_bounds_valid": true,
+  "original_objective_constant_cny": 0,
+  "global_lower_bound_cny": 71297854012.57652,
+  "proof_sha256": "b5b43bdf2f0f31a2b50e3adae2456a1c38938db8c70a092cfb6d9cd5112d3bdc",
+  "original_model_sha256": "0df6c606b0ad9bf444538f5c56a1ed642cacc068f25e913c7ca93d313a392be8",
+  "leaf_count": 50,
+  "node_count": 94,
+  "checked_optimal_lp_nodes": [
+    {
+      "id": 0,
+      "objective_cny": 16289829158248.904,
+      "constraint_residual": 0.0,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 1,
+      "objective_cny": 70968897753.31647,
+      "constraint_residual": 8.94525325769618e-09,
+      "bound_residual": 1.1175870895385742e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 2,
+      "objective_cny": 71205624406.82762,
+      "constraint_residual": 4.934154276270419e-07,
+      "bound_residual": 1.3171153057101037e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 3,
+      "objective_cny": 71442351059.60007,
+      "constraint_residual": 6.328627932816744e-08,
+      "bound_residual": 2.820462117826748e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 4,
+      "objective_cny": 71679077713.01834,
+      "constraint_residual": 4.520829544052418e-08,
+      "bound_residual": 5.711339734482124e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 5,
+      "objective_cny": 71915804366.91324,
+      "constraint_residual": 1.6536632749516437e-07,
+      "bound_residual": 2.349443391159132e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 6,
+      "objective_cny": 71042356492.51479,
+      "constraint_residual": 1.30385160446167e-08,
+      "bound_residual": 7.747295860394132e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 7,
+      "objective_cny": 71991451510.34207,
+      "constraint_residual": 3.073364496231079e-08,
+      "bound_residual": 2.050448699719709e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 8,
+      "objective_cny": 71205884257.5615,
+      "constraint_residual": 4.5942943735425034e-06,
+      "bound_residual": 2.221074955348603e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 9,
+      "objective_cny": 71205624406.26599,
+      "constraint_residual": 4.530920705292374e-08,
+      "bound_residual": 6.333955582249473e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 10,
+      "objective_cny": 71219145913.50041,
+      "constraint_residual": 5.960464477539063e-08,
+      "bound_residual": 5.942032051583127e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 11,
+      "objective_cny": 71171247436.28908,
+      "constraint_residual": 4.0046870708465576e-08,
+      "bound_residual": 3.523581426634337e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 12,
+      "objective_cny": 71896955720.39929,
+      "constraint_residual": 4.244793672114611e-08,
+      "bound_residual": 1.6299850358336698e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 13,
+      "objective_cny": 71337585957.14586,
+      "constraint_residual": 1.503140083514154e-07,
+      "bound_residual": 2.983413516233213e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 14,
+      "objective_cny": 72067406766.00864,
+      "constraint_residual": 1.2526288628578186e-07,
+      "bound_residual": 5.8605564845493063e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 15,
+      "objective_cny": 73014880088.50029,
+      "constraint_residual": 1.4901161193847656e-08,
+      "bound_residual": 8.409711398933342e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 16,
+      "objective_cny": 71259331714.33635,
+      "constraint_residual": 6.007030606269836e-07,
+      "bound_residual": 3.3970746007860875e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 17,
+      "objective_cny": 71205884257.18968,
+      "constraint_residual": 2.7821442927233878e-08,
+      "bound_residual": 2.0874926787151082e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 18,
+      "objective_cny": 71259063018.75526,
+      "constraint_residual": 3.725290298461914e-08,
+      "bound_residual": 1.709902061211973e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 19,
+      "objective_cny": 73610053819.53014,
+      "constraint_residual": 8.628456282799846e-08,
+      "bound_residual": 9.453493741587551e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 20,
+      "objective_cny": 71263183748.56871,
+      "constraint_residual": 9.390532795805484e-08,
+      "bound_residual": 8.384404281969182e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 21,
+      "objective_cny": 73943442438.2655,
+      "constraint_residual": 7.674502811028105e-08,
+      "bound_residual": 8.222608705032997e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 22,
+      "objective_cny": 71263449953.58003,
+      "constraint_residual": 7.096932331030904e-08,
+      "bound_residual": 4.170891514620312e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 23,
+      "objective_cny": 71259331714.44177,
+      "constraint_residual": 1.210719347000122e-08,
+      "bound_residual": 8.375877769140061e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 24,
+      "objective_cny": 71206790416.79506,
+      "constraint_residual": 1.8990999249370226e-08,
+      "bound_residual": 2.0485845163088947e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 25,
+      "objective_cny": 73608991082.97226,
+      "constraint_residual": 2.57161271122186e-06,
+      "bound_residual": 2.2625938345122165e-06,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 26,
+      "objective_cny": 71206805554.64885,
+      "constraint_residual": 1.3573738563970698e-07,
+      "bound_residual": 6.167914300700018e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 27,
+      "objective_cny": 73122126149.34381,
+      "constraint_residual": 2.501765266060829e-07,
+      "bound_residual": 1.294826329489851e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 28,
+      "objective_cny": 71206963682.93924,
+      "constraint_residual": 1.4202669262886047e-08,
+      "bound_residual": 1.2952749983696776e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 29,
+      "objective_cny": 73610232103.79431,
+      "constraint_residual": 8.195638656616211e-08,
+      "bound_residual": 4.2311594840831606e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 30,
+      "objective_cny": 71206963682.71573,
+      "constraint_residual": 1.6763806343078613e-08,
+      "bound_residual": 2.0118022803217173e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 31,
+      "objective_cny": 73040377604.6058,
+      "constraint_residual": 8.64383764564991e-09,
+      "bound_residual": 5.309530592967349e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 32,
+      "objective_cny": 71207332321.44489,
+      "constraint_residual": 2.042354894953636e-08,
+      "bound_residual": 4.712472978438392e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 33,
+      "objective_cny": 73609889187.64163,
+      "constraint_residual": 3.3760443329811096e-08,
+      "bound_residual": 1.6592870600378165e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 34,
+      "objective_cny": 71207332321.395,
+      "constraint_residual": 1.0550047222700939e-06,
+      "bound_residual": 4.7098425101343475e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 35,
+      "objective_cny": 73086068563.11156,
+      "constraint_residual": 3.30823240801692e-07,
+      "bound_residual": 2.2083668227423914e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 36,
+      "objective_cny": 71208302382.97789,
+      "constraint_residual": 2.5644701410307107e-08,
+      "bound_residual": 2.229450821014218e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 37,
+      "objective_cny": 72655541328.28632,
+      "constraint_residual": 4.5346808974500163e-08,
+      "bound_residual": 5.03503072568634e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 38,
+      "objective_cny": 71208302382.17427,
+      "constraint_residual": 1.3487472472206719e-08,
+      "bound_residual": 1.3389692132825814e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 39,
+      "objective_cny": 73100935830.70903,
+      "constraint_residual": 1.043081283569336e-07,
+      "bound_residual": 7.719336281297728e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 40,
+      "objective_cny": 71208353440.9393,
+      "constraint_residual": 3.5390257835388184e-08,
+      "bound_residual": 2.091837814077735e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 41,
+      "objective_cny": 73610423310.0205,
+      "constraint_residual": 3.4313416108489037e-08,
+      "bound_residual": 2.076607046042066e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 42,
+      "objective_cny": 71208578391.29639,
+      "constraint_residual": 1.5681729388644012e-07,
+      "bound_residual": 1.0438719666053239e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 43,
+      "objective_cny": 73610148811.00937,
+      "constraint_residual": 5.960464477539063e-08,
+      "bound_residual": 1.7721771762487205e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 44,
+      "objective_cny": 71211146108.14528,
+      "constraint_residual": 8.443530326106902e-08,
+      "bound_residual": 4.4829330334719426e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 45,
+      "objective_cny": 73606053639.29688,
+      "constraint_residual": 6.888046545454981e-08,
+      "bound_residual": 5.908221280636038e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 46,
+      "objective_cny": 71211876149.44264,
+      "constraint_residual": 1.4285650166583178e-07,
+      "bound_residual": 6.320066279392817e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 47,
+      "objective_cny": 73609294512.94559,
+      "constraint_residual": 5.8668498630660247e-08,
+      "bound_residual": 6.818368092353917e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 48,
+      "objective_cny": 71212415754.41096,
+      "constraint_residual": 1.2097020294915587e-07,
+      "bound_residual": 7.200608557536298e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 49,
+      "objective_cny": 73603470504.00597,
+      "constraint_residual": 5.500129796054409e-07,
+      "bound_residual": 7.196994111779986e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 50,
+      "objective_cny": 71213428473.69684,
+      "constraint_residual": 1.283595452150621e-07,
+      "bound_residual": 8.595505259937196e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 51,
+      "objective_cny": 73608804952.88199,
+      "constraint_residual": 3.311230456493064e-07,
+      "bound_residual": 5.201599151405389e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 52,
+      "objective_cny": 71315876007.13708,
+      "constraint_residual": 3.934673831196278e-08,
+      "bound_residual": 3.934553551021569e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 53,
+      "objective_cny": 71591770949.28346,
+      "constraint_residual": 1.73225998878479e-07,
+      "bound_residual": 5.0818016461562365e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 54,
+      "objective_cny": 71395265551.94688,
+      "constraint_residual": 1.2029358913423494e-06,
+      "bound_residual": 1.1638448538242585e-06,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 55,
+      "objective_cny": 72470695230.40863,
+      "constraint_residual": 4.0978193283081055e-08,
+      "bound_residual": 2.3238355684185308e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 56,
+      "objective_cny": 71265810263.30887,
+      "constraint_residual": 3.575451046344824e-08,
+      "bound_residual": 1.5961835028325104e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 57,
+      "objective_cny": 71263449953.74326,
+      "constraint_residual": 1.30385160446167e-08,
+      "bound_residual": 1.6144327937997867e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 58,
+      "objective_cny": 71708734645.44106,
+      "constraint_residual": 1.364387571811676e-07,
+      "bound_residual": 1.0324185950594256e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 59,
+      "objective_cny": 71297854012.57541,
+      "constraint_residual": 3.269137391348487e-08,
+      "bound_residual": 2.920436635578394e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 60,
+      "objective_cny": 72125035056.9863,
+      "constraint_residual": 2.0302832126617432e-07,
+      "bound_residual": 9.184475402435055e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 61,
+      "objective_cny": 71309030894.60606,
+      "constraint_residual": 1.3060857950719651e-08,
+      "bound_residual": 1.2896350654045818e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 62,
+      "objective_cny": 71267462291.27226,
+      "constraint_residual": 1.3637091456075723e-07,
+      "bound_residual": 9.131980885764993e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 63,
+      "objective_cny": 71265810263.3088,
+      "constraint_residual": 1.8209017627057733e-08,
+      "bound_residual": 2.5425594169752634e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 64,
+      "objective_cny": 71269016264.10455,
+      "constraint_residual": 6.111804395914078e-09,
+      "bound_residual": 2.8370956377849713e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 65,
+      "objective_cny": 71267462291.19247,
+      "constraint_residual": 9.782397114577179e-08,
+      "bound_residual": 6.550712353511504e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 66,
+      "objective_cny": 72324548533.58403,
+      "constraint_residual": 3.3620744943618774e-07,
+      "bound_residual": 4.117087623204238e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 67,
+      "objective_cny": 71322339109.38358,
+      "constraint_residual": 6.869336743875465e-08,
+      "bound_residual": 2.0077377962415792e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 68,
+      "objective_cny": 71412353912.06342,
+      "constraint_residual": 5.452943652173303e-08,
+      "bound_residual": 5.245212597593252e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 69,
+      "objective_cny": 72233656181.10347,
+      "constraint_residual": 8.838469511829317e-08,
+      "bound_residual": 3.005387293197881e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 70,
+      "objective_cny": 71270836787.07742,
+      "constraint_residual": 1.304911734223424e-08,
+      "bound_residual": 1.304911734223424e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 71,
+      "objective_cny": 71269016264.02495,
+      "constraint_residual": 4.315945616768196e-07,
+      "bound_residual": 5.338000111376751e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 72,
+      "objective_cny": 71277537890.40575,
+      "constraint_residual": 3.243485341419827e-07,
+      "bound_residual": 9.267100975485221e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 73,
+      "objective_cny": 71270836786.82088,
+      "constraint_residual": 1.3027801060161437e-07,
+      "bound_residual": 8.723973924215248e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 74,
+      "objective_cny": 72252052508.70285,
+      "constraint_residual": 2.6775524020195007e-08,
+      "bound_residual": 1.3038459201197838e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 75,
+      "objective_cny": 71325551867.12396,
+      "constraint_residual": 1.0962598930498908e-07,
+      "bound_residual": 5.330983217159081e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 76,
+      "objective_cny": 71464477217.9181,
+      "constraint_residual": 1.1478657589050473e-07,
+      "bound_residual": 6.771528335678048e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 77,
+      "objective_cny": 71604874255.28981,
+      "constraint_residual": 1.6763806343078613e-08,
+      "bound_residual": 1.4903633882568101e-09,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 78,
+      "objective_cny": 71288374041.91048,
+      "constraint_residual": 2.261458575958386e-08,
+      "bound_residual": 1.9535738896972325e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 79,
+      "objective_cny": 71277537890.41664,
+      "constraint_residual": 7.84885991139531e-08,
+      "bound_residual": 4.885515326870278e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 80,
+      "objective_cny": 71515637132.81287,
+      "constraint_residual": 1.7390311413123527e-08,
+      "bound_residual": 1.65815139396841e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 81,
+      "objective_cny": 71677938251.19829,
+      "constraint_residual": 2.310844138264656e-07,
+      "bound_residual": 3.5861091873812256e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 82,
+      "objective_cny": 71289019016.07295,
+      "constraint_residual": 1.896407069736355e-07,
+      "bound_residual": 1.2481969977241543e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 83,
+      "objective_cny": 71288374042.0879,
+      "constraint_residual": 7.503719867685277e-08,
+      "bound_residual": 4.0198499291171126e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 84,
+      "objective_cny": 71802335743.55705,
+      "constraint_residual": 9.035284165292978e-08,
+      "bound_residual": 4.0318359761926104e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 85,
+      "objective_cny": 71370697249.04451,
+      "constraint_residual": 1.7417872699709847e-07,
+      "bound_residual": 1.4865086939153116e-07,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 86,
+      "objective_cny": 71294544834.02646,
+      "constraint_residual": 2.6963237198529555e-08,
+      "bound_residual": 3.693226236563019e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 87,
+      "objective_cny": 71289019016.11145,
+      "constraint_residual": 1.5832483768463135e-08,
+      "bound_residual": 1.0459189070388675e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 88,
+      "objective_cny": 71358849870.87207,
+      "constraint_residual": 2.1420419216156006e-08,
+      "bound_residual": 1.5091927707544528e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 89,
+      "objective_cny": 71294544833.98018,
+      "constraint_residual": 2.5589784197893595e-06,
+      "bound_residual": 4.314415491535328e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 90,
+      "objective_cny": 72346409132.91524,
+      "constraint_residual": 1.5148543752729893e-08,
+      "bound_residual": 1.2893859591134316e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 91,
+      "objective_cny": 71371123290.5571,
+      "constraint_residual": 1.3999522279304861e-07,
+      "bound_residual": 6.305296300934132e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 92,
+      "objective_cny": 72495636125.59395,
+      "constraint_residual": 2.457363734720275e-07,
+      "bound_residual": 9.612222129362635e-08,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 93,
+      "objective_cny": 71356079634.79478,
+      "constraint_residual": 2.514570951461792e-08,
+      "bound_residual": 1.9973278929141842e-08,
+      "solver_optimality_record": true
+    }
+  ]
+}

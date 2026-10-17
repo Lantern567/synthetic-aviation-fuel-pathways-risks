@@ -1,0 +1,17 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "opened_facility": "facility_refinery_Qinhuangdao_Far_East_Refinery_green_h2_co2_to_saf",
+  "seconds": 6.019201278686523,
+  "lower_bound": 70940702913.18297,
+  "source_sha256": {
+    "master_data.npz": "a3cb198bdeb001cf7605ab863e489ca6a6aa80f396a0013c8f29c0156ddff807",
+    "master_matrix.npz": "9f58ecf8631ecf59f958834458a84ae0f7bc1f67ec8ea2db06ff8a370525ca27",
+    "root_lp_status.json": "bb32ab27940eb9b75127ed92ecfa1455d374344a4f0368a259dc21447bcf557c"
+  },
+  "max_constraint_residual": 2.9802322387695312e-08,
+  "max_bound_residual": 1.4210854715202004e-08,
+  "max_integer_violation": 0.0,
+  "objective": 76357854960.21991,
+  "gap": 0.0709442669632235
+}

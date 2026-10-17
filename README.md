@@ -1,5 +1,20 @@
 # Synthetic aviation fuel pathway revision archive
 
+The fixed [nexus-r1-20261017 release](https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks/releases/tag/nexus-r1-20261017) contains the scientific revision documented in [revision_20261017/](revision_20261017/README.md). It binds eighteen newly solved schedules to their exact execution sources, configurations, original summaries, complete saved dispatch and independent checks. The original direct-FT GTL comparator is preserved separately.
+
+Start with the new saved-data verification entry point:
+
+```bash
+python -m pip install -r archive_tools/requirements_revision_20261017_verification.txt
+python archive_tools/verify_revision_20261017.py --workspace work/revision_checks
+```
+
+This check requires no optimization or solver licence. The revision documentation also provides individual-case verification and exact model preparation commands. Original execution tools and reports remain identifiable separately from the current independent verification programs.
+
+The documentation below describes the immutable `nexus-r1-20261015` release and its legacy layout. Its root checksum inventory applies to that fixed release. The new revision has its own manifest and checksum inventory under `revision_20261017/`; new archive tools are named `*_revision_20261017.py`.
+
+## Fixed 20261015 release
+
 This fixed archive accompanies *Infrastructure incompatibility across synthetic aviation fuel pathways risks stranding decarbonization investments* by Junteng Liao and Haoran Zhang.
 
 Version `nexus-r1-20261015` provides the code, selected inputs and saved results for six electricity-dependent configurations evaluated with COPT 8.0.7. Each configuration has a baseline and an alternative-week schedule with baseline production assets fixed. The baseline uses weeks 1, 5, 14 and 44; the alternative uses weeks 1, 14, 27 and 44. Each set contains 224 three-hour periods. CTL is the separately identified partial-supply diagnostic.

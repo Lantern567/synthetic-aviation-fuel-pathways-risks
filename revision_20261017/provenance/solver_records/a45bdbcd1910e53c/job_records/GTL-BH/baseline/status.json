@@ -1,0 +1,25 @@
+{
+  "scenario": "GTL-BH",
+  "label": "baseline",
+  "state": "complete",
+  "stage": "export_and_validation",
+  "source_runtime": "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final",
+  "attempt": "verify_existing",
+  "history": [
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 3.2752859592437744
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 0.6882786750793457
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.36330318450927734
+    }
+  ]
+}

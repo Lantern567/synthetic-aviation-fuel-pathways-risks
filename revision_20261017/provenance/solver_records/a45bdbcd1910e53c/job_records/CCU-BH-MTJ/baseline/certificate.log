@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/accept_repaired.py", line 11, in <module>
+    assert report['passed'],report
+           ~~~~~~^^^^^^^^^^
+AssertionError: {'status': 1, 'has_solution': True, 'source_iteration': 'rounded', 'seconds': 8.438849925994873, 'objective': 74538725242.68808, 'lower_bound': 70940702913.18297, 'max_constraint_residual': 9.653410870669177e-08, 'max_bound_residual': 9.724806204758352e-08, 'max_integer_violation': 0.0, 'gap': 0.0482705106344445, 'physically_feasible_algebraically': True, 'source_sha256': '0df6c606b0ad9bf444538f5c56a1ed642cacc068f25e913c7ca93d313a392be8', 'column_name_sha256': '0647d6ac167494f1755dee2b109105511eeabd654b103e1fd6c268f281915305', 'method': 'Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection', 'scenario': 'CCU-BH-MTJ', 'label': 'baseline', 'relative_gap_tolerance': 0.01, 'passed': False}

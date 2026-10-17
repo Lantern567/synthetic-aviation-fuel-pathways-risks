@@ -1,0 +1,21 @@
+{
+  "physics_data_manifest_sha256": "0ac0feb1e69aa3a22c877045e1fc5f13e8b676d90d50636bee2bfe45484532b4",
+  "final_revision_manifest_sha256": "cda84ff3fbd73a55430b00d421b34fe89925f32435aa44a3c58b98420bb23578",
+  "scientific_sources_records_and_accounts_unchanged": true,
+  "changed_archive_tools": {
+    "archive_tools/requirements_revision_20261017_figures.txt": {
+      "previous_sha256": "4b89d4b25d14a817ed50caa4813125c657b3b3db38c0fabe516d44f76c0039bf",
+      "final_sha256": "0ac593c108aaf876abcd47582f2831a14f7f802d97e42cf2008b6e35e1c5c0cf"
+    },
+    "archive_tools/verify_revision_20261017.py": {
+      "previous_sha256": "b41e7dc6961e73e791e30ef71fd184f8c390ce78823b140a9a7d9156ac547bfa",
+      "final_sha256": "346740305a657efaa61ed28aa7df93d255fdf7c6f9ded7be501c85c074777186"
+    }
+  },
+  "completed_case_check_scope_unchanged": true,
+  "figure_dependency_import": {
+    "passed": true,
+    "module": "seaborn",
+    "version": "0.13.2"
+  }
+}

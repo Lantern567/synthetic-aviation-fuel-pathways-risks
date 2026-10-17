@@ -1,0 +1,18 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "source_iteration": "mip_no_root_cuts",
+  "seconds": 5.4701828956604,
+  "objective": 63122019319.73616,
+  "lower_bound": 62333394420.92,
+  "max_constraint_residual": 4.151095822635398e-08,
+  "max_bound_residual": 1.4028046280145645e-08,
+  "max_integer_violation": 0.0,
+  "gap": 0.012493657638255962,
+  "physically_feasible_algebraically": true,
+  "source_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+  "column_name_sha256": "54cab641d8a7ac377ec659ce66fe859f0e4a0456774a1c715270ae0a08a5671a",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection",
+  "bound_source": "mip_no_root_cuts_design.log",
+  "global_bound_method": "Valid integer master lower bound for an outer projection of the original full model"
+}

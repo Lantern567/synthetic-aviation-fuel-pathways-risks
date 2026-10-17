@@ -1,0 +1,265 @@
+location,week,captured_kg,sent_kg,export_over_local_capture_kg
+airport_北京,0,560000.0,101089.9485866409,0.0
+airport_北京,1,560000.0,101089.94858664094,0.0
+airport_北京,2,560000.0,101089.94858664094,0.0
+airport_北京,3,560000.0,101089.94858664092,0.0
+airport_天津,0,560000.0,560000.0000000001,1.1641532182693481e-10
+airport_天津,1,560000.0,560000.0,0.0
+airport_天津,2,560000.0,560000.0,0.0
+airport_天津,3,560000.0,560000.0,0.0
+refinery_Binyang Refinery,0,560000.0,521222.2728533328,0.0
+refinery_Binyang Refinery,1,560000.0,521222.27285333315,0.0
+refinery_Binyang Refinery,2,560000.0,521222.27285333304,0.0
+refinery_Binyang Refinery,3,560000.0,521222.27285333246,0.0
+refinery_CNOOC Dongying Refinery,0,560000.0,559999.9999999979,0.0
+refinery_CNOOC Dongying Refinery,1,560000.0,560000.0000000006,5.820766091346741e-10
+refinery_CNOOC Dongying Refinery,2,560000.0,560000.0000000006,5.820766091346741e-10
+refinery_CNOOC Dongying Refinery,3,560000.0,560000.0000000008,8.149072527885437e-10
+refinery_Fuyu Refinery,0,560000.0,559999.9999999997,0.0
+refinery_Fuyu Refinery,1,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Fuyu Refinery,2,560000.0,560000.0,0.0
+refinery_Fuyu Refinery,3,560000.0,560000.0,0.0
+refinery_Guangyuan Refinery,0,560000.0,560000.0000000002,2.3283064365386963e-10
+refinery_Guangyuan Refinery,1,560000.0,560000.0,0.0
+refinery_Guangyuan Refinery,2,560000.0,559999.9999999999,0.0
+refinery_Guangyuan Refinery,3,560000.0,560000.0,0.0
+refinery_Haike Ruilin Refinery,0,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Haike Ruilin Refinery,1,560000.0,560000.0,0.0
+refinery_Haike Ruilin Refinery,2,560000.0,560000.0,0.0
+refinery_Haike Ruilin Refinery,3,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Haiyue Refinery,0,560000.0,559999.9999999999,0.0
+refinery_Haiyue Refinery,1,560000.0,560000.0,0.0
+refinery_Haiyue Refinery,2,560000.0,560000.0,0.0
+refinery_Haiyue Refinery,3,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Hebei Dagang Refinery,0,560000.0,559999.9999999995,0.0
+refinery_Hebei Dagang Refinery,1,560000.0,560000.0000000005,4.656612873077393e-10
+refinery_Hebei Dagang Refinery,2,560000.0,560000.0,0.0
+refinery_Hebei Dagang Refinery,3,560000.0,560000.0,0.0
+refinery_Hebei Qianhai Refinery,0,560000.0,450893.08245333337,0.0
+refinery_Hebei Qianhai Refinery,1,560000.0,450893.08245333337,0.0
+refinery_Hebei Qianhai Refinery,2,560000.0,450893.0824533335,0.0
+refinery_Hebei Qianhai Refinery,3,560000.0,450893.08245333337,0.0
+refinery_Huabei Refinery,0,560000.0,438827.15520000004,0.0
+refinery_Huabei Refinery,1,560000.0,438827.15520000004,0.0
+refinery_Huabei Refinery,2,560000.0,438827.15520000015,0.0
+refinery_Huabei Refinery,3,560000.0,438827.1552,0.0
+refinery_Hualian Refinery,0,560000.0,484873.4404266664,0.0
+refinery_Hualian Refinery,1,559999.9999999998,484873.4404266664,0.0
+refinery_Hualian Refinery,2,560000.0,484873.4404266661,0.0
+refinery_Hualian Refinery,3,560000.0,484873.4404266664,0.0
+refinery_Huayu Refinery,0,560000.0,560000.0,0.0
+refinery_Huayu Refinery,1,560000.0,560000.0,0.0
+refinery_Huayu Refinery,2,560000.0,560000.0,0.0
+refinery_Huayu Refinery,3,560000.0,560000.0,0.0
+refinery_Lianhe Refinery,0,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Lianhe Refinery,1,560000.0,560000.0,0.0
+refinery_Lianhe Refinery,2,560000.0,559999.9999999999,0.0
+refinery_Lianhe Refinery,3,560000.0,560000.0,0.0
+refinery_PetroChina Qinhuangdao Refinery,0,560000.0,560000.0,0.0
+refinery_PetroChina Qinhuangdao Refinery,1,560000.0,560000.0,0.0
+refinery_PetroChina Qinhuangdao Refinery,2,560000.0,560000.0,0.0
+refinery_PetroChina Qinhuangdao Refinery,3,560000.0,560000.0,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,0,560000.0,402260.8098133328,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,1,560000.0,402260.8098133328,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,2,560000.0,402260.80981333274,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,3,559999.9999999981,402260.8098133327,0.0
+refinery_Petrochina Dagang Refinery,0,560000.0,499416.5986133334,0.0
+refinery_Petrochina Dagang Refinery,1,560000.0,499416.5986133334,0.0
+refinery_Petrochina Dagang Refinery,2,560000.0,499416.5986133333,0.0
+refinery_Petrochina Dagang Refinery,3,560000.0,499416.5986133334,0.0
+refinery_Qinhuangdao Far East Refinery,0,560000.0,560000.0,0.0
+refinery_Qinhuangdao Far East Refinery,1,560000.0,560000.0,0.0
+refinery_Qinhuangdao Far East Refinery,2,560000.0,560000.0,0.0
+refinery_Qinhuangdao Far East Refinery,3,560000.0,560000.0,0.0
+refinery_Shenchi Refinery,0,560000.0,560000.0,0.0
+refinery_Shenchi Refinery,1,560000.0,560000.0,0.0
+refinery_Shenchi Refinery,2,560000.0,560000.0,0.0
+refinery_Shenchi Refinery,3,560000.0,560000.0,0.0
+refinery_Sinopec Beijing Refinery,0,560000.0,426531.63093333325,0.0
+refinery_Sinopec Beijing Refinery,1,560000.0,426531.63093333325,0.0
+refinery_Sinopec Beijing Refinery,2,560000.0,426531.63093333336,0.0
+refinery_Sinopec Beijing Refinery,3,560000.0,426531.6309333335,0.0
+refinery_Sinopec Cangzhou Refinery,0,560000.0,560000.0,0.0
+refinery_Sinopec Cangzhou Refinery,1,560000.0,560000.0,0.0
+refinery_Sinopec Cangzhou Refinery,2,560000.0,560000.0,0.0
+refinery_Sinopec Cangzhou Refinery,3,560000.0,560000.0,0.0
+refinery_Sinopec Shijiazhuang Refinery,0,560000.0,438664.0204799998,0.0
+refinery_Sinopec Shijiazhuang Refinery,1,560000.0,438664.0204799998,0.0
+refinery_Sinopec Shijiazhuang Refinery,2,560000.0,438664.02047999983,0.0
+refinery_Sinopec Shijiazhuang Refinery,3,560000.0,438664.02047999983,0.0
+refinery_Sinopec Tianjin Refinery,0,560000.0,392557.31498666626,0.0
+refinery_Sinopec Tianjin Refinery,1,560000.0,392557.3149866664,0.0
+refinery_Sinopec Tianjin Refinery,2,560000.0,392557.31498666626,0.0
+refinery_Sinopec Tianjin Refinery,3,560000.0,392557.3149866664,0.0
+refinery_Tianhong 1 Refinery,0,560000.0,560000.0,0.0
+refinery_Tianhong 1 Refinery,1,560000.0,560000.0,0.0
+refinery_Tianhong 1 Refinery,2,560000.0,560000.0000000003,3.4924596548080444e-10
+refinery_Tianhong 1 Refinery,3,560000.0,560000.0,0.0
+refinery_Tianjin  Refinery,0,560000.0,560000.0,0.0
+refinery_Tianjin  Refinery,1,560000.0,560000.0,0.0
+refinery_Tianjin  Refinery,2,560000.0,560000.0,0.0
+refinery_Tianjin  Refinery,3,560000.0,560000.0,0.0
+refinery_Wudi Xinyue Refinery,0,560000.0,462723.37066666625,0.0
+refinery_Wudi Xinyue Refinery,1,559999.999999998,462723.3706666661,0.0
+refinery_Wudi Xinyue Refinery,2,560000.0,462723.37066666625,0.0
+refinery_Wudi Xinyue Refinery,3,560000.0,462723.3706666663,0.0
+refinery_Xinhai  Refinery,0,560000.0,487296.29311999964,0.0
+refinery_Xinhai  Refinery,1,560000.0,487296.29311999964,0.0
+refinery_Xinhai  Refinery,2,560000.0,487296.29311999964,0.0
+refinery_Xinhai  Refinery,3,560000.0,487296.2931199997,0.0
+refinery_Yatong Refinery,0,560000.0,560000.0,0.0
+refinery_Yatong Refinery,1,560000.0,560000.0,0.0
+refinery_Yatong Refinery,2,560000.0,560000.0000000001,1.1641532182693481e-10
+refinery_Yatong Refinery,3,560000.0,560000.0,0.0
+refinery_Zhonghai  Refinery,0,560000.0,560000.0,0.0
+refinery_Zhonghai  Refinery,1,560000.0,560000.0,0.0
+refinery_Zhonghai  Refinery,2,560000.0,560000.0,0.0
+refinery_Zhonghai  Refinery,3,560000.0,560000.0,0.0
+refinery_Zhongjie Refinery,0,560000.0,560000.0,0.0
+refinery_Zhongjie Refinery,1,560000.0,560000.0,0.0
+refinery_Zhongjie Refinery,2,560000.0,560000.0,0.0
+refinery_Zhongjie Refinery,3,560000.0,560000.0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,0,560000.0,0.0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,1,560000.0,0.0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,2,560000.0,0.0,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,3,560000.0,0.0,0.0
+steel_Chengde Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Chengde Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Chengde Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Chengde Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hbis Laoting Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hbis Laoting Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hbis Laoting Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hbis Laoting Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Donghai Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Donghai Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Donghai Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Donghai Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Rongxin Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Rongxin Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Rongxin Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Rongxin Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,0,560000.0,0.0,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,1,560000.0,0.0,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,2,560000.0,0.0,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,3,560000.0,0.0,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Jingye Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Jingye Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Jingye Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Jingye Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Lingyuan Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Lingyuan Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Lingyuan Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Lingyuan Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Qian an Jiujiang Wire Co Ltd,0,560000.0,0.0,0.0
+steel_Qian an Jiujiang Wire Co Ltd,1,560000.0,0.0,0.0
+steel_Qian an Jiujiang Wire Co Ltd,2,560000.0,0.0,0.0
+steel_Qian an Jiujiang Wire Co Ltd,3,560000.0,0.0,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Guotang Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Guotang Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Guotang Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Guotang Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,0,560000.0,0.0,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,1,560000.0,0.0,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,2,560000.0,0.0,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,3,560000.0,0.0,0.0
+steel_Tianjin Pipe Corporation,0,560000.0,0.0,0.0
+steel_Tianjin Pipe Corporation,1,560000.0,0.0,0.0
+steel_Tianjin Pipe Corporation,2,560000.0,0.0,0.0
+steel_Tianjin Pipe Corporation,3,560000.0,0.0,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,3,560000.0,0.0,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,0,560000.0,0.0,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,1,560000.0,0.0,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,2,560000.0,0.0,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,3,560000.0,0.0,0.0

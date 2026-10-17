@@ -1,0 +1,24 @@
+{
+  "scenario": "CTL",
+  "label": "baseline",
+  "solver": "COPT",
+  "version": "8.0.7",
+  "status": "verified_decomposition_certificate",
+  "has_solution": true,
+  "seconds": 20.567676782608032,
+  "columns": 2848482,
+  "rows": 260404,
+  "route_calls": 222,
+  "electricity_scope": "Hydrogen uses renewable electricity only; co-located synthesis shares the same pool; DAC grid purchases cover DAC only; nonrenewable synthesis retains grid supply.",
+  "initial_solution_only": false,
+  "fixed_production_assets": false,
+  "fixed_asset_scope": "SAF and electrolyzer build/capacity; DAC build where present. Auxiliary inventory/transport use retains original optimization rules.",
+  "method": "Feasible full-model dispatch with fixed candidate binaries and weekly routes; global lower bound from routing projection",
+  "model_scope": {
+    "allow_ctl_shortage": true,
+    "description": "CTL diagnostic with its original 90% minimum-service inequality removed; all other constraints retained.",
+    "baseline_necessary_resource_upper_bound": 0.786147,
+    "summer_resource_bound_is_not_an_infeasibility_proof": true
+  },
+  "seconds_scope": "Final full-model dispatch solve only"
+}

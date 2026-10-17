@@ -1,0 +1,517 @@
+{
+  "optimization_status": 2,
+  "optimization_time": 0.4470219612121582,
+  "objective_value_lifecycle_total": 42363685560.244736,
+  "project_lifespan_years": 20,
+  "time_window_weeks": 4,
+  "facility_investment_cost": 4049623198.776045,
+  "facility_operation_cost": 196362948.14898586,
+  "production_cost": 1954779498.9898767,
+  "transport_operation_cost": 658676514.8556428,
+  "storage_equipment_cost": 0.0,
+  "storage_operation_cost": 0.0,
+  "h2_storage_investment": 0.0,
+  "h2_storage_operation": 0.0,
+  "ft_reactor_investment_cost": 10000000.0,
+  "ft_reactor_operation_cost": 1963629.4814898588,
+  "ft_catalyst_cost": 390955899.79797196,
+  "ft_energy_cost": 3127647198.3837757,
+  "ft_production_cost": 3518603098.181763,
+  "ng_transport_investment": 0.0,
+  "ng_transport_operation": 0.0,
+  "saf_transport_investment": 0.0,
+  "saf_transport_operation": 651593166.3299563,
+  "natural_gas_cost": 31322083505.48098,
+  "shortage_cost": 0.0,
+  "final_inventory_cost": 0.0,
+  "total_investment_cost": 4059623198.776045,
+  "total_operation_cost": 38304062361.468994,
+  "total_cost_excluding_shortage": 42363685560.24537,
+  "demand_fulfillment_ratio": 1.0,
+  "cost_breakdown": {
+    "facility_investment_cost": 4049623198.776045,
+    "facility_operation_cost": 196362948.14898586,
+    "production_cost": 1954779498.9898767,
+    "transport_operation_cost": 658676514.8556428,
+    "storage_equipment_cost": 0.0,
+    "storage_operation_cost": 0.0,
+    "h2_storage_investment": 0.0,
+    "h2_storage_operation": 0.0,
+    "ft_reactor_investment_cost": 10000000.0,
+    "ft_reactor_operation_cost": 1963629.4814898588,
+    "ft_production_cost": 3518603098.181763,
+    "ng_transport_investment": 0.0,
+    "ng_transport_operation": 0.0,
+    "saf_transport_investment": 0.0,
+    "saf_transport_operation": 651593166.3299563,
+    "natural_gas_cost": 31322083505.48098,
+    "final_inventory_cost": 0.0
+  },
+  "facilities": {
+    "ft_ft_candidate_26": {
+      "location": "ft_candidate_26",
+      "name": "FT设施候选点26(机场北京)",
+      "technology": "ft_direct_conversion",
+      "built": true,
+      "capacity_kg_per_hour": 68526.53955363082,
+      "max_annual_capacity_kg": 600292486.4898059,
+      "actual_annual_production_kg": 514121187.13736695,
+      "utilization_rate": 0.8564511445806637,
+      "location_type": "airport_with_ng_supply",
+      "transport_mode": "ng_pipeline_direct",
+      "latitude": 40.0801,
+      "longitude": 116.5846,
+      "source_id": "北京",
+      "ng_supply_capacity_m3_per_hour": 5000,
+      "ng_price_yuan_per_m3": 3.2
+    },
+    "ft_ft_candidate_27": {
+      "location": "ft_candidate_27",
+      "name": "FT设施候选点27(机场天津)",
+      "technology": "ft_direct_conversion",
+      "built": true,
+      "capacity_kg_per_hour": 19563.166576451997,
+      "max_annual_capacity_kg": 171373339.20971948,
+      "actual_annual_production_kg": 149540845.3103991,
+      "utilization_rate": 0.8726027397260276,
+      "location_type": "airport_with_ng_supply",
+      "transport_mode": "ng_pipeline_direct",
+      "latitude": 39.1244,
+      "longitude": 117.3462,
+      "source_id": "天津",
+      "ng_supply_capacity_m3_per_hour": 5000,
+      "ng_price_yuan_per_m3": 2.76
+    }
+  },
+  "ft_facilities": {
+    "ft_candidate_26": {
+      "location_id": "ft_candidate_26",
+      "name": "FT设施候选点26(机场北京)",
+      "built": true,
+      "capacity_kg_saf_per_hour": 68526.53955363082,
+      "max_annual_saf_capacity_kg": 600292486.4898059,
+      "source_type": "airport_with_ng_supply",
+      "source_id": "北京",
+      "latitude": 40.0801,
+      "longitude": 116.5846,
+      "ng_supply_capacity_m3_per_hour": 5000,
+      "ng_price_yuan_per_m3": 3.2,
+      "technology": "ft_direct_conversion"
+    },
+    "ft_candidate_27": {
+      "location_id": "ft_candidate_27",
+      "name": "FT设施候选点27(机场天津)",
+      "built": true,
+      "capacity_kg_saf_per_hour": 19563.166576451997,
+      "max_annual_saf_capacity_kg": 171373339.20971948,
+      "source_type": "airport_with_ng_supply",
+      "source_id": "天津",
+      "latitude": 39.1244,
+      "longitude": 117.3462,
+      "ng_supply_capacity_m3_per_hour": 5000,
+      "ng_price_yuan_per_m3": 2.76,
+      "technology": "ft_direct_conversion"
+    }
+  },
+  "saf_transport": {
+    "ft_candidate_26_北京_0": {
+      "from_location": "ft_candidate_26",
+      "to_airport": "北京",
+      "week": 0,
+      "transport_kg_saf": 11512458.64500998,
+      "distance_km": 0.0,
+      "from_latitude": 40.0801,
+      "from_longitude": 116.5846,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_26_北京_1": {
+      "from_location": "ft_candidate_26",
+      "to_airport": "北京",
+      "week": 1,
+      "transport_kg_saf": 5756229.322504992,
+      "distance_km": 0.0,
+      "from_latitude": 40.0801,
+      "from_longitude": 116.5846,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_26_北京_2": {
+      "from_location": "ft_candidate_26",
+      "to_airport": "北京",
+      "week": 2,
+      "transport_kg_saf": 11512458.64500998,
+      "distance_km": 0.0,
+      "from_latitude": 40.0801,
+      "from_longitude": 116.5846,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_26_北京_3": {
+      "from_location": "ft_candidate_26",
+      "to_airport": "北京",
+      "week": 3,
+      "transport_kg_saf": 10766637.01342635,
+      "distance_km": 0.0,
+      "from_latitude": 40.0801,
+      "from_longitude": 116.5846,
+      "to_latitude": 40.0801,
+      "to_longitude": 116.5846,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_27_天津_0": {
+      "from_location": "ft_candidate_27",
+      "to_airport": "天津",
+      "week": 0,
+      "transport_kg_saf": 3286611.984843935,
+      "distance_km": 0.0,
+      "from_latitude": 39.1244,
+      "from_longitude": 117.3462,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_27_天津_1": {
+      "from_location": "ft_candidate_27",
+      "to_airport": "天津",
+      "week": 1,
+      "transport_kg_saf": 3286611.984843936,
+      "distance_km": 0.0,
+      "from_latitude": 39.1244,
+      "from_longitude": 117.3462,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_27_天津_2": {
+      "from_location": "ft_candidate_27",
+      "to_airport": "天津",
+      "week": 2,
+      "transport_kg_saf": 1643305.992421968,
+      "distance_km": 0.0,
+      "from_latitude": 39.1244,
+      "from_longitude": 117.3462,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    },
+    "ft_candidate_27_天津_3": {
+      "from_location": "ft_candidate_27",
+      "to_airport": "天津",
+      "week": 3,
+      "transport_kg_saf": 3286611.9848439367,
+      "distance_km": 0.0,
+      "from_latitude": 39.1244,
+      "from_longitude": 117.3462,
+      "to_latitude": 39.1244,
+      "to_longitude": 117.3462,
+      "transport_type": "SAF",
+      "transport_mode": "truck",
+      "route_coordinates": []
+    }
+  },
+  "ng_transport": {},
+  "ng_pipeline_direct": {},
+  "inventory": {
+    "ft_candidate_27_50": {
+      "location": "ft_candidate_27",
+      "hour": 50,
+      "inventory_kg": 1.0186340659856796e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_51": {
+      "location": "ft_candidate_27",
+      "hour": 51,
+      "inventory_kg": 1.0913936421275139e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_52": {
+      "location": "ft_candidate_27",
+      "hour": 52,
+      "inventory_kg": 1.1641532182693481e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_53": {
+      "location": "ft_candidate_27",
+      "hour": 53,
+      "inventory_kg": 1.2369127944111824e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_54": {
+      "location": "ft_candidate_27",
+      "hour": 54,
+      "inventory_kg": 1.3096723705530167e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_172": {
+      "location": "ft_candidate_27",
+      "hour": 172,
+      "inventory_kg": 3.4924596548080444e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_173": {
+      "location": "ft_candidate_27",
+      "hour": 173,
+      "inventory_kg": 3.2741809263825417e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_174": {
+      "location": "ft_candidate_27",
+      "hour": 174,
+      "inventory_kg": 3.055902197957039e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_175": {
+      "location": "ft_candidate_27",
+      "hour": 175,
+      "inventory_kg": 2.837623469531536e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_176": {
+      "location": "ft_candidate_27",
+      "hour": 176,
+      "inventory_kg": 2.6193447411060333e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_177": {
+      "location": "ft_candidate_27",
+      "hour": 177,
+      "inventory_kg": 2.4010660126805305e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_178": {
+      "location": "ft_candidate_27",
+      "hour": 178,
+      "inventory_kg": 2.1827872842550278e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_179": {
+      "location": "ft_candidate_27",
+      "hour": 179,
+      "inventory_kg": 1.964508555829525e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_180": {
+      "location": "ft_candidate_27",
+      "hour": 180,
+      "inventory_kg": 1.7462298274040222e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_181": {
+      "location": "ft_candidate_27",
+      "hour": 181,
+      "inventory_kg": 1.5279510989785194e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_182": {
+      "location": "ft_candidate_27",
+      "hour": 182,
+      "inventory_kg": 1.3096723705530167e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_183": {
+      "location": "ft_candidate_27",
+      "hour": 183,
+      "inventory_kg": 1.0913936421275139e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_207": {
+      "location": "ft_candidate_27",
+      "hour": 207,
+      "inventory_kg": 2.546585164964199e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_208": {
+      "location": "ft_candidate_27",
+      "hour": 208,
+      "inventory_kg": 2.3283064365386963e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_209": {
+      "location": "ft_candidate_27",
+      "hour": 209,
+      "inventory_kg": 1.1641532182693481e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_210": {
+      "location": "ft_candidate_27",
+      "hour": 210,
+      "inventory_kg": 2.9831426218152046e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_211": {
+      "location": "ft_candidate_27",
+      "hour": 211,
+      "inventory_kg": 2.764863893389702e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_212": {
+      "location": "ft_candidate_27",
+      "hour": 212,
+      "inventory_kg": 2.546585164964199e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_213": {
+      "location": "ft_candidate_27",
+      "hour": 213,
+      "inventory_kg": 2.3283064365386963e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_214": {
+      "location": "ft_candidate_27",
+      "hour": 214,
+      "inventory_kg": 1.1641532182693481e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    },
+    "ft_candidate_27_215": {
+      "location": "ft_candidate_27",
+      "hour": 215,
+      "inventory_kg": 1.1641532182693481e-10,
+      "latitude": 39.1244,
+      "longitude": 117.3462
+    }
+  },
+  "annual_production_kg": 663662032.4477696,
+  "lifecycle_total_production_kg": 13273240648.955393,
+  "lifecycle_levelized_cost_per_kg": 6.501554612497611,
+  "lifecycle_levelized_cost_excluding_shortage_per_kg": 6.501554612497708,
+  "annual_levelized_cost_per_kg": 3.191661078154171,
+  "levelized_cost_constraint_satisfied": true,
+  "levelized_cost_threshold": 20,
+  "levelized_cost_margin_or_violation": 13.498445387502292,
+  "carbon_emissions": {
+    "detailed": {
+      "ng_extraction": 0.0,
+      "saf_facility": 356153.45801516564,
+      "ft_production": 125074767.65361772,
+      "saf_storage": 0.0,
+      "saf_transport": 0.0,
+      "ng_transport": 0.0
+    },
+    "by_stage": {
+      "raw_material_emissions": 0.0,
+      "facility_emissions": 356153.45801516564,
+      "production_emissions": 125074767.65361772,
+      "storage_emissions": 0.0,
+      "transport_emissions": 0.0,
+      "total_emissions": 125430921.11163288,
+      "annual_emissions": 1630601974.4512305
+    },
+    "total_production_kg": 51050925.57290536,
+    "carbon_intensity_kg": 2.456976434883754,
+    "carbon_intensity_mj": 56.94035770298387,
+    "vs_traditional_jet": -36.022069996647346,
+    "traditional_jet_ci_gco2e_per_mj": 89,
+    "abs_diff_vs_traditional_jet_gco2e_per_mj": -32.05964229701613,
+    "vs_corsia": 89.80119234327957,
+    "stage_contributions": {
+      "raw_material_emissions": {
+        "value": 0.0,
+        "percentage": 0.0
+      },
+      "facility_emissions": {
+        "value": 356153.45801516564,
+        "percentage": 0.283943907019698
+      },
+      "production_emissions": {
+        "value": 125074767.65361772,
+        "percentage": 99.71605609298031
+      },
+      "storage_emissions": {
+        "value": 0.0,
+        "percentage": 0.0
+      },
+      "transport_emissions": {
+        "value": 0.0,
+        "percentage": 0.0
+      }
+    },
+    "detailed_raw": {
+      "ng_extraction": 0.0,
+      "saf_facility": 356153.45801516564,
+      "ft_production": 125074767.65361772,
+      "saf_storage": 0.0,
+      "saf_transport": 0.0,
+      "ng_transport": 0.0
+    },
+    "revision_scope": "Archived control pathway; no new physical certification"
+  },
+  "cost_breakdown_raw": {
+    "facility_investment_cost": 4049623198.776045,
+    "facility_operation_cost": 196362948.14898586,
+    "production_cost": 1954779498.9898767,
+    "transport_operation_cost": 658676514.8556428,
+    "storage_equipment_cost": 0.0,
+    "storage_operation_cost": 0.0,
+    "h2_storage_investment": 0.0,
+    "h2_storage_operation": 0.0,
+    "ft_reactor_investment_cost": 10000000.0,
+    "ft_reactor_operation_cost": 1963629.4814898588,
+    "ft_catalyst_cost": 390955899.79797196,
+    "ft_energy_cost": 3127647198.3837757,
+    "ft_production_cost": 3518603098.181763,
+    "ng_transport_investment": 0.0,
+    "ng_transport_operation": 0.0,
+    "saf_transport_investment": 0.0,
+    "saf_transport_operation": 651593166.3299563,
+    "natural_gas_cost": 31322083505.48098,
+    "shortage_cost": 0.0,
+    "final_inventory_cost": 0.0,
+    "total_investment_cost": 4059623198.776045,
+    "total_operation_cost": 38304062361.468994,
+    "total_cost_excluding_shortage": 42363685560.24537,
+    "demand_fulfillment_ratio": 1.0
+  },
+  "revision_scope": "Archived control pathway; no new physical certification",
+  "source_sha256": "600de5945d834feee140891dc11b50e9b40cca3972d9f5da21ebe43a4e3b3f08",
+  "period_hours": 3,
+  "representative_source_weeks": [
+    1,
+    5,
+    14,
+    44
+  ],
+  "hydrogen_utilization_basis": "none"
+}

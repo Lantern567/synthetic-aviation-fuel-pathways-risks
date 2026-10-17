@@ -1,0 +1,48 @@
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/decomposed_runs/CCU-BH-FT/baseline/mip_no_root_cuts_design.log
+Model fingerprint: 62a90206
+
+Using Cardinal Optimizer v8.0.7 (e9a62f7d0e) on Linux (Ubuntu 22.04.5 LTS - x86_64)
+The CPU model is AMD EPYC 9654 96-Core Processor
+Hardware has 192 physical cores and 384 logical cores. Using instruction set X86_NATIVE (1)
+Minimizing a MIP problem
+
+The original problem has:
+    218010 rows, 191735 columns and 839281 non-zero elements
+    161 binaries
+
+Starting the MIP solver with 2 threads and 4 tasks
+
+Loading 1 initial MIP solution
+Initial MIP solution # 1 with objective value 63122 was accepted
+
+Presolving the problem
+
+The presolved problem has:
+    115554 rows, 152611 columns and 648972 non-zero elements
+    97 binaries
+
+Problem info:
+    Range of matrix coefficients:    [1e-02,2e+08]
+    Range of rhs coefficients:       [2e+06,1e+08]
+    Range of bound coefficients:     [1e+00,4e+11]
+    Range of cost coefficients:      [6e-07,2e+02]
+    Density of cost:                     30.5%
+
+     Nodes    Active  LPit/n  IntInf     BestBound  BestSolution     Gap   Time
+         0         1      --       0  0.000000e+00  6.312202e+04 100.00% 13.54s
+         0         1      --      33  6.233339e+04  6.312202e+04  1.249% 58.24s
+         1         1  321643      33  6.233339e+04  6.312202e+04  1.249%   900s
+         1         1  321643      33  6.233339e+04  6.312202e+04  1.249%   900s
+
+Best solution   : 63122.019319270
+Best bound      : 62333.394420606
+Best gap        : 1.2494%
+Solve time      : 900.03
+Solve node      : 1
+MIP status      : stopped (time limit reached)
+Solution status : integer feasible
+
+Violations      :     absolute     relative
+    bounds      :  2.56659e-09  2.56659e-09
+    rows        :  9.31323e-09  9.31323e-09
+    integrality :            0

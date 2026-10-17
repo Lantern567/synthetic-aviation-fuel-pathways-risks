@@ -1,0 +1,307 @@
+commodity,location,type,saved_peak_inventory_kg,charged_location,average_proxy_kg,represented_hours,independent_holding_cost_cny,independent_equipment_cost_cny
+saf,airport_北京,airport,11306879.026349084,True,5653439.513174542,672.0,494601119.80786335,113068790.26349084
+saf,airport_天津,airport,3227922.485114582,True,1613961.242557291,672.0,141200243.8577574,32279224.85114582
+saf,lng_lng_terminal_1,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_2,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_3,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_4,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_5,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_53,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_56,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_6,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_60,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_61,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_63,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_64,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_68,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_69,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_70,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_79,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_8,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_80,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_81,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,lng_lng_terminal_9,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_0,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_1,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_10,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_11,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_12,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_13,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_14,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_15,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_16,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_17,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_18,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_19,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_2,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_20,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_21,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_22,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_23,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_24,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_25,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_26,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_27,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_28,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_29,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_3,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_30,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_31,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_32,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_33,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_34,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_35,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_36,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_37,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_38,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_39,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_4,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_40,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_41,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_42,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_43,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_44,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_45,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_46,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_47,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_48,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_49,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_5,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_50,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_51,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_52,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_53,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_54,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_55,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_56,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_57,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_58,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_59,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_6,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_60,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_61,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_62,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_63,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_64,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_65,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_66,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_7,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_8,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_9,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_149,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_15,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_150,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_151,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_152,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_153,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_154,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_155,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_156,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_157,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_158,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_159,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_160,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_161,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_162,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_163,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_164,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_165,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_166,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_167,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_168,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_169,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_171,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_172,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_173,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_174,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_175,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_176,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_177,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_178,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_179,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_18,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_180,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_181,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_183,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_187,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_188,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_189,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_19,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_190,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_191,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_196,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_198,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_199,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_20,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_201,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_202,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_21,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_213,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_22,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_25,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_26,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_405,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_406,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_62,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_63,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_68,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_70,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_71,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_76,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_77,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_84,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_85,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_86,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_94,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_95,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,ng_pipeline_pipeline_99,ng_pipeline,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Binyang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_CNOOC Dongying Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Fuyu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Guangyuan Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Haike Ruilin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Haiyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hebei Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hebei Qianhai Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Huabei Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Hualian Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Huayu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Lianhe Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_PetroChina Qinhuangdao Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_PetroChina Rosneft Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Petrochina Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Qinhuangdao Far East Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Shenchi Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Beijing Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Cangzhou Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Shijiazhuang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Sinopec Tianjin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Tianhong 1 Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Wudi Xinyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Xinhai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Yatong Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Zhonghai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,refinery_Zhongjie Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Chengde Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Chengde Jianlong Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hbis Laoting Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Anfeng Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Donghai Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Huaxi Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Jinxi Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Rongxin Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Xinda Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Yanshan Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Jingye Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Lingyuan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qian an Jiujiang Wire Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qinhuangdao Baigong Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shanxi Tongde Xinghua Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shougang Jingtang United Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Shougang Qian an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Donghai Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Ganglu Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Guotang Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Medium Thick Plate Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Songting Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tangshan Wenfeng Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin New Tiangang United Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Pipe Corporation,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Tianjin Rockcheck Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+saf,steel_Xinji Aosen Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,airport_北京,airport,325102.5477044312,True,162551.2738522156,672.0,14221084.684136838,6502050.954088625
+h2,airport_天津,airport,82165.29962109808,True,41082.64981054904,672.0,3594188.0254701725,1643305.9924219616
+h2,lng_lng_terminal_1,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_2,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_3,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_4,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_5,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_53,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_56,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_6,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_60,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_61,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_63,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_64,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_68,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_69,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_70,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_79,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_8,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_80,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_81,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,lng_lng_terminal_9,lng_terminal,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Binyang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_CNOOC Dongying Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Fuyu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Guangyuan Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Haike Ruilin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Haiyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Hebei Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Hebei Qianhai Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Huabei Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Hualian Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Huayu Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Lianhe Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_PetroChina Qinhuangdao Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_PetroChina Rosneft Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Petrochina Dagang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Qinhuangdao Far East Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Shenchi Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Sinopec Beijing Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Sinopec Cangzhou Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Sinopec Shijiazhuang Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Sinopec Tianjin Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Tianhong 1 Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Tianjin  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Wudi Xinyue Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Xinhai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Yatong Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Zhonghai  Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,refinery_Zhongjie Refinery,byproduct_hydrogen_refinery,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Chengde Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Chengde Jianlong Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hbis Laoting Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Anfeng Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Donghai Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Huaxi Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Jinxi Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Rongxin Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Tianzhu Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Xinda Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Yanshan Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Jingye Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Lingyuan Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qian an Jiujiang Wire Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qinhuangdao Baigong Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shanxi Tongde Xinghua Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shougang Jingtang United Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Shougang Qian an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Donghai Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Ganglu Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Guotang Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Medium Thick Plate Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Songting Iron and Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tangshan Wenfeng Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin New Tiangang United Special Steel Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin Pipe Corporation,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Tianjin Rockcheck Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0
+h2,steel_Xinji Aosen Iron and Steel Group Co Ltd,byproduct_hydrogen_steel,0.0,True,0.0,672.0,0.0,0.0

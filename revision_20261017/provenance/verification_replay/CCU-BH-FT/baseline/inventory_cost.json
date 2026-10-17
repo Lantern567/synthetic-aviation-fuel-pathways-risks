@@ -1,0 +1,91 @@
+{
+  "scenario": "CCU-BH-FT",
+  "label": "baseline",
+  "run": "\\\\?\\E:\\nexus_scientific_revision_20261017\\archive_checks\\final_verification18\\runtimes\\compute_bh_final\\verified_runs\\CCU-BH-FT\\baseline",
+  "average_inventory_proxy": "Half the sum of charged site-specific saved peaks",
+  "represented_hours": 672.0,
+  "holding_charge_cny_per_kg_hour": 0.00102,
+  "lifecycle_operation_factor": 127.63591629684072,
+  "scope": "Independent saved-stock maxima and configured direct holding/equipment costs, with original location scopes and corrected physical hours. Costs are already in the optimized objective and are not added again.",
+  "checks": {
+    "saf.operation_cost_cny": {
+      "actual": 635801363.6656213,
+      "expected": 635801363.6656208,
+      "error": 4.76837158203125e-07,
+      "tolerance": 6.358013636656208,
+      "passed": true
+    },
+    "saf.equipment_cost_cny": {
+      "actual": 145348015.1146367,
+      "expected": 145348015.1146367,
+      "error": 0.0,
+      "tolerance": 1.4534801511463669,
+      "passed": true
+    },
+    "saf.hourly_charge_cny_per_kg_hour": {
+      "actual": 0.00102,
+      "expected": 0.00102,
+      "error": 0.0,
+      "tolerance": 1.0200000000000001e-11,
+      "passed": true
+    },
+    "saf.represented_hours": {
+      "actual": 672.0,
+      "expected": 672.0,
+      "error": 0.0,
+      "tolerance": 6.72e-06,
+      "passed": true
+    },
+    "saf.recorded_expression_cost_cny": {
+      "actual": 635801363.6656213,
+      "expected": 635801363.6656208,
+      "error": 4.76837158203125e-07,
+      "tolerance": 6.358013636656208,
+      "passed": true
+    },
+    "h2.operation_cost_cny": {
+      "actual": 0.0,
+      "expected": 2.1109212476143014e-06,
+      "error": -2.1109212476143014e-06,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "h2.equipment_cost_cny": {
+      "actual": 0.0,
+      "expected": 9.65138582387226e-07,
+      "error": -9.65138582387226e-07,
+      "tolerance": 0.001,
+      "passed": true
+    },
+    "h2.hourly_charge_cny_per_kg_hour": {
+      "actual": 0.00102,
+      "expected": 0.00102,
+      "error": 0.0,
+      "tolerance": 1.0200000000000001e-11,
+      "passed": true
+    },
+    "h2.represented_hours": {
+      "actual": 672.0,
+      "expected": 672.0,
+      "error": 0.0,
+      "tolerance": 6.72e-06,
+      "passed": true
+    },
+    "h2.recorded_expression_cost_cny": {
+      "actual": 0.0,
+      "expected": 2.1109212476143014e-06,
+      "error": -2.1109212476143014e-06,
+      "tolerance": 0.001,
+      "passed": true
+    }
+  },
+  "passed": true,
+  "input_sha256": {
+    "summary.json": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+    "model_parameters.json": "093de53af9e117b85c7478fd506c43735b48a301f8e778d24250222e4579f721",
+    "inventory_cost_parameters.json": "a3661913374c3fafea87df8dc3c2a238ca474730459e0ca5c7e47eeb2da5e960",
+    "config.yaml": "96b64f5b02e0991027398cfdae8d9fb2f07588e7319578c7e065b0ba52de5c20",
+    "saf_inventory.csv": "869f8c202b530c991244815a571b6624219f3cf151f55771f7da662b080c6a5a",
+    "h2_inventory.csv": "ddbeb4be72af84ae57b4d19eca8600e83e0a34e5e4bd1245eaacf9ff53193b39"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "docx_saved": false,
+  "publication_values_sha256": "813bf71f875424e8c2bfd70d8c71a1bbfe88ec4e7295677c040ae3f1110b6211",
+  "documents": {
+    "Manuscript_Clean.docx": {
+      "input_docx_sha256": "ce253dc06a89b5b561e314938c2952091862f3adbccff1939521e2a3968fa7e0",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 38,
+      "accepted_text_changed": true
+    },
+    "Manuscript_Marked_Changes.docx": {
+      "input_docx_sha256": "ee4d784dd79ee1452fb2c4d3aaeb1310ea23d5e16ebfa2d0c085bf7c7378d85c",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 38,
+      "accepted_text_changed": true
+    },
+    "Supplementary_Figure_Archive.docx": {
+      "input_docx_sha256": "c6a5c8004f6ec9929f264c84bb1e14d945994022e2f5e4e493f1f6962853d57c",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 3,
+      "accepted_text_changed": true
+    },
+    "Supplementary_Figure_Archive_Marked_Changes.docx": {
+      "input_docx_sha256": "91b5f4ea4b3e5aed2158ef3f8023460030cb97ab35ac408a7e73e649aca7cc9d",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 3,
+      "accepted_text_changed": true
+    },
+    "Supplementary_Information.docx": {
+      "input_docx_sha256": "5942c739a62525d0c710d573379617e324dcc64a119cf03174561f5cdd8bcfc5",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 33,
+      "accepted_text_changed": true
+    },
+    "Supplementary_Information_Marked_Changes.docx": {
+      "input_docx_sha256": "aab3eaa2d671bc6fcdc36c5ce442e915387281698c4b4707e93728ca3360712f",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 33,
+      "accepted_text_changed": true
+    },
+    "作者审阅/Manuscript_Chinese.docx": {
+      "input_docx_sha256": "2d411ba19404bfd74d11a60d34cbea5d45c748a5a4bdefa2136f992d2d0f58b0",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 38,
+      "accepted_text_changed": true
+    },
+    "作者审阅/Manuscript_Marked_Changes_Chinese.docx": {
+      "input_docx_sha256": "0db6cdeead785e83415a95ff944ea8d2ae9dfcf03e736fb8b54f6a092830b9f4",
+      "citation_sequence_preserved": true,
+      "superscript_citation_run_count": 38,
+      "accepted_text_changed": true
+    }
+  },
+  "pairs": [
+    {
+      "clean": "Manuscript_Clean.docx",
+      "marked": "Manuscript_Marked_Changes.docx",
+      "accepted_paragraphs_match": true,
+      "accepted_tables_match": true
+    },
+    {
+      "clean": "作者审阅/Manuscript_Chinese.docx",
+      "marked": "作者审阅/Manuscript_Marked_Changes_Chinese.docx",
+      "accepted_paragraphs_match": true,
+      "accepted_tables_match": true
+    },
+    {
+      "clean": "Supplementary_Information.docx",
+      "marked": "Supplementary_Information_Marked_Changes.docx",
+      "accepted_paragraphs_match": true,
+      "accepted_tables_match": true
+    },
+    {
+      "clean": "Supplementary_Figure_Archive.docx",
+      "marked": "Supplementary_Figure_Archive_Marked_Changes.docx",
+      "accepted_paragraphs_match": true,
+      "accepted_tables_match": true
+    }
+  ]
+}

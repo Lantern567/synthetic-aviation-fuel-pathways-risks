@@ -1,0 +1,1066 @@
+[
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_CNOOC Dongying Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 2581.267079999986,
+    "quantity_unit": "kg",
+    "distance_km": 188.25510290569355,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.088644,
+    "source_longitude": 118.88525,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.88525,
+        38.088644
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Guangyuan Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 340.71366000000097,
+    "quantity_unit": "kg",
+    "distance_km": 206.4430365485234,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 37.676005,
+    "source_longitude": 118.339336,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.339336,
+        37.676005
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Haike Ruilin Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 5111.554560000028,
+    "quantity_unit": "kg",
+    "distance_km": 191.07332897767367,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.059069,
+    "source_longitude": 118.873916,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.873916,
+        38.059069
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Hebei Dagang Refinery",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 3147.14064000001,
+    "quantity_unit": "kg",
+    "distance_km": 64.05579371249486,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.435733,
+    "source_longitude": 117.378077,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.378077,
+        38.435733
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Hebei Qianhai Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 15343.160280000044,
+    "quantity_unit": "kg",
+    "distance_km": 77.16786965784303,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.360699,
+    "source_longitude": 117.405885,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.405885,
+        38.360699
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Huayu Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 3147.14064000001,
+    "quantity_unit": "kg",
+    "distance_km": 78.10253957346946,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.490239,
+    "source_longitude": 117.268074,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.268074,
+        38.490239
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Lianhe Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 7156.686179999979,
+    "quantity_unit": "kg",
+    "distance_km": 189.0805405334625,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.097408,
+    "source_longitude": 118.879765,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.879765,
+        38.097408
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_PetroChina Qinhuangdao Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 1377.2988599999928,
+    "quantity_unit": "kg",
+    "distance_km": 214.72050548137716,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 39.990302,
+    "source_longitude": 119.640584,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        119.640584,
+        39.990302
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_PetroChina Rosneft Tianjin  Refinery",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 22182.07361999994,
+    "quantity_unit": "kg",
+    "distance_km": 28.12136517928687,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.821201,
+    "source_longitude": 117.410056,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.410056,
+        38.821201
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Petrochina Dagang Refinery",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 8519.540819999977,
+    "quantity_unit": "kg",
+    "distance_km": 28.121365179286947,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.737926,
+    "source_longitude": 117.512307,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.512307,
+        38.737926
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Qinhuangdao Far East Refinery",
+    "destination": "steel_Tangshan Ganglu Iron and Steel Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 2164.0840200000043,
+    "quantity_unit": "kg",
+    "distance_km": 107.96796848387324,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 39.86328,
+    "source_longitude": 119.223595,
+    "destination_latitude": 40.183913,
+    "destination_longitude": 118.073913,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        119.223595,
+        39.86328
+      ],
+      [
+        118.073913,
+        40.183913
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Shenchi Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 4430.127240000014,
+    "quantity_unit": "kg",
+    "distance_km": 189.03963386929945,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.096965,
+    "source_longitude": 118.87927,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.87927,
+        38.096965
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Sinopec Cangzhou Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 5963.763540000013,
+    "quantity_unit": "kg",
+    "distance_km": 96.78014735600284,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.338765,
+    "source_longitude": 116.872577,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        116.872577,
+        38.338765
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Sinopec Tianjin Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 23546.627579977558,
+    "quantity_unit": "kg",
+    "distance_km": 22.35713180250862,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.972631,
+    "source_longitude": 117.741279,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.741279,
+        38.972631
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Tianhong 1 Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 8519.540819999977,
+    "quantity_unit": "kg",
+    "distance_km": 189.07891132033,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.092496,
+    "source_longitude": 118.893292,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.893292,
+        38.092496
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Tianjin  Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 2215.063620000007,
+    "quantity_unit": "kg",
+    "distance_km": 48.30298915373034,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 39.075368,
+    "source_longitude": 117.002342,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.002342,
+        39.075368
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Wudi Xinyue Refinery",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 13679.526000275097,
+    "quantity_unit": "kg",
+    "distance_km": 100.37850438743544,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.095197,
+    "source_longitude": 117.762038,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.762038,
+        38.095197
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Xinhai  Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 10223.95878,
+    "quantity_unit": "kg",
+    "distance_km": 91.0594299886285,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.296875,
+    "source_longitude": 117.701561,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.701561,
+        38.296875
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Yatong Refinery",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 6815.972519999985,
+    "quantity_unit": "kg",
+    "distance_km": 188.1016924292746,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.086922,
+    "source_longitude": 118.879533,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.879533,
+        38.086922
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "refinery_Zhongjie Refinery",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 4917.832079999981,
+    "quantity_unit": "kg",
+    "distance_km": 57.21400553324091,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.465418,
+    "source_longitude": 117.611834,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_refinery",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.611834,
+        38.465418
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Chengde Iron and Steel Group Co Ltd",
+    "destination": "steel_Chengde Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 350000.0,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 40.947707,
+    "source_longitude": 117.719747,
+    "destination_latitude": 40.947707,
+    "destination_longitude": 117.719747,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.719747,
+        40.947707
+      ],
+      [
+        117.719747,
+        40.947707
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tangshan Ganglu Iron and Steel Co Ltd",
+    "destination": "steel_Tangshan Ganglu Iron and Steel Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 350000.0,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 40.183913,
+    "source_longitude": 118.073913,
+    "destination_latitude": 40.183913,
+    "destination_longitude": 118.073913,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        118.073913,
+        40.183913
+      ],
+      [
+        118.073913,
+        40.183913
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 350000.0,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 39.031083,
+    "source_longitude": 117.499246,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.499246,
+        39.031083
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+    "destination": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 350000.0,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 39.300258,
+    "source_longitude": 117.800231,
+    "destination_latitude": 39.300258,
+    "destination_longitude": 117.800231,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.800231,
+        39.300258
+      ],
+      [
+        117.800231,
+        39.300258
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "H2",
+    "mode": "pipeline",
+    "weekly_quantity": 350000.0,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "hydrogen_transport_accounting.csv",
+    "source_latitude": 38.970638,
+    "source_longitude": 117.495794,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.495794,
+        38.970638
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Chengde Iron and Steel Group Co Ltd",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 3449921.747795851,
+    "quantity_unit": "kg",
+    "distance_km": 171.116119,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 40.947707,
+    "source_longitude": 117.719747,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.719747,
+        40.947707
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tangshan Ganglu Iron and Steel Co Ltd",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2333364.5869397325,
+    "quantity_unit": "kg",
+    "distance_km": 167.150278,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 40.183913,
+    "source_longitude": 118.073913,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        118.073913,
+        40.183913
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 599602.2708808902,
+    "quantity_unit": "kg",
+    "distance_km": 167.619647,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 39.031083,
+    "source_longitude": 117.499246,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.499246,
+        39.031083
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2603327.073371137,
+    "quantity_unit": "kg",
+    "distance_km": 23.885198,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 39.031083,
+    "source_longitude": 117.499246,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.499246,
+        39.031083
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2491308.167005483,
+    "quantity_unit": "kg",
+    "distance_km": 168.65177400000002,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 39.300258,
+    "source_longitude": 117.800231,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.800231,
+        39.300258
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 1012749.1338658691,
+    "quantity_unit": "kg",
+    "distance_km": 175.785214,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 38.970638,
+    "source_longitude": 117.495794,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.495794,
+        38.970638
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 272458.41336730693,
+    "quantity_unit": "kg",
+    "distance_km": 32.050766,
+    "distance_source": "Actual model GraphHopper route cache",
+    "source_latitude": 38.970638,
+    "source_longitude": 117.495794,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "byproduct_hydrogen_steel",
+    "destination_type": "airport",
+    "coordinates": [
+      [
+        117.495794,
+        38.970638
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_6",
+    "destination": "steel_Tangshan Ganglu Iron and Steel Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 8166776.054289037,
+    "quantity_unit": "kg",
+    "distance_km": 115.401312957788,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.9801382,
+    "source_longitude": 117.4630704,
+    "destination_latitude": 40.183913,
+    "destination_longitude": 118.073913,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.4630704,
+        39.9801382
+      ],
+      [
+        118.073913,
+        40.183913
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_8",
+    "destination": "steel_Chengde Iron and Steel Group Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 15012818.82639424,
+    "quantity_unit": "kg",
+    "distance_km": 138.47273856028255,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.9527554,
+    "source_longitude": 116.8487413,
+    "destination_latitude": 40.947707,
+    "destination_longitude": 117.719747,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        116.8487413,
+        39.9527554
+      ],
+      [
+        117.719747,
+        40.947707
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_11",
+    "destination": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 3004218.584519192,
+    "quantity_unit": "kg",
+    "distance_km": 85.44734571119011,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.1512174,
+    "source_longitude": 117.0382573,
+    "destination_latitude": 39.300258,
+    "destination_longitude": 117.800231,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.0382573,
+        39.1512174
+      ],
+      [
+        117.800231,
+        39.300258
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_12",
+    "destination": "steel_Tianjin Rockcheck Steel Group Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 8687321.03440412,
+    "quantity_unit": "kg",
+    "distance_km": 54.01819999830492,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.1512174,
+    "source_longitude": 117.0382573,
+    "destination_latitude": 38.970638,
+    "destination_longitude": 117.495794,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.0382573,
+        39.1512174
+      ],
+      [
+        117.495794,
+        38.970638
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_14",
+    "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 11210252.704882083,
+    "quantity_unit": "kg",
+    "distance_km": 54.6558504990048,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.1512174,
+    "source_longitude": 117.0382573,
+    "destination_latitude": 39.031083,
+    "destination_longitude": 117.499246,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.0382573,
+        39.1512174
+      ],
+      [
+        117.499246,
+        39.031083
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "CCU-BH-MTJ",
+    "source": "co2_source_24",
+    "destination": "steel_Tianjin New Tiangang United Special Steel Co Ltd",
+    "cargo": "CO2",
+    "mode": "pipeline",
+    "weekly_quantity": 5715360.0,
+    "quantity_unit": "kg",
+    "distance_km": 72.86292450172432,
+    "distance_source": "ccu_co2_transport_accounting.csv",
+    "source_latitude": 39.300551,
+    "source_longitude": 117.190744,
+    "destination_latitude": 39.300258,
+    "destination_longitude": 117.800231,
+    "source_type": "co2_capture",
+    "destination_type": "byproduct_hydrogen_steel",
+    "coordinates": [
+      [
+        117.190744,
+        39.300551
+      ],
+      [
+        117.800231,
+        39.300258
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  }
+]

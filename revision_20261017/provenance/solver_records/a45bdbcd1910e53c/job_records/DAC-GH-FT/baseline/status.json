@@ -1,0 +1,50 @@
+{
+  "scenario": "DAC-GH-FT",
+  "label": "baseline",
+  "stage": "inventory_cost",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 0,
+      "seconds": 0.00010347366333007812,
+      "reused_verified_artifact": true
+    },
+    {
+      "stage": "projection",
+      "exit_code": 0,
+      "seconds": 0.2390735149383545,
+      "reused_verified_artifact": true
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 136.88975739479065,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 4.2540459632873535,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "co2",
+      "exit_code": 0,
+      "seconds": 6.859160661697388,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 4.40269660949707,
+      "reused_verified_artifact": false
+    },
+    {
+      "stage": "inventory_cost",
+      "exit_code": 0,
+      "seconds": 0.3664712905883789,
+      "reused_verified_artifact": false
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+REVISION_STAGE_STARTED GTL-BH baseline model
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/execute_job.py", line 49, in <module>
+    raise RuntimeError(f'{scenario}/{label}: {stage} failed; inspect {output / (stage + ".log")}')
+RuntimeError: GTL-BH/baseline: model failed; inspect /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/job_records/GTL-BH/baseline/model.log
+REVISION_STAGE_STARTED GTL-BH baseline model
+REVISION_STAGE_STARTED GTL-BH baseline projection
+REVISION_STAGE_STARTED GTL-BH baseline design
+REVISION_STAGE_STARTED GTL-BH baseline dispatch
+REVISION_STAGE_STARTED GTL-BH baseline certificate
+REVISION_STAGE_STARTED GTL-BH baseline export
+REVISION_STAGE_STARTED GTL-BH baseline physics
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/execute_job.py", line 49, in <module>
+    raise RuntimeError(f'{scenario}/{label}: {stage} failed; inspect {output / (stage + ".log")}')
+RuntimeError: GTL-BH/baseline: physics failed; inspect /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/job_records/GTL-BH/baseline/physics.log

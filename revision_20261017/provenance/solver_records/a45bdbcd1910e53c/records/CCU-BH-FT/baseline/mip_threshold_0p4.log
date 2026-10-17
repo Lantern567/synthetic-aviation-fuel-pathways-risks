@@ -1,0 +1,19 @@
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/decomposed_runs/CCU-BH-FT/baseline/mip_threshold_0p4.log
+Model fingerprint: 71132b5e
+
+Using Cardinal Optimizer v8.0.7 (e9a62f7d0e) on Linux (Ubuntu 22.04.5 LTS - x86_64)
+The CPU model is AMD EPYC 9654 96-Core Processor
+Hardware has 192 physical cores and 384 logical cores. Using instruction set X86_NATIVE (1)
+Minimizing an LP problem
+
+The original problem has:
+    218010 rows, 191735 columns and 839281 non-zero elements
+The presolved problem is empty
+
+Postsolving
+
+Method   Iteration           Objective  Primal.NInf   Dual.NInf        Time
+Dual             0    1.6289829158e+07            0           0       0.12s
+
+Solving finished
+Status: Optimal  Objective: 1.6289829158e+07  Iterations: 0(0)  Time: 0.12s

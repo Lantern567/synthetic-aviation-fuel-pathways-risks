@@ -1,0 +1,27 @@
+{
+  "weeks": [
+    1,
+    5,
+    14,
+    44
+  ],
+  "plants": 109,
+  "periods": 224,
+  "hours_per_period": 3,
+  "energy_mwh": {
+    "solar_plant": 10806.16089712,
+    "wind_farm": 606812.2106899396
+  },
+  "capacity_mw": {
+    "solar_plant": 748.6,
+    "wind_farm": 3596.5
+  },
+  "demand_kg": 51050925.57290507,
+  "solar_conversion": "Original effective factor 0.1632 retained; P=capacity_MW*(raw_radiation/36)/1000*0.1632",
+  "solar_coordinates": "Native HDF5 [longitude,latitude], nearest 0.05-degree cell, per inventory phase",
+  "wind_conversion": "Source mean MW; three-hour duration and distinct inventory phases retained",
+  "source": "https://download.pangaea.de/reference/117364/attachments/DataDescription2020.pdf",
+  "time_zone": "UTC+8, cyclic source weather year at year boundary",
+  "spatial_assumption": "Original project reference locations retained; generation summed over selected phase locations",
+  "candidate_status": "Retained planning candidates include planned and under-construction wind projects"
+}

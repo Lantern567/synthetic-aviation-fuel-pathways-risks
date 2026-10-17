@@ -1,0 +1,24 @@
+{
+  "temporal_metrics": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt\u7684\u6587\u7ae0\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\temporal_data\\all_pathway_temporal_metrics.csv",
+    "sha256": "dbea16d5f9c6a78a60a59c7c795e4f5ed8a6f6262f19cd90eaee728bf4edbffe"
+  },
+  "network_metrics_sha256": "2465e42eab30877c63e7fdde05cd8df0224b41bdd0fa31756e8e93172ddacac4",
+  "carbon_sources": {
+    "DAC-BH-MTJ_carbon.json": "2e4d250f441163abaee001c65052db4cc18a6e9b116baf601bc5fd8fcc6d65ac",
+    "DAC-BH-FT_carbon.json": "63ac03faecc87bf375f7159da6fffbdc1b5fbbef147401d5fa1b3ee9a8669d39",
+    "GTL_carbon.json": "c8bb841a3daa8f16d8325b8f70b4e520856629c88110b1c4577b6569979e6a16",
+    "GTL-BH_carbon.json": "17352b185bf9a295a8561e3a51e4d1f7be8b2396ebe95e7e49517aeb1bd84d32",
+    "CCU-BH-FT_carbon.json": "19d9d57a05ba24a318f6c74acd373cb0034d3bf70e9777fa051c9f9a1775f2f6",
+    "CCU-BH-MTJ_carbon.json": "f57049b664d74c57cd1279b3e49e8dbc41aea2d626d8b1f093648d4a69d3064c",
+    "GTL-GH_carbon.json": "898ad01de530ed29b506edc055d4d490adbdb7897ec6504fe79f93c27432f2b0",
+    "DAC-GH-MTJ_carbon.json": "ccef15c677ae5026578d9bd4300eb312c5674c66c169439f4b55e16a239bed7c",
+    "DAC-GH-FT_carbon.json": "f95eb6837645fcff49276fd225cd94199bb6f1efa9250b3fe3dc1dce551884b0",
+    "CCU-GH-FT_carbon.json": "a39bf15007ed9cb93ccaa9818b1de3bd553a6be5b025cf860f805ac5e6650451",
+    "CCU-GH-MTJ_carbon.json": "f9f7bfdddd60852f560e2fd21cfc24aa6f0617950ebdba517ff23e8e5774c957",
+    "CTL-BH_carbon.json": "a90bcbad1c0691be1fa35cec83aab9037d21fcbe79d7e15900232f6147995b0d",
+    "CTL_carbon.json": "3f76793c17811eb4c5b68901148f12294f7779660539cc320dbaa18cb3bcae46"
+  },
+  "plotted_carbon": "Direct supply-chain carbon intensity in g CO2e/MJ",
+  "metrics_sha256": "3aa1d3550b3043d4663c85954bbf25906e40e0cc579b839983620bb6a4c79cd8"
+}

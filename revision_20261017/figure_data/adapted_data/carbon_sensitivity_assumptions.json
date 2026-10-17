@@ -1,0 +1,8 @@
+{
+  "fuel_carbon_mass_fraction": 0.85,
+  "co2_to_carbon_molar_mass_ratio": 3.6666666666666665,
+  "archived_GTL_fuel_energy_mj_per_kg": 43.15,
+  "combustion_basis": "Retained fuel carbon composition assumption, 0.85 kg C per kg fuel, converted by CO2/C=44/12; energy uses each new run configuration",
+  "capture_attribution_basis": "Actual normalized_carbon_emissions.detailed.co2_utilization_credit for the same real solution; the negative term is removed once",
+  "existing_formula_source": "github_current_20261015/repository/postprocess_source/original_source/inventory_carbon_update_20261013/figures_data/update_carbon.py:143-145"
+}

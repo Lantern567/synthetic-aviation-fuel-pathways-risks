@@ -1,0 +1,124 @@
+{
+  "figure": "Figure 3",
+  "pixels": [
+    4220,
+    2081
+  ],
+  "original_layout": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus返稿_实习生交接包_20260928\\02_Nexus原投稿\\03_图件\\Figure 3 Source File.png",
+  "original_layout_sha256": "e6adeff4b872abe7bafbdd9396b13f5c0e6182deaf999bd11eb43f809424dd35",
+  "png_sha256": "f3538dbc9e7793190e1e0d2a880e3248bd0ac0d5c54a33b4a57ad174717a4282",
+  "pdf_sha256": "e9afd850f43c773238917943dffbdb1834463e2fb5c197ec18e623fb7e113a9c",
+  "metric_source_sha256": "dbea16d5f9c6a78a60a59c7c795e4f5ed8a6f6262f19cd90eaee728bf4edbffe",
+  "panels": [
+    {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\outputs\\pareto_temporal_distribution_latest.pdf",
+      "source_sha256": "bcd5fc1ce812cbd69d1126326c4a03f035d80776dce54f4f24bf0c6eb84bfcce",
+      "clip_pdf_points": [
+        0.0,
+        0.0,
+        361.7919921875,
+        503.4825744628906
+      ],
+      "target_pixel_bounds": [
+        22,
+        22,
+        1490,
+        2053
+      ]
+    },
+    {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\outputs\\pareto_penalty_comparison_latest.pdf",
+      "source_sha256": "3f792ebf6e2b4c44d647c67503daa6c70645235d3c931546ae59147176d9374a",
+      "clip_pdf_points": [
+        1.0200000000000005,
+        55.14325000000002,
+        421.92451605504584,
+        345.564
+      ],
+      "target_pixel_bounds": [
+        1490,
+        128,
+        2948,
+        1115
+      ]
+    },
+    {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\outputs\\pareto_penalty_comparison_latest.pdf",
+      "source_sha256": "3f792ebf6e2b4c44d647c67503daa6c70645235d3c931546ae59147176d9374a",
+      "clip_pdf_points": [
+        430.8045160550459,
+        55.14325000000002,
+        754.404,
+        345.564
+      ],
+      "target_pixel_bounds": [
+        2950,
+        128,
+        4180,
+        1115
+      ]
+    },
+    {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\outputs\\pareto_penalty_comparison_latest.pdf",
+      "source_sha256": "3f792ebf6e2b4c44d647c67503daa6c70645235d3c931546ae59147176d9374a",
+      "clip_pdf_points": [
+        226.75199999999998,
+        1.0200000000000005,
+        528.6719999999999,
+        38.38799999999999
+      ],
+      "target_pixel_bounds": [
+        1790,
+        14,
+        2935,
+        125
+      ]
+    },
+    {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_temporal\\outputs\\pareto_penalty_driver_heatmap_latest.pdf",
+      "source_sha256": "aefbef0c53c877f142efd0a3907611b9e79e4f0eaf4a43dd74898dfc25916e55",
+      "clip_pdf_points": [
+        1.0200000000000005,
+        23.339999999999975,
+        1096.4746442371543,
+        364.771604743083
+      ],
+      "target_pixel_bounds": [
+        1500,
+        1255,
+        4180,
+        2057
+      ]
+    }
+  ],
+  "selected_configuration_metrics": [
+    {
+      "scenario": "GTL-BH",
+      "demand_fulfillment_ratio": 1.0,
+      "mean_synaf_utilization": 0.8624008704627861,
+      "worst_week_retention": 0.8834606891094513,
+      "mean_utilization_capacity_premium_pct": 15.955356058879522,
+      "additional_worst_week_capacity_premium_pct": 15.295935015277017
+    },
+    {
+      "scenario": "GTL",
+      "demand_fulfillment_ratio": 1.0,
+      "mean_synaf_utilization": 0.8624008704627861,
+      "worst_week_retention": 0.7085349545277082,
+      "mean_utilization_capacity_premium_pct": 15.955356058879522,
+      "additional_worst_week_capacity_premium_pct": 47.69974002056865
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "demand_fulfillment_ratio": 0.4701819733649485,
+      "mean_synaf_utilization": 0.7270674451038581,
+      "worst_week_retention": 0.6129095430383824,
+      "mean_utilization_capacity_premium_pct": 37.53882211809865,
+      "additional_worst_week_capacity_premium_pct": 86.86431155848942
+    }
+  ],
+  "vector_panels_preserved": true,
+  "visual_review_complete": false,
+  "bubble_encoding": "A monotone rescaling of total capacity premium; bubble area is not directly proportional to premium.",
+  "metric_scope": "Capacity-demand proxies for the selected schedules; low-load episodes and ramps are evaluated within representative weeks."
+}

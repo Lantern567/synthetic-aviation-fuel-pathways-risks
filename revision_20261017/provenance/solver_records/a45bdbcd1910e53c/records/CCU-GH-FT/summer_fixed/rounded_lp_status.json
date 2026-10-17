@@ -1,0 +1,7 @@
+{
+  "objective": 9650510632819.62,
+  "lower_bound": 9650510632819.623,
+  "gap": -4.047713275104386e-16,
+  "binary_rounding_threshold": 0.001,
+  "seconds": 28.728119134902954
+}

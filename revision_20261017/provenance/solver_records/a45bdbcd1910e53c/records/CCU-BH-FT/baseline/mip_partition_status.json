@@ -1,0 +1,24 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "selected_facilities": [
+    "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf",
+    "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf",
+    "facility_steel_Tianjin_Rockcheck_Steel_Group_Co_Ltd_green_h2_co2_to_saf"
+  ],
+  "seconds": 9.030774593353271,
+  "bound_source": "partition_bound/proof.json",
+  "source_sha256": {
+    "master_data.npz": "e573fb42a2b36e019267acf8c9a8ca7e49ccc59460c6f8522c17db2772736e29",
+    "master_matrix.npz": "d77097731cabf5bd59ddbd590f5a7c194cc80083335299307fe2e29350dc4a6a",
+    "root_lp_status.json": "f9341073efaf13ee05a6af97c64b7266779e8dfaebd1d459cd3499e815b8a266"
+  },
+  "max_row_error": 9.313225746154785e-09,
+  "max_bound_error": 2.5665940484032035e-09,
+  "max_integer_error": 0.0,
+  "objective": 63122019319.2649,
+  "lower_bound": 62505211062.19414,
+  "gap": 0.009771681320127098,
+  "saved_candidate": true,
+  "global_bound_method": "Minimum of exhaustive integer-design partition LP bounds; all leaf domains and original objective independently checked"
+}

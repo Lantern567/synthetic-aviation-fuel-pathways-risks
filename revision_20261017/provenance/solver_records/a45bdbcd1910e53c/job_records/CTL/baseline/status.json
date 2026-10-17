@@ -1,0 +1,18 @@
+{
+  "scenario": "CTL",
+  "label": "baseline",
+  "stage": "hydrogen_transport",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 4.133634567260742
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 3.914472818374634
+    }
+  ]
+}

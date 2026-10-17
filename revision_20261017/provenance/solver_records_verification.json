@@ -1,0 +1,1226 @@
+{
+  "passed": true,
+  "optimization_executed": false,
+  "solver_license_required": false,
+  "verified_actual_certificates": 18,
+  "checks": [
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+      "certificate_sha256": "23cdd45c23dee53b151fe4ca868f5ca61414c2117130b92eaa1285120d3062e9",
+      "root_lp_primal_max_row_error": 2.3283064365386963e-09,
+      "root_lp_primal_max_bound_error": 9.030182873739894e-11,
+      "root_lp_objective_error_cny": 0.013671875,
+      "full_model_relative_gap": 0.0026967966836518066,
+      "root_lp_objective_relative_error": 1.5718702861629675e-15,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+      "certificate_sha256": "ecd487637f5fc27c4fe8d3eca2bdc52b4c0530c2a0c24f450fa711c627014e9d",
+      "root_lp_primal_max_row_error": 7.0140231400728226e-09,
+      "root_lp_primal_max_bound_error": 2.6645352591003757e-15,
+      "root_lp_objective_error_cny": 2.041015625,
+      "full_model_relative_gap": 0.002881085369926595,
+      "root_lp_objective_relative_error": 2.3279056355691764e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+      "certificate_sha256": "fdf6cb53bd269ef89597cc7ceb7b86d0da79338c69155200b0cc09e3580c6fb8",
+      "root_lp_primal_max_row_error": 7.246853783726692e-09,
+      "root_lp_primal_max_bound_error": 4.0389678347315804e-28,
+      "root_lp_objective_error_cny": 0.862548828125,
+      "full_model_relative_gap": 0.00657469541274198,
+      "root_lp_objective_relative_error": 5.103250163434171e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+      "certificate_sha256": "889159b17dfe23c38ee8b9524ae3c410edb0717641ded2bf08788a667fe082a5",
+      "root_lp_primal_max_row_error": 1.1175870895385742e-08,
+      "root_lp_primal_max_bound_error": 6.462348535570529e-27,
+      "root_lp_objective_error_cny": 0.00063323974609375,
+      "full_model_relative_gap": 0.009771681327520003,
+      "root_lp_objective_relative_error": 1.015891645203306e-14,
+      "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+      "partition_validation": {
+        "passed": true,
+        "full_integer_domain_covered": true,
+        "all_leaf_bounds_valid": true,
+        "original_objective_constant_cny": 0,
+        "global_lower_bound_cny": 62505211062.19414,
+        "proof_sha256": "871ae618a5b488278f3b2b97dfa9cbdb0103eef5b109cc398e39f0eeb378beee",
+        "original_model_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+        "leaf_count": 8,
+        "node_count": 10,
+        "checked_optimal_lp_nodes": [
+          {
+            "id": 0,
+            "objective_cny": 16289829158248.904,
+            "constraint_residual": 0.0,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 1,
+            "objective_cny": 62361589261.001144,
+            "constraint_residual": 1.1175870895385742e-08,
+            "bound_residual": 1.3844730390749993e-11,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 2,
+            "objective_cny": 62598315914.49254,
+            "constraint_residual": 1.1175870895385742e-08,
+            "bound_residual": 8.968028994929349e-11,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 3,
+            "objective_cny": 62835042667.755325,
+            "constraint_residual": 1.5157873311582246e-08,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 4,
+            "objective_cny": 63071769362.01018,
+            "constraint_residual": 1.0120927387178896e-08,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 5,
+            "objective_cny": 63308496018.22384,
+            "constraint_residual": 1.4434348480487804e-08,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 6,
+            "objective_cny": 62450503366.26858,
+            "constraint_residual": 1.5859259965197174e-07,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 7,
+            "objective_cny": 63023391494.38682,
+            "constraint_residual": 2.1513571389264593e-05,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 8,
+            "objective_cny": 62505211062.19666,
+            "constraint_residual": 5.587935447692871e-09,
+            "bound_residual": 5.198234770713546e-10,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 9,
+            "objective_cny": 62636129981.91564,
+            "constraint_residual": 3.725290298461914e-09,
+            "bound_residual": 3.6125184202401304e-10,
+            "solver_optimality_record": true
+          }
+        ],
+        "independent_domain_audit": {
+          "passed": true,
+          "optimization_executed": false,
+          "proof_sha256": "871ae618a5b488278f3b2b97dfa9cbdb0103eef5b109cc398e39f0eeb378beee",
+          "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+          "nodes": 10,
+          "roots": 6,
+          "leaves": 8,
+          "remaining_site_splits": [],
+          "reported_gap": 0.009771681320127098
+        }
+      }
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+      "certificate_sha256": "f249de5ac7ab81ef0663cd9d1f836179bd59dd40cf62ad06310ebb13c3ff9fa9",
+      "root_lp_primal_max_row_error": 4.656612873077393e-10,
+      "root_lp_primal_max_bound_error": 2.582964953035116e-10,
+      "root_lp_objective_error_cny": 0.00390625,
+      "full_model_relative_gap": 0.0022107657085066687,
+      "root_lp_objective_relative_error": 3.46971597650439e-16,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+      "certificate_sha256": "8e09902f7924e18b30b24297c77dceabc58fd6dac4d7a48a4336c63f285a35c9",
+      "root_lp_primal_max_row_error": 3.5390257835388184e-08,
+      "root_lp_primal_max_bound_error": 2.614462515147638e-12,
+      "root_lp_objective_error_cny": 1.728515625,
+      "full_model_relative_gap": 0.002347584935090857,
+      "root_lp_objective_relative_error": 1.5273667832845123e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "cbf0c867890680b52e1b37c829b81a6ae6d87d009910b7c7f12e657ef2f4d5a8",
+      "certificate_sha256": "53c244674531dffd17668ba6f221a4ed6fbca19c4104f30a09b7734d68b41046",
+      "root_lp_primal_max_row_error": 5.209585651755333e-09,
+      "root_lp_primal_max_bound_error": 2.908056841006738e-26,
+      "root_lp_objective_error_cny": 6.00634765625,
+      "full_model_relative_gap": 0.003384627806037339,
+      "root_lp_objective_relative_error": 2.032354089070443e-12,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+      "certificate_sha256": "854c97a908f6ca4c3826b0d77d286bcfaece9fef7943fedb4a98a49d9c983ec6",
+      "root_lp_primal_max_row_error": 1.7695128917694092e-08,
+      "root_lp_primal_max_bound_error": 6.194574886557676e-13,
+      "root_lp_objective_error_cny": 0.00211334228515625,
+      "full_model_relative_gap": 0.009689355131859019,
+      "root_lp_objective_relative_error": 4.455980903473935e-14,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+      "certificate_sha256": "2b44af3472a8dea2dd0ef743ed71e424b15713768592d98edd78f49baf862041",
+      "root_lp_primal_max_row_error": 8.009374141693115e-08,
+      "root_lp_primal_max_bound_error": 1.2116903504194741e-27,
+      "root_lp_objective_error_cny": 0.0,
+      "full_model_relative_gap": 0.004773372489028523,
+      "root_lp_objective_relative_error": 0.0,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35",
+      "certificate_sha256": "f94b112be50c35a9d370820234f2bcebd7dbe16c2ccdf81dc6892f5b508fc803",
+      "root_lp_primal_max_row_error": 3.725290298461914e-09,
+      "root_lp_primal_max_bound_error": 8.08597633294994e-11,
+      "root_lp_objective_error_cny": 0.009765625,
+      "full_model_relative_gap": 0.0014772846410593063,
+      "root_lp_objective_relative_error": 1.011928318776096e-15,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+      "certificate_sha256": "349a7e8d24c3808d466dd5c06767b34861cf4d8c066b51b45433a80e16dd73ca",
+      "root_lp_primal_max_row_error": 7.683411240577698e-09,
+      "root_lp_primal_max_bound_error": 3.6197889130562544e-10,
+      "root_lp_objective_error_cny": 0.001953125,
+      "full_model_relative_gap": 0.0006845161317157672,
+      "root_lp_objective_relative_error": 1.5636126283484602e-16,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd",
+      "certificate_sha256": "95e94563fa75586526a624d0c82f73715842816df49fe8024be3a3a3ef80cee8",
+      "root_lp_primal_max_row_error": 9.313225746154785e-09,
+      "root_lp_primal_max_bound_error": 7.8580342233181e-10,
+      "root_lp_objective_error_cny": 4.703125,
+      "full_model_relative_gap": 0.000448029757859677,
+      "root_lp_objective_relative_error": 4.820619100947438e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b",
+      "certificate_sha256": "7cbe96ee8587c1599a0b7d5c333e27e7ad14c04b05ff0ba4fb4df0555c8af05f",
+      "root_lp_primal_max_row_error": 8.767528925091028e-09,
+      "root_lp_primal_max_bound_error": 8.431925380136818e-09,
+      "root_lp_objective_error_cny": 3.720703125,
+      "full_model_relative_gap": 0.0002577574056972903,
+      "root_lp_objective_relative_error": 2.9572251776319697e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_0.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+      "certificate_sha256": "3e74e04a2e7b40bccadcc33c52bf61fa503ab6facb9d2472f5f3f70b1de724b4",
+      "root_lp_primal_max_row_error": 7.741618901491165e-09,
+      "root_lp_primal_max_bound_error": 6.51925802230835e-09,
+      "root_lp_objective_error_cny": 0.00091552734375,
+      "full_model_relative_gap": 0,
+      "root_lp_objective_relative_error": 1.760735223239075e-14,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "passed": true,
+      "summary_sha256": "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50",
+      "certificate_sha256": "9d8dc1b5c25a3c678882328d84d49efeefb9017b37eec763b2be9c5a46c0aeee",
+      "root_lp_primal_max_row_error": 4.470348358154297e-08,
+      "root_lp_primal_max_bound_error": 1.8699211068451405e-09,
+      "root_lp_objective_error_cny": 0.0048828125,
+      "full_model_relative_gap": 0.001973442576682076,
+      "root_lp_objective_relative_error": 9.498403650678292e-16,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+      "certificate_sha256": "90cf13619255540b12cf4d2bf0da8ae69452b417cac617f43cf609e032c69469",
+      "root_lp_primal_max_row_error": 1.4901161193847656e-08,
+      "root_lp_primal_max_bound_error": 1.6685226000845438e-08,
+      "root_lp_objective_error_cny": 0.0003662109375,
+      "full_model_relative_gap": 0.009899856461398737,
+      "root_lp_objective_relative_error": 5.1622118538657265e-15,
+      "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+      "partition_validation": {
+        "passed": true,
+        "full_integer_domain_covered": true,
+        "all_leaf_bounds_valid": true,
+        "original_objective_constant_cny": 0,
+        "global_lower_bound_cny": 71297854012.57652,
+        "proof_sha256": "b5b43bdf2f0f31a2b50e3adae2456a1c38938db8c70a092cfb6d9cd5112d3bdc",
+        "original_model_sha256": "0df6c606b0ad9bf444538f5c56a1ed642cacc068f25e913c7ca93d313a392be8",
+        "leaf_count": 50,
+        "node_count": 94,
+        "checked_optimal_lp_nodes": [
+          {
+            "id": 0,
+            "objective_cny": 16289829158248.904,
+            "constraint_residual": 0.0,
+            "bound_residual": 0.0,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 1,
+            "objective_cny": 70968897753.31648,
+            "constraint_residual": 8.94525325769618e-09,
+            "bound_residual": 1.1175870895385742e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 2,
+            "objective_cny": 71205624406.82767,
+            "constraint_residual": 4.934154276270419e-07,
+            "bound_residual": 1.3171153057101037e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 3,
+            "objective_cny": 71442351059.6001,
+            "constraint_residual": 6.328627932816744e-08,
+            "bound_residual": 2.820462117826748e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 4,
+            "objective_cny": 71679077713.01837,
+            "constraint_residual": 4.520829544052418e-08,
+            "bound_residual": 5.711339734482124e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 5,
+            "objective_cny": 71915804366.91327,
+            "constraint_residual": 1.6536632749516437e-07,
+            "bound_residual": 2.349443391159132e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 6,
+            "objective_cny": 71042356492.51482,
+            "constraint_residual": 1.30385160446167e-08,
+            "bound_residual": 7.747295860394132e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 7,
+            "objective_cny": 71991451510.3421,
+            "constraint_residual": 3.073364496231079e-08,
+            "bound_residual": 2.050448699719709e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 8,
+            "objective_cny": 71205884257.56154,
+            "constraint_residual": 4.5942943735425034e-06,
+            "bound_residual": 2.221074955348603e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 9,
+            "objective_cny": 71205624406.26602,
+            "constraint_residual": 4.530920705292374e-08,
+            "bound_residual": 6.333955582249473e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 10,
+            "objective_cny": 71219145913.50044,
+            "constraint_residual": 5.960464477539063e-08,
+            "bound_residual": 5.942032051583127e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 11,
+            "objective_cny": 71171247436.28905,
+            "constraint_residual": 4.0046870708465576e-08,
+            "bound_residual": 3.523581426634337e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 12,
+            "objective_cny": 71896955720.39932,
+            "constraint_residual": 4.244793672114611e-08,
+            "bound_residual": 1.6299850358336698e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 13,
+            "objective_cny": 71337585957.14586,
+            "constraint_residual": 1.503140083514154e-07,
+            "bound_residual": 2.983413516233213e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 14,
+            "objective_cny": 72067406766.00864,
+            "constraint_residual": 1.2526288628578186e-07,
+            "bound_residual": 5.8605564845493063e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 15,
+            "objective_cny": 73014880088.50027,
+            "constraint_residual": 1.4901161193847656e-08,
+            "bound_residual": 8.409711398933342e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 16,
+            "objective_cny": 71259331714.33636,
+            "constraint_residual": 6.007030606269836e-07,
+            "bound_residual": 3.3970746007860875e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 17,
+            "objective_cny": 71205884257.18971,
+            "constraint_residual": 2.7821442927233878e-08,
+            "bound_residual": 2.0874926787151082e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 18,
+            "objective_cny": 71259063018.75533,
+            "constraint_residual": 3.725290298461914e-08,
+            "bound_residual": 1.709902061211973e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 19,
+            "objective_cny": 73610053819.53015,
+            "constraint_residual": 8.628456282799846e-08,
+            "bound_residual": 9.453493741587551e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 20,
+            "objective_cny": 71263183748.56874,
+            "constraint_residual": 9.390532795805484e-08,
+            "bound_residual": 8.384404281969182e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 21,
+            "objective_cny": 73943442438.26552,
+            "constraint_residual": 7.674502811028105e-08,
+            "bound_residual": 8.222608705032997e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 22,
+            "objective_cny": 71263449953.58005,
+            "constraint_residual": 7.096932331030904e-08,
+            "bound_residual": 4.170891514620312e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 23,
+            "objective_cny": 71259331714.44179,
+            "constraint_residual": 1.210719347000122e-08,
+            "bound_residual": 8.375877769140061e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 24,
+            "objective_cny": 71206790416.79509,
+            "constraint_residual": 1.8990999249370226e-08,
+            "bound_residual": 2.0485845163088947e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 25,
+            "objective_cny": 73608991082.97229,
+            "constraint_residual": 2.57161271122186e-06,
+            "bound_residual": 2.2625938345122165e-06,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 26,
+            "objective_cny": 71206805554.64883,
+            "constraint_residual": 1.3573738563970698e-07,
+            "bound_residual": 6.167914300700018e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 27,
+            "objective_cny": 73122126149.34383,
+            "constraint_residual": 2.501765266060829e-07,
+            "bound_residual": 1.294826329489851e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 28,
+            "objective_cny": 71206963682.93922,
+            "constraint_residual": 1.4202669262886047e-08,
+            "bound_residual": 1.2952749983696776e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 29,
+            "objective_cny": 73610232103.79433,
+            "constraint_residual": 8.195638656616211e-08,
+            "bound_residual": 4.2311594840831606e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 30,
+            "objective_cny": 71206963682.71573,
+            "constraint_residual": 1.6763806343078613e-08,
+            "bound_residual": 2.0118022803217173e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 31,
+            "objective_cny": 73040377604.6058,
+            "constraint_residual": 8.64383764564991e-09,
+            "bound_residual": 5.309530592967349e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 32,
+            "objective_cny": 71207332321.44496,
+            "constraint_residual": 2.042354894953636e-08,
+            "bound_residual": 4.712472978438392e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 33,
+            "objective_cny": 73609889187.64166,
+            "constraint_residual": 3.3760443329811096e-08,
+            "bound_residual": 1.6592870600378165e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 34,
+            "objective_cny": 71207332321.395,
+            "constraint_residual": 1.0550047222700939e-06,
+            "bound_residual": 4.7098425101343475e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 35,
+            "objective_cny": 73086068563.11157,
+            "constraint_residual": 3.30823240801692e-07,
+            "bound_residual": 2.2083668227423914e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 36,
+            "objective_cny": 71208302382.9779,
+            "constraint_residual": 2.5644701410307107e-08,
+            "bound_residual": 2.229450821014218e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 37,
+            "objective_cny": 72655541328.28633,
+            "constraint_residual": 4.5346808974500163e-08,
+            "bound_residual": 5.03503072568634e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 38,
+            "objective_cny": 71208302382.17426,
+            "constraint_residual": 1.3487472472206719e-08,
+            "bound_residual": 1.3389692132825814e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 39,
+            "objective_cny": 73100935830.70906,
+            "constraint_residual": 1.043081283569336e-07,
+            "bound_residual": 7.719336281297728e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 40,
+            "objective_cny": 71208353440.93929,
+            "constraint_residual": 3.5390257835388184e-08,
+            "bound_residual": 2.091837814077735e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 41,
+            "objective_cny": 73610423310.02054,
+            "constraint_residual": 3.4313416108489037e-08,
+            "bound_residual": 2.076607046042066e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 42,
+            "objective_cny": 71208578391.2964,
+            "constraint_residual": 1.5681729388644012e-07,
+            "bound_residual": 1.0438719666053239e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 43,
+            "objective_cny": 73610148811.0094,
+            "constraint_residual": 5.960464477539063e-08,
+            "bound_residual": 1.7721771762487205e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 44,
+            "objective_cny": 71211146108.14532,
+            "constraint_residual": 8.443530326106902e-08,
+            "bound_residual": 4.4829330334719426e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 45,
+            "objective_cny": 73606053639.2969,
+            "constraint_residual": 6.888046545454981e-08,
+            "bound_residual": 5.908221280636038e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 46,
+            "objective_cny": 71211876149.44261,
+            "constraint_residual": 1.4285650166583178e-07,
+            "bound_residual": 6.320066279392817e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 47,
+            "objective_cny": 73609294512.94559,
+            "constraint_residual": 5.8668498630660247e-08,
+            "bound_residual": 6.818368092353917e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 48,
+            "objective_cny": 71212415754.41096,
+            "constraint_residual": 1.2097020294915587e-07,
+            "bound_residual": 7.200608557536298e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 49,
+            "objective_cny": 73603470504.006,
+            "constraint_residual": 5.500129796054409e-07,
+            "bound_residual": 7.196994111779986e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 50,
+            "objective_cny": 71213428473.6969,
+            "constraint_residual": 1.283595452150621e-07,
+            "bound_residual": 8.595505259937196e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 51,
+            "objective_cny": 73608804952.88202,
+            "constraint_residual": 3.311230456493064e-07,
+            "bound_residual": 5.201599151405389e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 52,
+            "objective_cny": 71315876007.13707,
+            "constraint_residual": 3.934673831196278e-08,
+            "bound_residual": 3.934553551021569e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 53,
+            "objective_cny": 71591770949.2835,
+            "constraint_residual": 1.73225998878479e-07,
+            "bound_residual": 5.0818016461562365e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 54,
+            "objective_cny": 71395265551.9469,
+            "constraint_residual": 1.2029358913423494e-06,
+            "bound_residual": 1.1638448538242585e-06,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 55,
+            "objective_cny": 72470695230.40865,
+            "constraint_residual": 4.0978193283081055e-08,
+            "bound_residual": 2.3238355684185308e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 56,
+            "objective_cny": 71265810263.30882,
+            "constraint_residual": 3.575451046344824e-08,
+            "bound_residual": 1.5961835028325104e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 57,
+            "objective_cny": 71263449953.7433,
+            "constraint_residual": 1.30385160446167e-08,
+            "bound_residual": 1.6144327937997867e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 58,
+            "objective_cny": 71708734645.44109,
+            "constraint_residual": 1.364387571811676e-07,
+            "bound_residual": 1.0324185950594256e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 59,
+            "objective_cny": 71297854012.57542,
+            "constraint_residual": 3.269137391348487e-08,
+            "bound_residual": 2.920436635578394e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 60,
+            "objective_cny": 72125035056.9863,
+            "constraint_residual": 2.0302832126617432e-07,
+            "bound_residual": 9.184475402435055e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 61,
+            "objective_cny": 71309030894.60608,
+            "constraint_residual": 1.3060857950719651e-08,
+            "bound_residual": 1.2896350654045818e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 62,
+            "objective_cny": 71267462291.27234,
+            "constraint_residual": 1.3637091456075723e-07,
+            "bound_residual": 9.131980885764993e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 63,
+            "objective_cny": 71265810263.30882,
+            "constraint_residual": 1.8209017627057733e-08,
+            "bound_residual": 2.5425594169752634e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 64,
+            "objective_cny": 71269016264.10461,
+            "constraint_residual": 6.111804395914078e-09,
+            "bound_residual": 2.8370956377849713e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 65,
+            "objective_cny": 71267462291.1925,
+            "constraint_residual": 9.782397114577179e-08,
+            "bound_residual": 6.550712353511504e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 66,
+            "objective_cny": 72324548533.58406,
+            "constraint_residual": 3.3620744943618774e-07,
+            "bound_residual": 4.117087623204238e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 67,
+            "objective_cny": 71322339109.38358,
+            "constraint_residual": 6.869336743875465e-08,
+            "bound_residual": 2.0077377962415792e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 68,
+            "objective_cny": 71412353912.06345,
+            "constraint_residual": 5.452943652173303e-08,
+            "bound_residual": 5.245212597593252e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 69,
+            "objective_cny": 72233656181.1035,
+            "constraint_residual": 8.838469511829317e-08,
+            "bound_residual": 3.005387293197881e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 70,
+            "objective_cny": 71270836787.0774,
+            "constraint_residual": 1.304911734223424e-08,
+            "bound_residual": 1.304911734223424e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 71,
+            "objective_cny": 71269016264.02498,
+            "constraint_residual": 4.315945616768196e-07,
+            "bound_residual": 5.338000111376751e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 72,
+            "objective_cny": 71277537890.40578,
+            "constraint_residual": 3.243485341419827e-07,
+            "bound_residual": 9.267100975485221e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 73,
+            "objective_cny": 71270836786.82086,
+            "constraint_residual": 1.3027801060161437e-07,
+            "bound_residual": 8.723973924215248e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 74,
+            "objective_cny": 72252052508.70287,
+            "constraint_residual": 2.6775524020195007e-08,
+            "bound_residual": 1.3038459201197838e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 75,
+            "objective_cny": 71325551867.12402,
+            "constraint_residual": 1.0962598930498908e-07,
+            "bound_residual": 5.330983217159081e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 76,
+            "objective_cny": 71464477217.91809,
+            "constraint_residual": 1.1478657589050473e-07,
+            "bound_residual": 6.771528335678048e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 77,
+            "objective_cny": 71604874255.28981,
+            "constraint_residual": 1.6763806343078613e-08,
+            "bound_residual": 1.4903633882568101e-09,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 78,
+            "objective_cny": 71288374041.9105,
+            "constraint_residual": 2.261458575958386e-08,
+            "bound_residual": 1.9535738896972325e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 79,
+            "objective_cny": 71277537890.41669,
+            "constraint_residual": 7.84885991139531e-08,
+            "bound_residual": 4.885515326870278e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 80,
+            "objective_cny": 71515637132.81285,
+            "constraint_residual": 1.7390311413123527e-08,
+            "bound_residual": 1.65815139396841e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 81,
+            "objective_cny": 71677938251.1983,
+            "constraint_residual": 2.310844138264656e-07,
+            "bound_residual": 3.5861091873812256e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 82,
+            "objective_cny": 71289019016.07295,
+            "constraint_residual": 1.896407069736355e-07,
+            "bound_residual": 1.2481969977241543e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 83,
+            "objective_cny": 71288374042.08789,
+            "constraint_residual": 7.503719867685277e-08,
+            "bound_residual": 4.0198499291171126e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 84,
+            "objective_cny": 71802335743.5571,
+            "constraint_residual": 9.035284165292978e-08,
+            "bound_residual": 4.0318359761926104e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 85,
+            "objective_cny": 71370697249.04454,
+            "constraint_residual": 1.7417872699709847e-07,
+            "bound_residual": 1.4865086939153116e-07,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 86,
+            "objective_cny": 71294544834.02647,
+            "constraint_residual": 2.6963237198529555e-08,
+            "bound_residual": 3.693226236563019e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 87,
+            "objective_cny": 71289019016.11147,
+            "constraint_residual": 1.5832483768463135e-08,
+            "bound_residual": 1.0459189070388675e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 88,
+            "objective_cny": 71358849870.87212,
+            "constraint_residual": 2.1420419216156006e-08,
+            "bound_residual": 1.5091927707544528e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 89,
+            "objective_cny": 71294544833.98024,
+            "constraint_residual": 2.5589784197893595e-06,
+            "bound_residual": 4.314415491535328e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 90,
+            "objective_cny": 72346409132.91524,
+            "constraint_residual": 1.5148543752729893e-08,
+            "bound_residual": 1.2893859591134316e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 91,
+            "objective_cny": 71371123290.5571,
+            "constraint_residual": 1.3999522279304861e-07,
+            "bound_residual": 6.305296300934132e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 92,
+            "objective_cny": 72495636125.59395,
+            "constraint_residual": 2.457363734720275e-07,
+            "bound_residual": 9.612222129362635e-08,
+            "solver_optimality_record": true
+          },
+          {
+            "id": 93,
+            "objective_cny": 71356079634.79482,
+            "constraint_residual": 2.514570951461792e-08,
+            "bound_residual": 1.9973278929141842e-08,
+            "solver_optimality_record": true
+          }
+        ],
+        "independent_domain_audit": {
+          "passed": true,
+          "optimization_executed": false,
+          "proof_sha256": "b5b43bdf2f0f31a2b50e3adae2456a1c38938db8c70a092cfb6d9cd5112d3bdc",
+          "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+          "nodes": 94,
+          "roots": 6,
+          "leaves": 50,
+          "remaining_site_splits": [
+            {
+              "node": 89,
+              "fixed_factories": 1,
+              "free_candidates": 85,
+              "subset_sizes": [
+                4,
+                81
+              ]
+            },
+            {
+              "node": 87,
+              "fixed_factories": 1,
+              "free_candidates": 86,
+              "subset_sizes": [
+                23,
+                63
+              ]
+            },
+            {
+              "node": 83,
+              "fixed_factories": 1,
+              "free_candidates": 87,
+              "subset_sizes": [
+                23,
+                64
+              ]
+            },
+            {
+              "node": 79,
+              "fixed_factories": 1,
+              "free_candidates": 88,
+              "subset_sizes": [
+                84,
+                4
+              ]
+            },
+            {
+              "node": 73,
+              "fixed_factories": 1,
+              "free_candidates": 89,
+              "subset_sizes": [
+                85,
+                4
+              ]
+            },
+            {
+              "node": 71,
+              "fixed_factories": 1,
+              "free_candidates": 90,
+              "subset_sizes": [
+                4,
+                86
+              ]
+            },
+            {
+              "node": 65,
+              "fixed_factories": 1,
+              "free_candidates": 91,
+              "subset_sizes": [
+                15,
+                76
+              ]
+            },
+            {
+              "node": 63,
+              "fixed_factories": 1,
+              "free_candidates": 92,
+              "subset_sizes": [
+                76,
+                16
+              ]
+            },
+            {
+              "node": 57,
+              "fixed_factories": 1,
+              "free_candidates": 93,
+              "subset_sizes": [
+                12,
+                81
+              ]
+            },
+            {
+              "node": 23,
+              "fixed_factories": 1,
+              "free_candidates": 94,
+              "subset_sizes": [
+                4,
+                90
+              ]
+            },
+            {
+              "node": 50,
+              "fixed_factories": 1,
+              "free_candidates": 81,
+              "subset_sizes": [
+                76,
+                5
+              ]
+            },
+            {
+              "node": 20,
+              "fixed_factories": 1,
+              "free_candidates": 94,
+              "subset_sizes": [
+                80,
+                14
+              ]
+            }
+          ],
+          "reported_gap": 0.00989985646357057
+        }
+      }
+    },
+    {
+      "scenario": "CTL-BH",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "d56adfe279c57047d5ec54ca992decd91b58cca652d607df3b6ce2926bad5165",
+      "certificate_sha256": "465c30bd2cc6a05a4c9230f900635cf17d83c27b6aa0b22017e11ac533197501",
+      "root_lp_primal_max_row_error": 3.725290298461914e-09,
+      "root_lp_primal_max_bound_error": 1.7367561689345796e-26,
+      "root_lp_objective_error_cny": 0.0015869140625,
+      "full_model_relative_gap": 0.009714104610778394,
+      "root_lp_objective_relative_error": 3.4127666627651114e-14,
+      "bound_status_sources": "Exhaustive integer-design partition with all saved optimal-LP leaf records",
+      "partition_validation": {
+        "passed": true,
+        "full_integer_domain_covered": true,
+        "all_leaf_bounds_valid": true,
+        "original_objective_constant_cny": 0,
+        "global_lower_bound_cny": 46499342595.37807,
+        "proof_sha256": "66b24e023d77cfda3fa5d722eee53dead231f967cfbd1da80e905863a5b4c556",
+        "original_model_sha256": "46f3272d4828a5b01993b1563e40d67fced4f0546c8d0bc82061490af9f8e397",
+        "leaf_count": 6,
+        "node_count": 6,
+        "checked_optimal_lp_nodes": [],
+        "independent_domain_audit": {
+          "passed": true,
+          "optimization_executed": false,
+          "proof_sha256": "66b24e023d77cfda3fa5d722eee53dead231f967cfbd1da80e905863a5b4c556",
+          "scope": "Read-only independent combinatorial audit of actual recorded proof domains; numerical LP validity is checked separately",
+          "nodes": 6,
+          "roots": 6,
+          "leaves": 6,
+          "remaining_site_splits": [],
+          "reported_gap": 0.009714104610755385
+        }
+      }
+    },
+    {
+      "scenario": "GTL-BH",
+      "label": "baseline",
+      "passed": true,
+      "summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+      "certificate_sha256": "f7ec90583c5b989ee3b85095104fc946d371c397d2c4ec8a5317c2dc40e32bcb",
+      "root_lp_primal_max_row_error": 6.05359673500061e-08,
+      "root_lp_primal_max_bound_error": 6.984919309616089e-09,
+      "root_lp_objective_error_cny": 0.00411224365234375,
+      "full_model_relative_gap": 0.0032315300875705682,
+      "root_lp_objective_relative_error": 1.0080296629613995e-13,
+      "bound_status_sources": [
+        "root_lp_status.json",
+        "repair_status_rounded.json",
+        "rounded_lp_status.json"
+      ],
+      "partition_validation": null
+    }
+  ],
+  "scope": "Replay saved LP primal constraints and objectives, recorded optimal-LP/global-bound statuses, original full-model certificate gaps and exhaustive integer-partition coverage where used. Independent dual vectors were not saved."
+}

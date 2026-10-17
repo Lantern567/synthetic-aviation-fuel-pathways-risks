@@ -1,0 +1,4 @@
+﻿scenario,category,pathway,lcoe_cny_per_kg,carbon_diff_gco2e_per_mj,h2_applicable,h2_mean_utilization,h2_median_utilization,saf_mean_utilization,saf_median_utilization
+GTL-BH,Blue,Two-Step,,,True,0.9999999999999994,1.0,0.8624008704627861,1.0
+GTL,Blue,One-Step,,,False,,,0.8624008704627861,0.9192811601565691
+CCU-GH-FT,Green,One-Step,,,True,0.2764562694126725,0.2289020246368559,0.7270674451038581,0.8409363746754831

@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_dac_projected",
+  "scenario": "DAC-GH-FT",
+  "label": "summer_fixed",
+  "pid": 1894770,
+  "launched_unix": 1792230878.5373983,
+  "from_stage": "model"
+}

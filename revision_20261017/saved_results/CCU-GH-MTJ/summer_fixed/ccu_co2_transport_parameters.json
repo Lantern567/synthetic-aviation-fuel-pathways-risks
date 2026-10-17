@@ -1,0 +1,40 @@
+{
+  "scenario": "CCU-GH-MTJ",
+  "weeks": 4,
+  "periods_per_week": 56,
+  "hours_per_period": 3,
+  "quantity_basis": "Each weekly CO2 supply contract is delivered once in every representative week",
+  "distance_scope": "Existing CO2 pipeline route cache; self-supply has zero transport distance",
+  "transport_loss_fraction": 0.0,
+  "cost_cny_per_kg_km": 0.0001,
+  "carbon_kg_co2e_per_kg_100km": 0.01,
+  "economic_parameters": {
+    "discount_rate": 0.08,
+    "project_lifespan": 20,
+    "mtj_plant_lifetime": 25,
+    "electrolyzer_lifetime": 15,
+    "pipeline_lifetime": 30,
+    "storage_lifetime": 25,
+    "transport_vehicle_lifetime": 20,
+    "mtj_plant_capacity_factor": 0.85,
+    "electrolyzer_capacity_factor": 0.75,
+    "pipeline_capacity_factor": 0.95,
+    "storage_capacity_factor": 0.9,
+    "transport_capacity_factor": 0.75,
+    "levelized_cost_threshold_yuan_per_kg": 1000
+  },
+  "storage": {
+    "average_inventory_proxy": "Half the sum of site-specific CO2 peak inventory variables",
+    "source_hours": 168,
+    "represented_hours": 672,
+    "factor": 4,
+    "parameters": {},
+    "operation_cost_cny": 0.0
+  },
+  "ledger": {
+    "co2_pipeline_transport_cost": 26941360.083597947,
+    "co2_pipeline_transport": 211079.77178571626,
+    "co2_storage_investment": 0.0,
+    "co2_storage_operation": 0.0
+  }
+}

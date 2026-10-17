@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_bh_final",
+  "scenario": "GTL-BH",
+  "label": "baseline",
+  "pid": 1945983,
+  "launched_unix": 1792231481.42411,
+  "from_stage": "model"
+}

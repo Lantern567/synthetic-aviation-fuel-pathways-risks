@@ -1,0 +1,59 @@
+{
+  "detailed": {
+    "ng_extraction": 11361430.97908201,
+    "saf_facility": 358110.9821579037,
+    "electrolyzer_facility": 1605.063268561957,
+    "ng_to_methanol": 54534868.69959344,
+    "methanol_to_saf": 137312793.62404755,
+    "h2_production": 4828608.166109655,
+    "mtj_storage": 30078.82568559598,
+    "h2_storage": 8561.458511712335,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 11783.4703013472,
+    "mtj_transport": 172131.4101780454,
+    "ng_transport": 675289.008562644,
+    "co2_utilization_credit": 0.0
+  },
+  "detailed_raw": {
+    "ng_extraction": 11361430.97908201,
+    "saf_facility": 358110.9821579037,
+    "electrolyzer_facility": 1605.063268561957,
+    "ng_to_methanol": 54534868.69959344,
+    "methanol_to_saf": 137312793.62404755,
+    "h2_production": 4828608.166109655,
+    "mtj_storage": 10026275.228532,
+    "h2_storage": 2846.102192514756,
+    "h2_truck_transport": 0.0,
+    "h2_pipeline_transport": 11783.4703013472,
+    "h2_transport": 11783.4703013472,
+    "mtj_transport": 172131.4101780454,
+    "ng_transport": 675289.008562644,
+    "co2_utilization_credit": 0.0
+  },
+  "by_stage": {
+    "raw_material_emissions": 11361430.979082,
+    "facility_emissions": 359716.0454264658,
+    "production_emissions": 196676270.48975706,
+    "storage_emissions": 38640.28419730831,
+    "transport_emissions": 859203.8890421923,
+    "co2_utilization_credit": 0.0,
+    "total_emissions": 209295261.68749845,
+    "annual_emissions": 2720838401.93748
+  },
+  "total_production_kg": 56807154.89541006,
+  "carbon_intensity_kg": 3.684311634209465,
+  "carbon_intensity_mj": 85.3838153930351,
+  "traditional_jet_ci_gco2e_per_mj": 89.0,
+  "carbon_accounting": {
+    "inventory_carbon": "Three-hour endpoint-mean stocks integrated over 224 intervals (672 hours); 225 states with half weight at initial and terminal boundaries; SAF kg converted to tonnes and H2 retained in kg",
+    "inventory_cost": "Keep the model site-peak/2 proxy and its optimized cost components; do not apply a second time multiplier",
+    "electricity_ci_rule": "Retained model wind/solar mean intensity",
+    "coal_and_synthesis": "For CTL scenarios, reconstruct coal emissions from actual purchased coal and synthesis emissions from configured technology energy at each production site",
+    "ccu_dac_synthesis": "CCU and DAC FT/MTJ use the common configured route-level input assumption of 7.6 kWh/kg final fuel for physical demand, electricity cost and emissions; no additional methanol-stage electricity is added",
+    "meoh_co2_stock_energy": "No separate energy coefficients in the model; no new coefficients inserted",
+    "carbon_categories": "Original eight categories with aggregate transport aliases removed; utilization credit separate"
+  },
+  "source_summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+  "abs_diff_vs_traditional_jet_gco2e_per_mj": -3.616184606964893,
+  "vs_traditional_jet": -4.063128771870661
+}

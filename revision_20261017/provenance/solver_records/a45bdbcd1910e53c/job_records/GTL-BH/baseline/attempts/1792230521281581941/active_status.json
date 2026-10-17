@@ -1,0 +1,13 @@
+{
+  "scenario": "GTL-BH",
+  "label": "baseline",
+  "stage": "model",
+  "state": "failed",
+  "history": [
+    {
+      "stage": "model",
+      "exit_code": 1,
+      "seconds": 16.922842502593994
+    }
+  ]
+}

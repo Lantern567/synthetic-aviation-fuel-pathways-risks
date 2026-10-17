@@ -1,0 +1,63 @@
+{
+  "accounting_mode": "Actual coal procurement and one-step synthesis electricity",
+  "coal_mass_scope": "Sum of actual location-week coal purchases over all four represented weeks",
+  "configured_coal_parameters": {
+    "coal_type": "bituminous",
+    "carbon_content": 0.75,
+    "co2_per_kg_coal": 2.44,
+    "coal_price_yuan_per_ton": 525,
+    "gasification_efficiency": 0.75,
+    "gasification_energy_mj_per_kg": 8.0,
+    "gasification_energy_kwh_per_kg": 2.22,
+    "gasification_energy_cost_yuan_per_mj": 0.05,
+    "coal_consumption_kg_per_kg_saf": 1.0,
+    "base_co2_yield_kg_per_kg_saf": 3.5
+  },
+  "co2_available_kg_per_kg_coal": 2.44,
+  "purchase_cny_per_kg_coal": 0.525,
+  "gasification_cny_per_kg_coal": 0.4,
+  "carbon_coefficients_kg_co2e_per_kg_coal": {
+    "coal_mining": 0.04,
+    "coal_transport": 0.05,
+    "coal_gasification_direct": 0.15,
+    "coal_gasification_energy": 1.332,
+    "coal_co2_fugitive": 0.36600000000000005,
+    "co2_capture_energy": 0.149328
+  },
+  "configured_production_process": {
+    "h2_electrolysis_emission": 0.05,
+    "saf_synthesis_emission": 0.3,
+    "saf_process_energy": 3.0,
+    "mtj_process_energy": 800,
+    "renewable_electricity": 0.02,
+    "electrolysis_energy": 55,
+    "green_h2_intensity": 1.1,
+    "coal_mining_emission": 0.04,
+    "coal_transport_emission": 0.05,
+    "coal_gasification_direct_emission": 0.15,
+    "coal_gasification_energy_kwh_per_kg": 2.22,
+    "gasification_electricity_intensity": 0.6,
+    "co2_capture_energy_kwh_per_ton": 120,
+    "co2_capture_efficiency": 0.85,
+    "coal_co2_yield_kg_per_kg": 2.44
+  },
+  "synthesis_kwh_per_kg_saf": {
+    "green_h2_co2_to_saf": 4.0
+  },
+  "co2_consumption_kg_per_kg_saf": {
+    "green_h2_co2_to_saf": 3.6666666666666665
+  },
+  "co2_supply_timing": "Each actual location-week coal purchase releases its configured CO2 yield uniformly over that week of 56 three-hour intervals",
+  "additional_mtj_electricity": "The one-step pathway has no separate methanol-to-jet stage",
+  "actual_coal_purchase_kg": 55156940.503658265,
+  "ledger": {
+    "coal_mining": 2206277.6201463304,
+    "coal_transport": 2757847.025182913,
+    "coal_gasification_direct": 8273541.075548741,
+    "coal_gasification_energy": 73469044.7508728,
+    "coal_co2_fugitive": 20187440.224338926,
+    "co2_capture_energy": 8236475.611530281,
+    "saf_synthesis_energy": 55839991.353083216,
+    "methanol_to_saf": 0.0
+  }
+}

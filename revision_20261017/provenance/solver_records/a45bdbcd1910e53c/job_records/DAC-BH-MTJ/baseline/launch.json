@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_dac_projected",
+  "scenario": "DAC-BH-MTJ",
+  "label": "baseline",
+  "pid": 1818424,
+  "launched_unix": 1792230040.7011302,
+  "from_stage": "model"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "byte_identical": true,
+  "verification_sha256": "58feb2291658a3da61c2f58937e1debcc4f062f56feddb00cd9da9cebcffe759",
+  "script_sha256": "093ff226ddae2b90b86234b99549dd87cb5ea3e1125e8de2efa332e346988921",
+  "aliases": [
+    {
+      "figure": "S30",
+      "source": "h2_saf_2col_3row_by_category.png",
+      "alias": "Figure_S30.png",
+      "sha256": "4e474eb3a73146359e82e7889f900dbc9055192d0db298e612e6cae89d772aa4",
+      "bytes": 2015369
+    },
+    {
+      "figure": "S30",
+      "source": "h2_saf_2col_3row_by_category.pdf",
+      "alias": "Figure_S30.pdf",
+      "sha256": "002195260b2334fcea0ec2256ac8c06b85f9b21ffa4a32b57d513f27471e2966",
+      "bytes": 169901
+    },
+    {
+      "figure": "S33",
+      "source": "pareto_temporal_distribution_latest.png",
+      "alias": "Figure_S33.png",
+      "sha256": "188c253f6b1a84ff69c140de7b9a0c5306a0465ddc47d33665e72453ae31a8ff",
+      "bytes": 441846
+    },
+    {
+      "figure": "S33",
+      "source": "pareto_temporal_distribution_latest.pdf",
+      "alias": "Figure_S33.pdf",
+      "sha256": "bcd5fc1ce812cbd69d1126326c4a03f035d80776dce54f4f24bf0c6eb84bfcce",
+      "bytes": 68221
+    },
+    {
+      "figure": "S34",
+      "source": "pareto_penalty_comparison_latest.png",
+      "alias": "Figure_S34.png",
+      "sha256": "b1ff4c41657a65f24da0596767e46455f8a573467ca0a380f3262154b992bd52",
+      "bytes": 661378
+    },
+    {
+      "figure": "S34",
+      "source": "pareto_penalty_comparison_latest.pdf",
+      "alias": "Figure_S34.pdf",
+      "sha256": "3f792ebf6e2b4c44d647c67503daa6c70645235d3c931546ae59147176d9374a",
+      "bytes": 69955
+    },
+    {
+      "figure": "S35",
+      "source": "pareto_penalty_driver_heatmap_latest.png",
+      "alias": "Figure_S35.png",
+      "sha256": "6f6a61e534bedc051190651d698f90ca6d42af8bf12fce841cb3eac6b6f2886f",
+      "bytes": 1025850
+    },
+    {
+      "figure": "S35",
+      "source": "pareto_penalty_driver_heatmap_latest.pdf",
+      "alias": "Figure_S35.pdf",
+      "sha256": "aefbef0c53c877f142efd0a3907611b9e79e4f0eaf4a43dd74898dfc25916e55",
+      "bytes": 78604
+    }
+  ]
+}

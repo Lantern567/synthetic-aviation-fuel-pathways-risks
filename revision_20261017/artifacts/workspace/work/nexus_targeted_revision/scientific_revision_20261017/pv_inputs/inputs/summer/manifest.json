@@ -1,0 +1,61 @@
+{
+  "weeks": [
+    1,
+    14,
+    27,
+    44
+  ],
+  "plants": 109,
+  "periods": 224,
+  "hours_per_period": 3,
+  "energy_mwh": {
+    "solar_plant": 64880.976392586665,
+    "wind_farm": 794254.948474155
+  },
+  "capacity_mw": {
+    "solar_plant": 632.1666666666667,
+    "wind_farm": 3596.5
+  },
+  "demand_kg": 56807154.89541006,
+  "solar_conversion": "P_ac_MW = min(C_ac_MW, C_dc_MW * GHI_Wm2 / 1000 * (1 - 0.14) * 0.96)",
+  "solar_coordinates": "Native HDF5 [longitude,latitude], nearest 0.05-degree cell, per inventory phase",
+  "wind_conversion": "Source mean MW; three-hour duration and distinct inventory phases retained",
+  "source": "https://download.pangaea.de/reference/117364/attachments/DataDescription2020.pdf",
+  "time_zone": "UTC+8, cyclic source weather year at year boundary",
+  "spatial_assumption": "Original project reference locations retained; generation summed over selected phase locations",
+  "candidate_status": "Retained planning candidates include planned and under-construction wind projects",
+  "solar_capacity_raw_mw": 748.6,
+  "solar_capacity_dc_mw": 758.6,
+  "solar_capacity_ac_mw": 632.1666666666667,
+  "solar_capacity_mapping": "MWp/dc retains raw MW; MWac converts raw MW * 1.2; unknown is assumed DC and retains raw MW",
+  "solar_engineering_parameters": {
+    "system_loss_fraction": 0.14,
+    "inverter_efficiency": 0.96,
+    "dc_ac_ratio": 1.2,
+    "unknown_capacity_rating_assumption": "DC"
+  },
+  "solar_model_scope": "Simplified GHI-proportional resource model using documented PVWatts default engineering parameters. No module efficiency multiplier, temperature model, transposition model, or full PVWatts simulation is applied.",
+  "solar_parameter_sources": [
+    {
+      "url": "https://pvwatts.nlr.gov/docs/help_system_sysloss.php",
+      "supports": "Default system losses 14%; inverter efficiency separately defaults to 96%; inverter losses are excluded from system losses",
+      "accessed_date": "2026-10-17"
+    },
+    {
+      "url": "https://developer.nlr.gov/docs/solar/pvwatts/v8/",
+      "supports": "PVWatts V8 dc_ac_ratio default 1.2 and inv_eff default 96",
+      "accessed_date": "2026-10-17"
+    },
+    {
+      "url": "https://samrepo.nlr.gov/help/pvwatts_system_design.html",
+      "supports": "DC nameplate power is electrical power at STC; AC inverter rating equals DC nameplate divided by DC/AC ratio; module efficiency defines area rather than another multiplier on nameplate power",
+      "accessed_date": "2026-10-17"
+    },
+    {
+      "url": "https://www.gem.wiki/Global_Solar_Power_Tracker_Methodology",
+      "supports": "GEM retains phase-specific AC/DC/unknown capacity ratings; the unknown-to-DC assignment here is a declared study assumption",
+      "accessed_date": "2026-10-17"
+    }
+  ],
+  "source_input_sha256": "9f82438468e527fbaf910b9eedca5758edaf8bcb7a7c9a06a2933889497e4690"
+}

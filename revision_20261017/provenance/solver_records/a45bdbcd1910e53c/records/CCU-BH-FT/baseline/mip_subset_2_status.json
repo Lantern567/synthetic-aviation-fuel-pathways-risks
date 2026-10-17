@@ -1,0 +1,20 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "selected_facilities": [
+    "facility_steel_Tianjin_New_Tiangang_United_Special_Steel_Co_Ltd_green_h2_co2_to_saf"
+  ],
+  "seconds": 11.427912473678589,
+  "bound_source": "root_lp_status.json",
+  "source_sha256": {
+    "master_data.npz": "e573fb42a2b36e019267acf8c9a8ca7e49ccc59460c6f8522c17db2772736e29",
+    "master_matrix.npz": "d77097731cabf5bd59ddbd590f5a7c194cc80083335299307fe2e29350dc4a6a",
+    "root_lp_status.json": "f9341073efaf13ee05a6af97c64b7266779e8dfaebd1d459cd3499e815b8a266"
+  },
+  "max_row_error": 8.940696716308594e-08,
+  "max_bound_error": 3.841705620288849e-09,
+  "max_integer_error": 0.0,
+  "objective": 63874243442.11849,
+  "lower_bound": 62333394420.92,
+  "gap": 0.024123166681336575
+}

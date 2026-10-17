@@ -1,0 +1,79 @@
+{
+  "source_plotting_script": {
+    "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\source\\generate_appendix_docx.py",
+    "sha256": "830be0a0504e4fcc783c760facff6657b9de578e25b2e7e06ab0487f8f153232",
+    "functions": [
+      "create_renewable_raw_summary",
+      "create_renewable_resource_maps"
+    ]
+  },
+  "inventory_sources": {
+    "wind": {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\wind_power_plants.csv",
+      "sha256": "a43da410def6565abdcc3d7a73943fac0ac428044b01d8a22a4e541fcf1aabae",
+      "rows": 7988
+    },
+    "solar": {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\solar_power_plants.csv",
+      "sha256": "e961d5591de1aa2a56934d303eb7055b55a0f07ebae336a0d55750946b1caf9b",
+      "rows": 13265
+    }
+  },
+  "frozen_input_sha256": "08f5feb41b945abdf097d0f8762ee9169849440456e60f176cc044d1f8fa25f7",
+  "candidate_resource_metrics": {
+    "wind": {
+      "candidate_plants": 44,
+      "capacity_mw": 3596.5,
+      "capacity_ac_mw": 3596.5,
+      "hours": 2016,
+      "energy_mwh": 2562637.1141867973,
+      "capacity_factor_median": 0.3492290869818019,
+      "full_load_hours_median": 704.0458393553126,
+      "availability_percentiles_5_95": [
+        32.636307251929395,
+        38.63124842587702
+      ]
+    },
+    "solar": {
+      "candidate_plants": 65,
+      "capacity_mw": 632.1666666666667,
+      "capacity_ac_mw": 632.1666666666667,
+      "hours": 2016,
+      "energy_mwh": 205397.7324038933,
+      "capacity_factor_median": 0.15782517968253967,
+      "full_load_hours_median": 318.17556224,
+      "availability_percentiles_5_95": [
+        15.626657301587302,
+        16.76569781587301
+      ]
+    }
+  },
+  "joint_coverage": {
+    "demand_source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\static_supplement\\twelve_week_joint_relative_states.csv",
+    "demand_source_sha256": "c3759d64b7a7a8c8a4717fa717dca2acc074c859659604e360a83a77773ea458",
+    "selected_weeks": [
+      1,
+      5,
+      14,
+      44
+    ],
+    "inside_count": 7,
+    "outside_weeks": [
+      18,
+      22,
+      27,
+      31,
+      35
+    ],
+    "selection_algorithm_rerun": false,
+    "selection_scope": "Original representative weeks retained. The marginal-range calculation is a descriptive coverage diagnostic."
+  },
+  "sha256": {
+    "figures/Figure_S6.png": "2bbb922644f9d59bcab642714eb291ac916440a839dc85b97b0f74aa377749c2",
+    "figures/Figure_S6.pdf": "98df31872ecebdf45119d35886ad5d0791d6c2386251fc06663b193608e5f10e",
+    "figures/Figure_S7.png": "73f0ef6c7fe03b8c968422dc92aed32e8d26aa9c926831fcf74dfcf84d3e47f8",
+    "figures/Figure_S7.pdf": "8a966363c2457869219ea9be33d78299915fa7631200dd605d45a27bd2c57a57",
+    "resource_data/selected_candidate_resource_metrics.csv": "3c0fd218b9f842802cd555841fe57dc6fb842e578e2f69bbea8949fe47684692",
+    "resource_data/twelve_week_joint_relative_states.csv": "b45c463106b778cc0715a9f0d65d8742bc56e9c2f561bb161dba04666cb28476"
+  }
+}

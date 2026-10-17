@@ -1,0 +1,52 @@
+{
+  "archive_docx": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_代码归档同步20261015\\Supplementary_Figure_Archive.docx",
+  "archive_docx_sha256": "1f3f00a78bf00d20871fcfbd66a05c8e4ee7143d4e69842d0d96a7f6ee0f9ae8",
+  "main_docx": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus系统提交文件_代码归档同步20261015\\Manuscript_Clean.docx",
+  "main_docx_sha256": "88e7cead9a28f981b60b332a39298dea2f1918a3c643b7766b78a039dc093863",
+  "reference_files": {
+    "main_map_source.png": {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\Nexus返稿_实习生交接包_20260928\\02_Nexus原投稿\\03_图件\\Figure 2 Source File.png",
+      "source_sha256": "60da78de5371c3ccb717db47f685dc858a4aeccb35f6c18bb60979cabbae11fb"
+    },
+    "main_registration.json": {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\network_data\\basemap_registration.json",
+      "source_sha256": "cf9ce777df081ef7dcdbbfadf89db6be810f277bcfd304dc3eb722fcd94cad16"
+    },
+    "archive_registration.json": {
+      "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_space_time\\network_data\\archive_basemap_registration.json",
+      "source_sha256": "ed235875d59cdbad9198552fe0f4a6212c04df347889ce6d1c071927d21b38b9"
+    }
+  },
+  "templates": {
+    "archive_registration.json": {
+      "sha256": "ed235875d59cdbad9198552fe0f4a6212c04df347889ce6d1c071927d21b38b9"
+    },
+    "main_composite_template.png": {
+      "sha256": "6fee96468859d7b24f56d9679f0935801c7819af8477eaef962e47e1c6bcefae",
+      "format": "PNG",
+      "width": 4360,
+      "height": 3668
+    },
+    "main_map_source.png": {
+      "sha256": "60da78de5371c3ccb717db47f685dc858a4aeccb35f6c18bb60979cabbae11fb",
+      "format": "PNG",
+      "width": 4360,
+      "height": 3668
+    },
+    "main_registration.json": {
+      "sha256": "cf9ce777df081ef7dcdbbfadf89db6be810f277bcfd304dc3eb722fcd94cad16"
+    },
+    "original_S49.png": {
+      "sha256": "4b1dd514cfb9c7e91a598eb43ac081e4e3036834d778522325ef4db089f0c5f0",
+      "format": "PNG",
+      "width": 6000,
+      "height": 1097
+    },
+    "original_S54.png": {
+      "sha256": "7f6adaf2caf38fc138a362a3a6d7a3207fb24576a2bb2f3434b727e7b8fddd24",
+      "format": "PNG",
+      "width": 3000,
+      "height": 2329
+    }
+  }
+}

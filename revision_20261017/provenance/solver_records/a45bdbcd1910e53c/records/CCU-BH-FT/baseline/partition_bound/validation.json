@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "full_integer_domain_covered": true,
+  "all_leaf_bounds_valid": true,
+  "original_objective_constant_cny": 0,
+  "global_lower_bound_cny": 62505211062.19414,
+  "proof_sha256": "871ae618a5b488278f3b2b97dfa9cbdb0103eef5b109cc398e39f0eeb378beee",
+  "original_model_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+  "leaf_count": 8,
+  "node_count": 10,
+  "checked_optimal_lp_nodes": [
+    {
+      "id": 0,
+      "objective_cny": 16289829158248.904,
+      "constraint_residual": 0.0,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 1,
+      "objective_cny": 62361589261.001114,
+      "constraint_residual": 1.1175870895385742e-08,
+      "bound_residual": 1.3844730390749993e-11,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 2,
+      "objective_cny": 62598315914.49251,
+      "constraint_residual": 1.1175870895385742e-08,
+      "bound_residual": 8.968028994929349e-11,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 3,
+      "objective_cny": 62835042667.755394,
+      "constraint_residual": 1.5157873311582246e-08,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 4,
+      "objective_cny": 63071769362.00999,
+      "constraint_residual": 1.0120927387178896e-08,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 5,
+      "objective_cny": 63308496018.22382,
+      "constraint_residual": 1.4434348480487804e-08,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 6,
+      "objective_cny": 62450503366.26857,
+      "constraint_residual": 1.5859259965197174e-07,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 7,
+      "objective_cny": 63023391494.3868,
+      "constraint_residual": 2.1513571389264593e-05,
+      "bound_residual": 0.0,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 8,
+      "objective_cny": 62505211062.19665,
+      "constraint_residual": 5.587935447692871e-09,
+      "bound_residual": 5.198234770713546e-10,
+      "solver_optimality_record": true
+    },
+    {
+      "id": 9,
+      "objective_cny": 62636129981.915665,
+      "constraint_residual": 3.725290298461914e-09,
+      "bound_residual": 3.6125184202401304e-10,
+      "solver_optimality_record": true
+    }
+  ]
+}

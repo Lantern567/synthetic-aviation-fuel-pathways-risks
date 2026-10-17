@@ -1,0 +1,71 @@
+{
+  "scope": "Exact coefficient repricing of each retained design, dispatch and output; no new optimization",
+  "S22": {
+    "grid_synthesis_kwh": 73479227.0578575,
+    "grid_price_cny_kwh": 0.6,
+    "nonrenewable_output_kg": 9668319.349718092,
+    "production_kg": 15958406.368982445,
+    "nonrenewable_output_share": 0.6058449149728333,
+    "electrolyzer_capex_cny_kg_h": 360000.0,
+    "grid_cost_slope": 4.6044213537935335,
+    "capex_cost_slope": 2.1818629034001604e-05,
+    "reconstructed_electricity_cny_kg": 17.286105338448376
+  },
+  "S23": {
+    "DAC-GH-FT": {
+      "captured_co2_kg": 76810319.76952207,
+      "co2_kg_per_kg_fuel": 3.2000000000000006,
+      "baseline_capture_cny_t": 4500.0,
+      "slope_cny_kg_fuel_per_cny_t_co2": 0.0032000000000000006
+    },
+    "DAC-GH-MTJ": {
+      "captured_co2_kg": 55854422.29143854,
+      "co2_kg_per_kg_fuel": 3.4999999999999996,
+      "baseline_capture_cny_t": 4500.0,
+      "slope_cny_kg_fuel_per_cny_t_co2": 0.003499999999999999
+    },
+    "DAC-BH-FT": {
+      "captured_co2_kg": 147840000.0,
+      "co2_kg_per_kg_fuel": 3.199999999999999,
+      "baseline_capture_cny_t": 4500.0,
+      "slope_cny_kg_fuel_per_cny_t_co2": 0.003199999999999999
+    },
+    "DAC-BH-MTJ": {
+      "captured_co2_kg": 147840000.0,
+      "co2_kg_per_kg_fuel": 3.4999999999999996,
+      "baseline_capture_cny_t": 4500.0,
+      "slope_cny_kg_fuel_per_cny_t_co2": 0.003499999999999999
+    }
+  },
+  "S20": {
+    "GTL": {
+      "baseline_cost_cny_kg": 6.501554612497708,
+      "production_kg": 51050925.57290536,
+      "ng_consumed_m3": 96996758.58852018,
+      "effective_ng_price_cny_m3": 2.5299999999999847,
+      "ng_m3_per_kg_fuel": 1.9,
+      "natural_gas_cost_cny_kg": 4.806999999999971,
+      "source": "Preserved original direct-FT design and source ledger"
+    },
+    "GTL-BH": {
+      "baseline_cost_cny_kg": 6.281085627773086,
+      "production_kg": 51050925.57290508,
+      "ng_consumed_m3": 40840740.45832407,
+      "routed_ng_procurement_m3": 0.0,
+      "effective_ng_price_cny_m3": 2.530000000000014,
+      "ng_m3_per_kg_fuel": 0.8,
+      "natural_gas_cost_cny_kg": 2.0240000000000116,
+      "source": "New verified GTL-BH design, actual dispatch and NG procurement"
+    }
+  },
+  "S21": {
+    "steel_baseline_capex_cny_kg_h": 280000.0,
+    "refinery_baseline_capex_cny_kg_h": 224000.0,
+    "refinery_to_steel_ratio": 0.8,
+    "conditioning_investment_cny": 1041854688.3790406,
+    "conditioning_capacity_factor": 0.9,
+    "cost_slope_cny_kg_per_100k": 0.057104797803688254,
+    "baseline_cost_cny_kg": 6.281085627773086,
+    "scope": "Steel and refinery CAPEX move in the original 1.0:0.8 ratio; all production assets, dispatch and service are held fixed"
+  }
+}

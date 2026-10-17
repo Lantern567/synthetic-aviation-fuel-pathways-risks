@@ -1,0 +1,106 @@
+{
+  "CTL": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CTL_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CTL_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\CTL\\baseline\\summary.json",
+    "source_sha256": "c4e3f32d33bde4b7d024141ffe3df5629234e87071e7d4b89be6ad4ac7a8eae1",
+    "scope": "CTL partial-supply diagnostic; original 90% minimum is infeasible",
+    "cost_component_residual_cny": 0.0035400390625
+  },
+  "CTL-BH": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CTL-BH_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CTL-BH_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\coal_hydrogen_saf_optimization\\results\\byproduct_hydrogen\\complete_solution_20260201_215450.json",
+    "source_sha256": "79ae5de4a3e3db2357035b75a1d496f5a3a60afa3a4e81352f2168c2a34e7e99",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": -6.103515625e-05
+  },
+  "DAC-GH-FT": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-GH-FT_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-GH-FT_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\DAC-GH-FT\\baseline\\summary.json",
+    "source_sha256": "95bda752982746a7fd1d775a943f2f0b81ff20a750328b893a36a668abbc6589",
+    "scope": "2026-10-06 corrected baseline; full-model and independent physical checks passed",
+    "cost_component_residual_cny": 0.0046539306640625
+  },
+  "DAC-GH-MTJ": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-GH-MTJ_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-GH-MTJ_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\DAC-GH-MTJ\\baseline\\summary.json",
+    "source_sha256": "52b1e588461c4fb30f8a63ac0780f9a3cba7def70c0ff23b7fb868b1decb3708",
+    "scope": "2026-10-06 corrected baseline; full-model and independent physical checks passed",
+    "cost_component_residual_cny": 0.0115509033203125
+  },
+  "DAC-BH-FT": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-BH-FT_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-BH-FT_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\dac_hydrogen_saf_supply_chain_optimization\\results\\byproduct_hydrogen\\one_step\\complete_solution_20260201_205000.json",
+    "source_sha256": "85f6726ed3b0b406c8f5a1fddd64e5341371cb59f0985fb442ac9d1c87d6b475",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": 0.0194854736328125
+  },
+  "DAC-BH-MTJ": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-BH-MTJ_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\DAC-BH-MTJ_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\dac_hydrogen_saf_supply_chain_optimization\\results\\byproduct_hydrogen\\two_step\\complete_solution_20260201_204929.json",
+    "source_sha256": "251df5d8b1e412fb8731c8a61512dafdac8fa79e7aa8c5a47815cd07e323de57",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": -0.055633544921875
+  },
+  "CCU-GH-FT": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-GH-FT_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-GH-FT_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\CCU-GH-FT\\baseline\\summary.json",
+    "source_sha256": "a52cd30e49cb2938ba18f401ee4df874865a35dd8c4ab02552f863381ccb51dc",
+    "scope": "2026-10-06 corrected baseline; full-model and independent physical checks passed",
+    "cost_component_residual_cny": 0.0012359619140625
+  },
+  "CCU-GH-MTJ": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-GH-MTJ_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-GH-MTJ_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\CCU-GH-MTJ\\baseline\\summary.json",
+    "source_sha256": "5f60c260977bf4008ab451ed618ed7b5123cc8c6d52637cadf6a17486061be67",
+    "scope": "2026-10-06 corrected baseline; full-model and independent physical checks passed",
+    "cost_component_residual_cny": 0.00286865234375
+  },
+  "CCU-BH-FT": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-BH-FT_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-BH-FT_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\green_hydrogen_supply_chain_optimization\\results\\byproduct_hydrogen\\one_step\\complete_solution_20260201_221438.json",
+    "source_sha256": "df18796c2867c51234b37ea18d8f831afa92aa4fd5cad3cfc7a99d53e0d2bda3",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": -0.000274658203125
+  },
+  "CCU-BH-MTJ": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-BH-MTJ_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\CCU-BH-MTJ_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\green_hydrogen_supply_chain_optimization\\results\\byproduct_hydrogen\\two_step\\complete_solution_20260201_221232.json",
+    "source_sha256": "87767d3b5d962102c3e54e5d3afc08d9b4774d1144c5b0a03ea8a91e86d47e5d",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": -0.00048828125
+  },
+  "GTL-GH": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL-GH_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL-GH_carbon_emissions.json",
+    "source": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\corrected_runs_20261006\\result_delivery\\核算依据\\GTL-GH\\baseline\\summary.json",
+    "source_sha256": "2ab1414fb33db423ff7d84df2a6c9ce7f433b1307395f06e5ccc978d83f019de",
+    "scope": "2026-10-06 corrected baseline; full-model and independent physical checks passed",
+    "cost_component_residual_cny": 0.0007171630859375
+  },
+  "GTL": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\natural_gas_supply_chain_optimization\\results\\ft_one_step\\complete_solution_20260201_215354.json",
+    "source_sha256": "600de5945d834feee140891dc11b50e9b40cca3972d9f5da21ebe43a4e3b3f08",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": -0.00063323974609375
+  },
+  "GTL-BH": {
+    "solution": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL-BH_complete_solution.json",
+    "carbon": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\revision_20261007\\figures_cost\\adapted_data\\GTL-BH_carbon_emissions.json",
+    "source": "\\\\?\\C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\github_archive\\repository\\archived_outputs\\products\\supply_chain_optimization\\natural_gas_supply_chain_optimization\\results\\byproduct_hydrogen\\byproduct_hydrogen\\two_step\\complete_solution_20260201_220501.json",
+    "source_sha256": "6fcf80ef2b77346bec740467f09c2fe8cda5eaeee08b2a1b337fc61a361c231d",
+    "scope": "Archived control pathway; no new physical certification",
+    "cost_component_residual_cny": 0.00016021728515625
+  }
+}

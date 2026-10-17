@@ -1,0 +1,61 @@
+{
+  "accounting_mode": "Site peak capacity / 2 proxy over all represented physical hours",
+  "applied_in_optimization": true,
+  "periods": 224,
+  "hours_per_period": 3,
+  "represented_hours": 672,
+  "periods_per_week": 56,
+  "weeks": 4,
+  "economic_parameters": {
+    "discount_rate": 0.08,
+    "project_lifespan": 20,
+    "mtj_plant_lifetime": 25,
+    "electrolyzer_lifetime": 20,
+    "pipeline_lifetime": 30,
+    "storage_lifetime": 25,
+    "transport_vehicle_lifetime": 20,
+    "mtj_plant_capacity_factor": 0.85,
+    "electrolyzer_capacity_factor": 0.9,
+    "pipeline_capacity_factor": 0.95,
+    "storage_capacity_factor": 0.9,
+    "transport_capacity_factor": 0.75,
+    "levelized_cost_threshold_yuan_per_kg": 1000
+  },
+  "direct_cost_parameters": {
+    "warehouse_rent_per_m3_hour": 0.01,
+    "storage_density_kg_per_m3": 500.0,
+    "handling_cost_per_kg_hour": 0.001
+  },
+  "records": {
+    "saf": {
+      "field": "storage_operation_cost",
+      "source_hour_multiplier": 224,
+      "represented_hours": 672,
+      "factor": 3.0,
+      "average_inventory_proxy": "Half the sum of site-specific inventory capacity variables",
+      "charged_location_scope": "All inventory locations represented by the original model cost expression",
+      "source_expression_cost_cny": 162090543.00644606,
+      "final_expression_cost_cny": 486271629.01933813,
+      "operation_cny_per_kg_hour": 0.00102,
+      "equipment_cny_per_kg_capacity": 10.0
+    },
+    "h2": {
+      "field": "h2_storage_operation",
+      "source_hour_multiplier": 224,
+      "represented_hours": 672,
+      "factor": 3.0,
+      "average_inventory_proxy": "Half the sum of site-specific inventory capacity variables",
+      "charged_location_scope": "All inventory locations represented by the original model cost expression",
+      "source_expression_cost_cny": 15485318.586261725,
+      "final_expression_cost_cny": 46455955.75878517,
+      "operation_cny_per_kg_hour": 0.00102,
+      "equipment_cny_per_kg_capacity": 20.0
+    }
+  },
+  "ledger": {
+    "storage_equipment_cost": 111164618.5799828,
+    "storage_operation_cost": 486271629.01933813,
+    "h2_storage_investment": 21240221.69711463,
+    "h2_storage_operation": 46455955.75878517
+  }
+}

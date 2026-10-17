@@ -1,0 +1,57 @@
+[
+  {
+    "input": "inputs/baseline/renewable_periods.csv",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\baseline\\renewable_periods.csv",
+    "sha256": "4ca3e99522f17692aa11793d68e3b17e8c6f09324605dc3d5a9f08edd110225f"
+  },
+  {
+    "input": "inputs/baseline/airport_input.csv",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\baseline\\airport_input.csv",
+    "sha256": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9"
+  },
+  {
+    "input": "inputs/baseline/manifest.json",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\baseline\\manifest.json",
+    "sha256": "c424a452cd84ee6a7a51858c5e9bae85c96797a4b57e9c8e44ab8bc89bc15637"
+  },
+  {
+    "input": "inputs/baseline/airport_input.xlsx",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\baseline\\airport_input.xlsx",
+    "sha256": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8"
+  },
+  {
+    "input": "inputs/summer/renewable_periods.csv",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\summer\\renewable_periods.csv",
+    "sha256": "9f82438468e527fbaf910b9eedca5758edaf8bcb7a7c9a06a2933889497e4690"
+  },
+  {
+    "input": "inputs/summer/airport_input.csv",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\summer\\airport_input.csv",
+    "sha256": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4"
+  },
+  {
+    "input": "inputs/summer/manifest.json",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\inputs\\summer\\manifest.json",
+    "sha256": "8afece6cc578d3f8c3c6f39bac46b07c1e7e95dffa8ba48fce7099652fa0f094"
+  },
+  {
+    "input": "inputs/summer/airport_input.xlsx",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\pv_inputs\\inputs\\summer\\airport_input.xlsx",
+    "sha256": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a"
+  },
+  {
+    "input": "solar_grid_mapping.csv",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\solar_grid_mapping.csv",
+    "sha256": "3b887bc47119ff9d9b02e8d767cbe029e3086b9d937e13666e2ac09ab18770a6"
+  },
+  {
+    "input": "solar_hdf5_provenance.json",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\solar_hdf5_provenance.json",
+    "sha256": "2cc2088902abecc6f6f6834b0017014e45b0121172526b670bba9898eae81d8e"
+  },
+  {
+    "input": "raw_profile_validation.json",
+    "original": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\submission_final_20261012\\data_stage\\raw_profile_validation.json",
+    "sha256": "0b29f423a1e72c8dd5185dd010f42d015144d9bdfb7a73203b7e122786a7ab68"
+  }
+]

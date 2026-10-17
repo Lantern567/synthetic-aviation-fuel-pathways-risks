@@ -1,0 +1,15 @@
+{
+  "published_root": "../../preserved_GTL",
+  "templates": {
+    "quadrant": "../original_templates/quadrant.py",
+    "polar": "../original_templates/polar.py",
+    "lollipop": "../original_templates/lollipop.py",
+    "breakdown": "../original_templates/breakdown.py",
+    "sensitivity": "../original_templates/sensitivity.py",
+    "stitch": "../original_templates/stitch.py"
+  },
+  "processor": "../../verification_source/update_accounts.py",
+  "old_gtl_config": "../original_parameters/NaturalGasSupplyChainOptimizer_config_one_step.yaml",
+  "old_gtl_core": "../original_parameters/natural_gas_optimization_model_one_step.py",
+  "sensitivity_registry": "../original_parameters/scenario_registry.py"
+}

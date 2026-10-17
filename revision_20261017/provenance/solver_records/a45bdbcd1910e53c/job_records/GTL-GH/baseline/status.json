@@ -1,0 +1,23 @@
+{
+  "scenario": "GTL-GH",
+  "label": "baseline",
+  "stage": "hydrogen_transport",
+  "state": "complete",
+  "history": [
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "seconds": 79.18040752410889
+    },
+    {
+      "stage": "physics",
+      "exit_code": 0,
+      "seconds": 4.649439811706543
+    },
+    {
+      "stage": "hydrogen_transport",
+      "exit_code": 0,
+      "seconds": 0.9826107025146484
+    }
+  ]
+}

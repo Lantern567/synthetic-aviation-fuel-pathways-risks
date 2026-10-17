@@ -1,0 +1,9 @@
+REVISION_STAGE_STARTED CCU-BH-MTJ baseline model
+REVISION_STAGE_STARTED CCU-BH-MTJ baseline projection
+REVISION_STAGE_STARTED CCU-BH-MTJ baseline design
+REVISION_STAGE_STARTED CCU-BH-MTJ baseline dispatch
+REVISION_STAGE_STARTED CCU-BH-MTJ baseline certificate
+Traceback (most recent call last):
+  File "/data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/execute_job.py", line 49, in <module>
+    raise RuntimeError(f'{scenario}/{label}: {stage} failed; inspect {output / (stage + ".log")}')
+RuntimeError: CCU-BH-MTJ/baseline: certificate failed; inspect /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_bh_final/job_records/CCU-BH-MTJ/baseline/certificate.log

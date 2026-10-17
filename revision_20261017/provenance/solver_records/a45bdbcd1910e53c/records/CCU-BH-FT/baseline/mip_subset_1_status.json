@@ -1,0 +1,20 @@
+{
+  "status": 1,
+  "has_solution": true,
+  "selected_facilities": [
+    "facility_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_green_h2_co2_to_saf"
+  ],
+  "seconds": 6.433003187179565,
+  "bound_source": "root_lp_status.json",
+  "source_sha256": {
+    "master_data.npz": "e573fb42a2b36e019267acf8c9a8ca7e49ccc59460c6f8522c17db2772736e29",
+    "master_matrix.npz": "d77097731cabf5bd59ddbd590f5a7c194cc80083335299307fe2e29350dc4a6a",
+    "root_lp_status.json": "f9341073efaf13ee05a6af97c64b7266779e8dfaebd1d459cd3499e815b8a266"
+  },
+  "max_row_error": 9.685754776000977e-08,
+  "max_bound_error": 5.145935233485943e-09,
+  "max_integer_error": 0.0,
+  "objective": 63625012992.356224,
+  "lower_bound": 62333394420.92,
+  "gap": 0.02030048420723149
+}

@@ -1,0 +1,18 @@
+{
+  "CCU-BH-FT/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "CCU-BH-FT/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "CCU-BH-FT/baseline/byproduct_hydrogen_periods.csv": "959312f7c4ad302db9951f1cde82584b326dd6accd475c4a47430d086609f935",
+  "CCU-BH-FT/baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+  "CCU-BH-MTJ/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "CCU-BH-MTJ/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "CCU-BH-MTJ/baseline/byproduct_hydrogen_periods.csv": "959312f7c4ad302db9951f1cde82584b326dd6accd475c4a47430d086609f935",
+  "CCU-BH-MTJ/baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+  "CTL-BH/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "CTL-BH/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "CTL-BH/baseline/byproduct_hydrogen_periods.csv": "e4b583a699049a071544adecc2539ee82286a5544f7b7407bf796b58bc3da233",
+  "CTL-BH/baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+  "GTL-BH/baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "GTL-BH/baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "GTL-BH/baseline/byproduct_hydrogen_periods.csv": "959312f7c4ad302db9951f1cde82584b326dd6accd475c4a47430d086609f935",
+  "GTL-BH/baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db"
+}

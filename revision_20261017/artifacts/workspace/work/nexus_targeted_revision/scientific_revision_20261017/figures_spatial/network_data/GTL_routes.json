@@ -1,0 +1,226 @@
+[
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_26",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2878114.661252495,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 40.0801,
+    "source_longitude": 116.5846,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        116.5846,
+        40.0801
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_26",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 1439057.330626248,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 40.0801,
+    "source_longitude": 116.5846,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        116.5846,
+        40.0801
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_26",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2878114.661252495,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 40.0801,
+    "source_longitude": 116.5846,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        116.5846,
+        40.0801
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_26",
+    "destination": "北京",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 2691659.253356588,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 40.0801,
+    "source_longitude": 116.5846,
+    "destination_latitude": 40.0801,
+    "destination_longitude": 116.5846,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        116.5846,
+        40.0801
+      ],
+      [
+        116.5846,
+        40.0801
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_27",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 821652.9962109837,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 39.1244,
+    "source_longitude": 117.3462,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        117.3462,
+        39.1244
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_27",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 821652.996210984,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 39.1244,
+    "source_longitude": 117.3462,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        117.3462,
+        39.1244
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_27",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 410826.498105492,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 39.1244,
+    "source_longitude": 117.3462,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        117.3462,
+        39.1244
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  },
+  {
+    "scenario": "GTL",
+    "source": "ft_candidate_27",
+    "destination": "天津",
+    "cargo": "SAF",
+    "mode": "truck",
+    "weekly_quantity": 821652.9962109842,
+    "quantity_unit": "kg",
+    "distance_km": 0.0,
+    "distance_source": "Retained GTL archived transport records",
+    "source_latitude": 39.1244,
+    "source_longitude": 117.3462,
+    "destination_latitude": 39.1244,
+    "destination_longitude": 117.3462,
+    "source_type": "FT设施",
+    "destination_type": "机场",
+    "coordinates": [
+      [
+        117.3462,
+        39.1244
+      ],
+      [
+        117.3462,
+        39.1244
+      ]
+    ],
+    "geometry_basis": "endpoint_schematic"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "baseline/airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+  "baseline/airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+  "baseline/byproduct_hydrogen_periods.csv": "d2ee22eb7a1ebc82e570929cdfe9ed6df0e8c94f0492d638041745f1756c8dc1",
+  "baseline/byproduct_input_provenance.json": "cf6a3e009d2e41346cd96d758c50555e259185cf545c294f638ea6e436ca1b0a",
+  "baseline/manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+  "baseline/renewable_periods.csv": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510",
+  "summer/airport_input.csv": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4",
+  "summer/airport_input.xlsx": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a",
+  "summer/byproduct_hydrogen_periods.csv": "d2ee22eb7a1ebc82e570929cdfe9ed6df0e8c94f0492d638041745f1756c8dc1",
+  "summer/byproduct_input_provenance.json": "cf6a3e009d2e41346cd96d758c50555e259185cf545c294f638ea6e436ca1b0a",
+  "summer/manifest.json": "5a303c6bcc52edd13a120f986377119698c75462c353f897a6e8b57f1e786589",
+  "summer/renewable_periods.csv": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495"
+}

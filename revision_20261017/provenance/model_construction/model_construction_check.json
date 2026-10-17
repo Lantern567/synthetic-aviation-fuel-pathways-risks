@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "scope": "Real COPT model construction from the archive-prepared exact source and inputs; no optimization",
+  "optimization_executed": false,
+  "scenario": "CCU-GH-FT",
+  "label": "baseline",
+  "model_mps_payload_sha256": "66b2b632d2f7a7393fd66c69b030dd722349bd7e17330326112b29f679be3296",
+  "original_model_mps_payload_sha256": "a38b8c187dd875fca91b2445874f2734366862e7fb98f7938640c0946cb1de2f",
+  "mps_payload_byte_identical": false,
+  "route_cache_sha256_before_and_after": "e4d6e219ef7f42d0b09bf735dc1149f3a64aa2500c06b8cb71985f806097aa92",
+  "run_model_sha256": "0fe9320661b24ad3749f17b39c5b07ef31924dd09d97f39f4610a01ffb05b3b2",
+  "configuration_sha256": "36044c5b9fbf195ac6ad06031e0e5beb2f824e1a633a89235f500efdaee3fcf2"
+}

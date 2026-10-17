@@ -1,0 +1,8 @@
+{
+  "runtime": "compute_final",
+  "scenario": "GTL-GH",
+  "label": "summer_fixed",
+  "pid": 1944239,
+  "launched_unix": 1792231450.5009065,
+  "from_stage": "model"
+}

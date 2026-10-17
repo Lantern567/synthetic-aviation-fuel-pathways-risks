@@ -1,0 +1,747 @@
+/home/ljt/miniconda3/envs/green_methanol_for_port_transportation/lib/python3.12/site-packages/pyproj/__init__.py:91: UserWarning: Valid PROJ data directory not found. Either set the path using the environmental variable PROJ_DATA (PROJ 9.1+) | PROJ_LIB (PROJ<9.1) or with `pyproj.datadir.set_data_dir`.
+  warnings.warn(str(err))
+INFO:cache.data_cache_manager:从配置文件读取缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/shared/data/cache
+INFO:cache.data_cache_manager:缓存管理器初始化完成，缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/shared/data/cache/filtered_500km_data
+INFO:cache.data_cache_manager:路径规划缓存结构已设置，目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/shared/data/cache/path_planning_cache
+WARNING:root:部分高级缓存组件不可用: No module named 'cache.cache_performance_monitor'
+WARNING: 氢气运输可视化器导入失败: attempted relative import beyond top-level package
+WARNING: 可视化功能将不可用，但不影响优化计算
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/config.yaml
+INFO:core.green_hydrogen_optimization_model:配置文件加载成功: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/config.yaml
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 📝 日志已挂载: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/logs/two_step/green_h2_supply_chain_two_step_{date}.log
+INFO:core.green_hydrogen_optimization_model:📝 日志已挂载: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/results/logs/two_step/green_h2_supply_chain_two_step_{date}.log
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 🔧 工艺模式: TWO_STEP
+INFO:core.green_hydrogen_optimization_model:🔧 工艺模式: TWO_STEP
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 📄 配置文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/config.yaml
+INFO:core.green_hydrogen_optimization_model:📄 配置文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/config.yaml
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO -    H₂消耗: 0.7 kg/kg SAF | CO₂消耗: 3.5 kg/kg SAF | CAPEX: 240,000 元/(kg/h)
+INFO:core.green_hydrogen_optimization_model:   H₂消耗: 0.7 kg/kg SAF | CO₂消耗: 3.5 kg/kg SAF | CAPEX: 240,000 元/(kg/h)
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 并行计算workers数量: 4 (最大限制: 128)
+INFO:core.green_hydrogen_optimization_model:并行计算workers数量: 4 (最大限制: 128)
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 加载碳排放参数: 8 个类别
+INFO:core.green_hydrogen_optimization_model:加载碳排放参数: 8 个类别
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/shared/data/cache/graphhopper_routes
+INFO:core.green_hydrogen_optimization_model:GraphHopper路径规划缓存目录: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/shared/data/cache/graphhopper_routes
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.green_hydrogen_optimization_model:GraphHopper路径规划引擎初始化完成，OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+INFO:core.green_hydrogen_optimization_model:初始化优化器: 4周 (224小时), GraphHopper路径规划: True
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
+INFO:core.green_hydrogen_optimization_model:OSM数据文件: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/china-latest.osm.pbf
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - GraphHopper服务: localhost:8989
+INFO:core.green_hydrogen_optimization_model:GraphHopper服务: localhost:8989
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 最大运输距离限制: 1000.0 公里
+INFO:core.green_hydrogen_optimization_model:最大运输距离限制: 1000.0 公里
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 短距离路径规划精确计算: True
+INFO:core.green_hydrogen_optimization_model:短距离路径规划精确计算: True
+2026-10-17 17:26:05,885 - core.green_hydrogen_optimization_model - INFO - 配置文件加载完成: 24 个配置段
+INFO:core.green_hydrogen_optimization_model:配置文件加载完成: 24 个配置段
+2026-10-17 17:26:06,591 - core.green_hydrogen_optimization_model - INFO - 从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/inputs/baseline/airport_input.xlsx
+INFO:core.green_hydrogen_optimization_model:从配置文件获取机场数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/inputs/baseline/airport_input.xlsx
+2026-10-17 17:26:06,591 - core.green_hydrogen_optimization_model - INFO - 从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/inputs/baseline/airport_input.xlsx
+INFO:core.green_hydrogen_optimization_model:从Excel文件加载数据: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/inputs/baseline/airport_input.xlsx
+2026-10-17 17:26:06,656 - core.green_hydrogen_optimization_model - INFO - Excel文件读取成功(All_Airports)，包含 8 行数据
+INFO:core.green_hydrogen_optimization_model:Excel文件读取成功(All_Airports)，包含 8 行数据
+2026-10-17 17:26:06,656 - core.green_hydrogen_optimization_model - INFO - 处理京津冀五个机场Excel数据...
+INFO:core.green_hydrogen_optimization_model:处理京津冀五个机场Excel数据...
+2026-10-17 17:26:06,656 - core.green_hydrogen_optimization_model - INFO - Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+INFO:core.green_hydrogen_optimization_model:Excel columns: ['week_number', 'week_start', 'week_end', 'total_flights', 'flight_days', 'departure_airport_name', 'departure_airport_latitude', 'departure_airport_longitude', 'weekly_total_fuel_kg_total', 'weekly_total_fuel_kg_avg', 'weekly_total_fuel_kg_std', 'weekly_total_fuel_kg_min', 'weekly_total_fuel_kg_max', 'weekly_total_fuel_kg_count', 'weekly_fuel_per_km_avg', 'weekly_fuel_per_km_total', 'weekly_fuel_per_km_std', 'weekly_fuel_per_km_min', 'weekly_fuel_per_km_max', 'weekly_fuel_per_km_count', 'weekly_fuel_per_passenger_avg', 'weekly_fuel_per_passenger_total', 'weekly_fuel_per_passenger_std', 'weekly_fuel_per_passenger_min', 'weekly_fuel_per_passenger_max', 'weekly_fuel_per_passenger_count', 'weekly_total_time_minutes_total', 'weekly_total_time_minutes_avg', 'weekly_total_time_minutes_std', 'weekly_total_time_minutes_min', 'weekly_total_time_minutes_max', 'weekly_total_time_minutes_count', 'weekly_climb_time_minutes_total', 'weekly_climb_time_minutes_avg', 'weekly_climb_time_minutes_std', 'weekly_climb_time_minutes_min', 'weekly_climb_time_minutes_max', 'weekly_climb_time_minutes_count', 'weekly_cruise_time_minutes_total', 'weekly_cruise_time_minutes_avg', 'weekly_cruise_time_minutes_std', 'weekly_cruise_time_minutes_min', 'weekly_cruise_time_minutes_max', 'weekly_cruise_time_minutes_count', 'weekly_descent_time_minutes_total', 'weekly_descent_time_minutes_avg', 'weekly_descent_time_minutes_std', 'weekly_descent_time_minutes_min', 'weekly_descent_time_minutes_max', 'weekly_descent_time_minutes_count', 'weekly_climb_fuel_kg_total', 'weekly_climb_fuel_kg_avg', 'weekly_climb_fuel_kg_std', 'weekly_climb_fuel_kg_min', 'weekly_climb_fuel_kg_max', 'weekly_climb_fuel_kg_count', 'weekly_cruise_fuel_kg_total', 'weekly_cruise_fuel_kg_avg', 'weekly_cruise_fuel_kg_std', 'weekly_cruise_fuel_kg_min', 'weekly_cruise_fuel_kg_max', 'weekly_cruise_fuel_kg_count', 'weekly_descent_fuel_kg_total', 'weekly_descent_fuel_kg_avg', 'weekly_descent_fuel_kg_std', 'weekly_descent_fuel_kg_min', 'weekly_descent_fuel_kg_max', 'weekly_descent_fuel_kg_count', 'weekly_co2_direct_kg_total', 'weekly_co2_direct_kg_avg', 'weekly_co2_direct_kg_std', 'weekly_co2_direct_kg_min', 'weekly_co2_direct_kg_max', 'weekly_co2_direct_kg_count', 'weekly_co2_equivalent_kg_total', 'weekly_co2_equivalent_kg_avg', 'weekly_co2_equivalent_kg_std', 'weekly_co2_equivalent_kg_min', 'weekly_co2_equivalent_kg_max', 'weekly_co2_equivalent_kg_count', 'weekly_co2_rf_equivalent_kg_total', 'weekly_co2_rf_equivalent_kg_avg', 'weekly_co2_rf_equivalent_kg_std', 'weekly_co2_rf_equivalent_kg_min', 'weekly_co2_rf_equivalent_kg_max', 'weekly_co2_rf_equivalent_kg_count', 'weekly_co2_per_passenger_kg_avg', 'weekly_co2_per_passenger_kg_total', 'weekly_co2_per_passenger_kg_std', 'weekly_co2_per_passenger_kg_min', 'weekly_co2_per_passenger_kg_max', 'weekly_co2_per_passenger_kg_count', 'weekly_co2_per_km_kg_avg', 'weekly_co2_per_km_kg_total', 'weekly_co2_per_km_kg_std', 'weekly_co2_per_km_kg_min', 'weekly_co2_per_km_kg_max', 'weekly_co2_per_km_kg_count', 'weekly_co2_per_pkm_kg_avg', 'weekly_co2_per_pkm_kg_total', 'weekly_co2_per_pkm_kg_std', 'weekly_co2_per_pkm_kg_min', 'weekly_co2_per_pkm_kg_max', 'weekly_co2_per_pkm_kg_count', 'weekly_nox_kg_total', 'weekly_nox_kg_avg', 'weekly_nox_kg_std', 'weekly_nox_kg_min', 'weekly_nox_kg_max', 'weekly_nox_kg_count', 'weekly_h2o_kg_total', 'weekly_h2o_kg_avg', 'weekly_h2o_kg_std', 'weekly_h2o_kg_min', 'weekly_h2o_kg_max', 'weekly_h2o_kg_count', 'weekly_fuel_efficiency_l_per_100km_avg', 'weekly_fuel_efficiency_l_per_100km_total', 'weekly_fuel_efficiency_l_per_100km_std', 'weekly_fuel_efficiency_l_per_100km_min', 'weekly_fuel_efficiency_l_per_100km_max', 'weekly_fuel_efficiency_l_per_100km_count', 'weekly_energy_intensity_mj_per_pkm_avg', 'weekly_energy_intensity_mj_per_pkm_total', 'weekly_energy_intensity_mj_per_pkm_std', 'weekly_energy_intensity_mj_per_pkm_min', 'weekly_energy_intensity_mj_per_pkm_max', 'weekly_energy_intensity_mj_per_pkm_count', 'weekly_carbon_intensity_kg_co2_per_pkm_avg', 'weekly_carbon_intensity_kg_co2_per_pkm_total', 'weekly_carbon_intensity_kg_co2_per_pkm_std', 'weekly_carbon_intensity_kg_co2_per_pkm_min', 'weekly_carbon_intensity_kg_co2_per_pkm_max', 'weekly_carbon_intensity_kg_co2_per_pkm_count', 'weekly_environmental_impact_score_total', 'weekly_environmental_impact_score_avg', 'weekly_environmental_impact_score_std', 'weekly_environmental_impact_score_min', 'weekly_environmental_impact_score_max', 'weekly_environmental_impact_score_count', 'weekly_fuel_cost_yuan_avg_total', 'weekly_fuel_cost_yuan_avg_avg', 'weekly_fuel_cost_yuan_avg_std', 'weekly_fuel_cost_yuan_avg_min', 'weekly_fuel_cost_yuan_avg_max', 'weekly_fuel_cost_yuan_avg_count', 'weekly_fuel_cost_per_passenger_avg', 'weekly_fuel_cost_per_passenger_total', 'weekly_fuel_cost_per_passenger_std', 'weekly_fuel_cost_per_passenger_min', 'weekly_fuel_cost_per_passenger_max', 'weekly_fuel_cost_per_passenger_count', 'weekly_fuel_cost_per_km_avg', 'weekly_fuel_cost_per_km_total', 'weekly_fuel_cost_per_km_std', 'weekly_fuel_cost_per_km_min', 'weekly_fuel_cost_per_km_max', 'weekly_fuel_cost_per_km_count', 'weekly_distance_km_total', 'weekly_distance_km_avg', 'weekly_distance_km_std', 'weekly_distance_km_min', 'weekly_distance_km_max', 'weekly_distance_km_count', 'weekly_passengers_total', 'weekly_passengers_avg', 'weekly_passengers_std', 'weekly_passengers_min', 'weekly_passengers_max', 'weekly_passengers_count', 'has_original_data', 'source_week', 'is_estimated', 'airport', 'original_week']
+2026-10-17 17:26:06,657 - core.green_hydrogen_optimization_model - INFO - 处理了 2 个京津冀机场的数据
+INFO:core.green_hydrogen_optimization_model:处理了 2 个京津冀机场的数据
+2026-10-17 17:26:06,719 - core.green_hydrogen_optimization_model - INFO - [内存监控] 释放excel_data后: 466.52 MB
+INFO:core.green_hydrogen_optimization_model:[内存监控] 释放excel_data后: 466.52 MB
+2026-10-17 17:26:06,724 - core.green_hydrogen_optimization_model - INFO - 从配置文件获取CO₂捕获源数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
+INFO:core.green_hydrogen_optimization_model:从配置文件获取CO₂捕获源数据路径: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/data/co2_capture_sources.csv
+2026-10-17 17:26:06,729 - core.green_hydrogen_optimization_model - INFO - 加载CO₂捕获源原始数据: 3445 条记录
+INFO:core.green_hydrogen_optimization_model:加载CO₂捕获源原始数据: 3445 条记录
+2026-10-17 17:26:06,731 - core.green_hydrogen_optimization_model - INFO - Backfilling province for 20 CO? sources
+INFO:core.green_hydrogen_optimization_model:Backfilling province for 20 CO? sources
+2026-10-17 17:26:06,739 - core.green_hydrogen_optimization_model - INFO - Facility type 'gas_power': resolved 0 records, 19 still unknown
+INFO:core.green_hydrogen_optimization_model:Facility type 'gas_power': resolved 0 records, 19 still unknown
+2026-10-17 17:26:06,745 - core.green_hydrogen_optimization_model - INFO - Facility type 'oil_refinery': resolved 0 records, 1 still unknown
+INFO:core.green_hydrogen_optimization_model:Facility type 'oil_refinery': resolved 0 records, 1 still unknown
+2026-10-17 17:26:06,763 - core.green_hydrogen_optimization_model - INFO - 过滤后保留100km范围内的CO₂捕获源: 31 条记录
+INFO:core.green_hydrogen_optimization_model:过滤后保留100km范围内的CO₂捕获源: 31 条记录
+2026-10-17 17:26:06,764 - core.green_hydrogen_optimization_model - INFO - 成功加载 31 个CO₂捕获源
+INFO:core.green_hydrogen_optimization_model:成功加载 31 个CO₂捕获源
+2026-10-17 17:26:06,764 - core.green_hydrogen_optimization_model - INFO - CO₂捕获总能力: 1.46 百万吨/周
+INFO:core.green_hydrogen_optimization_model:CO₂捕获总能力: 1.46 百万吨/周
+2026-10-17 17:26:06,764 - core.green_hydrogen_optimization_model - INFO - 平均捕获成本: 162.58 元/吨
+INFO:core.green_hydrogen_optimization_model:平均捕获成本: 162.58 元/吨
+2026-10-17 17:26:06,764 - core.green_hydrogen_optimization_model - INFO - CO₂捕获源类型分布: {'coal_power': 16, 'gas_power': 14, 'oil_refinery': 1}
+INFO:core.green_hydrogen_optimization_model:CO₂捕获源类型分布: {'coal_power': 16, 'gas_power': 14, 'oil_refinery': 1}
+2026-10-17 17:26:06,820 - core.green_hydrogen_optimization_model - INFO - [内存监控] 释放co2_df后: 467.53 MB
+INFO:core.green_hydrogen_optimization_model:[内存监控] 释放co2_df后: 467.53 MB
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO -   添加了 2 个机场位置到基础locations中
+INFO:core.green_hydrogen_optimization_model:  添加了 2 个机场位置到基础locations中
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO -   添加了 31 个CO₂捕获源到基础locations中
+INFO:core.green_hydrogen_optimization_model:  添加了 31 个CO₂捕获源到基础locations中
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.green_hydrogen_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+INFO:core.green_hydrogen_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - [敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+INFO:core.green_hydrogen_optimization_model:[敏感性分析-参数验证] 从配置文件读取的平准化成本门槛值:
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO -   economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+INFO:core.green_hydrogen_optimization_model:  economic_parameters.levelized_cost_threshold_yuan_per_kg = 1000 元/kg
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - MTJ变动运营成本参数读取: 0.8元/kg (配置文件中值: 0.8)
+INFO:core.green_hydrogen_optimization_model:MTJ变动运营成本参数读取: 0.8元/kg (配置文件中值: 0.8)
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=18,000元/年, 变动OPEX=1元/kg
+INFO:core.green_hydrogen_optimization_model:MTJ生产基础成本估算: CAPEX=53,550元/(kg/hour), 固定OPEX=18,000元/年, 变动OPEX=1元/kg
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - WARNING - 未提供实际产量，使用理论估算: 7446.00 kg/年
+WARNING:core.green_hydrogen_optimization_model:未提供实际产量，使用理论估算: 7446.00 kg/年
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - 基础平准化成本: 4 元/kg
+INFO:core.green_hydrogen_optimization_model:基础平准化成本: 4 元/kg
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - 电解槽需在第15年更换，总项目期间平准化成本已计算更换费用
+INFO:core.green_hydrogen_optimization_model:电解槽需在第15年更换，总项目期间平准化成本已计算更换费用
+2026-10-17 17:26:06,836 - core.green_hydrogen_optimization_model - INFO - 使用优化模型内部成本计算，不依赖外部成本分析器
+INFO:core.green_hydrogen_optimization_model:使用优化模型内部成本计算，不依赖外部成本分析器
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 定义了 1 种SAF生产技术（绿氢+CO₂两步法）
+INFO:core.green_hydrogen_optimization_model:定义了 1 种SAF生产技术（绿氢+CO₂两步法）
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 基础平准化成本: 4 元/kg
+INFO:core.green_hydrogen_optimization_model:基础平准化成本: 4 元/kg
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   绿氢+CO₂费托合成制SAF: 5 元/kg (复杂度因子: 1.20)
+INFO:core.green_hydrogen_optimization_model:  绿氢+CO₂费托合成制SAF: 5 元/kg (复杂度因子: 1.20)
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 定义了运输位置映射:
+INFO:core.green_hydrogen_optimization_model:定义了运输位置映射:
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   氢气生产位置: 109 个
+INFO:core.green_hydrogen_optimization_model:  氢气生产位置: 109 个
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   机场位置: 2 个
+INFO:core.green_hydrogen_optimization_model:  机场位置: 2 个
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   总位置数: 142 个
+INFO:core.green_hydrogen_optimization_model:  总位置数: 142 个
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 【位置类型匹配诊断】
+INFO:core.green_hydrogen_optimization_model:【位置类型匹配诊断】
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 实际位置类型分布: {'solar_plant': 65, 'wind_farm': 44, 'airport': 2, 'co2_capture': 31}
+INFO:core.green_hydrogen_optimization_model:实际位置类型分布: {'solar_plant': 65, 'wind_farm': 44, 'airport': 2, 'co2_capture': 31}
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 总位置数: 142
+INFO:core.green_hydrogen_optimization_model:总位置数: 142
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - 
+技术 [green_h2_co2_to_saf]:
+INFO:core.green_hydrogen_optimization_model:
+技术 [green_h2_co2_to_saf]:
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   要求位置类型: ['solar_plant', 'wind_farm', 'airport', 'co2_capture']
+INFO:core.green_hydrogen_optimization_model:  要求位置类型: ['solar_plant', 'wind_farm', 'airport', 'co2_capture']
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   匹配到的位置数: 142
+INFO:core.green_hydrogen_optimization_model:  匹配到的位置数: 142
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO -   ✅ 匹配位置示例: ['Beijing CGN Haifeng Agricultural Greenhouse solar project', 'Beijing Changping Qinghuiling wind/solar demonstration project', 'Beijing Foton Cummins Engine ISF factory solar project']
+INFO:core.green_hydrogen_optimization_model:  ✅ 匹配位置示例: ['Beijing CGN Haifeng Agricultural Greenhouse solar project', 'Beijing Changping Qinghuiling wind/solar demonstration project', 'Beijing Foton Cummins Engine ISF factory solar project']
+2026-10-17 17:26:06,837 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络构建完成: 376节点, 402边, 32个连通分量 (最大分量115节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:crude管道网络不连通! 分量大小: [115, 100, 46, 11, 9]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络构建完成: 401节点, 452边, 37个连通分量 (最大分量116节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:refined管道网络不连通! 分量大小: [116, 73, 36, 15, 13]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络构建完成: 1482节点, 1620边, 184个连通分量 (最大分量657节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:natural_gas管道网络不连通! 分量大小: [657, 24, 20, 19, 18]
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管网近邻接驳完成: 新增2419条接驳边 (<= 20.0km)
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:mixed管道网络构建完成: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 38.66km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.89km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 20.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 43.04km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.26km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 145.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 168.72km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 43.57km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（17节点），最近距离 38.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 39.20km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 34.25km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 28.31km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 30.41km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 42.27km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 85.76km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（5节点），最近距离 25.67km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 22.80km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（6节点），最近距离 37.44km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 24.99km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（21节点），最近距离 72.38km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 28.49km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 23.55km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 41.69km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 27.94km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（2节点），最近距离 40.88km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 24.40km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 47.35km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（7节点），最近距离 31.56km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（4节点），最近距离 41.21km 超过阈值 10.0km
+WARNING:hydrogen.hydrogen_pipeline_distance_calculator:无法桥接分量（3节点），最近距离 66.87km 超过阈值 10.0km
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:连通分量桥接完成: 成功 0 个, 失败 30 个
+INFO:hydrogen.hydrogen_pipeline_distance_calculator:桥接后mixed管道网络: 2213节点, 4882边, 31个连通分量 (最大分量2085节点)
+2026-10-17 17:26:07,100 - core.green_hydrogen_optimization_model - INFO - 氢气管道距离计算器初始化完成
+INFO:core.green_hydrogen_optimization_model:氢气管道距离计算器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:初始化氢气聚类优化器: eps=15.0km, min_samples=2
+2026-10-17 17:26:07,101 - core.green_hydrogen_optimization_model - INFO - 氢气聚类优化器初始化完成
+INFO:core.green_hydrogen_optimization_model:氢气聚类优化器初始化完成
+INFO:hydrogen.hydrogen_clustering_optimizer:开始对109个氢气生产厂进行聚类...
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类完成: 6个聚类, 10个噪声点
+INFO:hydrogen.hydrogen_clustering_optimizer:最终聚类结果: 6个聚类, 10个独立点
+INFO:hydrogen.hydrogen_clustering_optimizer:聚类结果已导出到: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/clustering_results.json
+2026-10-17 17:26:07,104 - core.green_hydrogen_optimization_model - INFO - 氢气聚类完成: 6个聚类, 10个独立点
+INFO:core.green_hydrogen_optimization_model:氢气聚类完成: 6个聚类, 10个独立点
+2026-10-17 17:26:07,104 - core.green_hydrogen_optimization_model - INFO - 管道路径将按需计算（延迟计算模式）
+INFO:core.green_hydrogen_optimization_model:管道路径将按需计算（延迟计算模式）
+2026-10-17 17:26:07,104 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:07,104 - core.green_hydrogen_optimization_model - INFO - 开始初始化CO2捕获源聚类...
+INFO:core.green_hydrogen_optimization_model:开始初始化CO2捕获源聚类...
+2026-10-17 17:26:07,105 - core.green_hydrogen_optimization_model - INFO - CO2捕获源数量: 31
+INFO:core.green_hydrogen_optimization_model:CO2捕获源数量: 31
+INFO:hydrogen.co2_clustering_optimizer:初始化CO2聚类优化器: eps=15.0km, min_samples=3, max_clusters=200
+2026-10-17 17:26:07,105 - core.green_hydrogen_optimization_model - INFO - CO2聚类优化器创建成功
+INFO:core.green_hydrogen_optimization_model:CO2聚类优化器创建成功
+2026-10-17 17:26:07,105 - core.green_hydrogen_optimization_model - INFO - 准备聚类CO2捕获源字典，共31个位置
+INFO:core.green_hydrogen_optimization_model:准备聚类CO2捕获源字典，共31个位置
+INFO:hydrogen.co2_clustering_optimizer:============================================================
+INFO:hydrogen.co2_clustering_optimizer:开始CO2捕获源聚类分析: 31个CO2源
+INFO:hydrogen.co2_clustering_optimizer:============================================================
+INFO:hydrogen.co2_clustering_optimizer:✓ 数据准备完成: 0.00秒
+INFO:hydrogen.co2_clustering_optimizer:开始DBSCAN聚类: 31个点, eps=15.0km, min_samples=3
+INFO:hydrogen.co2_clustering_optimizer:使用Numba JIT并行计算（利用所有CPU核心）...
+INFO:hydrogen.co2_clustering_optimizer:✓ 距离矩阵计算完成: 耗时0.20秒, 平均邻居数3.6
+INFO:hydrogen.co2_clustering_optimizer:✓ DBSCAN聚类完成: 发现4个聚类
+INFO:hydrogen.co2_clustering_optimizer:  - 距离计算: 0.20秒 (99.9%)
+INFO:hydrogen.co2_clustering_optimizer:  - 聚类扩展: 0.00秒 (0.0%)
+INFO:hydrogen.co2_clustering_optimizer:  - 总耗时: 0.20秒
+INFO:hydrogen.co2_clustering_optimizer:✓ 聚类结果: 4个聚类, 8个噪声点
+INFO:hydrogen.co2_clustering_optimizer:✓ 后处理完成: 0.00秒
+INFO:hydrogen.co2_clustering_optimizer:  - 管道距离缓存: 9个坐标点
+INFO:hydrogen.co2_clustering_optimizer:============================================================
+INFO:hydrogen.co2_clustering_optimizer:✓ CO2聚类全流程完成!
+INFO:hydrogen.co2_clustering_optimizer:  - 总耗时: 0.21秒
+INFO:hydrogen.co2_clustering_optimizer:  - 最终聚类: 4个, 独立点: 8个
+INFO:hydrogen.co2_clustering_optimizer:============================================================
+INFO:hydrogen.co2_clustering_optimizer:CO2聚类结果已导出到: /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/project/products/supply_chain_optimization/green_hydrogen_supply_chain_optimization/co2_clustering_results.json
+2026-10-17 17:26:07,311 - core.green_hydrogen_optimization_model - INFO - CO2聚类完成！
+INFO:core.green_hydrogen_optimization_model:CO2聚类完成！
+2026-10-17 17:26:07,311 - core.green_hydrogen_optimization_model - INFO -   - 聚类数量: 4
+INFO:core.green_hydrogen_optimization_model:  - 聚类数量: 4
+2026-10-17 17:26:07,311 - core.green_hydrogen_optimization_model - INFO -   - 独立点数量: 8
+INFO:core.green_hydrogen_optimization_model:  - 独立点数量: 8
+2026-10-17 17:26:07,311 - core.green_hydrogen_optimization_model - INFO -   - 总CO2捕获源: 31
+INFO:core.green_hydrogen_optimization_model:  - 总CO2捕获源: 31
+2026-10-17 17:26:07,311 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:07,312 - core.green_hydrogen_optimization_model - INFO - 初始化CO2超级图优化器...
+INFO:core.green_hydrogen_optimization_model:初始化CO2超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:🚀 开始构建超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:步骤1/3: 构建超级图...
+INFO:shared.optimizers.super_graph_optimizer:  加载原始管道网络...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ 管道网络: 1482节点, 1620边
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2聚类中心...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2聚类中心: 4个
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2独立点（噪声点）...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2独立点: 8个
+INFO:shared.optimizers.super_graph_optimizer:  添加SAF工厂...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ SAF工厂: 142个
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 超级图构建完成: 0.02秒
+INFO:shared.optimizers.super_graph_optimizer:步骤2/3: 预计算所有最短路径...
+INFO:shared.optimizers.super_graph_optimizer:  使用johnson算法...
+INFO:shared.optimizers.super_graph_optimizer:  图规模: 1636节点, 3160边
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 1.32秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 距离对数: 699,854
+INFO:shared.optimizers.super_graph_optimizer:步骤3/3: 预计算CO2源到聚类中心的距离...
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 0.00秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ CO2源数量: 31
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:✓ 超级图优化器初始化完成！
+INFO:shared.optimizers.super_graph_optimizer:  总耗时: 1.34秒
+INFO:shared.optimizers.super_graph_optimizer:  超级图节点数: 1636
+INFO:shared.optimizers.super_graph_optimizer:    - 管道节点: 1482
+INFO:shared.optimizers.super_graph_optimizer:    - CO2聚类中心: 4
+INFO:shared.optimizers.super_graph_optimizer:    - CO2独立点: 8
+INFO:shared.optimizers.super_graph_optimizer:    - SAF工厂: 142
+INFO:shared.optimizers.super_graph_optimizer:  超级图边数: 3160
+INFO:shared.optimizers.super_graph_optimizer:    - 新增边: 1540
+INFO:shared.optimizers.super_graph_optimizer:  预计算距离对数: 699854
+INFO:shared.optimizers.super_graph_optimizer:  预计算耗时: 1.32秒
+INFO:shared.optimizers.super_graph_optimizer:  查询性能: O(1)字典查找 (~0.001ms)
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+2026-10-17 17:26:08,650 - core.green_hydrogen_optimization_model - INFO - ✓ CO2超级图优化器初始化成功！
+INFO:core.green_hydrogen_optimization_model:✓ CO2超级图优化器初始化成功！
+2026-10-17 17:26:08,650 - core.green_hydrogen_optimization_model - INFO - 初始化H2超级图优化器...
+INFO:core.green_hydrogen_optimization_model:初始化H2超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:🚀 开始构建超级图优化器...
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:步骤1/3: 构建超级图...
+INFO:shared.optimizers.super_graph_optimizer:  加载原始管道网络...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ 管道网络: 1482节点, 1620边
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2聚类中心...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2聚类中心: 6个
+INFO:shared.optimizers.super_graph_optimizer:  添加CO2独立点（噪声点）...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ CO2独立点: 10个
+INFO:shared.optimizers.super_graph_optimizer:  添加SAF工厂...
+INFO:shared.optimizers.super_graph_optimizer:    ✓ SAF工厂: 142个
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 超级图构建完成: 0.02秒
+INFO:shared.optimizers.super_graph_optimizer:步骤2/3: 预计算所有最短路径...
+INFO:shared.optimizers.super_graph_optimizer:  使用johnson算法...
+INFO:shared.optimizers.super_graph_optimizer:  图规模: 1640节点, 3200边
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 1.33秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 距离对数: 706,534
+INFO:shared.optimizers.super_graph_optimizer:步骤3/3: 预计算CO2源到聚类中心的距离...
+INFO:shared.optimizers.super_graph_optimizer:  ✓ 预计算完成: 0.00秒
+INFO:shared.optimizers.super_graph_optimizer:  ✓ CO2源数量: 109
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+INFO:shared.optimizers.super_graph_optimizer:✓ 超级图优化器初始化完成！
+INFO:shared.optimizers.super_graph_optimizer:  总耗时: 1.36秒
+INFO:shared.optimizers.super_graph_optimizer:  超级图节点数: 1640
+INFO:shared.optimizers.super_graph_optimizer:    - 管道节点: 1482
+INFO:shared.optimizers.super_graph_optimizer:    - CO2聚类中心: 6
+INFO:shared.optimizers.super_graph_optimizer:    - CO2独立点: 10
+INFO:shared.optimizers.super_graph_optimizer:    - SAF工厂: 142
+INFO:shared.optimizers.super_graph_optimizer:  超级图边数: 3200
+INFO:shared.optimizers.super_graph_optimizer:    - 新增边: 1580
+INFO:shared.optimizers.super_graph_optimizer:  预计算距离对数: 706534
+INFO:shared.optimizers.super_graph_optimizer:  预计算耗时: 1.33秒
+INFO:shared.optimizers.super_graph_optimizer:  查询性能: O(1)字典查找 (~0.001ms)
+INFO:shared.optimizers.super_graph_optimizer:======================================================================
+2026-10-17 17:26:10,006 - core.green_hydrogen_optimization_model - INFO - ✓ H2超级图优化器初始化成功！
+INFO:core.green_hydrogen_optimization_model:✓ H2超级图优化器初始化成功！
+2026-10-17 17:26:10,006 - core.green_hydrogen_optimization_model - INFO - 数据加载完成: 142个生产地点, 2个机场, 31个CO₂捕获源
+INFO:core.green_hydrogen_optimization_model:数据加载完成: 142个生产地点, 2个机场, 31个CO₂捕获源
+DATA_READY CCU-GH-MTJ baseline 142
+Cardinal Optimizer v8.0.7. Build date Sep 20 2026
+Copyright Cardinal Operations 2026. All Rights Reserved
+
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'LpMethod' to 2
+Setting parameter 'RelGap' to 0.001
+Setting parameter 'FeasTol' to 1e-07
+Setting parameter 'IntTol' to 1e-07
+2026-10-17 17:26:10,033 - core.green_hydrogen_optimization_model - INFO - 创建决策变量...
+INFO:core.green_hydrogen_optimization_model:创建决策变量...
+2026-10-17 17:26:10,095 - core.green_hydrogen_optimization_model - INFO - MTJ容量配置: 读取到的容量上限 = 10000 kg/h
+INFO:core.green_hydrogen_optimization_model:MTJ容量配置: 读取到的容量上限 = 10000 kg/h
+2026-10-17 17:26:10,095 - core.green_hydrogen_optimization_model - WARNING - MTJ容量配置异常: 期望100000，实际10000，强制使用100000
+WARNING:core.green_hydrogen_optimization_model:MTJ容量配置异常: 期望100000，实际10000，强制使用100000
+2026-10-17 17:26:10,096 - core.green_hydrogen_optimization_model - INFO - 最终使用的MTJ容量限制: 100000 kg/h
+INFO:core.green_hydrogen_optimization_model:最终使用的MTJ容量限制: 100000 kg/h
+2026-10-17 17:26:10,433 - core.green_hydrogen_optimization_model - INFO - 【禁用罐车运输】跳过氢气罐车运输变量创建，仅使用管道运输
+INFO:core.green_hydrogen_optimization_model:【禁用罐车运输】跳过氢气罐车运输变量创建，仅使用管道运输
+2026-10-17 17:26:10,433 - core.green_hydrogen_optimization_model - INFO - 创建氢能管道运输变量，作为罐车运输的替代选择
+INFO:core.green_hydrogen_optimization_model:创建氢能管道运输变量，作为罐车运输的替代选择
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 15478 条氢能管道运输路线
+INFO:core.green_hydrogen_optimization_model:创建了 15478 条氢能管道运输路线
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 31808 个生产变量
+INFO:core.green_hydrogen_optimization_model:创建了 31808 个生产变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 142 个设施变量
+INFO:core.green_hydrogen_optimization_model:创建了 142 个设施变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 142 个设施产能变量
+INFO:core.green_hydrogen_optimization_model:创建了 142 个设施产能变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 1136 个运输变量
+INFO:core.green_hydrogen_optimization_model:创建了 1136 个运输变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 31950 个库存变量
+INFO:core.green_hydrogen_optimization_model:创建了 31950 个库存变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 24416 个制氢变量
+INFO:core.green_hydrogen_optimization_model:创建了 24416 个制氢变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 109 个电解槽容量变量
+INFO:core.green_hydrogen_optimization_model:创建了 109 个电解槽容量变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 31950 个氢气库存变量
+INFO:core.green_hydrogen_optimization_model:创建了 31950 个氢气库存变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 8 个缺货惩罚变量
+INFO:core.green_hydrogen_optimization_model:创建了 8 个缺货惩罚变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建了 15478 个氢能管道运输变量
+INFO:core.green_hydrogen_optimization_model:创建了 15478 个氢能管道运输变量
+2026-10-17 17:26:10,567 - core.green_hydrogen_optimization_model - INFO - 创建CO₂运输变量（仅管道）
+INFO:core.green_hydrogen_optimization_model:创建CO₂运输变量（仅管道）
+2026-10-17 17:26:10,580 - core.green_hydrogen_optimization_model - INFO - 创建了 4402 条CO₂运输路线（仅管道）
+INFO:core.green_hydrogen_optimization_model:创建了 4402 条CO₂运输路线（仅管道）
+2026-10-17 17:26:10,580 - core.green_hydrogen_optimization_model - INFO - 创建了 4402 个CO₂管道运输变量
+INFO:core.green_hydrogen_optimization_model:创建了 4402 个CO₂管道运输变量
+2026-10-17 17:26:10,580 - core.green_hydrogen_optimization_model - INFO - 创建甲醇生产和库存变量
+INFO:core.green_hydrogen_optimization_model:创建甲醇生产和库存变量
+2026-10-17 17:26:10,771 - core.green_hydrogen_optimization_model - INFO - 创建了 31808 个甲醇生产变量
+INFO:core.green_hydrogen_optimization_model:创建了 31808 个甲醇生产变量
+2026-10-17 17:26:10,771 - core.green_hydrogen_optimization_model - INFO - 创建了 31950 个甲醇库存变量
+INFO:core.green_hydrogen_optimization_model:创建了 31950 个甲醇库存变量
+2026-10-17 17:26:10,771 - core.green_hydrogen_optimization_model - INFO - 创建CO₂库存变量（时间尺度匹配：周级供应/捕获→小时级消耗）
+INFO:core.green_hydrogen_optimization_model:创建CO₂库存变量（时间尺度匹配：周级供应/捕获→小时级消耗）
+2026-10-17 17:26:10,842 - core.green_hydrogen_optimization_model - INFO - 创建了 31950 个CO₂库存变量
+INFO:core.green_hydrogen_optimization_model:创建了 31950 个CO₂库存变量
+2026-10-17 17:26:10,842 - core.green_hydrogen_optimization_model - INFO - CO₂库存位置数量: 142
+INFO:core.green_hydrogen_optimization_model:CO₂库存位置数量: 142
+2026-10-17 17:26:10,842 - core.green_hydrogen_optimization_model - INFO - 创建统一的成本表达式对象...
+INFO:core.green_hydrogen_optimization_model:创建统一的成本表达式对象...
+2026-10-17 17:26:10,843 - core.green_hydrogen_optimization_model - INFO - 成本表达式中使用的MTJ变动运营成本: 0.8元/kg
+INFO:core.green_hydrogen_optimization_model:成本表达式中使用的MTJ变动运营成本: 0.8元/kg
+2026-10-17 17:26:11,098 - core.green_hydrogen_optimization_model - INFO - 计算电解槽/副产氢设备投资成本...
+INFO:core.green_hydrogen_optimization_model:计算电解槽/副产氢设备投资成本...
+2026-10-17 17:26:11,395 - core.green_hydrogen_optimization_model - INFO - 氢气储存成本计算（基于周供应量峰值库存）
+INFO:core.green_hydrogen_optimization_model:氢气储存成本计算（基于周供应量峰值库存）
+2026-10-17 17:26:11,398 - core.green_hydrogen_optimization_model - INFO - 开始缓存氢气管道运输距离: 15369条路径...
+INFO:core.green_hydrogen_optimization_model:开始缓存氢气管道运输距离: 15369条路径...
+2026-10-17 17:26:11,398 - core.green_hydrogen_optimization_model - INFO - 使用H2超级图O(1)并行查询加速距离计算（4个workers）...
+INFO:core.green_hydrogen_optimization_model:使用H2超级图O(1)并行查询加速距离计算（4个workers）...
+2026-10-17 17:26:11,845 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 1000/15369 (6.5%), 成功: 1000, 失败: 0, 预计剩余: 6.4秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 1000/15369 (6.5%), 成功: 1000, 失败: 0, 预计剩余: 6.4秒
+2026-10-17 17:26:11,846 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 2000/15369 (13.0%), 成功: 2000, 失败: 0, 预计剩余: 3.0秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 2000/15369 (13.0%), 成功: 2000, 失败: 0, 预计剩余: 3.0秒
+2026-10-17 17:26:11,848 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 3000/15369 (19.5%), 成功: 3000, 失败: 0, 预计剩余: 1.9秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 3000/15369 (19.5%), 成功: 3000, 失败: 0, 预计剩余: 1.9秒
+2026-10-17 17:26:11,849 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 4000/15369 (26.0%), 成功: 4000, 失败: 0, 预计剩余: 1.3秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 4000/15369 (26.0%), 成功: 4000, 失败: 0, 预计剩余: 1.3秒
+2026-10-17 17:26:11,850 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 5000/15369 (32.5%), 成功: 5000, 失败: 0, 预计剩余: 0.9秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 5000/15369 (32.5%), 成功: 5000, 失败: 0, 预计剩余: 0.9秒
+2026-10-17 17:26:11,852 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 6000/15369 (39.0%), 成功: 6000, 失败: 0, 预计剩余: 0.7秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 6000/15369 (39.0%), 成功: 6000, 失败: 0, 预计剩余: 0.7秒
+2026-10-17 17:26:11,853 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 7000/15369 (45.5%), 成功: 7000, 失败: 0, 预计剩余: 0.5秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 7000/15369 (45.5%), 成功: 7000, 失败: 0, 预计剩余: 0.5秒
+2026-10-17 17:26:11,854 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 8000/15369 (52.1%), 成功: 8000, 失败: 0, 预计剩余: 0.4秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 8000/15369 (52.1%), 成功: 8000, 失败: 0, 预计剩余: 0.4秒
+2026-10-17 17:26:11,856 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 9000/15369 (58.6%), 成功: 9000, 失败: 0, 预计剩余: 0.3秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 9000/15369 (58.6%), 成功: 9000, 失败: 0, 预计剩余: 0.3秒
+2026-10-17 17:26:11,857 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 10000/15369 (65.1%), 成功: 10000, 失败: 0, 预计剩余: 0.2秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 10000/15369 (65.1%), 成功: 10000, 失败: 0, 预计剩余: 0.2秒
+2026-10-17 17:26:11,859 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 11000/15369 (71.6%), 成功: 11000, 失败: 0, 预计剩余: 0.2秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 11000/15369 (71.6%), 成功: 11000, 失败: 0, 预计剩余: 0.2秒
+2026-10-17 17:26:11,860 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 12000/15369 (78.1%), 成功: 12000, 失败: 0, 预计剩余: 0.1秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 12000/15369 (78.1%), 成功: 12000, 失败: 0, 预计剩余: 0.1秒
+2026-10-17 17:26:11,861 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 13000/15369 (84.6%), 成功: 13000, 失败: 0, 预计剩余: 0.1秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 13000/15369 (84.6%), 成功: 13000, 失败: 0, 预计剩余: 0.1秒
+2026-10-17 17:26:11,863 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 14000/15369 (91.1%), 成功: 14000, 失败: 0, 预计剩余: 0.0秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 14000/15369 (91.1%), 成功: 14000, 失败: 0, 预计剩余: 0.0秒
+2026-10-17 17:26:11,864 - core.green_hydrogen_optimization_model - INFO - H2超级图查询进度: 15000/15369 (97.6%), 成功: 15000, 失败: 0, 预计剩余: 0.0秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询进度: 15000/15369 (97.6%), 成功: 15000, 失败: 0, 预计剩余: 0.0秒
+2026-10-17 17:26:11,865 - core.green_hydrogen_optimization_model - INFO - H2超级图查询完成: 成功15369/15369条, 耗时: 0.47秒, 平均速度: 32902.8条/秒
+INFO:core.green_hydrogen_optimization_model:H2超级图查询完成: 成功15369/15369条, 耗时: 0.47秒, 平均速度: 32902.8条/秒
+2026-10-17 17:26:11,865 - core.green_hydrogen_optimization_model - INFO - 氢气距离缓存完成: 15369条路径, 总耗时: 0.47秒, 平均速度: 32899.3条/秒
+INFO:core.green_hydrogen_optimization_model:氢气距离缓存完成: 15369条路径, 总耗时: 0.47秒, 平均速度: 32899.3条/秒
+2026-10-17 17:26:11,920 - core.green_hydrogen_optimization_model - INFO - CO2捕获单位成本（从unified_costs.co2_capture读取）: 0.28 元/kg
+INFO:core.green_hydrogen_optimization_model:CO2捕获单位成本（从unified_costs.co2_capture读取）: 0.28 元/kg
+2026-10-17 17:26:12,002 - core.green_hydrogen_optimization_model - INFO - 开始缓存CO₂管道运输距离: 4371条路径...
+INFO:core.green_hydrogen_optimization_model:开始缓存CO₂管道运输距离: 4371条路径...
+2026-10-17 17:26:12,002 - core.green_hydrogen_optimization_model - INFO - 使用超级图O(1)并行查询加速距离计算（4个workers）...
+INFO:core.green_hydrogen_optimization_model:使用超级图O(1)并行查询加速距离计算（4个workers）...
+2026-10-17 17:26:12,051 - core.green_hydrogen_optimization_model - INFO - ✓ 超级图查询完成: 4371条路径成功, 0条失败, 耗时: 0.05秒, 平均速度: 89152.0条/秒
+INFO:core.green_hydrogen_optimization_model:✓ 超级图查询完成: 4371条路径成功, 0条失败, 耗时: 0.05秒, 平均速度: 89152.0条/秒
+2026-10-17 17:26:12,066 - core.green_hydrogen_optimization_model - INFO - 甲醇相关成本已全部删除（完全的中间产物不单独计费）
+INFO:core.green_hydrogen_optimization_model:甲醇相关成本已全部删除（完全的中间产物不单独计费）
+2026-10-17 17:26:12,067 - core.green_hydrogen_optimization_model - INFO - 创建了 142 个CO₂峰值库存辅助变量
+INFO:core.green_hydrogen_optimization_model:创建了 142 个CO₂峰值库存辅助变量
+2026-10-17 17:26:12,251 - core.green_hydrogen_optimization_model - INFO - 添加了 31950 个CO₂峰值库存约束
+INFO:core.green_hydrogen_optimization_model:添加了 31950 个CO₂峰值库存约束
+2026-10-17 17:26:12,251 - core.green_hydrogen_optimization_model - INFO - CO₂储存成本计算（设备基于峰值库存，运营基于平均库存）
+INFO:core.green_hydrogen_optimization_model:CO₂储存成本计算（设备基于峰值库存，运营基于平均库存）
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 统一成本表达式创建完成
+INFO:core.green_hydrogen_optimization_model:统一成本表达式创建完成
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 项目期限: 20年，时间窗口: 4周
+INFO:core.green_hydrogen_optimization_model:项目期限: 20年，时间窗口: 4周
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 运营成本年化系数: 13.0
+INFO:core.green_hydrogen_optimization_model:运营成本年化系数: 13.0
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 20年运营成本现值系数: 9.82
+INFO:core.green_hydrogen_optimization_model:20年运营成本现值系数: 9.82
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 生命周期运营成本系数: 127.64
+INFO:core.green_hydrogen_optimization_model:生命周期运营成本系数: 127.64
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 所有运营成本已扩展至20年生命周期现值
+INFO:core.green_hydrogen_optimization_model:所有运营成本已扩展至20年生命周期现值
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 
+【关键参数验证】
+INFO:core.green_hydrogen_optimization_model:
+【关键参数验证】
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - MTJ变动运营成本参数: 0.8 元/kg
+INFO:core.green_hydrogen_optimization_model:MTJ变动运营成本参数: 0.8 元/kg
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 电力成本参数: 350 元/MWh
+INFO:core.green_hydrogen_optimization_model:电力成本参数: 350 元/MWh
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 电解制氢耗电: 55 kWh/kg H2
+INFO:core.green_hydrogen_optimization_model:电解制氢耗电: 55 kWh/kg H2
+2026-10-17 17:26:12,297 - core.green_hydrogen_optimization_model - INFO - 创建性能指标表达式...
+INFO:core.green_hydrogen_optimization_model:创建性能指标表达式...
+2026-10-17 17:26:12,302 - core.green_hydrogen_optimization_model - INFO - [调试] 创建总生产量表达式，包含 31808 个生产变量
+INFO:core.green_hydrogen_optimization_model:[调试] 创建总生产量表达式，包含 31808 个生产变量
+2026-10-17 17:26:12,302 - core.green_hydrogen_optimization_model - INFO - [调试] 创建缺货产量表达式，包含 8 个缺货变量
+INFO:core.green_hydrogen_optimization_model:[调试] 创建缺货产量表达式，包含 8 个缺货变量
+2026-10-17 17:26:12,306 - core.green_hydrogen_optimization_model - INFO - [调试] 创建氢气总产量表达式，包含 24416 个变量
+INFO:core.green_hydrogen_optimization_model:[调试] 创建氢气总产量表达式，包含 24416 个变量
+2026-10-17 17:26:12,310 - core.green_hydrogen_optimization_model - INFO - [调试] 创建甲醇总产量表达式，包含 31808 个变量
+INFO:core.green_hydrogen_optimization_model:[调试] 创建甲醇总产量表达式，包含 31808 个变量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO - 性能指标表达式创建完成
+INFO:core.green_hydrogen_optimization_model:性能指标表达式创建完成
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO - 包含 7 个性能表达式
+INFO:core.green_hydrogen_optimization_model:包含 7 个性能表达式
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - production_total: SAF总产量
+INFO:core.green_hydrogen_optimization_model:  - production_total: SAF总产量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - shortage_total: 缺货总量
+INFO:core.green_hydrogen_optimization_model:  - shortage_total: 缺货总量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - total_demand: 总需求量
+INFO:core.green_hydrogen_optimization_model:  - total_demand: 总需求量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - hydrogen_total_production: 氢气总产量
+INFO:core.green_hydrogen_optimization_model:  - hydrogen_total_production: 氢气总产量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - methanol_total_production: 甲醇总产量
+INFO:core.green_hydrogen_optimization_model:  - methanol_total_production: 甲醇总产量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - facilities_count: MTJ设施数量
+INFO:core.green_hydrogen_optimization_model:  - facilities_count: MTJ设施数量
+2026-10-17 17:26:12,311 - core.green_hydrogen_optimization_model - INFO -   - hydrogen_facilities_count: 氢气设施数量
+INFO:core.green_hydrogen_optimization_model:  - hydrogen_facilities_count: 氢气设施数量
+2026-10-17 17:26:12,316 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:12,316 - core.green_hydrogen_optimization_model - INFO - 创建碳排放计算表达式...
+INFO:core.green_hydrogen_optimization_model:创建碳排放计算表达式...
+2026-10-17 17:26:12,316 - core.green_hydrogen_optimization_model - INFO - ================================================================================
+INFO:core.green_hydrogen_optimization_model:================================================================================
+2026-10-17 17:26:12,316 - core.green_hydrogen_optimization_model - INFO - 验证碳排放参数完整性...
+INFO:core.green_hydrogen_optimization_model:验证碳排放参数完整性...
+2026-10-17 17:26:12,316 - core.green_hydrogen_optimization_model - INFO - 碳排放参数完整性检查通过
+INFO:core.green_hydrogen_optimization_model:碳排放参数完整性检查通过
+2026-10-17 17:26:12,317 - core.green_hydrogen_optimization_model - INFO - SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+INFO:core.green_hydrogen_optimization_model:SAF设施碳强度: 150 kg CO2eq/t年产能, 寿命: 25年
+2026-10-17 17:26:12,317 - core.green_hydrogen_optimization_model - INFO - 电解槽碳强度: 1500 kg CO2eq/MW → 82.50 kg CO2eq/(kg H2/h), 寿命: 15年
+INFO:core.green_hydrogen_optimization_model:电解槽碳强度: 1500 kg CO2eq/MW → 82.50 kg CO2eq/(kg H2/h), 寿命: 15年
+2026-10-17 17:26:12,317 - core.green_hydrogen_optimization_model - INFO - [调试] 设施容量变量数量: 142
+INFO:core.green_hydrogen_optimization_model:[调试] 设施容量变量数量: 142
+2026-10-17 17:26:12,317 - core.green_hydrogen_optimization_model - INFO - [调试] 电解槽容量变量数量: 109
+INFO:core.green_hydrogen_optimization_model:[调试] 电解槽容量变量数量: 109
+2026-10-17 17:26:12,317 - core.green_hydrogen_optimization_model - INFO - 预计算动态可再生能源碳强度...
+INFO:core.green_hydrogen_optimization_model:预计算动态可再生能源碳强度...
+2026-10-17 17:26:12,341 - core.green_hydrogen_optimization_model - INFO - 动态碳强度统计: 最小=0.0300, 最大=0.0300, 平均=0.0300 kgCO₂e/kWh
+INFO:core.green_hydrogen_optimization_model:动态碳强度统计: 最小=0.0300, 最大=0.0300, 平均=0.0300 kgCO₂e/kWh
+2026-10-17 17:26:12,347 - core.green_hydrogen_optimization_model - INFO - 动态氢气碳强度统计: 最小=1.7000, 最大=1.7000, 平均=1.7000 kgCO₂e/kg H₂
+INFO:core.green_hydrogen_optimization_model:动态氢气碳强度统计: 最小=1.7000, 最大=1.7000, 平均=1.7000 kgCO₂e/kg H₂
+2026-10-17 17:26:12,541 - core.green_hydrogen_optimization_model - INFO - SAF合成工艺能耗: 7.6 kWh/kg, 市电碳强度: 0.6 kgCO₂e/kWh
+INFO:core.green_hydrogen_optimization_model:SAF合成工艺能耗: 7.6 kWh/kg, 市电碳强度: 0.6 kgCO₂e/kWh
+2026-10-17 17:26:12,541 - core.green_hydrogen_optimization_model - INFO - ✨ SAF合成碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+INFO:core.green_hydrogen_optimization_model:✨ SAF合成碳排放根据工厂位置类型选择碳强度（可再生站点 vs 市电）
+2026-10-17 17:26:12,593 - core.green_hydrogen_optimization_model - INFO - MTJ工艺能耗: 800 kWh/t
+INFO:core.green_hydrogen_optimization_model:MTJ工艺能耗: 800 kWh/t
+2026-10-17 17:26:12,593 - core.green_hydrogen_optimization_model - INFO - 电解制氢能耗: 55 kWh/kg H₂, 工艺排放: 0.05 kg CO2eq/kg H₂
+INFO:core.green_hydrogen_optimization_model:电解制氢能耗: 55 kWh/kg H₂, 工艺排放: 0.05 kg CO2eq/kg H₂
+2026-10-17 17:26:12,593 - core.green_hydrogen_optimization_model - INFO - ✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+INFO:core.green_hydrogen_optimization_model:✨ 使用动态碳强度代替固定值 (原固定值: 0.02 kg CO2eq/kWh)
+2026-10-17 17:26:12,594 - core.green_hydrogen_optimization_model - INFO - [调试] 生产变量数量: 31808
+INFO:core.green_hydrogen_optimization_model:[调试] 生产变量数量: 31808
+2026-10-17 17:26:12,594 - core.green_hydrogen_optimization_model - INFO - [调试] 氢气生产变量数量: 24416
+INFO:core.green_hydrogen_optimization_model:[调试] 氢气生产变量数量: 24416
+2026-10-17 17:26:12,806 - core.green_hydrogen_optimization_model - INFO - MTJ储存能耗: 5 kWh/t·天
+INFO:core.green_hydrogen_optimization_model:MTJ储存能耗: 5 kWh/t·天
+2026-10-17 17:26:12,806 - core.green_hydrogen_optimization_model - INFO - 氢气储存能耗: 2 kWh/kg·天
+INFO:core.green_hydrogen_optimization_model:氢气储存能耗: 2 kWh/kg·天
+2026-10-17 17:26:12,807 - core.green_hydrogen_optimization_model - INFO - [调试] MTJ存储变量数量: 31950
+INFO:core.green_hydrogen_optimization_model:[调试] MTJ存储变量数量: 31950
+2026-10-17 17:26:12,807 - core.green_hydrogen_optimization_model - INFO - [调试] 氢气存储变量数量: 31950
+INFO:core.green_hydrogen_optimization_model:[调试] 氢气存储变量数量: 31950
+2026-10-17 17:26:12,868 - core.green_hydrogen_optimization_model - INFO - CO₂管道运输碳强度: 0.0100 kgCO2eq/kg/100km
+INFO:core.green_hydrogen_optimization_model:CO₂管道运输碳强度: 0.0100 kgCO2eq/kg/100km
+2026-10-17 17:26:12,868 - core.green_hydrogen_optimization_model - INFO - [调试] CO₂管道运输变量数量: 4402
+INFO:core.green_hydrogen_optimization_model:[调试] CO₂管道运输变量数量: 4402
+2026-10-17 17:26:12,868 - core.green_hydrogen_optimization_model - INFO - 氢气管道运输: 0.02 kg CO2eq/kg·km
+INFO:core.green_hydrogen_optimization_model:氢气管道运输: 0.02 kg CO2eq/kg·km
+2026-10-17 17:26:12,868 - core.green_hydrogen_optimization_model - INFO - MTJ罐车运输: 0.12 kg CO2eq/t·km
+INFO:core.green_hydrogen_optimization_model:MTJ罐车运输: 0.12 kg CO2eq/t·km
+2026-10-17 17:26:12,869 - core.green_hydrogen_optimization_model - INFO - [调试] 氢气管道变量数量: 15478
+INFO:core.green_hydrogen_optimization_model:[调试] 氢气管道变量数量: 15478
+2026-10-17 17:26:12,869 - core.green_hydrogen_optimization_model - INFO - [调试] MTJ运输变量数量: 1136
+INFO:core.green_hydrogen_optimization_model:[调试] MTJ运输变量数量: 1136
+2026-10-17 17:26:12,869 - core.green_hydrogen_optimization_model - INFO - [调试] 距离计算测试 Beijing CGN Haifeng Agricultural Greenhouse solar project -> 北京: 29.88 km
+INFO:core.green_hydrogen_optimization_model:[调试] 距离计算测试 Beijing CGN Haifeng Agricultural Greenhouse solar project -> 北京: 29.88 km
+2026-10-17 17:26:12,869 - core.green_hydrogen_optimization_model - INFO - CO₂源配置: scenario_type=industrial_capture, enable_credit=True
+INFO:core.green_hydrogen_optimization_model:CO₂源配置: scenario_type=industrial_capture, enable_credit=True
+2026-10-17 17:26:12,975 - core.green_hydrogen_optimization_model - INFO - ✨ CO₂利用负排放表达式已创建 (场景: industrial_capture)
+INFO:core.green_hydrogen_optimization_model:✨ CO₂利用负排放表达式已创建 (场景: industrial_capture)
+2026-10-17 17:26:12,975 - core.green_hydrogen_optimization_model - INFO -    计算公式: SAF产量 × 0.85 × 3.67 × -1.0
+INFO:core.green_hydrogen_optimization_model:   计算公式: SAF产量 × 0.85 × 3.67 × -1.0
+2026-10-17 17:26:12,975 - core.green_hydrogen_optimization_model - INFO -    每kg SAF固定碳排放: -3.12 kg CO₂e
+INFO:core.green_hydrogen_optimization_model:   每kg SAF固定碳排放: -3.12 kg CO₂e
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO - 碳排放表达式创建完成
+INFO:core.green_hydrogen_optimization_model:碳排放表达式创建完成
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO - 包含 14 个细分项，8 个汇总项
+INFO:core.green_hydrogen_optimization_model:包含 14 个细分项，8 个汇总项
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO - 碳强度计算组件已准备，将在求解后计算具体数值
+INFO:core.green_hydrogen_optimization_model:碳强度计算组件已准备，将在求解后计算具体数值
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO - [调试] 碳排放表达式详情:
+INFO:core.green_hydrogen_optimization_model:[调试] 碳排放表达式详情:
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - saf_facility: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - saf_facility: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - electrolyzer_facility: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - electrolyzer_facility: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - methanol_to_saf: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - methanol_to_saf: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - saf_synthesis_energy: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - saf_synthesis_energy: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - h2_production: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - h2_production: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - mtj_storage: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - mtj_storage: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - h2_storage: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - h2_storage: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - h2_truck_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - h2_truck_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - h2_pipeline_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - h2_pipeline_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - h2_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - h2_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - mtj_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - mtj_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - co2_pipeline_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - co2_pipeline_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - co2_transport: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - co2_transport: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO - [调试] 碳排放汇总项详情:
+INFO:core.green_hydrogen_optimization_model:[调试] 碳排放汇总项详情:
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - raw_material_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - raw_material_emissions: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - facility_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - facility_emissions: LinExpr
+2026-10-17 17:26:13,012 - core.green_hydrogen_optimization_model - INFO -   - production_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - production_emissions: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   - storage_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - storage_emissions: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   - transport_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - transport_emissions: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   - co2_utilization_credit: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - co2_utilization_credit: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   - total_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - total_emissions: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   - annual_emissions: LinExpr
+INFO:core.green_hydrogen_optimization_model:  - annual_emissions: LinExpr
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO - [调试] 优化时段: 4周, 总小时数: 224小时
+INFO:core.green_hydrogen_optimization_model:[调试] 优化时段: 4周, 总小时数: 224小时
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO - [调试] 年化系数: 13.000
+INFO:core.green_hydrogen_optimization_model:[调试] 年化系数: 13.000
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO - 时间尺度一致性验证:
+INFO:core.green_hydrogen_optimization_model:时间尺度一致性验证:
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   原料获取: CO₂捕获（按周计算）
+INFO:core.green_hydrogen_optimization_model:  原料获取: CO₂捕获（按周计算）
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   设施建设: 年产能摊销到优化时段
+INFO:core.green_hydrogen_optimization_model:  设施建设: 年产能摊销到优化时段
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+INFO:core.green_hydrogen_optimization_model:  生产过程: 按小时计算(production_vars, hydrogen_production_vars)
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+INFO:core.green_hydrogen_optimization_model:  储存处理: 按小时计算(storage_vars, hydrogen_storage_vars)
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   运输配送: MTJ按周, H₂按总量, CO₂按周
+INFO:core.green_hydrogen_optimization_model:  运输配送: MTJ按周, H₂按总量, CO₂按周
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO -   最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+INFO:core.green_hydrogen_optimization_model:  最终结果: 所有项目累计为优化时段内总碳排放(kg CO2eq)
+2026-10-17 17:26:13,013 - core.green_hydrogen_optimization_model - INFO - ============================================================
+INFO:core.green_hydrogen_optimization_model:============================================================
+2026-10-17 17:26:13,165 - core.green_hydrogen_optimization_model - INFO - 创建约束条件...
+INFO:core.green_hydrogen_optimization_model:创建约束条件...
+2026-10-17 17:26:13,165 - core.green_hydrogen_optimization_model - INFO - 跳过冗余的时间尺度匹配约束（已被库存平衡约束覆盖）
+INFO:core.green_hydrogen_optimization_model:跳过冗余的时间尺度匹配约束（已被库存平衡约束覆盖）
+2026-10-17 17:26:13,165 - core.green_hydrogen_optimization_model - INFO - 添加生产能力约束（包括最小产能和最小年产量约束）...
+INFO:core.green_hydrogen_optimization_model:添加生产能力约束（包括最小产能和最小年产量约束）...
+2026-10-17 17:26:13,367 - core.green_hydrogen_optimization_model - INFO - 生产能力约束添加完成: 142个位置 × 1个技术, 包括最小产能约束和最小年产量约束
+INFO:core.green_hydrogen_optimization_model:生产能力约束添加完成: 142个位置 × 1个技术, 包括最小产能约束和最小年产量约束
+2026-10-17 17:26:13,367 - core.green_hydrogen_optimization_model - INFO - 开始添加严格的小时级原料供应约束，共有142个位置
+INFO:core.green_hydrogen_optimization_model:开始添加严格的小时级原料供应约束，共有142个位置
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 添加氢气运输能力限制约束...
+INFO:core.green_hydrogen_optimization_model:添加氢气运输能力限制约束...
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 【禁用罐车运输】跳过氢气罐车运输能力限制约束
+INFO:core.green_hydrogen_optimization_model:【禁用罐车运输】跳过氢气罐车运输能力限制约束
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 氢气运输能力限制约束添加完成
+INFO:core.green_hydrogen_optimization_model:氢气运输能力限制约束添加完成
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 严格的小时级原料供应约束添加完成（已移除维护停机约束）
+INFO:core.green_hydrogen_optimization_model:严格的小时级原料供应约束添加完成（已移除维护停机约束）
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 添加SAF库存平衡约束...
+INFO:core.green_hydrogen_optimization_model:添加SAF库存平衡约束...
+2026-10-17 17:26:13,493 - core.green_hydrogen_optimization_model - INFO - 【新机制】SAF出库仅在每周最后一个期间(索引55)进行
+INFO:core.green_hydrogen_optimization_model:【新机制】SAF出库仅在每周最后一个期间(索引55)进行
+2026-10-17 17:26:31,941 - core.green_hydrogen_optimization_model - INFO - 跳过每日氢气产量与次日需求耦合约束（由库存与运输约束统一管理）
+INFO:core.green_hydrogen_optimization_model:跳过每日氢气产量与次日需求耦合约束（由库存与运输约束统一管理）
+2026-10-17 17:26:31,942 - core.green_hydrogen_optimization_model - INFO - 添加氢气运输约束...
+INFO:core.green_hydrogen_optimization_model:添加氢气运输约束...
+2026-10-17 17:26:31,942 - core.green_hydrogen_optimization_model - INFO - 添加氢气全局守恒约束（周级）...
+INFO:core.green_hydrogen_optimization_model:添加氢气全局守恒约束（周级）...
+2026-10-17 17:26:31,958 - core.green_hydrogen_optimization_model - INFO - 添加氢气全局守恒约束（周级）完成
+INFO:core.green_hydrogen_optimization_model:添加氢气全局守恒约束（周级）完成
+2026-10-17 17:26:31,958 - core.green_hydrogen_optimization_model - INFO - 添加氢气源地总出库约束（周级）...
+INFO:core.green_hydrogen_optimization_model:添加氢气源地总出库约束（周级）...
+2026-10-17 17:26:31,974 - core.green_hydrogen_optimization_model - INFO - 添加氢气供需平衡约束...
+INFO:core.green_hydrogen_optimization_model:添加氢气供需平衡约束...
+2026-10-17 17:26:32,011 - core.green_hydrogen_optimization_model - INFO - 氢气供需平衡约束添加完成
+INFO:core.green_hydrogen_optimization_model:氢气供需平衡约束添加完成
+2026-10-17 17:26:32,012 - core.green_hydrogen_optimization_model - INFO - 添加氢能管道运输约束...
+INFO:core.green_hydrogen_optimization_model:添加氢能管道运输约束...
+2026-10-17 17:26:32,012 - core.green_hydrogen_optimization_model - INFO - [修复] 检测到 15478 个管道运输变量（周级，索引为二元组）
+INFO:core.green_hydrogen_optimization_model:[修复] 检测到 15478 个管道运输变量（周级，索引为二元组）
+2026-10-17 17:26:32,084 - core.green_hydrogen_optimization_model - INFO - [修复] 添加了 15478 个管道容量约束（周级）
+INFO:core.green_hydrogen_optimization_model:[修复] 添加了 15478 个管道容量约束（周级）
+2026-10-17 17:26:32,084 - core.green_hydrogen_optimization_model - INFO - 【已优化】管道生产限制约束已被源地总出库约束覆盖，已删除冗余约束
+INFO:core.green_hydrogen_optimization_model:【已优化】管道生产限制约束已被源地总出库约束覆盖，已删除冗余约束
+2026-10-17 17:26:32,084 - core.green_hydrogen_optimization_model - INFO - 氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+INFO:core.green_hydrogen_optimization_model:氢能管道运输约束添加完成（需求满足约束已在主要氢气运输约束中处理）
+2026-10-17 17:26:32,084 - core.green_hydrogen_optimization_model - INFO - 添加CO₂供应平衡约束（周级）...
+INFO:core.green_hydrogen_optimization_model:添加CO₂供应平衡约束（周级）...
+2026-10-17 17:26:32,145 - core.green_hydrogen_optimization_model - INFO - 添加了 568 个CO₂供应平衡约束
+INFO:core.green_hydrogen_optimization_model:添加了 568 个CO₂供应平衡约束
+2026-10-17 17:26:32,145 - core.green_hydrogen_optimization_model - INFO - 添加CO₂捕获容量上限约束（包含本地使用）...
+INFO:core.green_hydrogen_optimization_model:添加CO₂捕获容量上限约束（包含本地使用）...
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - 添加了 31 个CO₂捕获容量上限约束
+INFO:core.green_hydrogen_optimization_model:添加了 31 个CO₂捕获容量上限约束
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - 添加甲醇生产约束（H₂+CO₂→甲醇）...
+INFO:core.green_hydrogen_optimization_model:添加甲醇生产约束（H₂+CO₂→甲醇）...
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - [诊断] 检查技术 green_h2_co2_to_saf...
+INFO:core.green_hydrogen_optimization_model:[诊断] 检查技术 green_h2_co2_to_saf...
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - [诊断] 甲醇生产位置数量: 142
+INFO:core.green_hydrogen_optimization_model:[诊断] 甲醇生产位置数量: 142
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO -    示例位置: ['Beijing Hainachuan Auto Benz supporting industrial park user-side solar project', 'co2_source_21', 'Xinyi Glass Wuqing solar project']
+INFO:core.green_hydrogen_optimization_model:   示例位置: ['Beijing Hainachuan Auto Benz supporting industrial park user-side solar project', 'co2_source_21', 'Xinyi Glass Wuqing solar project']
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - 甲醇生产约束：依赖氢气和CO₂库存平衡约束保证原料供需平衡
+INFO:core.green_hydrogen_optimization_model:甲醇生产约束：依赖氢气和CO₂库存平衡约束保证原料供需平衡
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - 添加SAF生产约束（甲醇→SAF）...
+INFO:core.green_hydrogen_optimization_model:添加SAF生产约束（甲醇→SAF）...
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - SAF生产约束：依赖甲醇库存平衡约束保证甲醇供需平衡
+INFO:core.green_hydrogen_optimization_model:SAF生产约束：依赖甲醇库存平衡约束保证甲醇供需平衡
+2026-10-17 17:26:32,147 - core.green_hydrogen_optimization_model - INFO - 添加甲醇库存平衡约束...
+INFO:core.green_hydrogen_optimization_model:添加甲醇库存平衡约束...
+2026-10-17 17:26:32,462 - core.green_hydrogen_optimization_model - INFO - 添加了 31950 个甲醇库存平衡约束
+INFO:core.green_hydrogen_optimization_model:添加了 31950 个甲醇库存平衡约束
+2026-10-17 17:26:32,463 - core.green_hydrogen_optimization_model - INFO - 【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现
+INFO:core.green_hydrogen_optimization_model:【已优化】甲醇库存非负约束已通过变量下界 lb=0 实现
+2026-10-17 17:26:32,463 - core.green_hydrogen_optimization_model - INFO - 添加CO₂库存平衡约束（时间尺度匹配）...
+INFO:core.green_hydrogen_optimization_model:添加CO₂库存平衡约束（时间尺度匹配）...
+2026-10-17 17:26:32,463 - core.green_hydrogen_optimization_model - INFO - 【新机制】CO₂入库（管道+本地捕获）仅在每周0h进行
+INFO:core.green_hydrogen_optimization_model:【新机制】CO₂入库（管道+本地捕获）仅在每周0h进行
+2026-10-17 17:26:32,837 - core.green_hydrogen_optimization_model - INFO - 添加了 31950 个CO₂库存平衡约束
+INFO:core.green_hydrogen_optimization_model:添加了 31950 个CO₂库存平衡约束
+2026-10-17 17:26:32,837 - core.green_hydrogen_optimization_model - INFO - 【已优化】CO₂库存非负约束已通过变量下界 lb=0 实现
+INFO:core.green_hydrogen_optimization_model:【已优化】CO₂库存非负约束已通过变量下界 lb=0 实现
+2026-10-17 17:26:32,837 - core.green_hydrogen_optimization_model - INFO - 添加平准化成本约束...
+INFO:core.green_hydrogen_optimization_model:添加平准化成本约束...
+2026-10-17 17:26:32,837 - core.green_hydrogen_optimization_model - INFO - 平准化成本门槛值: 1000 元/kg
+INFO:core.green_hydrogen_optimization_model:平准化成本门槛值: 1000 元/kg
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 平准化成本约束添加完成
+INFO:core.green_hydrogen_optimization_model:平准化成本约束添加完成
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 约束形式: (总成本 - 短缺成本) - 1000 * 总产量现值 <= 0
+INFO:core.green_hydrogen_optimization_model:约束形式: (总成本 - 短缺成本) - 1000 * 总产量现值 <= 0
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 现值系数: 9.8181
+INFO:core.green_hydrogen_optimization_model:现值系数: 9.8181
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 年化系数: 13.0000
+INFO:core.green_hydrogen_optimization_model:年化系数: 13.0000
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 产量现值化系数: 127.6359
+INFO:core.green_hydrogen_optimization_model:产量现值化系数: 127.6359
+2026-10-17 17:26:32,864 - core.green_hydrogen_optimization_model - INFO - 修正前的错误系数(lifecycle_operation_factor): 127.6359
+INFO:core.green_hydrogen_optimization_model:修正前的错误系数(lifecycle_operation_factor): 127.6359
+2026-10-17 17:26:33,197 - core.green_hydrogen_optimization_model - INFO - 设置目标函数（使用统一的成本表达式）...
+INFO:core.green_hydrogen_optimization_model:设置目标函数（使用统一的成本表达式）...
+2026-10-17 17:26:33,206 - core.green_hydrogen_optimization_model - INFO - 目标函数设置完成（使用统一成本表达式）
+INFO:core.green_hydrogen_optimization_model:目标函数设置完成（使用统一成本表达式）
+Setting parameter 'TimeLimit' to 14400
+Setting parameter 'Threads' to 16
+Setting parameter 'RelGap' to 0.005
+Setting log file to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/copt.log
+MODEL_READY CCU-GH-MTJ baseline 3704823 375508
+Writing problem to /data3/dataset/ljt/code_project/nexus_scientific_revision_20261017/compute_final_ccu/runs/CCU-GH-MTJ/baseline/model.mps
+MODEL_EXPORTED CCU-GH-MTJ baseline

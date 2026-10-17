@@ -1,0 +1,881 @@
+location,technology,value
+refinery_Binyang Refinery,pipeline_direct_conversion,0.0
+refinery_Binyang Refinery,airport_integrated_conversion,0.0
+refinery_Binyang Refinery,lng_terminal_conversion,0.0
+refinery_Binyang Refinery,lng_to_hplant_conversion,0.0
+refinery_CNOOC Dongying Refinery,pipeline_direct_conversion,0.0
+refinery_CNOOC Dongying Refinery,airport_integrated_conversion,0.0
+refinery_CNOOC Dongying Refinery,lng_terminal_conversion,0.0
+refinery_CNOOC Dongying Refinery,lng_to_hplant_conversion,0.0
+refinery_Fuyu Refinery,pipeline_direct_conversion,0.0
+refinery_Fuyu Refinery,airport_integrated_conversion,0.0
+refinery_Fuyu Refinery,lng_terminal_conversion,0.0
+refinery_Fuyu Refinery,lng_to_hplant_conversion,0.0
+refinery_Guangyuan Refinery,pipeline_direct_conversion,0.0
+refinery_Guangyuan Refinery,airport_integrated_conversion,0.0
+refinery_Guangyuan Refinery,lng_terminal_conversion,0.0
+refinery_Guangyuan Refinery,lng_to_hplant_conversion,0.0
+refinery_Haike Ruilin Refinery,pipeline_direct_conversion,0.0
+refinery_Haike Ruilin Refinery,airport_integrated_conversion,0.0
+refinery_Haike Ruilin Refinery,lng_terminal_conversion,0.0
+refinery_Haike Ruilin Refinery,lng_to_hplant_conversion,0.0
+refinery_Haiyue Refinery,pipeline_direct_conversion,0.0
+refinery_Haiyue Refinery,airport_integrated_conversion,0.0
+refinery_Haiyue Refinery,lng_terminal_conversion,0.0
+refinery_Haiyue Refinery,lng_to_hplant_conversion,0.0
+refinery_Hebei Dagang Refinery,pipeline_direct_conversion,0.0
+refinery_Hebei Dagang Refinery,airport_integrated_conversion,0.0
+refinery_Hebei Dagang Refinery,lng_terminal_conversion,0.0
+refinery_Hebei Dagang Refinery,lng_to_hplant_conversion,0.0
+refinery_Hebei Qianhai Refinery,pipeline_direct_conversion,0.0
+refinery_Hebei Qianhai Refinery,airport_integrated_conversion,0.0
+refinery_Hebei Qianhai Refinery,lng_terminal_conversion,0.0
+refinery_Hebei Qianhai Refinery,lng_to_hplant_conversion,0.0
+refinery_Huabei Refinery,pipeline_direct_conversion,0.0
+refinery_Huabei Refinery,airport_integrated_conversion,0.0
+refinery_Huabei Refinery,lng_terminal_conversion,0.0
+refinery_Huabei Refinery,lng_to_hplant_conversion,0.0
+refinery_Hualian Refinery,pipeline_direct_conversion,0.0
+refinery_Hualian Refinery,airport_integrated_conversion,0.0
+refinery_Hualian Refinery,lng_terminal_conversion,0.0
+refinery_Hualian Refinery,lng_to_hplant_conversion,0.0
+refinery_Huayu Refinery,pipeline_direct_conversion,0.0
+refinery_Huayu Refinery,airport_integrated_conversion,0.0
+refinery_Huayu Refinery,lng_terminal_conversion,0.0
+refinery_Huayu Refinery,lng_to_hplant_conversion,0.0
+refinery_Lianhe Refinery,pipeline_direct_conversion,0.0
+refinery_Lianhe Refinery,airport_integrated_conversion,0.0
+refinery_Lianhe Refinery,lng_terminal_conversion,0.0
+refinery_Lianhe Refinery,lng_to_hplant_conversion,0.0
+refinery_PetroChina Qinhuangdao Refinery,pipeline_direct_conversion,0.0
+refinery_PetroChina Qinhuangdao Refinery,airport_integrated_conversion,0.0
+refinery_PetroChina Qinhuangdao Refinery,lng_terminal_conversion,0.0
+refinery_PetroChina Qinhuangdao Refinery,lng_to_hplant_conversion,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,pipeline_direct_conversion,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,airport_integrated_conversion,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_terminal_conversion,0.0
+refinery_PetroChina Rosneft Tianjin  Refinery,lng_to_hplant_conversion,0.0
+refinery_Petrochina Dagang Refinery,pipeline_direct_conversion,0.0
+refinery_Petrochina Dagang Refinery,airport_integrated_conversion,0.0
+refinery_Petrochina Dagang Refinery,lng_terminal_conversion,0.0
+refinery_Petrochina Dagang Refinery,lng_to_hplant_conversion,0.0
+refinery_Qinhuangdao Far East Refinery,pipeline_direct_conversion,0.0
+refinery_Qinhuangdao Far East Refinery,airport_integrated_conversion,0.0
+refinery_Qinhuangdao Far East Refinery,lng_terminal_conversion,0.0
+refinery_Qinhuangdao Far East Refinery,lng_to_hplant_conversion,0.0
+refinery_Shenchi Refinery,pipeline_direct_conversion,0.0
+refinery_Shenchi Refinery,airport_integrated_conversion,0.0
+refinery_Shenchi Refinery,lng_terminal_conversion,0.0
+refinery_Shenchi Refinery,lng_to_hplant_conversion,0.0
+refinery_Sinopec Beijing Refinery,pipeline_direct_conversion,0.0
+refinery_Sinopec Beijing Refinery,airport_integrated_conversion,0.0
+refinery_Sinopec Beijing Refinery,lng_terminal_conversion,0.0
+refinery_Sinopec Beijing Refinery,lng_to_hplant_conversion,0.0
+refinery_Sinopec Cangzhou Refinery,pipeline_direct_conversion,0.0
+refinery_Sinopec Cangzhou Refinery,airport_integrated_conversion,0.0
+refinery_Sinopec Cangzhou Refinery,lng_terminal_conversion,0.0
+refinery_Sinopec Cangzhou Refinery,lng_to_hplant_conversion,0.0
+refinery_Sinopec Shijiazhuang Refinery,pipeline_direct_conversion,0.0
+refinery_Sinopec Shijiazhuang Refinery,airport_integrated_conversion,0.0
+refinery_Sinopec Shijiazhuang Refinery,lng_terminal_conversion,0.0
+refinery_Sinopec Shijiazhuang Refinery,lng_to_hplant_conversion,0.0
+refinery_Sinopec Tianjin Refinery,pipeline_direct_conversion,0.0
+refinery_Sinopec Tianjin Refinery,airport_integrated_conversion,0.0
+refinery_Sinopec Tianjin Refinery,lng_terminal_conversion,0.0
+refinery_Sinopec Tianjin Refinery,lng_to_hplant_conversion,0.0
+refinery_Tianhong 1 Refinery,pipeline_direct_conversion,0.0
+refinery_Tianhong 1 Refinery,airport_integrated_conversion,0.0
+refinery_Tianhong 1 Refinery,lng_terminal_conversion,0.0
+refinery_Tianhong 1 Refinery,lng_to_hplant_conversion,0.0
+refinery_Tianjin  Refinery,pipeline_direct_conversion,0.0
+refinery_Tianjin  Refinery,airport_integrated_conversion,0.0
+refinery_Tianjin  Refinery,lng_terminal_conversion,0.0
+refinery_Tianjin  Refinery,lng_to_hplant_conversion,0.0
+refinery_Wudi Xinyue Refinery,pipeline_direct_conversion,0.0
+refinery_Wudi Xinyue Refinery,airport_integrated_conversion,0.0
+refinery_Wudi Xinyue Refinery,lng_terminal_conversion,0.0
+refinery_Wudi Xinyue Refinery,lng_to_hplant_conversion,0.0
+refinery_Xinhai  Refinery,pipeline_direct_conversion,0.0
+refinery_Xinhai  Refinery,airport_integrated_conversion,0.0
+refinery_Xinhai  Refinery,lng_terminal_conversion,0.0
+refinery_Xinhai  Refinery,lng_to_hplant_conversion,0.0
+refinery_Yatong Refinery,pipeline_direct_conversion,0.0
+refinery_Yatong Refinery,airport_integrated_conversion,0.0
+refinery_Yatong Refinery,lng_terminal_conversion,0.0
+refinery_Yatong Refinery,lng_to_hplant_conversion,0.0
+refinery_Zhonghai  Refinery,pipeline_direct_conversion,0.0
+refinery_Zhonghai  Refinery,airport_integrated_conversion,0.0
+refinery_Zhonghai  Refinery,lng_terminal_conversion,0.0
+refinery_Zhonghai  Refinery,lng_to_hplant_conversion,0.0
+refinery_Zhongjie Refinery,pipeline_direct_conversion,0.0
+refinery_Zhongjie Refinery,airport_integrated_conversion,0.0
+refinery_Zhongjie Refinery,lng_terminal_conversion,0.0
+refinery_Zhongjie Refinery,lng_to_hplant_conversion,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,pipeline_direct_conversion,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,airport_integrated_conversion,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_terminal_conversion,0.0
+steel_Cangzhou China Railway Equipment Manufacture Material Co Ltd,lng_to_hplant_conversion,0.0
+steel_Chengde Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Chengde Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Chengde Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Chengde Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Chengde Jianlong Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hbis Laoting Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hbis Laoting Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hbis Laoting Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hbis Laoting Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Anfeng Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Donghai Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Donghai Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Donghai Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Donghai Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Huaxi Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Jinxi Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Rongxin Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Rongxin Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Rongxin Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Rongxin Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,pipeline_direct_conversion,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,airport_integrated_conversion,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_terminal_conversion,0.0
+steel_Hebei Tangyin Iron and Steel Co Ltd Caofeidian base,lng_to_hplant_conversion,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Tianzhu Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Xinda Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Yanshan Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Hebei Zongheng Group Fengnan Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Jingye Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Jingye Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Jingye Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Jingye Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Lingyuan Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Lingyuan Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Lingyuan Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Lingyuan Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Qian an Jiujiang Wire Co Ltd,pipeline_direct_conversion,0.0
+steel_Qian an Jiujiang Wire Co Ltd,airport_integrated_conversion,0.0
+steel_Qian an Jiujiang Wire Co Ltd,lng_terminal_conversion,0.0
+steel_Qian an Jiujiang Wire Co Ltd,lng_to_hplant_conversion,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Qinhuangdao Baigong Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Qinhuangdao Hongxing Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Shanxi Tongde Xinghua Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Shougang Jingtang United Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Shougang Qian an Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Donghai Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Donghua Iron and Steel Enterprise Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Fengnan District Jing an Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Ganglu Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Guotang Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Guotang Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Guotang Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Guotang Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Medium Thick Plate Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Ruifeng Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Songting Iron and Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tangshan Wenfeng Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Tianjin Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,pipeline_direct_conversion,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,airport_integrated_conversion,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_terminal_conversion,0.0
+steel_Tianjin New Tiangang United Special Steel Co Ltd,lng_to_hplant_conversion,0.0
+steel_Tianjin Pipe Corporation,pipeline_direct_conversion,0.0
+steel_Tianjin Pipe Corporation,airport_integrated_conversion,0.0
+steel_Tianjin Pipe Corporation,lng_terminal_conversion,0.0
+steel_Tianjin Pipe Corporation,lng_to_hplant_conversion,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Tianjin Rockcheck Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,pipeline_direct_conversion,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,airport_integrated_conversion,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_terminal_conversion,0.0
+steel_Xinji Aosen Iron and Steel Group Co Ltd,lng_to_hplant_conversion,0.0
+airport_北京,pipeline_direct_conversion,0.0
+airport_北京,airport_integrated_conversion,68526.53955363082
+airport_北京,lng_terminal_conversion,0.0
+airport_北京,lng_to_hplant_conversion,0.0
+airport_天津,pipeline_direct_conversion,0.0
+airport_天津,airport_integrated_conversion,19563.166576452004
+airport_天津,lng_terminal_conversion,0.0
+airport_天津,lng_to_hplant_conversion,0.0
+lng_lng_terminal_1,pipeline_direct_conversion,0.0
+lng_lng_terminal_1,airport_integrated_conversion,0.0
+lng_lng_terminal_1,lng_terminal_conversion,0.0
+lng_lng_terminal_1,lng_to_hplant_conversion,0.0
+lng_lng_terminal_2,pipeline_direct_conversion,0.0
+lng_lng_terminal_2,airport_integrated_conversion,0.0
+lng_lng_terminal_2,lng_terminal_conversion,0.0
+lng_lng_terminal_2,lng_to_hplant_conversion,0.0
+lng_lng_terminal_3,pipeline_direct_conversion,0.0
+lng_lng_terminal_3,airport_integrated_conversion,0.0
+lng_lng_terminal_3,lng_terminal_conversion,0.0
+lng_lng_terminal_3,lng_to_hplant_conversion,0.0
+lng_lng_terminal_4,pipeline_direct_conversion,0.0
+lng_lng_terminal_4,airport_integrated_conversion,0.0
+lng_lng_terminal_4,lng_terminal_conversion,0.0
+lng_lng_terminal_4,lng_to_hplant_conversion,0.0
+lng_lng_terminal_5,pipeline_direct_conversion,0.0
+lng_lng_terminal_5,airport_integrated_conversion,0.0
+lng_lng_terminal_5,lng_terminal_conversion,0.0
+lng_lng_terminal_5,lng_to_hplant_conversion,0.0
+lng_lng_terminal_6,pipeline_direct_conversion,0.0
+lng_lng_terminal_6,airport_integrated_conversion,0.0
+lng_lng_terminal_6,lng_terminal_conversion,0.0
+lng_lng_terminal_6,lng_to_hplant_conversion,0.0
+lng_lng_terminal_8,pipeline_direct_conversion,0.0
+lng_lng_terminal_8,airport_integrated_conversion,0.0
+lng_lng_terminal_8,lng_terminal_conversion,0.0
+lng_lng_terminal_8,lng_to_hplant_conversion,0.0
+lng_lng_terminal_9,pipeline_direct_conversion,0.0
+lng_lng_terminal_9,airport_integrated_conversion,0.0
+lng_lng_terminal_9,lng_terminal_conversion,0.0
+lng_lng_terminal_9,lng_to_hplant_conversion,0.0
+lng_lng_terminal_53,pipeline_direct_conversion,0.0
+lng_lng_terminal_53,airport_integrated_conversion,0.0
+lng_lng_terminal_53,lng_terminal_conversion,0.0
+lng_lng_terminal_53,lng_to_hplant_conversion,0.0
+lng_lng_terminal_56,pipeline_direct_conversion,0.0
+lng_lng_terminal_56,airport_integrated_conversion,0.0
+lng_lng_terminal_56,lng_terminal_conversion,0.0
+lng_lng_terminal_56,lng_to_hplant_conversion,0.0
+lng_lng_terminal_60,pipeline_direct_conversion,0.0
+lng_lng_terminal_60,airport_integrated_conversion,0.0
+lng_lng_terminal_60,lng_terminal_conversion,0.0
+lng_lng_terminal_60,lng_to_hplant_conversion,0.0
+lng_lng_terminal_61,pipeline_direct_conversion,0.0
+lng_lng_terminal_61,airport_integrated_conversion,0.0
+lng_lng_terminal_61,lng_terminal_conversion,0.0
+lng_lng_terminal_61,lng_to_hplant_conversion,0.0
+lng_lng_terminal_63,pipeline_direct_conversion,0.0
+lng_lng_terminal_63,airport_integrated_conversion,0.0
+lng_lng_terminal_63,lng_terminal_conversion,0.0
+lng_lng_terminal_63,lng_to_hplant_conversion,0.0
+lng_lng_terminal_64,pipeline_direct_conversion,0.0
+lng_lng_terminal_64,airport_integrated_conversion,0.0
+lng_lng_terminal_64,lng_terminal_conversion,0.0
+lng_lng_terminal_64,lng_to_hplant_conversion,0.0
+lng_lng_terminal_68,pipeline_direct_conversion,0.0
+lng_lng_terminal_68,airport_integrated_conversion,0.0
+lng_lng_terminal_68,lng_terminal_conversion,0.0
+lng_lng_terminal_68,lng_to_hplant_conversion,0.0
+lng_lng_terminal_69,pipeline_direct_conversion,0.0
+lng_lng_terminal_69,airport_integrated_conversion,0.0
+lng_lng_terminal_69,lng_terminal_conversion,0.0
+lng_lng_terminal_69,lng_to_hplant_conversion,0.0
+lng_lng_terminal_70,pipeline_direct_conversion,0.0
+lng_lng_terminal_70,airport_integrated_conversion,0.0
+lng_lng_terminal_70,lng_terminal_conversion,0.0
+lng_lng_terminal_70,lng_to_hplant_conversion,0.0
+lng_lng_terminal_79,pipeline_direct_conversion,0.0
+lng_lng_terminal_79,airport_integrated_conversion,0.0
+lng_lng_terminal_79,lng_terminal_conversion,0.0
+lng_lng_terminal_79,lng_to_hplant_conversion,0.0
+lng_lng_terminal_80,pipeline_direct_conversion,0.0
+lng_lng_terminal_80,airport_integrated_conversion,0.0
+lng_lng_terminal_80,lng_terminal_conversion,0.0
+lng_lng_terminal_80,lng_to_hplant_conversion,0.0
+lng_lng_terminal_81,pipeline_direct_conversion,0.0
+lng_lng_terminal_81,airport_integrated_conversion,0.0
+lng_lng_terminal_81,lng_terminal_conversion,0.0
+lng_lng_terminal_81,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_15,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_15,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_15,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_15,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_18,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_18,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_18,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_18,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_19,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_19,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_19,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_19,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_20,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_20,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_20,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_20,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_21,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_21,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_21,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_21,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_22,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_22,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_22,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_22,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_25,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_25,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_25,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_25,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_26,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_26,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_26,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_26,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_62,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_62,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_62,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_62,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_63,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_63,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_63,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_63,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_68,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_68,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_68,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_68,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_70,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_70,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_70,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_70,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_71,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_71,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_71,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_71,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_76,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_76,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_76,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_76,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_77,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_77,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_77,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_77,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_84,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_84,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_84,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_84,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_85,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_85,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_85,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_85,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_86,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_86,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_86,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_86,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_94,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_94,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_94,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_94,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_95,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_95,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_95,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_95,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_99,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_99,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_99,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_99,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_149,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_149,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_149,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_149,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_150,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_150,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_150,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_150,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_151,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_151,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_151,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_151,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_152,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_152,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_152,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_152,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_153,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_153,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_153,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_153,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_154,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_154,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_154,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_154,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_155,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_155,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_155,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_155,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_156,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_156,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_156,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_156,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_157,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_157,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_157,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_157,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_158,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_158,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_158,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_158,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_159,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_159,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_159,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_159,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_160,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_160,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_160,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_160,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_161,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_161,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_161,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_161,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_162,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_162,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_162,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_162,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_163,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_163,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_163,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_163,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_164,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_164,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_164,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_164,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_165,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_165,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_165,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_165,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_166,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_166,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_166,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_166,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_167,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_167,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_167,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_167,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_168,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_168,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_168,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_168,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_169,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_169,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_169,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_169,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_171,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_171,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_171,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_171,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_172,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_172,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_172,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_172,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_173,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_173,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_173,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_173,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_174,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_174,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_174,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_174,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_175,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_175,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_175,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_175,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_176,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_176,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_176,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_176,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_177,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_177,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_177,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_177,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_178,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_178,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_178,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_178,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_179,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_179,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_179,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_179,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_180,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_180,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_180,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_180,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_181,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_181,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_181,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_181,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_183,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_183,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_183,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_183,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_187,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_187,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_187,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_187,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_188,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_188,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_188,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_188,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_189,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_189,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_189,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_189,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_190,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_190,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_190,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_190,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_191,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_191,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_191,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_191,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_196,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_196,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_196,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_196,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_198,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_198,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_198,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_198,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_199,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_199,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_199,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_199,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_201,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_201,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_201,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_201,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_202,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_202,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_202,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_202,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_213,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_213,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_213,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_213,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_405,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_405,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_405,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_405,lng_to_hplant_conversion,0.0
+ng_pipeline_pipeline_406,pipeline_direct_conversion,0.0
+ng_pipeline_pipeline_406,airport_integrated_conversion,0.0
+ng_pipeline_pipeline_406,lng_terminal_conversion,0.0
+ng_pipeline_pipeline_406,lng_to_hplant_conversion,0.0
+ng_pipeline_0,pipeline_direct_conversion,0.0
+ng_pipeline_0,airport_integrated_conversion,0.0
+ng_pipeline_0,lng_terminal_conversion,0.0
+ng_pipeline_0,lng_to_hplant_conversion,0.0
+ng_pipeline_1,pipeline_direct_conversion,0.0
+ng_pipeline_1,airport_integrated_conversion,0.0
+ng_pipeline_1,lng_terminal_conversion,0.0
+ng_pipeline_1,lng_to_hplant_conversion,0.0
+ng_pipeline_2,pipeline_direct_conversion,0.0
+ng_pipeline_2,airport_integrated_conversion,0.0
+ng_pipeline_2,lng_terminal_conversion,0.0
+ng_pipeline_2,lng_to_hplant_conversion,0.0
+ng_pipeline_3,pipeline_direct_conversion,0.0
+ng_pipeline_3,airport_integrated_conversion,0.0
+ng_pipeline_3,lng_terminal_conversion,0.0
+ng_pipeline_3,lng_to_hplant_conversion,0.0
+ng_pipeline_4,pipeline_direct_conversion,0.0
+ng_pipeline_4,airport_integrated_conversion,0.0
+ng_pipeline_4,lng_terminal_conversion,0.0
+ng_pipeline_4,lng_to_hplant_conversion,0.0
+ng_pipeline_5,pipeline_direct_conversion,0.0
+ng_pipeline_5,airport_integrated_conversion,0.0
+ng_pipeline_5,lng_terminal_conversion,0.0
+ng_pipeline_5,lng_to_hplant_conversion,0.0
+ng_pipeline_6,pipeline_direct_conversion,0.0
+ng_pipeline_6,airport_integrated_conversion,0.0
+ng_pipeline_6,lng_terminal_conversion,0.0
+ng_pipeline_6,lng_to_hplant_conversion,0.0
+ng_pipeline_7,pipeline_direct_conversion,0.0
+ng_pipeline_7,airport_integrated_conversion,0.0
+ng_pipeline_7,lng_terminal_conversion,0.0
+ng_pipeline_7,lng_to_hplant_conversion,0.0
+ng_pipeline_8,pipeline_direct_conversion,0.0
+ng_pipeline_8,airport_integrated_conversion,0.0
+ng_pipeline_8,lng_terminal_conversion,0.0
+ng_pipeline_8,lng_to_hplant_conversion,0.0
+ng_pipeline_9,pipeline_direct_conversion,0.0
+ng_pipeline_9,airport_integrated_conversion,0.0
+ng_pipeline_9,lng_terminal_conversion,0.0
+ng_pipeline_9,lng_to_hplant_conversion,0.0
+ng_pipeline_10,pipeline_direct_conversion,0.0
+ng_pipeline_10,airport_integrated_conversion,0.0
+ng_pipeline_10,lng_terminal_conversion,0.0
+ng_pipeline_10,lng_to_hplant_conversion,0.0
+ng_pipeline_11,pipeline_direct_conversion,0.0
+ng_pipeline_11,airport_integrated_conversion,0.0
+ng_pipeline_11,lng_terminal_conversion,0.0
+ng_pipeline_11,lng_to_hplant_conversion,0.0
+ng_pipeline_12,pipeline_direct_conversion,0.0
+ng_pipeline_12,airport_integrated_conversion,0.0
+ng_pipeline_12,lng_terminal_conversion,0.0
+ng_pipeline_12,lng_to_hplant_conversion,0.0
+ng_pipeline_13,pipeline_direct_conversion,0.0
+ng_pipeline_13,airport_integrated_conversion,0.0
+ng_pipeline_13,lng_terminal_conversion,0.0
+ng_pipeline_13,lng_to_hplant_conversion,0.0
+ng_pipeline_14,pipeline_direct_conversion,0.0
+ng_pipeline_14,airport_integrated_conversion,0.0
+ng_pipeline_14,lng_terminal_conversion,0.0
+ng_pipeline_14,lng_to_hplant_conversion,0.0
+ng_pipeline_15,pipeline_direct_conversion,0.0
+ng_pipeline_15,airport_integrated_conversion,0.0
+ng_pipeline_15,lng_terminal_conversion,0.0
+ng_pipeline_15,lng_to_hplant_conversion,0.0
+ng_pipeline_16,pipeline_direct_conversion,0.0
+ng_pipeline_16,airport_integrated_conversion,0.0
+ng_pipeline_16,lng_terminal_conversion,0.0
+ng_pipeline_16,lng_to_hplant_conversion,0.0
+ng_pipeline_17,pipeline_direct_conversion,0.0
+ng_pipeline_17,airport_integrated_conversion,0.0
+ng_pipeline_17,lng_terminal_conversion,0.0
+ng_pipeline_17,lng_to_hplant_conversion,0.0
+ng_pipeline_18,pipeline_direct_conversion,0.0
+ng_pipeline_18,airport_integrated_conversion,0.0
+ng_pipeline_18,lng_terminal_conversion,0.0
+ng_pipeline_18,lng_to_hplant_conversion,0.0
+ng_pipeline_19,pipeline_direct_conversion,0.0
+ng_pipeline_19,airport_integrated_conversion,0.0
+ng_pipeline_19,lng_terminal_conversion,0.0
+ng_pipeline_19,lng_to_hplant_conversion,0.0
+ng_pipeline_20,pipeline_direct_conversion,0.0
+ng_pipeline_20,airport_integrated_conversion,0.0
+ng_pipeline_20,lng_terminal_conversion,0.0
+ng_pipeline_20,lng_to_hplant_conversion,0.0
+ng_pipeline_21,pipeline_direct_conversion,0.0
+ng_pipeline_21,airport_integrated_conversion,0.0
+ng_pipeline_21,lng_terminal_conversion,0.0
+ng_pipeline_21,lng_to_hplant_conversion,0.0
+ng_pipeline_22,pipeline_direct_conversion,0.0
+ng_pipeline_22,airport_integrated_conversion,0.0
+ng_pipeline_22,lng_terminal_conversion,0.0
+ng_pipeline_22,lng_to_hplant_conversion,0.0
+ng_pipeline_23,pipeline_direct_conversion,0.0
+ng_pipeline_23,airport_integrated_conversion,0.0
+ng_pipeline_23,lng_terminal_conversion,0.0
+ng_pipeline_23,lng_to_hplant_conversion,0.0
+ng_pipeline_24,pipeline_direct_conversion,0.0
+ng_pipeline_24,airport_integrated_conversion,0.0
+ng_pipeline_24,lng_terminal_conversion,0.0
+ng_pipeline_24,lng_to_hplant_conversion,0.0
+ng_pipeline_25,pipeline_direct_conversion,0.0
+ng_pipeline_25,airport_integrated_conversion,0.0
+ng_pipeline_25,lng_terminal_conversion,0.0
+ng_pipeline_25,lng_to_hplant_conversion,0.0
+ng_pipeline_26,pipeline_direct_conversion,0.0
+ng_pipeline_26,airport_integrated_conversion,0.0
+ng_pipeline_26,lng_terminal_conversion,0.0
+ng_pipeline_26,lng_to_hplant_conversion,0.0
+ng_pipeline_27,pipeline_direct_conversion,0.0
+ng_pipeline_27,airport_integrated_conversion,0.0
+ng_pipeline_27,lng_terminal_conversion,0.0
+ng_pipeline_27,lng_to_hplant_conversion,0.0
+ng_pipeline_28,pipeline_direct_conversion,0.0
+ng_pipeline_28,airport_integrated_conversion,0.0
+ng_pipeline_28,lng_terminal_conversion,0.0
+ng_pipeline_28,lng_to_hplant_conversion,0.0
+ng_pipeline_29,pipeline_direct_conversion,0.0
+ng_pipeline_29,airport_integrated_conversion,0.0
+ng_pipeline_29,lng_terminal_conversion,0.0
+ng_pipeline_29,lng_to_hplant_conversion,0.0
+ng_pipeline_30,pipeline_direct_conversion,0.0
+ng_pipeline_30,airport_integrated_conversion,0.0
+ng_pipeline_30,lng_terminal_conversion,0.0
+ng_pipeline_30,lng_to_hplant_conversion,0.0
+ng_pipeline_31,pipeline_direct_conversion,0.0
+ng_pipeline_31,airport_integrated_conversion,0.0
+ng_pipeline_31,lng_terminal_conversion,0.0
+ng_pipeline_31,lng_to_hplant_conversion,0.0
+ng_pipeline_32,pipeline_direct_conversion,0.0
+ng_pipeline_32,airport_integrated_conversion,0.0
+ng_pipeline_32,lng_terminal_conversion,0.0
+ng_pipeline_32,lng_to_hplant_conversion,0.0
+ng_pipeline_33,pipeline_direct_conversion,0.0
+ng_pipeline_33,airport_integrated_conversion,0.0
+ng_pipeline_33,lng_terminal_conversion,0.0
+ng_pipeline_33,lng_to_hplant_conversion,0.0
+ng_pipeline_34,pipeline_direct_conversion,0.0
+ng_pipeline_34,airport_integrated_conversion,0.0
+ng_pipeline_34,lng_terminal_conversion,0.0
+ng_pipeline_34,lng_to_hplant_conversion,0.0
+ng_pipeline_35,pipeline_direct_conversion,0.0
+ng_pipeline_35,airport_integrated_conversion,0.0
+ng_pipeline_35,lng_terminal_conversion,0.0
+ng_pipeline_35,lng_to_hplant_conversion,0.0
+ng_pipeline_36,pipeline_direct_conversion,0.0
+ng_pipeline_36,airport_integrated_conversion,0.0
+ng_pipeline_36,lng_terminal_conversion,0.0
+ng_pipeline_36,lng_to_hplant_conversion,0.0
+ng_pipeline_37,pipeline_direct_conversion,0.0
+ng_pipeline_37,airport_integrated_conversion,0.0
+ng_pipeline_37,lng_terminal_conversion,0.0
+ng_pipeline_37,lng_to_hplant_conversion,0.0
+ng_pipeline_38,pipeline_direct_conversion,0.0
+ng_pipeline_38,airport_integrated_conversion,0.0
+ng_pipeline_38,lng_terminal_conversion,0.0
+ng_pipeline_38,lng_to_hplant_conversion,0.0
+ng_pipeline_39,pipeline_direct_conversion,0.0
+ng_pipeline_39,airport_integrated_conversion,0.0
+ng_pipeline_39,lng_terminal_conversion,0.0
+ng_pipeline_39,lng_to_hplant_conversion,0.0
+ng_pipeline_40,pipeline_direct_conversion,0.0
+ng_pipeline_40,airport_integrated_conversion,0.0
+ng_pipeline_40,lng_terminal_conversion,0.0
+ng_pipeline_40,lng_to_hplant_conversion,0.0
+ng_pipeline_41,pipeline_direct_conversion,0.0
+ng_pipeline_41,airport_integrated_conversion,0.0
+ng_pipeline_41,lng_terminal_conversion,0.0
+ng_pipeline_41,lng_to_hplant_conversion,0.0
+ng_pipeline_42,pipeline_direct_conversion,0.0
+ng_pipeline_42,airport_integrated_conversion,0.0
+ng_pipeline_42,lng_terminal_conversion,0.0
+ng_pipeline_42,lng_to_hplant_conversion,0.0
+ng_pipeline_43,pipeline_direct_conversion,0.0
+ng_pipeline_43,airport_integrated_conversion,0.0
+ng_pipeline_43,lng_terminal_conversion,0.0
+ng_pipeline_43,lng_to_hplant_conversion,0.0
+ng_pipeline_44,pipeline_direct_conversion,0.0
+ng_pipeline_44,airport_integrated_conversion,0.0
+ng_pipeline_44,lng_terminal_conversion,0.0
+ng_pipeline_44,lng_to_hplant_conversion,0.0
+ng_pipeline_45,pipeline_direct_conversion,0.0
+ng_pipeline_45,airport_integrated_conversion,0.0
+ng_pipeline_45,lng_terminal_conversion,0.0
+ng_pipeline_45,lng_to_hplant_conversion,0.0
+ng_pipeline_46,pipeline_direct_conversion,0.0
+ng_pipeline_46,airport_integrated_conversion,0.0
+ng_pipeline_46,lng_terminal_conversion,0.0
+ng_pipeline_46,lng_to_hplant_conversion,0.0
+ng_pipeline_47,pipeline_direct_conversion,0.0
+ng_pipeline_47,airport_integrated_conversion,0.0
+ng_pipeline_47,lng_terminal_conversion,0.0
+ng_pipeline_47,lng_to_hplant_conversion,0.0
+ng_pipeline_48,pipeline_direct_conversion,0.0
+ng_pipeline_48,airport_integrated_conversion,0.0
+ng_pipeline_48,lng_terminal_conversion,0.0
+ng_pipeline_48,lng_to_hplant_conversion,0.0
+ng_pipeline_49,pipeline_direct_conversion,0.0
+ng_pipeline_49,airport_integrated_conversion,0.0
+ng_pipeline_49,lng_terminal_conversion,0.0
+ng_pipeline_49,lng_to_hplant_conversion,0.0
+ng_pipeline_50,pipeline_direct_conversion,0.0
+ng_pipeline_50,airport_integrated_conversion,0.0
+ng_pipeline_50,lng_terminal_conversion,0.0
+ng_pipeline_50,lng_to_hplant_conversion,0.0
+ng_pipeline_51,pipeline_direct_conversion,0.0
+ng_pipeline_51,airport_integrated_conversion,0.0
+ng_pipeline_51,lng_terminal_conversion,0.0
+ng_pipeline_51,lng_to_hplant_conversion,0.0
+ng_pipeline_52,pipeline_direct_conversion,0.0
+ng_pipeline_52,airport_integrated_conversion,0.0
+ng_pipeline_52,lng_terminal_conversion,0.0
+ng_pipeline_52,lng_to_hplant_conversion,0.0
+ng_pipeline_53,pipeline_direct_conversion,0.0
+ng_pipeline_53,airport_integrated_conversion,0.0
+ng_pipeline_53,lng_terminal_conversion,0.0
+ng_pipeline_53,lng_to_hplant_conversion,0.0
+ng_pipeline_54,pipeline_direct_conversion,0.0
+ng_pipeline_54,airport_integrated_conversion,0.0
+ng_pipeline_54,lng_terminal_conversion,0.0
+ng_pipeline_54,lng_to_hplant_conversion,0.0
+ng_pipeline_55,pipeline_direct_conversion,0.0
+ng_pipeline_55,airport_integrated_conversion,0.0
+ng_pipeline_55,lng_terminal_conversion,0.0
+ng_pipeline_55,lng_to_hplant_conversion,0.0
+ng_pipeline_56,pipeline_direct_conversion,0.0
+ng_pipeline_56,airport_integrated_conversion,0.0
+ng_pipeline_56,lng_terminal_conversion,0.0
+ng_pipeline_56,lng_to_hplant_conversion,0.0
+ng_pipeline_57,pipeline_direct_conversion,0.0
+ng_pipeline_57,airport_integrated_conversion,0.0
+ng_pipeline_57,lng_terminal_conversion,0.0
+ng_pipeline_57,lng_to_hplant_conversion,0.0
+ng_pipeline_58,pipeline_direct_conversion,0.0
+ng_pipeline_58,airport_integrated_conversion,0.0
+ng_pipeline_58,lng_terminal_conversion,0.0
+ng_pipeline_58,lng_to_hplant_conversion,0.0
+ng_pipeline_59,pipeline_direct_conversion,0.0
+ng_pipeline_59,airport_integrated_conversion,0.0
+ng_pipeline_59,lng_terminal_conversion,0.0
+ng_pipeline_59,lng_to_hplant_conversion,0.0
+ng_pipeline_60,pipeline_direct_conversion,0.0
+ng_pipeline_60,airport_integrated_conversion,0.0
+ng_pipeline_60,lng_terminal_conversion,0.0
+ng_pipeline_60,lng_to_hplant_conversion,0.0
+ng_pipeline_61,pipeline_direct_conversion,0.0
+ng_pipeline_61,airport_integrated_conversion,0.0
+ng_pipeline_61,lng_terminal_conversion,0.0
+ng_pipeline_61,lng_to_hplant_conversion,0.0
+ng_pipeline_62,pipeline_direct_conversion,0.0
+ng_pipeline_62,airport_integrated_conversion,0.0
+ng_pipeline_62,lng_terminal_conversion,0.0
+ng_pipeline_62,lng_to_hplant_conversion,0.0
+ng_pipeline_63,pipeline_direct_conversion,0.0
+ng_pipeline_63,airport_integrated_conversion,0.0
+ng_pipeline_63,lng_terminal_conversion,0.0
+ng_pipeline_63,lng_to_hplant_conversion,0.0
+ng_pipeline_64,pipeline_direct_conversion,0.0
+ng_pipeline_64,airport_integrated_conversion,0.0
+ng_pipeline_64,lng_terminal_conversion,0.0
+ng_pipeline_64,lng_to_hplant_conversion,0.0
+ng_pipeline_65,pipeline_direct_conversion,0.0
+ng_pipeline_65,airport_integrated_conversion,0.0
+ng_pipeline_65,lng_terminal_conversion,0.0
+ng_pipeline_65,lng_to_hplant_conversion,0.0
+ng_pipeline_66,pipeline_direct_conversion,0.0
+ng_pipeline_66,airport_integrated_conversion,0.0
+ng_pipeline_66,lng_terminal_conversion,0.0
+ng_pipeline_66,lng_to_hplant_conversion,0.0
