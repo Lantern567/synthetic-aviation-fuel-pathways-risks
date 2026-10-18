@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "retained_value_count": 24,
+  "source_record_count": 28967,
+  "valid_fuel_record_count": 28852,
+  "missing_fuel_record_count": 115,
+  "case_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "source_month_labels": [
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12"
+  ],
+  "demand_storage_labels": [
+    1,
+    5,
+    9,
+    14,
+    18,
+    22,
+    27,
+    31,
+    35,
+    40,
+    44,
+    48
+  ],
+  "resource_source_week_labels": [
+    1,
+    5,
+    9,
+    14,
+    18,
+    22,
+    27,
+    31,
+    35,
+    40,
+    44,
+    48
+  ],
+  "A_B": {
+    "baseline": {
+      "demand_kg": 51050925.57290507,
+      "resource_week_labels": [
+        1,
+        5,
+        14,
+        44
+      ],
+      "case_indices": [
+        0,
+        1,
+        3,
+        10
+      ],
+      "input_files_sha256": {
+        "airport_input.csv": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9",
+        "airport_input.xlsx": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8",
+        "manifest.json": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db",
+        "renewable_periods.csv": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510"
+      }
+    },
+    "summer": {
+      "demand_kg": 56807154.89541006,
+      "resource_week_labels": [
+        1,
+        14,
+        27,
+        44
+      ],
+      "case_indices": [
+        0,
+        3,
+        6,
+        10
+      ],
+      "input_files_sha256": {
+        "airport_input.csv": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4",
+        "airport_input.xlsx": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a",
+        "manifest.json": "5a303c6bcc52edd13a120f986377119698c75462c353f897a6e8b57f1e786589",
+        "renewable_periods.csv": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495"
+      }
+    }
+  },
+  "retained_result_count": 18,
+  "manifest_sha256": "b9ae763f6697b9446794c4fe0569e800105b9d2cdc6b7d9c8fa0a694ea3cdfb5",
+  "build_source_sha256": "f950affdc0c52e2dee3b1a83462cd34180de30854322b86858eec5876fe2c35f",
+  "model_inputs_changed": false,
+  "optimization_results_changed": false
+}

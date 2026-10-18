@@ -1,0 +1,71 @@
+{
+  "counts": {
+    "raw_solar_inventory": 13265,
+    "raw_wind_inventory": 7988,
+    "pipeline_inventory": 436,
+    "refinery_inventory": 180,
+    "steel_inventory": 211,
+    "carbon_inventory": 3445
+  },
+  "candidate_solar_projects": 65,
+  "candidate_wind_projects": 44,
+  "resource_pool": {
+    "weeks": 12,
+    "three_hour_periods": 672,
+    "hours": 2016
+  },
+  "model_horizon": {
+    "weeks": 4,
+    "three_hour_periods": 224,
+    "hours": 672
+  },
+  "source_files": {
+    "cases": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\demand_revision_20261018\\existing_demand_cases\\case_values.csv",
+      "sha256": "ef08a285a3849c8bcd85127e50d8478e1ec2536f345dcb5b4ac03176fcecfe4c"
+    },
+    "case_contract": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\demand_revision_20261018\\existing_demand_cases\\summary.json",
+      "sha256": "b57f39ced9dd8e09da5eda1a2b06d17a286aa6ea331906f6b1cad3260d13d921"
+    },
+    "case_mapping": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\demand_revision_20261018\\existing_demand_cases\\A_B_case_mapping.csv",
+      "sha256": "52afdd5329b78f9687b13015486177873963bc49f871078bb0d827f58e6d76aa"
+    },
+    "candidate_resources": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\figures_resource\\resource_data\\selected_candidate_resource_metrics.csv",
+      "sha256": "3c0fd218b9f842802cd555841fe57dc6fb842e578e2f69bbea8949fe47684692"
+    },
+    "raw_solar_inventory": {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\solar_power_plants.csv",
+      "sha256": "e961d5591de1aa2a56934d303eb7055b55a0f07ebae336a0d55750946b1caf9b"
+    },
+    "raw_wind_inventory": {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\wind_power_plants.csv",
+      "sha256": "a43da410def6565abdcc3d7a73943fac0ac428044b01d8a22a4e541fcf1aabae"
+    },
+    "pipeline_inventory": {
+      "path": "E:\\green_methanol_for_port_transportation-main\\products\\gis_energy_mapping\\gis_data_scraper\\scraped_gis_data\\natural_gas_pipelines.csv",
+      "sha256": "971cb39502d1ea53360e309383b4723430ef0ad4fd000c8b13971d512cb8df84"
+    },
+    "refinery_inventory": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\industrial_inputs\\refinery_daily_byproduct_h2_20251027_202950.csv",
+      "sha256": "74577c921794715eb5e64676b4d2168d2e1232a662f1691ea2f93354be5210ac"
+    },
+    "steel_inventory": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\historical_runtime\\industrial_inputs\\steel_daily_byproduct_h2_20251027_202950.csv",
+      "sha256": "5dc10908327d5e804105b355279959cb0c554609be458b42dad456934947bab8"
+    },
+    "carbon_inventory": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\scientific_revision_20261017\\runtime\\compute\\project\\products\\supply_chain_optimization\\green_hydrogen_supply_chain_optimization\\data\\co2_capture_sources.csv",
+      "sha256": "74a4859daca2fd2c7768929692b4b32229801e1719a59014ae867778e1b80999"
+    },
+    "original_generator": {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\minor_clarifications_20261018\\qa\\new_review_20261018\\demand_sources\\generate_appendix_docx.py",
+      "sha256": "28a11e6a5bf563091d82d1920d3440e43c6682d98b4580c4b2cc0edf9981a4c9"
+    }
+  },
+  "original_layout_source": "create_raw_data_overview_panel; original four-panel layout and palette",
+  "scope": "Existing sample-demand cases and resource pool; no input values or model solutions changed",
+  "baseline_demand_sha256": "561e6d5bef15f794a534708261a4a289d46a6d13609a33a3783075d2199f2732"
+}

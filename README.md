@@ -1,5 +1,7 @@
 # Synthetic aviation fuel pathway revision archive
 
+The fixed [nexus-r1-20261018-cases release](https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks/releases/tag/nexus-r1-20261018-cases) adds the sample-based airport-demand case definitions, flight-record mappings and Supplementary Figures S1-S5 in [revision_20261018/](revision_20261018/README.md). The demand cases are paired with selected weather blocks. Their original flight dates, case indices and weather-block labels are recorded separately. All model inputs, eighteen saved solutions and final accounting records from the scientific revision below are retained unchanged.
+
 The fixed [nexus-r1-20261017 release](https://github.com/Lantern567/synthetic-aviation-fuel-pathways-risks/releases/tag/nexus-r1-20261017) contains the scientific revision documented in [revision_20261017/](revision_20261017/README.md). It binds eighteen newly solved schedules to their exact execution sources, configurations, original summaries, complete saved dispatch and independent checks. The original direct-FT GTL comparator is preserved separately.
 
 Start with the new saved-data verification entry point:

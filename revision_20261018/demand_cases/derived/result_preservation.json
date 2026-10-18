@@ -1,0 +1,115 @@
+{
+  "frozen_commit": "8b4eac762b85bcccf510cba3a61174530d48e849",
+  "checked_result_count": 18,
+  "passed": true,
+  "runs": [
+    {
+      "scenario": "CTL",
+      "label": "baseline",
+      "summary_sha256": "de131040bb46a9b37cec2339d79d3086f4d29a7a2a58887505262764ce3846f5",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CTL-BH",
+      "label": "baseline",
+      "summary_sha256": "d56adfe279c57047d5ec54ca992decd91b58cca652d607df3b6ce2926bad5165",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "baseline",
+      "summary_sha256": "b0567c255d487fb1b9c2c3ec1718059de1a319d833e7fed5f4252527e6cb85da",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "GTL-BH",
+      "label": "baseline",
+      "summary_sha256": "9ac23f07966d877a47ce43c806145d646bd4dcb678483f54c8d59a188a294486",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "426cc4ca0181caffe8414b9b7266491178379820271907dbc968f58991f6ec2d",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "615e9ecd49f84238c70c367a25997e1112221c9e8812d2e997071ffe4c2d26f3",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "summary_sha256": "db96faadadb2dc9db9c92280e3745a9538db376615a0e65af7b022c2661b8419",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "441772ac30e8fb9f064f8ec304734fa1d4730471067eb8dbe4153a4446f9f93a",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "baseline",
+      "summary_sha256": "22503fcb256ef58c0ef44e6485f95547f4a7239284dc23985b4117da2188dabb",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "daf7240a7c743e15fafcd51f7ec1f12b2699a82fd0faa182eab92357b71690ae",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-BH-FT",
+      "label": "baseline",
+      "summary_sha256": "d31aabacc4ca946b6542520d35c1e52752eba7cbe9c90e0ce9882d3903450dec",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-BH-MTJ",
+      "label": "baseline",
+      "summary_sha256": "cbf0c867890680b52e1b37c829b81a6ae6d87d009910b7c7f12e657ef2f4d5a8",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CTL",
+      "label": "summer_fixed",
+      "summary_sha256": "6101028aa4c77e75b4a09bbaf619c92fd1be667e4f6fa85a37703fd4b2f33a50",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "GTL-GH",
+      "label": "summer_fixed",
+      "summary_sha256": "82dd6793f3b040bcfa70609f5aeae6a3f43acd089097af54bed615f3561e9624",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "ce1a4958e87ddc017105cb732a99e73f0b38d3b9a55531fce1fd8dd0dea47e35",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "01bd0d51a953d53eafdbfd016d2f10eb3e87478893eaca6ebab4ededfc062c03",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-GH-FT",
+      "label": "summer_fixed",
+      "summary_sha256": "68fcd1f64e7408f255024add1f68b2b2b3ca61903a80a83e0e59c2396b3567bd",
+      "matches_frozen_release": true
+    },
+    {
+      "scenario": "DAC-GH-MTJ",
+      "label": "summer_fixed",
+      "summary_sha256": "cc59288b0254e3ba1c25de0dd879c3b677162374b5e2a16a39a0e979a1477f7b",
+      "matches_frozen_release": true
+    }
+  ]
+}

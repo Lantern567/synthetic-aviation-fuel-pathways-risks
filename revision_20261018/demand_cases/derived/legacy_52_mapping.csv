@@ -1,0 +1,105 @@
+model_airport,legacy_storage_slot,source_case_index,source_storage_label,saved_direct_bucket_flag,saved_fuel_kg,description
+天津,1,0,1,True,3286611.984843936,Direct monthly sample bucket
+天津,2,0,1,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,3,0,1,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,4,1,5,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,5,1,5,True,3286611.984843936,Direct monthly sample bucket
+天津,6,1,5,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,7,1,5,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,8,2,9,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,9,2,9,True,3286611.984843936,Direct monthly sample bucket
+天津,10,2,9,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,11,2,9,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,12,3,14,False,1643305.992421968,Nearest populated bucket copied by legacy procedure
+天津,13,3,14,False,1643305.992421968,Nearest populated bucket copied by legacy procedure
+天津,14,3,14,True,1643305.992421968,Direct monthly sample bucket
+天津,15,3,14,False,1643305.992421968,Nearest populated bucket copied by legacy procedure
+天津,16,3,14,False,1643305.992421968,Nearest populated bucket copied by legacy procedure
+天津,17,4,18,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,18,4,18,True,3286611.984843936,Direct monthly sample bucket
+天津,19,4,18,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,20,4,18,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,21,5,22,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,22,5,22,True,3286611.984843936,Direct monthly sample bucket
+天津,23,5,22,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,24,5,22,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,25,6,27,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,26,6,27,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,27,6,27,True,3286611.984843936,Direct monthly sample bucket
+天津,28,6,27,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,29,6,27,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,30,7,31,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,31,7,31,True,3286611.984843936,Direct monthly sample bucket
+天津,32,7,31,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,33,7,31,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,34,8,35,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,35,8,35,True,3286611.984843936,Direct monthly sample bucket
+天津,36,8,35,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,37,8,35,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,38,9,40,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,39,9,40,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,40,9,40,True,3286611.984843936,Direct monthly sample bucket
+天津,41,9,40,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,42,9,40,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,43,10,44,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,44,10,44,True,3286611.984843936,Direct monthly sample bucket
+天津,45,10,44,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,46,10,44,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,47,11,48,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,48,11,48,True,3286611.984843936,Direct monthly sample bucket
+天津,49,11,48,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,50,11,48,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,51,11,48,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+天津,52,11,48,False,3286611.984843936,Nearest populated bucket copied by legacy procedure
+北京,1,0,1,True,11512458.64500998,Direct monthly sample bucket
+北京,2,0,1,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,3,0,1,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,4,1,5,False,5756229.322504992,Nearest populated bucket copied by legacy procedure
+北京,5,1,5,True,5756229.322504992,Direct monthly sample bucket
+北京,6,1,5,False,5756229.322504992,Nearest populated bucket copied by legacy procedure
+北京,7,1,5,False,5756229.322504992,Nearest populated bucket copied by legacy procedure
+北京,8,2,9,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,9,2,9,True,11512458.64500998,Direct monthly sample bucket
+北京,10,2,9,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,11,2,9,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,12,3,14,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,13,3,14,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,14,3,14,True,11512458.64500998,Direct monthly sample bucket
+北京,15,3,14,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,16,3,14,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,17,4,18,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,18,4,18,True,11512458.64500998,Direct monthly sample bucket
+北京,19,4,18,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,20,4,18,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,21,5,22,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,22,5,22,True,11512458.64500998,Direct monthly sample bucket
+北京,23,5,22,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,24,5,22,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,25,6,27,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,26,6,27,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,27,6,27,True,11512458.64500998,Direct monthly sample bucket
+北京,28,6,27,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,29,6,27,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,30,7,31,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,31,7,31,True,11512458.64500998,Direct monthly sample bucket
+北京,32,7,31,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,33,7,31,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,34,8,35,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,35,8,35,True,11512458.64500998,Direct monthly sample bucket
+北京,36,8,35,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,37,8,35,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,38,9,40,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,39,9,40,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,40,9,40,True,11512458.64500998,Direct monthly sample bucket
+北京,41,9,40,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,42,9,40,False,11512458.64500998,Nearest populated bucket copied by legacy procedure
+北京,43,10,44,False,10766637.01342635,Nearest populated bucket copied by legacy procedure
+北京,44,10,44,True,10766637.01342635,Direct monthly sample bucket
+北京,45,10,44,False,10766637.01342635,Nearest populated bucket copied by legacy procedure
+北京,46,10,44,False,10766637.01342635,Nearest populated bucket copied by legacy procedure
+北京,47,11,48,False,6502050.954088623,Nearest populated bucket copied by legacy procedure
+北京,48,11,48,True,6502050.954088623,Direct monthly sample bucket
+北京,49,11,48,False,6502050.954088623,Nearest populated bucket copied by legacy procedure
+北京,50,11,48,False,6502050.954088623,Nearest populated bucket copied by legacy procedure
+北京,51,11,48,False,6502050.954088623,Nearest populated bucket copied by legacy procedure
+北京,52,11,48,False,6502050.954088623,Nearest populated bucket copied by legacy procedure

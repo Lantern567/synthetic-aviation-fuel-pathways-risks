@@ -1,0 +1,61 @@
+=== 2024年机场周度参数分析报告（最终正确版本）===
+分析时间: 2025-07-26 14:27:49
+数据源: capital_binhai_airports_data_20250726_123415.xlsx
+
+=== 计算逻辑说明 ===
+1. 严格计算52周完整数据，不允许缺失
+2. 每周数据 = 该周所有航班的参数叠加/聚合
+   - 总量参数（燃油、CO2、时间等）：求和
+   - 比率参数（单位消耗等）：求平均值
+3. 没有数据的周：用时间最近的有数据周填充
+4. 提供每个参数的：总计、平均、标准差、最大最小值
+
+=== 数据完整性验证 ===
+
+机场: 天津 - ✓ 完整
+  - 总周数: 52/52
+  - 有原始数据周数: 12
+  - 填充估算周数: 40
+  - 数据覆盖率: 23.1%
+  - 全年总航班数: 33,660
+  - 全年总燃油消耗: 162,687,293.2 kg
+  - 全年总CO2排放: 514,091,846.7 kg
+  - 平均每周航班数: 647.3
+  - 平均每周燃油消耗: 3,128,601.8 kg
+
+机场: 北京 - ✓ 完整
+  - 总周数: 52/52
+  - 有原始数据周数: 12
+  - 填充估算周数: 40
+  - 数据覆盖率: 23.1%
+  - 全年总航班数: 90,196
+  - 全年总燃油消耗: 542,577,199.6 kg
+  - 全年总CO2排放: 1,714,543,950.7 kg
+  - 平均每周航班数: 1734.5
+  - 平均每周燃油消耗: 10,434,176.9 kg
+
+=== 输出文件 ===
+主数据表格: D:\Green methanol\green_methanol_for_port_transportation-main\green_methanol_for_port_transportation-main\resource_flight_data_process\src\weekly_analysis\..\..\results\tables\all_airports_weekly_parameters_20250726_142747.xlsx
+图表目录: D:\Green methanol\green_methanol_for_port_transportation-main\green_methanol_for_port_transportation-main\resource_flight_data_process\src\weekly_analysis\..\..\results\charts
+
+=== 数据表格结构 ===
+每行代表一个机场的一周数据，包含以下字段：
+- week_number: 周数 (1-52)
+- airport: 机场名称
+- total_flights: 该周总航班数
+- has_original_data: 是否为原始数据
+- source_week: 数据来源周（如果是填充数据）
+
+每个参数包含6个统计维度：
+- weekly_XXX_total: 周总计
+- weekly_XXX_avg: 周平均
+- weekly_XXX_std: 标准差
+- weekly_XXX_min: 最小值
+- weekly_XXX_max: 最大值
+- weekly_XXX_count: 有效数据点数
+
+=== 验证确认 ===
+✓ 52周数据完整性：已验证
+✓ 每周数据为该周所有航班聚合：已实现
+✓ 缺失周用最近周填充：已实现
+✓ 参数计算正确性：总量求和，比率求均值

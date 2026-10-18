@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "scope": "Description of the existing sample-aggregation demand cases; no new model inputs, weights, deduplication, calendar reconstruction, or optimization.",
+  "case_index_definition": "Zero-based position in the existing 12-case extraction list.",
+  "demand_storage_label_definition": "Existing week-number storage key created after month labels were parsed as month-start dates.",
+  "resource_source_week_label_definition": "Source-week block label read from the actual resource input and its execution builder; independent of original flight-record dates.",
+  "legacy_52_scope": "Stored case-copy mapping only; not an observed annual demand series.",
+  "source_bucket_rule": "The saved flight_date field equals flight_year_month (YYYY-MM), grouped by the ISO week of its parsed month-start date; original day-precision dates are retained separately.",
+  "source_evidence": [
+    {
+      "filename": "capital_binhai_airports_data_20250726_123415.xlsx",
+      "source_role_index": 0,
+      "sha256": "01b858d3a46c9cbd279c17bcb5eb9132cb3d3e127d775d959f85538f513f458a"
+    },
+    {
+      "filename": "typical_12weeks_demand_20251129_163442.xlsx",
+      "source_role_index": 1,
+      "sha256": "f7bba32a0cb51306bcd0eff57c2c342814adcd9e14eeb6c21e01c073c6a0823c"
+    },
+    {
+      "filename": "all_airports_weekly_parameters_20250726_142747.xlsx",
+      "source_role_index": 2,
+      "sha256": "e3d19fa465c9cd8a797fcafc1d7de06cae08c2f976d52da1fc0c9f994518b2dc"
+    },
+    {
+      "filename": "renewable_12weeks.csv",
+      "source_role_index": 3,
+      "sha256": "08f5feb41b945abdf097d0f8762ee9169849440456e60f176cc044d1f8fa25f7"
+    },
+    {
+      "filename": "raw_record_lineage_audit.csv.gz",
+      "source_role_index": 4,
+      "sha256": "45ecb33d298338481d9fd1cbebb131f28397ad4a1716d7b4bbe5c138e9cd79ae"
+    },
+    {
+      "filename": "extract_typical_weeks_data.py",
+      "source_role_index": 5,
+      "sha256": "a2e8eb7fe5757c3c95e31dad6bf62e8b66e2bd88512d62ad3f8fa7ca509e8fee"
+    },
+    {
+      "filename": "build_verified_inputs.py",
+      "source_role_index": 6,
+      "sha256": "51d26beb216bb3df3e185a4b280728864aa85352bee4607885acf3d3db30e85f"
+    },
+    {
+      "filename": "parallel_flight_processor.py",
+      "source_role_index": 7,
+      "sha256": "fa4f87bd14a9a330392bfbc9a7cb5fbc4183c0bba7a1ab67a8af63cbad3952f2"
+    },
+    {
+      "filename": "data_loader.py",
+      "source_role_index": 8,
+      "sha256": "9a01bde5c9a9d62f3d6a276c95af3884abe2d2bb82a2cea2456aecad475e69ca"
+    },
+    {
+      "filename": "final_correct_calculator.py",
+      "source_role_index": 9,
+      "sha256": "ec8a5dd82813f68a99865b5161c8142964a8d4d5c0d3ec080ffa384b29f5ed4e"
+    },
+    {
+      "filename": "final_analysis_summary_20250726_142747.txt",
+      "source_role_index": 10,
+      "sha256": "de80c7d7cb7b799b452c1a373d2c638ab85cf9fb2d6a19cf389834b1cc90a8b3"
+    },
+    {
+      "filename": "revision_manifest.json",
+      "source_role_index": 11,
+      "sha256": "cda84ff3fbd73a55430b00d421b34fe89925f32435aa44a3c58b98420bb23578"
+    },
+    {
+      "filename": "SHA256SUMS.json",
+      "source_role_index": 12,
+      "sha256": "1370066e6d9d0a021377896b3347b35f207d0d9b06c3c9ce71bea898b9df2667"
+    },
+    {
+      "filename": "airport_input.csv",
+      "source_role_index": 13,
+      "sha256": "43cdbd968d33417437116ff984c9b0280450d92815a02f9c76cd7f0dd70690d9"
+    },
+    {
+      "filename": "airport_input.xlsx",
+      "source_role_index": 14,
+      "sha256": "1c24b2f842c84856fc33ef53eded231fbb8298f5c956a62b99fbc6338f9f43a8"
+    },
+    {
+      "filename": "manifest.json",
+      "source_role_index": 15,
+      "sha256": "efd491552e34cabcf797dc29a09e01aae4e4ec9fb26b46b12c2ecdbd4e4b04db"
+    },
+    {
+      "filename": "renewable_periods.csv",
+      "source_role_index": 16,
+      "sha256": "3c2e164c00f37c5b2bafe24e6e24cf67f37941bfec895bd7df134de86136a510"
+    },
+    {
+      "filename": "airport_input.csv",
+      "source_role_index": 17,
+      "sha256": "d0d923621a9084c0ec0d53b6bdc569682d3a766eacf1ad5b9c81c2dbe02829b4"
+    },
+    {
+      "filename": "airport_input.xlsx",
+      "source_role_index": 18,
+      "sha256": "d04120cfe55b05d4baae3ca266d2a62b80669e504eeb9efdb228131242098a7a"
+    },
+    {
+      "filename": "manifest.json",
+      "source_role_index": 19,
+      "sha256": "5a303c6bcc52edd13a120f986377119698c75462c353f897a6e8b57f1e786589"
+    },
+    {
+      "filename": "renewable_periods.csv",
+      "source_role_index": 20,
+      "sha256": "9e0abfc96468a7746ef2124e0700e93d14d44359933d8174c662c25a419c7495"
+    }
+  ],
+  "frozen_commit": "8b4eac762b85bcccf510cba3a61174530d48e849",
+  "model_inputs_changed": false,
+  "optimization_results_changed": false,
+  "files": [
+    {
+      "path": "A_B_case_mapping.csv",
+      "bytes": 1007,
+      "sha256": "52afdd5329b78f9687b13015486177873963bc49f871078bb0d827f58e6d76aa"
+    },
+    {
+      "path": "build_contract.py",
+      "bytes": 16296,
+      "sha256": "f950affdc0c52e2dee3b1a83462cd34180de30854322b86858eec5876fe2c35f"
+    },
+    {
+      "path": "case_date_composition.csv",
+      "bytes": 6064,
+      "sha256": "ff363d140fad659cb04521d9e9313a85b74d922244f05b1d32b3af061e7f55c0"
+    },
+    {
+      "path": "case_source_records.csv.gz",
+      "bytes": 3601357,
+      "sha256": "1e42a30ce406ff72b7decbb0db5c75198dc29da31072236c91b815812231b574"
+    },
+    {
+      "path": "case_values.csv",
+      "bytes": 65995,
+      "sha256": "ef08a285a3849c8bcd85127e50d8478e1ec2536f345dcb5b4ac03176fcecfe4c"
+    },
+    {
+      "path": "input_byte_preservation.csv",
+      "bytes": 906,
+      "sha256": "4082e9e1c63c52c437c96e6ac608feea5eaeb97106713c7d7b710b267fa2c010"
+    },
+    {
+      "path": "legacy_52_mapping.csv",
+      "bytes": 9097,
+      "sha256": "19e96564f9bdc4f7f822fee999f150fdb26d26bd93741d8e59977dc646a5bd6f"
+    },
+    {
+      "path": "result_preservation.json",
+      "bytes": 3851,
+      "sha256": "9c906f418998ee26744b576708694e7e2919ac007cfd9ff6934fa4524a49df9d"
+    },
+    {
+      "path": "valid_sample_records.csv.gz",
+      "bytes": 3596209,
+      "sha256": "d280cb5f1275a10301cde542de1099c36dc21f123e06a6ed4b86f5cbcac51a55"
+    }
+  ]
+}

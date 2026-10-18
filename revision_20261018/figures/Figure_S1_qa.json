@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "data_sha256": "55880f1103566d9a3818b9b81ff4256ac9ec34c4f515a313815f92cfa74e5c4d",
+  "baseline_demand_sha256": "561e6d5bef15f794a534708261a4a289d46a6d13609a33a3783075d2199f2732",
+  "baseline_airport_case_values_kg": [
+    {
+      "model_week": 1,
+      "airport_en": "Beijing",
+      "case_index": 0,
+      "source_month_label": "2024-01",
+      "resource_source_week_label": 1,
+      "weekly_total_fuel_kg_total": 11512458.64500998
+    },
+    {
+      "model_week": 1,
+      "airport_en": "Tianjin",
+      "case_index": 0,
+      "source_month_label": "2024-01",
+      "resource_source_week_label": 1,
+      "weekly_total_fuel_kg_total": 3286611.984843936
+    },
+    {
+      "model_week": 2,
+      "airport_en": "Beijing",
+      "case_index": 1,
+      "source_month_label": "2024-02",
+      "resource_source_week_label": 5,
+      "weekly_total_fuel_kg_total": 5756229.322504992
+    },
+    {
+      "model_week": 2,
+      "airport_en": "Tianjin",
+      "case_index": 1,
+      "source_month_label": "2024-02",
+      "resource_source_week_label": 5,
+      "weekly_total_fuel_kg_total": 3286611.984843936
+    },
+    {
+      "model_week": 3,
+      "airport_en": "Beijing",
+      "case_index": 3,
+      "source_month_label": "2024-04",
+      "resource_source_week_label": 14,
+      "weekly_total_fuel_kg_total": 11512458.64500998
+    },
+    {
+      "model_week": 3,
+      "airport_en": "Tianjin",
+      "case_index": 3,
+      "source_month_label": "2024-04",
+      "resource_source_week_label": 14,
+      "weekly_total_fuel_kg_total": 1643305.992421968
+    },
+    {
+      "model_week": 4,
+      "airport_en": "Beijing",
+      "case_index": 10,
+      "source_month_label": "2024-11",
+      "resource_source_week_label": 44,
+      "weekly_total_fuel_kg_total": 10766637.01342635
+    },
+    {
+      "model_week": 4,
+      "airport_en": "Tianjin",
+      "case_index": 10,
+      "source_month_label": "2024-11",
+      "resource_source_week_label": 44,
+      "weekly_total_fuel_kg_total": 3286611.984843936
+    }
+  ],
+  "resource_pool": {
+    "weeks": 12,
+    "three_hour_periods": 672,
+    "hours": 2016
+  },
+  "model_horizon": {
+    "weeks": 4,
+    "three_hour_periods": 224,
+    "hours": 672
+  },
+  "renewable_candidates": 109,
+  "original_model_inputs_modified": false,
+  "outputs": [
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\demand_revision_20261018\\figures_demand_cases\\Figure_S1.png",
+      "sha256": "bc70b86124d4319ca3c6701a8f83bb75925b6f021df5f637e91086257046f246"
+    },
+    {
+      "path": "C:\\Users\\Lantern567\\Documents\\ChatGPT\\ljt的文章\\work\\nexus_targeted_revision\\demand_revision_20261018\\figures_demand_cases\\Figure_S1.pdf",
+      "sha256": "8201c4ec6428c0a784e1aaa5ec44839ffdc906e920dd7be18ea3bb46a6cdd708"
+    }
+  ],
+  "png_size": [
+    2207,
+    1555
+  ],
+  "text_outside_canvas": [],
+  "visual_review_required": true
+}

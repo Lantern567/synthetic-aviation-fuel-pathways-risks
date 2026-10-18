@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "case_contract_manifest_sha256": "b9ae763f6697b9446794c4fe0569e800105b9d2cdc6b7d9c8fa0a694ea3cdfb5",
+  "source_sha256": {
+    "case_values.csv": "ef08a285a3849c8bcd85127e50d8478e1ec2536f345dcb5b4ac03176fcecfe4c",
+    "A_B_case_mapping.csv": "52afdd5329b78f9687b13015486177873963bc49f871078bb0d827f58e6d76aa",
+    "valid_sample_records.csv.gz": "d280cb5f1275a10301cde542de1099c36dc21f123e06a6ed4b86f5cbcac51a55",
+    "summary.json": "b57f39ced9dd8e09da5eda1a2b06d17a286aa6ea331906f6b1cad3260d13d921"
+  },
+  "render_source_sha256": "45efd98b72303a0616c4c6958c84a7081a3195ef63e92b118355b4499431e706",
+  "retained_case_values": 24,
+  "selected_mapping_values": 16,
+  "composition_valid_records": 28852,
+  "composition_excluded_records": 115,
+  "deduplication_applied": false,
+  "new_model_inputs_generated": false,
+  "captions": {
+    "S2": "Four selected sample-based demand cases. (a) Fuel demand assigned to model weeks M1–M4. (b) Fuel demand and summed sample flight distance; marker area represents record count and marker shape identifies model week. (c) Fuel shares of climb, cruise and descent across the four selected cases. (d) Mean fuel per included record. C denotes the zero-based demand-case index and R the paired resource block; the source month is also shown beneath each selected model week.",
+    "S3": "Demand-case magnitude and composition of the retained departure-airport sample. (a) The 12 demand cases; diamonds mark cases selected for A. (b) Aircraft-class shares among 28,852 valid fuel-estimation records departing Capital or Binhai. (c) Mean flight distance and fuel share by aircraft class; marker area represents record count. The 115 records lacking saved fuel estimates are excluded from composition statistics. Source records are retained without deduplication.",
+    "S4": "Distribution and ordering of the 12 retained sample-based demand cases. (a) Every case value is shown separately for each airport. (b) The same 12 values are ranked within airport, with ties ordered by case index. Diamonds identify the four cases selected for A. The display describes the finite case set.",
+    "S5": "Mapping from the retained demand-case pool to the four model weeks. (a) The original 12 case values, with selected cases highlighted. (b) The four selected case values assigned to M1–M4. C denotes zero-based case index and R the paired resource block; the source month is also stated beneath the selected model-week labels."
+  },
+  "figures": [
+    {
+      "path": "Figure_S2.pdf",
+      "bytes": 46546,
+      "sha256": "59e696084336a4e02d099c3047ba04279b0f474c763fe0e1fbf591125385fb57"
+    },
+    {
+      "path": "Figure_S2.png",
+      "bytes": 195583,
+      "sha256": "54425129d42dea98016f0cf88de2b525f58f79241c385d455422ecec9ceb6829"
+    },
+    {
+      "path": "Figure_S3.pdf",
+      "bytes": 49588,
+      "sha256": "582a4c1aee666d4a53270ba807ad15bc8cd21b6c70025ed635bc816d14dd4c37"
+    },
+    {
+      "path": "Figure_S3.png",
+      "bytes": 231680,
+      "sha256": "691ea55a798ce1bf3a0b6779746f0e9a68476dc20554e3495f0bde500602102d"
+    },
+    {
+      "path": "Figure_S4.pdf",
+      "bytes": 40094,
+      "sha256": "f9d3e0cb3197b8a998d1433353f30613e473c45b4c3d2db8de8c9fb07124b851"
+    },
+    {
+      "path": "Figure_S4.png",
+      "bytes": 109354,
+      "sha256": "7a1198a1965b3a22912570b64466e5a6cc597c07f09497b69183f38ea5281b15"
+    },
+    {
+      "path": "Figure_S5.pdf",
+      "bytes": 43165,
+      "sha256": "1ee2e428c01ff6528f3c96f7553101e8951107668c4afb2d79932a98b39c2c8b"
+    },
+    {
+      "path": "Figure_S5.png",
+      "bytes": 129596,
+      "sha256": "18348a448d55051401745ce92068fd8c7e8a655b5aadfb99d6a0edc3e735fe3e"
+    }
+  ],
+  "data": [
+    {
+      "path": "case_series.csv",
+      "sha256": "2153fb6c2595d40baa8311aa24d245f99f3e60eaba9a033635f9d07968a305f0"
+    },
+    {
+      "path": "selected_cases.csv",
+      "sha256": "272b826b98d9d4044b5231526630d2ecee3dd551debd6fc5662d8fd55f3a15b0"
+    },
+    {
+      "path": "aircraft_summary.csv",
+      "sha256": "43a03218b1aeab03dd1aeb2606e6d24a29a968e0c9029a7a786c51f3fa02b76f"
+    },
+    {
+      "path": "case_ranks.csv",
+      "sha256": "149d260d2d9f1124bcbf6e20a0de2d219e8c78c415549c6f0fff8e8564333ac9"
+    }
+  ]
+}
