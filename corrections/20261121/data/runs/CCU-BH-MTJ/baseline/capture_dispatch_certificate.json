@@ -1,0 +1,156 @@
+{
+  "scenario": "CCU-BH-MTJ",
+  "label": "baseline",
+  "new_supply_limits_checked": 31,
+  "regional_flows": {
+    "co2_source_1": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_2": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_3": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_4": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_5": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_6": {
+      "weekly_t": 8166.776054289037,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_7": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_8": {
+      "weekly_t": 15012.81882639424,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_9": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_10": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_11": {
+      "weekly_t": 3004.2185845191916,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_12": {
+      "weekly_t": 8687.32103440412,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_13": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_14": {
+      "weekly_t": 11210.252704882083,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_15": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_16": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_17": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 10811.556
+    },
+    "co2_source_18": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 12145.140000000001
+    },
+    "co2_source_19": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 12669.047999999999
+    },
+    "co2_source_20": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 100018.8
+    },
+    "co2_source_21": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40007.52
+    },
+    "co2_source_22": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 45293.275440000005
+    },
+    "co2_source_23": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 33339.6
+    },
+    "co2_source_24": {
+      "weekly_t": 5715.36,
+      "corrected_t_week": 5715.36
+    },
+    "co2_source_25": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 19051.2
+    },
+    "co2_source_26": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 24195.024
+    },
+    "co2_source_27": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 5829.667200000001
+    },
+    "co2_source_28": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 68108.04
+    },
+    "co2_source_29": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40245.66
+    },
+    "co2_source_30": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 47532.744
+    },
+    "co2_source_31": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 85170.204
+    }
+  },
+  "transfers": [],
+  "original_certificate_sha256": "90cf13619255540b12cf4d2bf0da8ae69452b417cac617f43cf609e032c69469",
+  "original_contracts_sha256": "15a99a22ae89eb3314f067a47a176402f1e2ed2cc749f7c6f8f777694e5f1922",
+  "original_full_model_feasible": true,
+  "valid_global_lower_bound_CNY": 71297854012.57652,
+  "original_total_objective_CNY": 72010750102.26662,
+  "certified_total_objective_gap": 0.009899856461398737,
+  "bound_argument": "The 16 regional coal-source ceilings decrease. The other 15 ceilings, remaining constraint rows, objective and variable domains are identical. The preceding global lower bound remains valid for the restriction.",
+  "full_matrix": {
+    "rows": 241974,
+    "columns": 1546263,
+    "changed_upper_bound_rows": 16,
+    "changed_primal_columns": [],
+    "column_name_sha256": "0647d6ac167494f1755dee2b109105511eeabd654b103e1fd6c268f281915305",
+    "original_mps_gzip_sha256": "0df6c606b0ad9bf444538f5c56a1ed642cacc068f25e913c7ca93d313a392be8",
+    "original_full_primal_sha256": "67e3f6db09262ca414094855bcf792fe6f5d2623e0c5f70b8cfe71decca06e82",
+    "max_constraint_absolute_residual": 4.944013198837638e-08,
+    "max_bound_violation": 3.976377627168404e-08,
+    "max_integer_violation": 0.0,
+    "archived_objective_CNY": 72010750102.26662,
+    "corrected_objective_CNY": 72010750102.2673,
+    "valid_global_lower_bound_CNY": 71297854012.57652,
+    "certified_total_objective_gap": 0.00989985646140818
+  },
+  "passed": true
+}

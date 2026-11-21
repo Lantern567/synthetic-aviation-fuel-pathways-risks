@@ -1,0 +1,177 @@
+{
+  "scenario": "CCU-BH-FT",
+  "label": "baseline",
+  "new_supply_limits_checked": 31,
+  "regional_flows": {
+    "co2_source_1": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_2": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_3": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_4": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_5": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_6": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_7": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_8": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_9": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_10": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_11": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_12": {
+      "weekly_t": 21569.94,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_13": {
+      "weekly_t": 20071.726015532528,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_14": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_15": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_16": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_17": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 10811.556
+    },
+    "co2_source_18": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 12145.140000000001
+    },
+    "co2_source_19": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 12669.047999999999
+    },
+    "co2_source_20": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 100018.8
+    },
+    "co2_source_21": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40007.52
+    },
+    "co2_source_22": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 45293.275440000005
+    },
+    "co2_source_23": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 33339.6
+    },
+    "co2_source_24": {
+      "weekly_t": 5715.36,
+      "corrected_t_week": 5715.36
+    },
+    "co2_source_25": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 19051.2
+    },
+    "co2_source_26": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 24195.024
+    },
+    "co2_source_27": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 5829.667200000001
+    },
+    "co2_source_28": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 68108.04
+    },
+    "co2_source_29": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40245.66
+    },
+    "co2_source_30": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 47532.744
+    },
+    "co2_source_31": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 85170.204
+    }
+  },
+  "transfers": [
+    {
+      "from": "co2_source_12",
+      "to": "co2_source_13",
+      "destination": "steel_Tianjin Iron and Steel Group Co Ltd",
+      "kg_week": 7431621.542372808,
+      "distance_km": 54.6558504990048
+    }
+  ],
+  "original_certificate_sha256": "889159b17dfe23c38ee8b9524ae3c410edb0717641ded2bf08788a667fe082a5",
+  "original_contracts_sha256": "dc350d7c36915ad87b300d102cd578b0341a5c6e020a5d7881bd8446a984ed8c",
+  "original_full_model_feasible": true,
+  "valid_global_lower_bound_CNY": 62505211062.19414,
+  "original_total_objective_CNY": 63122019319.73616,
+  "certified_total_objective_gap": 0.009771681327520003,
+  "bound_argument": "The 16 regional coal-source ceilings decrease. The other 15 ceilings, remaining constraint rows, objective and variable domains are identical. The preceding global lower bound remains valid for the restriction.",
+  "corrected_contracts_sha256": "a7690420b888feda36eaf993b47377f96b831b6e6c36bb3e5784775ae1c070bf",
+  "full_matrix": {
+    "rows": 241974,
+    "columns": 1546263,
+    "changed_upper_bound_rows": 16,
+    "changed_primal_columns": [
+      "co2_pipeline_co2_source_12_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_week",
+      "co2_pipeline_co2_source_13_steel_Tianjin_Iron_and_Steel_Group_Co_Ltd_week"
+    ],
+    "column_name_sha256": "54cab641d8a7ac377ec659ce66fe859f0e4a0456774a1c715270ae0a08a5671a",
+    "original_mps_gzip_sha256": "ed8c5392d35b0e9d4434e3b50d1216bb4f3e10fb9b759e60e93141d8db5023a7",
+    "original_full_primal_sha256": "e688962e0f746b2fd836b89aa16911ca345f6345668494e934515f0fdc66bc14",
+    "max_constraint_absolute_residual": 4.151095822635398e-08,
+    "max_bound_violation": 1.4028046280145645e-08,
+    "max_integer_violation": 0.0,
+    "archived_objective_CNY": 63122019319.73616,
+    "corrected_objective_CNY": 63122019319.74129,
+    "valid_global_lower_bound_CNY": 62505211062.19414,
+    "certified_total_objective_gap": 0.009771681327600432,
+    "dispatch_solver": "HiGHS 1.16.0",
+    "full_fixed_design_dispatch_status": "Optimal",
+    "economic_dispatch_optimum_CNY": 63122019319.73977,
+    "retained_solution_minus_independent_optimum_CNY": 0.00151824951171875,
+    "independent_solve_max_row_residual": 4.945999876326823e-08,
+    "fixed_design_and_weekly_variables": 9376,
+    "full_dispatch_seconds": 4.140757899964228,
+    "selection": "An economically equivalent dispatch retains all archived non-CO2 variables. Among previously used co-located units, minimize the weekly tonnage reassigned, using larger original contracts first in a tie.",
+    "full_primal_sha256": "59c0ee858cda4daedda15c8d4f08bc42986dc027706ba03223a3ada95a5a961e"
+  },
+  "passed": true
+}
