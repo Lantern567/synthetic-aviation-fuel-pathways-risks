@@ -1,0 +1,20 @@
+{
+  "sectors": {
+    "Refinery": {
+      "sites": 180,
+      "provincial_level_regions": 26,
+      "gross_t_day": 1412.5621776,
+      "external_supply_fraction": 0.15,
+      "source_sha256": "74577c921794715eb5e64676b4d2168d2e1232a662f1691ea2f93354be5210ac"
+    },
+    "Steel": {
+      "sites": 211,
+      "provincial_level_regions": 28,
+      "gross_t_day": 150549.2714698767,
+      "external_supply_fraction": 0.3,
+      "source_sha256": "5dc10908327d5e804105b355279959cb0c554609be458b42dad456934947bab8"
+    }
+  },
+  "plotted_quantity": "Gross site-level estimates before regional screening and external supply fractions.",
+  "figure_csv_sha256": "996ee159ed55311450e92bb71363573f742fa50b1344bf33dcd7fe6a9662f455"
+}

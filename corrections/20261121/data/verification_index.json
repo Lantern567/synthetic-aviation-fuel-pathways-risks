@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "coal_Mt_week": 81.7237572732,
+  "industrial_configurations": [
+    {
+      "scenario": "CCU-BH-FT",
+      "set": "baseline",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 2,
+      "original_global_lower_bound_CNY": 62505211062.19414,
+      "certified_gap_pct": 0.9771681327520003,
+      "evidence_sha256": "3cc4f6023283e892f75d2fbc2fcc75b3c32898af00cbaf779bd000582aee9051"
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "set": "baseline",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 0,
+      "original_global_lower_bound_CNY": 71297854012.57652,
+      "certified_gap_pct": 0.9899856461398737,
+      "evidence_sha256": "6cb3f51a576b24cca627bfee56d6909915c377393905faa57f1c71ef68823127"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "set": "baseline",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 0,
+      "original_global_lower_bound_CNY": 8697839204896.411,
+      "certified_gap_pct": 0.26967966836518065,
+      "evidence_sha256": "4a1f90f67fd29be372c087b15186c40282c34526343edb9851038e04cb88bf53"
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "set": "summer_fixed",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 0,
+      "original_global_lower_bound_CNY": 9650510632819.623,
+      "certified_gap_pct": 0.14772846410593063,
+      "evidence_sha256": "2e5c948ecb7c4bf21ffa35de770b417007a869ad85578ddb971fe9d72b3fb255"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "set": "baseline",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 0,
+      "original_global_lower_bound_CNY": 11258126101535.844,
+      "certified_gap_pct": 0.22107657085066687,
+      "evidence_sha256": "a2b8e99849c3f7f63770abafa5522f2fb7b4f5bbbb26d7deb80969dfc83d707a"
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "set": "summer_fixed",
+      "valid_source_limits": 31,
+      "changed_weekly_contracts": 0,
+      "original_global_lower_bound_CNY": 12491105306964.396,
+      "certified_gap_pct": 0.06845161317157672,
+      "evidence_sha256": "1a74b17f358f82ef8dc7d219b0ded140e6ff02db50340322dc853892d54230b7"
+    }
+  ],
+  "affected_full_model_rows": 241974,
+  "BH_FT_top_three_route_pct": 55.828180124120465,
+  "BH_FT_largest_source_pct": 34.64765199489411,
+  "original_bound_replay": [
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "baseline",
+      "certificate_sha256": "23cdd45c23dee53b151fe4ca868f5ca61414c2117130b92eaa1285120d3062e9",
+      "root_lp_primal_max_row_error": 2.3283064365386963e-09,
+      "root_lp_primal_max_bound_error": 9.030182873739894e-11,
+      "root_lp_objective_error_cny": 0.013671875,
+      "full_model_relative_gap": 0.0026967966836518066,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-BH-FT",
+      "label": "baseline",
+      "certificate_sha256": "889159b17dfe23c38ee8b9524ae3c410edb0717641ded2bf08788a667fe082a5",
+      "root_lp_primal_max_row_error": 1.1175870895385742e-08,
+      "root_lp_primal_max_bound_error": 6.462348535570529e-27,
+      "root_lp_objective_error_cny": 0.0006561279296875,
+      "full_model_relative_gap": 0.009771681327520003,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "baseline",
+      "certificate_sha256": "f249de5ac7ab81ef0663cd9d1f836179bd59dd40cf62ad06310ebb13c3ff9fa9",
+      "root_lp_primal_max_row_error": 4.656612873077393e-10,
+      "root_lp_primal_max_bound_error": 2.582964953035116e-10,
+      "root_lp_objective_error_cny": 0.001953125,
+      "full_model_relative_gap": 0.0022107657085066687,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-FT",
+      "label": "summer_fixed",
+      "certificate_sha256": "f94b112be50c35a9d370820234f2bcebd7dbe16c2ccdf81dc6892f5b508fc803",
+      "root_lp_primal_max_row_error": 3.725290298461914e-09,
+      "root_lp_primal_max_bound_error": 8.08597633294994e-11,
+      "root_lp_objective_error_cny": 0.009765625,
+      "full_model_relative_gap": 0.0014772846410593063,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-GH-MTJ",
+      "label": "summer_fixed",
+      "certificate_sha256": "349a7e8d24c3808d466dd5c06767b34861cf4d8c066b51b45433a80e16dd73ca",
+      "root_lp_primal_max_row_error": 7.683411240577698e-09,
+      "root_lp_primal_max_bound_error": 3.6197889130562544e-10,
+      "root_lp_objective_error_cny": 0.0,
+      "full_model_relative_gap": 0.0006845161317157672,
+      "passed": true
+    },
+    {
+      "scenario": "CCU-BH-MTJ",
+      "label": "baseline",
+      "certificate_sha256": "90cf13619255540b12cf4d2bf0da8ae69452b417cac617f43cf609e032c69469",
+      "root_lp_primal_max_row_error": 1.4901161193847656e-08,
+      "root_lp_primal_max_bound_error": 1.6685226000845438e-08,
+      "root_lp_objective_error_cny": 0.00018310546875,
+      "full_model_relative_gap": 0.009899856461398737,
+      "passed": true
+    }
+  ]
+}

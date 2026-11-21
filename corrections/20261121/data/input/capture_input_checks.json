@@ -1,0 +1,374 @@
+{
+  "base_commit": "e24a85cf9a131e45be6808ace2e3b7cb140cdac9",
+  "regulatory_source": "https://hbj.nea.gov.cn/xxgk/fdzdgknr/scxxgk/202403/P020240318557794789706.pdf#page=18",
+  "scope": "National inventory and the archived Beijing 100-km industrial CO2 screen",
+  "unit_count": 3146,
+  "nameplate_overrides": [
+    "G100000104573",
+    "G100000104574",
+    "G100000104575",
+    "G100000104576"
+  ],
+  "hours_per_week": 168.0,
+  "emission_t_per_mwh": 0.95,
+  "capture_fraction": 0.85,
+  "previous_Mt_week": {
+    "coal_power": 179.2502712,
+    "gas_power": 3.31692013044,
+    "oil_refinery": 6.7421566296
+  },
+  "corrected_Mt_week": {
+    "coal_power": 81.7237572732,
+    "gas_power": 3.31692013044,
+    "oil_refinery": 6.7421566296
+  },
+  "sha256": {
+    "unit_snapshot": "681f2f58b973e9bbc405cfd46c867d19d0bfe2a526edce1110927a9d47ca8951",
+    "previous_inventory": "74a4859daca2fd2c7768929692b4b32229801e1719a59014ae867778e1b80999",
+    "configuration": "96b64f5b02e0991027398cfdae8d9fb2f07588e7319578c7e065b0ba52de5c20",
+    "corrected_inventory": "94a3091571b370a16efca5f67750e336349ac5468bf7311bf9e60651c13e677e"
+  },
+  "regional_sources": [
+    {
+      "source": "co2_source_1",
+      "location_id": "coal_power_715",
+      "plant": "Guodian Langfang power station",
+      "kind": "coal_power",
+      "latitude": 39.4787099,
+      "longitude": 116.7688474,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_2",
+      "location_id": "coal_power_722",
+      "plant": "Guodian Langfang power station",
+      "kind": "coal_power",
+      "latitude": 39.4787099,
+      "longitude": 116.7688474,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_3",
+      "location_id": "coal_power_1917",
+      "plant": "Panshan power station",
+      "kind": "coal_power",
+      "latitude": 39.9801382,
+      "longitude": 117.4630704,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 38106.894
+    },
+    {
+      "source": "co2_source_4",
+      "location_id": "coal_power_1924",
+      "plant": "Panshan power station",
+      "kind": "coal_power",
+      "latitude": 39.9801382,
+      "longitude": 117.4630704,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 38106.894
+    },
+    {
+      "source": "co2_source_5",
+      "location_id": "coal_power_1927",
+      "plant": "Panshan power station",
+      "kind": "coal_power",
+      "latitude": 39.9801382,
+      "longitude": 117.4630704,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 43139.88
+    },
+    {
+      "source": "co2_source_6",
+      "location_id": "coal_power_1932",
+      "plant": "Panshan power station",
+      "kind": "coal_power",
+      "latitude": 39.9801382,
+      "longitude": 117.4630704,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 43139.88
+    },
+    {
+      "source": "co2_source_7",
+      "location_id": "coal_power_2110",
+      "plant": "Sanhe Yanjiao power station",
+      "kind": "coal_power",
+      "latitude": 39.9527554,
+      "longitude": 116.8487413,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_8",
+      "location_id": "coal_power_2112",
+      "plant": "Sanhe Yanjiao power station",
+      "kind": "coal_power",
+      "latitude": 39.9527554,
+      "longitude": 116.8487413,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_9",
+      "location_id": "coal_power_2116",
+      "plant": "Sanhe Yanjiao power station",
+      "kind": "coal_power",
+      "latitude": 39.9527554,
+      "longitude": 116.8487413,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_10",
+      "location_id": "coal_power_2120",
+      "plant": "Sanhe Yanjiao power station",
+      "kind": "coal_power",
+      "latitude": 39.9527554,
+      "longitude": 116.8487413,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_11",
+      "location_id": "coal_power_3634",
+      "plant": "Yangliuqing power station",
+      "kind": "coal_power",
+      "latitude": 39.1512174,
+      "longitude": 117.0382573,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_12",
+      "location_id": "coal_power_3640",
+      "plant": "Yangliuqing power station",
+      "kind": "coal_power",
+      "latitude": 39.1512174,
+      "longitude": 117.0382573,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_13",
+      "location_id": "coal_power_3645",
+      "plant": "Yangliuqing power station",
+      "kind": "coal_power",
+      "latitude": 39.1512174,
+      "longitude": 117.0382573,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_14",
+      "location_id": "coal_power_3646",
+      "plant": "Yangliuqing power station",
+      "kind": "coal_power",
+      "latitude": 39.1512174,
+      "longitude": 117.0382573,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 21569.94
+    },
+    {
+      "source": "co2_source_15",
+      "location_id": "coal_power_3794",
+      "plant": "Zhuozhou power station",
+      "kind": "coal_power",
+      "latitude": 39.563323,
+      "longitude": 115.999182,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_16",
+      "location_id": "coal_power_3795",
+      "plant": "Zhuozhou power station",
+      "kind": "coal_power",
+      "latitude": 39.563323,
+      "longitude": 115.999182,
+      "price_cny_t": 150.0,
+      "previous_t_week": 56977.2,
+      "corrected_t_week": 25164.93
+    },
+    {
+      "source": "co2_source_17",
+      "location_id": "gas_power_3",
+      "plant": "Beijing Huadian Beiran Tongzhou Yunhe Central District Distributed EnergyStation",
+      "kind": "gas_power",
+      "latitude": 39.907844,
+      "longitude": 116.694372,
+      "price_cny_t": 180.0,
+      "previous_t_week": 10811.556,
+      "corrected_t_week": 10811.556
+    },
+    {
+      "source": "co2_source_18",
+      "location_id": "gas_power_4",
+      "plant": "Beijing Jingneng Future City Distributed Energy Station",
+      "kind": "gas_power",
+      "latitude": 40.101857,
+      "longitude": 116.468205,
+      "price_cny_t": 180.0,
+      "previous_t_week": 12145.140000000001,
+      "corrected_t_week": 12145.140000000001
+    },
+    {
+      "source": "co2_source_19",
+      "location_id": "gas_power_5",
+      "plant": "Beijing North Haidian District Shangzhuang Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 40.085791,
+      "longitude": 116.194356,
+      "price_cny_t": 180.0,
+      "previous_t_week": 12669.047999999999,
+      "corrected_t_week": 12669.047999999999
+    },
+    {
+      "source": "co2_source_20",
+      "location_id": "gas_power_6",
+      "plant": "Beijing Xibei Jingneng Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.942123,
+      "longitude": 116.125862,
+      "price_cny_t": 180.0,
+      "previous_t_week": 100018.8,
+      "corrected_t_week": 100018.8
+    },
+    {
+      "source": "co2_source_21",
+      "location_id": "gas_power_7",
+      "plant": "Beijing Xinan/Southwestern Caoqiao Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.832915,
+      "longitude": 116.35129,
+      "price_cny_t": 180.0,
+      "previous_t_week": 40007.52,
+      "corrected_t_week": 40007.52
+    },
+    {
+      "source": "co2_source_22",
+      "location_id": "gas_power_54",
+      "plant": "Shenhua Guohua Beijing Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.951717,
+      "longitude": 116.618218,
+      "price_cny_t": 180.0,
+      "previous_t_week": 45293.275440000005,
+      "corrected_t_week": 45293.275440000005
+    },
+    {
+      "source": "co2_source_23",
+      "location_id": "gas_power_80",
+      "plant": "Sun Palace Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.978379,
+      "longitude": 116.438267,
+      "price_cny_t": 180.0,
+      "previous_t_week": 33339.6,
+      "corrected_t_week": 33339.6
+    },
+    {
+      "source": "co2_source_24",
+      "location_id": "gas_power_88",
+      "plant": "Tianjin Huadian Beichen Wind Power Industrial Park Distributed Energy Station",
+      "kind": "gas_power",
+      "latitude": 39.300551,
+      "longitude": 117.190744,
+      "price_cny_t": 180.0,
+      "previous_t_week": 5715.36,
+      "corrected_t_week": 5715.36
+    },
+    {
+      "source": "co2_source_25",
+      "location_id": "gas_power_90",
+      "plant": "Tianjin Huadian Wuqing Distributed Energy Station",
+      "kind": "gas_power",
+      "latitude": 39.434524,
+      "longitude": 116.984489,
+      "price_cny_t": 180.0,
+      "previous_t_week": 19051.2,
+      "corrected_t_week": 19051.2
+    },
+    {
+      "source": "co2_source_26",
+      "location_id": "gas_power_122",
+      "plant": "Zhengchangzhuang Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.889359,
+      "longitude": 116.27264,
+      "price_cny_t": 180.0,
+      "previous_t_week": 24195.024,
+      "corrected_t_week": 24195.024
+    },
+    {
+      "source": "co2_source_27",
+      "location_id": "gas_power_123",
+      "plant": "Zhengdong Group South Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.97149,
+      "longitude": 116.495479,
+      "price_cny_t": 180.0,
+      "previous_t_week": 5829.667200000001,
+      "corrected_t_week": 5829.667200000001
+    },
+    {
+      "source": "co2_source_28",
+      "location_id": "gas_power_148",
+      "plant": "Datang Gaojing Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.939899,
+      "longitude": 116.129712,
+      "price_cny_t": 180.0,
+      "previous_t_week": 68108.04,
+      "corrected_t_week": 68108.04
+    },
+    {
+      "source": "co2_source_29",
+      "location_id": "gas_power_168",
+      "plant": "Gao'antun Gas Power Plant",
+      "kind": "gas_power",
+      "latitude": 39.946923,
+      "longitude": 116.61362,
+      "price_cny_t": 180.0,
+      "previous_t_week": 40245.66,
+      "corrected_t_week": 40245.66
+    },
+    {
+      "source": "co2_source_30",
+      "location_id": "gas_power_219",
+      "plant": "Huaneng Beijing PowerPlant",
+      "kind": "gas_power",
+      "latitude": 39.885741,
+      "longitude": 116.53263,
+      "price_cny_t": 180.0,
+      "previous_t_week": 47532.744,
+      "corrected_t_week": 47532.744
+    },
+    {
+      "source": "co2_source_31",
+      "location_id": "oil_refinery_139",
+      "plant": "Sinopec Beijing Refinery",
+      "kind": "oil_refinery",
+      "latitude": 39.72377,
+      "longitude": 116.0835,
+      "price_cny_t": 120.0,
+      "previous_t_week": 85170.204,
+      "corrected_t_week": 85170.204
+    }
+  ]
+}

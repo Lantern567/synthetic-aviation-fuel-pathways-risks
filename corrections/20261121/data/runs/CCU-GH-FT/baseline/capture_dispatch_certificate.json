@@ -1,0 +1,141 @@
+{
+  "scenario": "CCU-GH-FT",
+  "label": "baseline",
+  "new_supply_limits_checked": 31,
+  "regional_flows": {
+    "co2_source_1": {
+      "weekly_t": 1079.6759957466356,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_2": {
+      "weekly_t": 1775.1009359417208,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_3": {
+      "weekly_t": 1302.406996839981,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_4": {
+      "weekly_t": 890.423077394803,
+      "corrected_t_week": 38106.894
+    },
+    "co2_source_5": {
+      "weekly_t": 95.92905984289466,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_6": {
+      "weekly_t": 596.0733630914114,
+      "corrected_t_week": 43139.88
+    },
+    "co2_source_7": {
+      "weekly_t": 545.1773354028148,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_8": {
+      "weekly_t": 744.6285812661633,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_9": {
+      "weekly_t": 481.77409070334096,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_10": {
+      "weekly_t": 193.53287832049512,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_11": {
+      "weekly_t": 15.262687596075267,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_12": {
+      "weekly_t": 32.509524579640306,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_13": {
+      "weekly_t": 25.623760851784215,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_14": {
+      "weekly_t": 395.37896229379305,
+      "corrected_t_week": 21569.94
+    },
+    "co2_source_15": {
+      "weekly_t": 6.79094371292931,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_16": {
+      "weekly_t": 130.0345540775429,
+      "corrected_t_week": 25164.93
+    },
+    "co2_source_17": {
+      "weekly_t": 314.2381265758694,
+      "corrected_t_week": 10811.556
+    },
+    "co2_source_18": {
+      "weekly_t": 3104.579238072407,
+      "corrected_t_week": 12145.140000000001
+    },
+    "co2_source_19": {
+      "weekly_t": 5618.28492507,
+      "corrected_t_week": 12669.047999999999
+    },
+    "co2_source_20": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 100018.8
+    },
+    "co2_source_21": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40007.52
+    },
+    "co2_source_22": {
+      "weekly_t": 3947.462950894579,
+      "corrected_t_week": 45293.275440000005
+    },
+    "co2_source_23": {
+      "weekly_t": 248.64434430421673,
+      "corrected_t_week": 33339.6
+    },
+    "co2_source_24": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 5715.36
+    },
+    "co2_source_25": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 19051.2
+    },
+    "co2_source_26": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 24195.024
+    },
+    "co2_source_27": {
+      "weekly_t": 2033.9995417376433,
+      "corrected_t_week": 5829.667200000001
+    },
+    "co2_source_28": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 68108.04
+    },
+    "co2_source_29": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 40245.66
+    },
+    "co2_source_30": {
+      "weekly_t": 0.0,
+      "corrected_t_week": 47532.744
+    },
+    "co2_source_31": {
+      "weekly_t": 1442.5853461875868,
+      "corrected_t_week": 85170.204
+    }
+  },
+  "transfers": [],
+  "original_certificate_sha256": "23cdd45c23dee53b151fe4ca868f5ca61414c2117130b92eaa1285120d3062e9",
+  "original_contracts_sha256": "d491aca8bfa7eba7a9edf143445d15bcc3ea041001b56e7a68134903d03257e8",
+  "original_full_model_feasible": true,
+  "valid_global_lower_bound_CNY": 8697839204896.411,
+  "original_total_objective_CNY": 8721358936753.986,
+  "certified_total_objective_gap": 0.0026967966836518066,
+  "bound_argument": "The 16 regional coal-source ceilings decrease. The other 15 ceilings, remaining constraint rows, objective and variable domains are identical. The preceding global lower bound remains valid for the restriction.",
+  "unchanged_primal_sha256": "878c6343ac2417d3788e6698f496d465cd85d00bbec578a0bbaaea6355a75cec",
+  "passed": true
+}

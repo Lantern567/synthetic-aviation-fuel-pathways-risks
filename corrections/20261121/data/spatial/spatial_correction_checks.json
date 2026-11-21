@@ -1,0 +1,18 @@
+{
+  "scenario": "CCU-BH-FT",
+  "scope": "Positive mass-flow records with original study definitions, grouping and distances",
+  "old_positive_routes": 44,
+  "corrected_positive_routes": 45,
+  "changed_metrics": {
+    "关键通道集中度": {
+      "previous": 66.88873277319175,
+      "corrected": 55.828180124120465
+    },
+    "单点失效影响": {
+      "previous": 46.585016538230406,
+      "corrected": 34.64765199489411
+    }
+  },
+  "site_and_module_counts_unchanged": true,
+  "corrected_network_metrics_sha256": "4630e7872c5ea60d93f7a9d56f7956597c48866a52c1c362ed41c85cbbc180bc"
+}
