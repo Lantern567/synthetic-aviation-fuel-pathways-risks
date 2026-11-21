@@ -19,6 +19,7 @@ In Table S18 the three largest routes carry 55.83% of mass flow, and the largest
 - `data/input/coal_unit_inputs.csv` identifies all coal units and their applied nameplates and capacity factors. `data/input/co2_capture_sources.csv` contains the complete model input. `capture_input_checks.json` provides hashes, national totals and the regional correspondence.
 - `data/runs/<scenario>/<set>/capture_dispatch_certificate.json` records every regional source check and the objective certificate. The CCU-BH-FT baseline also includes its complete revised primal vector, route contracts and independently checked cost and carbon ledgers.
 - `data/spatial/` contains the updated transport and network records in the study's figure-input formats.
+- `data/hydrogen_figure/` provides the source class, standardized provincial-level region and gross estimated quantity for each of the 391 industrial by-product hydrogen sites in Figure S23. The 180 refineries cover 26 provincial-level regions and the 211 steel sites cover 28.
 
 ## Reproduce the checks
 
@@ -41,7 +42,7 @@ python check_revision.py --archive STUDY_ARCHIVE --data REBUILT
 `SPATIAL_FIGURE_INPUTS` is the archive's `revision_20261017/artifacts/workspace/work/nexus_targeted_revision/scientific_revision_20261017/figures_spatial/network_data` directory. For figure generation, also install the figure dependencies distributed with the original archive.
 
 ```sh
-python plot_capture.py --archive STUDY_ARCHIVE --inventory REBUILT/input/co2_capture_sources.csv --scratch SCRATCH/national --output FIGURES
+python plot_capture.py --archive STUDY_ARCHIVE --inventory REBUILT/input/co2_capture_sources.csv --hydrogen data/hydrogen_figure/Figure_S23_byproduct_hydrogen.csv --scratch SCRATCH/national --output FIGURES
 python plot_network.py --archive STUDY_ARCHIVE --spatial-correction REBUILT/spatial --scratch SCRATCH/network --output FIGURES
 ```
 
